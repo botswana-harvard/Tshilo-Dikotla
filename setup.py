@@ -18,10 +18,10 @@ setup(
     include_package_data=True,
     url='https://github.com/botswana-harvard/Tshilo-Dikotla',
     license='GPL license, see LICENSE',
-    description='edc tshilo_dikotla bhp077',
+    description='edc tshilo_dikotla bhp085',
     long_description=README,
     zip_safe=False,
-    keywords='edc tshilo_dikotla bhp077',
+    keywords='edc tshilo_dikotla bhp085',
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
