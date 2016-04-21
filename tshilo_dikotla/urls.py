@@ -1,5 +1,3 @@
-import django_databrowse
-
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls import include, url, patterns
@@ -7,7 +5,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import RedirectView
 
-#from edc_dashboard.subject.views import additional_requisition
+# from edc_dashboard.subject.views import additional_requisition
 
 from .load_edc import load_edc
 
@@ -23,15 +21,9 @@ urlpatterns = patterns(
     (r'^i18n/', include('django.conf.urls.i18n')),
 )
 
-urlpatterns += patterns(
-    '',
-    url(r'^databrowse/(.*)', login_required(django_databrowse.site.root)),
-)
-
 # urlpatterns += patterns(
 #     '',
-#     url(r'^{app_name}/dashboard/visit/add_requisition/'.format(app_name=APP_NAME),
-#         additional_requisition, name="add_requisition"),
+#     url(r'^databrowse/(.*)', login_required(django_databrowse.site.root)),
 # )
 
 urlpatterns += patterns(
@@ -39,11 +31,6 @@ urlpatterns += patterns(
     url(r'^{app_name}/dashboard/'.format(app_name=APP_NAME),
         include('microbiome.apps.{app_name}_dashboard.urls'.format(app_name=APP_NAME))),
 )
-
-# urlpatterns += patterns(
-#     '',
-#     (r'^bhp_sync/', include('edc_sync.urls')),
-# )
 
 urlpatterns += patterns(
     '',
@@ -60,10 +47,6 @@ urlpatterns += patterns(
         'django.contrib.auth.views.password_change_done',
         name='password_change_done'.format(app_name=APP_NAME)),
 )
-# urlpatterns += patterns(
-#     '',
-#     url(r'^{app_name}/section/'.format(app_name=APP_NAME), include('edc_dashboard.section.urls'), name='section'),
-# )
 
 urlpatterns += patterns(
     '',

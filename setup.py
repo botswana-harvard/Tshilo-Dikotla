@@ -11,12 +11,12 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='tshilo_dikotla',
-    version='0.5.0rc1',
+    version='0.1.0dev',
     author='Erik van Widenfelt',
     author_email='ew2789@gmail.com',
     packages=find_packages(),
     include_package_data=True,
-    url='https://github.com/botswana-harvard/Tshilo-Dikotla',
+    url='https://github.com/botswana-harvard/tshilo-dikotla',
     license='GPL license, see LICENSE',
     description='edc tshilo_dikotla bhp085',
     long_description=README,
@@ -31,7 +31,7 @@ setup(
         'Programming Language :: Python',
         # 'Programming Language :: Python :: 3',
         # 'Programming Language :: Python :: 3.2',
-        # 'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.4',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],

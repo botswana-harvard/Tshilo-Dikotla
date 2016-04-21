@@ -1,7 +1,4 @@
-import django_databrowse
-
 from django.contrib import admin
-from django.db.models import get_models
 
 from edc_base.utils import edc_base_startup
 from edc_call_manager.caller_site import site_model_callers
@@ -27,8 +24,8 @@ def load_edc():
     site_model_callers.autodiscover()
     admin.autodiscover()
 
-    for model in get_models():
-        try:
-            django_databrowse.site.register(model)
-        except:
-            pass
+#     for model in get_models():
+#         try:
+#             django_databrowse.site.register(model)
+#         except:
+#             pass

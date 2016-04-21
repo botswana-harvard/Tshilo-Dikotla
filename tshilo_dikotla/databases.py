@@ -3,16 +3,16 @@ import os
 from unipath import Path
 
 try:
-    # expect at ~/source/microbiome/etc/default.cnf
+    # expect at ~/source/tshilo-dikotla/etc/default.cnf
     # etc folder is not in the git repo
-    PATH = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(2).child('etc')
+    PATH = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1).child('etc')
     if not os.path.exists(PATH):
         raise TypeError('Path to database credentials at \'{}\' does not exist'.format(PATH))
     with open(os.path.join(PATH, 'secret_key.txt')) as f:
         PRODUCTION_SECRET_KEY = f.read().strip()
     PRODUCTION_MYSQL = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'OPTIONS': {
                 'read_default_file': os.path.join(PATH, 'default.cnf'),
             },
@@ -20,15 +20,15 @@ try:
             'PORT': '',
             'ATOMIC_REQUESTS': True,
         },
-        'lab_api': {
-            'ENGINE': 'django.db.backends.mysql',
-            'OPTIONS': {
-                'read_default_file': os.path.join(PATH, 'lab_api.cnf'),
-            },
-            'HOST': '',
-            'PORT': '',
-            'ATOMIC_REQUESTS': True,
-        },
+#         'lab_api': {
+#             'ENGINE': 'django.db.backends.mysql',
+#             'OPTIONS': {
+#                 'read_default_file': os.path.join(PATH, 'lab_api.cnf'),
+#             },
+#             'HOST': '',
+#             'PORT': '',
+#             'ATOMIC_REQUESTS': True,
+#         },
     }
 except TypeError:
     PRODUCTION_MYSQL = None
@@ -38,7 +38,7 @@ except TypeError:
 TRAVIS_MYSQL = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mb',
+        'NAME': 'td',
         'USER': 'travis',
         'HOST': '',
         'PORT': '',
@@ -46,7 +46,7 @@ TRAVIS_MYSQL = {
     },
     'lab_api': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mb_lab',
+        'NAME': 'td_lab',
         'USER': 'travis',
         'HOST': '',
         'PORT': '',
@@ -54,7 +54,7 @@ TRAVIS_MYSQL = {
     },
     'test_server': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mb_test',
+        'NAME': 'td_test',
         'USER': 'travis',
         'HOST': '',
         'PORT': '',
