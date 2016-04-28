@@ -1,7 +1,7 @@
-import django_databrowse
-
+# import django_databrowse
 from django.contrib import admin
-from django.db.models import get_models
+# from django.db.models import get_models
+from django.apps import apps
 
 from edc_base.utils import edc_base_startup
 from edc_call_manager.caller_site import site_model_callers
@@ -11,13 +11,11 @@ from edc_lab.lab_profile.classes import site_lab_profiles
 from edc_rule_groups.classes import site_rule_groups
 from edc_visit_schedule.classes import site_visit_schedules
 
-from microbiome.apps.mb.app_configuration import AppConfiguration
-
 
 def load_edc():
     edc_base_startup()
     site_lab_profiles.autodiscover()
-    AppConfiguration(lab_profiles=site_lab_profiles).prepare()
+#     AppConfiguration(lab_profiles=site_lab_profiles).prepare()
     site_visit_schedules.autodiscover()
     site_visit_schedules.build_all()
     site_rule_groups.autodiscover()
@@ -27,8 +25,8 @@ def load_edc():
     site_model_callers.autodiscover()
     admin.autodiscover()
 
-    for model in get_models():
-        try:
-            django_databrowse.site.register(model)
-        except:
-            pass
+#     for model in apps.get_models():
+#         try:
+#             django_databrowse.site.register(model)
+#         except:
+#             pass
