@@ -22,6 +22,7 @@ django-tastypie==0.13.3
 -e git+https://github.com/botswana-harvard/edc-meta-data@develop#egg=edc_meta_data
 -e git+https://github.com/botswana-harvard/edc-notification@develop#egg=edc_notification
 -e git+https://github.com/botswana-harvard/edc-offstudy@develop#egg=edc_offstudy
+-e git+https://github.com/botswana-harvard/edc-registration@develop#egg=edc_registration
 -e git+https://github.com/botswana-harvard/edc-quota@develop#egg=edc_quota
 -e git+https://github.com/botswana-harvard/edc-registration@develop#egg=edc_registration
 -e git+https://github.com/botswana-harvard/edc-rule-groups@develop#egg=edc_rule_groups
