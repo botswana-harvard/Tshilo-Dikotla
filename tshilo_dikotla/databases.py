@@ -65,7 +65,7 @@ TRAVIS_POSTGRES = {
 TEST_HOSTS_POSTGRES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mb',
+        'NAME': 'td',
         'USER': 'django',
         'PASSWORD': 'django',
         'HOST': '',
@@ -74,7 +74,7 @@ TEST_HOSTS_POSTGRES = {
     },
     'lab_api': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mb_lab',
+        'NAME': 'td_lab',
         'USER': 'django',
         'PASSWORD': 'django',
         'HOST': '',
