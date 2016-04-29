@@ -10,7 +10,7 @@ try:
         raise TypeError('Path to database credentials at \'{}\' does not exist'.format(PATH))
     with open(os.path.join(PATH, 'secret_key.txt')) as f:
         PRODUCTION_SECRET_KEY = f.read().strip()
-    PRODUCTION_MYSQL = {
+    PRODUCTION_POSTGRES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'OPTIONS': {
@@ -31,13 +31,13 @@ try:
 #         },
     }
 except TypeError:
-    PRODUCTION_MYSQL = None
+    PRODUCTION_POSTGRES = None
     PRODUCTION_SECRET_KEY = None
     print('Path to production database credentials does not exist')
 
-TRAVIS_MYSQL = {
+TRAVIS_POSTGRES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'td',
         'USER': 'travis',
         'HOST': '',
@@ -45,7 +45,7 @@ TRAVIS_MYSQL = {
         'ATOMIC_REQUESTS': True,
     },
     'lab_api': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'td_lab',
         'USER': 'travis',
         'HOST': '',
@@ -53,7 +53,7 @@ TRAVIS_MYSQL = {
         'ATOMIC_REQUESTS': True,
     },
     'test_server': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'td_test',
         'USER': 'travis',
         'HOST': '',
@@ -62,9 +62,9 @@ TRAVIS_MYSQL = {
     },
 }
 
-TEST_HOSTS_MYSQL = {
+TEST_HOSTS_POSTGRES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'mb',
         'USER': 'django',
         'PASSWORD': 'django',
@@ -73,7 +73,7 @@ TEST_HOSTS_MYSQL = {
         'ATOMIC_REQUESTS': True,
     },
     'lab_api': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'mb_lab',
         'USER': 'django',
         'PASSWORD': 'django',

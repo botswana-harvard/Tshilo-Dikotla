@@ -19,7 +19,7 @@ from django.utils import timezone
 from django.core.exceptions import ImproperlyConfigured
 
 from .databases import (
-    PRODUCTION_MYSQL, TEST_HOSTS_MYSQL, TRAVIS_MYSQL, PRODUCTION_SECRET_KEY)
+    PRODUCTION_POSTGRES, TEST_HOSTS_POSTGRES, TRAVIS_POSTGRES, PRODUCTION_SECRET_KEY)
 
 # EDC specific settings
 APP_NAME = 'tshilo_dikotla'
@@ -184,11 +184,11 @@ if socket.gethostname() in DEVELOPER_HOSTS:
     }
 elif socket.gethostname() == LIVE_SERVER:
     SECRET_KEY = PRODUCTION_SECRET_KEY
-    DATABASES = PRODUCTION_MYSQL
+    DATABASES = PRODUCTION_POSTGRES
 elif socket.gethostname() in TEST_HOSTS:
-    DATABASES = TEST_HOSTS_MYSQL
+    DATABASES = TEST_HOSTS_POSTGRES
 elif 'test' in sys.argv:
-    DATABASES = TRAVIS_MYSQL
+    DATABASES = TRAVIS_POSTGRES
 
 # django auth
 AUTH_PROFILE_MODULE = "bhp_userprofile.userprofile"
