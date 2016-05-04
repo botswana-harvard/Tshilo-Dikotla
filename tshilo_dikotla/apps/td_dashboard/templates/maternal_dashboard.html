@@ -1,0 +1,45 @@
+{% extends "base_registered_subject_dashboard.html"%}
+{% load common_tags %}
+{% load crypto_tags%}
+{% load admin_urls %}
+
+{% block clinic_dashboard_marquee %}
+<table>
+    <tr style="background:lightyellow;">
+        <td><B>Name:</B> {{maternal_consent.first_name|encrypted }} ({{ maternal_consent.initials|encrypted }}) </td>
+        <td><B>Gender:</B> {{maternal_consent.gender|gender }}</td> 
+        <td><B>Born:</B> {{maternal_consent.dob|date:"Y-m-d" }}</td> 
+        <td><B>Age:</B> {{maternal_consent.dob|age }}</td>
+        <td><B>Consented:</B> {{maternal_consent.consent_datetime|date:"Y-m-d H:i" }}</td>
+    </tr>
+</table>
+<table>
+	<tr style=background:lightyellow;>
+		<td><B> Antenatal enrollment status: </B>{% if antenatal_enrollment.is_eligible %} passed {% elif antenatal_enrollment.is_eligible == False %} failed {%else%}<i>not filled</i>{% endif %}</td>
+		<td><B> Postnatal enrollment status: </B>{% if antenatal_enrollment.is_eligible == False %} failed antenatal {% elif postnatal_enrollment.is_eligible %} passed {% elif postnatal_enrollment.is_eligible == False %} failed {%else%}<i>not filled</i>{% endif %}</td>
+	</tr>
+     <tr style=background:lightyellow;">
+        <td><B>Antenatal HIV status:</B>{%if antenatal_hiv_status%}<span> {{antenatal_hiv_status}}</span>{%else%}<i> NO ANT Enrollment HIV result</i>{%endif%}</td>
+        <td><B>Postnatal HIV status:</B>{%if postnatal_hiv_status%}<span> {{postnatal_hiv_status}}</span>{%else%}<i> NO PNT Enrollment HIV result</i>{%endif%}</td>
+    </tr>
+</table>
+{% endblock %}
+
+{% block infants %}
+    <tr name="top right"><td>
+    <H3>Registered Infant</H3>
+    {% if infants %}
+        <ol>
+          <li>
+          {% for subject_identifier,infant in infants.iteritems %}
+           <A href="{% url 'subject_dashboard_url' dashboard_type='infant' dashboard_model='registered_subject' dashboard_id=infant.dashboard_id show='appointments' %}">
+             {{subject_identifier}} {{ infant.gender }} {{ infant.first_name|encrypted }}
+          </A>
+          {% endfor %}
+        </ol>        
+    {% else %}    
+        no infants
+    {% endif %}
+
+    </td></tr>
+{% endblock infants %}  

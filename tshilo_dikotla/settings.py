@@ -22,7 +22,7 @@ from .databases import (
     PRODUCTION_POSTGRES, TEST_HOSTS_POSTGRES, TRAVIS_POSTGRES, PRODUCTION_SECRET_KEY)
 
 # EDC specific settings
-APP_NAME = 'tshilo_dikotla'
+APP_NAME = 'td'
 LIVE_SERVER = 'td.bhp.org.bw'
 TEST_HOSTS = ['edc4.bhp.org.bw']
 DEVELOPER_HOSTS = [
@@ -69,6 +69,11 @@ INSTALLED_APPS = [
     'django_revision',
     'django_crypto_fields',
     'south',
+    'edc_templates',
+    'edc_identifier',
+    'edc_lab.lab_packing',
+    'edc_lab.lab_clinic_api',
+    'edc_lab.lab_clinic_reference',
     'edc_appointment',
     'edc_base',
     'edc_call_manager',
@@ -79,8 +84,6 @@ INSTALLED_APPS = [
     'edc_data_manager',
     'edc_death_report',
     'edc_device',
-    'edc_identifier',
-    'edc_lab',
     'edc_meta_data',
     'edc_offstudy',
     'edc_registration',
@@ -89,6 +92,7 @@ INSTALLED_APPS = [
     'edc_visit_schedule',
     'edc_visit_tracking',
     'tshilo_dikotla.apps.td',
+    'tshilo_dikotla.apps.td_dashboard',
     'tshilo_dikotla.apps.td_maternal',
     'tshilo_dikotla.apps.td_infant',
 ]
@@ -143,12 +147,11 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = '{}.urls'.format(APP_NAME)
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -161,7 +164,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = '{}.wsgi.application'.format(APP_NAME)
 
 
 # Database
@@ -192,12 +194,6 @@ elif 'test' in sys.argv:
 
 # django auth
 AUTH_PROFILE_MODULE = "bhp_userprofile.userprofile"
-
-PROJECT_TITLE = 'Tshilo Dikotla'
-INSTITUTION = 'Botswana-Harvard AIDS Institute'
-PROTOCOL_REVISION = 'v1.0'
-PROTOCOL_NUMBER = '085'
-SOURCE_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
 
 PROJECT_NUMBER = 'BHP085'
 PROJECT_IDENTIFIER_PREFIX = '085'
@@ -297,37 +293,4 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.9/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-
-STATIC_URL = '/static/'
-
-
-if socket.gethostname() == LIVE_SERVER:
-    KEY_PATH = '/home/django/source/tshilo-dikotla/keys'
-elif socket.gethostname() in TEST_HOSTS + DEVELOPER_HOSTS:
-    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields')
-elif 'test' in sys.argv:
-    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields')
-else:
-    raise TypeError(
-        'Warning! Unknown hostname for KEY_PATH. \n'
-        'Getting this wrong on a LIVE SERVER will corrupt your encrypted data!!! \n'
-        'Expected hostname to appear in one of '
-        'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
-        'Got hostname=\'{}\'\n'.format(socket.gethostname()))
 

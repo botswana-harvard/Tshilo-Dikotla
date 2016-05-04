@@ -32,11 +32,11 @@ urlpatterns = patterns(
 #     url(r'^databrowse/(.*)', login_required(django_databrowse.site.root)),
 # )
 
-# urlpatterns += patterns(
-#     '',
-#     url(r'^{app_name}/dashboard/'.format(app_name=APP_NAME),
-#         include('tshilo_dikotla.apps.{app_name}_dashboard.urls'.format(app_name=APP_NAME))),
-# )
+urlpatterns += patterns(
+    '',
+    url(r'^{app_name}/dashboard/'.format(app_name=APP_NAME),
+        include('tshilo_dikotla.apps.{app_name}_dashboard.urls'.format(app_name=APP_NAME))),
+)
 
 urlpatterns += patterns(
     '',
@@ -52,6 +52,11 @@ urlpatterns += patterns(
     url(r'^{app_name}/password_change_done/'.format(app_name=APP_NAME),
         'django.contrib.auth.views.password_change_done',
         name='password_change_done'.format(app_name=APP_NAME)),
+)
+
+urlpatterns += patterns(
+    '',
+    url(r'^{app_name}/section/'.format(app_name=APP_NAME), include('edc_dashboard.section.urls'), name='section'),
 )
 
 urlpatterns += patterns(

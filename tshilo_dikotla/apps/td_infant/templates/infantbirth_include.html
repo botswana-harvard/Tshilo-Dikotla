@@ -1,0 +1,44 @@
+{% load common_tags %}
+{% load crypto_tags %}
+{% load url from future %}
+{% load admin_urls %}
+
+  <div class="results">
+      <table  cellspacing="0" id="result_list" border=1>
+    	<thead>
+			<tr>
+    	<th>Dashboard</th>
+    	<th>Identifier</th>
+    	<th>Initials</th>
+    	<th>Dob</th>    	    	    	
+    	<th>User Created</th>
+    	<th>Date Modified</th>    	    	
+    	</thead>
+        {% for infantbirth in search_result.object_list %}
+                <tr class="{% cycle 'row1' 'row2' %}">
+                <td><A href="{% url 'subject_dashboard_url' dashboard_type='infant' dashboard_model='infant_birth' dashboard_id=infantbirth.pk show='appointments' %}">{{ infantbirth.registered_subject.subject_identifier }}</A></td>        
+                <td>{{ infantbirth.registered_subject.subject_identifier|escape}}</td>
+              	<td>{{ infantbirth.registered_subject.initials }}</td>          	
+                <td>{{ infantbirth.dob|date:'Y-m-d' }}</td>                      	            
+                <td>{{ infantbirth.registered_subject.user_created }}</td>
+              	<td>{{ infantbirth.registered_subject.modified|date:"Y-m-d" }}</td>   	  
+                </tr>
+        {% endfor %}
+    </table>    
+    </div>
+<div class="pagination">
+    <span class="step-links">
+        {% if search_result.has_previous %}
+            <a href="?page={{ search_result.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ search_result.number }} of {{ search_result.paginator.num_pages }}.
+        </span>
+
+        {% if search_result.has_next %}
+            <a href="?page={{ search_result.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+

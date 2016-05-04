@@ -1,0 +1,54 @@
+{% load crypto_tags %}
+{% load admin_urls %}
+
+<div class="results">
+      <table cellspacing="0" id="result_list">
+        <thead><tr>
+        <th>Dashboard</th>
+        <th>Eligibility</th>
+        <th>Loss</th>
+        <th>Registration Date/Time</th>
+        <th>Age</th>  
+        <th>Pregnancy Status</th>  
+        <th>Delivery Status</th>    
+        <th>User Created</th>  
+        <th>Date Created</th>
+        <th>Host</th>       
+        
+        </thead>
+        <tbody>
+
+      {% for maternal_eligibility in search_result.object_list %}
+                <tr class="{% cycle 'row2' 'row1' %}">
+                {% if maternal_eligibility.is_consented %}
+                	<td>
+                		<ul>
+		                	{% for consent in maternal_eligibility.previous_consents %}
+		                		<li><A href="{% url 'subject_dashboard_url' dashboard_type='maternal' dashboard_model='maternal_eligibility' dashboard_id=maternal_eligibility.pk show='appointments' %}"><div nowrap>{{ consent.subject_identifier }} (V{{consent.version}})</div></A></li>
+		                	{% endfor %}
+		                	{% if not maternal_eligibility.have_latest_consent %}
+		                		<span style="color:red"><li><span><A href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=section_url&section_name=maternal">re-consent (V{{maternal_eligibility.current_consent_version}})</A></li>
+		                	{% endif %}
+		                </ul>
+		            </td>
+                {% elif maternal_eligibility.is_eligible %}
+                    <td><A href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=section_url&section_name=maternal">add maternal consent (V{{maternal_eligibility.current_consent_version}})</A></td>
+                {% else %}
+                    <td>{{ maternal_eligibility.ineligibility }}</td>
+                {% endif %}
+
+                <td><A href="{% url 'admin:td_maternal_maternaleligibility_change' maternal_eligibility.pk %}?&next=section_url&section_name=maternal">edit eligibility</A></td>
+                <td>{{maternal_eligibility.maternal_eligibility_loss.reason_ineligible|default:"-----" }}</td>
+                <td>{{maternal_eligibility.report_datetime}}</td>
+                <td>{{maternal_eligibility.age_in_years}}</td>
+                <td>{{maternal_eligibility.currently_pregnant}}</td>
+                <td>{{maternal_eligibility.recently_delivered}}</td>
+                <td>{{maternal_eligibility.user_created}}</td>
+                <td>{{maternal_eligibility.created|date:"d M Y H:i"}}</td>
+                <td>{{maternal_eligibility.hostname_created}}</td>
+
+      {% endfor %}
+      <tr><td colspan="9">{{ search_result.object_list.count }} maternal eligibility records found.</td></tr>
+      </tbody>
+      </table>
+      </div>
