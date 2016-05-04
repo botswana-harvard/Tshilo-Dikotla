@@ -250,7 +250,7 @@ if socket.gethostname() == LIVE_SERVER:
     PROJECT_TITLE = '{} Live Server'.format(PROJECT_TITLE)
 elif socket.gethostname() in TEST_HOSTS:
     DEVICE_ID = 99
-    PROJECT_TITLE = 'TEST (mysql): {}'.format(PROJECT_TITLE)
+    PROJECT_TITLE = 'TEST (postgres): {}'.format(PROJECT_TITLE)
 elif socket.gethostname() in DEVELOPER_HOSTS:
     DEVICE_ID = 99
     PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
