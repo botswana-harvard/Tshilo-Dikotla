@@ -11,7 +11,7 @@ from .maternal_eligibility import MaternalEligibility
 # from ..managers import MaternalEligibilityLossManager
 
 
-class MaternalEligibilityLoss(SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class MaternalEligibilityLoss(ExportTrackingFieldsMixin, BaseUuidModel):
     """ A model triggered and completed by system when a mother is in-eligible. """
 
     maternal_eligibility = models.OneToOneField(MaternalEligibility, null=True)
@@ -27,6 +27,7 @@ class MaternalEligibilityLoss(SyncModelMixin, ExportTrackingFieldsMixin, BaseUui
         help_text='Gets reasons from Maternal Eligibility.ineligibility')
 
 #     objects = MaternalEligibilityLossManager()
+    objects = models.Manager()
 
     history = AuditTrail()
 

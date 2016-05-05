@@ -2,6 +2,7 @@ from uuid import uuid4
 from django.utils import timezone
 
 from django.db import models
+from django.apps import apps
 # from django.db.models import get_model
 
 from edc_base.audit_trail import AuditTrail
@@ -60,9 +61,16 @@ class MaternalEligibility (ExportTrackingFieldsMixin, BaseUuidModel):
         choices=YES_NO)
 
     recently_delivered = models.CharField(
-        verbose_name="Have you recently delivered or had a baby within the past 72 hours?",
+        verbose_name="Have you recently delivered or had a baby?",
         max_length=3,
         choices=YES_NO)
+
+    hours_delivered = models.DecimalField(
+        verbose_name="If delivered, how many hours has it been since you delivered?",
+        max_digits=2,
+        decimal_places=0,
+        null=True,
+        blank=True,)
 
     is_eligible = models.BooleanField(
         default=False,
@@ -77,6 +85,7 @@ class MaternalEligibility (ExportTrackingFieldsMixin, BaseUuidModel):
         editable=False)
 
 #     objects = MaternalEligibilityManager()
+    objects = models.Manager()
 
     history = AuditTrail()
 
@@ -105,15 +114,15 @@ class MaternalEligibility (ExportTrackingFieldsMixin, BaseUuidModel):
     def natural_key(self):
         return (self.eligibility_id, self.report_datetime, )
 
-#     @property
-#     def maternal_eligibility_loss(self):
-#         MaternalEligibilityLoss = get_model('mb_maternal', 'MaternalEligibilityLoss')
-#         try:
-#             maternal_eligibility_loss = MaternalEligibilityLoss.objects.get(
-#                 maternal_eligibility_id=self.id)
-#         except MaternalEligibilityLoss.DoesNotExist:
-#             maternal_eligibility_loss = None
-#         return maternal_eligibility_loss
+    @property
+    def maternal_eligibility_loss(self):
+        MaternalEligibilityLoss = apps.get_model('td_maternal', 'MaternalEligibilityLoss')
+        try:
+            maternal_eligibility_loss = MaternalEligibilityLoss.objects.get(
+                maternal_eligibility_id=self.id)
+        except MaternalEligibilityLoss.DoesNotExist:
+            maternal_eligibility_loss = None
+        return maternal_eligibility_loss
 
     @property
     def have_latest_consent(self):

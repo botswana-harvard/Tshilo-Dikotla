@@ -176,6 +176,7 @@ TEMPLATES = [
 #     }
 # }
 
+SOUTH_TESTS_MIGRATE = False
 
 if socket.gethostname() in DEVELOPER_HOSTS:
     DATABASES = {
@@ -184,6 +185,21 @@ if socket.gethostname() in DEVELOPER_HOSTS:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         },
     }
+    # TODO: Make this list auto generate from INSTALLED_APPS
+    MIGRATION_MODULES = {"edc_registration": None,
+                         "edc_content_type_map": None,
+                         "edc_visit_schedule": None,
+                         "edc_visit_tracking": None,
+                         "edc_appointment": None,
+                         "edc_call_manager": None,
+                         "edc_death_report": None,
+                         "edc_identifier": None,
+                         "edc_meta_data": None,
+                         "edc_consent": None,
+                         "edc_rule_groups": None,
+                         "edc_data_manager": None,
+                         "td_infant": None,
+                         "td_maternal": None}
 elif socket.gethostname() == LIVE_SERVER:
     SECRET_KEY = PRODUCTION_SECRET_KEY
     DATABASES = PRODUCTION_POSTGRES
@@ -291,6 +307,4 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
 
