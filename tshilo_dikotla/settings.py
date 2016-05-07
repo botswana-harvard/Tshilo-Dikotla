@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     'edc_lab.lab_clinic_reference',
     'edc_appointment',
     'edc_base',
+    'edc_configuration',
     'edc_call_manager',
     'edc_consent',
     'edc_constants',
@@ -93,12 +94,30 @@ INSTALLED_APPS = [
     'edc_visit_tracking',
     'tshilo_dikotla.apps.td',
     'tshilo_dikotla.apps.td_dashboard',
+    'tshilo_dikotla.apps.td_lab',
     'tshilo_dikotla.apps.td_maternal',
     'tshilo_dikotla.apps.td_infant',
 ]
 
 if 'test' in sys.argv:
     INSTALLED_APPS.append('edc_testing')
+    # TODO: Make this list auto generate from INSTALLED_APPS
+    # Ignore running migrations on unit tests, greately speeds up tests.
+    MIGRATION_MODULES = {"edc_registration": None,
+                         "edc_content_type_map": None,
+                         "edc_visit_schedule": None,
+                         "edc_visit_tracking": None,
+                         "edc_appointment": None,
+                         "edc_call_manager": None,
+                         "edc_death_report": None,
+                         "edc_identifier": None,
+                         "edc_meta_data": None,
+                         "edc_consent": None,
+                         "edc_rule_groups": None,
+                         "edc_data_manager": None,
+                         "td_lab": None,
+                         "td_infant": None,
+                         "td_maternal": None}
 
 if socket.gethostname() in DEVELOPER_HOSTS + TEST_HOSTS or 'test' in sys.argv:
     INSTALLED_APPS.pop(INSTALLED_APPS.index('south'))
@@ -185,21 +204,6 @@ if socket.gethostname() in DEVELOPER_HOSTS:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         },
     }
-    # TODO: Make this list auto generate from INSTALLED_APPS
-    MIGRATION_MODULES = {"edc_registration": None,
-                         "edc_content_type_map": None,
-                         "edc_visit_schedule": None,
-                         "edc_visit_tracking": None,
-                         "edc_appointment": None,
-                         "edc_call_manager": None,
-                         "edc_death_report": None,
-                         "edc_identifier": None,
-                         "edc_meta_data": None,
-                         "edc_consent": None,
-                         "edc_rule_groups": None,
-                         "edc_data_manager": None,
-                         "td_infant": None,
-                         "td_maternal": None}
 elif socket.gethostname() == LIVE_SERVER:
     SECRET_KEY = PRODUCTION_SECRET_KEY
     DATABASES = PRODUCTION_POSTGRES

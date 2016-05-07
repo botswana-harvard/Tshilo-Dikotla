@@ -79,3 +79,17 @@ def update_maternal_registered_subject(registered_subject, instance):
     registered_subject.subject_type = 'maternal'
     registered_subject.user_modified = instance.user_modified
     return registered_subject
+
+
+@receiver(post_save, weak=False, dispatch_uid="maternal_consent_on_post_save")
+def maternal_consent_on_post_save(sender, instance, raw, created, using, **kwargs):
+    """Update maternal_eligibility consented flag and consent fields on registered subject."""
+    if not raw:
+        if isinstance(instance, MaternalConsent):
+            maternal_eligibility = MaternalEligibility.objects.get(
+                registered_subject=instance.registered_subject)
+            maternal_eligibility.is_consented = True
+            maternal_eligibility.save(update_fields=['is_consented'])
+            instance.registered_subject.registration_datetime = instance.consent_datetime
+            instance.registered_subject.registration_status = CONSENTED
+            instance.registered_subject.save(update_fields=['registration_datetime', 'registration_status'])

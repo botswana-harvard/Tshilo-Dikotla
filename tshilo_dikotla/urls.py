@@ -1,4 +1,5 @@
 # import django_databrowse
+import sys
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 from django.conf.urls import include, url, patterns
@@ -10,7 +11,8 @@ from django.views.generic import RedirectView
 
 from .load_edc import load_edc
 
-load_edc()
+if 'migrate' not in sys.argv and 'makemigrations' not in sys.argv:
+    load_edc()
 
 APP_NAME = settings.APP_NAME
 
