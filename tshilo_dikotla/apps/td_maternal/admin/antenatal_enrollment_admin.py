@@ -18,8 +18,6 @@ class AntenatalEnrollmentAdmin(BaseModelAdmin):
               'report_datetime',
               'gestation_wks',
               'is_diabetic',
-              'on_tb_tx',
-              'on_hypertension_tx',
               'will_breastfeed',
               'will_remain_onstudy',
               'week32_test',
@@ -33,8 +31,6 @@ class AntenatalEnrollmentAdmin(BaseModelAdmin):
               'rapid_test_date',
               'rapid_test_result')
     radio_fields = {'is_diabetic': admin.VERTICAL,
-                    'on_tb_tx': admin.VERTICAL,
-                    'on_hypertension_tx': admin.VERTICAL,
                     'will_breastfeed': admin.VERTICAL,
                     'will_remain_onstudy': admin.VERTICAL,
                     'current_hiv_status': admin.VERTICAL,

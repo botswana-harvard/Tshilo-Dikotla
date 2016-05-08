@@ -55,23 +55,6 @@ class MaternalEligibility (ExportTrackingFieldsMixin, BaseUuidModel):
         null=True,
         editable=False)
 
-    currently_pregnant = models.CharField(
-        verbose_name="Are you currently pregnant?",
-        max_length=3,
-        choices=YES_NO)
-
-    recently_delivered = models.CharField(
-        verbose_name="Have you recently delivered or had a baby?",
-        max_length=3,
-        choices=YES_NO)
-
-    hours_delivered = models.DecimalField(
-        verbose_name="If delivered, how many hours has it been since you delivered?",
-        max_digits=2,
-        decimal_places=0,
-        null=True,
-        blank=True,)
-
     is_eligible = models.BooleanField(
         default=False,
         editable=False)

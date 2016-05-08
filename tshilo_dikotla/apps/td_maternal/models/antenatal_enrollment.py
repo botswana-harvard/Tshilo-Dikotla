@@ -37,7 +37,7 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
 
     gestation_wks = models.IntegerField(
         verbose_name="How many weeks pregnant?",
-        help_text=" (weeks of gestation). Eligible if >=36 weeks", )
+        help_text=" (weeks of gestation). Eligible if >16 and <36 weeks", )
 
 #     objects = AntenatalEnrollmentManager()
     objects = models.Manager()

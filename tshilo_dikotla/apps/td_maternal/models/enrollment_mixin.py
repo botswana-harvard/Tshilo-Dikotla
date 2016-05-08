@@ -30,22 +30,7 @@ class EnrollmentMixin(models.Model):
 
     is_diabetic = models.CharField(
         verbose_name='Are you diabetic?',
-        # default=NO,
         choices=YES_NO,
-        help_text='INELIGIBLE if YES',
-        max_length=3)
-
-    on_tb_tx = models.CharField(
-        verbose_name="Are you being treated for tubercolosis?",
-        choices=YES_NO,
-        # default=NO,
-        help_text='INELIGIBLE if YES',
-        max_length=3)
-
-    on_hypertension_tx = models.CharField(
-        verbose_name='Are you being treated for hypertension?',
-        choices=YES_NO,
-        # default=NO,
         help_text='INELIGIBLE if YES',
         max_length=3)
 
