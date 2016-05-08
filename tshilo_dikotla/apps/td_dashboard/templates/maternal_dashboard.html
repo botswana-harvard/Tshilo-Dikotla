@@ -16,11 +16,7 @@
 <table>
 	<tr style=background:lightyellow;>
 		<td><B> Antenatal enrollment status: </B>{% if antenatal_enrollment.is_eligible %} passed {% elif antenatal_enrollment.is_eligible == False %} failed {%else%}<i>not filled</i>{% endif %}</td>
-		<td><B> Postnatal enrollment status: </B>{% if antenatal_enrollment.is_eligible == False %} failed antenatal {% elif postnatal_enrollment.is_eligible %} passed {% elif postnatal_enrollment.is_eligible == False %} failed {%else%}<i>not filled</i>{% endif %}</td>
-	</tr>
-     <tr style=background:lightyellow;">
-        <td><B>Antenatal HIV status:</B>{%if antenatal_hiv_status%}<span> {{antenatal_hiv_status}}</span>{%else%}<i> NO ANT Enrollment HIV result</i>{%endif%}</td>
-        <td><B>Postnatal HIV status:</B>{%if postnatal_hiv_status%}<span> {{postnatal_hiv_status}}</span>{%else%}<i> NO PNT Enrollment HIV result</i>{%endif%}</td>
+        <td><B>HIV status:</B>{%if postnatal_hiv_status%}<span> {{postnatal_hiv_status}}</span>{%else%}<i> NO PNT Enrollment HIV result</i>{%endif%}</td>
     </tr>
 </table>
 {% endblock %}

@@ -16,7 +16,7 @@ from edc_sync.models import SyncModelMixin
 from .enrollment_helper import EnrollmentError, EnrollmentHelper
 from .enrollment_mixin import EnrollmentMixin
 from .maternal_consent import MaternalConsent
-from .postnatal_enrollment import PostnatalEnrollment
+# from .postnatal_enrollment import PostnatalEnrollment
 
 
 class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
@@ -24,7 +24,7 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
 
     consent_model = MaternalConsent
 
-    off_study_model = ('mb_maternal', 'MaternalOffStudy')
+    off_study_model = ('td_maternal', 'MaternalOffStudy')
 
     weeks_base_field = 'gestation_wks'  # for rapid test required calc
 
@@ -39,9 +39,10 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
         verbose_name="How many weeks pregnant?",
         help_text=" (weeks of gestation). Eligible if >=36 weeks", )
 
-    objects = AntenatalEnrollmentManager()
+#     objects = AntenatalEnrollmentManager()
+    objects = models.Manager()
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     def natural_key(self):
         return self.registered_subject.natural_key()
@@ -90,30 +91,30 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
         """Returns the visit code for the off-study visit if eligibility criteria fail."""
         return '1000M'
 
-    def update_common_fields_to_postnatal_enrollment(self):
-        """Updates common field values from Antenatal Enrollment to
-        Postnatal Enrollment if Postnatal Enrollment exists.
-
-        Confirms is_eligible does not change value before saving."""
-        if self.id and self.is_eligible:
-            try:
-                postnatal_enrollment = PostnatalEnrollment.objects.get(
-                    registered_subject=self.registered_subject)
-                for attrname in self.common_fields():
-                    setattr(postnatal_enrollment, attrname, getattr(self, attrname))
-                is_eligible = EnrollmentHelper(postnatal_enrollment).is_eligible
-                if is_eligible != postnatal_enrollment.is_eligible:
-                    raise EnrollmentError(
-                        'Eligiblity calculated for Postnatal Enrollment unexpectedly '
-                        'changed after updating values from Antenatal Enrollment. '
-                        'Got \'is_eligible\' changed from {} to {}.'.format(
-                            is_eligible, postnatal_enrollment.is_eligible))
-                else:
-                    postnatal_enrollment.save()
-            except PostnatalEnrollment.DoesNotExist:
-                pass
+#     def update_common_fields_to_postnatal_enrollment(self):
+#         """Updates common field values from Antenatal Enrollment to
+#         Postnatal Enrollment if Postnatal Enrollment exists.
+# 
+#         Confirms is_eligible does not change value before saving."""
+#         if self.id and self.is_eligible:
+#             try:
+#                 postnatal_enrollment = PostnatalEnrollment.objects.get(
+#                     registered_subject=self.registered_subject)
+#                 for attrname in self.common_fields():
+#                     setattr(postnatal_enrollment, attrname, getattr(self, attrname))
+#                 is_eligible = EnrollmentHelper(postnatal_enrollment).is_eligible
+#                 if is_eligible != postnatal_enrollment.is_eligible:
+#                     raise EnrollmentError(
+#                         'Eligiblity calculated for Postnatal Enrollment unexpectedly '
+#                         'changed after updating values from Antenatal Enrollment. '
+#                         'Got \'is_eligible\' changed from {} to {}.'.format(
+#                             is_eligible, postnatal_enrollment.is_eligible))
+#                 else:
+#                     postnatal_enrollment.save()
+#             except PostnatalEnrollment.DoesNotExist:
+#                 pass
 
     class Meta:
-        app_label = 'mb_maternal'
+        app_label = 'td_maternal'
         verbose_name = 'Antenatal Enrollment'
         verbose_name_plural = 'Antenatal Enrollment'

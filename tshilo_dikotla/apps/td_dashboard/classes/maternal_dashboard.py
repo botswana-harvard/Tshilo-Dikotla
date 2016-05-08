@@ -6,10 +6,10 @@ from edc_constants.constants import YES, POS, NEG, IND, NEVER, UNKNOWN, DWTA
 from edc_dashboard.subject import RegisteredSubjectDashboard
 
 from tshilo_dikotla.apps.td.constants import INFANT
-# from tshilo_dikotla.apps.td_lab.models.maternal_requisition import MaternalRequisition
+from tshilo_dikotla.apps.td_lab.models import MaternalRequisition
 from tshilo_dikotla.apps.td_maternal.models import (
     MaternalVisit, MaternalEligibility, MaternalConsent, MaternalLocator,
-    PostnatalEnrollment) # ,AntenatalEnrollment)
+    AntenatalEnrollment)
 from tshilo_dikotla.apps.td_infant.models import InfantBirth
 
 
@@ -34,16 +34,16 @@ class MaternalDashboard(RegisteredSubjectDashboard):
         self.subject_dashboard_url = 'subject_dashboard_url'
         self.visit_model = MaternalVisit
         self.dashboard_type_list = ['maternal']
-        self.membership_form_category = ['specimen', 'antenatal', 'postnatal']
+        self.membership_form_category = ['specimen', 'antenatal']
         self.dashboard_models['maternal_eligibility'] = MaternalEligibility
         self.dashboard_models['maternal_consent'] = MaternalConsent
         self.dashboard_models['visit'] = MaternalVisit
-#         self.requisition_model = MaternalRequisition
+        self._requisition_model = MaternalRequisition
         self._locator_model = MaternalLocator
 
     def get_context_data(self, **kwargs):
         super(MaternalDashboard, self).get_context_data(**kwargs)
-        postnatal_enrollment = self.postnatal_enrollment()
+#         postnatal_enrollment = self.postnatal_enrollment()
         antenatal_enrollment = self.antenatal_enrollment()
         self.context.update(
             home='tshilo_dikotla',
@@ -54,9 +54,9 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             maternal_consent=self.consent,
             local_results=self.render_labs(),
             antenatal_enrollment=self.antenatal_enrollment(),
-            postnatal_enrollment=postnatal_enrollment,
+#             postnatal_enrollment=postnatal_enrollment,
             antenatal_hiv_status=self.antenatal_maternal_hiv_status(antenatal_enrollment),
-            postnatal_hiv_status=self.postnatal_maternal_hiv_status(postnatal_enrollment),
+#             postnatal_hiv_status=self.postnatal_maternal_hiv_status(postnatal_enrollment),
         )
         return self.context
 
@@ -91,26 +91,26 @@ class MaternalDashboard(RegisteredSubjectDashboard):
                 maternal_hiv_status = 'IND ANT rapid test'
         return maternal_hiv_status
 
-    def postnatal_maternal_hiv_status(self, postnatal_enrollment):
-        maternal_hiv_status = None
-        if postnatal_enrollment:
-            if postnatal_enrollment.current_hiv_status == POS and postnatal_enrollment.evidence_hiv_status == YES:
-                maternal_hiv_status = POS
-            elif postnatal_enrollment.current_hiv_status == NEG and postnatal_enrollment.evidence_hiv_status == YES:
-                maternal_hiv_status = NEG
-            elif postnatal_enrollment.current_hiv_status == NEVER:
-                maternal_hiv_status = 'Never Tested'
-            elif postnatal_enrollment.current_hiv_status == UNKNOWN:
-                maternal_hiv_status = 'UNK'
-            elif postnatal_enrollment.current_hiv_status == DWTA:
-                maternal_hiv_status = 'REFUSED'
-            elif postnatal_enrollment.rapid_test_result == POS:
-                maternal_hiv_status = 'POS PNT rapid test'
-            elif postnatal_enrollment.rapid_test_result == NEG:
-                maternal_hiv_status = 'NEG PNT rapid test'
-            elif postnatal_enrollment.rapid_test_result == IND:
-                maternal_hiv_status = 'IND PNT rapid test'
-        return maternal_hiv_status
+#     def postnatal_maternal_hiv_status(self, postnatal_enrollment):
+#         maternal_hiv_status = None
+#         if postnatal_enrollment:
+#             if postnatal_enrollment.current_hiv_status == POS and postnatal_enrollment.evidence_hiv_status == YES:
+#                 maternal_hiv_status = POS
+#             elif postnatal_enrollment.current_hiv_status == NEG and postnatal_enrollment.evidence_hiv_status == YES:
+#                 maternal_hiv_status = NEG
+#             elif postnatal_enrollment.current_hiv_status == NEVER:
+#                 maternal_hiv_status = 'Never Tested'
+#             elif postnatal_enrollment.current_hiv_status == UNKNOWN:
+#                 maternal_hiv_status = 'UNK'
+#             elif postnatal_enrollment.current_hiv_status == DWTA:
+#                 maternal_hiv_status = 'REFUSED'
+#             elif postnatal_enrollment.rapid_test_result == POS:
+#                 maternal_hiv_status = 'POS PNT rapid test'
+#             elif postnatal_enrollment.rapid_test_result == NEG:
+#                 maternal_hiv_status = 'NEG PNT rapid test'
+#             elif postnatal_enrollment.rapid_test_result == IND:
+#                 maternal_hiv_status = 'IND PNT rapid test'
+#         return maternal_hiv_status
 
     def get_locator_scheduled_visit_code(self):
         """ Returns visit where the locator is scheduled, TODO: maybe search visit definition for this?."""
@@ -153,16 +153,16 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             pass
         return infants
 
-#     def antenatal_enrollment(self):
-#         try:
-#             antenatal_enrollment = AntenatalEnrollment.objects.get(registered_subject=self.registered_subject)
-#         except AntenatalEnrollment.DoesNotExist:
-#             antenatal_enrollment = None
-#         return antenatal_enrollment
-
-    def postnatal_enrollment(self):
+    def antenatal_enrollment(self):
         try:
-            postnatal_enrollment = PostnatalEnrollment.objects.get(registered_subject=self.registered_subject)
-        except PostnatalEnrollment.DoesNotExist:
-            postnatal_enrollment = None
-        return postnatal_enrollment
+            antenatal_enrollment = AntenatalEnrollment.objects.get(registered_subject=self.registered_subject)
+        except AntenatalEnrollment.DoesNotExist:
+            antenatal_enrollment = None
+        return antenatal_enrollment
+
+#     def postnatal_enrollment(self):
+#         try:
+#             postnatal_enrollment = PostnatalEnrollment.objects.get(registered_subject=self.registered_subject)
+#         except PostnatalEnrollment.DoesNotExist:
+#             postnatal_enrollment = None
+#         return postnatal_enrollment

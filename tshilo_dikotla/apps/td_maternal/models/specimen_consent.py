@@ -53,6 +53,6 @@ class SpecimenConsent(BaseSpecimenConsent, SampleCollectionFieldsMixin, Requires
         return self.consent_datetime
 
     class Meta:
-        app_label = 'tb_maternal'
+        app_label = 'td_maternal'
         verbose_name = 'Specimen Consent'
         verbose_name_plural = 'Specimen Consent'

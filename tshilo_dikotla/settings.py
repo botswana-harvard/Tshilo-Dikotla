@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     'edc_data_manager',
     'edc_death_report',
     'edc_device',
+    'edc_locator',
     'edc_meta_data',
     'edc_offstudy',
     'edc_registration',

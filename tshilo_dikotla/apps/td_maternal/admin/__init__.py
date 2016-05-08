@@ -1,2 +1,5 @@
+from .maternal_locator_admin import MaternalLocatorAdmin
 from .maternal_eligibility_admin import MaternalEligibilityAdmin
 from .maternal_consent_admin import MaternalConsentAdmin
+from .antenatal_enrollment_admin import AntenatalEnrollmentAdmin
+from .specimen_consent_admin import SpecimenConsentAdmin
