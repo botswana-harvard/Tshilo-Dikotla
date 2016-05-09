@@ -15,6 +15,7 @@ class AntenatalEnrollmentFactory(factory.DjangoModelFactory):
     report_datetime = timezone.now()
 
     gestation_wks = 36
+    last_period_date = timezone.datetime.now()
     is_diabetic = NO
     valid_regimen = YES
     valid_regimen_duration = YES
