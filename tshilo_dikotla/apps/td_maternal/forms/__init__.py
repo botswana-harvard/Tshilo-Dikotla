@@ -5,3 +5,4 @@ from .specimen_consent_form import SpecimenConsentForm
 from .base_enrollment_form import BaseEnrollmentForm
 from .antenatal_enrollment_form import AntenatalEnrollmentForm
 from .maternal_eligibility_form import MaternalEligibilityForm
+from .maternal_visit_form import MaternalVisitForm

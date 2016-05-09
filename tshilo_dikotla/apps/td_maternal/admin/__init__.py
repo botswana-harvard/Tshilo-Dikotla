@@ -3,3 +3,4 @@ from .maternal_eligibility_admin import MaternalEligibilityAdmin
 from .maternal_consent_admin import MaternalConsentAdmin
 from .antenatal_enrollment_admin import AntenatalEnrollmentAdmin
 from .specimen_consent_admin import SpecimenConsentAdmin
+from .maternal_visit_admin import MaternalVisitAdmin
