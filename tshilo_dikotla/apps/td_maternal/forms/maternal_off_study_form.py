@@ -25,3 +25,4 @@ class MaternalOffStudyForm (OffStudyFormMixin, BaseMaternalModelForm):
 
     class Meta:
         model = MaternalOffStudy
+        fields = '__all__'
