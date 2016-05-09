@@ -40,7 +40,7 @@ class MaternalRequisition(CrfModelMixin, RequisitionModelMixin,
 
     #history = AuditTrail()
 
-    #entry_meta_data_manager = RequisitionMetaDataManager(MaternalVisit)
+    entry_meta_data_manager = RequisitionMetaDataManager(MaternalVisit)
 
     def __unicode__(self):
         return '{0} {1}'.format(str(self.panel), self.requisition_identifier)

@@ -5,10 +5,14 @@ from django.utils import timezone
 from edc_registration.models import RegisteredSubject
 from edc_constants.constants import (
     FEMALE, SCHEDULED, SCREENED, CONSENTED, FAILED_ELIGIBILITY, ALIVE, OFF_STUDY, ON_STUDY)
+from edc_visit_schedule.models.visit_definition import VisitDefinition
+from edc_appointment.models.appointment import Appointment
 
 from .maternal_consent import MaternalConsent
 from .maternal_eligibility import MaternalEligibility
 from .maternal_eligibility_loss import MaternalEligibilityLoss
+from .maternal_off_study import MaternalOffStudy
+from .maternal_visit import MaternalVisit
 
 
 @receiver(post_save, weak=False, dispatch_uid="maternal_eligibility_on_post_save")
@@ -93,3 +97,35 @@ def maternal_consent_on_post_save(sender, instance, raw, created, using, **kwarg
             instance.registered_subject.registration_datetime = instance.consent_datetime
             instance.registered_subject.registration_status = CONSENTED
             instance.registered_subject.save(update_fields=['registration_datetime', 'registration_status'])
+
+
+@receiver(post_save, weak=False, dispatch_uid="ineligible_take_off_study")
+def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
+    """If not is_eligible, creates the 1000M visit and sets to off study."""
+    if not raw:
+        try:
+            if not instance.is_eligible:
+                report_datetime = instance.report_datetime
+                visit_definition = VisitDefinition.objects.get(code=instance.off_study_visit_code)
+                appointment = Appointment.objects.get(
+                    registered_subject=instance.registered_subject,
+                    visit_definition=visit_definition)
+                maternal_visit = MaternalVisit.objects.get(appointment=appointment)
+                if maternal_visit.reason != FAILED_ELIGIBILITY:
+                    maternal_visit.reason = FAILED_ELIGIBILITY
+                    maternal_visit.study_status = OFF_STUDY
+                    maternal_visit.save()
+        except MaternalVisit.DoesNotExist:
+            MaternalVisit.objects.create(
+                appointment=appointment,
+                report_datetime=report_datetime,
+                survival_status=ALIVE,
+                study_status=OFF_STUDY,
+                reason=FAILED_ELIGIBILITY)
+        except AttributeError as e:
+            if 'is_eligible' not in str(e) and 'off_study_visit_code' not in str(e):
+                raise
+        except VisitDefinition.DoesNotExist:
+            pass
+        except Appointment.DoesNotExist:
+            pass

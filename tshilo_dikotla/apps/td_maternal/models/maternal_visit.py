@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.apps import apps
 
 from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
@@ -14,6 +15,7 @@ from edc_visit_tracking.models import VisitModelMixin, PreviousVisitMixin, Caret
 from tshilo_dikotla.apps.td.choices import VISIT_REASON
 
 from .maternal_consent import MaternalConsent
+from .antenatal_enrollment import AntenatalEnrollment
 from .maternal_visit_crf_meta_data_mixin import MaternalVisitCrfMetaDataMixin
 
 
@@ -46,18 +48,14 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalV
     def get_visit_reason_choices(self):
         return VISIT_REASON
 
-
-#     def is_eligible(self):
-#         """Returns True if participant is either eligible ante or post natal."""
-#         eligible = False
-#         try:
-#             eligible = self.postnatal_enrollment.is_eligible
-#         except AttributeError:
-#             try:
-#                 eligible = self.antenatal_enrollment.is_eligible
-#             except AttributeError:
-#                 pass
-#         return eligible
+    def is_eligible(self):
+        """Returns True if participant is either eligible antenataly."""
+        eligible = False
+        try:
+            eligible = self.antenatal_enrollment.is_eligible
+        except AttributeError:
+            pass
+        return eligible
 
     def subject_failed_eligibility(self, exception_cls=None):
         exception_cls = exception_cls or ValidationError
@@ -77,9 +75,9 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalV
 #     @property
 #     def scheduled_rapid_test(self):
 #         """Returns the value of the \'result\' field of the RapidTestResult.
-#
+# 
 #         This is a scheduled maternal form for on-study participants."""
-#         RapidTestResult = models.get_model('mb_maternal', 'rapidtestresult')
+#         RapidTestResult = apps.get_model('td_maternal', 'rapidtestresult')
 #         try:
 #             obj = RapidTestResult.objects.filter(
 #                 maternal_visit__appointment__registered_subject=self.appointment.registered_subject,
@@ -92,25 +90,22 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalV
 #             scheduled_rapid_test = None
 #         return scheduled_rapid_test
 
-#     @property
-#     def enrollment_hiv_status(self):
-#         enrollment_hiv_status = None
-#         try:
-#             enrollment_hiv_status = self.postnatal_enrollment.enrollment_hiv_status
-#         except AttributeError:
-#             try:
-#                 enrollment_hiv_status = self.antenatal_enrollment.enrollment_hiv_status
-#             except AttributeError:
-#                 pass
-#         return enrollment_hiv_status
+    @property
+    def enrollment_hiv_status(self):
+        enrollment_hiv_status = None
+        try:
+            enrollment_hiv_status = self.antenatal_enrollment.enrollment_hiv_status
+        except AttributeError:
+            pass
+        return enrollment_hiv_status
 
-#     @property
-#     def antenatal_enrollment(self):
-#         try:
-#             return AntenatalEnrollment.objects.get(
-#                 registered_subject=self.appointment.registered_subject)
-#         except AntenatalEnrollment.DoesNotExist:
-#             return None
+    @property
+    def antenatal_enrollment(self):
+        try:
+            return AntenatalEnrollment.objects.get(
+                registered_subject=self.appointment.registered_subject)
+        except AntenatalEnrollment.DoesNotExist:
+            return None
 
 #     @property
 #     def postnatal_enrollment(self):

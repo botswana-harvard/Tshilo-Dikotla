@@ -9,8 +9,6 @@
         <th>Loss</th>
         <th>Registration Date/Time</th>
         <th>Age</th>  
-        <th>Pregnancy Status</th>  
-        <th>Delivery Status</th>    
         <th>User Created</th>  
         <th>Date Created</th>
         <th>Host</th>       
@@ -41,8 +39,6 @@
                 <td>{{maternal_eligibility.maternal_eligibility_loss.reason_ineligible|default:"-----" }}</td>
                 <td>{{maternal_eligibility.report_datetime}}</td>
                 <td>{{maternal_eligibility.age_in_years}}</td>
-                <td>{{maternal_eligibility.currently_pregnant}}</td>
-                <td>{{maternal_eligibility.recently_delivered}}</td>
                 <td>{{maternal_eligibility.user_created}}</td>
                 <td>{{maternal_eligibility.created|date:"d M Y H:i"}}</td>
                 <td>{{maternal_eligibility.hostname_created}}</td>

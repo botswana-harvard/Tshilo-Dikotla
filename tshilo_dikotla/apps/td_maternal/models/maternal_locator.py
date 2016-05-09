@@ -7,7 +7,9 @@ from edc_base.model.fields import OtherCharField
 from edc_base.model.validators import CellNumber, TelephoneNumber
 from edc_constants.choices import YES_NO
 from edc_locator.models import LocatorMixin
+from edc_meta_data.managers import CrfMetaDataManager
 
+from .maternal_visit import MaternalVisit
 from .maternal_crf_model import MaternalCrfModel
 
 
@@ -53,7 +55,9 @@ class MaternalLocator(LocatorMixin, MaternalCrfModel):
         blank=True,
         null=True)
 
-    history = AuditTrail()
+    entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
+
+    #history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'

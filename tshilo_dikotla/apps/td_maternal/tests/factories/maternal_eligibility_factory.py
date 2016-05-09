@@ -14,6 +14,3 @@ class MaternalEligibilityFactory(factory.DjangoModelFactory):
 
     report_datetime = timezone.now()
     age_in_years = 26
-    currently_pregnant = YES
-    recently_delivered = NO
-    hours_delivered = 0

@@ -3,7 +3,8 @@ from edc_constants.constants import NOT_REQUIRED, REQUIRED, ADDITIONAL, NOT_ADDI
 
 
 maternal_antenatal_entries = (
-    CrfTuple(10, 'td_maternal', 'maternalultrasound', REQUIRED, NOT_ADDITIONAL),
+#     CrfTuple(10, 'td_maternal', 'maternalultrasound', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(20, 'td_maternal', 'maternaloffstudy', NOT_REQUIRED, ADDITIONAL))
 
 # maternal_delivery_entries = (
@@ -36,27 +37,27 @@ maternal_antenatal_entries = (
 
 maternal_requisition_entries = (
     RequisitionPanelTuple(
-        10L, 'td_lab', 'maternalrequisition',
+        10, 'td_lab', 'maternalrequisition',
         'Viral Load', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
-        20L, 'td_lab', 'maternalrequisition',
+        20, 'td_lab', 'maternalrequisition',
         'Breast Milk (Storage)', 'STORAGE', 'BM', NOT_REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
-        30L, 'td_lab', 'maternalrequisition',
+        30, 'td_lab', 'maternalrequisition',
         'Vaginal swab (Storage)', 'STORAGE', 'VS', NOT_REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
-        40L, 'td_lab', 'maternalrequisition',
+        40, 'td_lab', 'maternalrequisition',
         'Rectal swab (Storage)', 'STORAGE', 'RS', NOT_REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
-        50L, 'td_lab', 'maternalrequisition',
+        50, 'td_lab', 'maternalrequisition',
         'Skin Swab (Storage)', 'STORAGE', 'SW', NOT_REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
-        60L, 'td_lab', 'maternalrequisition',
+        60, 'td_lab', 'maternalrequisition',
         'Vaginal STI Swab (Storage)', 'TEST', 'VS', NOT_REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
-        70L, 'td_lab', 'maternalrequisition',
+        70, 'td_lab', 'maternalrequisition',
         'Hematology (ARV)', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
-        80L, 'td_lab', 'maternalrequisition',
+        80, 'td_lab', 'maternalrequisition',
         'CD4/ CD8', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
 )

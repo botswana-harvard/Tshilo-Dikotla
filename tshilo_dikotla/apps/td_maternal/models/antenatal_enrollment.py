@@ -48,10 +48,6 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
         return self.registered_subject.natural_key()
     natural_key.dependencies = ['edc_registration.registeredsubject']
 
-    def save(self, *args, **kwargs):
-        self.update_common_fields_to_postnatal_enrollment()
-        super(AntenatalEnrollment, self).save(*args, **kwargs)
-
     def unenrolled_error_messages(self):
         """Returns a tuple (True, None) if mother is eligible otherwise
         (False, unenrolled_error_message) where error message is the reason enrollment failed."""
@@ -72,18 +68,14 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
             unenrolled_error_message.append('regimen duration invalid')
         if self.rapid_test_done == NO:
             unenrolled_error_message.append('rapid test not done')
-        if self.gestation_wks < 36:
-            unenrolled_error_message.append('gestation < 36wks')
+        if self.gestation_wks < 16 or self.gestation_wks > 36:
+            unenrolled_error_message.append('gestation not 16 to 36wks')
         return (self.is_eligible, ', '.join(unenrolled_error_message))
 
     def chronic_unenrolled_error_messages(self):
         unenrolled_error_message = None
         if self.is_diabetic == YES:
             unenrolled_error_message = 'Diabetic'
-        if self.on_tb_tx == YES:
-            unenrolled_error_message = 'on TB treatment'
-        if self.on_hypertension_tx == YES:
-            unenrolled_error_message = 'Hypertensive'
         return unenrolled_error_message
 
     @property

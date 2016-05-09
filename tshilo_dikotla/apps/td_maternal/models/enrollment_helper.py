@@ -42,22 +42,12 @@ class EnrollmentHelper(object):
             except AttributeError:
                 pass
 
-        # get correct field value for gestational age and
-        # choose the method to use to determine basic eligibility criteria (not
-        # including HIV status)
-        try:
-            self.gestational_age = self.gestation_wks
-            self.passes_basic_criteria = self.antenatal_criteria
-        except AttributeError:
-            self.gestational_age = self.gestation_wks_delivered
-            self.passes_basic_criteria = self.postnatal_criteria
-
         self.is_eligible = self.is_eligible_for_enrollment()
 
     def is_eligible_for_enrollment(self):
         """Returns True if all eligibility criteria passes."""
         is_eligible = False
-        if self.passes_basic_criteria():
+        if self.antenatal_criteria():
             if (self.enrollment_hiv_status == POS and self.valid_regimen == YES and
                     self.valid_regimen_duration == YES):
                 is_eligible = True
@@ -68,21 +58,8 @@ class EnrollmentHelper(object):
     def antenatal_criteria(self):
         """Returns True if basic criteria, not including HIV status,
         is met for antenatal enrollment."""
-        if (self.gestation_wks >= 36 and self.no_chronic_conditions() and
-                self.will_breastfeed == YES and self.will_remain_onstudy == YES):
-            return True
-        return False
-
-    def postnatal_criteria(self):
-        """Returns True if basic criteria, not including HIV status,
-        is met for postnatal enrollment."""
-        if (self.delivery_status == LIVE and self.gestation_wks_delivered >= 37 and
-                self.no_chronic_conditions() and
-                self.postpartum_days <= 3 and
-                self.vaginal_delivery == YES and
-                self.will_breastfeed == YES and
-                self.will_remain_onstudy == YES and
-                self.live_infants == 1):
+        if (self.gestation_wks >= 16 and self.gestation_wks <= 36 and self.no_chronic_conditions() and
+                self.will_breastfeed == YES and self.will_remain_onstudy == YES and self.no_chronic_conditions()):
             return True
         return False
 
@@ -178,6 +155,4 @@ class EnrollmentHelper(object):
 
     def no_chronic_conditions(self):
         """Returns True if subject has no chronic conditions."""
-        return (self.is_diabetic == NO and
-                self.on_tb_tx == NO and
-                self.on_hypertension_tx == NO)
+        return (self.is_diabetic == NO)

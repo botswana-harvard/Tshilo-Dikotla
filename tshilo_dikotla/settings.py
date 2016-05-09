@@ -116,6 +116,12 @@ if 'test' in sys.argv:
                          "edc_consent": None,
                          "edc_rule_groups": None,
                          "edc_data_manager": None,
+                         "lab_packing": None,
+                         "lab_clinic_api": None,
+                         "lab_clinic_reference": None,
+                         "edc_death_report": None,
+                         "edc_sync": None,
+                         "edc_configuration": None,
                          "td_lab": None,
                          "td_infant": None,
                          "td_maternal": None}
