@@ -35,9 +35,16 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
             datetime_not_future, ],
         help_text='')
 
+    last_period_date = models.DateTimeField(
+        verbose_name="What is the approximate date of the first day of the mother’s last menstrual period",
+        validators=[
+            datetime_not_before_study_start,
+            datetime_not_future, ],
+        help_text='')
+
     gestation_wks = models.IntegerField(
-        verbose_name="How many weeks pregnant?",
-        help_text=" (weeks of gestation). Eligible if >16 and <36 weeks", )
+        verbose_name="How many weeks pregnant is the mother by LMP?",
+        help_text=" (weeks of gestation). Eligible if >16 and <36 weeks GA", )
 
 #     objects = AntenatalEnrollmentManager()
     objects = models.Manager()

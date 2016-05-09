@@ -35,14 +35,14 @@ class EnrollmentMixin(models.Model):
         max_length=3)
 
     will_breastfeed = models.CharField(
-        verbose_name='Are you willing to breast-feed your child for a whole year?',
+        verbose_name='Are you willing to breast-feed your child for 6 months?',
         choices=YES_NO,
         # default=NO,
         help_text='INELIGIBLE if NO',
         max_length=3)
 
     will_remain_onstudy = models.CharField(
-        verbose_name="Are you willing to remain in the study during the infants first year of life",
+        verbose_name="Are you willing to remain in the study for the child's first three year of life",
         choices=YES_NO,
         # default=NO,
         help_text='INELIGIBLE if NO',
@@ -100,7 +100,7 @@ class EnrollmentMixin(models.Model):
         blank=False,
         # default=NOT_APPLICABLE,
         max_length=15,
-        help_text=("If not 6 or more weeks then not eligible."))
+        help_text=("If not 4 or more weeks then not eligible."))
 
     rapid_test_done = models.CharField(
         verbose_name="Was a rapid test processed?",
