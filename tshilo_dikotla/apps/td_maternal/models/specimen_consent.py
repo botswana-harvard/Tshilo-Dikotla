@@ -47,7 +47,7 @@ class SpecimenConsent(BaseSpecimenConsent, SampleCollectionFieldsMixin, Requires
     @property
     def subject_identifier(self):
         return self.get_subject_identifier()
-    subject_identifier.allow_tags = True
+#     subject_identifier.allow_tags = True
 
     @property
     def report_datetime(self):
