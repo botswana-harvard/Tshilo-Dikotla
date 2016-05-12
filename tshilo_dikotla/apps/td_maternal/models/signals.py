@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -9,6 +10,8 @@ from edc_visit_schedule.models.visit_definition import VisitDefinition
 from edc_appointment.models.appointment import Appointment
 
 from .maternal_consent import MaternalConsent
+from .maternal_ultrasound_initial import MaternalUltraSoundInitial
+from .antenatal_enrollment import AntenatalEnrollment
 from .maternal_eligibility import MaternalEligibility
 from .maternal_eligibility_loss import MaternalEligibilityLoss
 from .maternal_off_study import MaternalOffStudy
@@ -125,7 +128,60 @@ def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
         except AttributeError as e:
             if 'is_eligible' not in str(e) and 'off_study_visit_code' not in str(e):
                 raise
+#         except VisitDefinition.DoesNotExist:
+#             pass
+#         except Appointment.DoesNotExist:
+#             pass
+
+
+def put_back_on_study_from_failed_eligibility(instance):
+    """Attempts to change the 1000M maternal visit back to scheduled
+    from off study."""
+    with transaction.atomic():
+        try:
+            visit_definition = VisitDefinition.objects.get(code='1000M')
+            appointment = Appointment.objects.get(
+                registered_subject=instance.registered_subject,
+                visit_definition=visit_definition)
+            maternal_visit = MaternalVisit.objects.get(
+                appointment=appointment)
+            maternal_visit.study_status = ON_STUDY
+            maternal_visit.reason = SCHEDULED
+            maternal_visit.save()
+        except MaternalVisit.DoesNotExist:
+            MaternalVisit.objects.create(
+                appointment=appointment,
+                report_datetime=instance.report_datetime,
+                survival_status=ALIVE,
+                study_status=ON_STUDY,
+                reason=SCHEDULED)
         except VisitDefinition.DoesNotExist:
             pass
         except Appointment.DoesNotExist:
             pass
+
+
+@receiver(post_save, weak=False, dispatch_uid="eligible_put_back_on_study")
+def eligible_put_back_on_study(sender, instance, raw, created, using, **kwargs):
+    """changes the 1000M visit to scheduled from off study if is_eligible."""
+    if not raw:
+        try:
+            if instance.is_eligible and isinstance(instance, AntenatalEnrollment):
+                MaternalOffStudy.objects.get(
+                    maternal_visit__appointment__registered_subject=instance.registered_subject)
+        except AttributeError as e:
+            if 'is_eligible' not in str(e) and 'registered_subject' not in str(e):
+                raise
+        except MaternalOffStudy.DoesNotExist:
+            put_back_on_study_from_failed_eligibility(instance)
+
+
+@receiver(post_save, weak=False, dispatch_uid="maternal_ultrasound_initial_on_post_save")
+def maternal_ultrasound_initial_on_post_save(sender, instance, raw, created, using, **kwargs):
+    """Update antenatal enrollment to indicate if eligibility is passed on not based on ultra sound form results."""
+    if not raw:
+        if isinstance(instance, MaternalUltraSoundInitial):
+            # re-save antenatal enrollment record to recalculate eligibility
+            antenatal_enrollment = instance.antenatal_enrollment
+#             antenatal_enrollment.is_eligible = instance.pass_antenatal_enrollment
+            antenatal_enrollment.save()

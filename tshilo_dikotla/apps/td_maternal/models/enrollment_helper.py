@@ -11,38 +11,42 @@ class EnrollmentHelper(object):
 
     """Class that determines maternal eligibility based on the protocol specific criteria.
 
-    * Accepts an instance of AntenatalEnrollment or PostnatalEnrollment.
+    * Accepts an instance_antenatal of AntenatalEnrollment or PostnatalEnrollment.
     * is called in the save method of the EnrollmentMixin.
     * makes available the calculated enrollment_hiv_status and date_at_32wks
-      which can be saved to the model instance.
+      which can be saved to the model instance_antenatal.
 
     Note: it's assumed the form validates values to avoid raising an EnrollmentError here.
 
     For example:
 
         def save(self, *args, **kwargs):
-            enrollment_helper = EnrollmentHelper(instance=self)
+            enrollment_helper = EnrollmentHelper(instance_antenatal=self)
             self.is_eligible = enrollment_helper.is_eligible
             self.enrollment_hiv_status = enrollment_helper.enrollment_hiv_status
             self.date_at_32wks = enrollment_helper.date_at_32wks
             super(EnrollmentMixin, self).save(*args, **kwargs)
     """
 
-    def __init__(self, instance, exception_cls=None):
+    def __init__(self, instance_antenatal, instance_ultrasound=None, exception_cls=None):
         self._enrollment_hiv_status = None
         self.date_at_32wks = None
-        self.instance = instance
-        self.enrollment = self.instance._meta.verbose_name
+        self.instance_antenatal = instance_antenatal
+        self.instance_ultrasound = instance_ultrasound
+        self.enrollment = self.instance_antenatal._meta.verbose_name
         self.exception_cls = exception_cls or EnrollmentError
 
-        # make all fields from the enrollment instance available to this instance
-        for field in self.instance._meta.fields:
+        # make all fields from the enrollment instance_antenatal available to this instance_antenatal
+        for field in self.instance_antenatal._meta.fields:
             try:
-                setattr(self, field.name, getattr(self.instance, field.name))
+                setattr(self, field.name, getattr(self.instance_antenatal, field.name))
             except AttributeError:
                 pass
 
-        self.is_eligible = self.is_eligible_for_enrollment()
+        if instance_ultrasound:
+            self.is_eligible = self.instance_ultrasound.pass_antenatal_enrollment and self.is_eligible_for_enrollment()
+        else:
+            self.is_eligible = self.is_eligible_for_enrollment()
 
     def is_eligible_for_enrollment(self):
         """Returns True if all eligibility criteria passes."""
@@ -113,6 +117,7 @@ class EnrollmentHelper(object):
 
     def hiv_status_with_without_evidence(self):
         """Returns the hiv status if evidence is not available or None."""
+        hiv_status = None
         if self.evidence_hiv_status in [NO, NOT_APPLICABLE]:
             if (self.current_hiv_status == POS and self.rapid_test_done == YES and
                     self.rapid_test_result == POS):

@@ -9,17 +9,18 @@ class MaternalVisitCrfMetaDataMixin(CrfMetaDataMixin):
         """Custom methods that manipulate meta data on the post save.
 
         This method is called in the edc_meta_data signal."""
-        if self.reason == FAILED_ELIGIBILITY:
-            self.study_status = OFF_STUDY
-        elif self.reason == UNSCHEDULED:
-            self.change_to_unscheduled_visit(self.appointment)
-        elif self.reason == COMPLETED_PROTOCOL_VISIT:
-            self.study_status = OFF_STUDY
-        else:
-            self.required_for_maternal_pos()
-            self.required_for_maternal_not_pos()
-            self.required_labs_for_maternal_neg()
-            self.required_forms_for_maternal_neg()
+#         if self.reason == FAILED_ELIGIBILITY:
+#             self.study_status = OFF_STUDY
+#         elif self.reason == UNSCHEDULED:
+#             self.change_to_unscheduled_visit(self.appointment)
+#         elif self.reason == COMPLETED_PROTOCOL_VISIT:
+#             self.study_status = OFF_STUDY
+#         else:
+#             self.required_for_maternal_pos()
+#             self.required_for_maternal_not_pos()
+#             self.required_labs_for_maternal_neg()
+#             self.required_forms_for_maternal_neg()
+        pass
         return self
 
     def required_forms_for_maternal_neg(self):

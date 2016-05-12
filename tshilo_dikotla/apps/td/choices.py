@@ -663,3 +663,23 @@ CIRCUMCISION = (
     ('CIRC', 'circumcised'),
     ('UNCIRC', 'uncircumcised'),
 )
+
+GESTATIONS_NUMBER = (
+    ('0', '0'),
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('>3', 'greater than 3')
+)
+
+FLUID_VOLUME = (
+    ('0', '0'),
+    ('1', '1')
+)
+
+MALFORMATIONS = (
+    ('choroid_plexus_cyst', 'choroid plexus cyst'),
+    ('intracranial_calcification', 'intracranial calcification'),
+    ('posterior_fossa_cyst', 'posterior fossa cyst'),
+    ('intracranial_cyst', 'intracranial cyst'),
+)

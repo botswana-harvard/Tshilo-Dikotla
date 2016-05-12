@@ -58,6 +58,8 @@ class TestAntenatalEnrollment(BaseTestCase):
             evidence_hiv_status=YES,
             rapid_test_done=NOT_APPLICABLE,
             registered_subject=self.registered_subject,
+            valid_regimen=YES,
+            valid_regimen_duration=YES,
             gestation_wks=35)
         self.assertTrue(antenatal_enrollment.is_eligible)
 
@@ -83,6 +85,8 @@ class TestAntenatalEnrollment(BaseTestCase):
             evidence_hiv_status=YES,
             registered_subject=self.registered_subject,
             is_diabetic=NO,
+            valid_regimen=YES,
+            valid_regimen_duration=YES,
             rapid_test_done=NOT_APPLICABLE)
         self.assertTrue(antenatal_enrollment.is_eligible)
 
@@ -146,20 +150,10 @@ class TestAntenatalEnrollment(BaseTestCase):
             current_hiv_status=POS,
             evidence_hiv_status=YES,
             rapid_test_done=NO,
+            valid_regimen=YES,
+            valid_regimen_duration=YES,
             registered_subject=self.registered_subject,)
         self.assertTrue(antenatal_enrollment.is_eligible)
-
-    def test_positive_with_no_evidence_and_rapid_test_done_ineligible(self):
-        """Test for a negative mother who has no documentation of hiv_status,
-        but no rapid test done."""
-
-        antenatal_enrollment = AntenatalEnrollmentFactory(
-            current_hiv_status=POS,
-            evidence_hiv_status=NO,
-            registered_subject=self.registered_subject,
-            rapid_test_done=NO)
-        self.assertFalse(antenatal_enrollment.is_eligible)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
     def test_mother_tested_at_32weeks_with_evidence(self):
         """Test for a positive mother who tested at 32weeks,
@@ -173,6 +167,8 @@ class TestAntenatalEnrollment(BaseTestCase):
             current_hiv_status=POS,
             registered_subject=self.registered_subject,
             rapid_test_done=NOT_APPLICABLE,
+            valid_regimen=YES,
+            valid_regimen_duration=YES,
             gestation_wks=35)
         self.assertTrue(antenatal_enrollment.is_eligible)
 
@@ -191,21 +187,23 @@ class TestAntenatalEnrollment(BaseTestCase):
             gestation_wks=35)
         self.assertTrue(antenatal_enrollment.is_eligible)
 
-    def test_no_week32test_no_rapid_test_ineligible(self):
+    def test_no_week32test_rapid_test_ineligible(self):
         """Test for a mother who is at 35weeks gestational age,
-        did not test at week 32 and does not do a rapid test"""
+        did not test at week 32 and does a rapid test which is POS"""
         antenatal_enrollment = AntenatalEnrollmentFactory(
             week32_test=NO,
             week32_result=None,
             current_hiv_status=NEG,
             evidence_hiv_status=NO,
-            rapid_test_done=NO,
+            rapid_test_done=YES,
+            rapid_test_result=POS,
+            rapid_test_date=timezone.now().date(),
             registered_subject=self.registered_subject,
             gestation_wks=35)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
-    def test_no_week32test_does_rapid_test(self):
+    def test_no_week32test_does_rapid_test_too_late(self):
         """Test for a mother at 35weeks gestational age,
         who did not do hiv_testing at 32weeks but undergoes rapid testing"""
         antenatal_enrollment = AntenatalEnrollmentFactory(
@@ -213,11 +211,14 @@ class TestAntenatalEnrollment(BaseTestCase):
             week32_result=None,
             rapid_test_done=YES,
             rapid_test_result=POS,
+            rapid_test_date=timezone.now().date(),
             current_hiv_status=POS,
             evidence_hiv_status=NO,
+            valid_regimen=NO,
+            valid_regimen_duration=NO,
             registered_subject=self.registered_subject,
             gestation_wks=35)
-        self.assertTrue(antenatal_enrollment.is_eligible)
+        self.assertFalse(antenatal_enrollment.is_eligible)
 
     def test_no_week32test_evidence_na(self):
         """Test for a mother who has eligible gestational weeks, who is

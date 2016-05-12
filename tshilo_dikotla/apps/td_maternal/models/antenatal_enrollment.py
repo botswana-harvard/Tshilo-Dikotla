@@ -13,7 +13,6 @@ from edc_sync.models import SyncModelMixin
 
 #from ..managers import AntenatalEnrollmentManager
 
-from .enrollment_helper import EnrollmentError, EnrollmentHelper
 from .enrollment_mixin import EnrollmentMixin
 from .maternal_consent import MaternalConsent
 # from .postnatal_enrollment import PostnatalEnrollment

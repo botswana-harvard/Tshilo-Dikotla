@@ -6,3 +6,4 @@ from .antenatal_enrollment_admin import AntenatalEnrollmentAdmin
 from .specimen_consent_admin import SpecimenConsentAdmin
 from .maternal_visit_admin import MaternalVisitAdmin
 from .maternal_off_study_admin import MaternalOffStudyAdmin
+from .maternal_ultrasound_initial_admin import MaternalUltraSoundInitialAdmin

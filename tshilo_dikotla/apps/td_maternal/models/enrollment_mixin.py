@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps
 
 from edc_base.model.validators import date_not_before_study_start, date_not_future
 from edc_constants.choices import POS_NEG_UNTESTED_REFUSAL, YES_NO_NA, POS_NEG, YES_NO
@@ -139,7 +140,13 @@ class EnrollmentMixin(models.Model):
             self.registered_subject.first_name)
 
     def save(self, *args, **kwargs):
-        enrollment_helper = EnrollmentHelper(instance=self)
+        MaternalUltraSoundInitial = apps.get_model('td_maternal', 'MaternalUltraSoundInitial')
+        try:
+            maternal_ultrasound = MaternalUltraSoundInitial.objects.get(
+                maternal_visit__appointment__registered_subject=self.registered_subject)
+            enrollment_helper = EnrollmentHelper(instance_antenatal=self, instance_ultrasound=maternal_ultrasound)
+        except MaternalUltraSoundInitial.DoesNotExist:
+            enrollment_helper = EnrollmentHelper(instance_antenatal=self)
         self.is_eligible = enrollment_helper.is_eligible
         self.enrollment_hiv_status = enrollment_helper.enrollment_hiv_status
         self.date_at_32wks = enrollment_helper.date_at_32wks
