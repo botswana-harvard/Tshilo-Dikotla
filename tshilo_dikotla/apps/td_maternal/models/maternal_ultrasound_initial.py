@@ -68,7 +68,7 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
         return self.ga_by_lmp
 
     def edd_confirmed(self):
-        return self.edd_confirmed
+        return self.est_edd
 
     class Meta:
         app_label = 'td_maternal'
