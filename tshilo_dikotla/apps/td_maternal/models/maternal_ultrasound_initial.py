@@ -67,7 +67,7 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
     def evalualte_ga_confirmed(self):
         return self.ga_by_lmp
 
-    def edd_confirmed(self):
+    def evaluate_edd_confirmed(self):
         return self.est_edd
 
     class Meta:
