@@ -57,7 +57,7 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
 
     def save(self, *args, **kwargs):
         self.edd_confirmed = self.evalualte_ga_confirmed()
-        self.ga_confirmed = self.edd_confirmed()
+        self.ga_confirmed = self.evaluate_edd_confirmed()
         super(MaternalUltraSoundInitial, self).save(*args, **kwargs)
 
     @property
