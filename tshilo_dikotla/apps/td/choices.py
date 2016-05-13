@@ -6,7 +6,7 @@ from .constants import NO_MODIFICATIONS, START, BREASTFEED_ONLY
 
 STUDY_SITES = (
     ('40', 'Gaborone'),
-    ('50', 'Mogoditshane'),
+    ('10', 'Molepolole'),
 )
 
 VISIT_INFO_SOURCE = [

@@ -38,8 +38,7 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
     est_edd = models.DateField(
         verbose_name="Estimated date of delivery",
         validators=[
-            date_not_before_study_start,
-            date_not_future],
+            date_not_before_study_start],
         help_text='EDD')
 
     edd_confirmed = models.DateField(
@@ -56,9 +55,20 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
         choices=FLUID_VOLUME,
         help_text='')
 
+    def save(self, *args, **kwargs):
+        self.edd_confirmed = self.evalualte_ga_confirmed()
+        self.ga_confirmed = self.edd_confirmed()
+        super(MaternalUltraSoundInitial, self).save(*args, **kwargs)
+
     @property
     def pass_antenatal_enrollment(self):
         return True if int(self.number_of_gestations) == 1 else False
+
+    def evalualte_ga_confirmed(self):
+        return self.ga_by_lmp
+
+    def edd_confirmed(self):
+        return self.edd_confirmed
 
     class Meta:
         app_label = 'td_maternal'

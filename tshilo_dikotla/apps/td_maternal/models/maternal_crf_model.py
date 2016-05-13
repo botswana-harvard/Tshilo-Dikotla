@@ -20,6 +20,8 @@ class MaternalCrfModel(CrfModelMixin, ExportTrackingFieldsMixin, SyncModelMixin,
 
     consent_model = MaternalConsent
 
+    visit_model_attr = 'maternal_visit'
+
     off_study_model = ('td_maternal', 'MaternalOffStudy')
 
     maternal_visit = models.OneToOneField(MaternalVisit)

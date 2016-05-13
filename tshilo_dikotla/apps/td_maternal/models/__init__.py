@@ -15,5 +15,8 @@ from .maternal_labour_del import MaternalLabourDel
 from .base_ultra_sound_model import BaseUtraSoundModel
 from .maternal_ultrasound_initial import MaternalUltraSoundInitial
 from .maternal_ultrasound_fu import MaternalUltraSoundFu
+from .maternal_demographics import MaternalDemographics
+from .maternal_medical_history import MaternalMedicalHistory
+from .maternal_obsterical_history import MaternalObstericalHistory
 from .signals import *
 

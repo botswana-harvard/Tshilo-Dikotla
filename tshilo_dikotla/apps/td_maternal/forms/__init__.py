@@ -8,3 +8,6 @@ from .maternal_eligibility_form import MaternalEligibilityForm
 from .maternal_off_study_form import MaternalOffStudyForm
 from .maternal_visit_form import MaternalVisitForm
 from .maternal_ultrasound_initial_form import MaternalUltraSoundInitialForm
+from .maternal_demographics_form import MaternalDemographicsForm
+from .maternal_medical_history_form import MaternalMedicalHistoryForm
+from .maternal_obsterical_history_form import MaternalObstericalHistoryForm

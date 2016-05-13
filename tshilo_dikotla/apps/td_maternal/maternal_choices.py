@@ -23,7 +23,6 @@ NEXT_CHILD_PLAN = (
 
 RECRUIT_SOURCE = (
     ('ANC clinic staff', 'ANC clinic staff'),
-    ('Staff at site of delivery', 'Staff at site of delivery'),
     ('BHP recruiter/clinician', 'BHP recruiter/clinician'),
     (OTHER, 'Other, specify'),
 )
@@ -34,6 +33,8 @@ RECRUIT_CLINIC = (
     ('BH3 Clinic', 'BH3 Clinic'),
     ('Nkoyaphiri', 'Nkoyaphiri Clinic'),
     ('Lesirane', 'Lesirane Clinic'),
+    ('Old Naledi', 'Old Naledi'),
+    ('Mafitlhakgosi', 'Mafitlhakgosi'),
     (OTHER, 'Other health facilities not associated with study site'),
 )
 

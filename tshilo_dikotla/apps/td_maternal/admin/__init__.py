@@ -7,3 +7,6 @@ from .specimen_consent_admin import SpecimenConsentAdmin
 from .maternal_visit_admin import MaternalVisitAdmin
 from .maternal_off_study_admin import MaternalOffStudyAdmin
 from .maternal_ultrasound_initial_admin import MaternalUltraSoundInitialAdmin
+from .maternal_demographics_admin import MaternalDemographicsAdmin
+from .maternal_medical_history_admin import MaternalMedicalHistoryAdmin
+from .maternal_obsterical_history_admin import MaternalObstericalHistoryAdmin

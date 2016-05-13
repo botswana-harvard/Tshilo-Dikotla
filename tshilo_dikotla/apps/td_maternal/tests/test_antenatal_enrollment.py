@@ -1,7 +1,9 @@
 from django.utils import timezone
 from datetime import timedelta
 
-from edc_constants.constants import POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN, FAILED_ELIGIBILITY, OFF_STUDY
+from edc_appointment.models import Appointment
+from edc_constants.constants import (POS, YES, NO, NEG, NOT_APPLICABLE,
+    UNKNOWN, FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY,SCHEDULED)
 
 from .factories import (
     AntenatalEnrollmentFactory, MaternalEligibilityFactory, MaternalConsentFactory)
@@ -62,6 +64,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             valid_regimen_duration=YES,
             gestation_wks=35)
         self.assertTrue(antenatal_enrollment.is_eligible)
+        self.assertEqual(Appointment.objects.all().count(), 1)
 
     def test_is_diabetic_ineligible(self):
         """Test for a positive mother with valid documentation,
@@ -89,6 +92,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             valid_regimen_duration=YES,
             rapid_test_done=NOT_APPLICABLE)
         self.assertTrue(antenatal_enrollment.is_eligible)
+        self.assertEqual(Appointment.objects.all().count(), 1)
 
     def test_will_breastfeed(self):
         """Test for a negative mother with documentation evidence,
@@ -102,6 +106,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             registered_subject=self.registered_subject,
             will_breastfeed=YES)
         self.assertTrue(antenatal_enrollment.is_eligible)
+        self.assertEqual(Appointment.objects.all().count(), 1)
 
     def test_will_not_breastfeed_ineligible(self):
         """Test for a negative mother who has documentation of hiv_status,
@@ -129,6 +134,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             registered_subject=self.registered_subject,
             will_remain_onstudy=YES)
         self.assertTrue(antenatal_enrollment.is_eligible)
+        self.assertEqual(Appointment.objects.all().count(), 1)
 
     def test_not_will_remain_onstudy_ineligible(self):
         """Test for a negative mother who has documentatin of hiv_status,
@@ -154,6 +160,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             valid_regimen_duration=YES,
             registered_subject=self.registered_subject,)
         self.assertTrue(antenatal_enrollment.is_eligible)
+        self.assertEqual(Appointment.objects.all().count(), 1)
 
     def test_mother_tested_at_32weeks_with_evidence(self):
         """Test for a positive mother who tested at 32weeks,
@@ -171,6 +178,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             valid_regimen_duration=YES,
             gestation_wks=35)
         self.assertTrue(antenatal_enrollment.is_eligible)
+        self.assertEqual(Appointment.objects.all().count(), 1)
 
     def test_mother_untested_at_32weeks_undergoes_rapid(self):
         """Test for a mother who is at 35weeks of gestational age,
@@ -186,6 +194,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             registered_subject=self.registered_subject,
             gestation_wks=35)
         self.assertTrue(antenatal_enrollment.is_eligible)
+        self.scheduled_visit_on_eligible(self.registered_subject.subject_identifier)
 
     def test_no_week32test_rapid_test_ineligible(self):
         """Test for a mother who is at 35weeks gestational age,
@@ -235,6 +244,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             registered_subject=self.registered_subject,
             gestation_wks=35)
         self.assertTrue(antenatal_enrollment.is_eligible)
+        self.assertEqual(Appointment.objects.all().count(), 1)
 
     def test_no_week32test_evidence_na_rapid_neg_ineligible(self):
         """Test for a mother who has eligible gestational weeks, who is
@@ -254,7 +264,16 @@ class TestAntenatalEnrollment(BaseTestCase):
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
     def off_study_visit_on_ineligible(self, subject_identifier):
+        self.assertEqual(MaternalVisit.objects.all().count(), 1)
         self.assertEqual(MaternalVisit.objects.filter(
             reason=FAILED_ELIGIBILITY,
             study_status=OFF_STUDY,
             appointment__registered_subject__subject_identifier=subject_identifier).count(), 1)
+
+#     def scheduled_visit_on_eligible(self, subject_identifier):
+#         self.assertEqual(MaternalVisit.objects.all().count(), 1)
+#         self.assertEqual(MaternalVisit.objects.filter(
+#             reason=SCHEDULED,
+#             study_status=ON_STUDY,
+#             appointment__registered_subject__subject_identifier=subject_identifier).count(), 1)
+

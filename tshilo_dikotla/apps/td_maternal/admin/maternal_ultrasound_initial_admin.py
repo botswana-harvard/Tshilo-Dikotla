@@ -14,7 +14,8 @@ class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin):
 
     form = MaternalUltraSoundInitialForm
 
-    fields = ('report_datetime',
+    fields = ('maternal_visit',
+              'report_datetime',
               'number_of_gestations',
               'bpd',
               'hc',

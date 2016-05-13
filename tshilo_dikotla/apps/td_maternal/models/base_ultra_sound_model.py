@@ -69,7 +69,7 @@ class BaseUtraSoundModel(MaternalCrfModel):
 
     malformations = models.CharField(
         verbose_name="Amniotic fluid volume?",
-        max_length=3,
+        max_length=50,
         choices=MALFORMATIONS,
         help_text='')
 
