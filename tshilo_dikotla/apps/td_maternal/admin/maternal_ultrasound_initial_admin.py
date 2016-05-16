@@ -33,14 +33,15 @@ class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin):
               'cistema_magna',
               'malformations')
 
-    readonly_fields = ('edd_confirmed', 'ga_confirmed')
+    readonly_fields = ('edd_confirmed', 'ga_confirmed', 'ga_by_lmp')
 
     radio_fields = {'number_of_gestations': admin.VERTICAL,
                     'amniotic_fluid_volume': admin.VERTICAL,
                     'malformations': admin.VERTICAL}
 
-    list_display = ('report_datetime', 'number_of_gestations')
+    list_display = ('report_datetime', 'number_of_gestations', 'ga_confrimation_method', 'edd_confirmed',
+                    'ga_confirmed', 'ga_by_lmp')
 
-    list_filter = ('report_datetime', 'number_of_gestations', 'malformations')
+    list_filter = ('report_datetime', 'number_of_gestations', 'malformations', 'ga_confrimation_method')
 
 admin.site.register(MaternalUltraSoundInitial, MaternalUltraSoundInitialAdmin)

@@ -25,7 +25,7 @@ class TestAntenatalEnrollment(BaseTestCase):
         self.data = {
             'registered_subject': self.registered_subject}
 
-    def test_gestation_wks_below_16(self):
+    def test_gestation_wks_lmp_below_16(self):
         """Test for a positive mother with evidence of hiv_status,
         on a valid regimen but weeks of gestation below 16."""
 
@@ -34,11 +34,11 @@ class TestAntenatalEnrollment(BaseTestCase):
             evidence_hiv_status=YES,
             rapid_test_done=NOT_APPLICABLE,
             registered_subject=self.registered_subject,
-            gestation_wks=15)
+            gestation_wks_lmp=15)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
-    def test_gestation_wks_above_36(self):
+    def test_gestation_wks_lmp_above_36(self):
         """Test for a positive mother with evidence of hiv_status,
         on a valid regimen but weeks of gestation above 36."""
 
@@ -47,11 +47,11 @@ class TestAntenatalEnrollment(BaseTestCase):
             evidence_hiv_status=YES,
             rapid_test_done=NOT_APPLICABLE,
             registered_subject=self.registered_subject,
-            gestation_wks=37)
+            gestation_wks_lmp=37)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
-    def test_gestation_wks_between_16_and_36(self):
+    def test_gestation_wks_lmp_between_16_and_36(self):
         """Test for a positive mother with evidence of hiv_status,
         on a valid regimen but weeks of gestation between 16 and 36."""
 
@@ -62,7 +62,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             registered_subject=self.registered_subject,
             valid_regimen=YES,
             valid_regimen_duration=YES,
-            gestation_wks=35)
+            gestation_wks_lmp=35)
         self.assertTrue(antenatal_enrollment.is_eligible)
         self.assertEqual(Appointment.objects.all().count(), 1)
 
@@ -176,7 +176,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             rapid_test_done=NOT_APPLICABLE,
             valid_regimen=YES,
             valid_regimen_duration=YES,
-            gestation_wks=35)
+            gestation_wks_lmp=35)
         self.assertTrue(antenatal_enrollment.is_eligible)
         self.assertEqual(Appointment.objects.all().count(), 1)
 
@@ -192,7 +192,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             rapid_test_result=NEG,
             rapid_test_date=timezone.now().date(),
             registered_subject=self.registered_subject,
-            gestation_wks=35)
+            gestation_wks_lmp=35)
         self.assertTrue(antenatal_enrollment.is_eligible)
         self.scheduled_visit_on_eligible(self.registered_subject.subject_identifier)
 
@@ -208,7 +208,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             rapid_test_result=POS,
             rapid_test_date=timezone.now().date(),
             registered_subject=self.registered_subject,
-            gestation_wks=35)
+            gestation_wks_lmp=35)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
@@ -226,7 +226,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             valid_regimen=NO,
             valid_regimen_duration=NO,
             registered_subject=self.registered_subject,
-            gestation_wks=35)
+            gestation_wks_lmp=35)
         self.assertFalse(antenatal_enrollment.is_eligible)
 
     def test_no_week32test_evidence_na(self):
@@ -242,7 +242,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             rapid_test_done=YES,
             rapid_test_result=NEG,
             registered_subject=self.registered_subject,
-            gestation_wks=35)
+            gestation_wks_lmp=35)
         self.assertTrue(antenatal_enrollment.is_eligible)
         self.assertEqual(Appointment.objects.all().count(), 1)
 
@@ -259,7 +259,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             rapid_test_done=YES,
             rapid_test_result=POS,
             registered_subject=self.registered_subject,
-            gestation_wks=35)
+            gestation_wks_lmp=35)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 

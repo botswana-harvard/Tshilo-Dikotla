@@ -1,3 +1,4 @@
+from dateutil.relativedelta import relativedelta
 from edc_constants.constants import SCREENED
 from edc_registration.models import RegisteredSubject
 from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED
@@ -55,3 +56,36 @@ class TestMaternalUltrasound(BaseTestCase):
             study_status=OFF_STUDY,
             appointment__registered_subject__subject_identifier=self.registered_subject.subject_identifier).count(), 1)
 
+    def test_ga_by_lmp(self):
+        """Test GA by LMP correctly calculated considering antenatal enrollment date at lmp and  ultrasound
+        date."""
+        maternal_visit = MaternalVisit.objects.get(appointment__registered_subject=self.registered_subject,
+                                                   reason=SCHEDULED,
+                                                   appointment__visit_definition__code='1000M')
+        self.assertEqual(MaternalVisit.objects.all().count(), 1)
+        options = {'number_of_gestations': 1,
+                   'maternal_visit': maternal_visit}
+        maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
+        enrollment = maternal_ultrasound.antenatal_enrollment
+        edd_by_lmp = ((enrollment.last_period_date + relativedelta(years=1) + relativedelta(days=7)) -
+            relativedelta(months=3))
+        lmp = int(abs(40 - ((enrollment.edd_by_lmp - maternal_ultrasound.report_datetime.date()).days / 7)))
+        self.assertEqual(maternal_ultrasound.ga_by_lmp, lmp)
+
+    def test_edd_confirmed(self):
+        """Test edd confirmed correctly calculated considering antenatal enrollment date at lmp and  edd from 
+        ultrasound."""
+        pass
+
+    def test_ga_confirmed(self):
+        """Test GA confirmed is correctly calculated considering edd confirmed and the date of the ultra sound."""
+        maternal_visit = MaternalVisit.objects.get(appointment__registered_subject=self.registered_subject,
+                                                   reason=SCHEDULED,
+                                                   appointment__visit_definition__code='1000M')
+        self.assertEqual(MaternalVisit.objects.all().count(), 1)
+        options = {'number_of_gestations': 1,
+                   'maternal_visit': maternal_visit}
+        maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
+        ga_confirmed = int(abs(40 - ((maternal_ultrasound.edd_confirmed -
+            maternal_ultrasound.report_datetime.date()).days / 7)))
+        self.assertEqual(maternal_ultrasound.ga_confirmed, ga_confirmed)

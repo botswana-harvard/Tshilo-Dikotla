@@ -1,5 +1,6 @@
 import factory
 
+from datetime import datetime
 from django.utils import timezone
 
 from edc_constants.choices import YES, NO, POS, NEG, NOT_APPLICABLE
@@ -14,8 +15,8 @@ class AntenatalEnrollmentFactory(factory.DjangoModelFactory):
 
     report_datetime = timezone.now()
 
-    gestation_wks = 34
-    last_period_date = timezone.datetime.now()
+    gestation_wks_lmp = 34
+    last_period_date = timezone.datetime.date(datetime.today())
     is_diabetic = NO
     week32_test = NO
     will_breastfeed = YES

@@ -672,7 +672,7 @@ GESTATIONS_NUMBER = (
     ('>3', 'greater than 3')
 )
 
-FLUID_VOLUME = (
+ZERO_ONE = (
     ('0', '0'),
     ('1', '1')
 )

@@ -1,5 +1,9 @@
+from dateutil.relativedelta import relativedelta
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.apps import apps
 
+from edc_base.model.validators import date_not_before_study_start
 from edc_appointment.models import AppointmentMixin
 from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
@@ -25,7 +29,7 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
 
     off_study_model = ('td_maternal', 'MaternalOffStudy')
 
-    weeks_base_field = 'gestation_wks'  # for rapid test required calc
+    weeks_base_field = 'gestation_wks_lmp_lmp'  # for rapid test required calc
 
     report_datetime = models.DateTimeField(
         verbose_name="Report date",
@@ -34,21 +38,34 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
             datetime_not_future, ],
         help_text='')
 
-    last_period_date = models.DateTimeField(
+    last_period_date = models.DateField(
         verbose_name="What is the approximate date of the first day of the mother’s last menstrual period",
         validators=[
             datetime_not_before_study_start,
             datetime_not_future, ],
-        help_text='')
+        help_text='LMP')
 
-    gestation_wks = models.IntegerField(
+    gestation_wks_lmp = models.IntegerField(
         verbose_name="How many weeks pregnant is the mother by LMP?",
         help_text=" (weeks of gestation). Eligible if >16 and <36 weeks GA", )
 
-#     objects = AntenatalEnrollmentManager()
+    edd_by_lmp = models.DateField(
+        verbose_name="Estimated date of delivery by lmp",
+        validators=[
+            date_not_before_study_start],
+        help_text="EDD by LMP using Naegele's rule")
+
+
+#     objects = AntenatalEnrollmentManager()    
     objects = models.Manager()
 
 #     history = AuditTrail()
+
+    def save(self, *args, **kwargs):
+        # TODO: validate that values in Antenatal Enrollment that are used in MartenalUltrasound have not been changed,
+        # if an instance of maternal ultrasound exists.
+        self.edd_by_lmp = self.evaluate_edd_by_lmp()
+        super(AntenatalEnrollment, self).save(*args, **kwargs)
 
     def natural_key(self):
         return self.registered_subject.natural_key()
@@ -74,7 +91,7 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
             unenrolled_error_message.append('regimen duration invalid')
         if self.rapid_test_done == NO:
             unenrolled_error_message.append('rapid test not done')
-        if self.gestation_wks < 16 or self.gestation_wks > 36:
+        if self.gestation_wks_lmp < 16 or self.gestation_wks_lmp > 36:
             unenrolled_error_message.append('gestation not 16 to 36wks')
         return (self.is_eligible, ', '.join(unenrolled_error_message))
 
@@ -89,28 +106,9 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
         """Returns the visit code for the off-study visit if eligibility criteria fail."""
         return '1000M'
 
-#     def update_common_fields_to_postnatal_enrollment(self):
-#         """Updates common field values from Antenatal Enrollment to
-#         Postnatal Enrollment if Postnatal Enrollment exists.
-# 
-#         Confirms is_eligible does not change value before saving."""
-#         if self.id and self.is_eligible:
-#             try:
-#                 postnatal_enrollment = PostnatalEnrollment.objects.get(
-#                     registered_subject=self.registered_subject)
-#                 for attrname in self.common_fields():
-#                     setattr(postnatal_enrollment, attrname, getattr(self, attrname))
-#                 is_eligible = EnrollmentHelper(postnatal_enrollment).is_eligible
-#                 if is_eligible != postnatal_enrollment.is_eligible:
-#                     raise EnrollmentError(
-#                         'Eligiblity calculated for Postnatal Enrollment unexpectedly '
-#                         'changed after updating values from Antenatal Enrollment. '
-#                         'Got \'is_eligible\' changed from {} to {}.'.format(
-#                             is_eligible, postnatal_enrollment.is_eligible))
-#                 else:
-#                     postnatal_enrollment.save()
-#             except PostnatalEnrollment.DoesNotExist:
-#                 pass
+    def evaluate_edd_by_lmp(self):
+        # Using Naegele's rule
+        return (self.last_period_date + relativedelta(years=1) + relativedelta(days=7)) - relativedelta(months=3)
 
     class Meta:
         app_label = 'td_maternal'

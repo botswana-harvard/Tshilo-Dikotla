@@ -62,7 +62,7 @@ class EnrollmentHelper(object):
     def antenatal_criteria(self):
         """Returns True if basic criteria, not including HIV status,
         is met for antenatal enrollment."""
-        if (self.gestation_wks >= 16 and self.gestation_wks <= 36 and self.no_chronic_conditions() and
+        if (self.gestation_wks_lmp >= 16 and self.gestation_wks_lmp <= 36 and self.no_chronic_conditions() and
                 self.will_breastfeed == YES and self.will_remain_onstudy == YES and self.no_chronic_conditions()):
             return True
         return False
