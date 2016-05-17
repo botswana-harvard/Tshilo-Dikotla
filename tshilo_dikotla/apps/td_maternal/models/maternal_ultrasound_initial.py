@@ -19,7 +19,8 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
         help_text='If number is not equal to 1, then participant goes off study.')
 
     ga_by_lmp = models.IntegerField(
-        verbose_name="GA by LMP at ultrasound date")
+        verbose_name="GA by LMP at ultrasound date",
+        help_text='Units in weeks. Derived variable, see AntenatalEnrollment.')
 
     ga_by_ultrasound_wks = models.IntegerField(
         verbose_name="GA by ultrasound in weeks",
@@ -44,11 +45,11 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
 
     edd_confirmed = models.DateField(
         verbose_name="EDD Confirmed.",
-        help_text='EDD Confirmed. Derived variable.')
+        help_text='EDD Confirmed. Derived variable, see AntenatalEnrollment.')
 
     ga_confirmed = models.IntegerField(
-        verbose_name="GA confirmed from ultrasound date",
-        help_text='must be less than 7days.')
+        verbose_name="GA confirmed.",
+        help_text='Derived variable.')
 
     amniotic_fluid_volume = models.CharField(
         verbose_name="Amniotic fluid volume?",

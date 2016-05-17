@@ -47,7 +47,7 @@ class BaseEnrollmentForm(BaseModelForm):
 
     def raise_if_rapid_test_required(self):
         cleaned_data = self.cleaned_data
-        if cleaned_data.get('current_hiv_status') == NEG:
+        if cleaned_data.get('current_hiv_status') == NEG and cleaned_data.get('week32_test_date'):
             weeks_since_test = self.weeks_since_test(
                 cleaned_data.get('week32_test_date'), cleaned_data.get('report_datetime'))
             if weeks_since_test < 32 and cleaned_data.get('rapid_test_done') == NO:

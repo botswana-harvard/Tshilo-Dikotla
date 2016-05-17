@@ -17,7 +17,7 @@ class AntenatalEnrollmentAdmin(BaseModelAdmin):
     fields = ('registered_subject',
               'report_datetime',
               'last_period_date',
-              'gestation_wks',
+              'gestation_wks_lmp',
               'is_diabetic',
               'will_breastfeed',
               'will_remain_onstudy',

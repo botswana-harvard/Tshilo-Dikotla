@@ -3,11 +3,11 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.apps import apps
 
-from edc_base.model.validators import date_not_before_study_start
 from edc_appointment.models import AppointmentMixin
 from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import (datetime_not_before_study_start, datetime_not_future,)
+from edc_base.model.validators import (datetime_not_before_study_start, datetime_not_future, 
+    date_not_before_study_start, date_not_future)
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_consent.models import RequiresConsentMixin
 from edc_constants.constants import NO, YES
@@ -41,8 +41,8 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
     last_period_date = models.DateField(
         verbose_name="What is the approximate date of the first day of the mother’s last menstrual period",
         validators=[
-            datetime_not_before_study_start,
-            datetime_not_future, ],
+            date_not_before_study_start,
+            date_not_future, ],
         help_text='LMP')
 
     gestation_wks_lmp = models.IntegerField(
