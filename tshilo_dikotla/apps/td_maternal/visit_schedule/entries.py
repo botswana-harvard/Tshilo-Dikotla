@@ -5,10 +5,13 @@ from edc_constants.constants import NOT_REQUIRED, REQUIRED, ADDITIONAL, NOT_ADDI
 maternal_antenatal_entries = (
     CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(20, 'td_maternal', 'maternalultrasoundinitial', REQUIRED, NOT_ADDITIONAL),
-    CrfTuple(30, 'td_maternal', 'maternalobstericalhistory', NOT_REQUIRED, ADDITIONAL),
-    CrfTuple(40, 'td_maternal', 'maternalmedicalhistory', NOT_REQUIRED, ADDITIONAL),
-    CrfTuple(50, 'td_maternal', 'maternaldemographics', NOT_REQUIRED, ADDITIONAL),
-    CrfTuple(60, 'td_maternal', 'maternaloffstudy', NOT_REQUIRED, ADDITIONAL))
+    CrfTuple(30, 'td_maternal', 'maternalobstericalhistory', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(40, 'td_maternal', 'maternalmedicalhistory', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(50, 'td_maternal', 'maternaldemographics', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(60, 'td_maternal', 'maternallifetimearvhistory', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(70, 'td_maternal', 'maternalarvpreg', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(80, 'td_maternal', 'maternalclinicalmeasurementsone', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(90, 'td_maternal', 'maternaloffstudy', REQUIRED, NOT_ADDITIONAL))
 
 # maternal_delivery_entries = (
 #     CrfTuple(10L, 'td_maternal', 'maternallabourdel', REQUIRED, NOT_ADDITIONAL),

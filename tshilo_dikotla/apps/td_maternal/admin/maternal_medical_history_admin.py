@@ -8,17 +8,19 @@ from .base_maternal_model_admin import BaseMaternalModelAdmin
 class MaternalMedicalHistoryAdmin(BaseMaternalModelAdmin):
 
     form = MaternalMedicalHistoryForm
-    fields = ('maternal_visit',
-              'chronic_since',
-#               'chronic',
-              'chronic_other',
-              'who_diagnosis',
-#               'who',
-    )
-    list_display = ('maternal_visit', 'chronic_since', )
-    list_filter = ('chronic_since', )
+#     fields = ('maternal_visit',
+#               'chronic_since',
+# #               'chronic',
+#               'chronic_other',
+#               'who_diagnosis',
+# #               'who',
+#     )
+    list_display = ('maternal_visit', 'chronic_since', 'sero_posetive', 'date_hiv_diagnosis', 'perinataly_infected')
+    list_filter = ('chronic_since', 'sero_posetive', 'date_hiv_diagnosis', 'perinataly_infected')
     radio_fields = {'chronic_since': admin.VERTICAL,
-                    'who_diagnosis': admin.VERTICAL}
-#     filter_horizontal = ('chronic', 'who',)
+                    'who_diagnosis': admin.VERTICAL,
+                    'sero_posetive': admin.VERTICAL,
+                    'perinataly_infected': admin.VERTICAL}
+    filter_horizontal = ('who', 'mother_chronic', 'father_chronic', 'mother_medications')
 
 admin.site.register(MaternalMedicalHistory, MaternalMedicalHistoryAdmin)

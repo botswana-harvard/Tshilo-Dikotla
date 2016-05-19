@@ -59,6 +59,27 @@ ARV_INTERRUPTION_REASON = (
     (NOT_APPLICABLE, 'Not Applicable'),
 )
 
+ARV_DRUG_LIST = (
+    ('Abacavir', 'ABC'),
+    ('Zidovudine', 'AZT'),
+    ('Tenoforvir', 'TDF'),
+    ('Lamivudine', '3TC'),
+    ('Emtricitabine', 'FTC'),
+    ('Xtc', 'XTC'),
+    ('Didanosine', 'DDI'),
+    ('Stavudine', 'D4T'),
+    ('Nevirapine', 'NVP'),
+    ('Efavirenz', 'EFV'),
+    ('Lopinavir', 'LPV'),
+    ('Aluvia', 'ALU'),
+    ('Atazanavir', 'ATV'),
+    ('Ritonavir', 'RTV'),
+    ('Raltegravir', 'RAL'),
+    ('Dolutegravir', 'DTG'),
+    ('Nelfinavir', 'NFV'),
+    ('HAART,unknown', 'HAART,unknown'),
+)
+
 AUTOPSY_SOURCE = (
     ('mother', 'Mother of infant'),
     ('family_mem', 'Other family member'),
@@ -317,22 +338,36 @@ MATERNAL_VISIT_STUDY_STATUS = (
 
 
 OFF_STUDY_REASON = [
-    ('failed_enrollment', 'Failed Enrollment'),
-    ('moved', ' Subject will be moving out of study area or unable to stay in study area'),
-    ('lost_no_contact', 'Lost to follow-up, unable to locate'),
-    ('lost_contacted', 'Lost to follow-up, contacted but did not come to study clinic'),
-    ('withdrew_by_mother', 'Mother changed mind and withdrew consent'),
-    ('withdrew_by_father',
-     'Father of baby did not want infant to participate and participant withdrew consent'),
-    ('withdrew_by_family',
-     ' Other family member did not want mother/infant to participate and participant withdrew consent'),
-    ('hiv_pos', 'Infant found to be HIV-infected'),
-    ('complete',
-        ('Completion of protocol required period of time for observation '
-         '(see Study Protocol for definition of Completion.) [skip to end of form]')),
-    ('death',
-        ('Participant death (complete the DEATH REPORT FORM AF005) '
-         '(For EAE Reporting requirements see EAE Reporting Manual)')),
+    ('multiple_vialble_gestations', 'Multiple (2 or more) viable gestations seen on ultrasound'),
+    ('miscarriage_or_arbotion_lt_20wks', 'Miscarriage or arbotion (fetal demise < 20 weeks GA)'),
+    ('fetal_death_gt_20wks', 'fetal Death at >= 20weeks GA (IUFD) or still born'),
+    ('maternal_death_pre_deliv', 'Maternal death PRIOR to delivery (complete the Death Report Form AF005)'),
+    ('maternal_death_post_deliv', 'Maternal death POST delivery (complete the Death Report Form AF005)'),
+    ('moving_out_of_study_area_pre_deliv',
+     'Participant stated she will be moving out of the study area or unable to stay in study area PRIOR delivery'),
+    ('moving_out_of_study_area_post_deliv',
+     'Participant stated she will be moving out of the study area or unable to stay in study area POST delivery'),
+    ('loss_to_followup_prior_deliv', 'Participant lost to follow-up/unable to locate PRIOR to delivery'),
+    ('loss_to_followup_post_deliv', 'Participant lost to follow-up/unable to locate POST to delivery'),
+    ('loss_to_followup_contacted_prior_deliv',
+     'Participant lost to follow-up, contacted but did not come to study clinic PRIOR to delivery'),
+    ('loss_to_followup_contacted_post_deliv',
+     'Participant lost to follow-up, contacted but did not come to study clinic POST to delivery'),
+    ('withdrew_consent_prior_deliv', 'Mother changed mind and withdrew consent PRIOR to delivery'),
+    ('withdrew_consent_post_deliv', 'Mother changed mind and withdrew consent POST to delivery'),
+    ('father_refused_prior_deliv',
+     'Father of the baby refused to participate, hence participant withdrew consent PRIOR delivery'),
+    ('father_refused_post_deliv',
+     'Father of the baby refused to participate, hence participant withdrew consent POST delivery'),
+    ('family_member_refused_prior_deliv',
+     'Other family member refused to participate, hence participant withdrew consent PRIOR delivery'),
+    ('family_member_refused_post_deliv',
+     'Other family member refused to participate, hence participant withdrew consent POST delivery'),
+    ('infant_hiv_infected', 'Infant found to be HIV infected'),
+    ('infant_death', 'Infant death (complete infant Death Report Form)'),
+    ('protocol_completion',
+     'Completion of protocol required period of time for observation (see Study Protocol for definition of'
+     ' "Completion") (skip to end of form)'),
     (OTHER, 'Other'),
 ]
 

@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 
 from .maternal_crf_model import MaternalCrfModel
 
@@ -11,7 +11,7 @@ class MaternalObstericalHistory(MaternalCrfModel):
     """ A model completed by the user on Obsterical History for all mothers. """
 
     prev_pregnancies = models.IntegerField(
-        verbose_name="Not including this pregnancy, how many previous pregnancies for this participant?",
+        verbose_name="Including this pregnancy, how many previous pregnancies for this participant?",
         validators=[MinValueValidator(0), MaxValueValidator(20), ],
         help_text="")
     pregs_24wks_or_more = models.IntegerField(
@@ -41,7 +41,17 @@ class MaternalObstericalHistory(MaternalCrfModel):
         validators=[MinValueValidator(0), MaxValueValidator(20), ],
         help_text="")
 
-    history = AuditTrail()
+    children_deliv_before_37wks = models.IntegerField(
+        verbose_name=("Number of previous prenancies delivered at < 37 weeks GA?"),
+        validators=[MinValueValidator(0), MaxValueValidator(20), ],
+        help_text="")
+
+    children_deliv_aftr_37wks = models.IntegerField(
+        verbose_name=("Number of previous prenancies delivered at >= 37 weeks GA?"),
+        validators=[MinValueValidator(0), MaxValueValidator(20), ],
+        help_text="")
+
+#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'

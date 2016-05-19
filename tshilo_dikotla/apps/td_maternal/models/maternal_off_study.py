@@ -1,19 +1,19 @@
 from django.db import models
 
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_consent.models import RequiresConsentMixin
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_meta_data.managers import CrfMetaDataManager
 from edc_offstudy.models import OffStudyModelMixin
-from edc_sync.models import SyncModelMixin
+# from edc_sync.models import SyncModelMixin
 from edc_visit_tracking.models import CrfModelMixin
 
 from .maternal_consent import MaternalConsent
 from .maternal_visit import MaternalVisit
 
 
-class MaternalOffStudy(OffStudyModelMixin, CrfModelMixin, SyncModelMixin,
+class MaternalOffStudy(OffStudyModelMixin, CrfModelMixin,
                        RequiresConsentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ A model completed by the user on the visit when the mother is taken off-study. """
@@ -22,7 +22,7 @@ class MaternalOffStudy(OffStudyModelMixin, CrfModelMixin, SyncModelMixin,
 
     maternal_visit = models.OneToOneField(MaternalVisit)
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
 

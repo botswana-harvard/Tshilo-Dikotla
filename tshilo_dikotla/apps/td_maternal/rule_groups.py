@@ -18,7 +18,7 @@ class MaternalUltrasoundInitialRuleGroup(RuleGroup):
         target_model=[('td_maternal', 'maternalobstericalhistory'), ('td_maternal', 'maternalmedicalhistory'), ('td_maternal', 'maternaldemographics')])
 
     class Meta:
-#         app_label = 'td_maternal'
+        app_label = 'td_maternal'
         source_fk = (MaternalVisit, 'maternal_visit')
         source_model = MaternalUltraSoundInitial
 

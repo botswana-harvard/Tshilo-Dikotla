@@ -13,23 +13,23 @@ class MaternalMedicalHistoryForm(BaseMaternalModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalMedicalHistoryForm, self).clean()
-        if 'chronic' in cleaned_data.keys():
-            self.validate_m2m(
-                label='chronic condition',
-                leading=cleaned_data.get('chronic_since'),
-                m2m=cleaned_data.get('chronic'),
-                other=cleaned_data.get('chronic_other'))
-        # WHO validations
-        if 'who' in cleaned_data.keys():
-            self.validate_m2m_wcs_dx(
-                label='WHO diagnoses',
-                leading=cleaned_data.get('who_diagnosis'),
-                m2m=cleaned_data.get('who'))
-
-        self.who_stage_diagnosis_for_neg_and_pos_mother()
-        self.postnatal_evaluate_mother_hiv_status()
-        self.validate_has_chronicition_no_listing()
-        self.validate_has_who_diagnosis_no_listing()
+#         if 'chronic' in cleaned_data.keys():
+#             self.validate_m2m(
+#                 label='chronic condition',
+#                 leading=cleaned_data.get('chronic_since'),
+#                 m2m=cleaned_data.get('chronic'),
+#                 other=cleaned_data.get('chronic_other'))
+#         # WHO validations
+#         if 'who' in cleaned_data.keys():
+#             self.validate_m2m_wcs_dx(
+#                 label='WHO diagnoses',
+#                 leading=cleaned_data.get('who_diagnosis'),
+#                 m2m=cleaned_data.get('who'))
+# 
+#         self.who_stage_diagnosis_for_neg_and_pos_mother()
+#         self.postnatal_evaluate_mother_hiv_status()
+#         self.validate_has_chronicition_no_listing()
+#         self.validate_has_who_diagnosis_no_listing()
         return cleaned_data
 
     def validate_has_chronicition_no_listing(self):

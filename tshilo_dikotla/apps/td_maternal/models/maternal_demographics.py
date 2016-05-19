@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
 from edc_constants.choices import YES_NO
 
@@ -142,7 +142,7 @@ class MaternalDemographics(MaternalCrfModel):
         choices=HOUSE_TYPE,
         help_text="Indicate the primary type of housing used over the past 30 days",)
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'

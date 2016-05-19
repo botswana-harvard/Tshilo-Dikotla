@@ -7,7 +7,7 @@ from tshilo_dikotla.apps.td_maternal.models import MaternalVisit, MaternalEligib
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory)
+                        AntenatalEnrollmentFactory, MaternalOffStudyFactory)
 
 
 class TestMaternalUltrasound(BaseTestCase):
@@ -41,6 +41,7 @@ class TestMaternalUltrasound(BaseTestCase):
                    'maternal_visit': maternal_visit}
         maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
         self.assertFalse(maternal_ultrasound.antenatal_enrollment.is_eligible)
+        MaternalOffStudyFactory(maternal_visit=maternal_visit)
 
     def test_create_visit_with_offstudy_on_failure(self):
         """Offstudy visit created on antenatal enrollment failure."""

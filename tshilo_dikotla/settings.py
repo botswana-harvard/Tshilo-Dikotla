@@ -91,10 +91,12 @@ INSTALLED_APPS = [
     'edc_registration',
     'edc_rule_groups',
     'edc_sync',
+    'edc_code_lists',
     'edc_visit_schedule',
     'edc_visit_tracking',
     'tshilo_dikotla.apps.td',
     'tshilo_dikotla.apps.td_dashboard',
+    'tshilo_dikotla.apps.td_list',
     'tshilo_dikotla.apps.td_lab',
     'tshilo_dikotla.apps.td_maternal',
     'tshilo_dikotla.apps.td_infant',
@@ -124,7 +126,8 @@ if 'test' in sys.argv:
                          "edc_configuration": None,
                          "td_lab": None,
                          "td_infant": None,
-                         "td_maternal": None}
+                         "td_maternal": None,
+                         "td_list": None}
 
 if socket.gethostname() in DEVELOPER_HOSTS + TEST_HOSTS or 'test' in sys.argv:
     INSTALLED_APPS.pop(INSTALLED_APPS.index('south'))
