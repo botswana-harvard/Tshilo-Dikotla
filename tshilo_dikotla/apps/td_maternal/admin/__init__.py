@@ -14,3 +14,5 @@ from .maternal_arv_history_admin import MaternalLifetimeArvHistoryAdmin
 from .maternal_arv_preg_admin import MaternalArvAdmin
 from .maternal_arv_preg_admin import MaternalArvPregAdmin
 from .maternal_clinical_measurements_admin import MaternalClinicalMeasurementsOneAdmin
+from .antenatal_visit_membership_admin import AntenataVisitMembershipAdmin
+from .maternal_labour_del_admin import MaternalLabourDelAdmin

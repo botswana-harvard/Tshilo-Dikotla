@@ -15,4 +15,6 @@ from .maternal_arv_history_form import MaternalLifetimeArvHistoryForm
 from .maternal_arv_preg_form import MaternalArvPregForm
 from .maternal_clinical_measurements_form import MaternalClinicalMeasurementsOneForm
 from .maternal_arv_preg_form import MaternalArvForm
+from .antenatal_visit_membership_form import AntenatalVisitMembershipForm
+from .maternal_labour_del_form import MaternalLabourDelForm
 

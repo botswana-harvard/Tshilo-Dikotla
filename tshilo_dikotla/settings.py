@@ -123,6 +123,7 @@ if 'test' in sys.argv:
                          "lab_clinic_reference": None,
                          "edc_death_report": None,
                          "edc_sync": None,
+                         "edc_code_lists": None,
                          "edc_configuration": None,
                          "td_lab": None,
                          "td_infant": None,

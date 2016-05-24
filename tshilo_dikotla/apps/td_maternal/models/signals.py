@@ -8,6 +8,9 @@ from edc_constants.constants import (
     FEMALE, SCHEDULED, SCREENED, CONSENTED, FAILED_ELIGIBILITY, ALIVE, OFF_STUDY, ON_STUDY)
 from edc_visit_schedule.models.visit_definition import VisitDefinition
 from edc_appointment.models.appointment import Appointment
+from edc_identifier.subject.classes import InfantIdentifier
+
+from tshilo_dikotla.apps.td.constants import INFANT
 
 from .maternal_consent import MaternalConsent
 from .maternal_ultrasound_initial import MaternalUltraSoundInitial
@@ -16,6 +19,7 @@ from .maternal_eligibility import MaternalEligibility
 from .maternal_eligibility_loss import MaternalEligibilityLoss
 from .maternal_off_study import MaternalOffStudy
 from .maternal_visit import MaternalVisit
+from .maternal_labour_del import MaternalLabourDel
 
 
 @receiver(post_save, weak=False, dispatch_uid="maternal_eligibility_on_post_save")
@@ -185,3 +189,39 @@ def maternal_ultrasound_initial_on_post_save(sender, instance, raw, created, usi
             antenatal_enrollment = instance.antenatal_enrollment
 #             antenatal_enrollment.is_eligible = instance.pass_antenatal_enrollment
             antenatal_enrollment.save()
+
+
+@receiver(post_save, weak=False, dispatch_uid='create_infant_identifier_on_labour_delivery')
+def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, using, **kwargs):
+    """Creates an identifier for the registered infant.
+
+    RegisteredSubject.objects.create( is called by InfantIdentifier
+
+    Only one infant per mother is allowed."""
+    if not raw and created:
+        if isinstance(instance, MaternalLabourDel):
+            if instance.live_infants_to_register == 1:
+                maternal_registered_subject = instance.registered_subject
+                maternal_consent = MaternalConsent.objects.get(
+                    registered_subject=maternal_registered_subject)
+                maternal_ultrasound = MaternalUltraSoundInitial.objects.get(
+                    maternal_visit__appointment__registered_subject=instance.registered_subject)
+                with transaction.atomic():
+                    infant_identifier = InfantIdentifier(
+                        maternal_identifier=maternal_registered_subject.subject_identifier,
+                        study_site=maternal_consent.study_site,
+                        birth_order=0,
+                        live_infants=int(maternal_ultrasound.number_of_gestations),
+                        live_infants_to_register=instance.live_infants_to_register,
+                        user=instance.user_created)
+                    RegisteredSubject.objects.using(using).create(
+                        subject_identifier=infant_identifier.get_identifier(),
+                        registration_datetime=instance.delivery_datetime,
+                        subject_type=INFANT,
+                        user_created=instance.user_created,
+                        created=timezone.now(),
+                        first_name='No Name',
+                        initials=None,
+                        registration_status='DELIVERED',
+                        relative_identifier=maternal_consent.subject_identifier,
+                        study_site=maternal_consent.study_site)

@@ -5,20 +5,20 @@ from edc_visit_schedule.classes import (
 
 from ..models import AntenatalEnrollment, MaternalVisit
 
-from .entries import maternal_antenatal_entries, maternal_requisition_entries
+from .entries import maternal_enrollment_entries
 
 
 class AntenatalEnrollmentVisitSchedule(VisitScheduleConfiguration):
 
-    name = 'antenatal visit schedule'
+    name = 'enrollment visit schedule'
     app_label = 'td_maternal'
 
-    membership_forms = OrderedDict({'antenatal': MembershipFormTuple(
-        'antenatal', AntenatalEnrollment, True), })
+    membership_forms = OrderedDict({'enrollment': MembershipFormTuple(
+        'enrollment', AntenatalEnrollment, True), })
 
     schedules = OrderedDict({
         'Antenatal Enrollment': ScheduleTuple('Antenatal Enrollment',
-                                              'antenatal', None, None), })
+                                              'enrollment', None, None), })
 
     visit_definitions = OrderedDict()
 
@@ -35,7 +35,7 @@ class AntenatalEnrollmentVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Antenatal Enrollment',
         'instructions': '',
-        'requisitions': maternal_requisition_entries,
-        'entries': maternal_antenatal_entries}
+        'requisitions': (),
+        'entries': maternal_enrollment_entries}
 
 site_visit_schedules.register(AntenatalEnrollmentVisitSchedule)

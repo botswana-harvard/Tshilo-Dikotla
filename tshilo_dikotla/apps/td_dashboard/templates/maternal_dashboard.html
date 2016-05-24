@@ -27,7 +27,7 @@
     {% if infants %}
         <ol>
           <li>
-          {% for subject_identifier,infant in infants.iteritems %}
+          {% for subject_identifier,infant in infants.items %}
            <A href="{% url 'subject_dashboard_url' dashboard_type='infant' dashboard_model='registered_subject' dashboard_id=infant.dashboard_id show='appointments' %}">
              {{subject_identifier}} {{ infant.gender }} {{ infant.first_name|encrypted }}
           </A>

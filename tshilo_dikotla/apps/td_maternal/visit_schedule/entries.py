@@ -2,7 +2,7 @@ from edc_visit_schedule.classes.visit_schedule_configuration import RequisitionP
 from edc_constants.constants import NOT_REQUIRED, REQUIRED, ADDITIONAL, NOT_ADDITIONAL
 
 
-maternal_antenatal_entries = (
+maternal_enrollment_entries = (
     CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(20, 'td_maternal', 'maternalultrasoundinitial', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(30, 'td_maternal', 'maternalobstericalhistory', REQUIRED, NOT_ADDITIONAL),
@@ -12,6 +12,10 @@ maternal_antenatal_entries = (
     CrfTuple(70, 'td_maternal', 'maternalarvpreg', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(80, 'td_maternal', 'maternalclinicalmeasurementsone', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(90, 'td_maternal', 'maternaloffstudy', REQUIRED, NOT_ADDITIONAL))
+
+maternal_antenatal_entries = (
+    CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
+)
 
 # maternal_delivery_entries = (
 #     CrfTuple(10L, 'td_maternal', 'maternallabourdel', REQUIRED, NOT_ADDITIONAL),

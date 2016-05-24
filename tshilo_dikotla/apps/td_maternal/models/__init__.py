@@ -23,5 +23,6 @@ from .maternal_arv_preg import MaternalArvPreg
 from .maternal_arv_preg import MaternalArv
 from .base_maternal_clinical_measurements import BaseMaternalClinicalMeasurements
 from .maternal_clinical_measurements_one import MaternalClinicalMeasurementsOne
+from .antenatal_visit_membership import AntenatalVisitMembership
 from .signals import *
 
