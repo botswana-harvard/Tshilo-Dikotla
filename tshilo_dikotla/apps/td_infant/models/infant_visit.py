@@ -9,7 +9,7 @@ from edc_constants.constants import (
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.models import OffStudyMixin
 from edc_registration.models import RegisteredSubject
-from edc_sync.models import SyncModelMixin
+# from edc_sync.models import SyncModelMixin
 from edc_visit_tracking.constants import VISIT_REASON_NO_FOLLOW_UP_CHOICES, LOST_VISIT
 from edc_visit_tracking.models import PreviousVisitMixin
 from edc_visit_tracking.models import VisitModelMixin
@@ -22,7 +22,7 @@ from .infant_birth import InfantBirth
 
 
 class InfantVisit(
-        CrfMetaDataMixin, SyncModelMixin, PreviousVisitMixin, OffStudyMixin, VisitModelMixin,
+        CrfMetaDataMixin, PreviousVisitMixin, OffStudyMixin, VisitModelMixin,
         CaretakerFieldsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ A model completed by the user on the infant visits. """

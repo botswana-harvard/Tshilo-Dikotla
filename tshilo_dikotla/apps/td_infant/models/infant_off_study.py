@@ -11,7 +11,7 @@ from edc_visit_tracking.models import CrfModelMixin
 from .infant_visit import InfantVisit
 
 
-class InfantOffStudy(CrfModelMixin, SyncModelMixin, OffStudyModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class InfantOffStudy(CrfModelMixin, OffStudyModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ A model completed by the user when the infant is taken off study. """
 

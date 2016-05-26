@@ -3,7 +3,7 @@ from edc_registration.models import RegisteredSubject
 
 from tshilo_dikotla.apps.td.constants import INFANT
 from tshilo_dikotla.apps.td_infant.models import InfantVisit, InfantBirth
-# from tshilo_dikotla.apps.td_lab.models import InfantRequisition
+from tshilo_dikotla.apps.td_lab.models import InfantRequisition
 from tshilo_dikotla.apps.td_maternal.models import (MaternalLocator, MaternalConsent, MaternalVisit,
                                                     MaternalEligibility)
 
@@ -33,7 +33,7 @@ class InfantDashboard(RegisteredSubjectDashboard):
         self.dashboard_models['infant_birth'] = InfantBirth
         self.dashboard_models['visit'] = InfantVisit
         self.membership_form_category = ['infant_enrollment']
-#         self.requisition_model = InfantRequisition
+        self._requisition_model = InfantRequisition
         self._locator_model = None
         self._maternal_identifier = None
         self._infant_birth = None

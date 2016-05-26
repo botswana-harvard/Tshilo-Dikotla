@@ -50,7 +50,7 @@ class EnrollmentMixin(models.Model):
         max_length=3)
 
     week32_test = models.CharField(
-        verbose_name="Have you tested for HIV on OR after 32 weeks gestational age?",
+        verbose_name="Have you tested for HIV before or during this pregnancy?",
         choices=YES_NO,
         default=NO,
         max_length=3)
@@ -101,7 +101,7 @@ class EnrollmentMixin(models.Model):
         blank=False,
         # default=NOT_APPLICABLE,
         max_length=15,
-        help_text=("If not 4 or more weeks then not eligible."))
+        help_text=("If not 4 or more weeks then NOT eligible."))
 
     rapid_test_done = models.CharField(
         verbose_name="Was a rapid test processed?",

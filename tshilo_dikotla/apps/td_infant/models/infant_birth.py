@@ -9,14 +9,14 @@ from edc_constants.choices import GENDER_UNDETERMINED
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.models import OffStudyMixin
 from edc_registration.models import RegisteredSubject
-from edc_sync.models import SyncModelMixin
+# from edc_sync.models import SyncModelMixin
 
 from tshilo_dikotla.apps.td_maternal.models import MaternalLabourDel
 
 # from ..managers import InfantBirthModelManager
 
 
-class InfantBirth(OffStudyMixin, SyncModelMixin, AppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class InfantBirth(OffStudyMixin, AppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
     """ A model completed by the user on the infant's birth. """
 
     off_study_model = ('td_infant', 'InfantOffStudy')
@@ -52,9 +52,10 @@ class InfantBirth(OffStudyMixin, SyncModelMixin, AppointmentMixin, ExportTrackin
         max_length=10,
         choices=GENDER_UNDETERMINED)
 
+    objects = models.Manager()
 #     objects = InfantBirthModelManager()
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     def natural_key(self):
         return self.maternal_labour_del.natural_key()
@@ -67,7 +68,7 @@ class InfantBirth(OffStudyMixin, SyncModelMixin, AppointmentMixin, ExportTrackin
         """Creates infant appointments relative to the date-of-delivery"""
         relative_identifier = self.registered_subject.relative_identifier
         maternal_labour_del = MaternalLabourDel.objects.get(
-            maternal_visit__appointment__registered_subject__subject_identifier=relative_identifier)
+            registered_subject__subject_identifier=relative_identifier)
         self.create_all(
             base_appt_datetime=maternal_labour_del.delivery_datetime, using=using)
 

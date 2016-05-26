@@ -1,3 +1,4 @@
+from .base_test_case import BaseTestCase
 from .test_maternal_eligibility import TestMaternalEligibility
 from .test_antenatal_enrollment import TestAntenatalEnrollment
 from .test_maternal_lab_del import TestMaternalLabourDel

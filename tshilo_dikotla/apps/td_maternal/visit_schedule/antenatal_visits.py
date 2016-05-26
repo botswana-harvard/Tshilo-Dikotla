@@ -21,7 +21,7 @@ class AntenatalVisitSchedule(VisitScheduleConfiguration):
 
     visit_definitions = OrderedDict()
 
-    visit_definitions['1100M'] = {
+    visit_definitions['1010M'] = {
         'title': 'Antenatal Visit 1',
         'time_point': 0,
         'base_interval': 1,
@@ -37,7 +37,7 @@ class AntenatalVisitSchedule(VisitScheduleConfiguration):
         'requisitions': maternal_requisition_entries,
         'entries': maternal_antenatal_entries}
 
-    visit_definitions['1200M'] = {
+    visit_definitions['1020M'] = {
         'title': 'Antenatal Visit 2',
         'time_point': 10,
         'base_interval': 3,

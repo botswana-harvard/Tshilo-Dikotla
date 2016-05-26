@@ -39,7 +39,7 @@ class InfantRequisition(CrfModelMixin, RequisitionModelMixin, ExportTrackingFiel
 
     #history = AuditTrail()
 
-    #entry_meta_data_manager = RequisitionMetaDataManager(InfantVisit)
+    entry_meta_data_manager = RequisitionMetaDataManager(InfantVisit)
 
     def get_visit(self):
         return self.infant_visit

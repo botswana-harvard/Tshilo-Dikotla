@@ -1,1 +1,2 @@
 from .maternal_requisition_form import MaternalRequisitionForm
+from .infant_requisition_form import InfantRequisitionForm

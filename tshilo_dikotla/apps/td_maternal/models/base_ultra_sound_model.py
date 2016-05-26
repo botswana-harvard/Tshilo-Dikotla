@@ -20,7 +20,7 @@ class BaseUtraSoundModel(MaternalCrfModel):
     """ The base ultra sound model. """
 
     bpd = models.DecimalField(
-        verbose_name="BDP?",
+        verbose_name="BPD?",
         max_digits=6,
         decimal_places=2,
         help_text='Units in mm.')

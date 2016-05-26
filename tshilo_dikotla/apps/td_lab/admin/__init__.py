@@ -1,1 +1,3 @@
 from .maternal_requisition_admin import MaternalRequisitionAdmin
+from .infant_requisition_admin import InfantRequisitionAdmin
+
