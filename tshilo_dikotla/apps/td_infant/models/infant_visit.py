@@ -53,10 +53,11 @@ class InfantVisit(
         elif self.reason == UNSCHEDULED:
             self.change_to_unscheduled_visit(self.appointment)
         elif self.reason == SCHEDULED:
-            if self.postnatal_enrollment.enrollment_hiv_status:
-                self.requires_infant_birth_arv_on_maternal_pos()
-                self.requires_dna_pcr_on_maternal_pos()
-                self.requires_circumcision_for_male_at_2030_or_2060()
+            pass
+#             if self.postnatal_enrollment.enrollment_hiv_status:
+#                 self.requires_infant_birth_arv_on_maternal_pos()
+#                 self.requires_dna_pcr_on_maternal_pos()
+#                 self.requires_circumcision_for_male_at_2030_or_2060()
         return self
 
 #     def requires_infant_birth_arv_on_maternal_pos(self):
