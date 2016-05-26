@@ -140,13 +140,13 @@ class MaternalDashboard(RegisteredSubjectDashboard):
                 infant_birth = InfantBirth.objects.get(registered_subject__exact=infant_registered_subject)
                 dct = infant_birth.__dict__
                 dct['dashboard_model'] = convert_from_camel(infant_birth._meta.object_name)
-                dct['dashboard_id'] = convert_from_camel(infant_birth.pk)
+                dct['dashboard_id'] = convert_from_camel(str(infant_birth.pk))
                 dct['dashboard_type'] = INFANT
                 infants[infant_registered_subject.subject_identifier] = dct
             except InfantBirth.DoesNotExist:
                 dct = {'subject_identifier': infant_registered_subject.subject_identifier}
                 dct['dashboard_model'] = 'registered_subject'
-                dct['dashboard_id'] = infant_registered_subject.pk
+                dct['dashboard_id'] = str(infant_registered_subject.pk)
                 dct['dashboard_type'] = INFANT
                 infants[infant_registered_subject.subject_identifier] = dct
         except RegisteredSubject.DoesNotExist:
