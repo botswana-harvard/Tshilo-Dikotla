@@ -12,6 +12,8 @@ from edc_sync.models import SyncModelMixin
 from edc_visit_tracking.models import CrfModelMixin
 
 from tshilo_dikotla.apps.td.choices import MALFORMATIONS
+from tshilo_dikotla.apps.td.validators import validate_bpd, validate_hc, validate_fl, validate_ac, validate_hl
+
 from .maternal_crf_model import MaternalCrfModel
 
 
@@ -21,30 +23,35 @@ class BaseUtraSoundModel(MaternalCrfModel):
 
     bpd = models.DecimalField(
         verbose_name="BPD?",
+        validators=[validate_bpd, ],
         max_digits=6,
         decimal_places=2,
         help_text='Units in mm.')
 
     hc = models.DecimalField(
         verbose_name="HC?",
+        validators=[validate_hc, ],
         max_digits=6,
         decimal_places=2,
         help_text='Units in mm.')
 
     ac = models.DecimalField(
         verbose_name="AC?",
+        validators=[validate_ac, ],
         max_digits=6,
         decimal_places=2,
         help_text='Units in mm.')
 
     fl = models.DecimalField(
         verbose_name="FL?",
+        validators=[validate_fl, ],
         max_digits=6,
         decimal_places=2,
         help_text='Units in mm.')
 
     hl = models.DecimalField(
         verbose_name="HL?",
+        validators=[validate_hl, ],
         max_digits=6,
         decimal_places=2,
         help_text='Units in mm.')

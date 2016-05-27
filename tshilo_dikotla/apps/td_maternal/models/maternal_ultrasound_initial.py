@@ -3,6 +3,7 @@ from django.db import models
 from edc_base.model.validators import date_not_before_study_start, date_not_future
 
 from tshilo_dikotla.apps.td.choices import GESTATIONS_NUMBER,  ZERO_ONE
+from tshilo_dikotla.apps.td.validators import validate_ga_by_ultrasound, validate_fetal_weight
 
 from .antenatal_enrollment import AntenatalEnrollment
 from .base_ultra_sound_model import BaseUtraSoundModel
@@ -24,6 +25,7 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
 
     ga_by_ultrasound_wks = models.IntegerField(
         verbose_name="GA by ultrasound in weeks",
+        validators=[validate_ga_by_ultrasound, ],
         help_text='Units in weeks.')
 
     ga_by_ultrasound_days = models.IntegerField(
@@ -33,6 +35,7 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
 
     est_fetal_weight = models.DecimalField(
         verbose_name="Estimated fetal weight",
+        validators=[validate_fetal_weight, ],
         max_digits=8,
         decimal_places=2,
         help_text='Units in grams.')
