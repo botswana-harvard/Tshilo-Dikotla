@@ -59,6 +59,11 @@ ARV_INTERRUPTION_REASON = (
     (NOT_APPLICABLE, 'Not Applicable'),
 )
 
+AZT_NVP = (
+    ('Zidovudine', 'AZT'),
+    ('Nevirapine', 'NVP'),
+)
+
 ARV_DRUG_LIST = (
     ('Abacavir', 'ABC'),
     ('Zidovudine', 'AZT'),
@@ -717,4 +722,21 @@ MALFORMATIONS = (
     ('intracranial_calcification', 'intracranial calcification'),
     ('posterior_fossa_cyst', 'posterior fossa cyst'),
     ('intracranial_cyst', 'intracranial cyst'),
+)
+
+DIAGNOSES = (
+    ('Gestational Hypertension', 'Gestational Hypertension'),
+    ('Pre-eclampsia', 'Pre-eclampsia'),
+    ('Liver Problems', 'Liver Problems'),
+    ('Genital Herpes', 'Genital Herpes'),
+    ('Syphillis', 'Syphillis'),
+    ('Gonorrhea', 'Gonorrhea'),
+    ('Chlamydia', 'Chlamydia'),
+    ('Hepatitis B surface Ag positive', 'Hepatitis B surface Ag positive'),
+    ('Hepatitis C', 'Hepatitis C'),
+    ('Depression', 'Depression'),
+    ('Tuberculosis', 'Tuberculosis'),
+    ('Asthma requiring steroids', 'Asthma requiring steroids'),
+    ('Pneumonia', 'Pneumonia'),
+    ('Other', 'Other')
 )

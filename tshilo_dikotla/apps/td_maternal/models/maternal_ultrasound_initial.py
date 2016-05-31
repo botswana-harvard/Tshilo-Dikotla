@@ -1,8 +1,9 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 from edc_base.model.validators import date_not_before_study_start, date_not_future
 
-from tshilo_dikotla.apps.td.choices import GESTATIONS_NUMBER,  ZERO_ONE
+from tshilo_dikotla.apps.td.choices import GESTATIONS_NUMBER, ZERO_ONE
 from tshilo_dikotla.apps.td.validators import validate_ga_by_ultrasound, validate_fetal_weight
 
 from .antenatal_enrollment import AntenatalEnrollment
@@ -54,12 +55,6 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
         verbose_name="GA confirmed.",
         help_text='Derived variable.')
 
-    amniotic_fluid_volume = models.CharField(
-        verbose_name="Amniotic fluid volume?",
-        max_length=3,
-        choices=ZERO_ONE,
-        help_text='')
-
     ga_confrimation_method = models.CharField(
         verbose_name="The method used to derive edd_confirmed.",
         max_length=3,
@@ -82,17 +77,25 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
     def evaluate_ga_by_lmp(self):
         return int(abs(40 - ((self.antenatal_enrollment.edd_by_lmp - self.report_datetime.date()).days / 7)))
 
-    def evaluate_edd_confirmed(self):
+    def evaluate_edd_confirmed(self, error_clss=None):
+        ga_by_lmp = self.evaluate_ga_by_lmp()
         edd_by_lmp = self.antenatal_enrollment.edd_by_lmp
-        if self.ga_by_lmp > 16 and self.ga_by_lmp < 22:
-            if (edd_by_lmp - self.est_edd).days > 10:
+        error_clss = error_clss or ValidationError
+        if ga_by_lmp > 16 and ga_by_lmp < 22:
+            if abs((edd_by_lmp - self.est_edd).days) > 10:
                 return (self.est_edd, 1)
-        elif self.ga_by_lmp > 22 and self.ga_by_lmp < 28:
-            if (edd_by_lmp - self.est_edd).days > 14:
+            raise error_clss('Unable to correctly determine edd_confirmed. ga_by_lmp=\'{}\', edd_by_lmp=\'{}\''
+                             ' est_edd=\'{}\''.format(ga_by_lmp, edd_by_lmp, self.est_edd))
+        elif ga_by_lmp > 22 and ga_by_lmp < 28:
+            if abs((edd_by_lmp - self.est_edd).days) > 14:
                 return (self.est_edd, 1)
-        elif self.ga_by_lmp > 28:
-            if (edd_by_lmp - self.est_edd).days > 21:
+            raise error_clss('Unable to correctly determine edd_confirmed. ga_by_lmp=\'{}\', edd_by_lmp=\'{}\''
+                             ' est_edd=\'{}\''.format(ga_by_lmp, edd_by_lmp, self.est_edd))
+        elif ga_by_lmp > 28:
+            if abs((edd_by_lmp - self.est_edd).days) > 21:
                 return (self.est_edd, 1)
+            raise error_clss('Unable to correctly determine edd_confirmed. ga_by_lmp=\'{}\', edd_by_lmp=\'{}\''
+                             ' est_edd=\'{}\''.format(ga_by_lmp, edd_by_lmp, self.est_edd))
         else:
             return (edd_by_lmp, 0)
 

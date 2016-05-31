@@ -1,9 +1,18 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 
 from .base_maternal_clinical_measurements import BaseMaternalClinicalMeasurements
 
 
 class MaternalClinicalMeasurementsOne(BaseMaternalClinicalMeasurements):
+
+    height = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        verbose_name="Mother's height? ",
+        validators=[MinValueValidator(134), MaxValueValidator(195), ],
+        help_text="Measured in Centimeters (cm)")
 
     objects = models.Manager()
 

@@ -18,6 +18,7 @@ class AntenatalEnrollmentAdmin(BaseModelAdmin):
               'report_datetime',
               'last_period_date',
               'gestation_wks_lmp',
+              'edd_by_lmp',
               'is_diabetic',
               'will_breastfeed',
               'will_remain_onstudy',
@@ -31,6 +32,7 @@ class AntenatalEnrollmentAdmin(BaseModelAdmin):
               'rapid_test_done',
               'rapid_test_date',
               'rapid_test_result')
+    readonly_fields = ('edd_by_lmp', )
     radio_fields = {'is_diabetic': admin.VERTICAL,
                     'will_breastfeed': admin.VERTICAL,
                     'will_remain_onstudy': admin.VERTICAL,

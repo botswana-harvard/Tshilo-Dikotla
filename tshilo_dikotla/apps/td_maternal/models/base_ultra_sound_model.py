@@ -11,7 +11,7 @@ from edc_offstudy.models import OffStudyModelMixin
 from edc_sync.models import SyncModelMixin
 from edc_visit_tracking.models import CrfModelMixin
 
-from tshilo_dikotla.apps.td.choices import MALFORMATIONS
+from tshilo_dikotla.apps.td.choices import MALFORMATIONS, ZERO_ONE
 from tshilo_dikotla.apps.td.validators import validate_bpd, validate_hc, validate_fl, validate_ac, validate_hl
 
 from .maternal_crf_model import MaternalCrfModel
@@ -73,6 +73,12 @@ class BaseUtraSoundModel(MaternalCrfModel):
         max_digits=6,
         decimal_places=2,
         help_text='Units in mm.')
+
+    amniotic_fluid_volume = models.CharField(
+        verbose_name="Amniotic fluid volume?",
+        max_length=3,
+        choices=ZERO_ONE,
+        help_text='')
 
     malformations = models.CharField(
         verbose_name="Amniotic fluid volume?",

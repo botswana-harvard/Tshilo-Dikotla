@@ -24,5 +24,9 @@ from .maternal_arv_preg import MaternalArv
 from .base_maternal_clinical_measurements import BaseMaternalClinicalMeasurements
 from .maternal_clinical_measurements_one import MaternalClinicalMeasurementsOne
 from .antenatal_visit_membership import AntenatalVisitMembership
+from .maternal_interim_idcc_data import MaternalInterimIdcc
+from .maternal_clinical_measurements_two import MaternalClinicalMeasurementsTwo
+from .maternal_azt_nvp import MaternalAztNvp
+from .maternal_diagnoses import MaternalDiagnoses
 from .signals import *
 

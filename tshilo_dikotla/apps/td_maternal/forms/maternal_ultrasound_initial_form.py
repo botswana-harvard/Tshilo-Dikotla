@@ -8,6 +8,7 @@ class MaternalUltraSoundInitialForm(BaseMaternalModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalUltraSoundInitialForm, self).clean()
+        MaternalUltraSoundInitial(**cleaned_data).evaluate_edd_confirmed(error_clss=forms.ValidationError)
         return cleaned_data
 
     class Meta:

@@ -17,13 +17,6 @@ class BaseMaternalClinicalMeasurements(MaternalCrfModel):
         validators=[MinValueValidator(30), MaxValueValidator(136), ],
         help_text="Measured in Kilograms (kg)")
 
-    height = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        verbose_name="Mother's height? ",
-        validators=[MinValueValidator(134), MaxValueValidator(195), ],
-        help_text="Measured in Centimeters (cm)")
-
     systolic_bp = models.IntegerField(
         max_length=3,
         verbose_name="Mother's systolic blood pressure?",
