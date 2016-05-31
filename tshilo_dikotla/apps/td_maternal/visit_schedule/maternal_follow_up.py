@@ -22,7 +22,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
     visit_definitions = OrderedDict()
 
     visit_definitions['1100M'] = {
-        'title': '1 Month Visit',
+        'title': 'Delivery Visit',
         'time_point': 30,
         'base_interval': 10,
         'base_interval_unit': 'D',
@@ -38,13 +38,13 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'entries': maternal_antenatal1_entries}
 
     visit_definitions['1200M'] = {
-        'title': '2 Months Visit',
+        'title': '1 Months Visit',
         'time_point': 50,
-        'base_interval': 12,
-        'base_interval_unit': 'D',
-        'window_lower_bound': 15,
+        'base_interval': 1,
+        'base_interval_unit': 'M',
+        'window_lower_bound': 0,
         'window_lower_bound_unit': 'D',
-        'window_upper_bound': 60,
+        'window_upper_bound': 0,
         'window_upper_bound_unit': 'D',
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
@@ -54,13 +54,13 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'entries': maternal_antenatal1_entries}
 
     visit_definitions['1600M'] = {
-        'title': '6 Months Visit',
+        'title': '2 Months Visit',
         'time_point': 110,
-        'base_interval': 16,
-        'base_interval_unit': 'D',
-        'window_lower_bound': 29,
+        'base_interval': 2,
+        'base_interval_unit': 'M',
+        'window_lower_bound': 0,
         'window_lower_bound_unit': 'D',
-        'window_upper_bound': 45,
+        'window_upper_bound': 0,
         'window_upper_bound_unit': 'D',
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
@@ -70,13 +70,13 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'entries': maternal_antenatal1_entries}
 
     visit_definitions['2200M'] = {
-        'title': '12 Months Visit',
+        'title': '6 Months Visit',
         'time_point': 170,
-        'base_interval': 22,
-        'base_interval_unit': 'D',
-        'window_lower_bound': 44,
+        'base_interval': 6,
+        'base_interval_unit': 'M',
+        'window_lower_bound': 0,
         'window_lower_bound_unit': 'D',
-        'window_upper_bound': 45,
+        'window_upper_bound': 0,
         'window_upper_bound_unit': 'D',
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
@@ -86,13 +86,13 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'entries': maternal_antenatal1_entries}
 
     visit_definitions['2800M'] = {
-        'title': '18 Months Visit',
+        'title': '12 Months Visit',
         'time_point': 230,
-        'base_interval': 28,
-        'base_interval_unit': 'D',
-        'window_lower_bound': 44,
+        'base_interval': 12,
+        'base_interval_unit': 'M',
+        'window_lower_bound': 0,
         'window_lower_bound_unit': 'D',
-        'window_upper_bound': 45,
+        'window_upper_bound': 0,
         'window_upper_bound_unit': 'D',
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
@@ -102,13 +102,13 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'entries': maternal_antenatal1_entries}
 
     visit_definitions['2400M'] = {
-        'title': '24 Months Visit',
+        'title': '18 Months Visit',
         'time_point': 290,
-        'base_interval': 34,
-        'base_interval_unit': 'D',
-        'window_lower_bound': 44,
+        'base_interval': 18,
+        'base_interval_unit': 'M',
+        'window_lower_bound': 0,
         'window_lower_bound_unit': 'D',
-        'window_upper_bound': 45,
+        'window_upper_bound': 0,
         'window_upper_bound_unit': 'D',
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
@@ -118,13 +118,29 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'entries': maternal_antenatal1_entries}
 
     visit_definitions['3000M'] = {
-        'title': '30 Months Visit',
+        'title': '24 Months Visit',
         'time_point': 350,
-        'base_interval': 40,
-        'base_interval_unit': 'D',
-        'window_lower_bound': 44,
+        'base_interval': 24,
+        'base_interval_unit': 'M',
+        'window_lower_bound': 0,
         'window_lower_bound_unit': 'D',
-        'window_upper_bound': 45,
+        'window_upper_bound': 0,
+        'window_upper_bound_unit': 'D',
+        'grouping': 'maternal',
+        'visit_tracking_model': MaternalVisit,
+        'schedule': 'Follow Up Visit',
+        'instructions': '',
+        'requisitions': (),
+        'entries': maternal_antenatal1_entries}
+
+    visit_definitions['3600M'] = {
+        'title': '30 Months Visit',
+        'time_point': 410,
+        'base_interval': 30,
+        'base_interval_unit': 'M',
+        'window_lower_bound': 0,
+        'window_lower_bound_unit': 'D',
+        'window_upper_bound': 0,
         'window_upper_bound_unit': 'D',
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
@@ -136,11 +152,11 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
     visit_definitions['3600M'] = {
         'title': '36 Months Visit',
         'time_point': 410,
-        'base_interval': 46,
-        'base_interval_unit': 'D',
-        'window_lower_bound': 44,
+        'base_interval': 36,
+        'base_interval_unit': 'M',
+        'window_lower_bound': 0,
         'window_lower_bound_unit': 'D',
-        'window_upper_bound': 45,
+        'window_upper_bound': 0,
         'window_upper_bound_unit': 'D',
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
