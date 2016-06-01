@@ -27,6 +27,15 @@ from .antenatal_visit_membership import AntenatalVisitMembership
 from .maternal_interim_idcc_data import MaternalInterimIdcc
 from .maternal_clinical_measurements_two import MaternalClinicalMeasurementsTwo
 from .maternal_azt_nvp import MaternalAztNvp
+from .diagnoses_mixin import DiagnosesMixin
 from .maternal_diagnoses import MaternalDiagnoses
+from .maternal_labour_del import MaternalHivInterimHx
+from .maternal_postpartum_fu import MaternalPostPartumFu
+from .maternal_postpartum_dep import MaternalPostPartumDep
+from .maternal_arv_post import MaternalArvPost
+from .maternal_arv_post import MaternalArvPostMed
+from .maternal_arv_post import MaternalArvPostAdh
+from .rapid_test_result import RapidTestResult
+from .maternal_contraception import MaternalContraception
 from .signals import *
 

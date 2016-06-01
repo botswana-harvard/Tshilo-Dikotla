@@ -21,3 +21,12 @@ from .maternal_ultrasound_fu_admin import MaternalUltraSoundFuAdmin
 from .maternal_interim_idcc_admin import MaternalInterimIdccAdmin
 from .maternal_azt_nvp_admin import MaternalAztNvp
 from .maternal_diagnoses_admin import MaternalDiagnosesAdmin
+from .maternal_labour_del_admin import MaternalHivInterimHxAdmin
+from .maternal_postpartum_dep_admin import MaternalPostPartumDepAdmin
+from .maternal_postpartum_fu_admin import MaternalPostPartumFuAdmin
+from .maternal_arv_post_admin import MaternalArvPostModInlineAdmin
+from .maternal_arv_post_admin import MaternalArvPostModAdmin
+from .maternal_arv_post_admin import MaternalArvPostAdmin
+from .maternal_arv_post_admin import MaternalArvPostAdhAdmin
+from .rapid_test_result_admin import RapidTestResultAdmin
+from .maternal_contraception_admin import MaternalContraception

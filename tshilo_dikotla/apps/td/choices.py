@@ -740,3 +740,75 @@ DIAGNOSES = (
     ('Pneumonia', 'Pneumonia'),
     ('Other', 'Other')
 )
+
+HOSPITALIZATION_REASON = (
+    ('Pneumonia or other respiratory disease', 'Pneumonia or other respiratory disease'),
+    ('Postpartum infection', 'Postpartum infection (wound/laceration)'),
+    ('Bowel obstruction', 'Bowel obstruction'),
+    ('Endometritis', 'Endometritis'),
+    ('Unexplained fever', 'Unexplained fever'),
+    ('Other', 'Other')
+)
+
+LAUGH = (
+    ('As much as I always could', 'As much as I always could'),
+    ('Not quite so much now', 'Not quite so much now'),
+    ('Definitely not so much now', 'Definitely not so much now'),
+    ('Not at all', 'Not at all')
+)
+
+ENJOYMENT = (
+    ('As much as I ever did', 'As much as I ever did'),
+    ('Rather less than I used to', 'Rather less than I used to'),
+    ('Definitely less than I used to', 'Definitely less than I used to'),
+    ('Hardly at all', 'Hardly at all')
+)
+
+BLAME = (
+    ('Yes, most of the time', 'Yes, most of the time'),
+    ('Yes, some of the time', 'Yes, some of the time'),
+    ('Not very often', 'Not very often'),
+    ('No, never', 'No, never')
+)
+
+UNHAPPY = BLAME
+
+SAD = BLAME
+
+ANXIOUS = (
+    ('No, not at all', 'No, not at all'),
+    ('Hardly ever', 'Hardly ever'),
+    ('Yes, sometimes', 'Yes, sometimes'),
+    ('Yes, very often', 'Yes, very often')
+)
+
+PANICK = (
+    ('Yes, quite a lot', 'Yes, quite a lot'),
+    ('Yes, sometimes', 'Yes, sometimes'),
+    ('No, not much', 'No, not much'),
+    ('No, not at all', 'No, not at all')
+)
+
+TOP = (
+    ('Yes, most of the time I haven’t been able to cope at all',
+     'Yes, most of the time I haven’t been able to cope at all'),
+    ('Yes, sometimes I haven’t been coping as well as usual',
+     'Yes, sometimes I haven’t been coping as well as usual'),
+    ('No, most of the time I have coped quite well',
+     'No, most of the time I have coped quite well'),
+    ('No, I have been coping as well as ever', 'No, I have been coping as well as ever')
+)
+
+CRYING = (
+    ('Yes, most of the time', 'Yes, most of the time'),
+    ('Yes, quite often', 'Yes, quite often'),
+    ('Only occasionally', 'Only occasionally'),
+    ('No, never', 'No, never')
+)
+
+HARM = (
+    ('Yes, quite often', 'Yes, quite often'),
+    ('Sometimes', 'Sometimes'),
+    ('Hardly ever', 'Hardly ever'),
+    ('Never', 'Never')
+)

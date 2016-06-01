@@ -22,4 +22,12 @@ from .maternal_labour_del_form import MaternalLabourDelForm
 from .maternal_interim_idcc_form import MaternalInterimIdccForm
 from .maternal_azt_nvp_form import MaternalAztNvpForm
 from .maternal_diagnoses_form import MaternalDiagnosesForm
+from .maternal_labour_del_form import MaternalHivInterimHxForm
+from .maternal_postpartum_fu_form import MaternalPostPartumFuForm
+from .maternal_postpartum_dep_form import MaternalPostPartumDepForm
+from .maternal_arv_post_form import MaternalArvPostForm
+from .maternal_arv_post_form import MaternalArvPostMedForm
+from .maternal_arv_post_form import MaternalArvPostAdhForm
+from .rapid_test_result_form import RapidTestResultForm
+from .maternal_contraception_form import MaternalContraceptionForm
 

@@ -14,6 +14,12 @@ YES_NO_DNT_DWTA = (
     ('Dont know right now', 'I do not know right now'),
     ('DWTA', 'Don\'t want to answer'))
 
+YES_NO_NO_PARTNER_DWTA = (
+    (YES, YES),
+    (NO, NO),
+    ('no_partner', 'I do not currently have a partner'),
+    ('DWTA', 'Don\'t want to answer'))
+
 NEXT_CHILD_PLAN = (
     ('within 2years', 'Within the next 2 years'),
     ('between 2-5years from now', 'From 2 years to 5 years from now'),
@@ -306,4 +312,36 @@ REASON_CONTRACEPTIVE_NOT_INITIATED = (
 
 SITE = (
     ('Gaborone', 'Gaborone'),
+)
+
+PAP_SMEAR = (
+    (YES, YES),
+    (NO, NO),
+    ('never_had_pap_smear', 'I have never had a Pap smear'),
+    ('DWTA', 'Don\'t want to answer')
+)
+
+NORMAL_ABNORMAL_DWTA = (
+    ('normal', 'Normal'),
+    ('abnormal', 'Abnormal'),
+    ('DWTA', 'Don\'t Want to Answer')
+)
+
+PAP_SMEAR_ESTIMATE = (
+    ('within_last_6months', 'Within the last 6 months'),
+    ('more_than_6months_within_1year', 'More than 6 months ago but within the last year'),
+    ('more_than_1year_within_2years', 'More than one year ago but within the last two years'),
+    ('more_than_1year_within_5years', 'More than one year ago but within the last five years'),
+    ('more_than_5years', 'More than five years ago')
+)
+
+INFLUENTIAL_IN_DECISION_MAKING = (
+    ('independent_decision', 'I made the decision independent of any discussions I have had.'),
+    ('partner_most_influential', 'My partner was the most influential.'),
+    ('mother_most_influential', 'My mother was the most influential.'),
+    ('sister_most_influential', 'My sister was the most influential.'),
+    ('auntie_most_influential', 'My auntie was the most influential.'),
+    ('mother_in_law_most_influential', 'My mother-in-law was the most influential'),
+    ('DWTA', 'I do not wish to answer this question'),
+    (OTHER, 'Another person was the most influential (Please type in the description of this person below)')
 )

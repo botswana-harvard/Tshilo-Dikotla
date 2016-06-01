@@ -180,7 +180,7 @@ class MaternalLabDelMed(MaternalCrfModel):
         verbose_name_plural = "Delivery: Medical"
 
 
-class MaternalLabDelClinic(MaternalCrfModel):
+class MaternalHivInterimHx(MaternalCrfModel):
 
     """ Laboratory and other clinical information collected during labor and delivery.
     for HIV +ve mothers ONLY"""
@@ -237,8 +237,10 @@ class MaternalLabDelClinic(MaternalCrfModel):
 
     class Meta:
         app_label = 'td_maternal'
-        verbose_name = "Delivery: Clinical"
-        verbose_name_plural = "Delivery: Clinical"
+        verbose_name = "Maternal Hiv Interim Hx"
+        verbose_name_plural = "Maternal Hiv Interim Hx"
+#         verbose_name = "Delivery: Clinical"
+#         verbose_name_plural = "Delivery: Clinical"
 
 
 class MaternalLabDelDx(MaternalCrfModel):

@@ -2,8 +2,8 @@ from django.contrib import admin
 
 from edc_registration.models import RegisteredSubject
 
-from ..forms import MaternalLabourDelForm
-from ..models import MaternalLabourDel
+from ..forms import MaternalLabourDelForm, MaternalHivInterimHxForm
+from ..models import MaternalLabourDel, MaternalHivInterimHx
 
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
@@ -45,3 +45,14 @@ class MaternalLabourDelAdmin(BaseMaternalModelAdmin):
         return super(MaternalLabourDelAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(MaternalLabourDel, MaternalLabourDelAdmin)
+
+
+class MaternalHivInterimHxAdmin(BaseMaternalModelAdmin):
+
+    form = MaternalHivInterimHxForm
+
+    radio_fields = {'has_cd4': admin.VERTICAL,
+                    'has_vl': admin.VERTICAL,
+                    'vl_detectable': admin.VERTICAL}
+
+admin.site.register(MaternalHivInterimHx, MaternalHivInterimHxAdmin)
