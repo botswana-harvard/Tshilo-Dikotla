@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_sync.models import SyncModelMixin

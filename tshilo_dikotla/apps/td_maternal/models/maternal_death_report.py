@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_death_report.models import DeathReportModelMixin
 from edc_export.models import ExportTrackingFieldsMixin
@@ -18,7 +18,7 @@ class MaternalDeathReport(CrfModelMixin, SyncModelMixin, DeathReportModelMixin,
 
     maternal_visit = models.OneToOneField(MaternalVisit)
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
 

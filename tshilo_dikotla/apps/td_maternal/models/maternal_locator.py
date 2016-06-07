@@ -1,8 +1,8 @@
 from django.db import models
 
 from edc_registration.models import RegisteredSubject
-from edc_base.audit_trail import AuditTrail
-from edc_base.encrypted_fields import EncryptedCharField
+# from edc_base.audit_trail import AuditTrail
+from django_crypto_fields.fields import EncryptedCharField
 from edc_base.model.fields import OtherCharField
 from edc_base.model.validators import CellNumber, TelephoneNumber
 from edc_constants.choices import YES_NO

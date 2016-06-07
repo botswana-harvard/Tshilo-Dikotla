@@ -1,9 +1,10 @@
 from django.contrib import admin
 from collections import OrderedDict
 
-from edc_base.modeladmin.admin import BaseModelAdmin
 from edc_registration.models import RegisteredSubject
 from edc_export.actions import export_as_csv_action
+
+from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
 
 from ..forms import AntenatalEnrollmentForm
 from ..models import AntenatalEnrollment

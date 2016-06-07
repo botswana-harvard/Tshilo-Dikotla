@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import YES_NO, POS_NEG
 
 from .maternal_crf_model import MaternalCrfModel
@@ -33,7 +33,7 @@ class RapidTestResult(MaternalCrfModel):
         blank=True,
         null=True)
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     def get_result_datetime(self):
         return self.report_datetime

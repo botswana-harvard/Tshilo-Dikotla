@@ -1,10 +1,14 @@
 from django.contrib import admin
+from django.core.urlresolvers import reverse
 from collections import OrderedDict
 
-from edc_base.modeladmin.admin import BaseModelAdmin
+# from edc_base.modeladmin.admin import BaseModelAdmin
+# from edc_consent.admin.mixins import ModelAdminConsentMixin
 from edc_registration.models import RegisteredSubject
 from edc_consent.actions import flag_as_verified_against_paper, unflag_as_verified_against_paper
 from edc_export.actions import export_as_csv_action
+
+from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
 
 from ..forms import MaternalConsentForm
 from ..models import MaternalConsent
@@ -99,5 +103,9 @@ class MaternalConsentAdmin(BaseModelAdmin):
                 id__exact=request.GET.get('registered_subject', 0))
 
         return super(MaternalConsentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def redirect_url(self, request, obj, post_url_continue=None):
+        url_name = request.GET.get(self.querystring_name)
+        return reverse(url_name, args=[request.GET.get('section_name')])
 
 admin.site.register(MaternalConsent, MaternalConsentAdmin)

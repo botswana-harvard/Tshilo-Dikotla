@@ -22,7 +22,7 @@ class MaternalLabourDelAdmin(BaseMaternalModelAdmin):
                    'delivery_complications',
                    'has_uterine_tender')
 
-    search_fields = ('registered_subject__subject_identifier')
+    search_fields = ('registered_subject__subject_identifier', )
 
     radio_fields = {'delivery_time_estimated': admin.VERTICAL,
                     'has_uterine_tender': admin.VERTICAL,

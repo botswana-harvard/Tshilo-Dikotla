@@ -1,7 +1,7 @@
 from django.db import models
 
 from edc_appointment.models import AppointmentMixin
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_consent.models import RequiresConsentMixin, BaseSpecimenConsent
 from edc_consent.models.fields import SampleCollectionFieldsMixin, VulnerabilityFieldsMixin

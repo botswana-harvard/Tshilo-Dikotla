@@ -103,7 +103,7 @@ INSTALLED_APPS = [
 ]
 
 if 'test' in sys.argv:
-    INSTALLED_APPS.append('edc_testing')
+#     INSTALLED_APPS.append('edc_testing')
     # TODO: Make this list auto generate from INSTALLED_APPS
     # Ignore running migrations on unit tests, greately speeds up tests.
     MIGRATION_MODULES = {"edc_registration": None,

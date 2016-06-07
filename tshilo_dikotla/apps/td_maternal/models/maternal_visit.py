@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.apps import apps
 
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_consent.models import RequiresConsentMixin
 from edc_constants.constants import (
@@ -31,7 +31,7 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalV
 
     death_report_model = ('td_maternal', 'MaternalDeathReport')
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     def __unicode__(self):
         return '{} {} {}'.format(self.appointment.registered_subject.subject_identifier,
@@ -106,6 +106,9 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalV
                 registered_subject=self.appointment.registered_subject)
         except AntenatalEnrollment.DoesNotExist:
             return None
+
+    def get_subject_identifier(self):
+        return self.appointment.registered_subject.subject_identifier
 
 #     @property
 #     def postnatal_enrollment(self):

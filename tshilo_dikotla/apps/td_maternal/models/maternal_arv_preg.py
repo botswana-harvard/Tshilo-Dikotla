@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
@@ -43,7 +43,7 @@ class MaternalArvPreg(MaternalCrfModel):
         blank=True,
         null=True)
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'

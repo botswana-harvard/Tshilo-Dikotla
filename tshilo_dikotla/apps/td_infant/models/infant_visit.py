@@ -2,7 +2,7 @@
 
 from edc_appointment.models import Appointment
 from edc_meta_data.models import CrfMetaDataMixin
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_constants.constants import (
     UNSCHEDULED, SCHEDULED, COMPLETED_PROTOCOL_VISIT, DEAD, POS, MALE, MISSED_VISIT)
@@ -33,7 +33,7 @@ class InfantVisit(
 
     consent_model = InfantBirth  # a bit weird, see visit_form_mixin clean()
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     @property
     def postnatal_enrollment(self):

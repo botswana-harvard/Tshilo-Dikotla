@@ -2,7 +2,7 @@ from django.db import models, transaction
 # from django.db.models import get_model
 
 from edc_appointment.models import AppointmentMixin
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import (datetime_not_before_study_start, datetime_not_future,)
 from edc_consent.models import RequiresConsentMixin
@@ -65,7 +65,7 @@ class PostnatalEnrollment(SyncModelMixin, OffStudyMixin, AppointmentMixin,
 
 #     objects = PostnatalEnrollmentManager()
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     def natural_key(self):
         return (self.report_datetime, self.registered_subject.natural_key())

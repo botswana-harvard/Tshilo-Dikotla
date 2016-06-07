@@ -3,9 +3,10 @@ from collections import OrderedDict
 from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
-from edc_base.modeladmin.admin import BaseModelAdmin
 from edc_consent.actions import flag_as_verified_against_paper, unflag_as_verified_against_paper
 from edc_registration.models import RegisteredSubject
+
+from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
 
 from ..forms import SpecimenConsentForm
 from ..models import SpecimenConsent

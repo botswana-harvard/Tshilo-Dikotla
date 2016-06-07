@@ -1,8 +1,8 @@
 from collections import OrderedDict
 
 from edc_export.actions import export_as_csv_action
-from edc_base.modeladmin.admin import BaseModelAdmin
 
+from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
 from ..models import MaternalVisit
 
 

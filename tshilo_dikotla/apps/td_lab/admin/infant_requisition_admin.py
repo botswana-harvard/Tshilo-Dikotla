@@ -2,9 +2,9 @@ from copy import copy
 
 from django.contrib import admin
 
-from edc_base.modeladmin.admin.base_model_admin import BaseModelAdmin
 from lab_requisition.admin import RequisitionAdminMixin
 
+from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
 from tshilo_dikotla.apps.td.constants import INFANT
 from tshilo_dikotla.apps.td_infant.models import InfantVisit
 

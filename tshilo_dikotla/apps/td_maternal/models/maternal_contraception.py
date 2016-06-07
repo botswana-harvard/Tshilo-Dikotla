@@ -1,7 +1,7 @@
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import YES_NO_DWTA
 
 from tshilo_dikotla.apps.td_list.models import Contraceptives, MaternalRelatives
@@ -154,7 +154,7 @@ class MaternalContraception(MaternalCrfModel):
         choices=YES_NO_DWTA,
         help_text='')
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'

@@ -1,13 +1,16 @@
 from django.contrib import admin
 
 from edc_registration.models import RegisteredSubject
-from edc_locator.admin import BaseLocatorModelAdmin
+# from edc_locator.admin import BaseLocatorModelAdmin
+from edc_locator.admin import ModelAdminLocatorMixin
+
+from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
 
 from ..forms import MaternalLocatorForm
 from ..models import MaternalLocator
 
 
-class MaternalLocatorAdmin(BaseLocatorModelAdmin):
+class MaternalLocatorAdmin(ModelAdminLocatorMixin, BaseModelAdmin):
 
     form = MaternalLocatorForm
 

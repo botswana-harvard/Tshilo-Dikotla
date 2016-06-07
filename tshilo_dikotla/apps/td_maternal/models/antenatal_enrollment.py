@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.apps import apps
 
 from edc_appointment.models import AppointmentMixin
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import (datetime_not_before_study_start, datetime_not_future, 
     date_not_before_study_start, date_not_future)
@@ -56,7 +56,7 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
         help_text="EDD by LMP using Naegele's rule")
 
 
-#     objects = AntenatalEnrollmentManager()    
+#     objects = AntenatalEnrollmentManager()
     objects = models.Manager()
 
 #     history = AuditTrail()

@@ -1,7 +1,7 @@
 from django.db import models
 from django.apps import apps
 
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import (datetime_not_before_study_start, datetime_not_future)
 from edc_consent.models import RequiresConsentMixin

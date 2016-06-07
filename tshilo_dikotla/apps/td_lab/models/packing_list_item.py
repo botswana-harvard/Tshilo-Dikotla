@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_constants.constants import NOT_APPLICABLE
 from edc_export.models import ExportTrackingFieldsMixin

@@ -103,7 +103,14 @@ def maternal_consent_on_post_save(sender, instance, raw, created, using, **kwarg
             maternal_eligibility.save(update_fields=['is_consented'])
             instance.registered_subject.registration_datetime = instance.consent_datetime
             instance.registered_subject.registration_status = CONSENTED
-            instance.registered_subject.save(update_fields=['registration_datetime', 'registration_status'])
+            instance.registered_subject.subject_identifier = instance.subject_identifier
+            instance.registered_subject.initials = instance.initials
+            instance.registered_subject.last_name = instance.last_name
+            instance.registered_subject.identity = instance.identity
+            instance.registered_subject.dob = instance.dob
+            instance.registered_subject.subject_consent_id = instance.id
+            instance.registered_subject.subject_consent_id = instance.pk
+            instance.registered_subject.save()
 
 
 @receiver(post_save, weak=False, dispatch_uid="ineligible_take_off_study")

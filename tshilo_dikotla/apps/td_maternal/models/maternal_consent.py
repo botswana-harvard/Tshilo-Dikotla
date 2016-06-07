@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel
 from edc_consent.models.base_consent import BaseConsent
@@ -53,7 +53,7 @@ class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMi
         blank=True,
         null=True, )
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     def __unicode__(self):
         return '{0} {1} {2} ({3})'.format(self.subject_identifier, self.first_name,

@@ -1,7 +1,7 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
-from edc_base.audit_trail import AuditTrail
+# from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
@@ -172,7 +172,7 @@ class MaternalLabDelMed(MaternalCrfModel):
         blank=True,
         null=True)
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'
@@ -233,7 +233,7 @@ class MaternalHivInterimHx(MaternalCrfModel):
         blank=True,
         null=True)
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'
@@ -266,7 +266,7 @@ class MaternalLabDelDx(MaternalCrfModel):
         choices=YES_NO,
         help_text="If yes, Select all that apply in the table, only report grade 3 or 4 diagnoses")
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'
@@ -301,7 +301,7 @@ class MaternalLabDelDxT (CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
 
 #     objects = MaternalLabDelDxTManager()
 
-    history = AuditTrail()
+#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'
