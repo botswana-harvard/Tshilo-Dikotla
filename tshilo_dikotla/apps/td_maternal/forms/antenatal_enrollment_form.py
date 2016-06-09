@@ -2,6 +2,8 @@ from django import forms
 
 from edc_constants.constants import YES
 
+from tshilo_dikotla.apps.td_maternal.models.enrollment_helper import EnrollmentHelper
+
 from ..models import AntenatalEnrollment, PostnatalEnrollment, MaternalEligibility
 
 from .base_enrollment_form import BaseEnrollmentForm
@@ -23,7 +25,10 @@ class AntenatalEnrollmentForm(BaseEnrollmentForm):
 #             except PostnatalEnrollment.DoesNotExist:
 #                 pass
 #         self.fill_postnatal_enrollment_if_recently_delivered()
-        self.raise_if_rapid_test_required()
+#         self.raise_if_rapid_test_required()
+        enrollment_helper = EnrollmentHelper(instance_antenatal=self._meta.model(**cleaned_data),
+                                             exception_cls=forms.ValidationError)
+        enrollment_helper.raise_validation_error_for_rapidtest()
 
         return cleaned_data
 

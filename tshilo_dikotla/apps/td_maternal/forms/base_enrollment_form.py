@@ -12,17 +12,17 @@ class BaseEnrollmentForm(BaseModelForm):
 
     def clean(self):
         cleaned_data = super(BaseEnrollmentForm, self).clean()
-        self.requires_specimen_consent()
-        self.requires_rapid_test_if_current_hiv_status_uknown()
-        self.requires_week32_result_if_tested()
-        self.neg_current_hiv_status_and_test_and_regimen()
-        self.pos_current_hiv_status_and_test_and_regimen()
-        self.valid_regimen_and_duration()
-        self.week32_test_matches_current()
-        self.rapid_test_date_and_result()
-        self.raise_if_rapid_test_required()
-        self.raise_if_rapid_test_date_future()
-        EnrollmentHelper(instance_antenatal=self._meta.model(**cleaned_data), exception_cls=forms.ValidationError)
+#         self.requires_specimen_consent()
+#         self.requires_rapid_test_if_current_hiv_status_uknown()
+#         self.requires_week32_result_if_tested()
+#         self.neg_current_hiv_status_and_test_and_regimen()
+#         self.pos_current_hiv_status_and_test_and_regimen()
+#         self.valid_regimen_and_duration()
+#         self.week32_test_matches_current()
+#         self.rapid_test_date_and_result()
+#         self.raise_if_rapid_test_required()
+#         self.raise_if_rapid_test_date_future()
+#         EnrollmentHelper(instance_antenatal=self._meta.model(**cleaned_data), exception_cls=forms.ValidationError)
         return cleaned_data
 
     def clean_report_datetime(self):
