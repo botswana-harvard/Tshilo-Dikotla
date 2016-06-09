@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps
 from django.core.exceptions import ValidationError
 
 from edc_base.model.validators import date_not_before_study_start, date_not_future
@@ -145,10 +146,12 @@ class EnrollmentMixin(models.Model):
         super(EnrollmentMixin, self).save(*args, **kwargs)
 
     def antenatal_criteria(self, enrollment_helper):
-        """Returns True if basic criteria is met for antenatal enrollment."""
+        """Returns True if basic criteria is met for enrollment."""
         basic_criteria = (self.ga_lmp_enrollment_wks >= 16 and self.ga_lmp_enrollment_wks <= 36 and
                           enrollment_helper.no_chronic_conditions() and self.will_breastfeed == YES and
-                          self.will_remain_onstudy == YES)
+                          self.will_remain_onstudy == YES and
+                          (self.ultrasound.pass_antenatal_enrollment if self.ultrasound else True) and
+                          (self.delivery.keep_on_study if self.delivery else True))
         if basic_criteria and self.enrollment_hiv_status == POS and self.will_get_arvs == YES:
             return True
         elif basic_criteria and self.enrollment_hiv_status == NEG:
@@ -158,6 +161,24 @@ class EnrollmentMixin(models.Model):
 
     def get_registration_datetime(self):
         return self.report_datetime
+
+    @property
+    def ultrasound(self):
+        MaternalUltraSoundInitial = apps.get_model('td_maternal', 'MaternalUltraSoundInitial')
+        try:
+            return MaternalUltraSoundInitial.objects.get(
+                maternal_visit__appointment__registered_subject=self.registered_subject)
+        except MaternalUltraSoundInitial.DoesNotExist:
+            return None
+
+    @property
+    def delivery(self):
+        MaternalLabourDel = apps.get_model('td_maternal', 'MaternalLabourDel')
+        try:
+            return MaternalLabourDel.objects.get(
+                registered_subject=self.registered_subject)
+        except MaternalLabourDel.DoesNotExist:
+            return None
 
     @property
     def subject_identifier(self):

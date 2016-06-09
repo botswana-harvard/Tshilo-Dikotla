@@ -90,6 +90,10 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
             unenrolled_error_message.append('rapid test not done')
         if self.ga_lmp_enrollment_wks < 16 or self.ga_lmp_enrollment_wks > 36:
             unenrolled_error_message.append('gestation not 16 to 36wks')
+        if self.delivery and not self.delivery.keep_on_study:
+            unenrolled_error_message.append('Hiv+ and not on ART for atleast 4 weeks.')
+        if self.ultrasound and not self.ultrasound.pass_antenatal_enrollment:
+            unenrolled_error_message.append('Pregnancy is not a singleton.')
         return unenrolled_error_message
 
     def chronic_unenrolled_error_messages(self):

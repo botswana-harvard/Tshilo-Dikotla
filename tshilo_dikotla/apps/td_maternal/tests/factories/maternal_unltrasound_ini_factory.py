@@ -27,7 +27,7 @@ class MaternalUltraSoundIniFactory(factory.DjangoModelFactory):
     ga_by_ultrasound_wks = 7
     ga_by_ultrasound_days = 5
     est_fetal_weight = 700
-    est_edd = timezone.now() + timedelta(days=90)
+    est_edd = timezone.now().date() + timedelta(days=90)
     edd_confirmed = timezone.now() + timedelta(days=90)
     ga_confirmed = 7
     amniotic_fluid_volume = 1

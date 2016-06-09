@@ -346,6 +346,8 @@ OFF_STUDY_REASON = [
     ('multiple_vialble_gestations', 'Multiple (2 or more) viable gestations seen on ultrasound'),
     ('miscarriage_or_arbotion_lt_20wks', 'Miscarriage or arbotion (fetal demise < 20 weeks GA)'),
     ('fetal_death_gt_20wks', 'fetal Death at >= 20weeks GA (IUFD) or still born'),
+    ('took_art_less_than_4weeks',
+     'Mother took ART for less than 4 weeks during pregnancy'),
     ('maternal_death_pre_deliv', 'Maternal death PRIOR to delivery (complete the Death Report Form AF005)'),
     ('maternal_death_post_deliv', 'Maternal death POST delivery (complete the Death Report Form AF005)'),
     ('moving_out_of_study_area_pre_deliv',
@@ -811,4 +813,9 @@ HARM = (
     ('Sometimes', 'Sometimes'),
     ('Hardly ever', 'Hardly ever'),
     ('Never', 'Never')
+)
+
+AMNIOTIC_FLUID = (
+    ('0', 'Normal'),
+    ('1', 'Abnormal')
 )

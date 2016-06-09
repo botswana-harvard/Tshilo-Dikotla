@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.apps import apps
 
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
@@ -7,7 +8,7 @@ from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
 # from edc_code_lists.models import WcsDxAdult
 from edc_constants.choices import YES_NO, YES_NO_UNKNOWN, YES_NO_NA
-from edc_constants.constants import NOT_APPLICABLE
+from edc_constants.constants import NOT_APPLICABLE, YES, POS
 from edc_sync.models import SyncModelMixin
 from edc_visit_tracking.models import CrfInlineModelMixin
 from edc_registration.models import RegisteredSubject
@@ -132,6 +133,17 @@ class MaternalLabourDel(RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
 
     def get_subject_identifier(self):
         return self.registered_subject.subject_identifier
+
+    @property
+    def antenatal_enrollment(self):
+        AntenatalEnrollment = apps.get_model('td_maternal', 'antenatalenrollment')
+        return AntenatalEnrollment.objects.get(registered_subject=self.registered_subject)
+    
+    @property
+    def keep_on_study(self):
+        if self.antenatal_enrollment.enrollment_hiv_status == POS and self.valid_regiment_duration != YES:
+            return False
+        return True
 
     class Meta:
         app_label = 'td_maternal'

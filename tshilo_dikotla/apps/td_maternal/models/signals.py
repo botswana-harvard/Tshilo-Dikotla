@@ -187,14 +187,13 @@ def eligible_put_back_on_study(sender, instance, raw, created, using, **kwargs):
             put_back_on_study_from_failed_eligibility(instance)
 
 
-@receiver(post_save, weak=False, dispatch_uid="maternal_ultrasound_initial_on_post_save")
-def maternal_ultrasound_initial_on_post_save(sender, instance, raw, created, using, **kwargs):
+@receiver(post_save, weak=False, dispatch_uid="maternal_ultrasound_delivery_initial_on_post_save")
+def maternal_ultrasound_delivery_initial_on_post_save(sender, instance, raw, created, using, **kwargs):
     """Update antenatal enrollment to indicate if eligibility is passed on not based on ultra sound form results."""
     if not raw:
-        if isinstance(instance, MaternalUltraSoundInitial):
+        if isinstance(instance, MaternalUltraSoundInitial) or isinstance(instance, MaternalLabourDel):
             # re-save antenatal enrollment record to recalculate eligibility
             antenatal_enrollment = instance.antenatal_enrollment
-#             antenatal_enrollment.is_eligible = instance.pass_antenatal_enrollment
             antenatal_enrollment.save()
 
 

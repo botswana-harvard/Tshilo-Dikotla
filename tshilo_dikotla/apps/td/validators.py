@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 
 def validate_bpd(value):
     if value < 5 or value > 300:
-        raise ValidationError('BPD has to be between 0 and 300. You entered {}'.format(value))
+        raise ValidationError('BPD has to be between 5 and 300. You entered {}'.format(value))
 
 
 def validate_hc(value):

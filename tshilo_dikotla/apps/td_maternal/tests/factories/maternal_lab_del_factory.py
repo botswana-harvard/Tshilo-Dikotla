@@ -25,4 +25,5 @@ class MaternalLabourDelFactory(factory.DjangoModelFactory):
     has_chorioamnionitis = NO
     delivery_complications = NO
     live_infants_to_register = 1
+    valid_regiment_duration = YES
 
