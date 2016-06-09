@@ -39,7 +39,6 @@ class AntenatalEnrollmentAdmin(MembershipBaseModelAdmin):
                     'will_breastfeed': admin.VERTICAL,
                     'will_remain_onstudy': admin.VERTICAL,
                     'current_hiv_status': admin.VERTICAL,
-                    'ga_lmp_enrollment_wks': admin.VERTICAL,
                     'week32_test': admin.VERTICAL,
                     'week32_result': admin.VERTICAL,
                     'evidence_hiv_status': admin.VERTICAL,

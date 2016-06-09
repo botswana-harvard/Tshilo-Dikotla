@@ -20,14 +20,12 @@ class MaternalUltraSoundFuAdmin(BaseMaternalModelAdmin):
               'ac',
               'fl',
               'hl',
-              'amniotic_fluid_volume',
               'lateral_ventricle',
               'cerebellum',
               'cistema_magna',
               'malformations')
 
-    radio_fields = {'amniotic_fluid_volume': admin.VERTICAL,
-                    'malformations': admin.VERTICAL}
+    radio_fields = {'malformations': admin.VERTICAL}
 
     list_display = ('maternal_visit', 'report_datetime', 'lateral_ventricle', 'cerebellum')
 

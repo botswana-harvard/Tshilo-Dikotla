@@ -30,7 +30,6 @@ class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin):
               'est_fetal_weight',
               'est_edd',
               'edd_confirmed',
-              'amniotic_fluid_volume',
               'lateral_ventricle',
               'cerebellum',
               'cistema_magna',
@@ -39,7 +38,6 @@ class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin):
     readonly_fields = ('edd_confirmed', 'ga_confirmed', 'ga_by_lmp')
 
     radio_fields = {'number_of_gestations': admin.VERTICAL,
-                    'amniotic_fluid_volume': admin.VERTICAL,
                     'malformations': admin.VERTICAL}
 
     list_display = ('report_datetime', 'number_of_gestations', 'ga_confrimation_method', 'edd_confirmed',
