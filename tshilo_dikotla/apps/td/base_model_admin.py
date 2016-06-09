@@ -12,6 +12,11 @@ class BaseModelAdmin(ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsM
     date_hierarchy = 'modified'
     empty_value_display = '-'
 
+    def redirect_url(self, request, obj, post_url_continue=None):
+        url_name = request.GET.get(self.querystring_name)
+        section_name = request.GET.get('section_name')
+        return reverse(url_name, kwargs={'section_name': section_name})
+
 
 class MembershipBaseModelAdmin(ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin,
                                ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin, admin.ModelAdmin):

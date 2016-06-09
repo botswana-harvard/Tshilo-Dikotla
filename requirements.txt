@@ -1,34 +1,35 @@
 Django==1.9
--e git+https://github.com/erikvw/django-crypto-fields@7bcd07e90e00825250d8f684fb3a2aa2c121cd5b#egg=django_crypto_fields
+django-crispy-forms==1.6.0
+-e git+https://github.com/erikvw/django-crypto-fields@246bf4d085b48a27a43202bf816d67e84a134286#egg=django_crypto_fields
 django-extensions==1.6.1
 -e git+https://github.com/erikvw/django-revision@522bb4e0cc41df969f0cba9485919ec1125cd157#egg=django_revision
 django-simple-history==1.8.1
 django-tastypie==0.13.3
--e git+https://github.com/botswana-harvard/edc-appointment@09dddf0fc0470d3ba055d75d6158e3fc1d7a8bbf#egg=edc_appointment
--e git+https://github.com/botswana-harvard/edc-base@0ca6271747b2920d126aa955b059f72626d041a9#egg=edc_base
--e git+https://github.com/botswana-harvard/edc-call-manager@1799f66c308b238db83c87757bad33806bd354cb#egg=edc_call_manager
+-e git+https://github.com/botswana-harvard/edc-appointment@44d8156ae682cf995bb8cc9e705d5621bdf161f9#egg=edc_appointment
+-e git+https://github.com/botswana-harvard/edc-base@3b2a89c578f76618c3f95ddb503ed36922ad347a#egg=edc_base
+-e git+https://github.com/botswana-harvard/edc-call-manager@12c6c10eaaa2be10fab12737c00aa8dc12dc5f0b#egg=edc_call_manager
 -e git+https://github.com/botswana-harvard/edc-code-lists@2e3a9aef57d80a0787cff735db9c10fc3dbe7add#egg=edc_code_lists
--e git+https://github.com/botswana-harvard/edc-configuration@38a1bb16604f8737864f18446529da6e4d8541d8#egg=edc_configuration
--e git+https://github.com/botswana-harvard/edc-consent@0d5aed9d9c6487136e27ab8e28a36fee30596727#egg=edc_consent
+-e git+https://github.com/botswana-harvard/edc-configuration@0b078ab0885dc45e09b5d5ab9d9a02877553519b#egg=edc_configuration
+-e git+https://github.com/botswana-harvard/edc-consent@5c3572647e3a327ab936bd6892e57ea828fe2ad0#egg=edc_consent
 -e git+https://github.com/botswana-harvard/edc-constants@6a06b691a15894759e9a279892c0ba4961e9bed0#egg=edc_constants
--e git+https://github.com/botswana-harvard/edc-content-type-map@8558022f4633affa00ac01d4366711ea92e1bc0b#egg=edc_content_type_map
--e git+https://github.com/botswana-harvard/edc-dashboard@de3cfa7e7118c8c6e3f234ff3ebf9603eef42ace#egg=edc_dashboard
--e git+https://github.com/botswana-harvard/edc-data-manager@a530294307589465aac73d9b2bdfdd9214ab71a6#egg=edc_data_manager
+-e git+https://github.com/botswana-harvard/edc-content-type-map@7614883ed1e89eb5a90ee92df91746ae54965ec3#egg=edc_content_type_map
+-e git+https://github.com/botswana-harvard/edc-dashboard@1e52d5a6a4b6184b6a99248365a8737562ed4f07#egg=edc_dashboard
+-e git+https://github.com/botswana-harvard/edc-data-manager@a0633a457c205c4361f002d27649a4d6764148bb#egg=edc_data_manager
 -e git+https://github.com/botswana-harvard/edc-death-report@120cb9b0b8491de9b5a7b17d2b25d6c97e43cb0a#egg=edc_death_report
 -e git+https://github.com/botswana-harvard/edc-device@e641387fbe9d672b73723e624105b503a907fd66#egg=edc_device
--e git+https://github.com/botswana-harvard/edc-export@6237c4048c8a1e339b18ec46aa614e9f6567de9e#egg=edc_export
--e git+https://github.com/botswana-harvard/edc-identifier@6d9dfccc91c4a443636830da5c26828e679c5646#egg=edc_identifier
--e git+https://github.com/botswana-harvard/edc-lab@7814ed48a68e73c2c6d7df1f72275c3c3e69ef26#egg=edc_lab
--e git+https://github.com/botswana-harvard/edc-locator@fc60781ee05400cc8e17906a8bafbe9e1195fab4#egg=edc_locator
--e git+https://github.com/botswana-harvard/edc-meta-data@c9b23453aedf342f0733ab1411220a296b453672#egg=edc_meta_data
+-e git+https://github.com/botswana-harvard/edc-export@e9e3dd2a2feadbfca4df09182b582b4893721397#egg=edc_export
+-e git+https://github.com/botswana-harvard/edc-identifier@d5e030cd844f12a660f19e370e7d4044e4fe1b73#egg=edc_identifier
+-e git+https://github.com/botswana-harvard/edc-lab@c05dfe2092156e84266acf4114ea4e6e1e9f27ba#egg=edc_lab
+-e git+https://github.com/botswana-harvard/edc-locator@2275ddff0c119a4666902d2fac0dba6159993bc0#egg=edc_locator
+-e git+https://github.com/botswana-harvard/edc-meta-data@d50d54077f4b226100112db7aee018341bc8bffe#egg=edc_meta_data
 -e git+https://github.com/botswana-harvard/edc-notification@7de21100ecccd46afd3fa3ea4d03390d2bab033c#egg=edc_notification
--e git+https://github.com/botswana-harvard/edc-offstudy@d7e28e31d16f8cc6f45052c519187e8e4d15407b#egg=edc_offstudy
+-e git+https://github.com/botswana-harvard/edc-offstudy@f1b2d2c1a5b64e16e2d03cf5a12ade564b891e5b#egg=edc_offstudy
 -e git+https://github.com/botswana-harvard/edc-quota@7ea1d99ec2140428df38386434e3403cf44f464a#egg=edc_quota
 -e git+https://github.com/botswana-harvard/edc-rule-groups@1ed5aebf2d308ec0af504b5c561431e592f39673#egg=edc_rule_groups
--e git+https://github.com/botswana-harvard/edc-sync@adc69a39fb2aa7e995f7a9624c7cdc39937ea1ec#egg=edc_sync
+-e git+https://github.com/botswana-harvard/edc-sync@3ea845047789a13ae24e28a71a94cdf1c7461339#egg=edc_sync
 -e git+https://github.com/botswana-harvard/edc-templates@c79a1d3a541fed424451f6da455bce2b6c84e07c#egg=edc_templates
 -e git+https://github.com/botswana-harvard/edc-testing@d0444af275efc731e923b3239111e7a470802e42#egg=edc_testing
--e git+https://github.com/botswana-harvard/edc-visit-schedule@f9d5de83ac87160e9e1c89e03e333e32121b964f#egg=edc_visit_schedule
+-e git+https://github.com/botswana-harvard/edc-visit-schedule@3d78fdf6319e1488372dfa5324ce8a841b84e7a8#egg=edc_visit_schedule
 -e git+https://github.com/botswana-harvard/edc-visit-tracking@6c9f910613d91302c9c08fc0b1d04c9e7cc33a40#egg=edc_visit_tracking
 factory-boy==2.6.1
 fake-factory==0.5.7
@@ -37,7 +38,7 @@ flake8==2.5.4
 gitdb==0.6.4
 GitPython==1.0.2
 -e git+https://github.com/botswana-harvard/lab-requisition@e90bfd28465c10565edd3d37d15a91f39fe51f2e#egg=lab_requisition
--e git+https://github.com/botswana-harvard/lis@be6ed7f871399f1087892f996bc44fef02249334#egg=lis
+-e git+https://github.com/botswana-harvard/lis@161c9c1f251d4282955a2a8e6d916775bd63be6f#egg=lis
 mccabe==0.4.0
 numpy==1.11.0
 pep8==1.7.0
