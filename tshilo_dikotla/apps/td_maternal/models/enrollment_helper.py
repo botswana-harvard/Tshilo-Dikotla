@@ -103,7 +103,7 @@ class EnrollmentHelper(object):
         return False
 
     def raise_validation_error_for_rapidtest(self):
-        if (self.validate_rapid_test and self.instance_antenatal.rapid_test_done != YES and
+        if (not self.validate_rapid_test and self.instance_antenatal.rapid_test_done != YES and
                 self.instance_antenatal.rapid_test_result not in [POS, NEG]):
                     raise self.exception_cls('A rapid test with a valid result of either POS or NEG is required. Ensure'
                                              ' this is the case.')
