@@ -6,13 +6,13 @@ from edc_export.actions import export_as_csv_action
 from edc_consent.actions import flag_as_verified_against_paper, unflag_as_verified_against_paper
 from edc_registration.models import RegisteredSubject
 
-from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.apps.td.base_model_admin import MembershipBaseModelAdmin
 
 from ..forms import SpecimenConsentForm
 from ..models import SpecimenConsent
 
 
-class SpecimenConsentAdmin(BaseModelAdmin):
+class SpecimenConsentAdmin(MembershipBaseModelAdmin):
 
     dashboard_type = 'maternal'
     form = SpecimenConsentForm

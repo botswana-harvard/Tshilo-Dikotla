@@ -4,13 +4,13 @@ from collections import OrderedDict
 from edc_registration.models import RegisteredSubject
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.apps.td.base_model_admin import MembershipBaseModelAdmin
 
 from ..forms import AntenatalEnrollmentForm
 from ..models import AntenatalEnrollment
 
 
-class AntenatalEnrollmentAdmin(BaseModelAdmin):
+class AntenatalEnrollmentAdmin(MembershipBaseModelAdmin):
 
     dashboard_type = 'maternal'
     form = AntenatalEnrollmentForm
@@ -18,35 +18,36 @@ class AntenatalEnrollmentAdmin(BaseModelAdmin):
     fields = ('registered_subject',
               'report_datetime',
               'last_period_date',
-              'gestation_wks_lmp',
               'edd_by_lmp',
+              'ga_lmp_enrollment_wks',
+              'ga_lmp_anc_wks',
               'is_diabetic',
               'will_breastfeed',
               'will_remain_onstudy',
+              'current_hiv_status',
+              'evidence_hiv_status',
               'week32_test',
               'week32_test_date',
               'week32_result',
-              'current_hiv_status',
-              'evidence_hiv_status',
-              'valid_regimen',
-              'valid_regimen_duration',
+              'evidence_32wk_hiv_status',
+              'will_get_arvs',
               'rapid_test_done',
               'rapid_test_date',
               'rapid_test_result')
-    readonly_fields = ('edd_by_lmp', )
+    readonly_fields = ('edd_by_lmp', 'ga_lmp_enrollment_wks')
     radio_fields = {'is_diabetic': admin.VERTICAL,
                     'will_breastfeed': admin.VERTICAL,
                     'will_remain_onstudy': admin.VERTICAL,
                     'current_hiv_status': admin.VERTICAL,
+                    'ga_lmp_enrollment_wks': admin.VERTICAL,
                     'week32_test': admin.VERTICAL,
                     'week32_result': admin.VERTICAL,
                     'evidence_hiv_status': admin.VERTICAL,
-                    'valid_regimen': admin.VERTICAL,
-                    'valid_regimen_duration': admin.VERTICAL,
+                    'will_get_arvs': admin.VERTICAL,
                     'rapid_test_done': admin.VERTICAL,
                     'rapid_test_result': admin.VERTICAL}
     list_display = ('registered_subject', 'report_datetime', 'evidence_hiv_status',
-                    'valid_regimen')
+                    'will_get_arvs', 'ga_lmp_anc_wks')
 
     actions = [
         export_as_csv_action(

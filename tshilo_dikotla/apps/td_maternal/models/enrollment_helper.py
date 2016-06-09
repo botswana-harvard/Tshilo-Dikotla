@@ -28,136 +28,88 @@ class EnrollmentHelper(object):
             super(EnrollmentMixin, self).save(*args, **kwargs)
     """
 
-    def __init__(self, instance_antenatal, instance_ultrasound=None, exception_cls=None):
-        self._enrollment_hiv_status = None
-        self.date_at_32wks = None
+    def __init__(self, instance_antenatal, exception_cls=None):
+#         self.date_at_32wks = (self.instance_antenatal.report_datetime.date() -
+#                               relativedelta(weeks=instance_antenatal.ga_lmp_enrollment_wks - 32))
         self.instance_antenatal = instance_antenatal
-        self.instance_ultrasound = instance_ultrasound
-        self.enrollment = self.instance_antenatal._meta.verbose_name
+        self.date_at_32wks = self.evaluate_edd_by_lmp - relativedelta(weeks=6)
         self.exception_cls = exception_cls or EnrollmentError
-
-        # make all fields from the enrollment instance_antenatal available to this instance_antenatal
-        for field in self.instance_antenatal._meta.fields:
-            try:
-                setattr(self, field.name, getattr(self.instance_antenatal, field.name))
-            except AttributeError:
-                pass
-
-        if instance_ultrasound:
-            self.is_eligible = self.instance_ultrasound.pass_antenatal_enrollment and self.is_eligible_for_enrollment()
-        else:
-            self.is_eligible = self.is_eligible_for_enrollment()
-
-    def is_eligible_for_enrollment(self):
-        """Returns True if all eligibility criteria passes."""
-        is_eligible = False
-        if self.antenatal_criteria():
-            if (self.enrollment_hiv_status == POS and self.valid_regimen == YES and
-                    self.valid_regimen_duration == YES):
-                is_eligible = True
-            elif self.enrollment_hiv_status == NEG:
-                is_eligible = True
-        return is_eligible
-
-    def antenatal_criteria(self):
-        """Returns True if basic criteria, not including HIV status,
-        is met for antenatal enrollment."""
-        if (self.gestation_wks_lmp >= 16 and self.gestation_wks_lmp <= 36 and self.no_chronic_conditions() and
-                self.will_breastfeed == YES and self.will_remain_onstudy == YES and self.no_chronic_conditions()):
-            return True
-        return False
 
     @property
     def enrollment_hiv_status(self):
         """Returns the maternal HIV status at enrollment based on valid combinations
-        expected from the form otherwise raises a EnrollmentError.
+        expected from the form otherwise raises a EnrollmentError. Can only return POS or NEG.
 
         Note: the EnrollmentError should never be excepted!!"""
-        if not self._enrollment_hiv_status:
-            if self.evidence_hiv_status == YES:
-                self._enrollment_hiv_status = self.hiv_status_with_evidence()
-            elif self.evidence_hiv_status in [NO, NOT_APPLICABLE]:
-                self._enrollment_hiv_status = self.hiv_status_with_without_evidence()
-            if not self._enrollment_hiv_status:
-                raise self.exception_cls(
-                    'Unable to determine maternal hiv status at enrollment. '
-                    'Got current_hiv_status={}, evidence_hiv_status={}, '
-                    'rapid_test_done={}, rapid_test_result={}'.format(
-                        self.current_hiv_status,
-                        self.evidence_hiv_status,
-                        self.rapid_test_done,
-                        self.rapid_test_result))
-        return self._enrollment_hiv_status
+        pos = self.known_hiv_pos_with_evidence() or self.tested_pos_at32wks() or self.tested_pos_rapidtest()
+        neg = self.tested_neg_at32wks() or self.tested_neg_rapidtest()
+        if neg and not pos:
+            return NEG
+        elif pos and not neg:
+            return POS
+        else:
+            # Case neg and pos OR not neg and not pos
+            raise self.exception_cls(
+                'Unable to determine maternal hiv status at enrollment. '
+                'Got current_hiv_status={}, evidence_hiv_status={}, '
+                'rapid_test_done={}, rapid_test_result={}'.format(
+                    self.instance_antenatal.current_hiv_status,
+                    self.instance_antenatal.evidence_hiv_status,
+                    self.instance_antenatal.rapid_test_done,
+                    self.instance_antenatal.rapid_test_result))
 
-    def hiv_status_with_evidence(self):
-        """Returns the hiv status if evidence is available or None."""
-        hiv_status = None
-        if self.evidence_hiv_status == YES:
-            if self.hiv_status_on_or_after_32wk(self.exception_cls) == POS:
-                hiv_status = POS
-            elif self.hiv_status_on_or_after_32wk(self.exception_cls) == NEG:
-                hiv_status = NEG
-            elif self.current_hiv_status == POS and self.rapid_test_done in [NO, NOT_APPLICABLE]:
-                hiv_status = POS
-            elif self.current_hiv_status == NEG and self.rapid_test_done in [NO, NOT_APPLICABLE]:
-                hiv_status = UNKNOWN
-            elif (self.current_hiv_status == POS and self.rapid_test_done == YES and
-                    self.rapid_test_result == POS):
-                hiv_status = POS
-            elif (self.current_hiv_status == NEG and
-                    self.rapid_test_done == YES and self.rapid_test_result == NEG):
-                hiv_status = NEG
-            elif (self.current_hiv_status == NEG and
-                    self.rapid_test_done == YES and self.rapid_test_result == POS):
-                hiv_status = SEROCONVERSION
-            elif (self.current_hiv_status == NEG and
-                    self.rapid_test_done == YES and self.rapid_test_result == IND):
-                hiv_status = IND
-        return hiv_status
+    def known_hiv_pos_with_evidence(self):
+        """"""
+        if self.instance_antenatal.current_hiv_status == POS and self.instance_antenatal.evidence_hiv_status == YES:
+            return True
+        return False
 
-    def hiv_status_with_without_evidence(self):
-        """Returns the hiv status if evidence is not available or None."""
-        hiv_status = None
-        if self.evidence_hiv_status in [NO, NOT_APPLICABLE]:
-            if (self.current_hiv_status == POS and self.rapid_test_done == YES and
-                    self.rapid_test_result == POS):
-                hiv_status = POS
-            elif (self.current_hiv_status == POS and self.rapid_test_done == NO and
-                    self.rapid_test_result is None):
-                hiv_status = UNKNOWN
-            elif (self.current_hiv_status in [NEG, NEVER, UNKNOWN, DWTA] and self.rapid_test_done == YES and
-                    self.rapid_test_result == NEG):
-                hiv_status = NEG
-            elif (self.current_hiv_status in [NEG, NEVER, UNKNOWN, DWTA] and self.rapid_test_done == YES and
-                    self.rapid_test_result == POS):
-                hiv_status = SEROCONVERSION
-            elif (self.current_hiv_status in [NEG, NEVER, UNKNOWN, DWTA] and self.rapid_test_done == NO and
-                    self.rapid_test_result is None):
-                hiv_status = UNKNOWN
-        return hiv_status
+    def tested_pos_at32wks(self):
+        if (self.instance_antenatal.week32_test == YES and self.instance_antenatal.week32_result == POS and
+                self.instance_antenatal.evidence_32wk_hiv_status == YES):
+            return True
+        return False
 
-    def hiv_status_on_or_after_32wk(self, exception_cls=None):
-        """Returns the maternal status on or after week 32 gestational age or None."""
-        hiv_status = None
-        exception_cls = exception_cls or EnrollmentError
-        if self.week32_test == YES and self.week32_test_date:
-            if not self.test_date_is_on_or_after_32wks():
-                raise exception_cls(
-                    'Test date is not on or after 32 weeks gestational age.')
-            elif self.week32_result == POS and self.current_hiv_status == POS:
-                hiv_status = POS
-            elif self.week32_result == NEG and self.current_hiv_status == NEG:
-                hiv_status = NEG
-        return hiv_status
+    def tested_pos_rapidtest(self):
+        if self.instance_antenatal.rapid_test_done == YES and self.instance_antenatal.rapid_test_result == POS:
+            return True
+        return False
+
+    def tested_neg_at32wks(self):
+        """"""
+        if (self.instance_antenatal.week32_test == YES and self.test_date_is_on_or_after_32wks() and
+                self.instance_antenatal.week32_result == NEG and
+                self.instance_antenatal.evidence_32wk_hiv_status == YES):
+            return True
+        return False
+
+    def tested_neg_rapidtest(self):
+        if self.instance_antenatal.rapid_test_done == YES and self.instance_antenatal.rapid_test_result == NEG:
+            return True
+        return False
 
     def test_date_is_on_or_after_32wks(self):
         """Returns True if the test date is on or after 32 weeks gestational age."""
-        self.date_at_32wks = self.report_datetime.date() - relativedelta(weeks=self.gestational_age - 32)
-        if self.rapid_test_date:
-            if self.week32_test_date > self.rapid_test_date:
+        if self.instance_antenatal.rapid_test_date:
+            if self.instance_antenatal.week32_test_date > self.instance_antenatal.rapid_test_date:
                 raise self.exception_cls('Rapid test date cannot precede test date on or after 32 weeks')
-        return self.week32_test_date >= self.date_at_32wks
+        return self.instance_antenatal.week32_test_date >= self.date_at_32wks
+
+    @property
+    def validate_rapid_test(self):
+        """Returns True to indicate that a rapid test is not required, False to indicate a rapid test is required."""
+        if self.known_hiv_pos_with_evidence() or self.tested_pos_at32wks() or self.tested_neg_at32wks():
+            return True
+        return False
+
+    @property
+    def evaluate_edd_by_lmp(self):
+        return (self.instance_antenatal.last_period_date + relativedelta(days=280))
+
+    @property
+    def evaluate_ga_lmp(self):
+        return 40 - ((self.evaluate_edd_by_lmp - self.instance_antenatal.report_datetime.date()).days / 7)
 
     def no_chronic_conditions(self):
         """Returns True if subject has no chronic conditions."""
-        return (self.is_diabetic == NO)
+        return (self.instance_antenatal.is_diabetic == NO)

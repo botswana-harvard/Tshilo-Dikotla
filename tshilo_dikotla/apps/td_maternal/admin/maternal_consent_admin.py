@@ -104,8 +104,4 @@ class MaternalConsentAdmin(BaseModelAdmin):
 
         return super(MaternalConsentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def redirect_url(self, request, obj, post_url_continue=None):
-        url_name = request.GET.get(self.querystring_name)
-        return reverse(url_name, args=[request.GET.get('section_name')])
-
 admin.site.register(MaternalConsent, MaternalConsentAdmin)

@@ -2,13 +2,15 @@ from django.contrib import admin
 
 from edc_registration.models import RegisteredSubject
 
+from tshilo_dikotla.apps.td.base_model_admin import MembershipBaseModelAdmin
+
 from ..forms import MaternalLabourDelForm, MaternalHivInterimHxForm
 from ..models import MaternalLabourDel, MaternalHivInterimHx
 
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalLabourDelAdmin(BaseMaternalModelAdmin):
+class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
 
     form = MaternalLabourDelForm
 
@@ -16,11 +18,13 @@ class MaternalLabourDelAdmin(BaseMaternalModelAdmin):
                     'delivery_datetime',
                     'labour_hrs',
                     'delivery_hospital',
-                    'live_infants_to_register')
+                    'live_infants_to_register',
+                    'valid_regiment_duration')
 
     list_filter = ('delivery_hospital',
                    'delivery_complications',
-                   'has_uterine_tender')
+                   'has_uterine_tender',
+                   'valid_regiment_duration')
 
     search_fields = ('registered_subject__subject_identifier', )
 
@@ -29,7 +33,8 @@ class MaternalLabourDelAdmin(BaseMaternalModelAdmin):
                     'has_chorioamnionitis': admin.VERTICAL,
                     'delivery_hospital': admin.VERTICAL,
                     'delivery_complications': admin.VERTICAL,
-                    'has_temp': admin.VERTICAL, }
+                    'has_temp': admin.VERTICAL,
+                    'valid_regiment_duration': admin.VERTICAL, }
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "registered_subject":

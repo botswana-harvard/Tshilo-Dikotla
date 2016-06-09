@@ -93,6 +93,21 @@ class MaternalLabourDel(RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
     live_infants_to_register = models.IntegerField(
         verbose_name="How many babies are you registering to the study? ")
 
+    valid_regiment_duration = models.CharField(
+        verbose_name="(Interviewer) If HIV+ve, has the participant been on the ART "
+                     "regimen for at least 4 weeks in pregnancy?",
+        choices=YES_NO_NA,
+        null=True,
+        blank=False,
+        # default=NOT_APPLICABLE,
+        max_length=15,
+        help_text=("If not 4 or more weeks then participant will go OFF STUDY."))
+
+    arv_initiation_date = models.DateField(
+        verbose_name="(Interviewer) If on ART, when did the participant initiate therapy for this pregnancy?",
+        null=True,
+        blank=True)
+
     delivery_comment = models.TextField(
         verbose_name="List any additional information about the labour and delivery (mother only) ",
         max_length=250,

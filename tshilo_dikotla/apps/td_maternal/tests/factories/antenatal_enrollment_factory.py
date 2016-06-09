@@ -14,9 +14,8 @@ class AntenatalEnrollmentFactory(factory.DjangoModelFactory):
     class Meta:
         model = AntenatalEnrollment
 
-    report_datetime = timezone.now()
+    report_datetime = timezone.datetime.now()
 
-    gestation_wks_lmp = 34
     registered_subject = factory.SubFactory(RegisteredSubjectFactory)
     last_period_date = timezone.datetime.date(datetime.today())
     is_diabetic = NO
@@ -25,8 +24,9 @@ class AntenatalEnrollmentFactory(factory.DjangoModelFactory):
     current_hiv_status = NEG
     will_remain_onstudy = YES
     evidence_hiv_status = NO
+    evidence_32wk_hiv_status = NOT_APPLICABLE
     rapid_test_done = YES
     rapid_test_result = NEG
-    rapid_test_date = timezone.datetime.now()
-    valid_regimen = NOT_APPLICABLE
-    valid_regimen_duration = NOT_APPLICABLE
+    rapid_test_date = timezone.datetime.now().date()
+    will_get_arvs = NOT_APPLICABLE
+#     valid_regimen_duration = NOT_APPLICABLE

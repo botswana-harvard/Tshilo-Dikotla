@@ -4,13 +4,13 @@ from collections import OrderedDict
 from edc_registration.models import RegisteredSubject
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.apps.td.base_model_admin import MembershipBaseModelAdmin
 
 from ..forms import AntenatalVisitMembershipForm
 from ..models import AntenatalVisitMembership
 
 
-class AntenataVisitMembershipAdmin(BaseModelAdmin):
+class AntenataVisitMembershipAdmin(MembershipBaseModelAdmin):
 
     dashboard_type = 'maternal'
     form = AntenatalVisitMembershipForm
