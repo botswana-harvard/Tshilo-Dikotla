@@ -41,6 +41,7 @@ class AntenatalEnrollmentAdmin(MembershipBaseModelAdmin):
                     'current_hiv_status': admin.VERTICAL,
                     'week32_test': admin.VERTICAL,
                     'week32_result': admin.VERTICAL,
+                    'evidence_32wk_hiv_status': admin.VERTICAL,
                     'evidence_hiv_status': admin.VERTICAL,
                     'will_get_arvs': admin.VERTICAL,
                     'rapid_test_done': admin.VERTICAL,
