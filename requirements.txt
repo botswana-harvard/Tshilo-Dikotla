@@ -17,7 +17,7 @@ django-tastypie==0.13.3
 -e git+https://github.com/botswana-harvard/edc-data-manager@a0633a457c205c4361f002d27649a4d6764148bb#egg=edc_data_manager
 -e git+https://github.com/botswana-harvard/edc-death-report@120cb9b0b8491de9b5a7b17d2b25d6c97e43cb0a#egg=edc_death_report
 -e git+https://github.com/botswana-harvard/edc-device@e641387fbe9d672b73723e624105b503a907fd66#egg=edc_device
--e git+https://github.com/botswana-harvard/edc-export@e9e3dd2a2feadbfca4df09182b582b4893721397#egg=edc_export
+-e git+https://github.com/botswana-harvard/edc-export@f63942e68db69814f17111b1b4d4a3a17c2d2fd9#egg=edc_export
 -e git+https://github.com/botswana-harvard/edc-identifier@d5e030cd844f12a660f19e370e7d4044e4fe1b73#egg=edc_identifier
 -e git+https://github.com/botswana-harvard/edc-lab@c05dfe2092156e84266acf4114ea4e6e1e9f27ba#egg=edc_lab
 -e git+https://github.com/botswana-harvard/edc-locator@2275ddff0c119a4666902d2fac0dba6159993bc0#egg=edc_locator
