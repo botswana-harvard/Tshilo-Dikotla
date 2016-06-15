@@ -33,7 +33,7 @@ class AntenatalEnrollmentAdmin(MembershipBaseModelAdmin):
               'will_get_arvs',
               'rapid_test_done',
               'rapid_test_date',
-              'rapid_test_result'
+              'rapid_test_result',
               'enrollment_hiv_status')
     readonly_fields = ('edd_by_lmp', 'ga_lmp_enrollment_wks', 'enrollment_hiv_status')
     radio_fields = {'is_diabetic': admin.VERTICAL,
