@@ -16,8 +16,9 @@ maternal_enrollment_entries = (
 maternal_antenatal1_entries = (
     CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(20, 'td_maternal', 'maternalultrasoundfu', REQUIRED, NOT_ADDITIONAL),
-    CrfTuple(30, 'td_maternal', 'maternalinterimidcc', REQUIRED, NOT_ADDITIONAL),
-    CrfTuple(40, 'td_maternal', 'maternalclinicalmeasurementstwo', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(30, 'td_maternal', 'maternalrando', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(40, 'td_maternal', 'maternalinterimidcc', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(50, 'td_maternal', 'maternalclinicalmeasurementstwo', REQUIRED, NOT_ADDITIONAL),
 )
 
 maternal_antenatal2_entries = (

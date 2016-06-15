@@ -33,8 +33,9 @@ class AntenatalEnrollmentAdmin(MembershipBaseModelAdmin):
               'will_get_arvs',
               'rapid_test_done',
               'rapid_test_date',
-              'rapid_test_result')
-    readonly_fields = ('edd_by_lmp', 'ga_lmp_enrollment_wks')
+              'rapid_test_result'
+              'enrollment_hiv_status')
+    readonly_fields = ('edd_by_lmp', 'ga_lmp_enrollment_wks', 'enrollment_hiv_status')
     radio_fields = {'is_diabetic': admin.VERTICAL,
                     'will_breastfeed': admin.VERTICAL,
                     'will_remain_onstudy': admin.VERTICAL,
@@ -47,7 +48,7 @@ class AntenatalEnrollmentAdmin(MembershipBaseModelAdmin):
                     'rapid_test_done': admin.VERTICAL,
                     'rapid_test_result': admin.VERTICAL}
     list_display = ('registered_subject', 'report_datetime', 'evidence_hiv_status',
-                    'will_get_arvs', 'ga_lmp_anc_wks')
+                    'will_get_arvs', 'ga_lmp_anc_wks', 'enrollment_hiv_status')
 
     actions = [
         export_as_csv_action(
@@ -77,3 +78,6 @@ class AntenatalEnrollmentAdmin(MembershipBaseModelAdmin):
         return super(AntenatalEnrollmentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(AntenatalEnrollment, AntenatalEnrollmentAdmin)
+
+
+

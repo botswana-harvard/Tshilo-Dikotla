@@ -30,7 +30,6 @@ class MaternalUltraSoundIniFactory(factory.DjangoModelFactory):
     est_edd = timezone.now().date() + timedelta(days=90)
     edd_confirmed = timezone.now() + timedelta(days=90)
     ga_confirmed = 7
-    amniotic_fluid_volume = 1
     lateral_ventricle = 100
     cerebellum = 100
     cistema_magna = 100

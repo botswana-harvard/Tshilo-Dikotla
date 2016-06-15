@@ -23,3 +23,4 @@ class ConsentAppConfig(EdcConsentAppConfig):
          'end_datetime': study_end_datetime,
          'version': '1'}
     ]
+

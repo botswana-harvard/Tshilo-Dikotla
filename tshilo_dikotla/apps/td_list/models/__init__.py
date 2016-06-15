@@ -9,3 +9,5 @@ from .prior_arv import PriorArv
 from .supplements import Supplements
 from .maternal_relatives import MaternalRelatives
 from .medications import MaternalMedications
+from .randomization_item import RandomizationItem
+

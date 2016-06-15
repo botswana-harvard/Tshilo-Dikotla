@@ -30,4 +30,7 @@ from .maternal_arv_post_form import MaternalArvPostMedForm
 from .maternal_arv_post_form import MaternalArvPostAdhForm
 from .rapid_test_result_form import RapidTestResultForm
 from .maternal_contraception_form import MaternalContraceptionForm
+from .maternal_eligibility_loss_form import MaternalEligibilityLossForm
+from .maternal_death_report_form import MaternalDeathReportForm
+
 

@@ -68,8 +68,8 @@ class AppConfiguration(BaseAppConfiguration):
         'President\'s Day Holiday': date(2016, 7, 19),
         'Independence Day': date(2016, 9, 30),
         'Botswana Day Holiday': date(2016, 10, 1),
-        'Christmas Day': date(2015, 12, 25),
-        'Boxing Day': date(2015, 12, 26)}
+        'Christmas Day': date(2016, 12, 25),
+        'Boxing Day': date(2016, 12, 26)}
 
     consent_type_setup = [
         {'app_label': 'td_maternal',
@@ -82,67 +82,29 @@ class AppConfiguration(BaseAppConfiguration):
     study_site_setup = []
 
     lab_clinic_api_setup = {
-        'panel': [PanelTuple('Viral Load', 'TEST', 'WB'),
-                  PanelTuple('Breast Milk (Storage)', 'STORAGE', 'BM'),
-                  PanelTuple('Vaginal swab (Storage)', 'STORAGE', 'VS'),
-                  PanelTuple('Rectal swab (Storage)', 'STORAGE', 'RS'),
-                  PanelTuple('Skin Swab (Storage)', 'STORAGE', 'SW'),
-                  PanelTuple('Vaginal STI Swab (Storage)', 'TEST', 'VS'),
-                  PanelTuple('DNA PCR', 'TEST', 'WB'),
-                  PanelTuple('PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB'),
-                  PanelTuple('Stool storage', 'STORAGE', 'ST'),
-                  PanelTuple('Inflammatory Cytokines', 'STORAGE', 'WB'),
-                  PanelTuple('Hematology (ARV)', 'TEST', 'WB'),
-                  PanelTuple('CD4/ CD8', 'TEST', 'WB'),
-                  PanelTuple('Chemistry', 'TEST', 'WB')],
+        'panel': [PanelTuple('CD4', 'TEST', 'WB'),
+                  PanelTuple('Viral Load', 'TEST', 'WB'),
+                  PanelTuple('Fasting Glucose', 'TEST', 'WB'),
+                  PanelTuple('Glucose 1h', 'TEST', 'WB'),
+                  PanelTuple('Fasting 2h', 'TEST', 'WB')],
         'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
-                         AliquotTypeTuple('Plasma', 'PL', '32'),
-                         AliquotTypeTuple('Serum', 'SERUM', '06'),
-                         AliquotTypeTuple('Buffy Coat', 'BC', '16'),
-                         AliquotTypeTuple('Breast Milk: Whole', 'BM', '20'),
-                         AliquotTypeTuple('Breast Milk: Fluid', 'BMF', '21'),
-                         AliquotTypeTuple('Breast Milk: Pellet', 'BMP', '22'),
-                         AliquotTypeTuple('Vaginal swab', 'VS', '61'),
-                         AliquotTypeTuple('Rectal swab', 'RS', '62'),
-                         AliquotTypeTuple('Skin Swab', 'SW', '63'),
-                         AliquotTypeTuple('Stool', 'ST', '01')]}
+                         AliquotTypeTuple('Glucose', 'GLUC', '03')]}
 
-    lab_setup = {'microbiome': {
+    lab_setup = {'tshilo_dikotla': {
                  'destination': [DestinationTuple('BHHRL', 'Botswana-Harvard HIV Reference Laboratory',
                                                   'Gaborone', '3902671', 'bhhrl@bhp.org.bw')],
-                 'panel': [PanelTuple('Viral Load', 'TEST', 'WB'),
-                           PanelTuple('Breast Milk (Storage)', 'STORAGE', 'BM'),
-                           PanelTuple('Vaginal swab (Storage)', 'STORAGE', 'VS'),
-                           PanelTuple('Rectal swab (Storage)', 'STORAGE', 'RS'),
-                           PanelTuple('Skin Swab (Storage)', 'STORAGE', 'SW'),
-                           PanelTuple('Vaginal STI Swab (Storage)', 'TEST', 'VS'),
-                           PanelTuple('DNA PCR', 'TEST', 'WB'),
-                           PanelTuple('PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB'),
-                           PanelTuple('Stool storage', 'STORAGE', 'ST'),
-                           PanelTuple('Inflammatory Cytokines', 'STORAGE', 'WB'),
-                           PanelTuple('Hematology (ARV)', 'TEST', 'WB'),
-                           PanelTuple('CD4/ CD8', 'TEST', 'WB'),
-                           PanelTuple('Chemistry', 'TEST', 'WB')],
+                 'panel': [PanelTuple('CD4', 'TEST', 'WB'),
+                           PanelTuple('Viral Load', 'TEST', 'WB'),
+                           PanelTuple('Fasting Glucose', 'TEST', 'WB'),
+                           PanelTuple('Glucose 1h', 'TEST', 'WB'),
+                           PanelTuple('Fasting 2h', 'TEST', 'WB')],
                  'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
-                                  AliquotTypeTuple('Plasma', 'PL', '32'),
-                                  AliquotTypeTuple('Serum', 'SERUM', '06'),
-                                  AliquotTypeTuple('Buffy Coat', 'BC', '16'),
-                                  AliquotTypeTuple('Breast Milk: Whole', 'BM', '20'),
-                                  AliquotTypeTuple('Breast Milk: Fluid', 'BMF', '21'),
-                                  AliquotTypeTuple('Breast Milk: Pellet', 'BMP', '22'),
-                                  AliquotTypeTuple('Vaginal swab', 'VS', '61'),
-                                  AliquotTypeTuple('Rectal swab', 'RS', '62'),
-                                  AliquotTypeTuple('Skin Swab', 'SW', '63'),
-                                  AliquotTypeTuple('Stool', 'ST', '01')],
+                                  AliquotTypeTuple('Glucose', 'GLUC', '03')],
                  'profile': [ProfileTuple('Viral Load', 'WB'),
-                             ProfileTuple('Stool', 'ST'),
-                             ProfileTuple('Breast Milk (Storage)', 'BM')],
+                             ProfileTuple('Glucose', 'GLUC')],
                  'profile_item': [ProfileItemTuple('Viral Load', 'PL', 1.0, 3),
                                   ProfileItemTuple('Viral Load', 'BC', 0.5, 1),
-                                  ProfileItemTuple('Stool', 'ST', 1, 1),
-                                  ProfileItemTuple('Breast Milk (Storage)', 'BM', 2, 3),
-                                  ProfileItemTuple('Breast Milk (Storage)', 'BMF', 2, 5),
-                                  ProfileItemTuple('Breast Milk (Storage)', 'BMP', 1, 2)]}}
+                                  ProfileItemTuple('Glucose', 'GLUC', 1, 1)]}}
     labeling_setup = {}
 #     labeling_setup = {
 #         'label_printer': [LabelPrinterTuple('Zebra_Technologies_ZTC_GK420t',
@@ -189,3 +151,4 @@ class AppConfiguration(BaseAppConfiguration):
 #                      '^FO310,152^A0N,25,20^FD${drawn_datetime}^FS\n'
 #                      '^XZ')), True)]
 #     }
+

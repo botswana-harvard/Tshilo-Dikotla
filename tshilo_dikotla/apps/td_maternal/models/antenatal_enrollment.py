@@ -1,7 +1,4 @@
-from dateutil.relativedelta import relativedelta
 from django.db import models
-from django.core.exceptions import ValidationError
-from django.apps import apps
 
 from edc_appointment.models import AppointmentMixin
 # from edc_base.audit_trail import AuditTrail

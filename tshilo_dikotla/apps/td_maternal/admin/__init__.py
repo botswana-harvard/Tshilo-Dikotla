@@ -30,3 +30,5 @@ from .maternal_arv_post_admin import MaternalArvPostAdmin
 from .maternal_arv_post_admin import MaternalArvPostAdhAdmin
 from .rapid_test_result_admin import RapidTestResultAdmin
 from .maternal_contraception_admin import MaternalContraception
+from .maternal_eligibility_loss_admin import MaternalEligibilityLossAdmin
+from .maternal_death_report_admin import MaternalDeathReportAdmin

@@ -37,5 +37,6 @@ from .maternal_arv_post import MaternalArvPostMed
 from .maternal_arv_post import MaternalArvPostAdh
 from .rapid_test_result import RapidTestResult
 from .maternal_contraception import MaternalContraception
+from .maternal_randomization import MaternalRando
 from .signals import *
 

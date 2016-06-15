@@ -345,3 +345,14 @@ INFLUENTIAL_IN_DECISION_MAKING = (
     ('DWTA', 'I do not wish to answer this question'),
     (OTHER, 'Another person was the most influential (Please type in the description of this person below)')
 )
+
+FEEDING_CHOICES = (
+    ('FF', "formula"),
+    ('BF', "breast"),
+)
+
+BF_DURATION = (
+    ('36months', '36m'),
+    ('12months', '12m'),
+    ('6months', '6m'),
+)
