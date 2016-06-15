@@ -88,7 +88,9 @@ class AppConfiguration(BaseAppConfiguration):
                   PanelTuple('Glucose 1h', 'TEST', 'WB'),
                   PanelTuple('Fasting 2h', 'TEST', 'WB')],
         'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
-                         AliquotTypeTuple('Glucose', 'GLUC', '03')]}
+                         AliquotTypeTuple('Glucose', 'GLUC', '03'),
+                         AliquotTypeTuple('Plasma', 'PL', '32'),
+                         AliquotTypeTuple('Buffy Coat', 'BC', '16'),]}
 
     lab_setup = {'tshilo_dikotla': {
                  'destination': [DestinationTuple('BHHRL', 'Botswana-Harvard HIV Reference Laboratory',
@@ -99,6 +101,8 @@ class AppConfiguration(BaseAppConfiguration):
                            PanelTuple('Glucose 1h', 'TEST', 'WB'),
                            PanelTuple('Fasting 2h', 'TEST', 'WB')],
                  'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
+                                  AliquotTypeTuple('Plasma', 'PL', '32'),
+                                  AliquotTypeTuple('Buffy Coat', 'BC', '16'),
                                   AliquotTypeTuple('Glucose', 'GLUC', '03')],
                  'profile': [ProfileTuple('Viral Load', 'WB'),
                              ProfileTuple('Glucose', 'GLUC')],
