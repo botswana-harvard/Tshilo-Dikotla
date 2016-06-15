@@ -6,7 +6,7 @@ from edc_visit_schedule.classes import (
 from ..models import MaternalLabourDel, MaternalVisit
 
 from .entries import (maternal_birth_entries, maternal_followup1_entries, maternal_followup2_entries,
-                      maternal_followup3_entries)
+                      maternal_followup3_entries, maternal_requisition_followup)
 
 
 class MaternalFollowUpSchedule(VisitScheduleConfiguration):
@@ -35,7 +35,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': '',
-        'requisitions': (),
+        'requisitions': maternal_requisition_followup,
         'entries': maternal_birth_entries}
 
     visit_definitions['1200M'] = {
@@ -51,7 +51,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': '',
-        'requisitions': (),
+        'requisitions': maternal_requisition_followup,
         'entries': maternal_followup1_entries}
 
     visit_definitions['1600M'] = {
@@ -67,7 +67,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': '',
-        'requisitions': (),
+        'requisitions': maternal_requisition_followup,
         'entries': maternal_followup1_entries}
 
     visit_definitions['2200M'] = {
@@ -83,7 +83,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': '',
-        'requisitions': (),
+        'requisitions': maternal_requisition_followup,
         'entries': maternal_followup1_entries}
 
     visit_definitions['2800M'] = {
@@ -99,7 +99,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': '',
-        'requisitions': (),
+        'requisitions': maternal_requisition_followup,
         'entries': maternal_followup2_entries}
 
     visit_definitions['2400M'] = {
@@ -115,7 +115,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': '',
-        'requisitions': (),
+        'requisitions': maternal_requisition_followup,
         'entries': maternal_followup3_entries}
 
     visit_definitions['3000M'] = {
@@ -131,7 +131,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': '',
-        'requisitions': (),
+        'requisitions': maternal_requisition_followup,
         'entries': maternal_followup3_entries}
 
     visit_definitions['3600M'] = {
@@ -147,7 +147,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': '',
-        'requisitions': (),
+        'requisitions': maternal_requisition_followup,
         'entries': maternal_followup3_entries}
 
     visit_definitions['3600M'] = {
@@ -163,7 +163,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': '',
-        'requisitions': (),
+        'requisitions': maternal_requisition_followup,
         'entries': maternal_followup3_entries}
 
 site_visit_schedules.register(MaternalFollowUpSchedule)
