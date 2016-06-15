@@ -35,7 +35,7 @@ class AntenatalEnrollmentForm(BaseEnrollmentForm):
         return cleaned_data
 
     def validate_last_period_date(self, report_datetime, last_period_date):
-        if last_period_date >= report_datetime - relativedelta(weeks=4):
+        if last_period_date >= report_datetime.date() - relativedelta(weeks=4):
                 raise forms.ValidationError('LMP cannot be within 4weeks of report datetime. '
                                             'Got LMP as {} and report datetime as {}'.format(last_period_date,
                                                                                              report_datetime))
