@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from ..models import MartenalRando
+from ..models import MaternalRando
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
@@ -19,4 +19,4 @@ class MartenalRandoAdmin(BaseMaternalModelAdmin):
         'rx',
         'site',
         'randomization_datetime')
-admin.site.register(MartenalRando, MartenalRandoAdmin)
+admin.site.register(MaternalRando, MartenalRandoAdmin)
