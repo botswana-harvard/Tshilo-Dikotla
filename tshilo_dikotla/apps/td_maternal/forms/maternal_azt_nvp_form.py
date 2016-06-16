@@ -16,7 +16,8 @@ class MaternalAztNvpForm(BaseMaternalModelForm):
         fields = '__all__'
 
     def validate_randomization(self, cleaned_data):
-        maternal_randomization = MaternalRando.objects.get(maternal_visit=cleaned_data.get('maternal_visit'))
+        maternal_randomization = MaternalRando.objects.get(
+            subject_identifier=cleaned_data.get('maternal_visit').appointment.registered_subject.subject_identifier)
         if maternal_randomization.rx != cleaned_data.get('azt_nvp'):
             raise forms.ValidationError('The chosen prophylaxis regiment does not match the randomized regiment. '
                                         ' Got {}, while randomization was {}'.format(maternal_randomization.rx,
