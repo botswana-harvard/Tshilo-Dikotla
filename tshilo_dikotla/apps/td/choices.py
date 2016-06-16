@@ -60,8 +60,8 @@ ARV_INTERRUPTION_REASON = (
 )
 
 AZT_NVP = (
-    ('Zidovudine', 'AZT'),
-    ('Nevirapine', 'NVP'),
+    ('AZT', 'AZT'),
+    ('NVP', 'NVP'),
 )
 
 ARV_DRUG_LIST = (
