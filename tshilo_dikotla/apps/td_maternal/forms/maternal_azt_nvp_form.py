@@ -1,6 +1,6 @@
 from django import forms
 
-from ..models import MaternalAztNvp
+from ..models import MaternalAztNvp, MaternalRando
 from .base_maternal_model_form import BaseMaternalModelForm
 
 
@@ -13,3 +13,10 @@ class MaternalAztNvpForm(BaseMaternalModelForm):
     class Meta:
         model = MaternalAztNvp
         fields = '__all__'
+
+    def validate_randomization(self, cleaned_data):
+        maternal_randomization = MaternalRando.objects.get(maternal_visit=cleaned_data.get('maternal_visit'))
+        if maternal_randomization.rx != cleaned_data.get('azt_nvp'):
+            raise forms.ValidationError('The chosen prophylaxis regiment does not match the randomized regiment. '
+                                        ' Got {}, while randomization was {}'.format(maternal_randomization.rx,
+                                                                                     cleaned_data.get('azt_nvp')))
