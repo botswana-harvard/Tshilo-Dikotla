@@ -24,7 +24,6 @@ class MembershipBaseModelAdmin(ModelAdminNextUrlRedirectMixin, ModelAdminFormIns
     list_per_page = 10
     date_hierarchy = 'modified'
     empty_value_display = '-'
-    site_header = 'OLA KA DAA'
 
     def redirect_url(self, request, obj, post_url_continue=None):
         url_name = request.GET.get(self.querystring_name)

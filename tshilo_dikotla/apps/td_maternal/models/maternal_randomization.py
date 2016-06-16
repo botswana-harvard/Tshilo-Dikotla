@@ -43,36 +43,12 @@ class MaternalRando (MaternalCrfModel):
         verbose_name='Site',
         max_length=15)
 
-#     stratum = models.CharField(
-#         verbose_name='Stratum',
-#         max_length=15)
-
     sid = models.IntegerField(
         verbose_name='SID',
         unique=True)
 
     rx = EncryptedCharField(
         verbose_name="Treatment Assignment")
-
-#     bf_duration = models.CharField(
-#         verbose_name="Breast Feeding Duration (m)",
-#         choices=BF_DURATION,
-#         max_length=15,
-#         null=True,
-#         blank=True)
-
-#     feeding_choice = models.CharField(
-#         verbose_name="Feeding Choice",
-#         choices=FEEDING_CHOICES,
-#         max_length=2,
-#         null=True,
-#         blank=True)
-
-#     haart_status = models.CharField(
-#         verbose_name="Maternal HAART Status",
-#         max_length=10,
-#         null=True,
-#         blank=True)
 
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",
@@ -94,7 +70,7 @@ class MaternalRando (MaternalCrfModel):
         choices=YES_NO,
         help_text='To be confirmed by pharmacy staff only')
 
-    comment = models.CharField(
+    comment = models.TextField(
         max_length=250,
         null=True,
         blank=True,
@@ -107,9 +83,10 @@ class MaternalRando (MaternalCrfModel):
         return '{}'.format(self.sid, self.subject_identifier)
 
     def save(self, *args, **kwargs):
-        randomization_helper = Randomization(self, ValidationError)
-        (self.site, self.sid, self.rx, self.subject_identifier,
-         self.randomization_datetime, self.initials) = randomization_helper.randomize()
+        if not self.id:
+            randomization_helper = Randomization(self, ValidationError)
+            (self.site, self.sid, self.rx, self.subject_identifier,
+             self.randomization_datetime, self.initials) = randomization_helper.randomize()
         super(MaternalRando, self).save(*args, **kwargs)
 
     @property

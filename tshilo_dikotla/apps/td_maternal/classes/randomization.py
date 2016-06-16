@@ -56,6 +56,6 @@ class Randomization(object):
             raise self.exception_cls("Cannot Randomize mothers that are not HIV POS. Got {}. See Antenatal Enrollment."
                                      .format(self.maternal_rando.antenatal_enrollment.enrollment_hiv_status))
 
-    def verify_not_already_randomized(self):
-        if self.maternal_rando.maternal_visit.appointment.registered_subject.registration_status == RANDOMIZED:
-            raise self.exception_cls("Records show that this mother is already RANDOMIZED.")
+#     def verify_not_already_randomized(self):
+#         if self.maternal_rando.maternal_visit.appointment.registered_subject.registration_status == RANDOMIZED:
+#             raise self.exception_cls("Records show that this mother is already RANDOMIZED.")
