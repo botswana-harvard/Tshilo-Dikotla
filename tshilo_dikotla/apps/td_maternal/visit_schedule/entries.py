@@ -84,7 +84,7 @@ maternal_requisition_antenatal1 = (
         'Glucose 1h', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
         50, 'td_lab', 'maternalrequisition',
-        'Fasting 2h', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        'Glucose 2h', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
 )
 
 maternal_requisition_followup = (
