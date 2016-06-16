@@ -8,6 +8,7 @@ class MaternalAztNvpForm(BaseMaternalModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalAztNvpForm, self).clean()
+        self.validate_randomization(cleaned_data)
         return cleaned_data
 
     class Meta:
