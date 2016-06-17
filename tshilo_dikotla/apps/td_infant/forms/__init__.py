@@ -3,3 +3,7 @@ from .infant_birth_form import InfantBirthForm
 from .infant_death_report_form import InfantDeathReportForm
 from .infant_off_study_form import InfantOffStudyForm
 from .infant_visit_form import InfantVisitForm
+from .infant_birth_feeding_form import InfantBirthFeedinVaccineForm
+from .infant_birth_feeding_form import InfantVaccinesForm
+from .infant_birth_exam_form import InfantBirthExamForm
+from .infant_birth_data_form import InfantBirthDataForm

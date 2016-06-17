@@ -1,9 +1,9 @@
-from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.apps.td.base_model_admin import MembershipBaseModelAdmin
 
 from ..models import InfantVisit
 
 
-class BaseInfantScheduleModelAdmin(BaseModelAdmin):
+class BaseInfantScheduleModelAdmin(MembershipBaseModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "infant_visit":
