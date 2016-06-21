@@ -187,6 +187,8 @@ CTX_PLACEBO_STATUS = (
 )
 
 DX_INFANT = (
+    ('Poor weight gain or failure to thrive', 'Poor weight gain or failure to thrive'),
+    ('Severe diarrhea or gastroenteritis', 'Severe diarrhea or gastroenteritis'),
     ('Pneumonia, suspected (no CXR or microbiologic confirmation)',
      'Pneumonia, suspected (no CXR or microbiologic confirmation)'),
     ('Pneumonia, CXR confirmed, no bacterial pathogen',

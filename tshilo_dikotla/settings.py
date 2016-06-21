@@ -15,12 +15,15 @@ import os
 import socket
 from unipath import Path
 
+from Crypto.Cipher import AES
+
 from django.utils import timezone
 from django.core.exceptions import ImproperlyConfigured
 
 from .databases import (
     PRODUCTION_POSTGRES, TEST_HOSTS_POSTGRES, TRAVIS_POSTGRES, PRODUCTION_SECRET_KEY)
 
+AES_ENCRYPTION_MODE = AES.MODE_CFB
 # EDC specific settings
 APP_NAME = 'td'
 LIVE_SERVER = 'td.bhp.org.bw'
