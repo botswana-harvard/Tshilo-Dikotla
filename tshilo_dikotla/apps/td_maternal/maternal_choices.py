@@ -356,3 +356,12 @@ BF_DURATION = (
     ('12months', '12m'),
     ('6months', '6m'),
 )
+
+KNOW_HIV_STATUS = (
+    ('Nobody', 'Nobody'),
+    ('1 person', '1 person'),
+    ('2-5 people', '2-5 people'),
+    ('6-10 people', '6-10 people'),
+    ('More than 10 people', 'More than 10 people'),
+    ('dont know', 'I do not know'),
+)
