@@ -13,9 +13,9 @@ from .infant_congenital_anomalies import (InfantCongenitalAnomalies, BaseCnsItem
                                           InfantRespiratoryDefect, InfantLowerGi, InfantFemaleGenital, InfantRenal,
                                           InfantMusculoskeletal, InfantSkin, InfantTrisomies,
                                           InfantOtherAbnormalityItems, InfantMaleGenital)
+from .infant_fu_dx import (InfantFuDx, InfantFuDxItems)
 from .infant_fu import InfantFu
 from .infant_fu_physical import InfantFuPhysical
-from .infant_fu_dx import (InfantFuDx, InfantFuDxItems)
 from .infant_fu_immunizations import (InfantFuImmunizations, VaccinesReceived, VaccinesMissed)
 from .infant_feeding import InfantFeeding
 from .solid_food_assessment import SolidFoodAssessment

@@ -20,7 +20,7 @@ class InfantFuDx(InfantCrfModel):
 #     history = AuditTrail()
 
     class Meta:
-        app_label = 'mb_infant'
+        app_label = 'td_infant'
         verbose_name = "Infant FollowUp: Dx"
         verbose_name_plural = "Infant FollowUp: Dx"
 
