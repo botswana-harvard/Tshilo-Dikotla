@@ -21,6 +21,64 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
     schedules = OrderedDict({
         'Infant Enrollment': ScheduleTuple('Infant Enrollment',
                                            'infant_enrollment', None, None)})
+
+    infant_birth_requisitions = (
+        RequisitionPanelTuple(
+            10, 'td_lab', 'infantrequisition',
+            'Infant Insulin', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            20, 'td_lab', 'infantrequisition',
+            'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL)
+    )
+
+    infant_1month_requisitions = (
+        RequisitionPanelTuple(
+            10, 'td_lab', 'infantrequisition',
+            'Infant Insulin', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            20, 'td_lab', 'infantrequisition',
+            'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            30, 'td_lab', 'infantrequisition',
+            'DNA PCR', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            40, 'td_lab', 'infantrequisition',
+            'PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB', NOT_REQUIRED, ADDITIONAL)
+    )
+
+    infant_dnapcr_requisitions = (
+        RequisitionPanelTuple(
+            10, 'td_lab', 'infantrequisition',
+            'DNA PCR', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+    )
+
+    infant_36month_requisitions = (
+        RequisitionPanelTuple(
+            10, 'td_lab', 'infantrequisition',
+            'Infant Insulin', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            20, 'td_lab', 'infantrequisition',
+            'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            30, 'td_lab', 'infantrequisition',
+            'PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB', NOT_REQUIRED, ADDITIONAL)
+    )
+
+    infant_18month_requisitions = (
+        RequisitionPanelTuple(
+            10, 'td_lab', 'infantrequisition',
+            'Infant Insulin', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            20, 'td_lab', 'infantrequisition',
+            'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            30, 'td_lab', 'infantrequisition',
+            'DNA PCR', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            40, 'td_lab', 'infantrequisition',
+            'ELISA', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL)
+    )
+
     visit_definitions = OrderedDict()
     visit_definitions['2000'] = {
         'title': 'Birth',
@@ -35,7 +93,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
         'instructions': None,
-        'requisitions': (),
+        'requisitions': infant_birth_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantbirthdata', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(20, 'td_infant', 'infantbirthexam', REQUIRED, NOT_ADDITIONAL),
@@ -56,7 +114,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
         'instructions': None,
-        'requisitions': (),
+        'requisitions': infant_1month_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
@@ -77,7 +135,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
         'instructions': None,
-        'requisitions': (),
+        'requisitions': infant_dnapcr_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
@@ -100,7 +158,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
         'instructions': None,
-        'requisitions': (),
+        'requisitions': infant_dnapcr_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
@@ -123,7 +181,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
         'instructions': None,
-        'requisitions': (),
+        'requisitions': infant_dnapcr_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
@@ -146,7 +204,76 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
         'instructions': None,
-        'requisitions': (),
+        'requisitions': infant_18month_requisitions,
+        'entries': (
+            CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
+            # TOT: Add InfantNvpAzt
+            CrfTuple(50, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(50, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
+
+    visit_definitions['3200'] = {
+        'title': 'Infant 24 Month Visit',
+        'time_point': 120,
+        'base_interval': 12,
+        'base_interval_unit': 'M',
+        'window_lower_bound': 0,
+        'window_lower_bound_unit': 'D',
+        'window_upper_bound': 0,
+        'window_upper_bound_unit': 'D',
+        'grouping': INFANT,
+        'visit_tracking_model': InfantVisit,
+        'schedule': 'Infant Enrollment',
+        'instructions': None,
+        'requisitions': infant_dnapcr_requisitions,
+        'entries': (
+            CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
+            # TOT: Add InfantNvpAzt
+            CrfTuple(50, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(50, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
+
+    visit_definitions['3200'] = {
+        'title': 'Infant 30 Month Visit',
+        'time_point': 120,
+        'base_interval': 12,
+        'base_interval_unit': 'M',
+        'window_lower_bound': 0,
+        'window_lower_bound_unit': 'D',
+        'window_upper_bound': 0,
+        'window_upper_bound_unit': 'D',
+        'grouping': INFANT,
+        'visit_tracking_model': InfantVisit,
+        'schedule': 'Infant Enrollment',
+        'instructions': None,
+        'requisitions': infant_dnapcr_requisitions,
+        'entries': (
+            CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
+            # TOT: Add InfantNvpAzt
+            CrfTuple(50, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(50, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
+
+    visit_definitions['3200'] = {
+        'title': 'Infant 36 Month Visit',
+        'time_point': 120,
+        'base_interval': 12,
+        'base_interval_unit': 'M',
+        'window_lower_bound': 0,
+        'window_lower_bound_unit': 'D',
+        'window_upper_bound': 0,
+        'window_upper_bound_unit': 'D',
+        'grouping': INFANT,
+        'visit_tracking_model': InfantVisit,
+        'schedule': 'Infant Enrollment',
+        'instructions': None,
+        'requisitions': infant_36month_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
