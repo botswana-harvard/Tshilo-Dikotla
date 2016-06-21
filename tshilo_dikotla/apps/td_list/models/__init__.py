@@ -10,4 +10,7 @@ from .supplements import Supplements
 from .maternal_relatives import MaternalRelatives
 from .medications import MaternalMedications
 from .randomization_item import RandomizationItem
+from .foods import Foods
+from .rations import Rations
+
 

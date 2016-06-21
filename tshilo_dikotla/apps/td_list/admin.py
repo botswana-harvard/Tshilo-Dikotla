@@ -5,7 +5,17 @@ from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
 from .models import (
     ChronicConditions, Contraceptives, DiseasesAtEnrollment, HouseholdGoods,
     PriorArv, AutopsyInfoSource, Supplements, InfantVaccines,
-    HealthCond, DelComp, ObComp, LabDelDx, MaternalRelatives, MaternalMedications)
+    HealthCond, DelComp, ObComp, LabDelDx, MaternalRelatives, MaternalMedications, Rations, Foods)
+
+
+class RationsAdmin(BaseModelAdmin):
+    pass
+admin.site.register(Rations, RationsAdmin)
+
+
+class FoodsAdmin(BaseModelAdmin):
+    pass
+admin.site.register(Foods, FoodsAdmin)
 
 
 class ChronicConditionsAdmin(BaseModelAdmin):
