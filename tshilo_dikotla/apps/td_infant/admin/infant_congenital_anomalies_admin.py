@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from edc_base.modeladmin.admin import BaseModelAdmin
+from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
 from edc_base.modeladmin.admin import BaseTabularInline
 from edc_export.actions import export_as_csv_action
 from tshilo_dikotla.apps.td.constants import INFANT
@@ -29,7 +29,7 @@ from ..forms import (
 )
 
 
-class InfantCnsAdmin(BaseModelAdmin):
+class InfantCnsAdmin(BaseInfantScheduleModelAdmin):
     form = InfantCnsForm
     list_display = ('congenital_anomalies', 'abnormality_status',)
 
@@ -64,7 +64,7 @@ class InfantCnsInline(BaseTabularInline):
     extra = 0
 
 
-class InfantFacialDefectAdmin(BaseModelAdmin):
+class InfantFacialDefectAdmin(BaseInfantScheduleModelAdmin):
     form = InfantFacialDefectForm
     list_display = ('congenital_anomalies',)
 
@@ -97,7 +97,7 @@ class InfantFacialDefectInline(BaseTabularInline):
     extra = 0
 
 
-class InfantCleftDisorderAdmin(BaseModelAdmin):
+class InfantCleftDisorderAdmin(BaseInfantScheduleModelAdmin):
     form = InfantCleftDisorderForm
 
     list_display = ('congenital_anomalies',)
@@ -132,7 +132,7 @@ class InfantCleftDisorderInline(BaseTabularInline):
     extra = 0
 
 
-class InfantMouthUpGiAdmin(BaseModelAdmin):
+class InfantMouthUpGiAdmin(BaseInfantScheduleModelAdmin):
     form = InfantMouthUpGiForm
 
     list_display = ('congenital_anomalies',)
@@ -167,7 +167,7 @@ class InfantMouthUpGiInline(BaseTabularInline):
     extra = 0
 
 
-class InfantCardioDisorderAdmin(BaseModelAdmin):
+class InfantCardioDisorderAdmin(BaseInfantScheduleModelAdmin):
     form = InfantCardioDisorderForm
 
     list_display = ('congenital_anomalies',)
@@ -202,7 +202,7 @@ class InfantCardioDisorderInline(BaseTabularInline):
     extra = 0
 
 
-class InfantRespiratoryDefectAdmin(BaseModelAdmin):
+class InfantRespiratoryDefectAdmin(BaseInfantScheduleModelAdmin):
     form = InfantRespiratoryDefectForm
 
     list_display = ('congenital_anomalies',)
@@ -237,7 +237,7 @@ class InfantRespiratoryDefectInline(BaseTabularInline):
     extra = 0
 
 
-class InfantLowerGiAdmin(BaseModelAdmin):
+class InfantLowerGiAdmin(BaseInfantScheduleModelAdmin):
     form = InfantLowerGiForm
 
     list_display = ('congenital_anomalies',)
@@ -272,7 +272,7 @@ class InfantLowerGiInline(BaseTabularInline):
     extra = 0
 
 
-class InfantFemaleGenitalAdmin(BaseModelAdmin):
+class InfantFemaleGenitalAdmin(BaseInfantScheduleModelAdmin):
     form = InfantFemaleGenitalForm
 
     list_display = ('congenital_anomalies',)
@@ -307,7 +307,7 @@ class InfantFemaleGenitalInline(BaseTabularInline):
     extra = 0
 
 
-class InfantMaleGenitalAdmin(BaseModelAdmin):
+class InfantMaleGenitalAdmin(BaseInfantScheduleModelAdmin):
     form = InfantMaleGenitalForm
 
     list_display = ('congenital_anomalies',)
@@ -342,7 +342,7 @@ class InfantMaleGenitalInline(BaseTabularInline):
     extra = 0
 
 
-class InfantRenalAdmin(BaseModelAdmin):
+class InfantRenalAdmin(BaseInfantScheduleModelAdmin):
     form = form = InfantRenalForm
 
     list_display = ('congenital_anomalies',)
@@ -377,7 +377,7 @@ class InfantRenalInline(BaseTabularInline):
     extra = 0
 
 
-class InfantMusculoskeletalAdmin(BaseModelAdmin):
+class InfantMusculoskeletalAdmin(BaseInfantScheduleModelAdmin):
     form = form = InfantMusculoskeletalForm
 
     list_display = ('congenital_anomalies',)
@@ -412,7 +412,7 @@ class InfantMusculoskeletalInline(BaseTabularInline):
     extra = 0
 
 
-class InfantSkinAdmin(BaseModelAdmin):
+class InfantSkinAdmin(BaseInfantScheduleModelAdmin):
     form = form = InfantSkinForm
 
     list_display = ('congenital_anomalies',)
@@ -447,7 +447,7 @@ class InfantSkinInline(BaseTabularInline):
     extra = 0
 
 
-class InfantTrisomiesAdmin(BaseModelAdmin):
+class InfantTrisomiesAdmin(BaseInfantScheduleModelAdmin):
     form = InfantTrisomiesForm
 
     list_display = ('congenital_anomalies',)
@@ -482,7 +482,7 @@ class InfantTrisomiesInline(BaseTabularInline):
     extra = 0
 
 
-class InfantCongenitalAnomaliesAdmin(BaseModelAdmin):
+class InfantCongenitalAnomaliesAdmin(BaseInfantScheduleModelAdmin):
 
     form = InfantCongenitalAnomaliesForm
     dashboard_type = INFANT

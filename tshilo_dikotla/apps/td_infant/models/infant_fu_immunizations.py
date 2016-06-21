@@ -7,7 +7,7 @@ from edc_base.model.models import BaseUuidModel
 from edc_visit_tracking.models import CrfInlineModelMixin
 from edc_sync.models import SyncModelMixin
 
-from microbiome.apps.mb.choices import REASONS_VACCINES_MISSED
+from tshilo_dikotla.apps.td.choices import REASONS_VACCINES_MISSED
 
 from ..choices import IMMUNIZATIONS, INFANT_AGE_VACCINE_GIVEN
 # from ..managers import VaccinesMissedManager, VaccinesReceivedManager
