@@ -2,9 +2,10 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from edc_base.modeladmin.admin import BaseModelAdmin
 from edc_base.modeladmin.admin import BaseTabularInline
 from edc_export.actions import export_as_csv_action
+
+from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
 
 from ..models import InfantFuDx, InfantVisit, InfantFuDxItems
 from ..forms import InfantFuDxItemsForm
