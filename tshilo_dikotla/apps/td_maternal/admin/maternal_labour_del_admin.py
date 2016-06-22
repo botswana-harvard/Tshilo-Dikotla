@@ -18,7 +18,6 @@ class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
                     'delivery_datetime',
                     'labour_hrs',
                     'delivery_hospital',
-                    'live_infants_to_register',
                     'valid_regiment_duration')
 
     list_filter = ('delivery_hospital',
@@ -27,6 +26,7 @@ class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
                    'valid_regiment_duration')
 
     search_fields = ('registered_subject__subject_identifier', )
+    readonly_fields = ('live_infants_to_register',)
 
     radio_fields = {'delivery_time_estimated': admin.VERTICAL,
                     'has_uterine_tender': admin.VERTICAL,

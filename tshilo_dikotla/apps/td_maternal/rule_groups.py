@@ -15,12 +15,14 @@ class MaternalUltrasoundInitialRuleGroup(RuleGroup):
             predicate=('number_of_gestations', 'equals', ONE),
             consequence=UNKEYED,
             alternative=NOT_REQUIRED),
-        target_model=[('td_maternal', 'maternalobstericalhistory'), ('td_maternal', 'maternalmedicalhistory'), ('td_maternal', 'maternaldemographics')])
+        target_model=[('td_maternal', 'maternalobstericalhistory'),
+                      ('td_maternal', 'maternalmedicalhistory'),
+                      ('td_maternal', 'maternaldemographics')])
 
     class Meta:
         app_label = 'td_maternal'
         source_fk = (MaternalVisit, 'maternal_visit')
         source_model = MaternalUltraSoundInitial
 
-# site_rule_groups.register(MaternalUltrasoundInitialRuleGroup)
+site_rule_groups.register(MaternalUltrasoundInitialRuleGroup)
 
