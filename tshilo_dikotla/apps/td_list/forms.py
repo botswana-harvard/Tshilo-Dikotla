@@ -2,7 +2,7 @@ from django import forms
 from .models import (
     ChronicConditions, Contraceptives, DiseasesAtEnrollment, HouseholdGoods,
     PriorArv, AutopsyInfoSource, Supplements, InfantVaccines, MaternalRelatives, MaternalMedications,
-    Foods, Rations)
+    Foods, Rations, Malformations)
 
 
 class ChronicConditionsForm (forms.ModelForm):
@@ -75,3 +75,8 @@ class MaternalRelativesForm(forms.ModelForm):
 
     class Meta:
         model = MaternalRelatives
+
+class MalformationsForm(forms.ModelForm):
+
+    class Meta:
+        model = Malformations

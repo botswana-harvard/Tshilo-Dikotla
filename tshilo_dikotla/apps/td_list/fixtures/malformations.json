@@ -1,0 +1,74 @@
+[
+{
+    "pk": 1, 
+    "model": "td_list.malformations", 
+    "fields": {
+        "hostname_created": "django", 
+        "name": "Asthma", 
+        "short_name": "Asthma", 
+        "created": "2016-06-26T20:54:08.245", 
+        "user_modified": "", 
+        "modified": "2016-06-26T20:54:08.245", 
+        "hostname_modified": "django", 
+        "version": "1.0", 
+        "display_index": 8, 
+        "user_created": "django", 
+        "field_name": null, 
+        "revision": ":develop:"
+    }
+},
+{
+    "pk": 2, 
+    "model": "td_list.malformations", 
+    "fields": {
+        "hostname_created": "django", 
+        "name": "Hypertension", 
+        "short_name": "Hypertension", 
+        "created": "2016-06-26T20:54:08.245", 
+        "user_modified": "", 
+        "modified": "2016-06-26T20:54:08.245", 
+        "hostname_modified": "django", 
+        "version": "1.0", 
+        "display_index": 8, 
+        "user_created": "django", 
+        "field_name": null, 
+        "revision": ":develop:"
+    }
+},
+{
+    "pk": 3, 
+    "model": "td_list.malformations", 
+    "fields": {
+        "hostname_created": "django", 
+        "name": "Heart disease", 
+        "short_name": "Heart disease", 
+        "created": "2016-06-26T20:54:08.245", 
+        "user_modified": "", 
+        "modified": "2016-06-26T20:54:08.245", 
+        "hostname_modified": "django", 
+        "version": "1.0", 
+        "display_index": 8, 
+        "user_created": "django", 
+        "field_name": null, 
+        "revision": ":develop:"
+    }
+},
+{
+    "pk": 4, 
+    "model": "td_list.malformations", 
+    "fields": {
+        "hostname_created": "django", 
+        "name": "Other, specify", 
+        "short_name": "Other, specify", 
+        "created": "2016-06-26T20:54:08.245", 
+        "user_modified": "", 
+        "modified": "2016-06-26T20:54:08.245", 
+        "hostname_modified": "django", 
+        "version": "1.0", 
+        "display_index": 8, 
+        "user_created": "django", 
+        "field_name": null, 
+        "revision": ":develop:"
+    }
+}
+]
