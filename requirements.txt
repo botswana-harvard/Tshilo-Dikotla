@@ -25,7 +25,7 @@ django-tastypie==0.13.3
 -e git+https://github.com/botswana-harvard/edc-notification@7de21100ecccd46afd3fa3ea4d03390d2bab033c#egg=edc_notification
 -e git+https://github.com/botswana-harvard/edc-offstudy@f1b2d2c1a5b64e16e2d03cf5a12ade564b891e5b#egg=edc_offstudy
 -e git+https://github.com/botswana-harvard/edc-quota@7ea1d99ec2140428df38386434e3403cf44f464a#egg=edc_quota
--e git+https://github.com/botswana-harvard/edc-rule-groups@1ed5aebf2d308ec0af504b5c561431e592f39673#egg=edc_rule_groups
+-e git+https://github.com/botswana-harvard/edc-rule-groups@07e4e58ac4fa3bf1fc78fb67c581046e8a138556#egg=edc_rule_groups
 -e git+https://github.com/botswana-harvard/edc-sync@3ea845047789a13ae24e28a71a94cdf1c7461339#egg=edc_sync
 -e git+https://github.com/botswana-harvard/edc-templates@c79a1d3a541fed424451f6da455bce2b6c84e07c#egg=edc_templates
 -e git+https://github.com/botswana-harvard/edc-testing@d0444af275efc731e923b3239111e7a470802e42#egg=edc_testing
@@ -41,6 +41,7 @@ GitPython==1.0.2
 -e git+https://github.com/botswana-harvard/lis@161c9c1f251d4282955a2a8e6d916775bd63be6f#egg=lis
 mccabe==0.4.0
 numpy==1.11.0
+pbr==1.10.0
 pep8==1.7.0
 pycrypto==2.6.1
 pycups==1.9.73
@@ -54,4 +55,8 @@ selenium==2.53.2
 six==1.10.0
 smmap==0.9.0
 South==1.0.2
+stevedore==1.15.0
 Unipath==1.1
+virtualenv==15.0.2
+virtualenv-clone==0.2.6
+virtualenvwrapper==4.7.1
