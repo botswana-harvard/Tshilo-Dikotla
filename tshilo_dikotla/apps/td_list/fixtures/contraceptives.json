@@ -11,7 +11,7 @@
         "modified": "2016-06-26T20:54:08.245", 
         "hostname_modified": "django", 
         "version": "1.0", 
-        "display_index": 8, 
+        "display_index": 13, 
         "user_created": "django", 
         "field_name": null, 
         "revision": ":develop:"
@@ -29,7 +29,7 @@
         "modified": "2016-06-26T20:54:33.893", 
         "hostname_modified": "django", 
         "version": "1.0", 
-        "display_index": 0, 
+        "display_index": 1, 
         "user_created": "django", 
         "field_name": null, 
         "revision": ":develop:"
@@ -47,7 +47,7 @@
         "modified": "2016-06-26T20:54:44.576", 
         "hostname_modified": "django", 
         "version": "1.0", 
-        "display_index": 1, 
+        "display_index": 2, 
         "user_created": "django", 
         "field_name": null, 
         "revision": ":develop:"
@@ -65,7 +65,7 @@
         "modified": "2016-06-26T20:54:56.401", 
         "hostname_modified": "django", 
         "version": "1.0", 
-        "display_index": 2, 
+        "display_index": 3, 
         "user_created": "django", 
         "field_name": null, 
         "revision": ":develop:"
@@ -83,7 +83,7 @@
         "modified": "2016-06-26T20:57:24.723", 
         "hostname_modified": "django", 
         "version": "1.0", 
-        "display_index": 3, 
+        "display_index": 4, 
         "user_created": "django", 
         "field_name": null, 
         "revision": ":develop:"
@@ -101,7 +101,7 @@
         "modified": "2016-06-26T20:58:00.620", 
         "hostname_modified": "django", 
         "version": "1.0", 
-        "display_index": 4, 
+        "display_index": 5, 
         "user_created": "django", 
         "field_name": null, 
         "revision": ":develop:"
@@ -119,7 +119,7 @@
         "modified": "2016-06-26T20:58:00.620", 
         "hostname_modified": "django", 
         "version": "1.0", 
-        "display_index": 5, 
+        "display_index": 6, 
         "user_created": "django", 
         "field_name": null, 
         "revision": ":develop:"
@@ -137,7 +137,7 @@
         "modified": "2016-06-26T20:58:00.620", 
         "hostname_modified": "django", 
         "version": "1.0", 
-        "display_index": 6, 
+        "display_index": 7, 
         "user_created": "django", 
         "field_name": null, 
         "revision": ":develop:"
