@@ -124,6 +124,10 @@ class MaternalLabourDel(RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
 #     history = AuditTrail()
     objects = models.Manager()
 
+    def save(self, *args, **kwargs):
+        self.live_infants_to_register = 1
+        super(MaternalLabourDel, self).save(*args, **kwargs)
+
     def get_registration_datetime(self):
         return self.report_datetime
 
