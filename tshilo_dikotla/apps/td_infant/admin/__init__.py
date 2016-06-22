@@ -1,5 +1,7 @@
 from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
 from .infant_birth_admin import InfantBirthAdmin
+from .infant_birth_data_admin import InfantBirthDataAdmin
+from .infant_birth_arv_admin import InfantBirthArvAdmin
 from .infant_death_report_admin import InfantDeathReportAdmin
 from .infant_off_study_admin import InfantOffStudyAdmin
 from .infant_visit_admin import InfantVisitAdmin
