@@ -67,7 +67,7 @@ class TestMaternalRandomization(BaseTestCase):
             reason=SCHEDULED,
             appointment__visit_definition__code='1000M')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
-                                                                number_of_gestations=1,
+                                                                number_of_gestations=1
                                                                 )
         self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
             registered_subject=status_options.get('registered_subject'))

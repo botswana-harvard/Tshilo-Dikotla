@@ -20,7 +20,8 @@ class MaternalMedicalHistoryAdmin(BaseMaternalModelAdmin):
     radio_fields = {'chronic_since': admin.VERTICAL,
                     'who_diagnosis': admin.VERTICAL,
                     'sero_posetive': admin.VERTICAL,
-                    'perinataly_infected': admin.VERTICAL}
+                    'perinataly_infected': admin.VERTICAL,
+                    'know_hiv_status': admin.VERTICAL}
     filter_horizontal = ('who', 'mother_chronic', 'father_chronic', 'mother_medications')
 
 admin.site.register(MaternalMedicalHistory, MaternalMedicalHistoryAdmin)

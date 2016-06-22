@@ -726,6 +726,7 @@ MALFORMATIONS = (
     ('intracranial_calcification', 'intracranial calcification'),
     ('posterior_fossa_cyst', 'posterior fossa cyst'),
     ('intracranial_cyst', 'intracranial cyst'),
+    ('other', 'other')
 )
 
 DIAGNOSES = (
@@ -794,10 +795,10 @@ PANICK = (
 )
 
 TOP = (
-    ('Yes, most of the time I haven’t been able to cope at all',
-     'Yes, most of the time I haven’t been able to cope at all'),
-    ('Yes, sometimes I haven’t been coping as well as usual',
-     'Yes, sometimes I haven’t been coping as well as usual'),
+    ('Yes, most of the time I haven\'t been able to cope at all',
+     'Yes, most of the time I haven\'t been able to cope at all'),
+    ('Yes, sometimes I haven\'t been coping as well as usual',
+     'Yes, sometimes I haven\'t been coping as well as usual'),
     ('No, most of the time I have coped quite well',
      'No, most of the time I have coped quite well'),
     ('No, I have been coping as well as ever', 'No, I have been coping as well as ever')
