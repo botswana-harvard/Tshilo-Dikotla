@@ -8,8 +8,8 @@ class MaternalObstericalHistoryForm(BaseMaternalModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalObstericalHistoryForm, self).clean()
-        #self.validate_previous_pregnancies()
-        #self.validate_24wks_or_more_pregnancy()
+        self.validate_previous_pregnancies()
+        self.validate_24wks_or_more_pregnancy()
         return cleaned_data
 
     def validate_previous_pregnancies(self):
