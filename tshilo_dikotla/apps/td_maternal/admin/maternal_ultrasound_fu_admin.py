@@ -22,13 +22,12 @@ class MaternalUltraSoundFuAdmin(BaseMaternalModelAdmin):
               'hl',
               'lateral_ventricle',
               'cerebellum',
-              'cistema_magna',
-              'malformations')
-
-    radio_fields = {'malformations': admin.VERTICAL}
+              'cistema_magna')
 
     list_display = ('maternal_visit', 'report_datetime', 'lateral_ventricle', 'cerebellum')
 
     list_filter = ('report_datetime', )
+    
+    filter_horizontal = ('malformations',)
 
 admin.site.register(MaternalUltraSoundFu, MaternalUltraSoundFuAdmin)

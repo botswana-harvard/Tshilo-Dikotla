@@ -7,6 +7,7 @@ from edc_constants.choices import YES_NO, YES_NO_NA
 
 from .maternal_crf_model import MaternalCrfModel
 from tshilo_dikotla.apps.td_list.models import ChronicConditions, MaternalMedications
+from tshilo_dikotla.apps.td_maternal.maternal_choices import KNOW_HIV_STATUS
 from .maternal_consent import MaternalConsent
 
 
@@ -85,6 +86,11 @@ class MaternalMedicalHistory(MaternalCrfModel):
         max_length=25,
         verbose_name=("Was the mother peri-nataly infected with HIV?"),
         choices=YES_NO_NA,)
+
+    know_hiv_status = models.CharField(
+        max_length=50,
+        verbose_name="How many people know that you are HIV infected?",
+        choices=KNOW_HIV_STATUS)
 
 #     history = AuditTrail()
 

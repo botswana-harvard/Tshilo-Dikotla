@@ -1,11 +1,11 @@
 [
 {
     "pk": 1, 
-    "model": "td_list.malformations", 
+    "model": "td_list.maternalmedications", 
     "fields": {
         "hostname_created": "django", 
-        "name": "Choroid Plexus Cyst", 
-        "short_name": "Choroid Plexus Cyst", 
+        "name": "Prenatal Vitamins", 
+        "short_name": "Prenatal Vitamins", 
         "created": "2016-06-26T20:54:08.245", 
         "user_modified": "", 
         "modified": "2016-06-26T20:54:08.245", 
@@ -19,11 +19,11 @@
 },
 {
     "pk": 2, 
-    "model": "td_list.malformations", 
+    "model": "td_list.maternalmedications", 
     "fields": {
         "hostname_created": "django", 
-        "name": "Intracranial Calcification", 
-        "short_name": "Intracranial Calcification", 
+        "name": "Vitamin D supplement", 
+        "short_name": "Vitamin D supplement", 
         "created": "2016-06-26T20:54:08.245", 
         "user_modified": "", 
         "modified": "2016-06-26T20:54:08.245", 
@@ -37,11 +37,11 @@
 },
 {
     "pk": 3, 
-    "model": "td_list.malformations", 
+    "model": "td_list.maternalmedications", 
     "fields": {
         "hostname_created": "django", 
-        "name": "Posterior Fossa Cyst", 
-        "short_name": "Posterior Fossa Cyst", 
+        "name": "Traditional medications", 
+        "short_name": "Traditional medications", 
         "created": "2016-06-26T20:54:08.245", 
         "user_modified": "", 
         "modified": "2016-06-26T20:54:08.245", 
@@ -55,11 +55,11 @@
 },
 {
     "pk": 4, 
-    "model": "td_list.malformations", 
+    "model": "td_list.maternalmedications", 
     "fields": {
         "hostname_created": "django", 
-        "name": "Intracranial Cyst", 
-        "short_name": "Intracranial Cyst", 
+        "name": "Hypertensive medications", 
+        "short_name": "Hypertensive medications", 
         "created": "2016-06-26T20:54:08.245", 
         "user_modified": "", 
         "modified": "2016-06-26T20:54:08.245", 
@@ -73,11 +73,11 @@
 },
 {
     "pk": 5, 
-    "model": "td_list.malformations", 
+    "model": "td_list.maternalmedications", 
     "fields": {
         "hostname_created": "django", 
-        "name": "Other", 
-        "short_name": "Other, specify", 
+        "name": "Cholesterol medications", 
+        "short_name": "Cholesterol medications", 
         "created": "2016-06-26T20:54:08.245", 
         "user_modified": "", 
         "modified": "2016-06-26T20:54:08.245", 

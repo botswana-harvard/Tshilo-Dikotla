@@ -55,7 +55,7 @@ class MaternalLocator(LocatorMixin, MaternalCrfModel):
         blank=True,
         null=True)
 
-    entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
+#     entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
 
     #history = AuditTrail()
 

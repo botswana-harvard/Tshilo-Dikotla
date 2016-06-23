@@ -25,7 +25,7 @@ class MaternalMedicalHistoryForm(BaseMaternalModelForm):
 #                 label='WHO diagnoses',
 #                 leading=cleaned_data.get('who_diagnosis'),
 #                 m2m=cleaned_data.get('who'))
-# 
+#
 #         self.who_stage_diagnosis_for_neg_and_pos_mother()
 #         self.postnatal_evaluate_mother_hiv_status()
 #         self.validate_has_chronicition_no_listing()

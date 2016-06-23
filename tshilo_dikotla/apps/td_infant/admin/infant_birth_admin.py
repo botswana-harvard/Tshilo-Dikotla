@@ -5,14 +5,14 @@ from django.contrib import admin
 from edc_registration.models import RegisteredSubject
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.apps.td.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.apps.td.base_model_admin import MembershipBaseModelAdmin
 from tshilo_dikotla.apps.td_maternal.models import MaternalLabourDel
 
 from ..forms import InfantBirthForm
 from ..models import InfantBirth
 
 
-class InfantBirthAdmin(BaseModelAdmin):
+class InfantBirthAdmin(MembershipBaseModelAdmin):
 
     form = InfantBirthForm
 
