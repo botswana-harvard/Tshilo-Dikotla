@@ -16,15 +16,11 @@ class RapidTestResult(MaternalCrfModel):
         max_length=3)
 
     result_date = models.DateField(
-        verbose_name="Date of rapid test",
-        null=True,
-        blank=True)
+        verbose_name="Date of rapid test")
 
     result = models.CharField(
         verbose_name="What is the rapid test result?",
         choices=POS_NEG,
-        null=True,
-        blank=True,
         max_length=15)
 
     comments = models.CharField(
@@ -32,7 +28,7 @@ class RapidTestResult(MaternalCrfModel):
         max_length=250,
         blank=True,
         null=True)
-
+    objects = models.Manager()
 #     history = AuditTrail()
 
     def get_result_datetime(self):

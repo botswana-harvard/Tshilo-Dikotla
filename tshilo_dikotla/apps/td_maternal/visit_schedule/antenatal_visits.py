@@ -23,7 +23,7 @@ class AntenatalVisitSchedule(VisitScheduleConfiguration):
 
     visit_definitions['1010M'] = {
         'title': 'Antenatal Visit 1',
-        'time_point': 0,
+        'time_point': 5,
         'base_interval': 1,
         'base_interval_unit': 'D',
         'window_lower_bound': 0,
