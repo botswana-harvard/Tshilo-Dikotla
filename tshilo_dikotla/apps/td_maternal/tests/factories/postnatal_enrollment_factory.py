@@ -21,9 +21,9 @@ class PostnatalEnrollmentFactory(factory.DjangoModelFactory):
     report_datetime = timezone.datetime.now()
     consent_model = MaternalConsentFactory
     off_study_model = MaternalOffStudyFactory
-    weeks_base_field = gestation_wks_delivered
     postpartum_days = 1
     vaginal_delivery = YES
     gestation_wks_delivered = timezone.datetime.date(datetime.today())
     delivery_status = LIVE
     live_infants = 1
+    weeks_base_field = gestation_wks_delivered
