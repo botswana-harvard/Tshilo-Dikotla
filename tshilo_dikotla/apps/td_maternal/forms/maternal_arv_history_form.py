@@ -3,7 +3,7 @@ from django import forms
 from edc_constants.constants import NO, STOPPED, CONTINUOUS, RESTARTED
 from tshilo_dikotla.apps.td.utils import weeks_between
 
-from ..models import MaternalLifetimeArvHistory, MaternalConsent
+from ..models import MaternalLifetimeArvHistory, MaternalConsent, MaternalObstericalHistory
 
 from .base_maternal_model_form import BaseMaternalModelForm
 
@@ -14,6 +14,7 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
         cleaned_data = super(MaternalLifetimeArvHistoryForm, self).clean()
         self.validate_if_not_on_haart()
         self.validate_haart_start_date()
+        self.validate_prev_preg()
         return cleaned_data
 
     def validate_if_not_on_haart(self):
@@ -52,6 +53,30 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
                 raise forms.ValidationError("Date of triple ARVs first started CANNOT be before DOB.")
         except MaternalConsent.DoesNotExist:
             raise forms.ValidationError('Maternal Consent does not exist.')
+
+    def validate_prev_preg(self, cleaned_data):
+        ob_history = MaternalObstericalHistory.objects.filter(
+            maternal_visit__appointment__registered_subject=cleaned_data.get(
+                'maternal_visit').appointment.registered_subject)
+        if not ob_history:
+            raise forms.ValidationError('Please fill in the Maternal Obsterical History form first.')
+        else:
+            if ob_history[0].prev_pregnancies == 0:
+                if cleaned_data.get('prev_preg_azt') != NOT_APPLICABLE:
+                    raise forms.ValidationError(
+                        'In Maternal Obsterical History form you indicated there were no previous '
+                        'pregnancies. Receive AZT monotherapy in previous pregancy should be '
+                        'NOT APPLICABLE')
+                if cleaned_data.get('prev_sdnvp_labour') != NOT_APPLICABLE:
+                    raise forms.ValidationError(
+                        'In Maternal Obsterical History form you indicated there were no previous '
+                        'pregnancies. Single sd-NVP in labour during a prev pregnancy should '
+                        'be NOT APPLICABLE')
+                if cleaned_data.get('prev_preg_haart') != NOT_APPLICABLE:
+                    raise forms.ValidationError(
+                        'In Maternal Obsterical History form you indicated there were no previous '
+                        'pregnancies. triple ARVs during a prev pregnancy should '
+                        'be NOT APPLICABLE')
 
     class Meta:
         model = MaternalLifetimeArvHistory

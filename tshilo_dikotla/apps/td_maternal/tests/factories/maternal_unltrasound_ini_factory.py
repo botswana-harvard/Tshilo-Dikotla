@@ -3,9 +3,11 @@ from datetime import timedelta
 
 from django.utils import timezone
 
-from edc_constants.constants import YES, NO
+from edc_constants.constants import YES, NO, NOT_APPLICABLE
 
 from .maternal_visit_factory import MaternalVisitFactory
+
+from tshilo_dikotla.apps.td_list.models import Malformations
 
 from ...models import MaternalUltraSoundInitial
 
@@ -33,5 +35,4 @@ class MaternalUltraSoundIniFactory(factory.DjangoModelFactory):
     lateral_ventricle = 100
     cerebellum = 100
     cistema_magna = 100
-    malformations = 100
-
+    #malformations = [NOT_APPLICABLE]

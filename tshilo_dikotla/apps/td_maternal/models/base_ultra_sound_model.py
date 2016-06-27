@@ -3,6 +3,7 @@ from django.apps import apps
 
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
+from edc_base.model.fields import OtherCharField
 from edc_base.model.validators import (datetime_not_before_study_start, datetime_not_future)
 from edc_consent.models import RequiresConsentMixin
 from edc_export.models import ExportTrackingFieldsMixin
@@ -13,6 +14,7 @@ from edc_visit_tracking.models import CrfModelMixin
 
 from tshilo_dikotla.apps.td.choices import MALFORMATIONS, AMNIOTIC_FLUID
 from tshilo_dikotla.apps.td.validators import validate_bpd, validate_hc, validate_fl, validate_ac, validate_hl
+from tshilo_dikotla.apps.td_list.models import Malformations
 
 from .maternal_crf_model import MaternalCrfModel
 
@@ -74,18 +76,22 @@ class BaseUtraSoundModel(MaternalCrfModel):
         decimal_places=2,
         help_text='Units in mm.')
 
-#     amniotic_fluid_volume = models.CharField(
-#         verbose_name="Amniotic fluid volume?",
-#         max_length=10,
-#         choices=AMNIOTIC_FLUID,
-#         help_text='')
-
-    # TODO: Make this a ManyToMany
-    malformations = models.CharField(
-        verbose_name="Malformations?",
-        max_length=50,
-        choices=MALFORMATIONS,
+    amniotic_fluid_volume = models.CharField(
+        verbose_name="Amniotic fluid volume?",
+        max_length=10,
+        choices=AMNIOTIC_FLUID,
         help_text='')
+
+    malformations = models.ManyToManyField(
+        Malformations,
+        verbose_name="Malformations?",
+        help_text='')
+    
+    malformations_other = OtherCharField(
+        max_length=35,
+        verbose_name="If Other, please specify",
+        blank=True,
+        null=True)
 
     @property
     def antenatal_enrollment(self):
