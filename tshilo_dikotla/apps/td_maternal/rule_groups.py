@@ -1,44 +1,52 @@
-from edc_constants.constants import YES, UNKEYED, NOT_REQUIRED, POS, NEG
+from edc_constants.constants import YES, UNKEYED, NOT_REQUIRED, POS, NEG, UNK
 from edc_rule_groups.classes import RuleGroup, site_rule_groups, Logic, CrfRule, RequisitionRule
 from edc_registration.models import RegisteredSubject
 from edc_appointment.models import Appointment
 
 from tshilo_dikotla.apps.td.constants import ONE
 
-from .models import MaternalUltraSoundInitial, MaternalVisit, AntenatalEnrollment
+from .models import MaternalUltraSoundInitial, MaternalVisit, MaternalPostPartumDep
+from .classes import MaternalStatusHelper
 
 
 def func_mother_pos(visit_instance):
     """Returns true if mother is hiv positive."""
-    registered_subject = RegisteredSubject.objects.get(
-        subject_identifier=visit_instance.appointment.registered_subject.subject_identifier)
-    antenatal_enrollment = AntenatalEnrollment.objects.get(
-        registered_subject=registered_subject)
-    return antenatal_enrollment.enrollment_hiv_status == POS
+    maternal_status_helper = MaternalStatusHelper(visit_instance)
+    if maternal_status_helper.hiv_status == POS:
+        return True
+    return False
 
 
 def func_mother_neg(visit_instance):
     """Returns true if mother is hiv neg."""
-    registered_subject = RegisteredSubject.objects.get(
-        subject_identifier=visit_instance.appointment.registered_subject.subject_identifier)
-    antenatal_enrollment = AntenatalEnrollment.objects.get(
-        registered_subject=registered_subject)
-    return antenatal_enrollment.enrollment_hiv_status == NEG
+    maternal_status_helper = MaternalStatusHelper(visit_instance)
+    if maternal_status_helper.hiv_status == NEG:
+        return True
+    return False
 
 
 def show_rapid_testresult_form(visit_instance):
     """return True if Mother is HIV- and last HIV- result > 3months."""
-    return True
+    maternal_status_helper = MaternalStatusHelper(visit_instance)
+    if maternal_status_helper.hiv_status == UNK:
+        return True
+    return False
 
 
 def func_require_cd4(visit_instance):
     """Return true if mother is HIV+ and does not have a CD4 in the last 3 months."""
-    return func_mother_pos(visit_instance) and True
+    maternal_status_helper = MaternalStatusHelper(visit_instance)
+    if maternal_status_helper.eligible_for_cd4:
+        return True
+    return False
 
 
 def show_postpartum_depression(visit_instance):
     """Return true if postpartum depression has to be filled."""
-    return True
+    if (visit_instance.appointment.visit_definition.code != '1200M' and not
+        MaternalPostPartumDep.objects.filter(maternal_visit__appointment__visit_definition__code='1200M').exists()):
+        return True
+    return False
 
 
 class MaternalRegisteredSubjectRuleGroup(RuleGroup):

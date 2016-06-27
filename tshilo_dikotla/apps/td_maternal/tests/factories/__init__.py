@@ -9,5 +9,4 @@ from .antenatal_visit_membership_factory import AntenatalVisitMembershipFactory
 from .maternal_randomization_factory import MaternalRandomizationFactory
 from .postnatal_enrollment_factory import PostnatalEnrollmentFactory
 from .maternal_arv_preg_factory import MaternalArvPregFactory
-
-
+from .rapid_test_result_factory import RapidTestResultFactory
