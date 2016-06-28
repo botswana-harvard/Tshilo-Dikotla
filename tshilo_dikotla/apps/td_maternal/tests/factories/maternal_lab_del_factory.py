@@ -20,10 +20,9 @@ class MaternalLabourDelFactory(factory.DjangoModelFactory):
     delivery_time_estimated = NO
     labour_hrs = '3'
     delivery_hospital = 'Lesirane'
-    has_uterine_tender = NO
-    has_temp = NO
-    has_chorioamnionitis = NO
-    delivery_complications = NO
+    mode_delivery = 'spontaneous vaginal'
+    csection_reason = NOT_APPLICABLE
+#     delivery_complications = NO
     live_infants_to_register = 1
     valid_regiment_duration = YES
 

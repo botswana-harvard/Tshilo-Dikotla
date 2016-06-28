@@ -10,7 +10,7 @@ class MaternalRandomizationForm(BaseMaternalModelForm):
     def clean(self):
         cleaned_data = super(MaternalRandomizationForm, self).clean()
         randomization_helper = Randomization(MaternalRando(**cleaned_data),
-                                             error_clss=forms.ValidationError)
+                                             exception_cls=forms.ValidationError)
         randomization_helper.verify_hiv_status()
         return cleaned_data
 

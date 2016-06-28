@@ -7,7 +7,6 @@
 <table>
     <tr style="background:lightyellow;">
         <td><B>Name:</B> {{maternal_consent.first_name|encrypted }} ({{ maternal_consent.initials|encrypted }}) </td>
-        <td><B>Gender:</B> {{maternal_consent.gender|gender }}</td> 
         <td><B>Born:</B> {{maternal_consent.dob|date:"Y-m-d" }}</td> 
         <td><B>Age:</B> {{maternal_consent.dob|age }}</td>
         <td><B>Consented:</B> {{maternal_consent.consent_datetime|date:"Y-m-d H:i" }}</td>
@@ -15,8 +14,9 @@
 </table>
 <table>
 	<tr style=background:lightyellow;>
-		<td><B> Antenatal enrollment status: </B>{% if antenatal_enrollment.is_eligible %} passed {% elif antenatal_enrollment.is_eligible == False %} failed {%else%}<i>not filled</i>{% endif %}</td>
-        <td><B>HIV status:</B>{%if postnatal_hiv_status%}<span> {{postnatal_hiv_status}}</span>{%else%}<i> NO PNT Enrollment HIV result</i>{%endif%}</td>
+		<td><B>Antenatal enrollment status: </B>{% if antenatal_enrollment.is_eligible %} passed {% elif antenatal_enrollment.is_eligible == False %} failed {%else%}<i>not filled</i>{% endif %}</td>
+        <td><B>Enrollment HIV status:</B><span>{{enrollment_hiv_status}}</span></td>
+        <td><B>Current HIV status:</B><span>{{current_hiv_status}}</span></td>
     </tr>
 </table>
 {% endblock %}

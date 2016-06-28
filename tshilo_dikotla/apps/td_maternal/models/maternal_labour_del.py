@@ -16,10 +16,10 @@ from edc_consent.models import RequiresConsentMixin
 from edc_appointment.models import AppointmentMixin
 
 from tshilo_dikotla.apps.td.choices import DX_MATERNAL
-# from tshilo_dikotla.apps.td_list.models import Supplements, HealthCond, ObComp
+from tshilo_dikotla.apps.td_list.models import DeliveryComplications
 
 # from ..managers import MaternalLabDelDxTManager
-from ..maternal_choices import DELIVERY_HEALTH_FACILITY
+from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION_REASON
 
 from .maternal_consent import MaternalConsent
 from .maternal_crf_model import MaternalCrfModel
@@ -51,45 +51,40 @@ class MaternalLabourDel(RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
         max_length=3,
         choices=YES_NO)
 
-    labour_hrs = models.CharField(
-        verbose_name="How long prior to to delivery, in HRS, did labour begin? ",
-        max_length=10)
-
     delivery_hospital = models.CharField(
-        verbose_name="Where did the participant deliver? ",
+        verbose_name="Place of delivery? ",
         max_length=65,
         choices=DELIVERY_HEALTH_FACILITY,
         help_text="If 'OTHER', specify below")
 
     delivery_hospital_other = OtherCharField()
 
-    has_uterine_tender = models.CharField(
-        verbose_name="Was uterine tenderness recorded? ",
-        max_length=10,
-        choices=YES_NO_UNKNOWN)
+    labour_hrs = models.CharField(
+        verbose_name="How long prior to to delivery, in HRS, did labour begin? ",
+        max_length=10)
 
-    has_temp = models.CharField(
-        verbose_name="Is the maximum temparature known?",
-        max_length=3,
-        choices=YES_NO)
+    mode_delivery = models.CharField(
+        verbose_name="What was the mode of delivery?",
+        max_length=100,
+        choices=DELIVERY_MODE,
+        help_text="If 'OTHER', specify below")
 
-    labour_max_temp = models.DecimalField(
-        verbose_name="Indicate the maximum temperature of mother during labour",
-        max_digits=3,
-        decimal_places=1,
-        validators=[MinValueValidator(36.5), MaxValueValidator(39.0), ],
-        blank=True,
-        null=True)
+    mode_delivery_other = OtherCharField()
 
-    has_chorioamnionitis = models.CharField(
-        verbose_name="Was chorio-amnionitis suspected? ",
-        max_length=3,
-        choices=YES_NO)
+    csection_reason = models.CharField(
+        verbose_name="If C-section was performed, indicate reason below",
+        max_length=100,
+        choices=CSECTION_REASON,
+        help_text="If 'OTHER', specify below")
 
-    delivery_complications = models.CharField(
-        max_length=3,
-        choices=YES_NO,
-        verbose_name="Were there other complications at delivery? ")
+    mode_delivery_other = OtherCharField()
+
+    delivery_complications = models.ManyToManyField(
+        DeliveryComplications,
+        verbose_name="Were any of the following complications present at delivery? ",
+        help_text="If 'OTHER', specify below")
+
+    delivery_complications_other = OtherCharField()
 
     live_infants_to_register = models.IntegerField(
         verbose_name="How many babies are you registering to the study? ")
@@ -142,7 +137,7 @@ class MaternalLabourDel(RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
     def antenatal_enrollment(self):
         AntenatalEnrollment = apps.get_model('td_maternal', 'antenatalenrollment')
         return AntenatalEnrollment.objects.get(registered_subject=self.registered_subject)
-    
+
     @property
     def keep_on_study(self):
         if self.antenatal_enrollment.enrollment_hiv_status == POS and self.valid_regiment_duration != YES:
