@@ -14,5 +14,5 @@ from .foods import Foods
 from .rations import Rations
 from .malformations import Malformations
 from .delivery_complications import DeliveryComplications
-
+from .maternal_diagnoses import MaternalDiagnoses
 

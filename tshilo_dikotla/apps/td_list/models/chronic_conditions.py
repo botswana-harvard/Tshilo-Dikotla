@@ -1,7 +1,7 @@
 from edc_base.model.models import BaseListModel
 
 
-class ChronicConditions (BaseListModel):
+class ChronicConditions(BaseListModel):
 
     class Meta:
         app_label = 'td_list'
