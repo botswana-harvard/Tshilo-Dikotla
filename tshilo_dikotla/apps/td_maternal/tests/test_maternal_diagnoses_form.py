@@ -5,8 +5,9 @@ from django.utils import timezone
 from edc_constants.constants import (UNKNOWN, 
     YES, NEG, NOT_APPLICABLE, POS, NO, SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
 from tshilo_dikotla.apps.td_list.models import MaternalDiagnoses
+from edc_code_lists.models import WcsDxAdult
 from tshilo_dikotla.apps.td_maternal.models import MaternalVisit, RegisteredSubject
-from tshilo_dikotla.apps.td_maternal.forms import MaternalArvPregForm, MaternalArvForm
+from tshilo_dikotla.apps.td_maternal.forms import MaternalDiagnosesForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
@@ -40,8 +41,13 @@ class TestMaternalArvPregForm(BaseTestCase):
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(
             maternal_visit=self.maternal_visit, number_of_gestations=1,)
 
-        diagnoses = MaternalDiagnoses.objects.exclude(
-            name__icontains='other').exclude(name__icontains=NOT_APPLICABLE).first()
+        diagnoses = MaternalDiagnoses.objects.create(
+            hostname_created="django", name="Gestational Hypertension", 
+            short_name="Gestational Hypertension", created=timezone.datetime.now(), 
+            user_modified="", modified=timezone.datetime.now(), 
+            hostname_modified="django", version="1.0", 
+            display_index=1, user_created="django", field_name=None, 
+            revision=":develop:")
         
         self.who_dx = WcsDxAdult.objects.create(
             hostname_created="cabel", code="CS4003", short_name="Recurrent severe bacterial pneumo",
@@ -50,10 +56,31 @@ class TestMaternalArvPregForm(BaseTestCase):
     
         self.options = {
                 'new_diagnoses': YES,
-                'diagnoses': diagnoses.id,
+                'diagnoses': [diagnoses.id],
                 'has_who_dx': YES,
-                'who': self.who_dx.id
+                'who': [self.who_dx.id]
                 }
 
-    def test_has_diagnoses(self):
-        
+    def test_has_diagnoses_no_dx(self):
+        self.options['diagnoses'] = None
+        form = MaternalDiagnosesForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn('No new diagnoses, do not answer question on new diagnosis.', errors)
+
+    def test_has_no_dx_but_listed(self):
+        self.options['new_diagnoses'] = NO
+        form = MaternalDiagnosesForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn('Participant has new diagnoses, please add new diagnoses.', errors)
+
+    def test_has_who_diagnosis(self):
+        self.options['who'] = None
+        form = MaternalDiagnosesForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn('WHO diagnosis is Yes, please give who diagnosis.', errors)
+
+    def test_has_now_who_dx_but_listed(self):
+        self.options['has_who_dx'] = NO
+        form = MaternalDiagnosesForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn('WHO diagnoses is No, please do not give WHO Stage III/IV', errors)
