@@ -14,7 +14,6 @@ from edc_visit_tracking.constants import VISIT_REASON_NO_FOLLOW_UP_CHOICES, LOST
 from edc_visit_tracking.models import PreviousVisitMixin
 from edc_visit_tracking.models import VisitModelMixin
 
-from tshilo_dikotla.apps.td_maternal.models import PostnatalEnrollment
 from tshilo_dikotla.apps.td.choices import VISIT_REASON
 from edc_visit_tracking.models.caretaker_fields_mixin import CaretakerFieldsMixin
 
@@ -34,13 +33,6 @@ class InfantVisit(
     consent_model = InfantBirth  # a bit weird, see visit_form_mixin clean()
 
 #     history = AuditTrail()
-
-    @property
-    def postnatal_enrollment(self):
-        """Returns the mother's postnatal enrollment instance."""
-        maternal_registered_subject = RegisteredSubject.objects.get(
-            subject_identifier=self.appointment.registered_subject.relative_identifier)
-        return PostnatalEnrollment.objects.get(registered_subject=maternal_registered_subject)
 
     def custom_post_update_crf_meta_data(self):
         """Calls custom methods that manipulate meta data on the post save.

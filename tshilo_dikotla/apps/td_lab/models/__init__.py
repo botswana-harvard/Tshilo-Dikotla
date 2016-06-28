@@ -13,5 +13,5 @@ from .panel import Panel
 from .receive import Receive
 from .result import Result
 from .result_item import ResultItem
-from .maternal_requisition import MaternalRequisition
 from .infant_requisition import InfantRequisition
+from .maternal_requisition import MaternalRequisition

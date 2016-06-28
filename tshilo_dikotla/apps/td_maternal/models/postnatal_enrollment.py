@@ -91,8 +91,8 @@ class PostnatalEnrollment(SyncModelMixin, OffStudyMixin, AppointmentMixin,
             unenrolled_error_message.append('no HIV status evidence')
         if self.valid_regimen == NO:
             unenrolled_error_message.append('not on valid regimen')
-        if self.valid_regimen_duration == NO:
-            unenrolled_error_message.append('regimen duration invalid')
+#         if self.valid_regimen_duration == NO:
+#             unenrolled_error_message.append('regimen duration invalid')
         if self.rapid_test_done == NO:
             unenrolled_error_message.append('rapid test not done')
         return (self.is_eligible, ', '.join(unenrolled_error_message))
