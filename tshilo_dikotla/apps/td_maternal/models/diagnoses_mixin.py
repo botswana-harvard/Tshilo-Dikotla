@@ -4,7 +4,7 @@ from edc_base.model.fields import OtherCharField
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_code_lists.models import WcsDxAdult
 
-from tshilo_dikotla.apps.td.choices import DIAGNOSES
+from tshilo_dikotla.apps.td_list.models import MaternalDiagnoses
 
 
 class DiagnosesMixin(models.Model):
@@ -14,13 +14,12 @@ class DiagnosesMixin(models.Model):
         max_length=25,
         verbose_name="Have there been any new diagnoses or medical problems in the mother's health since last visit?",
         choices=YES_NO,
-        help_text="If No, skip next question.",
+        help_text="",
     )
 
-    diagnoses = models.CharField(
-        max_length=25,
+    diagnoses = models.ManyToManyField(
+        MaternalDiagnoses,
         verbose_name="Have any of the following diagnoses occured since last visit?",
-        choices=DIAGNOSES,
         help_text="",
     )
 
