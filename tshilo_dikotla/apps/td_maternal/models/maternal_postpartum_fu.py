@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
@@ -36,6 +37,7 @@ class MaternalPostPartumFu(MaternalCrfModel, DiagnosesMixin):
 
     hospitalization_days = models.IntegerField(
         verbose_name="Was the hospitalization for any of the following reasons?",
+        validators=[MinValueValidator(1)],
         blank=True,
         null=True,
     )

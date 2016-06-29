@@ -7,7 +7,7 @@ from edc_constants.constants import (UNKNOWN,
 from tshilo_dikotla.apps.td_list.models import MaternalDiagnoses
 from edc_code_lists.models import WcsDxAdult
 from tshilo_dikotla.apps.td_maternal.models import MaternalVisit, RegisteredSubject
-from tshilo_dikotla.apps.td_maternal.forms import MaternalDiagnosesForm
+from tshilo_dikotla.apps.td_maternal.forms import MaternalPostPartumFuForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
@@ -15,10 +15,10 @@ from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory
                         MaternalVisitFactory, MaternalArvPregFactory)
 
 
-class TestMaternalArvPregForm(BaseTestCase):
+class TestMaternalPostPartumFu(BaseTestCase):
 
     def setUp(self):
-        super(TestMaternalArvPregForm, self).setUp()
+        super(TestMaternalPostPartumFu, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
         self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
         self.registered_subject = self.maternal_consent.registered_subject
@@ -48,7 +48,7 @@ class TestMaternalArvPregForm(BaseTestCase):
             hostname_modified="django", version="1.0", 
             display_index=1, user_created="django", field_name=None, 
             revision=":develop:")
-        
+
         self.who_dx = WcsDxAdult.objects.create(
             hostname_created="cabel", code="CS4003", short_name="Recurrent severe bacterial pneumo",
             created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(), hostname_modified="cabel",
@@ -56,32 +56,47 @@ class TestMaternalArvPregForm(BaseTestCase):
             list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
     
         self.options = {
+                'hospitalized': YES,
+                'hospitalization_reason': 'Unexplained fever',
+                'hospitalization_days': 1,
                 'new_diagnoses': YES,
                 'diagnoses': [diagnoses.id],
                 'has_who_dx': YES,
                 'who': [self.who_dx.id]
                 }
 
+    def test_hospitalized_yes(self):
+        self.options['hospitalization_reason'] = None
+        form = MaternalPostPartumFuForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn('Patient was hospitalized, please give hospitalization_reason.', errors)
+
+    def test_hospitalized_no(self):
+        self.options['hospitalized'] = NO
+        form = MaternalPostPartumFuForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn('Patient was not hospitalized, please do not give hospitalization_reason.', errors)
+
     def test_has_diagnoses_no_dx(self):
         self.options['diagnoses'] = None
-        form = MaternalDiagnosesForm(data=self.options)
+        form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('No new diagnoses, do not answer question on new diagnosis.', errors)
 
     def test_has_no_dx_but_listed(self):
         self.options['new_diagnoses'] = NO
-        form = MaternalDiagnosesForm(data=self.options)
+        form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Participant has new diagnoses, please add new diagnoses.', errors)
 
     def test_has_who_diagnosis(self):
         self.options['who'] = None
-        form = MaternalDiagnosesForm(data=self.options)
+        form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('WHO diagnosis is Yes, please give who diagnosis.', errors)
 
     def test_has_now_who_dx_but_listed(self):
         self.options['has_who_dx'] = NO
-        form = MaternalDiagnosesForm(data=self.options)
+        form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('WHO diagnoses is No, please do not give WHO Stage III/IV', errors)
