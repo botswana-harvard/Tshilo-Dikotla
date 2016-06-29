@@ -46,7 +46,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
         self.dashboard_models['visit'] = MaternalVisit
         self._requisition_model = MaternalRequisition
         self._locator_model = MaternalLocator
-        self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
+        self.maternal_status_helper = None
 
     def get_context_data(self, **kwargs):
         super(MaternalDashboard, self).get_context_data(**kwargs)
@@ -58,7 +58,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             infants=self.get_registered_infant_identifier(),
             maternal_consent=self.consent,
             local_results=self.render_labs(),
-            antenatal_enrollment=self.antenatal_enrollment(),
+            antenatal_enrollment=self.antenatal_enrollment,
             enrollment_hiv_status=self.maternal_status_helper.enrollment_hiv_status,
             current_hiv_status=self.maternal_status_helper.hiv_status,
             currently_pregnant=self.currently_pregnant,
@@ -129,6 +129,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
 
     @property
     def antenatal_enrollment(self):
+        if not self.maternal_status_helper:
+            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
         try:
             antenatal_enrollment = AntenatalEnrollment.objects.get(registered_subject=self.registered_subject)
         except AntenatalEnrollment.DoesNotExist:
@@ -137,6 +139,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
 
     @property
     def maternal_randomization(self):
+        if not self.maternal_status_helper:
+            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
         try:
             maternal_rando = MaternalRando.objects.get(registered_subject=self.registered_subject)
         except MaternalRando.DoesNotExist:
@@ -145,6 +149,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
 
     @property
     def maternal_delivery(self):
+        if not self.maternal_status_helper:
+            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
         try:
             delivery = MaternalLabourDel.objects.get(registered_subject=self.registered_subject)
         except MaternalLabourDel.DoesNotExist:
@@ -159,6 +165,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
 
     @property
     def planned_delivery_site(self):
+        if not self.maternal_status_helper:
+            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
         if self.maternal_randomization and self.maternal_randomization.delivery_clinic != OTHER:
             return self.maternal_randomization.delivery_clinic
         elif self.maternal_randomization and self.maternal_randomization.delivery_clinic == OTHER:
@@ -168,6 +176,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
 
     @property
     def gestational_age(self):
+        if not self.maternal_status_helper:
+            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
         antenatal = self.antenatal_enrollment
         if antenatal:
             enrollment_helper = EnrollmentHelper(instance_antenatal=antenatal)
