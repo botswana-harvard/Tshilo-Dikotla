@@ -160,7 +160,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
     def currently_pregnant(self):
         if self.maternal_delivery:
             return True
-        return False
+        return None
 
     @property
     def planned_delivery_site(self):
