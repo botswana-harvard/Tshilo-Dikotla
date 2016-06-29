@@ -21,20 +21,18 @@ class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
                     'valid_regiment_duration')
 
     list_filter = ('delivery_hospital',
-                   'delivery_complications',
-                   'has_uterine_tender',
                    'valid_regiment_duration')
 
     search_fields = ('registered_subject__subject_identifier', )
     readonly_fields = ('live_infants_to_register',)
 
     radio_fields = {'delivery_time_estimated': admin.VERTICAL,
-                    'has_uterine_tender': admin.VERTICAL,
-                    'has_chorioamnionitis': admin.VERTICAL,
                     'delivery_hospital': admin.VERTICAL,
-                    'delivery_complications': admin.VERTICAL,
                     'has_temp': admin.VERTICAL,
-                    'valid_regiment_duration': admin.VERTICAL, }
+                    'valid_regiment_duration': admin.VERTICAL,
+                    'mode_delivery': admin.VERTICAL,
+                    'csection_reason': admin.VERTICAL,
+                    'csection_reason': admin.VERTICAL, }
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "registered_subject":
