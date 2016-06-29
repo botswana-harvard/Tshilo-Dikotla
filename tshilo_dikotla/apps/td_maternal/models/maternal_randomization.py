@@ -9,6 +9,8 @@ from django_crypto_fields.fields import EncryptedCharField
 
 from tshilo_dikotla.apps.td_maternal.classes import Randomization
 
+from ..maternal_choices import DELIVERY_HEALTH_FACILITY
+
 from .maternal_crf_model import MaternalCrfModel
 
 
@@ -75,6 +77,17 @@ class MaternalRando (MaternalCrfModel):
         null=True,
         blank=True,
         help_text="Comment if any manual changes made to rando list")
+
+    delivery_clinic = models.CharField(
+        max_length=100,
+        verbose_name="Which clinic does the mother plan to deliver at?",
+        choices=DELIVERY_HEALTH_FACILITY)
+
+    delivery_clinic_other = models.CharField(
+        max_length=100,
+        verbose_name="if other delivery clinic, specify...",
+        blank=True,
+        null=True, )
 
     objects = models.Manager()
 #     history = AuditTrail()
