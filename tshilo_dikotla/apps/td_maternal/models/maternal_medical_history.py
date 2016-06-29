@@ -7,7 +7,7 @@ from edc_constants.choices import YES_NO, YES_NO_NA
 
 from .maternal_crf_model import MaternalCrfModel
 from tshilo_dikotla.apps.td_list.models import ChronicConditions, MaternalMedications
-from tshilo_dikotla.apps.td_maternal.maternal_choices import KNOW_HIV_STATUS
+from tshilo_dikotla.apps.td_maternal.maternal_choices import KNOW_HIV_STATUS, LOWEST_CD4_KNOWN, IS_DATE_ESTIMATED
 from .maternal_consent import MaternalConsent
 
 
@@ -91,6 +91,38 @@ class MaternalMedicalHistory(MaternalCrfModel):
         max_length=50,
         verbose_name="How many people know that you are HIV infected?",
         choices=KNOW_HIV_STATUS)
+
+    lowest_cd4_known = models.CharField(
+        max_length=4,
+        choices=LOWEST_CD4_KNOWN,
+        verbose_name="Is the mother's lowest CD4 known?")
+
+    cd4_count = models.IntegerField(
+        verbose_name=("What was the mother's lowest known (nadir) CD4 cell count(cells/mm3)"
+                      " at any time in the past?"),
+        null=True,
+        blank=True,
+    )
+
+    cd4_date = models.DateField(
+        verbose_name="Year/Month of CD4 test ",
+        help_text="Format is YYYY-MM-DD. Use 01 for Day",
+        blank=True,
+        null=True)
+
+    is_date_estimated = models.CharField(
+        max_length=50,
+        choices=IS_DATE_ESTIMATED,
+        verbose_name=("Is the subject's date of CD4 test estimated?"),
+        blank=True,
+        null=True
+    )
+
+    comment = models.TextField(
+        max_length=250,
+        verbose_name="Comments",
+        blank=True,
+        null=True)
 
 #     history = AuditTrail()
 
