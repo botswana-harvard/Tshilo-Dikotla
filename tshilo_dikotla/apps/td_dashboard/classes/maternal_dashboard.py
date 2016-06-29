@@ -142,7 +142,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
         if not self.maternal_status_helper:
             self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
         try:
-            maternal_rando = MaternalRando.objects.get(registered_subject=self.registered_subject)
+            maternal_rando = MaternalRando.objects.get(
+                maternal_visit__appointment__registered_subject=self.registered_subject)
         except MaternalRando.DoesNotExist:
             maternal_rando = None
         return maternal_rando
