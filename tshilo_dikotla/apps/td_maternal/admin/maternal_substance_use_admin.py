@@ -12,10 +12,10 @@ class MaternalSubstanceUseAdmin(BaseMaternalModelAdmin):
 
     list_display = (
         'smoked_prior_to_preg', 'smoking_prior_preg_freq',
-        'smoked_during_pregnancy', 'smoking_during_preg_freq', 'alcohol_during_pregnancy'
+        'smoked_during_pregnancy', 'smoking_during_preg_freq', 'alcohol_during_pregnancy',
         'alcohol_during_preg_freq', 'marijuana_prior_preg', 'marijuana_prior_preg_freq',
         'marijuana_during_preg', 'marijuana_during_preg_freq',)
-    
+
     radio_fields = {
         'smoked_prior_to_preg': admin.VERTICAL, 'smoking_prior_preg_freq': admin.VERTICAL,
         'smoked_during_pregnancy': admin.VERTICAL, 'smoking_during_preg_freq': admin.VERTICAL,
@@ -32,7 +32,7 @@ class MaternalSubstanceUseTwoAdmin(BaseMaternalModelAdmin):
 
     list_display = (
         'smoked_prior_to_preg', 'smoked_prior_to_preg', 'smoking_prior_preg_freq',
-        'smoked_during_pregnancy', 'smoking_during_preg_freq', 'alcohol_during_pregnancy'
+        'smoked_during_pregnancy', 'smoking_during_preg_freq', 'alcohol_during_pregnancy',
         'alcohol_during_preg_freq', 'marijuana_prior_preg', 'marijuana_prior_preg_freq',
         'marijuana_during_preg', 'marijuana_during_preg_freq',)
 
