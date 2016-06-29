@@ -49,6 +49,8 @@ DELIVERY_HEALTH_FACILITY = (
     ('G.West Clinic', 'G.West Clinic'),
     ('BH3 Clinic', 'BH3 Clinic'),
     ('Lesirane', 'Lesirane Clinic'),
+    ('Old Naledi', 'Old Naledi'),
+    ('Mafitlhakgosi', 'Mafitlhakgosi'),
     (OTHER, 'Other health facilities not associated with study site'),
 )
 
@@ -60,6 +62,25 @@ PRIOR_PREG_HAART_STATUS = (
     (STOPPED,
      'Had treatment interruption and never restarted HAART prior to this pregnancy'),
     (NOT_APPLICABLE, 'Not Applicable'),
+)
+
+CSECTION_REASON = (
+    (NOT_APPLICABLE, 'Not Applicable'),
+    ('arrest', 'Arrest'),
+    ('non-reassuring fetal fetal heart rate', 'Non-reassuring fetal heart rate'),
+    ('malpresentation/breeech fetus', 'Malpresentation/breech fetus'),
+    ('interruption of hiv transmission', 'Interruption of HIV transmission'),
+    ('failure to progress/descend', 'Failue to progress/descend'),
+    ('fetal anomaly', 'Fetal anomaly'),
+    (OTHER, 'Other health facilities not associated with study site')
+)
+
+DELIVERY_MODE = (
+    ('spontaneous vaginal', 'spontaneous vaginal'),
+    ('vaginal forceps', 'vaginal forceps'),
+    ('elective c-section', 'elective C-section'),
+    ('emergent c-section', 'emrgent C-section'),
+    (OTHER, 'Other health facilities not associated with study site')
 )
 
 MARITAL_STATUS = (
@@ -364,4 +385,19 @@ KNOW_HIV_STATUS = (
     ('6-10 people', '6-10 people'),
     ('More than 10 people', 'More than 10 people'),
     ('dont know', 'I do not know'),
+    (NOT_APPLICABLE, 'Not applicable')
+)
+
+LOWEST_CD4_KNOWN = (
+    (YES, 'Yes'),
+    (NO, 'No'),
+    (NOT_APPLICABLE, 'Not applicable')
+)
+
+IS_DATE_ESTIMATED = (
+    (NO, 'No'),
+    ('Yes, estimated the Day', 'Yes, estimated the Day'),
+    ('Yes, estimated Month and Day', 'Yes, estimated Month and Day'),
+    ('Yes, estimated Year, Month and Day', 'Yes, estimated Year, Month and Day'),
+
 )
