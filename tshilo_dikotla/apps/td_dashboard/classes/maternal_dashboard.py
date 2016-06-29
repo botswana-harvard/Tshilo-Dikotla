@@ -15,8 +15,7 @@ from tshilo_dikotla.apps.td_infant.models import InfantBirth
 from tshilo_dikotla.apps.td_maternal.classes import MaternalStatusHelper
 
 
-UNK_LMP = 'UNK LMP'
-UNK = 'UNK'
+UNK = 'unk'
 
 
 class MaternalDashboard(RegisteredSubjectDashboard):
@@ -192,6 +191,6 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             elif enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and not self.currently_pregnant:
                 delivery = self.maternal_delivery
                 return enrollment_helper.evaluate_ga_lmp(delivery.delivery_datetime.date())
-            return UNK_LMP
-        return UNK_LMP
+            return UNK
+        return UNK
 
