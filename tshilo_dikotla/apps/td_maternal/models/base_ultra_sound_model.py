@@ -86,7 +86,7 @@ class BaseUtraSoundModel(MaternalCrfModel):
         Malformations,
         verbose_name="Malformations?",
         help_text='')
-    
+
     malformations_other = OtherCharField(
         max_length=35,
         verbose_name="If Other, please specify",

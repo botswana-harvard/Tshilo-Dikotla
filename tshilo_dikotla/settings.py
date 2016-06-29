@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     'tshilo_dikotla.apps.td_lab',
     'tshilo_dikotla.apps.td_maternal',
     'tshilo_dikotla.apps.td_infant',
+   
 ]
 
 if 'test' in sys.argv:
