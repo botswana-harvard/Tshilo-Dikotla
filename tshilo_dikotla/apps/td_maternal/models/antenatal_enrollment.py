@@ -3,8 +3,7 @@ from django.db import models
 from edc_appointment.models import AppointmentMixin
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import (datetime_not_before_study_start, datetime_not_future, 
-    date_not_before_study_start, date_not_future)
+from edc_base.model.validators import (date_not_before_study_start, date_not_future)
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_consent.models import RequiresConsentMixin
 from edc_constants.constants import NO, YES
@@ -27,13 +26,6 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
     off_study_model = ('td_maternal', 'MaternalOffStudy')
 
     weeks_base_field = 'ga_lmp_enrollment_wks'
-
-    report_datetime = models.DateTimeField(
-        verbose_name="Report date",
-        validators=[
-            datetime_not_before_study_start,
-            datetime_not_future, ],
-        help_text='')
 
     last_period_date = models.DateField(
         verbose_name="What is the approximate date of the first day of the mother’s last menstrual period",

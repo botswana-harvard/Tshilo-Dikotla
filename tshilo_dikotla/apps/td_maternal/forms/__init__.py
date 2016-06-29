@@ -33,6 +33,5 @@ from .maternal_contraception_form import MaternalContraceptionForm
 from .maternal_eligibility_loss_form import MaternalEligibilityLossForm
 from .maternal_death_report_form import MaternalDeathReportForm
 from .maternal_randomization_form import MaternalRandomizationForm
-
-
-
+from .maternal_substance_use_form import MaternalSubstanceUseForm
+from .maternal_substance_use_two_form import MaternalSubstanceUseTwoForm

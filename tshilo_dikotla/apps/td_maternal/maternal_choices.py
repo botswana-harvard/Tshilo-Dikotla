@@ -401,3 +401,10 @@ IS_DATE_ESTIMATED = (
     ('Yes, estimated Year, Month and Day', 'Yes, estimated Year, Month and Day'),
 
 )
+
+SMOKING_DRINKING_FREQUENCY = (
+    ('daily', 'Daily'),
+    ('once every few days', 'Once every few days'),
+    ('weekly', 'Weekly'),
+    ('2-3 times per month or less', '2-3 times per month or less'),
+)

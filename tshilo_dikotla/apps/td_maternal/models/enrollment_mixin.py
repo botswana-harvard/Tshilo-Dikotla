@@ -2,7 +2,8 @@ from django.db import models
 from django.apps import apps
 from django.core.exceptions import ValidationError
 
-from edc_base.model.validators import date_not_before_study_start, date_not_future
+from edc_base.model.validators import (date_not_before_study_start, date_not_future,
+                                       datetime_not_future, datetime_not_before_study_start)
 from edc_constants.choices import POS_NEG_UNTESTED_REFUSAL, YES_NO_NA, POS_NEG, YES_NO
 from edc_constants.constants import NO, YES, POS, NEG
 from edc_registration.models import RegisteredSubject
@@ -15,6 +16,13 @@ class EnrollmentMixin(models.Model):
     """Base Model for antenal enrollment"""
 
     registered_subject = models.OneToOneField(RegisteredSubject, null=True)
+
+    report_datetime = models.DateTimeField(
+        verbose_name="Report date",
+        validators=[
+            datetime_not_before_study_start,
+            datetime_not_future, ],
+        help_text='')
 
     enrollment_hiv_status = models.CharField(
         max_length=15,
@@ -138,7 +146,7 @@ class EnrollmentMixin(models.Model):
 #         if not enrollment_helper.validate_rapid_test():
 #             raise ValidationError('Ensure a rapid test id done for this subject.')
         self.edd_by_lmp = enrollment_helper.evaluate_edd_by_lmp
-        self.ga_lmp_enrollment_wks = int(enrollment_helper.evaluate_ga_lmp)
+        self.ga_lmp_enrollment_wks = int(enrollment_helper.evaluate_ga_lmp(self.report_datetime.date()))
         self.enrollment_hiv_status = enrollment_helper.enrollment_hiv_status
         self.date_at_32wks = enrollment_helper.date_at_32wks
         self.is_eligible = self.antenatal_criteria(enrollment_helper)
