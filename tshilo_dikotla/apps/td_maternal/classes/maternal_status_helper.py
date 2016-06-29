@@ -44,6 +44,11 @@ class MaternalStatusHelper(object):
         return status
 
     @property
+    def enrollment_hiv_status(self):
+        return AntenatalEnrollment.objects.get(
+            registered_subject=self.maternal_visit.appointment.registered_subject).enrollment_hiv_status
+
+    @property
     def eligible_for_cd4(self, ):
 #         latest_interim_idcc = None
 #         latest_cd4_requisition = None

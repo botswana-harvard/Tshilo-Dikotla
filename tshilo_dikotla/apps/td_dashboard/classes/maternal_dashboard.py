@@ -1,16 +1,22 @@
 from collections import OrderedDict
+from django.utils import timezone
 
 from edc_registration.models import RegisteredSubject
 from edc_base.utils import convert_from_camel
-from edc_constants.constants import YES, POS, NEG, IND, NEVER, UNKNOWN, DWTA
+from edc_constants.constants import YES, POS, NEG, IND, NEVER, UNKNOWN, DWTA, OTHER
 from edc_dashboard.subject import RegisteredSubjectDashboard
 
 from tshilo_dikotla.apps.td.constants import INFANT
 from tshilo_dikotla.apps.td_lab.models import MaternalRequisition
 from tshilo_dikotla.apps.td_maternal.models import (
     MaternalVisit, MaternalEligibility, MaternalConsent, MaternalLocator,
-    AntenatalEnrollment)
+    AntenatalEnrollment, MaternalLabourDel, EnrollmentHelper, MaternalRando)
 from tshilo_dikotla.apps.td_infant.models import InfantBirth
+from tshilo_dikotla.apps.td_maternal.classes import MaternalStatusHelper
+
+
+UNK_LMP = 'UNK LMP'
+UNK = 'UNK'
 
 
 class MaternalDashboard(RegisteredSubjectDashboard):
@@ -40,11 +46,10 @@ class MaternalDashboard(RegisteredSubjectDashboard):
         self.dashboard_models['visit'] = MaternalVisit
         self._requisition_model = MaternalRequisition
         self._locator_model = MaternalLocator
+        self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
 
     def get_context_data(self, **kwargs):
         super(MaternalDashboard, self).get_context_data(**kwargs)
-#         postnatal_enrollment = self.postnatal_enrollment()
-        antenatal_enrollment = self.antenatal_enrollment()
         self.context.update(
             home='tshilo_dikotla',
             search_name='maternal',
@@ -54,9 +59,14 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             maternal_consent=self.consent,
             local_results=self.render_labs(),
             antenatal_enrollment=self.antenatal_enrollment(),
-#             postnatal_enrollment=postnatal_enrollment,
-            antenatal_hiv_status=self.antenatal_maternal_hiv_status(antenatal_enrollment),
-#             postnatal_hiv_status=self.postnatal_maternal_hiv_status(postnatal_enrollment),
+            enrollment_hiv_status=self.maternal_status_helper.enrollment_hiv_status,
+            current_hiv_status=self.maternal_status_helper.hiv_status,
+            currently_pregnant=self.currently_pregnant,
+            gestational_age=self.gestational_age,
+            planned_delivery_site=self.planned_delivery_site,
+            delivery_site=(self.maternal_delivery.delivery_hospital if
+                           self.maternal_delivery.delivery_hospital != OTHER else
+                           self.maternal_delivery.delivery_hospital_other)
         )
         return self.context
 
@@ -70,47 +80,11 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             self._consent = None
         return self._consent
 
-    def antenatal_maternal_hiv_status(self, antenatal_enrollment):
-        maternal_hiv_status = None
-        if antenatal_enrollment:
-            if antenatal_enrollment.current_hiv_status == POS and antenatal_enrollment.evidence_hiv_status == YES:
-                maternal_hiv_status = POS
-            elif antenatal_enrollment.current_hiv_status == NEG and antenatal_enrollment.evidence_hiv_status == YES:
-                maternal_hiv_status = NEG
-            elif antenatal_enrollment.current_hiv_status == NEVER:
-                maternal_hiv_status = 'Never Tested'
-            elif antenatal_enrollment.current_hiv_status == UNKNOWN:
-                maternal_hiv_status = 'UNK'
-            elif antenatal_enrollment.current_hiv_status == DWTA:
-                maternal_hiv_status = 'REFUSED'
-            elif antenatal_enrollment.rapid_test_result == POS:
-                maternal_hiv_status = 'POS ANT rapid test'
-            elif antenatal_enrollment.rapid_test_result == NEG:
-                maternal_hiv_status = 'NEG ANT rapid test'
-            elif antenatal_enrollment.rapid_test_result == IND:
-                maternal_hiv_status = 'IND ANT rapid test'
-        return maternal_hiv_status
-
-#     def postnatal_maternal_hiv_status(self, postnatal_enrollment):
-#         maternal_hiv_status = None
-#         if postnatal_enrollment:
-#             if postnatal_enrollment.current_hiv_status == POS and postnatal_enrollment.evidence_hiv_status == YES:
-#                 maternal_hiv_status = POS
-#             elif postnatal_enrollment.current_hiv_status == NEG and postnatal_enrollment.evidence_hiv_status == YES:
-#                 maternal_hiv_status = NEG
-#             elif postnatal_enrollment.current_hiv_status == NEVER:
-#                 maternal_hiv_status = 'Never Tested'
-#             elif postnatal_enrollment.current_hiv_status == UNKNOWN:
-#                 maternal_hiv_status = 'UNK'
-#             elif postnatal_enrollment.current_hiv_status == DWTA:
-#                 maternal_hiv_status = 'REFUSED'
-#             elif postnatal_enrollment.rapid_test_result == POS:
-#                 maternal_hiv_status = 'POS PNT rapid test'
-#             elif postnatal_enrollment.rapid_test_result == NEG:
-#                 maternal_hiv_status = 'NEG PNT rapid test'
-#             elif postnatal_enrollment.rapid_test_result == IND:
-#                 maternal_hiv_status = 'IND PNT rapid test'
-#         return maternal_hiv_status
+    @property
+    def latest_visit(self):
+        return self.visit_model.objects.filter(
+            appointment__registered_subject=self.registered_subject).order_by(
+                '-appointment__visit_definition__time_point').first()
 
     def get_locator_scheduled_visit_code(self):
         """ Returns visit where the locator is scheduled, TODO: maybe search visit definition for this?."""
@@ -153,6 +127,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             pass
         return infants
 
+    @property
     def antenatal_enrollment(self):
         try:
             antenatal_enrollment = AntenatalEnrollment.objects.get(registered_subject=self.registered_subject)
@@ -160,9 +135,47 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             antenatal_enrollment = None
         return antenatal_enrollment
 
-#     def postnatal_enrollment(self):
-#         try:
-#             postnatal_enrollment = PostnatalEnrollment.objects.get(registered_subject=self.registered_subject)
-#         except PostnatalEnrollment.DoesNotExist:
-#             postnatal_enrollment = None
-#         return postnatal_enrollment
+    @property
+    def maternal_randomization(self):
+        try:
+            maternal_rando = MaternalRando.objects.get(registered_subject=self.registered_subject)
+        except MaternalRando.DoesNotExist:
+            maternal_rando = None
+        return maternal_rando
+
+    @property
+    def maternal_delivery(self):
+        try:
+            delivery = MaternalLabourDel.objects.get(registered_subject=self.registered_subject)
+        except MaternalLabourDel.DoesNotExist:
+            delivery = None
+        return delivery
+
+    @property
+    def currently_pregnant(self):
+        if self.maternal_delivery:
+            return True
+        return False
+
+    @property
+    def planned_delivery_site(self):
+        if self.maternal_randomization and self.maternal_randomization.delivery_clinic != OTHER:
+            return self.maternal_randomization.delivery_clinic
+        elif self.maternal_randomization and self.maternal_randomization.delivery_clinic == OTHER:
+            return self.maternal_randomization.delivery_clinic_other
+        else:
+            return UNK
+
+    @property
+    def gestational_age(self):
+        antenatal = self.antenatal_enrollment
+        if antenatal:
+            enrollment_helper = EnrollmentHelper(instance_antenatal=antenatal)
+            if enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and self.currently_pregnant:
+                return enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date())
+            elif enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and not self.currently_pregnant:
+                delivery = self.maternal_delivery
+                return enrollment_helper.evaluate_ga_lmp(delivery.delivery_datetime.date())
+            return UNK_LMP
+        return UNK_LMP
+
