@@ -47,9 +47,9 @@ class TestMaternalSubstanceUse(BaseTestCase):
         self.antenatal_visit_2 = MaternalVisitFactory(
             appointment=Appointment.objects.get(registered_subject=maternal_options.get('registered_subject'),
                                                 visit_definition__code='1020M'))
-        
+
         self.options = {
-            'maternal_visit': self.antenatal_visit_2.id, 
+            'maternal_visit': self.antenatal_visit_2.id,
             'smoked_prior_to_preg': YES,
             'smoking_prior_preg_freq': 'daily',
             'smoked_during_pregnancy': YES,
@@ -61,8 +61,8 @@ class TestMaternalSubstanceUse(BaseTestCase):
             'marijuana_during_preg': YES,
             'marijuana_during_preg_freq': 'daily',
             'other_illicit_substances_prior_preg': None,
-            'other_illicit_substances_during_preg': None,}
-    
+            'other_illicit_substances_during_preg': None}
+
     def test_smoked_prior_to_pregnancy_yes(self):
         self.options['smoking_prior_preg_freq'] = None
         form = MaternalSubstanceUseForm(data=self.options)
@@ -80,14 +80,14 @@ class TestMaternalSubstanceUse(BaseTestCase):
         self.options['smoking_during_preg_freq'] = None
         form = MaternalSubstanceUseForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('Participant has smoked tobacco during to this pregnancy, please give a frequency.', errors)
+        self.assertIn('Participant has smoked tobacco during this pregnancy, please give a frequency.', errors)
 
     def test_smoked_during_pregnancy_no(self):
         self.options['smoked_during_pregnancy'] = NO
         form = MaternalSubstanceUseForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
-            'Participant has never smoked tobacco during to this pregnancy, please do not give a frequency.', errors)
+            'Participant has never smoked tobacco during this pregnancy, please do not give a frequency.', errors)
 
     def test_alcohol_during_pregnancy_yes(self):
         self.options['alcohol_during_preg_freq'] = None
