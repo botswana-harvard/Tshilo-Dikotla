@@ -28,7 +28,6 @@ class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
 
     radio_fields = {'delivery_time_estimated': admin.VERTICAL,
                     'delivery_hospital': admin.VERTICAL,
-                    'has_temp': admin.VERTICAL,
                     'valid_regiment_duration': admin.VERTICAL,
                     'mode_delivery': admin.VERTICAL,
                     'csection_reason': admin.VERTICAL,
