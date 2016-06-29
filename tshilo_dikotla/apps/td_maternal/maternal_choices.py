@@ -386,3 +386,10 @@ KNOW_HIV_STATUS = (
     ('More than 10 people', 'More than 10 people'),
     ('dont know', 'I do not know'),
 )
+
+SMOKING_DRINKING_FREQUENCY = (
+    ('daily', 'Daily'),
+    ('once every few days', 'Once every few days'),
+    ('weekly', 'Weekly'),
+    ('2-3 times per month or less', '2-3 times per month or less'),
+)
