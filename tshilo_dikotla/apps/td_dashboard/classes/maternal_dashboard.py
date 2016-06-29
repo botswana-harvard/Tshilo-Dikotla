@@ -64,9 +64,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             currently_pregnant=self.currently_pregnant,
             gestational_age=self.gestational_age,
             planned_delivery_site=self.planned_delivery_site,
-            delivery_site=(self.maternal_delivery.delivery_hospital if
-                           self.maternal_delivery.delivery_hospital != OTHER else
-                           self.maternal_delivery.delivery_hospital_other)
+            delivery_site=self.delivery_site
         )
         return self.context
 
@@ -175,6 +173,13 @@ class MaternalDashboard(RegisteredSubjectDashboard):
         else:
             return UNK
 
+    @property
+    def delivery_site(self):
+        if self.maternal_delivery:
+            return (self.maternal_delivery.delivery_hospital if
+                    self.maternal_delivery.delivery_hospital != OTHER else
+                    self.maternal_delivery.delivery_hospital_other)
+        return UNK
     @property
     def gestational_age(self):
         if not self.maternal_status_helper:
