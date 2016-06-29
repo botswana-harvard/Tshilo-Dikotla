@@ -385,6 +385,21 @@ KNOW_HIV_STATUS = (
     ('6-10 people', '6-10 people'),
     ('More than 10 people', 'More than 10 people'),
     ('dont know', 'I do not know'),
+    (NOT_APPLICABLE, 'Not applicable')
+)
+
+LOWEST_CD4_KNOWN = (
+    (YES, 'Yes'),
+    (NO, 'No'),
+    (NOT_APPLICABLE, 'Not applicable')
+)
+
+IS_DATE_ESTIMATED = (
+    (NO, 'No'),
+    ('Yes, estimated the Day', 'Yes, estimated the Day'),
+    ('Yes, estimated Month and Day', 'Yes, estimated Month and Day'),
+    ('Yes, estimated Year, Month and Day', 'Yes, estimated Year, Month and Day'),
+
 )
 
 SMOKING_DRINKING_FREQUENCY = (
