@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 from edc_registration.models import RegisteredSubject
 from edc_constants.constants import POS, NEG, UNK
 
-from tshilo_dikotla.apps.td_maternal.models import AntenatalEnrollment, RapidTestResult, MaternalInterimIdcc
+from tshilo_dikotla.apps.td_maternal.models import AntenatalEnrollment, RapidTestResult
 from django.core.exceptions import ValidationError
 
 
@@ -15,6 +15,8 @@ class MaternalStatusHelper(object):
 
     @property
     def hiv_status(self):
+        if not self.maternal_visit:
+            return ''
         for visit in self.previous_visits:
             rapid_test_result = None
             try:
@@ -45,8 +47,11 @@ class MaternalStatusHelper(object):
 
     @property
     def enrollment_hiv_status(self):
-        return AntenatalEnrollment.objects.get(
-            registered_subject=self.maternal_visit.appointment.registered_subject).enrollment_hiv_status
+        if not self.maternal_visit:
+            return ''
+        else:
+            return AntenatalEnrollment.objects.get(
+                registered_subject=self.maternal_visit.appointment.registered_subject).enrollment_hiv_status
 
     @property
     def eligible_for_cd4(self, ):
@@ -67,8 +72,11 @@ class MaternalStatusHelper(object):
 
     @property
     def previous_visits(self):
-        visits = self.maternal_visit.__class__.objects.filter(
-            appointment__registered_subject=self.maternal_visit.appointment.registered_subject).order_by(
+        if not self.maternal_visit:
+            visits = []
+        else:
+            visits = self.maternal_visit.__class__.objects.filter(
+                appointment__registered_subject=self.maternal_visit.appointment.registered_subject).order_by(
                 '-appointment__visit_definition__time_point')
         return visits
 
