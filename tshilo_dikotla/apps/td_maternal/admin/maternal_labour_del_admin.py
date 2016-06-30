@@ -32,6 +32,7 @@ class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
                     'mode_delivery': admin.VERTICAL,
                     'csection_reason': admin.VERTICAL,
                     'csection_reason': admin.VERTICAL, }
+    filter_horizontal = ('delivery_complications',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "registered_subject":

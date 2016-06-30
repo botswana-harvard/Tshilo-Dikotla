@@ -42,6 +42,6 @@ class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin):
                     'ga_confirmed', 'ga_by_lmp')
 
     list_filter = ('report_datetime', 'number_of_gestations', 'malformations', 'ga_confrimation_method')
-    filter_horizontal = ('delivery_complications',)
+    filter_horizontal = ('malformations',)
 
 admin.site.register(MaternalUltraSoundInitial, MaternalUltraSoundInitialAdmin)
