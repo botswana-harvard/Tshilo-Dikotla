@@ -113,7 +113,7 @@ class EnrollmentHelper(object):
         return (self.instance_antenatal.last_period_date + relativedelta(days=280))
 
     def evaluate_ga_lmp(self, instance_date):
-        return 40 - ((self.evaluate_edd_by_lmp - instance_date).days / 7)
+        return int(40 - ((self.evaluate_edd_by_lmp - instance_date).days / 7))
 
     def no_chronic_conditions(self):
         """Returns True if subject has no chronic conditions."""
