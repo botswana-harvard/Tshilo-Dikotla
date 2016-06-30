@@ -22,5 +22,6 @@ class MartenalRandoAdmin(BaseMaternalModelAdmin):
         'rx',
         'site',
         'randomization_datetime')
+    radio_fields = {"delivery_clinic": admin.VERTICAL, }
 
 admin.site.register(MaternalRando, MartenalRandoAdmin)

@@ -12,7 +12,7 @@ class MaternalLabourDelForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalLabourDelForm, self).clean()
-        if (cleaned_data.get('valid_regiment_duration').date() == YES and
+        if (cleaned_data.get('valid_regiment_duration') == YES and
             (cleaned_data.get('delivery_datetime').date() - relativedelta(weeks=4) <
              cleaned_data.get('arv_initiation_date'))):
             raise forms.ValidationError('You indicated that the mother was on REGIMENT for a valid duration, but'

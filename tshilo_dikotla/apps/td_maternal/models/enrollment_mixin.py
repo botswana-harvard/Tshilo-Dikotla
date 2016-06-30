@@ -146,7 +146,7 @@ class EnrollmentMixin(models.Model):
 #         if not enrollment_helper.validate_rapid_test():
 #             raise ValidationError('Ensure a rapid test id done for this subject.')
         self.edd_by_lmp = enrollment_helper.evaluate_edd_by_lmp
-        self.ga_lmp_enrollment_wks = int(enrollment_helper.evaluate_ga_lmp(self.report_datetime.date()))
+        self.ga_lmp_enrollment_wks = enrollment_helper.evaluate_ga_lmp(self.report_datetime.date())
         self.enrollment_hiv_status = enrollment_helper.enrollment_hiv_status
         self.date_at_32wks = enrollment_helper.date_at_32wks
         self.is_eligible = self.antenatal_criteria(enrollment_helper)

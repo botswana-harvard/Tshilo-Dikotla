@@ -72,7 +72,7 @@ CSECTION_REASON = (
     ('interruption of hiv transmission', 'Interruption of HIV transmission'),
     ('failure to progress/descend', 'Failue to progress/descend'),
     ('fetal anomaly', 'Fetal anomaly'),
-    (OTHER, 'Other health facilities not associated with study site')
+    (OTHER, 'Other reason for csection not listed above.')
 )
 
 DELIVERY_MODE = (

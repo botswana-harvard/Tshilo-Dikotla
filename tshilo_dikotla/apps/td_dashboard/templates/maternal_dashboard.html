@@ -15,10 +15,10 @@
 <table>
 	<tr style=background:lightyellow;>
 		<td><B>Antenatal enrollment status: </B>{% if antenatal_enrollment.is_eligible %} passed {% elif antenatal_enrollment.is_eligible == False %} failed {%else%}<i>not filled</i>{% endif %}</td>
-        <td><B>Enrollment HIV status:</B><span>{{enrollment_hiv_status}}</span></td>
-        <td><B>Current HIV status:</B><span>{{current_hiv_status}}</span></td>
-        <td><B>{% if currently_pregnant == None %} Pregnant, GA:</B> {{gestational_age}} weeks {% else %}<B>Delivery GA:</B>B{{gestational_age}} weeks{% endif %}</td>
-        <td><B>{% if currently_pregnant == None %} Planned delivery site:</B> {{planned_delivery_site}} {% else %}<B>Delivery Clinic:</B> {{delivery_site}}{% endif %}</td>
+        <td><B>Enrollment HIV status:</B> <i>{{enrollment_hiv_status}}</i></td>
+        <td><B>Current HIV status:</B> <i>{{current_hiv_status}}</i></td>
+        <td><B>{% if currently_pregnant == True %} Pregnant, GA:</B><i>{{gestational_age}} weeks</i>{% else %}<B>Delivery GA:</B><i>{{gestational_age}} weeks</i>{% endif %}</td>
+        <td><B>{% if currently_pregnant == True %} Planned delivery site:</B><i>{{planned_delivery_site}}</i>{% else %}<B>Delivery Clinic:</B><i>{{delivery_site}}</i>{% endif %}</td>
     </tr>
 </table>
 {% endblock %}

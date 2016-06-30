@@ -157,7 +157,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
 
     @property
     def currently_pregnant(self):
-        if self.maternal_delivery:
+        if not self.maternal_delivery:
             return True
         return None
 
@@ -179,6 +179,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
                     self.maternal_delivery.delivery_hospital != OTHER else
                     self.maternal_delivery.delivery_hospital_other)
         return UNK
+
     @property
     def gestational_age(self):
         if not self.maternal_status_helper:
