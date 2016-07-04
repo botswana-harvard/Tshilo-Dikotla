@@ -17,6 +17,7 @@ class AntenatalEnrollmentAdmin(MembershipBaseModelAdmin):
 
     fields = ('registered_subject',
               'report_datetime',
+              'knows_lmp',
               'last_period_date',
               'edd_by_lmp',
               'ga_lmp_enrollment_wks',

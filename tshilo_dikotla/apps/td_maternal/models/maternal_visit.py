@@ -52,7 +52,7 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalV
         """Returns True if participant is either eligible antenataly."""
         eligible = False
         try:
-            eligible = self.antenatal_enrollment.is_eligible
+            eligible = self.antenatal_enrollment.is_eligible or self.antenatal_enrollment.pending_ultrasound
         except AttributeError:
             pass
         return eligible

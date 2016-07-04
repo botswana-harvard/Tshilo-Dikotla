@@ -1,6 +1,5 @@
 from edc_constants.constants import NO, YES, UNKNOWN, POS, NEG, IND, NOT_APPLICABLE, SEROCONVERSION, NEVER, DWTA
 from dateutil.relativedelta import relativedelta
-from tshilo_dikotla.apps.td.constants import LIVE
 
 
 class EnrollmentError(Exception):
@@ -29,10 +28,9 @@ class EnrollmentHelper(object):
     """
 
     def __init__(self, instance_antenatal, exception_cls=None):
-#         self.date_at_32wks = (self.instance_antenatal.report_datetime.date() -
-#                               relativedelta(weeks=instance_antenatal.ga_lmp_enrollment_wks - 32))
         self.instance_antenatal = instance_antenatal
-        self.date_at_32wks = self.evaluate_edd_by_lmp - relativedelta(weeks=6)
+        self.date_at_32wks = (self.evaluate_edd_by_lmp - relativedelta(weeks=6) if
+                              self.evaluate_edd_by_lmp else None)
         self.exception_cls = exception_cls or EnrollmentError
 
     @property
@@ -93,7 +91,7 @@ class EnrollmentHelper(object):
         if self.instance_antenatal.rapid_test_date:
             if self.instance_antenatal.week32_test_date > self.instance_antenatal.rapid_test_date:
                 raise self.exception_cls('Rapid test date cannot precede test date on or after 32 weeks')
-        return self.instance_antenatal.week32_test_date >= self.date_at_32wks
+        return (self.instance_antenatal.week32_test_date >= self.date_at_32wks if self.date_at_32wks else None)
 
     @property
     def validate_rapid_test(self):
@@ -109,11 +107,19 @@ class EnrollmentHelper(object):
                                              ' this is the case.')
 
     @property
+    def pending(self):
+        if (not self.instance_antenatal.ultrasound) and (NO in self.instance_antenatal.knows_lmp):
+            return True
+        return False
+
+    @property
     def evaluate_edd_by_lmp(self):
-        return (self.instance_antenatal.last_period_date + relativedelta(days=280))
+        return (self.instance_antenatal.last_period_date + relativedelta(days=280) if
+                self.instance_antenatal.last_period_date else None)
 
     def evaluate_ga_lmp(self, instance_date):
-        return int(40 - ((self.evaluate_edd_by_lmp - instance_date).days / 7))
+        return (int(40 - ((self.evaluate_edd_by_lmp - instance_date).days / 7)) if
+                self.instance_antenatal.last_period_date else None)
 
     def no_chronic_conditions(self):
         """Returns True if subject has no chronic conditions."""

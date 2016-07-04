@@ -1,11 +1,11 @@
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
-from edc_constants.constants import SCREENED
 from edc_consent.models import ConsentType
 from edc_registration.models import RegisteredSubject
-from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES, NO, NEG, NOT_APPLICABLE
+from edc_constants.constants import (FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES,
+                                     NO, NEG, NOT_APPLICABLE, SCREENED)
 from edc_meta_data.models import RequisitionMetaData
-from tshilo_dikotla.apps.td_maternal.models import MaternalVisit, MaternalEligibility, MaternalEligibilityLoss
+from tshilo_dikotla.apps.td_maternal.models import MaternalVisit
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
@@ -45,7 +45,7 @@ class TestMaternalUltrasound(BaseTestCase):
         self.assertEqual(MaternalVisit.objects.all().count(), 1)
         options = {'number_of_gestations': 1,
                    'maternal_visit': maternal_visit,
-                   'est_edd': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
+                   'est_edd_ultrasound': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
         maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
         self.assertTrue(maternal_ultrasound.antenatal_enrollment.is_eligible)
 
@@ -67,7 +67,7 @@ class TestMaternalUltrasound(BaseTestCase):
                                                    appointment__visit_definition__code='1000M')
         options = {'number_of_gestations': 2,
                    'maternal_visit': maternal_visit,
-                   'est_edd': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
+                   'est_edd_ultrasound': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
         maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
         self.assertFalse(maternal_ultrasound.antenatal_enrollment.is_eligible)
         self.assertEqual(MaternalVisit.objects.filter(
@@ -84,7 +84,7 @@ class TestMaternalUltrasound(BaseTestCase):
         self.assertEqual(MaternalVisit.objects.all().count(), 1)
         options = {'number_of_gestations': 1,
                    'maternal_visit': maternal_visit,
-                   'est_edd': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
+                   'est_edd_ultrasound': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
         maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
         enrollment = maternal_ultrasound.antenatal_enrollment
         edd_by_lmp = ((enrollment.last_period_date + relativedelta(years=1) + relativedelta(days=7)) -
@@ -105,8 +105,61 @@ class TestMaternalUltrasound(BaseTestCase):
         self.assertEqual(MaternalVisit.objects.all().count(), 1)
         options = {'number_of_gestations': 1,
                    'maternal_visit': maternal_visit,
-                   'est_edd': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
+                   'est_edd_ultrasound': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
         maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
         ga_confirmed = int(abs(40 - ((maternal_ultrasound.edd_confirmed -
             maternal_ultrasound.report_datetime.date()).days / 7)))
         self.assertEqual(maternal_ultrasound.ga_confirmed, ga_confirmed)
+
+    def test_ga_edd_confirmed_with_no_antenatal_lmp(self):
+        """Test GA and EDD confirmed are automatically chosen from ultrasound values
+        if no LMP at antenatal enrollment"""
+        maternal_visit = MaternalVisit.objects.get(appointment__registered_subject=self.registered_subject,
+                                                   reason=SCHEDULED,
+                                                   appointment__visit_definition__code='1000M')
+        self.assertEqual(MaternalVisit.objects.all().count(), 1)
+        options = {'number_of_gestations': 1,
+                   'maternal_visit': maternal_visit,
+                   'est_edd_ultrasound': timezone.datetime.now().date() + relativedelta(months=5)}
+        antenatal = self.antenatal_enrollment
+        antenatal.knows_lmp = NO,
+        antenatal.last_period_date = None
+        antenatal.save()
+        maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
+        self.assertEqual(maternal_ultrasound.edd_confirmed, maternal_ultrasound.est_edd_ultrasound)
+
+    def test_no_antenatal_lmp_but_eligible_from_ultrasound_gaconfirmed(self):
+        """Test if no LMP at antenatal enrollment, can still pass eligibility if 16 < ga > 36 from
+        ultrasound initial form"""
+        maternal_visit = MaternalVisit.objects.get(appointment__registered_subject=self.registered_subject,
+                                                   reason=SCHEDULED,
+                                                   appointment__visit_definition__code='1000M')
+        self.assertEqual(MaternalVisit.objects.all().count(), 1)
+        options = {'number_of_gestations': 1,
+                   'maternal_visit': maternal_visit,
+                   'est_edd_ultrasound': timezone.datetime.now().date() + relativedelta(months=5)}
+        antenatal = self.antenatal_enrollment
+        antenatal.knows_lmp = NO,
+        antenatal.last_period_date = None
+        antenatal.save()
+        ultrasound = MaternalUltraSoundIniFactory(**options)
+        antenatal = ultrasound.antenatal_enrollment
+        self.assertTrue(antenatal.is_eligible)
+
+    def test_no_antenatal_lmp_but_noteligible_from_ultrasound_gaconfirmed(self):
+        """Test if no LMP at antenatal enrollment, can still fail eligibility if 16 < ga > 36 from
+        ultrasound initial form"""
+        maternal_visit = MaternalVisit.objects.get(appointment__registered_subject=self.registered_subject,
+                                                   reason=SCHEDULED,
+                                                   appointment__visit_definition__code='1000M')
+        self.assertEqual(MaternalVisit.objects.all().count(), 1)
+        options = {'number_of_gestations': 1,
+                   'maternal_visit': maternal_visit,
+                   'est_edd_ultrasound': timezone.datetime.now().date() + relativedelta(months=7)}
+        antenatal = self.antenatal_enrollment
+        antenatal.knows_lmp = NO,
+        antenatal.last_period_date = None
+        antenatal.save()
+        ultrasound = MaternalUltraSoundIniFactory(**options)
+        antenatal = ultrasound.antenatal_enrollment
+        self.assertFalse(antenatal.is_eligible)

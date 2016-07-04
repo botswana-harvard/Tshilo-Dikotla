@@ -4,7 +4,7 @@ from datetime import datetime
 from django.utils import timezone
 
 from edc_registration.tests.factories import RegisteredSubjectFactory
-from edc_constants.choices import YES, NO, POS, NEG, NOT_APPLICABLE
+from edc_constants.constants import YES, NO, POS, NEG, NOT_APPLICABLE
 
 from tshilo_dikotla.apps.td_maternal.models import AntenatalEnrollment
 
@@ -17,6 +17,7 @@ class AntenatalEnrollmentFactory(factory.DjangoModelFactory):
     report_datetime = timezone.datetime.now()
 
     registered_subject = factory.SubFactory(RegisteredSubjectFactory)
+    knows_lmp = YES,
     last_period_date = timezone.datetime.date(datetime.today())
     is_diabetic = NO
     week32_test = NO

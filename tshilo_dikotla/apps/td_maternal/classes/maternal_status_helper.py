@@ -85,6 +85,7 @@ class MaternalStatusHelper(object):
             if getattr(intance_result_date_tuple[0], intance_result_date_tuple[1]) == POS:
                 return POS
             elif (getattr(intance_result_date_tuple[0], intance_result_date_tuple[1]) == NEG and
+                  getattr(intance_result_date_tuple[0], intance_result_date_tuple[2]) and
                   getattr(intance_result_date_tuple[0], intance_result_date_tuple[2]) >
                   (self.maternal_visit.report_datetime.date() - relativedelta(months=3))):
                 return NEG

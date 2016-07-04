@@ -38,6 +38,9 @@ class EnrollmentMixin(models.Model):
     is_eligible = models.BooleanField(
         editable=False)
 
+    pending_ultrasound = models.BooleanField(
+        editable=False)
+
     is_diabetic = models.CharField(
         verbose_name='Are you diabetic?',
         choices=YES_NO,
@@ -149,17 +152,23 @@ class EnrollmentMixin(models.Model):
         self.ga_lmp_enrollment_wks = enrollment_helper.evaluate_ga_lmp(self.report_datetime.date())
         self.enrollment_hiv_status = enrollment_helper.enrollment_hiv_status
         self.date_at_32wks = enrollment_helper.date_at_32wks
+        if not self.ultrasound:
+            self.pending_ultrasound = enrollment_helper.pending
         self.is_eligible = self.antenatal_criteria(enrollment_helper)
         self.unenrolled = self.unenrolled_error_messages()
         super(EnrollmentMixin, self).save(*args, **kwargs)
 
     def antenatal_criteria(self, enrollment_helper):
         """Returns True if basic criteria is met for enrollment."""
-        basic_criteria = (self.ga_lmp_enrollment_wks >= 16 and self.ga_lmp_enrollment_wks <= 36 and
-                          enrollment_helper.no_chronic_conditions() and self.will_breastfeed == YES and
-                          self.will_remain_onstudy == YES and
-                          (self.ultrasound.pass_antenatal_enrollment if self.ultrasound else True) and
-                          (self.delivery.keep_on_study if self.delivery else True))
+        if self.pending_ultrasound:
+            basic_criteria = False
+        else:
+            lmp_to_use = self.ga_lmp_enrollment_wks if self.ga_lmp_enrollment_wks else self.ultrasound.ga_confirmed
+            basic_criteria = (lmp_to_use >= 16 and lmp_to_use <= 36 and
+                              enrollment_helper.no_chronic_conditions() and self.will_breastfeed == YES and
+                              self.will_remain_onstudy == YES and
+                              (self.ultrasound.pass_antenatal_enrollment if self.ultrasound else True) and
+                              (self.delivery.keep_on_study if self.delivery else True))
         if basic_criteria and self.enrollment_hiv_status == POS and self.will_get_arvs == YES:
             return True
         elif basic_criteria and self.enrollment_hiv_status == NEG:
