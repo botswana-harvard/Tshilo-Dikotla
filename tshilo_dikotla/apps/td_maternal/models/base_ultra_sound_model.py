@@ -51,30 +51,30 @@ class BaseUtraSoundModel(MaternalCrfModel):
         decimal_places=2,
         help_text='Units in mm.')
 
-    hl = models.DecimalField(
-        verbose_name="HL?",
-        validators=[validate_hl, ],
-        max_digits=6,
-        decimal_places=2,
-        help_text='Units in mm.')
-
-    lateral_ventricle = models.DecimalField(
-        verbose_name="Lateral Ventricle",
-        max_digits=6,
-        decimal_places=2,
-        help_text='Units in mm.')
-
-    cerebellum = models.DecimalField(
-        verbose_name="Cerebellum?",
-        max_digits=6,
-        decimal_places=2,
-        help_text='Units in mm.')
-
-    cistema_magna = models.DecimalField(
-        verbose_name="Cistema Magna",
-        max_digits=6,
-        decimal_places=2,
-        help_text='Units in mm.')
+#     hl = models.DecimalField(
+#         verbose_name="HL?",
+#         validators=[validate_hl, ],
+#         max_digits=6,
+#         decimal_places=2,
+#         help_text='Units in mm.')
+# 
+#     lateral_ventricle = models.DecimalField(
+#         verbose_name="Lateral Ventricle",
+#         max_digits=6,
+#         decimal_places=2,
+#         help_text='Units in mm.')
+# 
+#     cerebellum = models.DecimalField(
+#         verbose_name="Cerebellum?",
+#         max_digits=6,
+#         decimal_places=2,
+#         help_text='Units in mm.')
+# 
+#     cistema_magna = models.DecimalField(
+#         verbose_name="Cistema Magna",
+#         max_digits=6,
+#         decimal_places=2,
+#         help_text='Units in mm.')
 
     amniotic_fluid_volume = models.CharField(
         verbose_name="Amniotic fluid volume?",
@@ -82,16 +82,16 @@ class BaseUtraSoundModel(MaternalCrfModel):
         choices=AMNIOTIC_FLUID,
         help_text='')
 
-    malformations = models.ManyToManyField(
-        Malformations,
-        verbose_name="Malformations?",
-        help_text='')
-
-    malformations_other = OtherCharField(
-        max_length=35,
-        verbose_name="If Other, please specify",
-        blank=True,
-        null=True)
+#     malformations = models.ManyToManyField(
+#         Malformations,
+#         verbose_name="Malformations?",
+#         help_text='')
+# 
+#     malformations_other = OtherCharField(
+#         max_length=35,
+#         verbose_name="If Other, please specify",
+#         blank=True,
+#         null=True)
 
     @property
     def antenatal_enrollment(self):

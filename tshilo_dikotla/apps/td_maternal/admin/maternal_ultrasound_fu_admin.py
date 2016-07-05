@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
@@ -19,15 +17,16 @@ class MaternalUltraSoundFuAdmin(BaseMaternalModelAdmin):
               'hc',
               'ac',
               'fl',
-              'hl',
-              'lateral_ventricle',
-              'cerebellum',
-              'cistema_magna')
+#               'hl',
+#               'lateral_ventricle',
+#               'cerebellum',
+#               'cistema_magna'
+    )
 
-    list_display = ('maternal_visit', 'report_datetime', 'lateral_ventricle', 'cerebellum')
+    list_display = ('maternal_visit', 'report_datetime')
 
     list_filter = ('report_datetime', )
-    
-    filter_horizontal = ('malformations',)
+
+#     filter_horizontal = ('malformations',)
 
 admin.site.register(MaternalUltraSoundFu, MaternalUltraSoundFuAdmin)
