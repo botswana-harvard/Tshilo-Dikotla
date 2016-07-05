@@ -77,3 +77,4 @@ class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMi
     class Meta:
         app_label = 'td_maternal'
         verbose_name = 'Maternal Consent'
+        unique_together = ('first_name', 'dob', 'initials', 'version')

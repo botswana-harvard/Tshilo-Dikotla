@@ -137,8 +137,9 @@ def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
                 study_status=OFF_STUDY,
                 reason=FAILED_ELIGIBILITY)
         except AttributeError as e:
-            if 'is_eligible' not in str(e) and 'off_study_visit_code' not in str(e):
-                raise
+            pass
+#             if 'is_eligible' not in str(e) and 'off_study_visit_code' not in str(e):
+#                 raise
 #         except VisitDefinition.DoesNotExist:
 #             pass
 #         except Appointment.DoesNotExist:
