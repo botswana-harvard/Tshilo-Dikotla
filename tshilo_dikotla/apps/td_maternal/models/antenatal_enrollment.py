@@ -16,7 +16,6 @@ from edc_sync.models import SyncModelMixin
 
 from .enrollment_mixin import EnrollmentMixin
 from .maternal_consent import MaternalConsent
-# from .postnatal_enrollment import PostnatalEnrollment
 
 
 class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
