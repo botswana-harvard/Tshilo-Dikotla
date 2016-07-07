@@ -1,6 +1,5 @@
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
-from datetime import timedelta
 
 from edc_appointment.models import Appointment
 from edc_constants.constants import (POS, YES, NO, NEG, NOT_APPLICABLE,
@@ -10,7 +9,7 @@ from .factories import (
     AntenatalEnrollmentFactory, MaternalEligibilityFactory, MaternalConsentFactory)
 
 
-from ..models import MaternalVisit, EnrollmentHelper
+from ..models import MaternalVisit, EnrollmentHelper, MaternalOffStudy
 
 from .base_test_case import BaseTestCase
 
@@ -293,6 +292,28 @@ class TestAntenatalEnrollment(BaseTestCase):
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, NEG)
         self.assertTrue(enrollment_helper.validate_rapid_test)
 
+    def test_mother_tested_NEG_no_LMP_rapidtest_enforced(self):
+        """Test for a mother who tested NEG with documentation but no LMP then rapid test is enforced"""
+
+        options = {'registered_subject': self.registered_subject,
+                   'knows_lmp': NO,
+                   'last_period_date': None,
+                   'current_hiv_status': UNKNOWN,
+                   'evidence_hiv_status': None,
+                   'week32_test': YES,
+                   'week32_test_date': (timezone.datetime.now() + relativedelta(weeks=5)).date(),
+                   'week32_result': NEG,
+                   'evidence_32wk_hiv_status': YES,
+                   'will_get_arvs': NOT_APPLICABLE,
+                   'rapid_test_done': NOT_APPLICABLE,
+                   'rapid_test_result': None,
+                   'rapid_test_date': None,
+                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
+
+        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        enrollment_helper = EnrollmentHelper(antenatal_enrollment)
+        self.assertTrue(enrollment_helper.validate_rapid_test)
+
     def test_mother_tested_NEG_after_32weeks_then_rapidtest_enforced_nodoc(self):
         """Test for a mother who tested NEG AFTER 32weeks, without documentation then rapid test is enforced"""
 
@@ -326,7 +347,7 @@ class TestAntenatalEnrollment(BaseTestCase):
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(antenatal_enrollment.is_eligible)
-        self.scheduled_visit_on_eligible(self.registered_subject.subject_identifier)
+        self.scheduled_visit_on_eligible_or_pending(self.registered_subject.subject_identifier)
 
     def test_no_week32test_rapid_test_ineligible(self):
         """Test for a mother who is at 35weeks gestational age,
@@ -345,39 +366,40 @@ class TestAntenatalEnrollment(BaseTestCase):
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
-#     def test_no_week32test_evidence_na(self):
-#         """Test for a mother who has eligible gestational weeks, who is
-#         not aware of current hiv_status but undergoes rapid testing """
-#         antenatal_enrollment = AntenatalEnrollmentFactory(
-#             week32_test=NO,
-#             week32_result='',
-#             evidence_hiv_status=NOT_APPLICABLE,
-#             will_get_arvs=NOT_APPLICABLE,
-# #             valid_regimen_duration=NOT_APPLICABLE,
-#             current_hiv_status=UNKNOWN,
-#             rapid_test_done=YES,
-#             rapid_test_result=NEG,
-#             registered_subject=self.registered_subject,
-#             gestation_wks_lmp=35)
-#         self.assertTrue(antenatal_enrollment.is_eligible)
-#         self.assertEqual(Appointment.objects.all().count(), 1)
-# 
-#     def test_no_week32test_evidence_na_rapid_neg_ineligible(self):
-#         """Test for a mother who has eligible gestational weeks, who is
-#         not aware of current hiv_status but undergoes rapid testing """
-#         antenatal_enrollment = AntenatalEnrollmentFactory(
-#             week32_test=NO,
-#             week32_result='',
-#             evidence_hiv_status=NOT_APPLICABLE,
-#             will_get_arvs=NOT_APPLICABLE,
-# #             valid_regimen_duration=NOT_APPLICABLE,
-#             current_hiv_status=UNKNOWN,
-#             rapid_test_done=YES,
-#             rapid_test_result=POS,
-#             registered_subject=self.registered_subject,
-#             gestation_wks_lmp=35)
-#         self.assertFalse(antenatal_enrollment.is_eligible)
-#         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
+    def test_lmp_not_provided_status(self):
+        """Test enrollment status is PENDING if lmp is not provided."""
+        options = {'registered_subject': self.registered_subject,
+                   'knows_lmp': NO,
+                   'last_period_date': None,
+                   'current_hiv_status': UNKNOWN,
+                   'evidence_hiv_status': None,
+                   'week32_test': NO,
+                   'rapid_test_done': YES,
+                   'rapid_test_date': timezone.datetime.now().date(),
+                   'rapid_test_result': POS}
+        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.assertFalse(antenatal_enrollment.is_eligible)
+        self.assertTrue(antenatal_enrollment.pending_ultrasound)
+        self.scheduled_visit_on_eligible_or_pending(self.registered_subject.subject_identifier)
+
+    def test_no_calculations_if_no_lmp(self):
+        """Test if no lmp then ga_by_lmp and edd_by_lmp are not calculated."""
+        options = {'registered_subject': self.registered_subject,
+                   'knows_lmp': NO,
+                   'last_period_date': None,
+                   'current_hiv_status': UNKNOWN,
+                   'evidence_hiv_status': None,
+                   'week32_test': NO,
+                   'rapid_test_done': YES,
+                   'rapid_test_date': timezone.datetime.now().date(),
+                   'rapid_test_result': POS}
+        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.assertTrue(antenatal_enrollment.pending_ultrasound)
+        self.assertIsNone(antenatal_enrollment.last_period_date)
+        self.assertIsNone(antenatal_enrollment.ga_lmp_enrollment_wks)
+        self.assertIsNone(antenatal_enrollment.edd_by_lmp)
+        self.assertIsNone(antenatal_enrollment.date_at_32wks)
+        self.scheduled_visit_on_eligible_or_pending(self.registered_subject.subject_identifier)
 
     def off_study_visit_on_ineligible(self, subject_identifier):
         self.assertEqual(MaternalVisit.objects.all().count(), 1)
@@ -386,8 +408,9 @@ class TestAntenatalEnrollment(BaseTestCase):
             study_status=OFF_STUDY,
             appointment__registered_subject__subject_identifier=subject_identifier).count(), 1)
 
-    def scheduled_visit_on_eligible(self, subject_identifier):
+    def scheduled_visit_on_eligible_or_pending(self, subject_identifier):
         self.assertEqual(MaternalVisit.objects.all().count(), 1)
+        self.assertEqual(MaternalOffStudy.objects.all().count(), 0)
         self.assertEqual(MaternalVisit.objects.filter(
             reason=SCHEDULED,
             study_status=ON_STUDY,

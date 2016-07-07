@@ -7,6 +7,7 @@ from edc_base.model.validators import (date_not_before_study_start, date_not_fut
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_consent.models import RequiresConsentMixin
 from edc_constants.constants import NO, YES
+from edc_constants.choices import YES_NO
 from edc_offstudy.models import OffStudyMixin
 from edc_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin
@@ -15,7 +16,6 @@ from edc_sync.models import SyncModelMixin
 
 from .enrollment_mixin import EnrollmentMixin
 from .maternal_consent import MaternalConsent
-# from .postnatal_enrollment import PostnatalEnrollment
 
 
 class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
@@ -27,16 +27,26 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
 
     weeks_base_field = 'ga_lmp_enrollment_wks'
 
+    knows_lmp = models.CharField(
+        verbose_name="Does the mother know the approximate date of the first day her last menstrual period?",
+        choices=YES_NO,
+        help_text='LMP',
+        max_length=3)
+
     last_period_date = models.DateField(
         verbose_name="What is the approximate date of the first day of the mother’s last menstrual period",
         validators=[
             date_not_before_study_start,
             date_not_future, ],
+        null=True,
+        blank=True,
         help_text='LMP')
 
     ga_lmp_enrollment_wks = models.IntegerField(
         verbose_name="GA by LMP at enrollment.",
-        help_text=" (weeks of gestation at enrollment, LPM). Eligible if >16 and <36 weeks GA",)
+        help_text=" (weeks of gestation at enrollment, LPM). Eligible if >16 and <36 weeks GA",
+        null=True,
+        blank=True,)
 
     ga_lmp_anc_wks = models.IntegerField(
         verbose_name="What is the mother's gestational age according to ANC records?",
@@ -48,8 +58,9 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
         verbose_name="Estimated date of delivery by lmp",
         validators=[
             date_not_before_study_start],
+        null=True,
+        blank=True,
         help_text="")
-
 
 #     objects = AntenatalEnrollmentManager()
     objects = models.Manager()
@@ -77,7 +88,7 @@ class AntenatalEnrollment(EnrollmentMixin, OffStudyMixin, AppointmentMixin,
             unenrolled_error_message.append('Will not get ARVs on this pregnancy.')
         if self.rapid_test_done == NO:
             unenrolled_error_message.append('rapid test not done')
-        if self.ga_lmp_enrollment_wks < 16 or self.ga_lmp_enrollment_wks > 36:
+        if self.ga_lmp_enrollment_wks and (self.ga_lmp_enrollment_wks < 16 or self.ga_lmp_enrollment_wks > 36):
             unenrolled_error_message.append('gestation not 16 to 36wks')
         if self.delivery and not self.delivery.keep_on_study:
             unenrolled_error_message.append('Hiv+ and not on ART for atleast 4 weeks.')

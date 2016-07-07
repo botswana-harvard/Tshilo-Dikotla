@@ -80,7 +80,7 @@ DELIVERY_MODE = (
     ('vaginal forceps', 'vaginal forceps'),
     ('elective c-section', 'elective C-section'),
     ('emergent c-section', 'emrgent C-section'),
-    (OTHER, 'Other health facilities not associated with study site')
+    (OTHER, 'Other delivery mode not listed above')
 )
 
 MARITAL_STATUS = (

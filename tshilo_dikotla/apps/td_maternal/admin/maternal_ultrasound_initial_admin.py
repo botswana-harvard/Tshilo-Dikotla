@@ -20,28 +20,29 @@ class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin):
               'hc',
               'ac',
               'fl',
-              'hl',
+#               'hl',
               'ga_by_lmp',
               'ga_by_ultrasound_wks',
               'ga_by_ultrasound_days',
               'ga_confirmed',
               'est_fetal_weight',
-              'est_edd',
+              'est_edd_ultrasound',
               'edd_confirmed',
-              'lateral_ventricle',
-              'cerebellum',
-              'cistema_magna',
-              'malformations',
+#               'lateral_ventricle',
+#               'cerebellum',
+#               'cistema_magna',
+#               'malformations',
               'amniotic_fluid_volume')
 
     readonly_fields = ('edd_confirmed', 'ga_confirmed', 'ga_by_lmp')
 
-    radio_fields = {'number_of_gestations': admin.VERTICAL}
+    radio_fields = {'number_of_gestations': admin.VERTICAL,
+                    'amniotic_fluid_volume': admin.VERTICAL,}
 
     list_display = ('report_datetime', 'number_of_gestations', 'ga_confrimation_method', 'edd_confirmed',
                     'ga_confirmed', 'ga_by_lmp')
 
-    list_filter = ('report_datetime', 'number_of_gestations', 'malformations', 'ga_confrimation_method')
-    filter_horizontal = ('malformations',)
+    list_filter = ('report_datetime', 'number_of_gestations', 'ga_confrimation_method')
+#     filter_horizontal = ('malformations',)
 
 admin.site.register(MaternalUltraSoundInitial, MaternalUltraSoundInitialAdmin)

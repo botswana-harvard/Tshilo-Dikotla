@@ -118,7 +118,7 @@ def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
     """If not is_eligible, creates the 1000M visit and sets to off study."""
     if not raw:
         try:
-            if not instance.is_eligible:
+            if not instance.is_eligible and not instance.pending_ultrasound:
                 report_datetime = instance.report_datetime
                 visit_definition = VisitDefinition.objects.get(code=instance.off_study_visit_code)
                 appointment = Appointment.objects.get(
@@ -137,8 +137,9 @@ def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
                 study_status=OFF_STUDY,
                 reason=FAILED_ELIGIBILITY)
         except AttributeError as e:
-            if 'is_eligible' not in str(e) and 'off_study_visit_code' not in str(e):
-                raise
+            pass
+#             if 'is_eligible' not in str(e) and 'off_study_visit_code' not in str(e):
+#                 raise
 #         except VisitDefinition.DoesNotExist:
 #             pass
 #         except Appointment.DoesNotExist:
@@ -177,7 +178,7 @@ def eligible_put_back_on_study(sender, instance, raw, created, using, **kwargs):
     """changes the 1000M visit to scheduled from off study if is_eligible."""
     if not raw:
         try:
-            if instance.is_eligible and isinstance(instance, AntenatalEnrollment):
+            if isinstance(instance, AntenatalEnrollment) and (instance.pending_ultrasound or instance.is_eligible):
                 MaternalOffStudy.objects.get(
                     maternal_visit__appointment__registered_subject=instance.registered_subject)
         except AttributeError as e:
@@ -194,6 +195,7 @@ def maternal_ultrasound_delivery_initial_on_post_save(sender, instance, raw, cre
         if isinstance(instance, MaternalUltraSoundInitial) or isinstance(instance, MaternalLabourDel):
             # re-save antenatal enrollment record to recalculate eligibility
             antenatal_enrollment = instance.antenatal_enrollment
+            antenatal_enrollment.pending_ultrasound = False
             antenatal_enrollment.save()
 
 

@@ -77,7 +77,7 @@ class MaternalLabourDel(RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
         choices=CSECTION_REASON,
         help_text="If 'OTHER', specify below")
 
-    mode_delivery_other = OtherCharField()
+    csection_reason_other = OtherCharField()
 
     delivery_complications = models.ManyToManyField(
         DeliveryComplications,

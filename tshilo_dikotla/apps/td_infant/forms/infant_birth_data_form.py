@@ -15,7 +15,7 @@ class InfantBirthDataForm(BaseInfantModelForm):
 
     def clean(self):
         cleaned_data = super(InfantBirthDataForm, self).clean()
-#         self.validate_apgar_score(cleaned_data)
+        self.validate_apgar_score(cleaned_data)
         return cleaned_data
 
     def validate_apgar_score(self, cleaned_data):

@@ -115,13 +115,6 @@ class MaternalUltrasoundInitialRuleGroup(RuleGroup):
                       ('td_maternal', 'maternalarvpreg'),
                       ('td_maternal', 'maternalclinicalmeasurementsone')])
 
-    antenatal_enrollment_fail = CrfRule(
-        logic=Logic(
-            predicate=('number_of_gestations', 'equals', ONE),
-            consequence=NOT_REQUIRED,
-            alternative=UNKEYED),
-        target_model=[('td_maternal', 'maternaloffstudy')])
-
     class Meta:
         app_label = 'td_maternal'
         source_fk = (MaternalVisit, 'maternal_visit')
