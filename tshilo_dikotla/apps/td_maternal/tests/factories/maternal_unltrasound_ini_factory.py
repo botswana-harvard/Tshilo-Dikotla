@@ -22,7 +22,7 @@ class MaternalUltraSoundIniFactory(factory.DjangoModelFactory):
     hc = 200
     ac = 200
     fl = 200
-    hl = 200
+    # hl = 200
     ga_by_lmp = 100
     ga_by_ultrasound_wks = 7
     ga_by_ultrasound_days = 5
@@ -30,6 +30,6 @@ class MaternalUltraSoundIniFactory(factory.DjangoModelFactory):
     est_edd_ultrasound = timezone.now().date() + timedelta(days=90)
     edd_confirmed = timezone.now() + timedelta(days=90)
     ga_confirmed = 7
-    lateral_ventricle = 100
-    cerebellum = 100
-    cistema_magna = 100
+    # lateral_ventricle = 100
+    # cerebellum = 100
+    # cistema_magna = 100

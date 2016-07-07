@@ -46,15 +46,15 @@ class TestMaternalUltraSoundInitial(BaseTestCase):
                    'hc': 200,
                    'ac': 200,
                    'fl': 200,
-                   'hl': 200,
+                   # 'hl': 200,
                    'ga_by_lmp': 100,
                    'ga_by_ultrasound_wks': 7,
                    'ga_by_ultrasound_days': 5,
                    'est_fetal_weight': 700,
                    'edd_confirmed': timezone.now() + timedelta(days=90),
                    'ga_confirmed': 7,
-                   'lateral_ventricle': 100,
-                   'cerebellum': 100,
+                   # 'lateral_ventricle': 100,
+                   # 'cerebellum': 100,
                    'cistema_magna': 100,
                    'est_edd': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
         self.maternal_ultrasound_init = MaternalUltraSoundInitial.objects.create(**options)

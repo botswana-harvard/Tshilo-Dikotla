@@ -1,1 +1,2 @@
 from .infant_birth_factory import InfantBirthFactory
+from .infant_visit_factory import InfantVisitFactory
