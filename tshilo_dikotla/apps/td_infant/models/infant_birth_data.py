@@ -2,13 +2,19 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 # from edc_base.audit_trail import AuditTrail
-from edc_constants.choices import YES_NO
+from edc_constants.choices import YES_NO, GENDER
 
 from .infant_crf_model import InfantCrfModel
 
 
 class InfantBirthData(InfantCrfModel):
     """ A model completed by the user on the infant's birth exam. """
+
+    infant_gender = models.CharField(
+        max_length=6,
+        choices=GENDER,
+        verbose_name="What is the gender of the infant?",
+        help_text="")
 
     weight_kg = models.DecimalField(
         max_digits=3,
