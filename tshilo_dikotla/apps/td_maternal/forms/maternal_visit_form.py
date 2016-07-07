@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
-from edc_base.form.forms import BaseModelForm
+from edc_base.form.old_forms import BaseModelForm
 from tshilo_dikotla.apps.td.choices import VISIT_REASON, VISIT_INFO_SOURCE, MATERNAL_VISIT_STUDY_STATUS, INFO_PROVIDER
 
 from ..models import MaternalVisit, MaternalConsent

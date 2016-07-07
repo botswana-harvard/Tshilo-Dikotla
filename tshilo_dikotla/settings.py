@@ -69,9 +69,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'simple_history',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'django_js_reverse',
     'django_revision',
-    'django_crypto_fields',
-    'south',
     'edc_templates',
     'edc_identifier',
     'edc_lab.lab_packing',
@@ -81,7 +82,7 @@ INSTALLED_APPS = [
     'edc_base',
     'edc_configuration',
     'edc_call_manager',
-    'edc_consent',
+#     'edc_consent',
     'edc_constants',
     'edc_content_type_map',
     'edc_dashboard',
@@ -93,10 +94,13 @@ INSTALLED_APPS = [
     'edc_offstudy',
     'edc_registration',
     'edc_rule_groups',
-    'edc_sync',
+#     'edc_sync',
     'edc_code_lists',
     'edc_visit_schedule',
     'edc_visit_tracking',
+    'tshilo_dikotla.apps.apps.DjangoCryptoFieldsAppConfig',
+    'tshilo_dikotla.apps.apps.ConsentAppConfig',
+    'tshilo_dikotla.apps.apps.EdcSyncAppConfig',
     'tshilo_dikotla.apps.td',
     'tshilo_dikotla.apps.td_dashboard',
     'tshilo_dikotla.apps.td_list',
@@ -123,6 +127,7 @@ if 'test' in sys.argv:
                          "edc_data_manager": None,
                          "lab_packing": None,
                          "lab_clinic_api": None,
+                         'django_crypto_fields': None,
                          "lab_clinic_reference": None,
                          "edc_death_report": None,
                          "edc_sync": None,
@@ -133,9 +138,6 @@ if 'test' in sys.argv:
                          "td_maternal": None,
                          "td_list": None}
 
-if socket.gethostname() in DEVELOPER_HOSTS + TEST_HOSTS or 'test' in sys.argv:
-    INSTALLED_APPS.pop(INSTALLED_APPS.index('south'))
-INSTALLED_APPS = tuple(INSTALLED_APPS)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

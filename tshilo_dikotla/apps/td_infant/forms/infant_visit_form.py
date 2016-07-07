@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
-from edc_base.form.forms import BaseModelForm
+from edc_base.form.old_forms import BaseModelForm
 from edc_constants.constants import ON_STUDY
 from edc_visit_tracking.forms import VisitFormMixin
 

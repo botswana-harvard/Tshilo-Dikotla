@@ -189,8 +189,9 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             enrollment_helper = EnrollmentHelper(instance_antenatal=antenatal)
             if enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and self.currently_pregnant:
                 return enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date())
-            elif not enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and self.currently_pregnant:
-                return self.antenatal_enrollment.ultrasound.ga_confirmed
+            elif (not enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and self.currently_pregnant
+                  and antenatal.ultrasound):
+                return antenatal.ultrasound.ga_confirmed
             elif enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and not self.currently_pregnant:
                 delivery = self.maternal_delivery
                 return enrollment_helper.evaluate_ga_lmp(delivery.delivery_datetime.date())

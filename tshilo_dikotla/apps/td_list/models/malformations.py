@@ -1,7 +1,7 @@
-from edc_base.model.models import BaseListModel
+from edc_base.model.models import ListModelMixin
 
 
-class Malformations(BaseListModel):
+class Malformations(ListModelMixin):
 
     class Meta:
         app_label = 'td_list'

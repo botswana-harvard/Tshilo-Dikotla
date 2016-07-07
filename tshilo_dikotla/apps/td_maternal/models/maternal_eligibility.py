@@ -13,7 +13,7 @@ from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
 from edc_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin
-from edc_consent.models import ConsentType
+from edc_consent.consent_type import ConsentType
 
 from tshilo_dikotla.apps.td.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
 

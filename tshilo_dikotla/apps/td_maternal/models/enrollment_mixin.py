@@ -15,7 +15,7 @@ class EnrollmentMixin(models.Model):
 
     """Base Model for antenal enrollment"""
 
-    registered_subject = models.OneToOneField(RegisteredSubject, null=True)
+    registered_subject = models.OneToOneField(RegisteredSubject)
 
     report_datetime = models.DateTimeField(
         verbose_name="Report date",

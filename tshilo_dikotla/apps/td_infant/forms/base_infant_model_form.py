@@ -1,4 +1,4 @@
-from edc_base.form.forms import BaseModelForm
+from edc_base.form.old_forms import BaseModelForm
 
 from ..models import InfantVisit
 

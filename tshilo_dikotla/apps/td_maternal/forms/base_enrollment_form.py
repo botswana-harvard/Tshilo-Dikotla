@@ -2,7 +2,7 @@ from dateutil import rrule
 from django import forms
 
 from edc_constants.constants import POS, NEG, NOT_APPLICABLE, YES, NO, DWTA, UNKNOWN, NEVER
-from edc_base.form.forms import BaseModelForm
+from edc_base.form.old_forms import BaseModelForm
 
 from ..models import MaternalConsent, SpecimenConsent
 from tshilo_dikotla.apps.td_maternal.models.enrollment_helper import EnrollmentHelper

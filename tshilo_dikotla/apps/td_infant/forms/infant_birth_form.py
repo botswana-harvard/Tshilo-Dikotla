@@ -2,7 +2,7 @@ from django import forms
 
 from edc_constants.constants import YES
 
-from edc_base.form.forms import BaseModelForm
+from edc_base.form.old_forms import BaseModelForm
 from tshilo_dikotla.apps.td_maternal.models import MaternalLabourDel
 
 from ..models import InfantBirth
