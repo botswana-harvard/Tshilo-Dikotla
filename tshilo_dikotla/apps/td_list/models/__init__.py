@@ -15,4 +15,5 @@ from .rations import Rations
 from .malformations import Malformations
 from .delivery_complications import DeliveryComplications
 from .maternal_diagnoses import MaternalDiagnoses
+from .maternal_hospitalization import MaternalHospitalization
 

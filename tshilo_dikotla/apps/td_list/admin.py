@@ -6,7 +6,7 @@ from .models import (
     ChronicConditions, Contraceptives, DiseasesAtEnrollment, HouseholdGoods,
     PriorArv, AutopsyInfoSource, Supplements, InfantVaccines,
     HealthCond, DelComp, ObComp, LabDelDx, MaternalRelatives, MaternalMedications, Rations, Foods,
-    Malformations, MaternalDiagnoses, DeliveryComplications)
+    Malformations, MaternalDiagnoses, DeliveryComplications, MaternalHospitalization)
 
 
 class RationsAdmin(BaseModelAdmin):
@@ -93,10 +93,17 @@ class MaternalRelativesAdmin(BaseModelAdmin):
     pass
 admin.site.register(MaternalRelatives, MaternalRelativesAdmin)
 
+
 class MalformationsAdmin(BaseModelAdmin):
     pass
 admin.site.register(Malformations, MalformationsAdmin)
 
+
 class MaternalDiagnosesAdmin(BaseModelAdmin):
     pass
 admin.site.register(MaternalDiagnoses, MaternalDiagnosesAdmin)
+
+
+class MaternalHospitalizationAdmin(BaseModelAdmin):
+    pass
+admin.site.register(MaternalHospitalization, MaternalHospitalizationAdmin)
