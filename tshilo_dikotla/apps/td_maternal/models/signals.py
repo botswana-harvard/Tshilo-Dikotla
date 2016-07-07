@@ -36,7 +36,7 @@ def maternal_eligibility_on_post_save(sender, instance, raw, created, using, **k
     Note: This is the ONLY place RegisteredSubject is created for mothers in this project."""
     if not raw:
         if isinstance(instance, MaternalEligibility) and not kwargs.get('update_fields'):
-            if not instance.is_eligible and not instance.pending_ultrasound:
+            if not instance.is_eligible:
                 try:
                     maternal_eligibility_loss = MaternalEligibilityLoss.objects.get(
                         maternal_eligibility_id=instance.id)
@@ -137,8 +137,9 @@ def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
                 study_status=OFF_STUDY,
                 reason=FAILED_ELIGIBILITY)
         except AttributeError as e:
-            if 'is_eligible' not in str(e) and 'off_study_visit_code' not in str(e):
-                raise
+            pass
+#             if 'is_eligible' not in str(e) and 'off_study_visit_code' not in str(e):
+#                 raise
 #         except VisitDefinition.DoesNotExist:
 #             pass
 #         except Appointment.DoesNotExist:
