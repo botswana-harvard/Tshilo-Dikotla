@@ -1,0 +1,38 @@
+[
+{
+    "pk": 1, 
+    "model": "td_list.maternalhospitalization", 
+    "fields": {
+        "hostname_created": "django", 
+        "name": "Other, specify", 
+        "short_name": "Other, specify", 
+        "created": "2016-06-26T20:54:08.245", 
+        "user_modified": "", 
+        "modified": "2016-06-26T20:54:08.245", 
+        "hostname_modified": "django", 
+        "version": "1.0", 
+        "display_index": 1, 
+        "user_created": "django", 
+        "field_name": null, 
+        "revision": ":develop:"
+    }
+},
+{
+    "pk": 2, 
+    "model": "td_list.maternalhospitalization", 
+    "fields": {
+        "hostname_created": "django", 
+        "name": "Pneumonia or other respiratory disease", 
+        "short_name": "Pneumonia or other respiratory disease", 
+        "created": "2016-06-26T20:54:08.245", 
+        "user_modified": "", 
+        "modified": "2016-06-26T20:54:08.245", 
+        "hostname_modified": "django", 
+        "version": "1.0", 
+        "display_index": 2, 
+        "user_created": "django", 
+        "field_name": null, 
+        "revision": ":develop:"
+    }
+},
+]
