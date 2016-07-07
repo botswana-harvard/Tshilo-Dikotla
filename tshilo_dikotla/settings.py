@@ -98,16 +98,15 @@ INSTALLED_APPS = [
     'edc_code_lists',
     'edc_visit_schedule',
     'edc_visit_tracking',
-    'tshilo_dikotla.apps.apps.DjangoCryptoFieldsAppConfig',
-    'tshilo_dikotla.apps.apps.ConsentAppConfig',
-    'tshilo_dikotla.apps.apps.EdcSyncAppConfig',
-    'tshilo_dikotla.apps.td',
-    'tshilo_dikotla.apps.td_dashboard',
-    'tshilo_dikotla.apps.td_list',
-    'tshilo_dikotla.apps.td_lab',
-    'tshilo_dikotla.apps.td_maternal',
-    'tshilo_dikotla.apps.td_infant',
-   
+    'tshilo_dikotla.apps.DjangoCryptoFieldsAppConfig',
+    'tshilo_dikotla.apps.ConsentAppConfig',
+    'tshilo_dikotla.apps.EdcSyncAppConfig',
+    'tshilo_dikotla.apps.TshiloDikotlaConfig',
+    'td_dashboard.apps.TdDashboardConfig',
+    'td_infant.apps.TdInfantConfig',
+    'td_lab.apps.TdLabConfig',
+    'td_list.apps.TdListConfig',
+    'td_maternal.apps.TdMaternalConfig',
 ]
 
 if 'test' in sys.argv:

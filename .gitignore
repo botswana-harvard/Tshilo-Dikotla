@@ -10,7 +10,7 @@ upgrade/
 test-*
 db.sqlite3
 etc/*
-tshilo_dikotla/apps/*/migrations/
+#tshilo_dikotla/apps/*/migrations/
 getresults_receive/.DS_Store
 # C extensions
 *.so

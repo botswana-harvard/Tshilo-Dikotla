@@ -10,8 +10,8 @@ from edc_lab.lab_profile.classes import site_lab_profiles
 from edc_rule_groups.classes import site_rule_groups
 from edc_visit_schedule.classes import site_visit_schedules
 
-from tshilo_dikotla.apps.td.app_configuration import AppConfiguration
-from tshilo_dikotla.apps.td_list.models import RandomizationItem
+from tshilo_dikotla.app_configuration import AppConfiguration
+from td_list.models import RandomizationItem
 
 
 def load_edc():

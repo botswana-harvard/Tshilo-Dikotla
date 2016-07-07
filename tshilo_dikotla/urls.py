@@ -28,7 +28,7 @@ urlpatterns = patterns(
 urlpatterns += patterns(
     '',
     url(r'^{app_name}/dashboard/'.format(app_name=APP_NAME),
-        include('tshilo_dikotla.apps.{app_name}_dashboard.urls'.format(app_name=APP_NAME))),
+        include('tshilo_dikotla.apps_old.{app_name}_dashboard.urls'.format(app_name=APP_NAME))),
 )
 
 # urlpatterns += patterns(
@@ -45,7 +45,7 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     '',
     url(r'^{app_name}/dashboard/'.format(app_name=APP_NAME),
-        include('tshilo_dikotla.apps.{app_name}_dashboard.urls'.format(app_name=APP_NAME))),
+        include('tshilo_dikotla.apps_old.{app_name}_dashboard.urls'.format(app_name=APP_NAME))),
 )
 
 urlpatterns += patterns(
