@@ -1,16 +1,17 @@
-Django==1.9.7
-django-braces==1.9.0
+Django==1.9.5
+django-braces==1.8.1
 django-cors-headers==1.1.0
 django-crispy-forms==1.6.0
 -e git+https://github.com/erikvw/django-crypto-fields@67c46e89f9738b474452d22bc1f4fd6db228c6fb#egg=django_crypto_fields
-django-extensions==1.6.7
+django-extensions==1.6.1
 django-js-reverse==0.7.2
+django-model-utils==2.5
 -e git+https://github.com/erikvw/django-revision@522bb4e0cc41df969f0cba9485919ec1125cd157#egg=django_revision
 django-simple-history==1.8.1
 django-tastypie==0.13.3
 djangorestframework==3.3.3
 -e git+https://github.com/botswana-harvard/edc-appointment@44d8156ae682cf995bb8cc9e705d5621bdf161f9#egg=edc_appointment
--e git+https://github.com/botswana-harvard/edc-base@ed49808efd8a6a6037533d1c9b7c84847a3620ba#egg=edc_base
+-e git+https://github.com/botswana-harvard/edc-base@c6f2c87a9a1090a97e7a7902fce288b25990ca50#egg=edc_base
 -e git+https://github.com/botswana-harvard/edc-call-manager@12c6c10eaaa2be10fab12737c00aa8dc12dc5f0b#egg=edc_call_manager
 -e git+https://github.com/botswana-harvard/edc-code-lists@6419b356bc3d63a4d30686ce47c10222e790b484#egg=edc_code_lists
 -e git+https://github.com/botswana-harvard/edc-configuration@36ff1d5cdf8064674b09b662667200c0d593404c#egg=edc_configuration
@@ -21,9 +22,9 @@ djangorestframework==3.3.3
 -e git+https://github.com/botswana-harvard/edc-data-manager@a0633a457c205c4361f002d27649a4d6764148bb#egg=edc_data_manager
 -e git+https://github.com/botswana-harvard/edc-death-report@6ce18e5b6b4a2e99efef43eb0434ed44bd828461#egg=edc_death_report
 -e git+https://github.com/botswana-harvard/edc-device@e641387fbe9d672b73723e624105b503a907fd66#egg=edc_device
--e git+https://github.com/botswana-harvard/edc-export@f4e60d62d0e6ac9c8e5a6fb7e83219293a2c5d15#egg=edc_export
+-e git+https://github.com/botswana-harvard/edc-export@aca36b5c147550194d1adcbd4bd0a92bc0a9ce6c#egg=edc_export
 -e git+https://github.com/botswana-harvard/edc-identifier@d5e030cd844f12a660f19e370e7d4044e4fe1b73#egg=edc_identifier
--e git+https://github.com/botswana-harvard/edc-lab@c05dfe2092156e84266acf4114ea4e6e1e9f27ba#egg=edc_lab
+-e git+https://github.com/botswana-harvard/edc-lab@54e74d8cc7eaae23439fdb8a4e686dcf0ffc03d4#egg=edc_lab
 -e git+https://github.com/botswana-harvard/edc-locator@2275ddff0c119a4666902d2fac0dba6159993bc0#egg=edc_locator
 -e git+https://github.com/botswana-harvard/edc-meta-data@d50d54077f4b226100112db7aee018341bc8bffe#egg=edc_meta_data
 -e git+https://github.com/botswana-harvard/edc-notification@7de21100ecccd46afd3fa3ea4d03390d2bab033c#egg=edc_notification
@@ -40,13 +41,16 @@ factory-boy==2.6.1
 fake-factory==0.5.7
 flake8==2.5.4
 gitdb==0.6.4
-GitPython==1.0.2
+gitflow==0.5.1
+GitPython==2.0.5
 -e git+https://github.com/botswana-harvard/lab-requisition@e90bfd28465c10565edd3d37d15a91f39fe51f2e#egg=lab_requisition
 -e git+https://github.com/botswana-harvard/lis@780cb9b56aaa87d71bacd90037185f680bb4e734#egg=lis
 mccabe==0.4.0
+mysqlclient==1.3.7
 numpy==1.11.0
 pbr==1.10.0
 pep8==1.7.0
+Pillow==3.2.0
 pycrypto==2.6.1
 pycups==1.9.73
 pyflakes==1.0.0
