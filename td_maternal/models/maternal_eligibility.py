@@ -13,7 +13,8 @@ from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
 from edc_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin
-from edc_consent.consent_type import ConsentType
+#from edc_consent.consent_type import ConsentType
+from edc_consent.consent_type import site_consent_types
 
 from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
 
@@ -111,7 +112,7 @@ class MaternalEligibility (ExportTrackingFieldsMixin, BaseUuidModel):
     def have_latest_consent(self):
         return (MaternalConsent.objects.filter(
             subject_identifier=self.registered_subject.subject_identifier).order_by('-version').first().version ==
-            ConsentType.objects.get_by_consent_datetime(MaternalConsent, timezone.now()).version)
+            site_consent_types.get_by_consent_datetime(MaternalConsent, timezone.now()).version)
 
     @property
     def previous_consents(self):
@@ -120,7 +121,7 @@ class MaternalEligibility (ExportTrackingFieldsMixin, BaseUuidModel):
 
     @property
     def current_consent_version(self):
-        return ConsentType.objects.get_by_consent_datetime(MaternalConsent, timezone.now()).version
+        return site_consent_types.get_by_consent_datetime(MaternalConsent, timezone.now()).version
 
     def set_uuid_for_eligibility_if_none(self):
         if not self.eligibility_id:
