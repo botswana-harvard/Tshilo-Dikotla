@@ -1,8 +1,9 @@
 from edc_base.model.models import ListModelMixin
 from edc_code_lists.models import DxCode
+from edc_base.model.models import BaseUuidModel
 
 
-class HealthCond (ListModelMixin):
+class HealthCond (ListModelMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'td_list'
