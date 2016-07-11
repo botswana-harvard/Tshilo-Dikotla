@@ -1,7 +1,8 @@
 from edc_base.model.models import ListModelMixin
+from edc_base.model.models import BaseUuidModel
 
 
-class RandomizationItem (ListModelMixin):
+class RandomizationItem (ListModelMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'td_list'

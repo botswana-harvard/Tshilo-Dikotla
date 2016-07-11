@@ -1,7 +1,8 @@
 from edc_base.model.models import ListModelMixin
+from edc_base.model.models import BaseUuidModel
 
 
-class MaternalMedications (ListModelMixin):
+class MaternalMedications (ListModelMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'td_list'
