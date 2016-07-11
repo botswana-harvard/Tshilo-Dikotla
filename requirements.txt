@@ -5,7 +5,6 @@ django-crispy-forms==1.6.0
 -e git+https://github.com/erikvw/django-crypto-fields@67c46e89f9738b474452d22bc1f4fd6db228c6fb#egg=django_crypto_fields
 django-extensions==1.6.1
 django-js-reverse==0.7.2
-django-model-utils==2.5
 -e git+https://github.com/erikvw/django-revision@522bb4e0cc41df969f0cba9485919ec1125cd157#egg=django_revision
 django-simple-history==1.8.1
 django-tastypie==0.13.3
@@ -18,7 +17,7 @@ djangorestframework==3.3.3
 -e git+https://github.com/botswana-harvard/edc-consent@0a5545f6c991d32f02e57947b2b283ef27fff2f5#egg=edc_consent
 -e git+https://github.com/botswana-harvard/edc-constants@6a06b691a15894759e9a279892c0ba4961e9bed0#egg=edc_constants
 -e git+https://github.com/botswana-harvard/edc-content-type-map@7614883ed1e89eb5a90ee92df91746ae54965ec3#egg=edc_content_type_map
--e git+https://github.com/botswana-harvard/edc-dashboard@1e52d5a6a4b6184b6a99248365a8737562ed4f07#egg=edc_dashboard
+-e git+https://github.com/botswana-harvard/edc-dashboard@17f491b3206c162008b76f75a82e62b4d91e68da#egg=edc_dashboard
 -e git+https://github.com/botswana-harvard/edc-data-manager@a0633a457c205c4361f002d27649a4d6764148bb#egg=edc_data_manager
 -e git+https://github.com/botswana-harvard/edc-death-report@6ce18e5b6b4a2e99efef43eb0434ed44bd828461#egg=edc_death_report
 -e git+https://github.com/botswana-harvard/edc-device@e641387fbe9d672b73723e624105b503a907fd66#egg=edc_device
@@ -31,15 +30,16 @@ djangorestframework==3.3.3
 -e git+https://github.com/botswana-harvard/edc-offstudy@f1b2d2c1a5b64e16e2d03cf5a12ade564b891e5b#egg=edc_offstudy
 -e git+https://github.com/botswana-harvard/edc-quota@7ea1d99ec2140428df38386434e3403cf44f464a#egg=edc_quota
 -e git+https://github.com/botswana-harvard/edc-registration@7a289d2c06d35e7af3e5ac70ebb8d8ec8f0c9bb0#egg=edc_registration
--e git+https://github.com/botswana-harvard/edc-rule-groups@07e4e58ac4fa3bf1fc78fb67c581046e8a138556#egg=edc_rule_groups
+-e git+https://github.com/botswana-harvard/edc-rule-groups@5772b7d003a461b3ae85e81f4df5bc580f423ca3#egg=edc_rule_groups
 -e git+https://github.com/botswana-harvard/edc-sync@86fb69ba34a734f0cc77d8b21c8fcebd3e4e61d5#egg=edc_sync
 -e git+https://github.com/botswana-harvard/edc-templates@c79a1d3a541fed424451f6da455bce2b6c84e07c#egg=edc_templates
 -e git+https://github.com/botswana-harvard/edc-testing@d0444af275efc731e923b3239111e7a470802e42#egg=edc_testing
--e git+https://github.com/botswana-harvard/edc-visit-schedule@3d78fdf6319e1488372dfa5324ce8a841b84e7a8#egg=edc_visit_schedule
+-e git+https://github.com/botswana-harvard/edc-visit-schedule@2aa61cec1950ee092f3ed1fa3098015a7100cc08#egg=edc_visit_schedule
 -e git+https://github.com/botswana-harvard/edc-visit-tracking@6c9f910613d91302c9c08fc0b1d04c9e7cc33a40#egg=edc_visit_tracking
 factory-boy==2.6.1
 fake-factory==0.5.7
 flake8==2.5.4
+geopy==1.11.0
 gitdb==0.6.4
 gitflow==0.5.1
 GitPython==2.0.5
