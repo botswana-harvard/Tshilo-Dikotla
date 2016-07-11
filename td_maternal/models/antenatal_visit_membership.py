@@ -9,13 +9,14 @@ from edc_export.models import ExportTrackingFieldsMixin
 from edc_consent.models import RequiresConsentMixin
 from edc_constants.choices import YES_NO
 from edc_registration.models import RegisteredSubject
-# from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
-# from .enrollment_mixin import EnrollmentMixin
+from ..managers import AntenatalVisitMembershipManager
+
 from .maternal_consent import MaternalConsent
 
 
-class AntenatalVisitMembership(RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
+class AntenatalVisitMembership(SyncModelMixin, RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
 
     consent_model = MaternalConsent
 
@@ -34,10 +35,15 @@ class AntenatalVisitMembership(RequiresConsentMixin, AppointmentMixin, BaseUuidM
         help_text='',
         max_length=3)
 
-    objects = models.Manager()
+    objects = AntenatalVisitMembershipManager()
+
+    history = SyncHistoricalRecords()
 
     def save(self, *args, **kwargs):
         super(AntenatalVisitMembership, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return "{0}".format(self.registered_subject.subject_identifier)
 
     def natural_key(self):
         return self.registered_subject.natural_key()

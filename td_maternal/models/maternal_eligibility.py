@@ -12,17 +12,16 @@ from edc_export.models import ExportTrackingFieldsMixin
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
 from edc_registration.models import RegisteredSubject
-from edc_sync.models import SyncModelMixin
-#from edc_consent.consent_type import ConsentType
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_consent.consent_type import site_consent_types
 
 from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
 
-# from ..managers import MaternalEligibilityManager
+from ..managers import MaternalEligibilityManager
 from ..models import MaternalConsent
 
 
-class MaternalEligibility (ExportTrackingFieldsMixin, BaseUuidModel):
+class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
     """ A model completed by the user to test and capture the result of the pre-consent eligibility checks.
 
     This model has no PII."""
@@ -32,7 +31,7 @@ class MaternalEligibility (ExportTrackingFieldsMixin, BaseUuidModel):
     eligibility_id = models.CharField(
         verbose_name="Eligibility Identifier",
         max_length=36,
-        default=None,
+        unique=True,
         editable=False)
 
     report_datetime = models.DateTimeField(
@@ -68,10 +67,9 @@ class MaternalEligibility (ExportTrackingFieldsMixin, BaseUuidModel):
         default=False,
         editable=False)
 
-#     objects = MaternalEligibilityManager()
-    objects = models.Manager()
+    objects = MaternalEligibilityManager()
 
-#     history = AuditTrail()
+    history = SyncHistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.set_uuid_for_eligibility_if_none()
@@ -92,11 +90,11 @@ class MaternalEligibility (ExportTrackingFieldsMixin, BaseUuidModel):
         is_eligible = False if error_message else True
         return (is_eligible, ','.join(error_message))
 
-    def __unicode__(self):
+    def __str__(self):
         return "{0} ({1})".format(self.eligibility_id, self.age_in_years)
 
     def natural_key(self):
-        return (self.eligibility_id, self.report_datetime, )
+        return self.eligibility_id
 
     @property
     def maternal_eligibility_loss(self):

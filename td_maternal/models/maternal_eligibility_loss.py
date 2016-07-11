@@ -4,17 +4,17 @@ from django.utils import timezone
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from .maternal_eligibility import MaternalEligibility
 
-# from ..managers import MaternalEligibilityLossManager
+from ..managers import MaternalEligibilityLossManager
 
 
-class MaternalEligibilityLoss(ExportTrackingFieldsMixin, BaseUuidModel):
+class MaternalEligibilityLoss(SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
     """ A model triggered and completed by system when a mother is in-eligible. """
 
-    maternal_eligibility = models.OneToOneField(MaternalEligibility, null=True)
+    maternal_eligibility = models.OneToOneField(MaternalEligibility)
 
     report_datetime = models.DateTimeField(
         verbose_name="Report Date and Time",
@@ -26,13 +26,15 @@ class MaternalEligibilityLoss(ExportTrackingFieldsMixin, BaseUuidModel):
         max_length=500,
         help_text='Gets reasons from Maternal Eligibility.ineligibility')
 
-#     objects = MaternalEligibilityLossManager()
-    objects = models.Manager()
+    objects = MaternalEligibilityLossManager()
 
-#     history = AuditTrail()
+    history = SyncHistoricalRecords()
+
+    def __str__(self):
+        return "{0}".format(self.maternal_eligibility.eligibility_id)
 
     def natural_key(self):
-        return (self.maternal_eligibility.natural_key(), self.report_datetime, )
+        return self.maternal_eligibility.natural_key()
 
     def ineligibility(self):
         return self.reason_ineligible or []

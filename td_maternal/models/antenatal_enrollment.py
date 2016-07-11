@@ -68,6 +68,9 @@ class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, OffStudyMixin, Appoin
     def save(self, *args, **kwargs):
         super(AntenatalEnrollment, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return "{0}".format(self.registered_subject.subject_identifier)
+
     def natural_key(self):
         return self.registered_subject.natural_key()
     natural_key.dependencies = ['edc_registration.registeredsubject']
