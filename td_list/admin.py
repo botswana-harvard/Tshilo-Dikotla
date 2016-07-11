@@ -1,7 +1,5 @@
 from django.contrib import admin
 
-from tshilo_dikotla.base_model_admin import BaseModelAdmin
-
 from .models import (
     ChronicConditions, Contraceptives, DiseasesAtEnrollment, HouseholdGoods,
     PriorArv, AutopsyInfoSource, Supplements, InfantVaccines,
@@ -9,101 +7,101 @@ from .models import (
     Malformations, MaternalDiagnoses, DeliveryComplications, MaternalHospitalization)
 
 
-class RationsAdmin(BaseModelAdmin):
+class RationsAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Rations, RationsAdmin)
 
 
-class FoodsAdmin(BaseModelAdmin):
+class FoodsAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Foods, FoodsAdmin)
 
 
-class ChronicConditionsAdmin(BaseModelAdmin):
+class ChronicConditionsAdmin(admin.ModelAdmin):
     pass
 admin.site.register(ChronicConditions, ChronicConditionsAdmin)
 
 
-class DeliveryComplicationsAdmin (BaseModelAdmin):
+class DeliveryComplicationsAdmin (admin.ModelAdmin):
     pass
 admin.site.register(DeliveryComplications, DeliveryComplicationsAdmin)
 
 
-class ContraceptivesAdmin(BaseModelAdmin):
+class ContraceptivesAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Contraceptives, ContraceptivesAdmin)
 
 
-class DiseasesAtEnrollmentAdmin(BaseModelAdmin):
+class DiseasesAtEnrollmentAdmin(admin.ModelAdmin):
     pass
 admin.site.register(DiseasesAtEnrollment, DiseasesAtEnrollmentAdmin)
 
 
-class HouseholdGoodsAdmin(BaseModelAdmin):
+class HouseholdGoodsAdmin(admin.ModelAdmin):
     pass
 admin.site.register(HouseholdGoods, HouseholdGoodsAdmin)
 
 
-class MaternalMedicationsAdmin(BaseModelAdmin):
+class MaternalMedicationsAdmin(admin.ModelAdmin):
     pass
 admin.site.register(MaternalMedications, MaternalMedicationsAdmin)
 
 
-class PriorArvAdmin(BaseModelAdmin):
+class PriorArvAdmin(admin.ModelAdmin):
     pass
 admin.site.register(PriorArv, PriorArvAdmin)
 
 
-class AutopsyInfoSourceAdmin(BaseModelAdmin):
+class AutopsyInfoSourceAdmin(admin.ModelAdmin):
     pass
 admin.site.register(AutopsyInfoSource, AutopsyInfoSourceAdmin)
 
 
-class SupplementsAdmin(BaseModelAdmin):
+class SupplementsAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Supplements, SupplementsAdmin)
 
 
-class InfantVaccinesAdmin(BaseModelAdmin):
+class InfantVaccinesAdmin(admin.ModelAdmin):
     pass
 admin.site.register(InfantVaccines, InfantVaccinesAdmin)
 
 
-class HealthCondAdmin(BaseModelAdmin):
+class HealthCondAdmin(admin.ModelAdmin):
     pass
 admin.site.register(HealthCond, HealthCondAdmin)
 
 
-class DelCompAdmin(BaseModelAdmin):
+class DelCompAdmin(admin.ModelAdmin):
     pass
 admin.site.register(DelComp, DelCompAdmin)
 
 
-class ObCompAdmin(BaseModelAdmin):
+class ObCompAdmin(admin.ModelAdmin):
     pass
 admin.site.register(ObComp, ObCompAdmin)
 
 
-class LabDelDxAdmin(BaseModelAdmin):
+class LabDelDxAdmin(admin.ModelAdmin):
     pass
 admin.site.register(LabDelDx, LabDelDxAdmin)
 
 
-class MaternalRelativesAdmin(BaseModelAdmin):
+class MaternalRelativesAdmin(admin.ModelAdmin):
     pass
 admin.site.register(MaternalRelatives, MaternalRelativesAdmin)
 
 
-class MalformationsAdmin(BaseModelAdmin):
+class MalformationsAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Malformations, MalformationsAdmin)
 
 
-class MaternalDiagnosesAdmin(BaseModelAdmin):
+class MaternalDiagnosesAdmin(admin.ModelAdmin):
     pass
 admin.site.register(MaternalDiagnoses, MaternalDiagnosesAdmin)
 
 
-class MaternalHospitalizationAdmin(BaseModelAdmin):
+class MaternalHospitalizationAdmin(admin.ModelAdmin):
     pass
 admin.site.register(MaternalHospitalization, MaternalHospitalizationAdmin)
