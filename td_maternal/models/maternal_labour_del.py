@@ -2,14 +2,13 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.apps import apps
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
 # from edc_code_lists.models import WcsDxAdult
 from edc_constants.choices import YES_NO, YES_NO_UNKNOWN, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE, YES, POS
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.models import CrfInlineModelMixin
 from edc_registration.models import RegisteredSubject
 from edc_consent.models import RequiresConsentMixin
@@ -18,14 +17,14 @@ from edc_appointment.models import AppointmentMixin
 from tshilo_dikotla.choices import DX_MATERNAL
 from td_list.models import DeliveryComplications
 
-# from ..managers import MaternalLabDelDxTManager
+from ..managers import MaternalLabourDelManager
 from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION_REASON
 
 from .maternal_consent import MaternalConsent
 from .maternal_crf_model import MaternalCrfModel
 
 
-class MaternalLabourDel(RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
+class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
 
@@ -95,7 +94,6 @@ class MaternalLabourDel(RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
         choices=YES_NO_NA,
         null=True,
         blank=False,
-        # default=NOT_APPLICABLE,
         max_length=15,
         help_text=("If not 4 or more weeks then participant will go OFF STUDY."))
 
@@ -116,12 +114,20 @@ class MaternalLabourDel(RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
         blank=True,
         null=True)
 
-#     history = AuditTrail()
-    objects = models.Manager()
+    history = SyncHistoricalRecords()
+
+    objects = MaternalLabourDelManager()
 
     def save(self, *args, **kwargs):
         self.live_infants_to_register = 1
         super(MaternalLabourDel, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return "{0}".format(self.registered_subject.subject_identifier)
+
+    def natural_key(self):
+        return self.registered_subject.natural_key()
+    natural_key.dependencies = ['edc_registration.registeredsubject']
 
     def get_registration_datetime(self):
         return self.report_datetime

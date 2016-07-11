@@ -7,9 +7,9 @@ from edc_consent.models import RequiresConsentMixin, BaseSpecimenConsent
 from edc_consent.models.fields import SampleCollectionFieldsMixin, VulnerabilityFieldsMixin
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_registration.models import RegisteredSubject
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
-#from ..managers import SpecimenConsentManager
+from ..managers import SpecimenConsentManager
 
 from .maternal_consent import MaternalConsent
 
@@ -23,12 +23,11 @@ class SpecimenConsent(BaseSpecimenConsent, SampleCollectionFieldsMixin, Requires
 
     registered_subject = models.OneToOneField(RegisteredSubject, null=True)
 
-    #objects = SpecimenConsentManager()
-    objects = models.Manager()
+    objects = SpecimenConsentManager()
 
-    #history = AuditTrail()
+    history = SyncHistoricalRecords()
 
-    def __unicode__(self):
+    def __str__(self):
         return "{0}".format(self.registered_subject.subject_identifier)
 
     def natural_key(self):
