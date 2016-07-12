@@ -698,7 +698,7 @@ ARV_STATUS_WITH_NEVER = (
     (NO_MODIFICATIONS, '1. No modifications made since the last attended scheduled visit or today'),
     (START, '2. Starting today or has started since last attended scheduled visit'),
     ('discontinued', '3. Permanently discontinued at or before the last attended scheduled visit'),
-    ('never started', '4. Never started'),
+    ('never_started', '4. Never started'),
     ('modified', '5. Change in at least one medication since the last attended scheduled visit or today'),
     (NOT_APPLICABLE, 'Not applicable'),
 )

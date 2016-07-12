@@ -120,8 +120,8 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            # TOT: Add InfantNvpAzt
-            CrfTuple(50, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL))}
+            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL))}
     visit_definitions['2200'] = {
         'title': 'Infant 2 Month Visit',
         'time_point': 20,
@@ -142,8 +142,8 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfuimmunizations', REQUIRED, NOT_ADDITIONAL),
-            # TOT: Add InfantNvpAzt
-            CrfTuple(50, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL))}
+            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL))}
 
     visit_definitions['2600'] = {
         'title': 'Infant 6 Month Visit',
@@ -164,9 +164,9 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            # TODO: Add InfantNvpAzt
-            CrfTuple(50, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
+            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(70, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
 
     visit_definitions['3200'] = {
         'title': 'Infant 12 Month Visit',
@@ -187,9 +187,9 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            # TOT: Add InfantNvpAzt
-            CrfTuple(50, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
+            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(70, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
 
     visit_definitions['3800'] = {
         'title': 'Infant 18 Month Visit',
@@ -210,9 +210,9 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            # TOT: Add InfantNvpAzt
-            CrfTuple(50, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
+            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(70, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
 
     visit_definitions['3200'] = {
         'title': 'Infant 24 Month Visit',
@@ -233,9 +233,9 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            # TOT: Add InfantNvpAzt
-            CrfTuple(50, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
+            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(70, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
 
     visit_definitions['3200'] = {
         'title': 'Infant 30 Month Visit',
@@ -256,9 +256,9 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            # TOT: Add InfantNvpAzt
-            CrfTuple(50, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
+            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(70, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
 
     visit_definitions['3200'] = {
         'title': 'Infant 36 Month Visit',
@@ -279,8 +279,8 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            # TOT: Add InfantNvpAzt
-            CrfTuple(50, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
+            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(70, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
 
 site_visit_schedules.register(InfantBirthVisitSchedule)
