@@ -92,100 +92,100 @@ class TestInfantBirthExam(BaseTestCase):
             'other_exam_info': 'NA',}
 
     def test_validate_general_activity1(self):
-        self.data['general_activity'] = 'ABNORMAL'
-        self.data['abnormal_activity'] = ''
-        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['general_activity'] = 'ABNORMAL'
+        self.options['abnormal_activity'] = ''
+        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(self.infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'If abnormal, please specify.', errors)
 
     def test_validate_general_activity2(self):
-        self.data['general_activity'] = 'NORMAL'
-        self.data['abnormal_activity'] = 'looks sideways'
-        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['general_activity'] = 'NORMAL'
+        self.options['abnormal_activity'] = 'looks sideways'
+        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(self.infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'You indicated that there was NO abnormality in general activity', errors)
 
     def test_validate_heent_exam1(self):
-        self.data['heent_exam'] = YES
-        self.data['heent_no_other'] = 'HEENT problems'
-        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['heent_exam'] = YES
+        self.options['heent_no_other'] = 'HEENT problems'
+        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(self.infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'If HEENT Exam is normal, Do not answer the following Question (Q7).', errors)
 
     def test_validate_heent_exam2(self):
-        self.data['heent_exam'] = NO
-        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['heent_exam'] = NO
+        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(self.infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'Provide answer to Q7.', errors)
 
     def test_validate_resp_exam1(self):
-        self.data['resp_exam'] = YES
-        self.data['resp_exam_other'] = 'Asthma'
-        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['resp_exam'] = YES
+        self.options['resp_exam_other'] = 'Asthma'
+        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(self.infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'If Respiratory Exam is normal, Do not answer the following Question (Q9).', errors)
 
     def test_validate_resp_exam2(self):
-        self.data['resp_exam'] = NO
-        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['resp_exam'] = NO
+        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(self.infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'Provide answer to Q9.', errors)
 
     def test_validate_cardiac_exam1(self):
-        self.data['cardiac_exam'] = YES
-        self.data['cardiac_exam_other'] = 'Palpitations'
-        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['cardiac_exam'] = YES
+        self.options['cardiac_exam_other'] = 'Palpitations'
+        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(self.infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'If Cardiac Exam is normal, Do not answer the following Question (Q11).', errors)
 
     def test_validate_cardiac_exam2(self):
-        self.data['cardiac_exam'] = NO
-        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['cardiac_exam'] = NO
+        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(self.infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'Provide answer to Q11.', errors)
 
     def test_validate_report_datetime_invalid(self):
-        self.data['cardiac_exam'] = NO
-        self.data['report_datetime'] = datetime(2015, 11, 18, 8, 29, 44)
-        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['cardiac_exam'] = NO
+        self.options['report_datetime'] = datetime(2015, 11, 18, 8, 29, 44)
+        self.infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(self.infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'Report_Datetime CANNOT be before consent datetime', errors)
 
     def test_abdominal_exam_1(self):
-        self.data['abdominal_exam'] = NO
-        infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['abdominal_exam'] = NO
+        infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'Provide answer to Q13.', errors)
 
     def test_abdominal_exam_2(self):
-        self.data['abdominal_exam'] = YES
-        self.data['abdominal_exam_other'] = 'TOO BIG'
-        infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['abdominal_exam'] = YES
+        self.options['abdominal_exam_other'] = 'TOO BIG'
+        infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'If Abdominal Exam is normal', errors)
 
     def test_skin_exam_1(self):
-        self.data['skin_exam'] = NO
-        infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['skin_exam'] = NO
+        infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'Provide answer to Q15.', errors)
 
     def test_skin_exam_2(self):
-        self.data['skin_exam'] = YES
-        self.data['skin_exam_other'] = 'lesions'
-        infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['skin_exam'] = YES
+        self.options['skin_exam_other'] = 'lesions'
+        infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'If Skin Exam is normal', errors)
 
     def test_neuro_exam_1(self):
-        self.data['neurologic_exam'] = YES
-        self.data['neuro_exam_other'] = 'bipolar'
-        infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['neurologic_exam'] = YES
+        self.options['neuro_exam_other'] = 'bipolar'
+        infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'If Neurological Exam is normal', errors)
 
     def test_neuro_exam_2(self):
-        self.data['neurologic_exam'] = NO
-        infant_birth_record_arv_form = InfantBirthExamForm(data=self.data)
+        self.options['neurologic_exam'] = NO
+        infant_birth_record_arv_form = InfantBirthExamForm(data=self.options)
         errors = ''.join(infant_birth_record_arv_form.errors.get('__all__'))
         self.assertIn(u'Provide answer to Q19.', errors)
