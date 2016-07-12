@@ -16,7 +16,7 @@ from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalE
                                          MaternalConsentFactory, AntenatalEnrollmentFactory,
                                          AntenatalVisitMembershipFactory, MaternalLabourDelFactory,
                                          MaternalVisitFactory)
-from td_infant.forms import InfantBirthDataForm
+from td_infant.forms import InfantBirthExamForm
 from .factories import InfantBirthFactory, InfantVisitFactory
 
 
