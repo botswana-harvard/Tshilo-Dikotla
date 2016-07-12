@@ -1,2 +1,4 @@
 from .infant_birth_factory import InfantBirthFactory
 from .infant_visit_factory import InfantVisitFactory
+from .infant_arv_proph_factory import InfantArvProphFactory
+from .infant_birth_arv_factory import InfantBirthArvFactory

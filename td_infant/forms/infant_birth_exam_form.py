@@ -13,14 +13,14 @@ class InfantBirthExamForm(BaseInfantModelForm):
 
     def clean(self):
         cleaned_data = super(InfantBirthExamForm, self).clean()
-#         self.validate_report_datetime(cleaned_data, 'report_datetime')
-#         self.validate_general_activity(cleaned_data)
-#         self.validate_heent_exam(cleaned_data)
-#         self.validate_resp_exam(cleaned_data)
-#         self.validate_cardiac_exam(cleaned_data)
-#         self.validate_abdominal_exam(cleaned_data)
-#         self.validate_skin_exam(cleaned_data)
-#         self.validate_neuro_exam(cleaned_data)
+        self.validate_report_datetime(cleaned_data, 'report_datetime')
+        self.validate_general_activity(cleaned_data)
+        self.validate_heent_exam(cleaned_data)
+        self.validate_resp_exam(cleaned_data)
+        self.validate_cardiac_exam(cleaned_data)
+        self.validate_abdominal_exam(cleaned_data)
+        self.validate_skin_exam(cleaned_data)
+        self.validate_neuro_exam(cleaned_data)
         return cleaned_data
 
     def validate_report_datetime(self, cleaned_data, field):

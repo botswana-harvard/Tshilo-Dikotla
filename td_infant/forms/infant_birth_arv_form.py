@@ -25,7 +25,7 @@ class InfantBirthArvForm(BaseInfantModelForm):
             if not cleaned_data.get('azt_dose_date'):
                 raise forms.ValidationError('Provide date of the first dose for AZT.')
             if cleaned_data.get('azt_additional_dose') == 'N/A':
-                raise forms.ValidationError('Do not select Not applicatable for Q6 if Q4 answer was yes.')
+                raise forms.ValidationError('Do not select Not applicable for Q6 if Q4 answer was yes.')
         else:
             if cleaned_data.get('azt_dose_date'):
                 raise forms.ValidationError('Participant indicated that AZT was NOT provided. '
