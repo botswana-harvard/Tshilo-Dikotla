@@ -1,7 +1,7 @@
 from .base_test_case import BaseTestCase
 
 from .factories import (MaternalEligibilityFactory, MaternalConsentFactory)
-from tshilo_dikotla.apps.td_maternal.forms import MaternalClinicalMeasurementsOneForm
+from td_maternal.forms import MaternalClinicalMeasurementsOneForm
 
 class TestMaternalClinicalMeasurementOne(BaseTestCase):
 
@@ -20,3 +20,15 @@ class TestMaternalClinicalMeasurementOne(BaseTestCase):
         form = MaternalClinicalMeasurementsOneForm(data=self.data)
         self.assertIn('Systolic blood pressure cannot be lower than the diastolic blood pressure.'
                 ' Please correct.',form.errors.get('__all__') )
+    
+    def test_systolic_not_blank(self):
+        """Test if the Systolic blood pressure field is not empty"""
+        self.data['systolic_bp'] = None
+        form = MaternalClinicalMeasurementsOneForm(data=self.data)
+        self.assertIn('Systolic Blood Pressure field cannot be blank. Please correct', form.errors.get('__all__'))
+
+    def test_diastolic_not_blank(self):
+        """Test if the Diastolic pressure field is blank"""
+        self.data['diastolic_bp'] = None
+        form = MaternalClinicalMeasurementsOneForm(data=self.data)
+        self.assertIn('Diastolic Blood Pressure field cannot be blank. Please correct', form.errors.get('__all__'))
