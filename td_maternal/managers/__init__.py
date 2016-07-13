@@ -5,4 +5,5 @@ from .specimen_consent_manager import SpecimenConsentManager
 from .antenatal_visit_membership_manager import AntenatalVisitMembershipManager
 from .maternal_lab_del_manager import MaternalLabourDelManager
 from .visit_crf_model_manager import VisitCrfModelManager
-
+from .rapid_test_result_manager import RapidTestResultManager
+from .maternal_randomization_manager import MaternalRandoManager

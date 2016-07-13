@@ -3,6 +3,9 @@ from django.db import models
 # from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import YES_NO, POS_NEG
 
+from edc_registration.models import RegisteredSubject
+
+from ..managers import RapidTestResultManager
 from .maternal_crf_model import MaternalCrfModel
 
 
@@ -28,14 +31,21 @@ class RapidTestResult(MaternalCrfModel):
         max_length=250,
         blank=True,
         null=True)
-    objects = models.Manager()
-#     history = AuditTrail()
+
+    # objects = RapidTestResultManager
 
     def get_result_datetime(self):
         return self.report_datetime
 
     def get_test_code(self):
         return 'HIV'
+
+    def __str__(self):
+        return "{0}".format(self.registered_subject.subject_identifier)
+
+    def natural_key(self):
+        return self.registered_subject.natural_key()
+    natural_key.dependencies = ['edc_registration.registeredsubject']
 
     class Meta:
         app_label = 'td_maternal'
