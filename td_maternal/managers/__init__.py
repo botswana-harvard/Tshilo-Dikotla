@@ -7,3 +7,5 @@ from .maternal_lab_del_manager import MaternalLabourDelManager
 from .visit_crf_model_manager import VisitCrfModelManager
 from .rapid_test_result_manager import RapidTestResultManager
 from .maternal_randomization_manager import MaternalRandoManager
+from .maternal_clinical_measurements_one_manager import MaternalClinicalMeasurementsOneManager
+from .maternal_clinical_measurements_two_manager import MaternalClinicalMeasurementsTwoManager
