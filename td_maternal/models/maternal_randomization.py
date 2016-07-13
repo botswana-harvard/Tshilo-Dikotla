@@ -9,6 +9,7 @@ from django_crypto_fields.fields import EncryptedCharField
 
 from td_maternal.classes import Randomization
 
+from ..managers import MaternalRandoManager
 from ..maternal_choices import DELIVERY_HEALTH_FACILITY
 
 from .maternal_crf_model import MaternalCrfModel
@@ -89,7 +90,7 @@ class MaternalRando (MaternalCrfModel):
         blank=True,
         null=True, )
 
-    objects = models.Manager()
+    objects = MaternalRandoManager()
 #     history = AuditTrail()
 
     def __str__(self):
@@ -101,6 +102,9 @@ class MaternalRando (MaternalCrfModel):
             (self.site, self.sid, self.rx, self.subject_identifier,
              self.randomization_datetime, self.initials) = randomization_helper.randomize()
         super(MaternalRando, self).save(*args, **kwargs)
+
+    def natural_key(self):
+        return (self.sid, self.registered_subject.natural_key())
 
     @property
     def antenatal_enrollment(self):
