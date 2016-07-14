@@ -9,7 +9,7 @@ from edc_visit_tracking.models import CrfInlineModelMixin
 
 from tshilo_dikotla.choices import ARV_INTERRUPTION_REASON, ARV_DRUG_LIST
 
-# from ..managers import MaternalArvManager
+from ..managers import MaternalArvManager, MaternalArvPregManager
 
 from .maternal_crf_model import MaternalCrfModel
 
@@ -43,7 +43,13 @@ class MaternalArvPreg(MaternalCrfModel):
         blank=True,
         null=True)
 
-#     history = AuditTrail()
+    objects = MaternalArvPregManager()
+
+    def __str__(self):
+        return "{0}".format(self.registered_subject.subject_identifier)
+
+    def natural_key(self):
+        return (self.report_datetime, self.registered_subject.natural_key())
 
     class Meta:
         app_label = 'td_maternal'
@@ -72,13 +78,10 @@ class MaternalArv(CrfInlineModelMixin, BaseUuidModel):
         null=True,
         blank=True)
 
-#     objects = MaternalArvManager()
-    objects = models.Manager()
-
-#     history = AuditTrail()
+    objects = MaternalArvManager()
 
     def natural_key(self):
-        return (self.arv_code, ) + self.maternal_arv_preg.natural_key()
+        return (self.arv_code, start_date) + self.maternal_arv_preg.natural_key()
 
     class Meta:
         app_label = 'td_maternal'

@@ -9,6 +9,7 @@ from td_list.models import PriorArv
 
 from ..maternal_choices import PRIOR_PREG_HAART_STATUS
 
+from ..managers import MaternalLifetimeArvHistoryManager
 from .maternal_crf_model import MaternalCrfModel
 
 
@@ -63,7 +64,13 @@ class MaternalLifetimeArvHistory(MaternalCrfModel):
         blank=True,
         null=True)
 
-#     history = AuditTrail()
+    objects = MaternalLifetimeArvHistoryManager()
+    
+    def __str__(self):
+        return "{0}".format(self.registered_subject.subject_identifier)
+
+    def natural_key(self):
+        return (self.report_datetime, self.registered_subject.natural_key())
 
     class Meta:
         app_label = 'td_maternal'
