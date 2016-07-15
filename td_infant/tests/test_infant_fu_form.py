@@ -16,7 +16,7 @@ from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalE
                                          MaternalConsentFactory, AntenatalEnrollmentFactory,
                                          AntenatalVisitMembershipFactory, MaternalLabourDelFactory,
                                          MaternalVisitFactory)
-from td_infant.forms import InfantBirthDataForm
+from td_infant.forms import InfantFuForm
 from .factories import InfantBirthFactory, InfantVisitFactory
 
 
@@ -82,7 +82,7 @@ class TestInfantFu(BaseTestCase):
     def test_infant_hospitalization(self):
         self.options['infant_birth'] = self.infant_visit.id
         self.options['was_hospitalized'] = YES
-        infant_fu = BaseTestInfantFuForm(data=self.options)
+        infant_fu = InfantFuForm(data=self.options)
         self.assertIn(
             'If infant was hospitalized, please provide # of days hospitalized',
             infant_fu.errors.get('__all__'))
@@ -91,7 +91,7 @@ class TestInfantFu(BaseTestCase):
         self.options['infant_birth'] = self.infant_visit.id
         self.options['was_hospitalized'] = YES
         self.options['days_hospitalized'] = 100
-        infant_fu = BaseTestInfantFuForm(data=self.options)
+        infant_fu = InfantFuForm(data=self.options)
         self.assertIn(
             'days hospitalized cannot be greater than 90days',
             infant_fu.errors.get('__all__'))
