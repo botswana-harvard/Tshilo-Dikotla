@@ -2,6 +2,7 @@ from django.test.testcases import TestCase
 
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
+from datetime import date
 
 from edc_constants.constants import (UNKNOWN,
     YES, NEG, NOT_APPLICABLE, POS, NO, SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
@@ -62,6 +63,7 @@ class BaseTestCase(TestCase):
                    'evidence_32wk_hiv_status': YES,
                    'will_get_arvs': NOT_APPLICABLE,
                    'rapid_test_done': YES,
+                   'rapid_test_date': date.today(),
                    'rapid_test_result': NEG,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
         return options
