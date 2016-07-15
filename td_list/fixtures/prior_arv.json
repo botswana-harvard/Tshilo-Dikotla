@@ -1,308 +1,308 @@
 [
 {
-    "pk": 1, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Other, specify", 
-        "short_name": "Other, specify", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 1, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "12e37889-4972-4710-876a-c281dbae0084", 
+	"fields": {
+		"name": "AZT", 
+		"short_name": "AZT", 
+		"display_index": 14, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:17:55.233", 
+		"modified": "2016-07-14T16:17:55.233", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 2, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "ATZ", 
-        "short_name": "ATZ", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 2, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "20b226b0-0542-48e9-9d43-fdfd71af54ad", 
+	"fields": {
+		"name": "DDI", 
+		"short_name": "DDI", 
+		"display_index": 6, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:15:22.807", 
+		"modified": "2016-07-14T16:15:22.807", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 3, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Raltegravir", 
-        "short_name": "Raltegravir", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 3, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "57e27d48-5af0-495d-ac67-cabc6026927a", 
+	"fields": {
+		"name": "Kaletra (or Aluvia)", 
+		"short_name": "Kaletra (or Aluvia)", 
+		"display_index": 3, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:14:27.482", 
+		"modified": "2016-07-14T16:14:27.482", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 4, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Kaletra (or Aluvia)", 
-        "short_name": "Kaletra (or Aluvia)", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 4, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "5e5fd0fd-c8e5-4bd8-96a3-7011a4d2f2a2", 
+	"fields": {
+		"name": "Other, specify", 
+		"short_name": "Other, specify", 
+		"display_index": 0, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:13:17.024", 
+		"modified": "2016-07-14T16:13:17.024", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 5, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Efavirenz (or Sustiva)", 
-        "short_name": "Efavirenz (or Sustiva)", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 5, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "6bdad19f-142a-42c0-b511-4dd05212057e", 
+	"fields": {
+		"name": "Nevirapine", 
+		"short_name": "Nevirapine", 
+		"display_index": 5, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:15:01.353", 
+		"modified": "2016-07-14T16:15:01.353", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 6, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Nevirapine", 
-        "short_name": "Nevirapine", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 6, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "6e8306c4-2a64-4868-8f59-f9acb148b69b", 
+	"fields": {
+		"name": "3TC", 
+		"short_name": "3TC", 
+		"display_index": 13, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:17:33.373", 
+		"modified": "2016-07-14T16:17:33.373", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 7, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "DDI", 
-        "short_name": "DDI", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 7, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "8199d106-8860-40b2-b6ac-99d5e800e443", 
+	"fields": {
+		"name": "Atripla", 
+		"short_name": "Atripla", 
+		"display_index": 16, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:18:37.480", 
+		"modified": "2016-07-14T16:18:37.480", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 8, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "D4T", 
-        "short_name": "D4T", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 8, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "828c29fc-a904-4b0d-9116-b78605d1f9eb", 
+	"fields": {
+		"name": "Tenofovir", 
+		"short_name": "Tenofovir", 
+		"display_index": 11, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:16:56.224", 
+		"modified": "2016-07-14T16:16:56.224", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 9, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Trizivir (AZT, 3TC, Abacavir)", 
-        "short_name": "Trizivir (AZT, 3TC, Abacavir)", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 9, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "939149bf-e3ef-41e5-b2ed-f70a2d12acdb", 
+	"fields": {
+		"name": "Truvada (Tenofovir, FTC)", 
+		"short_name": "Truvada (Tenofovir, FTC)", 
+		"display_index": 10, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:16:38.238", 
+		"modified": "2016-07-14T16:16:38.238", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 10, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Abacavir", 
-        "short_name": "Abacavir", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 10, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "9924214b-125a-446b-bcaa-597efba45755", 
+	"fields": {
+		"name": "ATZ", 
+		"short_name": "ATZ", 
+		"display_index": 1, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:13:36.303", 
+		"modified": "2016-07-14T16:13:36.303", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 11, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Truvada (Tenofovir, FTC)", 
-        "short_name": "Truvada (Tenofovir, FTC)", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 11, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "99bbd447-db85-4c3b-b089-08fb93ba7b92", 
+	"fields": {
+		"name": "D4T", 
+		"short_name": "D4T", 
+		"display_index": 7, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:15:36.950", 
+		"modified": "2016-07-14T16:15:36.950", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 12, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Tenofovir", 
-        "short_name": "Tenofovir", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 12, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "9a4470c2-fd83-4012-be2a-88a69c6ee31f", 
+	"fields": {
+		"name": "Raltegravir", 
+		"short_name": "Raltegravir", 
+		"display_index": 2, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:13:53.605", 
+		"modified": "2016-07-14T16:13:53.605", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 13, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Combivir (AZT,3TC)", 
-        "short_name": "Combivir (AZT,3TC)", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 13, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "9be45178-98d2-44d6-a0c5-95097be69506", 
+	"fields": {
+		"name": "Efavirenz (or Sustiva)", 
+		"short_name": "Efavirenz (or Sustiva)", 
+		"display_index": 4, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:14:45.464", 
+		"modified": "2016-07-14T16:14:45.464", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 14, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "3TC", 
-        "short_name": "3TC", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 14, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "d9619b9c-30b2-41bc-8f43-e2ffe0e7126e", 
+	"fields": {
+		"name": "Combivir (AZT,3TC)", 
+		"short_name": "Combivir (AZT,3TC)", 
+		"display_index": 12, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:17:15.146", 
+		"modified": "2016-07-14T16:17:15.146", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 15, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "AZT", 
-        "short_name": "AZT", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 15, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "e90f03c5-e4b8-4069-bd87-731f8bed6fa9", 
+	"fields": {
+		"name": "Trizivir (AZT, 3TC, Abacavir)", 
+		"short_name": "Trizivir (AZT, 3TC, Abacavir)", 
+		"display_index": 8, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:15:56.890", 
+		"modified": "2016-07-14T16:15:56.890", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 16, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "HAART, unknown", 
-        "short_name": "HAART, unknown", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 16, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.priorarv", 
+	"pk": "ee41a3e0-e83e-46a8-8865-183fcc7413ed", 
+	"fields": {
+		"name": "Abacavir", 
+		"short_name": "Abacavir", 
+		"display_index": 9, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:16:18.642", 
+		"modified": "2016-07-14T16:16:18.642", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
+}, 
 {
-    "pk": 17, 
-    "model": "td_list.priorarv", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Atripla", 
-        "short_name": "Atripla", 
-        "created": "2016-06-30T10:31:19", 
-        "user_modified": "", 
-        "modified": "2016-06-30T10:31:19", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 17, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
+	"model": "td_list.priorarv", 
+	"pk": "fdcbe84e-66a9-49de-96af-d647582a83a8", 
+	"fields": {
+		"name": "HAART, unknown", 
+		"short_name": "HAART, unknown", 
+		"display_index": 15, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T16:18:18.736", 
+		"modified": "2016-07-14T16:18:18.736", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-59-g9677123:develop:9677123cbacbd40a3024e5d390f6985a855d9125"
+	}
 }
 ]
