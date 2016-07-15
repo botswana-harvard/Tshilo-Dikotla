@@ -14,6 +14,7 @@ class MaternalPostPartumFuAdmin(BaseMaternalModelAdmin):
               'diagnoses',
               'diagnoses_other',
               'hospitalized',
+              'hospitalization_reason',
               'hospitalization_other',
               'hospitalization_days',
               'has_who_dx',
