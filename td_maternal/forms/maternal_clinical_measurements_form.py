@@ -9,6 +9,10 @@ class MaternalClinicalMeasurementsOneForm(BaseMaternalModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalClinicalMeasurementsOneForm, self).clean()
+        if not cleaned_data.get('systolic_bp'):
+            raise forms.ValidationError('Systolic Blood Pressure field cannot be blank. Please correct')
+        if not cleaned_data.get('diastolic_bp'):
+            raise forms.ValidationError('Diastolic Blood Pressure field cannot be blank. Please correct')
         if cleaned_data.get('systolic_bp') < cleaned_data.get('diastolic_bp'):
             raise forms.ValidationError(
                 'Systolic blood pressure cannot be lower than the diastolic blood pressure.'
