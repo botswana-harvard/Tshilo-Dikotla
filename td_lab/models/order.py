@@ -5,19 +5,18 @@ from django.utils import timezone
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
-# from ..managers import OrderManager
+from ..managers import OrderManager
 
 
 class Order(SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     order_datetime = models.DateTimeField(default=timezone.now)
 
-    #objects = OrderManager()
-    objects = models.Manager()
+    objects = OrderManager()
 
-    #history = AuditTrail()
+    history = SyncHistoricalRecords()
 
     def natural_key(self):
         return (self.order_datetime, )

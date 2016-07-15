@@ -6,7 +6,7 @@ from edc_constants.constants import NOT_APPLICABLE
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_lab.lab_packing.models import BasePackingListItem
 from edc_registration.models import RegisteredSubject
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from tshilo_dikotla.constants import INFANT
 
@@ -16,10 +16,10 @@ from .maternal_requisition import MaternalRequisition
 from .packing_list import PackingList
 from .panel import Panel
 
-#from ..managers import PackingListItemManager
+from ..managers import PackingListItemManager
 
 
-class PackingListItem(BasePackingListItem, ExportTrackingFieldsMixin, BaseUuidModel):
+class PackingListItem(BasePackingListItem, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     packing_list = models.ForeignKey(PackingList, null=True)
 
@@ -28,10 +28,9 @@ class PackingListItem(BasePackingListItem, ExportTrackingFieldsMixin, BaseUuidMo
         null=True,
         blank=True)
 
-    #objects = PackingListItemManager()
-    objects = models.Manager()
+    objects = PackingListItemManager()
 
-    #history = AuditTrail()
+    history = SyncHistoricalRecords()
 
     def get_subject_type(self):
         aliquot = Aliquot.objects.get(aliquot_identifier=self.item_reference)

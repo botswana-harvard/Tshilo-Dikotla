@@ -4,17 +4,16 @@ from django.db import models
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_lab.lab_packing.models import PackingListMixin
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
-#from ..managers import PackingListManager
+from ..managers import PackingListManager
 
 
-class PackingList(PackingListMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class PackingList(PackingListMixin, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
-    #objects = PackingListManager()
-    objects = models.Manager()
+    objects = PackingListManager()
 
-    #history = AuditTrail()
+    history = SyncHistoricalRecords()
 
 #     @property
 #     def item_models(self):

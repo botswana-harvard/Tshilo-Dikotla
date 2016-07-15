@@ -3,15 +3,15 @@ from django.db import models
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_lab.lab_profile.models import BaseProcessing
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
-#from ..managers import AliquotProcessingManager
+from ..managers import AliquotProcessingManager
 
 from .aliquot import Aliquot
 from .aliquot_profile import AliquotProfile
 
 
-class AliquotProcessing(BaseProcessing, ExportTrackingFieldsMixin, BaseUuidModel):
+class AliquotProcessing(BaseProcessing, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     aliquot = models.ForeignKey(
         Aliquot,
@@ -23,8 +23,9 @@ class AliquotProcessing(BaseProcessing, ExportTrackingFieldsMixin, BaseUuidModel
         verbose_name='Profile',
         help_text='Create aliquots according to this profile.')
 
-    #objects = AliquotProcessingManager()
-    objects = models.Manager()
+    objects = AliquotProcessingManager()
+
+    history = SyncHistoricalRecords()
 
     def natural_key(self):
         return self.aliquot.natural_key() + self.profile.natural_key()

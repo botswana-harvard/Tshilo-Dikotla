@@ -1,19 +1,18 @@
 from django.db import models
 from django.utils import timezone
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
-#from ..managers import OrderItemManager
+from ..managers import OrderItemManager
 
 from .aliquot import Aliquot
 from .order import Order
 from .panel import Panel
 
 
-class OrderItem(ExportTrackingFieldsMixin, BaseUuidModel):
+class OrderItem(SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     order = models.ForeignKey(Order)
 
@@ -40,10 +39,9 @@ class OrderItem(ExportTrackingFieldsMixin, BaseUuidModel):
         null=True,
         help_text="non-user helper field to simplify search and filtering")
 
-    #objects = OrderItemManager()
-    objects = models.Manager()
+    objects = OrderItemManager()
 
-    #history = AuditTrail()
+    history = SyncHistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.subject_identifier = self.aliquot.receive.registered_subject.subject_identifier

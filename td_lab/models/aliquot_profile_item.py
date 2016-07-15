@@ -3,7 +3,7 @@ from django.db import models
 from edc_base.model.models import BaseUuidModel
 from edc_lab.lab_profile.models import BaseProfileItem
 
-#from ..managers import ProfileItemManager
+from ..managers import ProfileItemManager
 
 from .aliquot_type import AliquotType
 from .aliquot_profile import AliquotProfile
@@ -15,8 +15,7 @@ class AliquotProfileItem(BaseProfileItem, BaseUuidModel):
 
     aliquot_type = models.ForeignKey(AliquotType)
 
-    #objects = ProfileItemManager()
-    objects = models.Manager()
+    objects = ProfileItemManager()
 
     def __unicode__(self):
         return str(self.aliquot_type)

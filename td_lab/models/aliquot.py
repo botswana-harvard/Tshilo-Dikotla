@@ -4,7 +4,7 @@ from django.db import models
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from lis.specimen.lab_aliquot.managers import AliquotManager
 from lis.specimen.lab_aliquot.models import BaseAliquot
 
@@ -13,7 +13,7 @@ from .aliquot_type import AliquotType
 from .receive import Receive
 
 
-class Aliquot(BaseAliquot, ExportTrackingFieldsMixin, BaseUuidModel):
+class Aliquot(BaseAliquot, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     receive = models.ForeignKey(
         Receive,
@@ -34,10 +34,9 @@ class Aliquot(BaseAliquot, ExportTrackingFieldsMixin, BaseUuidModel):
         verbose_name='rejected',
         default=False)
 
-    #objects = AliquotManager()
-    objects = models.Manager()
+    objects = AliquotManager()
 
-    #history = AuditTrail()
+    history = SyncHistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.subject_identifier = self.receive.registered_subject.subject_identifier

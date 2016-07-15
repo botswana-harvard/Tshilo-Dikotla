@@ -4,15 +4,15 @@ from django.db import models
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from lis.specimen.lab_result.models import BaseResult
 
-#from ..managers import ResultManager
+from ..managers import ResultManager
 
 from .order_item import OrderItem
 
 
-class Result(BaseResult, ExportTrackingFieldsMixin, BaseUuidModel):
+class Result(BaseResult, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
     """Stores result information in a one-to-many relation with :class:`ResultItem`."""
     order_item = models.ForeignKey(OrderItem)
 
@@ -23,10 +23,9 @@ class Result(BaseResult, ExportTrackingFieldsMixin, BaseUuidModel):
         db_index=True,
         help_text="non-user helper field to simplify search and filtering")
 
-    #objects = ResultManager()
-    objects = models.Manager()
+    objects = ResultManager()
 
-    #history = AuditTrail()
+    history = SyncHistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.subject_identifier = self.order.aliquot.receive.registered_subject.subject_identifier

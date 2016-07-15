@@ -5,14 +5,14 @@ from django.db import models
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_registration.models import RegisteredSubject
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from lis.specimen.lab_receive.models import BaseReceive
 
-#from ..managers import ReceiveManager
+from ..managers import ReceiveManager
 
 
-class Receive(BaseReceive, ExportTrackingFieldsMixin, BaseUuidModel):
+class Receive(BaseReceive, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     registered_subject = models.ForeignKey(RegisteredSubject, null=True, related_name='microbiome_receive')
 
@@ -20,10 +20,9 @@ class Receive(BaseReceive, ExportTrackingFieldsMixin, BaseUuidModel):
 
     subject_type = models.CharField(max_length=25, null=True, editable=False)
 
-    #objects = ReceiveManager()
-    objects = models.Manager()
+    objects = ReceiveManager()
 
-    #history = AuditTrail()
+    history = SyncHistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.subject_type = self.registered_subject.subject_type

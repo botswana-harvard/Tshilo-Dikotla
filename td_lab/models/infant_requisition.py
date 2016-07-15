@@ -4,7 +4,7 @@ from django.db import models
 from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_meta_data.managers import RequisitionMetaDataManager
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.models import CrfModelManager, CrfModelMixin
 from lab_requisition.models import RequisitionModelMixin
 
@@ -22,7 +22,7 @@ class InfantRequisitionManager(CrfModelManager):
         return self.get(requisition_identifier=requisition_identifier)
 
 
-class InfantRequisition(CrfModelMixin, RequisitionModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class InfantRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     aliquot_model = Aliquot
 
@@ -34,10 +34,9 @@ class InfantRequisition(CrfModelMixin, RequisitionModelMixin, ExportTrackingFiel
 
     panel = models.ForeignKey(Panel)
 
-    #objects = InfantRequisitionManager()
-    objects = models.Manager()
+    objects = InfantRequisitionManager()
 
-    #history = AuditTrail()
+    history = SyncHistoricalRecords()
 
     entry_meta_data_manager = RequisitionMetaDataManager(InfantVisit)
 

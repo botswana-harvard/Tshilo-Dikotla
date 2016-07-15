@@ -3,7 +3,7 @@ from django.db import models
 from edc_base.model.models import BaseUuidModel
 from edc_lab.lab_profile.models import BaseProfile
 
-#from ..managers import ProfileManager
+from ..managers import ProfileManager
 
 from .aliquot_type import AliquotType
 
@@ -14,8 +14,7 @@ class AliquotProfile(BaseProfile, BaseUuidModel):
         AliquotType,
         verbose_name='Source aliquot type')
 
-    #objects = ProfileManager()
-    objects = models.Manager()
+    objects = ProfileManager()
 
     def natural_key(self):
         return (self.name,)
