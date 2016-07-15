@@ -1,38 +1,37 @@
 [
 {
-    "pk": 1, 
-    "model": "td_list.maternalhospitalization", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Other, specify", 
-        "short_name": "Other, specify", 
-        "created": "2016-06-26T20:54:08.245", 
-        "user_modified": "", 
-        "modified": "2016-06-26T20:54:08.245", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 1, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.maternalhospitalization", 
+	"pk": "06d450b6-b30f-4231-aab0-4032342891fc", 
+	"fields": {"name": "Other, specify", 
+		"short_name": "Other, specify", 
+		"display_index": 0, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T15:49:27.034", 
+		"modified": "2016-07-14T15:49:27.034", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
 {
-    "pk": 2, 
-    "model": "td_list.maternalhospitalization", 
-    "fields": {
-        "hostname_created": "django", 
-        "name": "Pneumonia or other respiratory disease", 
-        "short_name": "Pneumonia or other respiratory disease", 
-        "created": "2016-06-26T20:54:08.245", 
-        "user_modified": "", 
-        "modified": "2016-06-26T20:54:08.245", 
-        "hostname_modified": "django", 
-        "version": "1.0", 
-        "display_index": 2, 
-        "user_created": "django", 
-        "field_name": null, 
-        "revision": ":develop:"
-    }
-},
+	"model": "td_list.maternalhospitalization", 
+	"pk": "9b9033a2-edd8-46bd-9f32-d239b4440ab0", 
+	"fields": {"name": "Pneumonia or other respiratory disease", 
+		"short_name": "Pneumonia or other respiratory disease", 
+		"display_index": 1, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T15:49:55.224", 
+		"modified": "2016-07-14T15:49:55.224", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}
 ]
