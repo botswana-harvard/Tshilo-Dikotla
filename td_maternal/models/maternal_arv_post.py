@@ -8,7 +8,7 @@ from edc_constants.constants import NOT_APPLICABLE
 # from edc_sync.models import SyncModelMixin
 from edc_visit_tracking.models.crf_inline_model_mixin import CrfInlineModelMixin
 
-# from ..managers import MaternalArvPostModManager
+from ..managers import MaternalArvPostModManager
 from ..maternal_choices import REASON_FOR_HAART, ARV_DRUG_LIST, DOSE_STATUS, ARV_MODIFICATION_REASON
 
 from .maternal_crf_model import MaternalCrfModel
@@ -44,8 +44,6 @@ class MaternalArvPost (MaternalCrfModel):
         max_length=25,
         choices=ARV_STATUS_WITH_NEVER,
         default=NOT_APPLICABLE,)
-
-#     history = AuditTrail()
 
     def visit(self):
         return self.maternal_visit
@@ -85,9 +83,10 @@ class MaternalArvPostMed(CrfInlineModelMixin, BaseUuidModel):
         choices=ARV_MODIFICATION_REASON,
         verbose_name="Reason for Modification")
 
-#     objects = MaternalArvPostModManager()
+    objects = MaternalArvPostModManager()
 
-#     history = AuditTrail()
+    def natural_key(self):
+        return (self.arv_code, self.modification_date) + self.maternal_arv_post.natural_key()
 
     class Meta:
         app_label = 'td_maternal'
@@ -119,9 +118,7 @@ class MaternalArvPostAdh(MaternalCrfModel):
         verbose_name="Comment",
         blank=True,
         null=True)
-
-#     history = AuditTrail()
-
+    
     class Meta:
         app_label = 'td_maternal'
         verbose_name = "Maternal ARVs Post: Adherence"

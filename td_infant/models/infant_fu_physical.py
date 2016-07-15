@@ -128,8 +128,6 @@ class InfantFuPhysical(InfantCrfModel):
         blank=True,
         null=True)
 
-#     history = AuditTrail()
-
     class Meta:
         app_label = 'td_infant'
         verbose_name = "Infant FollowUp: Physical"

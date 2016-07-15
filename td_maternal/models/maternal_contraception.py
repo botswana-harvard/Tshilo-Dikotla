@@ -154,7 +154,6 @@ class MaternalContraception(MaternalCrfModel):
         choices=YES_NO_DWTA,
         help_text='')
 
-#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'

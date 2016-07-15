@@ -2,7 +2,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 # from edc_base.audit_trail import AuditTrail
-
+from ..managers import MaternalClinicalMeasurementsManager
 from .maternal_crf_model import MaternalCrfModel
 
 
@@ -30,8 +30,10 @@ class BaseMaternalClinicalMeasurements(MaternalCrfModel):
         validators=[MinValueValidator(35), MaxValueValidator(130), ],
         help_text="in hg e.g. 80, should be between 35 and 130.")
 
-#     history = AuditTrail()
+    objects = MaternalClinicalMeasurementsManager()
+
+    def natural_key(self):
+        return self.registered_subject.natural_key()
 
     class Meta:
         abstract = True
-

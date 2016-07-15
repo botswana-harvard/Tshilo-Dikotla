@@ -22,8 +22,6 @@ class MaternalOffStudy(OffStudyModelMixin, CrfModelMixin,
 
     maternal_visit = models.OneToOneField(MaternalVisit)
 
-#     history = AuditTrail()
-
     entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
 
     class Meta:

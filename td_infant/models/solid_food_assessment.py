@@ -237,8 +237,6 @@ class SolidFoodAssessment(InfantCrfModel):
         help_text="",
     )
 
-#     history = AuditTrail()
-
     class Meta:
         app_label = 'td_infant'
         verbose_name = "Infant Solid Food Assessment"

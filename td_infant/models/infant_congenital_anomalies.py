@@ -13,11 +13,11 @@ from tshilo_dikotla.choices import (
     FEM_GENITAL_ANOMALY, MALE_GENITAL_ANOMALY, RENAL_ANOMALY, MUSCULOSKELETAL_ABNORMALITY,
     SKIN_ABNORMALITY, TRISOME_CHROSOMESOME_ABNORMALITY, OTHER_DEFECT)
 
-# from ..managers import (InfantInlineModelManager, InfantCnsManager, InfantFacialDefectManager,
-#                         InfantCleftDisorderManager, InfantMouthUpGiManager, InfantOtherAbnormalityItemsManager,
-#                         InfantCardioDisorderManager, InfantRespiratoryDefectManager, InfantLowerGiManager,
-#                         InfantFemaleGenitalManager, InfantMaleGenitalManager, InfantRenalManager,
-#                         InfantMusculoskeletalManager, InfantSkinManager, InfantTrisomiesManager)
+from ..managers import (InfantCnsManager, InfantFacialDefectManager,
+                        InfantCleftDisorderManager, InfantMouthUpGiManager, InfantOtherAbnormalityItemsManager,
+                        InfantCardioDisorderManager, InfantRespiratoryDefectManager, InfantLowerGiManager,
+                        InfantFemaleGenitalManager, InfantMaleGenitalManager, InfantRenalManager,
+                        InfantMusculoskeletalManager, InfantSkinManager, InfantTrisomiesManager)
 
 from .infant_crf_model import InfantCrfModel
 
@@ -25,8 +25,6 @@ from .infant_crf_model import InfantCrfModel
 class InfantCongenitalAnomalies(InfantCrfModel):
 
     """ A model completed by the user on the infant's congenital anomalies. """
-
-#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_infant'
@@ -37,7 +35,6 @@ class BaseCnsItem(CrfInlineModelMixin, BaseUuidModel):
 
     congenital_anomalies = models.ForeignKey(InfantCongenitalAnomalies)
 
-#     history = AuditTrail()
     class Meta:
         abstract = True
 
@@ -63,10 +60,7 @@ class InfantCns(BaseCnsItem):
         null=True,
     )
 
-    objects = models.Manager()
-#     objects = InfantCnsManager()
-
-#     history = AuditTrail()
+    objects = InfantCnsManager()
 
     def natural_key(self):
         return (self.cns, ) + self.congenital_anomalies.natural_key()
@@ -98,10 +92,7 @@ class InfantFacialDefect(BaseCnsItem):
         null=True,
     )
 
-    objects = models.Manager()
-#     objects = InfantFacialDefectManager()
-
-#     history = AuditTrail()
+    objects = InfantFacialDefectManager()
 
     def natural_key(self):
         return (self.facial_defect, ) + self.   congenital_anomalies.natural_key()
@@ -133,10 +124,7 @@ class InfantCleftDisorder(BaseCnsItem):
         null=True,
     )
 
-    objects = models.Manager()
-#     objects = InfantCleftDisorderManager()
-
-#     history = AuditTrail()
+    objects = InfantCleftDisorderManager()
 
     def natural_key(self):
         return (self.cleft_disorder, ) + self.congenital_anomalies.natural_key()
@@ -168,10 +156,7 @@ class InfantMouthUpGi(BaseCnsItem):
         null=True
     )
 
-    objects = models.Manager()
-#     objects = InfantMouthUpGiManager()
-
-#     history = AuditTrail()
+    objects = InfantMouthUpGiManager()
 
     def natural_key(self):
         return (self.mouth_up_gi, ) + self.congenital_anomalies.natural_key()
@@ -203,10 +188,7 @@ class InfantCardioDisorder(BaseCnsItem):
         null=True,
     )
 
-    objects = models.Manager()
-#     objects = InfantCardioDisorderManager()
-
-#     history = AuditTrail()
+    objects = InfantCardioDisorderManager()
 
     def natural_key(self):
         return (self.cardio_disorder, ) + self.congenital_anomalies.natural_key()
@@ -238,10 +220,8 @@ class InfantRespiratoryDefect(BaseCnsItem):
         null=True,
     )
 
-    objects = models.Manager()
-#     objects = InfantRespiratoryDefectManager()
+    objects = InfantRespiratoryDefectManager()
 
-#     history = AuditTrail()
 
     def natural_key(self):
         return (self.respiratory_defect, ) + self.congenital_anomalies.natural_key()
@@ -273,10 +253,7 @@ class InfantLowerGi(BaseCnsItem):
         null=True,
     )
 
-    objects = models.Manager()
-#     objects = InfantLowerGiManager()
-
-#     history = AuditTrail()
+    objects = InfantLowerGiManager()
 
     def natural_key(self):
         return (self.lower_gi, ) + self.congenital_anomalies.natural_key()
@@ -308,10 +285,7 @@ class InfantFemaleGenital(BaseCnsItem):
         null=True,
     )
 
-    objects = models.Manager()
-#     objects = InfantFemaleGenitalManager()
-
-#     history = AuditTrail()
+    objects = InfantFemaleGenitalManager()
 
     def natural_key(self):
         return (self.female_genital, ) + self.congenital_anomalies.natural_key()
@@ -342,10 +316,8 @@ class InfantMaleGenital(BaseCnsItem):
         blank=True,
         null=True,
     )
-    objects = models.Manager()
-#     objects = InfantMaleGenitalManager()
 
-#     history = AuditTrail()
+    objects = InfantMaleGenitalManager()
 
     def natural_key(self):
         return (self.male_genital, ) + self.congenital_anomalies.natural_key()
@@ -376,10 +348,8 @@ class InfantRenal(BaseCnsItem):
         blank=True,
         null=True,
     )
-    objects = models.Manager()
-#     objects = InfantRenalManager()
 
-#     history = AuditTrail()
+    objects = InfantRenalManager()
 
     def natural_key(self):
         return (self.renal, ) + self.congenital_anomalies.natural_key()
@@ -410,10 +380,8 @@ class InfantMusculoskeletal(BaseCnsItem):
         blank=True,
         null=True,
     )
-    objects = models.Manager()
-#     objects = InfantMusculoskeletalManager()
 
-#     history = AuditTrail()
+    objects = InfantMusculoskeletalManager()
 
     def natural_key(self):
         return (self.musculo_skeletal, ) + self.congenital_anomalies.natural_key()
@@ -447,9 +415,7 @@ class InfantSkin(BaseCnsItem):
         null=True,
     )
 
-#     objects = InfantSkinManager()
-
-#     history = AuditTrail()
+    objects = InfantSkinManager()
 
     def natural_key(self):
         return (self.skin, ) + self.congenital_anomalies.natural_key()
@@ -480,10 +446,8 @@ class InfantTrisomies(BaseCnsItem):
         blank=True,
         null=True,
     )
-    objects = models.Manager()
-#     objects = InfantTrisomiesManager()
 
-#     history = AuditTrail()
+    objects = InfantTrisomiesManager()
 
     def natural_key(self):
         return (self.trisomies, ) + self.congenital_anomalies.natural_key()
@@ -514,10 +478,8 @@ class InfantOtherAbnormalityItems(BaseCnsItem):
         blank=True,
         null=True,
     )
-    objects = models.Manager()
-#     objects = InfantOtherAbnormalityItemsManager()
 
-#     history = AuditTrail()
+    objects = InfantOtherAbnormalityItemsManager()
 
     def natural_key(self):
         return (self.other_abnormalities, ) + self.congenital_anomalies.natural_key()

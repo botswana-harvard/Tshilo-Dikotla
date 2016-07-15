@@ -17,7 +17,7 @@ from edc_appointment.models import AppointmentMixin
 from tshilo_dikotla.choices import DX_MATERNAL
 from td_list.models import DeliveryComplications
 
-from ..managers import MaternalLabourDelManager
+from ..managers import MaternalLabourDelManager, MaternalLabDelDxTManager
 from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION_REASON
 
 from .maternal_consent import MaternalConsent
@@ -204,7 +204,6 @@ class MaternalLabDelMed(MaternalCrfModel):
         blank=True,
         null=True)
 
-#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'
@@ -265,7 +264,6 @@ class MaternalHivInterimHx(MaternalCrfModel):
         blank=True,
         null=True)
 
-#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'
@@ -298,8 +296,6 @@ class MaternalLabDelDx(MaternalCrfModel):
         choices=YES_NO,
         help_text="If yes, Select all that apply in the table, only report grade 3 or 4 diagnoses")
 
-#     history = AuditTrail()
-
     class Meta:
         app_label = 'td_maternal'
         verbose_name = "Delivery: Preg Dx"
@@ -331,9 +327,10 @@ class MaternalLabDelDxT (CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
         max_length=3,
         choices=YES_NO)
 
-#     objects = MaternalLabDelDxTManager()
+    objects = MaternalLabDelDxTManager()
 
-#     history = AuditTrail()
+    def natural_key(self):
+        return (self.lab_del_dx, ) + self.maternal_lab_del_dx.natural_key()
 
     class Meta:
         app_label = 'td_maternal'

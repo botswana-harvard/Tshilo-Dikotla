@@ -1,7 +1,6 @@
 from django.db import models
 
 from edc_appointment.models import AppointmentMixin
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
 from edc_base.model.validators.date import date_not_future
@@ -9,14 +8,14 @@ from edc_constants.choices import GENDER_UNDETERMINED
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.models import OffStudyMixin
 from edc_registration.models import RegisteredSubject
-# from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from td_maternal.models import MaternalLabourDel
 
-# from ..managers import InfantBirthModelManager
+from ..managers import InfantBirthModelManager
 
 
-class InfantBirth(OffStudyMixin, AppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class InfantBirth(SyncModelMixin, OffStudyMixin, AppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
     """ A model completed by the user on the infant's birth. """
 
     off_study_model = ('td_infant', 'InfantOffStudy')
@@ -52,10 +51,9 @@ class InfantBirth(OffStudyMixin, AppointmentMixin, ExportTrackingFieldsMixin, Ba
         max_length=10,
         choices=GENDER_UNDETERMINED)
 
-    objects = models.Manager()
-#     objects = InfantBirthModelManager()
+    objects = InfantBirthModelManager()
 
-#     history = AuditTrail()
+    history = SyncHistoricalRecords()
 
     def natural_key(self):
         return self.maternal_labour_del.natural_key()

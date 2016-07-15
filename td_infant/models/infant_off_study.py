@@ -1,11 +1,10 @@
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_meta_data.managers import CrfMetaDataManager
 from edc_offstudy.models import OffStudyModelMixin
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.models import CrfModelMixin
 
 from .infant_visit import InfantVisit
@@ -19,7 +18,7 @@ class InfantOffStudy(CrfModelMixin, OffStudyModelMixin, ExportTrackingFieldsMixi
 
     entry_meta_data_manager = CrfMetaDataManager(InfantVisit)
 
-#     history = AuditTrail()
+    history = SyncHistoricalRecords()
 
     class Meta:
         app_label = 'td_infant'

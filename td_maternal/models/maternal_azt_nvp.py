@@ -23,12 +23,10 @@ class MaternalAztNvp(MaternalCrfModel):
 
     instructions_given = models.CharField(
         max_length=25,
-        verbose_name="Where instructions given to the mother on administration of the medications?",
+        verbose_name="Were instructions given to the mother on administration of the medications?",
         choices=YES_NO,
         help_text="",
     )
-
-#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'

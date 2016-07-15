@@ -51,7 +51,6 @@ class MaternalObstericalHistory(MaternalCrfModel):
         validators=[MinValueValidator(0), MaxValueValidator(20), ],
         help_text="")
 
-#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'

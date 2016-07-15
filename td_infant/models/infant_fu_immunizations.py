@@ -1,7 +1,6 @@
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
-# from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import YES_NO_UNKNOWN
 from edc_base.model.models import BaseUuidModel
 from edc_visit_tracking.models import CrfInlineModelMixin
@@ -10,7 +9,7 @@ from edc_sync.models import SyncModelMixin
 from tshilo_dikotla.choices import REASONS_VACCINES_MISSED
 
 from ..choices import IMMUNIZATIONS, INFANT_AGE_VACCINE_GIVEN
-# from ..managers import VaccinesMissedManager, VaccinesReceivedManager
+from ..managers import VaccinesMissedManager, VaccinesReceivedManager
 
 from .infant_crf_model import InfantCrfModel
 
@@ -30,8 +29,6 @@ class InfantFuImmunizations(InfantCrfModel):
         choices=YES_NO_UNKNOWN,
         verbose_name="Is the child missing any vaccinations?",
         help_text="")
-
-#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_infant'
@@ -61,10 +58,9 @@ class VaccinesReceived(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
         null=True,
         blank=True,
         max_length=35)
-    objects = models.Manager()
-#     objects = VaccinesReceivedManager()
 
-#     history = AuditTrail()
+    objects = VaccinesReceivedManager()
+
 
     def natural_key(self):
         return (self.received_vaccine_name, ) + self.infant_fu_immunizations.natural_key()
@@ -97,10 +93,8 @@ class VaccinesMissed(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
         blank=True)
 
     reason_missed_other = OtherCharField()
-    objects = models.Manager()
-#     objects = VaccinesMissedManager()
 
-#     history = AuditTrail()
+    objects = VaccinesMissedManager()
 
     def natural_key(self):
         return (self.missed_vaccine_name, ) + self.infant_fu_immunizations.natural_key()

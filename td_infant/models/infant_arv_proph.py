@@ -10,7 +10,7 @@ from edc_base.model.models import BaseUuidModel
 from tshilo_dikotla.choices import ARV_STATUS_WITH_NEVER
 
 from ..choices import ARV_MODIFICATION_REASON, ARV_DRUG_LIST, DOSE_STATUS
-# from ..managers import InfantArvProphModManager
+from ..managers import InfantArvProphModManager
 
 from .infant_crf_model import InfantCrfModel
 
@@ -32,8 +32,6 @@ class InfantArvProph(InfantCrfModel):
         default=NOT_APPLICABLE,
         choices=ARV_STATUS_WITH_NEVER,
         help_text="referring to prophylaxis other than single dose NVP")
-
-#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_infant'
@@ -73,10 +71,8 @@ class InfantArvProphMod(CrfInlineModelMixin, BaseUuidModel):
         max_length=100,
         null=True,
         blank=True)
-    objects = models.Manager()
-#     objects = InfantArvProphModManager()
 
-#     history = AuditTrail()
+    objects = InfantArvProphModManager()
 
     def natural_key(self):
         return (self.arv_code, ) + self.infant_arv_proph.natural_key()

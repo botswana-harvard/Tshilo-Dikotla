@@ -125,7 +125,6 @@ class MaternalMedicalHistory(MaternalCrfModel):
         blank=True,
         null=True)
 
-#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'

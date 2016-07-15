@@ -13,8 +13,6 @@ from .diagnoses_mixin import DiagnosesMixin
 
 class MaternalDiagnoses(MaternalCrfModel, DiagnosesMixin):
 
-#     history = AuditTrail()
-
     class Meta:
         app_label = 'td_maternal'
         verbose_name = "Maternal Diagnoses"

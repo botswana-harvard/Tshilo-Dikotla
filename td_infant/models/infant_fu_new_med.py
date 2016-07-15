@@ -10,7 +10,7 @@ from edc_visit_tracking.models import CrfInlineModelMixin
 
 from tshilo_dikotla.choices import MEDICATIONS
 
-# from ..managers import InfantFuNewMedItemsManager
+from ..managers import InfantFuNewMedItemsManager
 
 from .infant_crf_model import InfantCrfModel
 
@@ -27,8 +27,6 @@ class InfantFuNewMed(InfantCrfModel):
         help_text="do not report if the same course was recorded at previous visit. "
                   "only report oral and intravenous meds",
     )
-
-#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_infant'
@@ -65,10 +63,8 @@ class InfantFuNewMedItems(CrfInlineModelMixin, BaseUuidModel):
         choices=DRUG_ROUTE,
         verbose_name="Drug route",
     )
-    objects = models.Manager()
-#     objects = InfantFuNewMedItemsManager()
 
-#     history = AuditTrail()
+    objects = InfantFuNewMedItemsManager()
 
     def natural_key(self):
         return (self.medication, ) + self.infant_fu_med.natural_key()

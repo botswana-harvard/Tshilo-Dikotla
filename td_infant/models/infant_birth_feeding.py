@@ -8,7 +8,7 @@ from edc_sync.models import SyncModelMixin
 from tshilo_dikotla.choices import FEEDING_CHOICES
 
 from ..choices import INFANT_VACCINATIONS
-# from ..managers import InfantVaccinesManager
+from ..managers import InfantVaccinesManager
 
 from .infant_crf_model import InfantCrfModel
 
@@ -29,8 +29,6 @@ class InfantBirthFeedingVaccine(InfantCrfModel):
         blank=True,
         null=True)
 
-#     history = AuditTrail()
-
     class Meta:
         app_label = 'td_infant'
         verbose_name = "Birth Feeding & Vaccination"
@@ -50,10 +48,7 @@ class InfantVaccines(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
         null=True,
         blank=True)
 
-    objects = models.Manager()
-#     objects = InfantVaccinesManager()
-
-#     history = AuditTrail()
+    objects = InfantVaccinesManager()
 
     def natural_key(self):
         return (self.vaccination, ) + self.infant_birth_feed_vaccine.natural_key()

@@ -67,8 +67,6 @@ class MaternalInterimIdcc(MaternalCrfModel):
         null=True)
 
 
-#     history = AuditTrail()
-
     class Meta:
         app_label = 'td_maternal'
         verbose_name = "Maternal Interim Idcc Data"

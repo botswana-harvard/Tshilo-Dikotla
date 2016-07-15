@@ -142,7 +142,6 @@ class MaternalDemographics(MaternalCrfModel):
         choices=HOUSE_TYPE,
         help_text="Indicate the primary type of housing used over the past 30 days",)
 
-#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'

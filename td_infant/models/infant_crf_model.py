@@ -1,18 +1,18 @@
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_meta_data.managers import CrfMetaDataManager
 from edc_offstudy.models import OffStudyMixin
-# from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.models import CrfModelMixin
 
+from ..managers import InfantVisitCrfManager
 from .infant_visit import InfantVisit
 
 
-class InfantCrfModel(
-        CrfModelMixin, OffStudyMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class InfantCrfModel(CrfModelMixin, SyncModelMixin, OffStudyMixin, ExportTrackingFieldsMixin,
+                    BaseUuidModel):
 
     """ A model completed by the user on the infant's scheduled visit. """
 
@@ -20,8 +20,9 @@ class InfantCrfModel(
 
     infant_visit = models.OneToOneField(InfantVisit)
 
-#     history = AuditTrail()
-    objects = models.Manager()
+    history = SyncHistoricalRecords()
+
+    objects = InfantVisitCrfManager()
     entry_meta_data_manager = CrfMetaDataManager(InfantVisit)
 
     def get_consenting_subject_identifier(self):

@@ -4,11 +4,10 @@ from django.db import models
 from edc_constants.choices import YES_NO
 from edc_base.model.models import BaseUuidModel
 from edc_visit_tracking.models import CrfInlineModelMixin
-# from edc_sync.models import SyncModelMixin
 
 from tshilo_dikotla.choices import DX_INFANT
 
-# from ..managers import InfantFuDxItemsManager
+from ..managers import InfantFuDxItemsManager
 
 from .infant_crf_model import InfantCrfModel
 
@@ -16,8 +15,6 @@ from .infant_crf_model import InfantCrfModel
 class InfantFuDx(InfantCrfModel):
 
     """ A model completed by the user on the infant's follow up dx. """
-
-#     history = AuditTrail()
 
     class Meta:
         app_label = 'td_infant'
@@ -50,9 +47,7 @@ class InfantFuDxItems(CrfInlineModelMixin, BaseUuidModel):
         choices=YES_NO,
         max_length=3)
 
-#     objects = InfantFuDxItemsManager()
-
-#     history = AuditTrail()
+    objects = InfantFuDxItemsManager()
 
     def natural_key(self):
         return (self.fu_dx, ) + self.infant_fu_dx.natural_key()
