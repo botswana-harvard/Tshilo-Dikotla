@@ -49,6 +49,10 @@ class MaternalPostPartumFuForm(BaseMaternalModelForm):
                 raise forms.ValidationError(
                     'Question7: Participant was hospitalized, reasons cannot be N/A')
 
+            if not cleaned_data.get('hospitalization_days'):
+                raise forms.ValidationError(
+                    'Question9: The mother was hospitalized, please give number of days hospitalized')
+
     def validate_hospitalized_no(self):
         cleaned_data = self.cleaned_data
         if cleaned_data.get('hospitalized') == NO:
