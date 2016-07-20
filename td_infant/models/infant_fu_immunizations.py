@@ -3,6 +3,7 @@ from django.db import models
 from edc_base.model.fields import OtherCharField
 from edc_constants.choices import YES_NO_UNKNOWN
 from edc_base.model.models import BaseUuidModel
+from edc_base.model.validators import datetime_not_future
 from edc_visit_tracking.models import CrfInlineModelMixin
 from edc_sync.models import SyncModelMixin
 
@@ -49,6 +50,8 @@ class VaccinesReceived(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
 
     date_given = models.DateField(
         verbose_name="Date Given",
+        validators=[
+            datetime_not_future, ],
         null=True,
         blank=True)
 

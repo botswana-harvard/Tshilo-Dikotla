@@ -2,7 +2,7 @@ from django import forms
 
 from edc_constants.constants import YES
 
-from ..models import InfantFuImmunizations, VaccinesReceived, VaccinesMissed
+from ..models import InfantFuImmunizations, VaccinesReceived, VaccinesMissed, InfantBirth
 
 from .base_infant_model_form import BaseInfantModelForm
 
@@ -60,7 +60,21 @@ class VaccinesReceivedForm(BaseInfantModelForm):
         self.validate_measles_vaccine()
         self.validate_pentavalent_vaccine()
         self.validate_vitamin_a_vaccine()
+        validate_date_not_before_birth()
         return cleaned_data
+
+    def get_infant_birth_date(self, infant_identifier):
+        try:
+            infant_birth = InfantBirth.objects.get(infant_identifier)
+            return infant_birth.dob
+        except:
+            pass
+
+    def validate_date_not_before_birth(self):
+        cleaned_data = self.cleaned_data
+        infant_identifier = cleaned_data.get('infant_visit').subject_identifier
+        if cleaned_data.get('date_given') < self.get_infant_birth_date(infant_identifier):
+            raise forms.ValidationError("Vaccine date cannot be greater than the date of birth")
 
     def validate_received_vaccine_fields(self):
         cleaned_data = self.cleaned_data
