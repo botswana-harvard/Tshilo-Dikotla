@@ -37,7 +37,7 @@ except TypeError:
 
 TRAVIS_POSTGRES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'td',
         'USER': 'travis',
         'HOST': '',
@@ -45,7 +45,7 @@ TRAVIS_POSTGRES = {
         'ATOMIC_REQUESTS': True,
     },
     'lab_api': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'td_lab',
         'USER': 'travis',
         'HOST': '',
@@ -53,7 +53,7 @@ TRAVIS_POSTGRES = {
         'ATOMIC_REQUESTS': True,
     },
     'test_server': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'td_test',
         'USER': 'travis',
         'HOST': '',

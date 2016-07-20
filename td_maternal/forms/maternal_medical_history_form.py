@@ -10,6 +10,8 @@ from ..models import MaternalMedicalHistory, AntenatalEnrollment, PostnatalEnrol
 
 from td_maternal.classes import MaternalStatusHelper
 
+from .many_to_many_validation import ManyToManyMixin
+
 
 class MaternalMedicalHistoryForm(BaseMaternalModelForm):
 
@@ -77,62 +79,50 @@ class MaternalMedicalHistoryForm(BaseMaternalModelForm):
                     "Question5: Mother has prior chronic illness, they should be listed")
             status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
             subject_status = status_helper.hiv_status
-            diagnoses_qs = cleaned_data.get('who').values_list('short_name', flat=True)
-            diagnoses_list = list(diagnoses_qs.all())
+
             if cleaned_data.get('who_diagnosis') == NOT_APPLICABLE:
-                if NOT_APPLICABLE not in diagnoses_list and subject_status == NEG:
+                if self.validate_not_applicable_not_there('who') and subject_status == NEG:
                     raise forms.ValidationError(
                         "Question5: Participant is HIV Negative, do not give a listing, rather give N/A")
-                if NOT_APPLICABLE in diagnoses_list and len(diagnoses_list) > 1:
+                if self.validate_not_applicable_and_other_options('who'):
                     raise forms.ValidationError(
                         "Question5: Participant is HIV Negative, do not give a listing, only give N/A")
             if cleaned_data.get('who_diagnosis') == YES:
-                if NOT_APPLICABLE in diagnoses_list and subject_status == POS:
+                if self.validate_not_applicable_in_there('who') and subject_status == POS:
                     raise forms.ValidationError(
                         'Question5: Participant indicated that they had WHO stage III and IV, list of diagnosis cannot be N/A')
 
             if cleaned_data.get('who_diagnosis') == NO:
-                if NOT_APPLICABLE not in diagnoses_list and subject_status == POS:
+                if self.validate_not_applicable_not_there('who') and subject_status == POS:
                     raise forms.ValidationError(
                         'Question5: The mother does not have prior who stage III and IV illnesses. Should provide N/A')
-                if NOT_APPLICABLE in diagnoses_list and len(diagnoses_list) > 1:
+                if self.validate_not_applicable_and_other_options('who'):
                     raise forms.ValidationError(
                         'Question5: The mother does not have prior who stage III and IV illnesses. Should only provide N/A')
 
         except AntenatalEnrollment.DoesNotExist:
                 pass
- 
+
     def validate_mother_father_chronic_illness_multiple_selection(self):
-        cleaned_data = self.cleaned_data
- 
-        if not cleaned_data.get('mother_chronic'):
+
+        if self.validate_many_to_many_not_blank('mother_chronic'):
             raise forms.ValidationError('Question6: The field for the chronic illnesses of the mother should not be left blank')
- 
-        chronic_qs = cleaned_data.get('mother_chronic').values_list('short_name', flat=True)
-        chronic_list = list(chronic_qs.all())
- 
-        if NOT_APPLICABLE in chronic_list and len(chronic_list) > 1:
+
+        if self.validate_not_applicable_and_other_options('mother_chronic'):
             raise forms.ValidationError('Question6: You cannot select options that have N/A in them')
- 
-        if not cleaned_data.get('father_chronic'):
+
+        if self.validate_many_to_many_not_blank('father_chronic'):
             raise forms.ValidationError('Question8: The field for the chronic illnesses of the father should not be left blank')
- 
-        chronic_qs_fa = cleaned_data.get('father_chronic').values_list('short_name', flat=True)
-        chronic_list_fa = list(chronic_qs_fa.all())
- 
-        if NOT_APPLICABLE in chronic_list_fa and len(chronic_list_fa) > 1:
+
+        if self.validate_not_applicable_and_other_options('father_chronic'):
             raise forms.ValidationError('Question8: You cannot select options that have N/A in them')
- 
+
     def validate_mother_medications_multiple_selections(self):
-        cleaned_data = self.cleaned_data
- 
-        if not cleaned_data.get('mother_medications'):
+
+        if self.validate_many_to_many_not_blank('mother_medications'):
             raise forms.ValidationError('Question10: The field for the mothers medications should not be left blank')
- 
-        medication_qs = cleaned_data.get('mother_medications').values_list('short_name', flat=True)
-        medication_list = list(medication_qs.all())
- 
-        if NOT_APPLICABLE in medication_list and len(medication_list) > 1:
+
+        if self.validate_not_applicable_and_other_options('mother_medications'):
             raise forms.ValidationError('Question10: You cannot select options that have N/A in them')
  
     def validate_positive_mother_seropositive_yes(self):
@@ -140,26 +130,26 @@ class MaternalMedicalHistoryForm(BaseMaternalModelForm):
         try:
             status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
             subject_status = status_helper.hiv_status
-  
+
             if subject_status == POS:
                 if cleaned_data.get('sero_posetive') == YES:
                     if not cleaned_data.get('date_hiv_diagnosis'):
                         raise forms.ValidationError(
                             "The Mother is Sero-Positive, the approximate date of diagnosis should be supplied")
-  
+
                     if cleaned_data.get('perinataly_infected') == NOT_APPLICABLE:
                         raise forms.ValidationError(
                             "The field for whether the mother is perinataly_infected should not be N/A")
-  
+
                     if cleaned_data.get('know_hiv_status') == NOT_APPLICABLE:
                         raise forms.ValidationError(
                             "The field for whether anyone knows the HIV status of the mother should not be N/A")
-  
+
                     if cleaned_data.get('lowest_cd4_known') == NOT_APPLICABLE:
                         raise forms.ValidationError(
                             "The Mother is HIV Positive, the field for whether the lowest CD4 count is known should"
                             " not be N/A")
-  
+
         except AntenatalEnrollment.DoesNotExist:
                 pass
   

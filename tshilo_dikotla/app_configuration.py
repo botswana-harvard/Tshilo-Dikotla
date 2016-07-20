@@ -168,4 +168,3 @@ class AppConfiguration(BaseAppConfiguration):
 #                      '^FO310,152^A0N,25,20^FD${drawn_datetime}^FS\n'
 #                      '^XZ')), True)]
 #     }
-

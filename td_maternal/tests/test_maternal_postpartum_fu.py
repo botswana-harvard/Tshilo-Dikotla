@@ -134,6 +134,14 @@ class TestMaternalPostPartumFu(BaseTestCase):
         self.assertIn(
             'Question7: Participant was hospitalized, reasons cannot be N/A', errors)
 
+    def test_hospitalization_yes_no_hospitalization_days(self):
+        """Check that the number of hospitalization days has been given provided that the mother was hospitalized"""
+        self.options['hospitalization_days'] = None
+        form = MaternalPostPartumFuForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn(
+            'Question9: The mother was hospitalized, please give number of days hospitalized', errors)
+
     def test_hospitalized_no(self):
         """Check if the field for hospitalization reason is none"""
         self.options['hospitalized'] = NO
