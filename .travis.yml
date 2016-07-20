@@ -39,6 +39,7 @@ install:
 
 before_script:
   #- flake8 tshilo-dikotla
+  - mkdir -p crypto_fields/test_keys
   - mysql -e 'create database td CHARACTER SET utf8;'
   - mysql -e 'create database td_lab CHARACTER SET utf8;'
 
