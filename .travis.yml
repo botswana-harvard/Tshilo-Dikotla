@@ -1,0 +1,49 @@
+language: python
+python:
+  - "3.5"
+
+env:
+  - DJANGO_VERSION=1.9
+
+addons:
+  apt_packages:
+     - swig
+     - libssl-dev
+     - libssl0.9.8
+     - python-m2crypto
+     - libcups2-dev
+     - unixodbc-dev
+     - python-mysqldb
+
+services:
+  - mysql
+
+before_install:
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
+    - sleep 3 # give xvfb some time to start
+
+virtualenv:
+  system_site_packages: true
+
+install:
+  - pip install --upgrade pip
+  - pip install -q Django==$DJANGO_VERSION
+  - pip install flake8
+  - pip install coveralls
+  #- pip install M2Crypto
+  #- pip install pyodbc
+  - pip install pycups
+  #- pip install mysql-python
+  - pip install -q -r requirements.txt
+
+before_script:
+  #- flake8 tshilo-dikotla
+  - mysql -e 'create database td CHARACTER SET utf8;'
+  - mysql -e 'create database td_lab CHARACTER SET utf8;'
+
+script: 
+  - coverage run --source=td_maternal,td_infant,td_lab manage.py test
+
+after_success:
+  - coveralls
