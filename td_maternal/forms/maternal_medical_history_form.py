@@ -10,8 +10,6 @@ from ..models import MaternalMedicalHistory, AntenatalEnrollment, PostnatalEnrol
 
 from td_maternal.classes import MaternalStatusHelper
 
-from .many_to_many_validation import ManyToManyMixin
-
 
 class MaternalMedicalHistoryForm(BaseMaternalModelForm):
 
