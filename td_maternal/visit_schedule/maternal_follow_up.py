@@ -22,7 +22,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
 
     visit_definitions = OrderedDict()
 
-    visit_definitions['1100M'] = {
+    visit_definitions['2000M'] = {
         'title': 'Delivery Visit',
         'time_point': 30,
         'base_interval': 10,
@@ -38,7 +38,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'requisitions': maternal_requisition_followup,
         'entries': maternal_birth_entries}
 
-    visit_definitions['1200M'] = {
+    visit_definitions['2010M'] = {
         'title': '1 Months Visit',
         'time_point': 50,
         'base_interval': 1,
@@ -54,7 +54,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup1_entries}
 
-    visit_definitions['1600M'] = {
+    visit_definitions['2020M'] = {
         'title': '2 Months Visit',
         'time_point': 110,
         'base_interval': 2,
@@ -70,7 +70,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup1_entries}
 
-    visit_definitions['2200M'] = {
+    visit_definitions['2060M'] = {
         'title': '6 Months Visit',
         'time_point': 170,
         'base_interval': 6,
@@ -86,7 +86,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup1_entries}
 
-    visit_definitions['2800M'] = {
+    visit_definitions['2120M'] = {
         'title': '12 Months Visit',
         'time_point': 230,
         'base_interval': 12,
@@ -102,7 +102,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup2_entries}
 
-    visit_definitions['2400M'] = {
+    visit_definitions['2180M'] = {
         'title': '18 Months Visit',
         'time_point': 290,
         'base_interval': 18,
@@ -118,7 +118,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup3_entries}
 
-    visit_definitions['3000M'] = {
+    visit_definitions['2240M'] = {
         'title': '24 Months Visit',
         'time_point': 350,
         'base_interval': 24,
@@ -134,7 +134,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup3_entries}
 
-    visit_definitions['3600M'] = {
+    visit_definitions['2300M'] = {
         'title': '30 Months Visit',
         'time_point': 410,
         'base_interval': 30,
@@ -150,7 +150,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup3_entries}
 
-    visit_definitions['3600M'] = {
+    visit_definitions['2360M'] = {
         'title': '36 Months Visit',
         'time_point': 410,
         'base_interval': 36,

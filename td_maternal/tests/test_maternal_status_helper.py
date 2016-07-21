@@ -33,16 +33,16 @@ class TestMaternalStatusHelper(BaseTestCase):
         MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=randomization.maternal_visit.appointment.registered_subject,
-                visit_definition__code='1100M'))
+                visit_definition__code='2000M'))
         MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=randomization.maternal_visit.appointment.registered_subject,
-                visit_definition__code='1200M'))
-        maternal_visit_1600M = MaternalVisitFactory(
+                visit_definition__code='2010M'))
+        maternal_visit_2020M = MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=randomization.maternal_visit.appointment.registered_subject,
-                visit_definition__code='1600M'))
-        status_helper = MaternalStatusHelper(maternal_visit_1600M)
+                visit_definition__code='2020M'))
+        status_helper = MaternalStatusHelper(maternal_visit_2020M)
         self.assertEqual(status_helper.hiv_status, POS)
 
     def test_pos_status_from_rapid_test(self):
@@ -56,23 +56,23 @@ class TestMaternalStatusHelper(BaseTestCase):
         MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1100M'))
-        maternal_visit_1200M = MaternalVisitFactory(
+                visit_definition__code='2000M'))
+        maternal_visit_2010M = MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1200M'))
-        status_helper = MaternalStatusHelper(maternal_visit_1200M)
+                visit_definition__code='2010M'))
+        status_helper = MaternalStatusHelper(maternal_visit_2010M)
         self.assertEqual(status_helper.hiv_status, NEG)
-        rapid_test = RapidTestResultFactory(maternal_visit=maternal_visit_1200M, result=POS)
+        rapid_test = RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result=POS)
         MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1600M'))
-        maternal_visit_2200M = MaternalVisitFactory(
+                visit_definition__code='2020M'))
+        maternal_visit_2060M = MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='2200M'))
-        status_helper = MaternalStatusHelper(maternal_visit_2200M)
+                visit_definition__code='2060M'))
+        status_helper = MaternalStatusHelper(maternal_visit_2060M)
         self.assertEqual(status_helper.hiv_status, POS)
 
     def test_neg_status_from_enrollment(self):
@@ -86,16 +86,16 @@ class TestMaternalStatusHelper(BaseTestCase):
         MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1100M'))
+                visit_definition__code='2000M'))
         MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1200M'))
-        maternal_visit_1600M = MaternalVisitFactory(
+                visit_definition__code='2010M'))
+        maternal_visit_2020M = MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1600M'))
-        status_helper = MaternalStatusHelper(maternal_visit_1600M)
+                visit_definition__code='2020M'))
+        status_helper = MaternalStatusHelper(maternal_visit_2020M)
         self.assertEqual(status_helper.hiv_status, NEG)
 
     def test_neg_status_from_rapid_test(self):
@@ -109,21 +109,21 @@ class TestMaternalStatusHelper(BaseTestCase):
         MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1100M'))
-        maternal_visit_1200M = MaternalVisitFactory(
+                visit_definition__code='2000M'))
+        maternal_visit_2010M = MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1200M'))
-        status_helper = MaternalStatusHelper(maternal_visit_1200M)
+                visit_definition__code='2010M'))
+        status_helper = MaternalStatusHelper(maternal_visit_2010M)
         self.assertEqual(status_helper.hiv_status, NEG)
-        rapid_test = RapidTestResultFactory(maternal_visit=maternal_visit_1200M, result=NEG)
+        rapid_test = RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result=NEG)
         # Visit within 3months of rapid test.
-        maternal_visit_1600M = MaternalVisitFactory(
+        maternal_visit_2020M = MaternalVisitFactory(
             report_datetime=rapid_test.result_date + relativedelta(months=1),
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1600M'))
-        status_helper = MaternalStatusHelper(maternal_visit_1600M)
+                visit_definition__code='2020M'))
+        status_helper = MaternalStatusHelper(maternal_visit_2020M)
         self.assertEqual(status_helper.hiv_status, NEG)
 
     def test_unkown_status(self):
@@ -137,21 +137,21 @@ class TestMaternalStatusHelper(BaseTestCase):
         MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1100M'))
-        maternal_visit_1200M = MaternalVisitFactory(
+                visit_definition__code='2000M'))
+        maternal_visit_2010M = MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1200M'))
-        status_helper = MaternalStatusHelper(maternal_visit_1200M)
+                visit_definition__code='2010M'))
+        status_helper = MaternalStatusHelper(maternal_visit_2010M)
         self.assertEqual(status_helper.hiv_status, NEG)
-        rapid_test = RapidTestResultFactory(maternal_visit=maternal_visit_1200M, result=NEG)
+        rapid_test = RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result=NEG)
         # Visit within 3months of rapid test.
-        maternal_visit_1600M = MaternalVisitFactory(
+        maternal_visit_2020M = MaternalVisitFactory(
             report_datetime=rapid_test.result_date + relativedelta(months=4),
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1600M'))
-        status_helper = MaternalStatusHelper(maternal_visit_1600M)
+                visit_definition__code='2020M'))
+        status_helper = MaternalStatusHelper(maternal_visit_2020M)
         self.assertEqual(status_helper.hiv_status, UNK)
 
     def test_eligible_for_cd4(self):
@@ -167,14 +167,14 @@ class TestMaternalStatusHelper(BaseTestCase):
         MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1100M'))
-        maternal_visit_1200M = MaternalVisitFactory(
+                visit_definition__code='2000M'))
+        maternal_visit_2010M = MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
-                visit_definition__code='1200M'))
-        status_helper = MaternalStatusHelper(maternal_visit_1200M)
+                visit_definition__code='2010M'))
+        status_helper = MaternalStatusHelper(maternal_visit_2010M)
         self.assertEqual(len(status_helper.previous_visits), 5)
-        self.assertEqual(status_helper.previous_visits[0].appointment.visit_definition.code, '1200M')
+        self.assertEqual(status_helper.previous_visits[0].appointment.visit_definition.code, '2010M')
         self.assertEqual(status_helper.previous_visits[4].appointment.visit_definition.code, '1000M')
 
     def create_mother(self, status_options):
