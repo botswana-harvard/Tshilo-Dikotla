@@ -9,6 +9,7 @@ from edc_constants.choices import YES_NO
 from edc_locator.models import LocatorMixin
 from edc_meta_data.managers import CrfMetaDataManager
 
+from .potential_subject import PotentialSubject
 from .maternal_visit import MaternalVisit
 from .maternal_crf_model import MaternalCrfModel
 
@@ -19,6 +20,8 @@ class MaternalLocator(LocatorMixin, MaternalCrfModel):
     the details of the infant caretaker. """
 
     registered_subject = models.OneToOneField(RegisteredSubject, null=True)
+
+    potential_subject = models.ForeignKey(PotentialSubject, null=True)
 
     care_clinic = OtherCharField(
         verbose_name="Health clinic where your infant will receive their routine care ",
