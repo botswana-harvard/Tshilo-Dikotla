@@ -23,11 +23,9 @@ class ModelAdminStackedInlineMixin(ModelAdminAuditFieldsMixin, StackedInline):
     pass
 
 
-@admin.register(Call, site=call_manager_admin)
 class CallAdmin(BaseModelAdmin, ModelAdminCallMixin, SimpleHistoryAdmin):
     pass
-#     subject_app = 'td_maternal'
-#     subject_model = 'maternalconsent'
+admin.site.register(Call, CallAdmin)
 
 
 class LogEntryInlineAdmin(ModelAdminLogEntryInlineMixin, ModelAdminStackedInlineMixin):
@@ -35,13 +33,11 @@ class LogEntryInlineAdmin(ModelAdminLogEntryInlineMixin, ModelAdminStackedInline
     model = LogEntry
 
 
-@admin.register(Log, site=call_manager_admin)
 class LogAdmin(BaseModelAdmin, ModelAdminModelRedirectMixin, ModelAdminLogMixin, SimpleHistoryAdmin):
-
     inlines = [LogEntryInlineAdmin]
+admin.site.register(Log, LogAdmin)
 
 
-@admin.register(LogEntry, site=call_manager_admin)
 class LogEntryAdmin(BaseModelAdmin, ModelAdminLogEntryMixin, SimpleHistoryAdmin):
-
     pass
+admin.site.register(LogEntry, LogEntryAdmin)

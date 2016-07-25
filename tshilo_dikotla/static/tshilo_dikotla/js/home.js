@@ -6,24 +6,12 @@
             e.preventDefault();
             updateBadges();
         });
-        updateBadges();            
-        updatePillLinks();    
+        updateBadges();              
         updatePotentialSubjectLinks();
         updateVerifyConsentLinks();
-        callUrl = Urls['call_manager_admin:call_manager_call_changelist']();
+        callUrl =  $('#pill-call-manager').attr('href');
         updateCallLinks(callUrl);
     });
-    
-    function updatePillLinks() {
-        $('#pill-potential-subjects').click( function(e) {
-            e.preventDefault();
-            window.location.href=Urls['admin:td_maternal_potentialsubject_changelist']();
-            });
-        $('#pill-call-manager').click( function(e) {
-            e.preventDefault();
-            window.location.href=Urls['call_manager_admin:call_manager_call_changelist']();
-            });
-    }
     
     function updateCallLinks(callUrl) {
         $('#link-not-contacted').attr('href', callUrl+'?call_status__exact=NEW');
