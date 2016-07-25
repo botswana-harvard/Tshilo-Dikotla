@@ -52,23 +52,23 @@ class MaternalObstericalHistoryForm(BaseMaternalModelForm):
                                             'number of pregnancies lost at or after 24 weeks.'
                                             .format(cleaned_data.get('pregs_24wks_or_more')))
 
-        if cleaned_data.get('pregs_24wks_or_more') > cleaned_data.get('prev_pregnancies'):
-            raise forms.ValidationError(
-                'Number of pregnancies carried at least 24 weeks cannot be greater than previous pregnancies.')
-        if cleaned_data.get('lost_before_24wks') > cleaned_data.get('prev_pregnancies'):
-            raise forms.ValidationError(
-                'Number of pregnancies lost before 24 weeks cannot be greater than previous pregnancies.')
-        if (cleaned_data.get('lost_after_24wks') > cleaned_data.get('prev_pregnancies') or
-                cleaned_data.get('lost_after_24wks') > cleaned_data.get('pregs_24wks_or_more')):
-            raise forms.ValidationError(
-                'Number of pregnancies lost at or after 24 weeks gestation '
-                'cannot be greater than number of previous pregnancies or number of pregnancies at least 24 weeks.')
-        if (cleaned_data.get('pregs_24wks_or_more') +
-                cleaned_data.get('lost_before_24wks')) != cleaned_data.get('prev_pregnancies'):
-            raise forms.ValidationError(
-                'The sum of Number of pregnancies at least 24 weeks and '
-                'number of pregnancies lost before 24 weeks gestation. must be equal to '
-                'number of previous pregnancies for this participant.')
+#         if cleaned_data.get('pregs_24wks_or_more') > cleaned_data.get('prev_pregnancies'):
+#             raise forms.ValidationError(
+#                 'Number of pregnancies carried at least 24 weeks cannot be greater than previous pregnancies.')
+#         if cleaned_data.get('lost_before_24wks') > cleaned_data.get('prev_pregnancies'):
+#             raise forms.ValidationError(
+#                 'Number of pregnancies lost before 24 weeks cannot be greater than previous pregnancies.')
+#         if (cleaned_data.get('lost_after_24wks') > cleaned_data.get('prev_pregnancies') or
+#                 cleaned_data.get('lost_after_24wks') > cleaned_data.get('pregs_24wks_or_more')):
+#             raise forms.ValidationError(
+#                 'Number of pregnancies lost at or after 24 weeks gestation '
+#                 'cannot be greater than number of previous pregnancies or number of pregnancies at least 24 weeks.')
+#         if (cleaned_data.get('pregs_24wks_or_more') +
+#                 cleaned_data.get('lost_before_24wks')) != cleaned_data.get('prev_pregnancies'):
+#             raise forms.ValidationError(
+#                 'The sum of Number of pregnancies at least 24 weeks and '
+#                 'number of pregnancies lost before 24 weeks gestation. must be equal to '
+#                 'number of previous pregnancies for this participant.')
 
     class Meta:
         model = MaternalObstericalHistory
