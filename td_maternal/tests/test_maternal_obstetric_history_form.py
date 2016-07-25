@@ -125,38 +125,38 @@ class TestMaternalObstericalHistoryForm(BaseTestCase):
                       "number of living children,number of children died after 5 year CANNOT all be zero.",
                       mob_form.errors.get('__all__'))
 
-    def test_preg24wks_grt_prev_preg(self):
-        self.options['prev_pregnancies'] = 2
-        self.options['pregs_24wks_or_more'] = 3
-        mob_form = MaternalObstericalHistoryForm(data=self.options)
-        self.assertIn(
-            "Number of pregnancies carried at least 24 weeks cannot be greater than previous pregnancies.",
-            mob_form.errors.get('__all__'))
+#     def test_preg24wks_grt_prev_preg(self):
+#         self.options['prev_pregnancies'] = 2
+#         self.options['pregs_24wks_or_more'] = 3
+#         mob_form = MaternalObstericalHistoryForm(data=self.options)
+#         self.assertIn(
+#             "Number of pregnancies carried at least 24 weeks cannot be greater than previous pregnancies.",
+#             mob_form.errors.get('__all__'))
 
-    def test_lost_before_24wks_grt_prev_preg(self):
-        self.options['prev_pregnancies'] = 2
-        self.options['lost_before_24wks'] = 3
-        mob_form = MaternalObstericalHistoryForm(data=self.options)
-        self.assertIn(
-            "Number of pregnancies lost before 24 weeks cannot be greater than previous pregnancies.",
-            mob_form.errors.get('__all__'))
+#     def test_lost_before_24wks_grt_prev_preg(self):
+#         self.options['prev_pregnancies'] = 2
+#         self.options['lost_before_24wks'] = 3
+#         mob_form = MaternalObstericalHistoryForm(data=self.options)
+#         self.assertIn(
+#             "Number of pregnancies lost before 24 weeks cannot be greater than previous pregnancies.",
+#             mob_form.errors.get('__all__'))
 
-    def test_lost_after_24wks_grt_prev_preg(self):
-        self.options['prev_pregnancies'] = 2
-        self.options['pregs_24wks_or_more'] = 1
-        self.options['lost_before_24wks'] = 1
-        self.options['lost_after_24wks'] = 3
-        mob_form = MaternalObstericalHistoryForm(data=self.options)
-        self.assertIn("Number of pregnancies lost at or after 24 weeks gestation cannot be greater "
-                      "than number of previous pregnancies or number of pregnancies at least 24 weeks.",
-                      mob_form.errors.get('__all__'))
+#     def test_lost_after_24wks_grt_prev_preg(self):
+#         self.options['prev_pregnancies'] = 2
+#         self.options['pregs_24wks_or_more'] = 1
+#         self.options['lost_before_24wks'] = 1
+#         self.options['lost_after_24wks'] = 3
+#         mob_form = MaternalObstericalHistoryForm(data=self.options)
+#         self.assertIn("Number of pregnancies lost at or after 24 weeks gestation cannot be greater "
+#                       "than number of previous pregnancies or number of pregnancies at least 24 weeks.",
+#                       mob_form.errors.get('__all__'))
 
-    def test_pregs_24wks_or_more_plus_lost_before_24wks_grt_prev_pregnancies(self):
-        self.options['prev_pregnancies'] = 3
-        self.options['pregs_24wks_or_more'] = 1
-        self.options['lost_before_24wks'] = 1
-        self.options['lost_after_24wks'] = 1
-        mob_form = MaternalObstericalHistoryForm(data=self.options)
-        self.assertIn("The sum of Number of pregnancies at least 24 weeks and "
-                      "number of pregnancies lost before 24 weeks gestation. must be equal to "
-                      "number of previous pregnancies for this participant.", mob_form.errors.get('__all__'))
+#     def test_pregs_24wks_or_more_plus_lost_before_24wks_grt_prev_pregnancies(self):
+#         self.options['prev_pregnancies'] = 3
+#         self.options['pregs_24wks_or_more'] = 1
+#         self.options['lost_before_24wks'] = 1
+#         self.options['lost_after_24wks'] = 1
+#         mob_form = MaternalObstericalHistoryForm(data=self.options)
+#         self.assertIn("The sum of Number of pregnancies at least 24 weeks and "
+#                       "number of pregnancies lost before 24 weeks gestation. must be equal to "
+#                       "number of previous pregnancies for this participant.", mob_form.errors.get('__all__'))
