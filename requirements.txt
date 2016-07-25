@@ -1,17 +1,16 @@
 Django==1.9.5
-django-cors-headers==1.1.0
 django-crispy-forms==1.6.0
 -e git+https://github.com/erikvw/django-crypto-fields@67c46e89f9738b474452d22bc1f4fd6db228c6fb#egg=django_crypto_fields
 django-extensions==1.6.1
 django-js-reverse==0.7.2
 django-model-utils==2.5
--e git+https://github.com/erikvw/django-revision@522bb4e0cc41df969f0cba9485919ec1125cd157#egg=django_revision
+-e git+https://github.com/erikvw/django-revision@49969cab29fdef1b1b619923edc621ace6469323#egg=django_revision
 django-simple-history==1.8.1
 django-tastypie==0.13.3
 djangorestframework==3.3.3
 -e git+https://github.com/botswana-harvard/edc-appointment@a736be531cd650926184e57023adeb0545faa89f#egg=edc_appointment
 -e git+https://github.com/botswana-harvard/edc-base@c6f2c87a9a1090a97e7a7902fce288b25990ca50#egg=edc_base
--e git+https://github.com/botswana-harvard/edc-call-manager@12c6c10eaaa2be10fab12737c00aa8dc12dc5f0b#egg=edc_call_manager
+-e git+https://github.com/botswana-harvard/edc-call-manager@f70ed1fe60edecd683df2e2292471adf5ca3d20d#egg=edc_call_manager
 -e git+https://github.com/botswana-harvard/edc-code-lists@6419b356bc3d63a4d30686ce47c10222e790b484#egg=edc_code_lists
 -e git+https://github.com/botswana-harvard/edc-configuration@eb843e6b83e970c35bb4f6197deb3fd0cd0804d8#egg=edc_configuration
 -e git+https://github.com/botswana-harvard/edc-consent@0a5545f6c991d32f02e57947b2b283ef27fff2f5#egg=edc_consent
@@ -48,6 +47,7 @@ GitPython==2.0.5
 mccabe==0.4.0
 mysqlclient==1.3.7
 numpy==1.11.0
+pandas==0.18.1
 pbr==1.10.0
 pep8==1.7.0
 Pillow==3.2.0
