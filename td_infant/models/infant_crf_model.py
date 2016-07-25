@@ -25,6 +25,9 @@ class InfantCrfModel(CrfModelMixin, SyncModelMixin, OffStudyMixin, ExportTrackin
     objects = InfantVisitCrfManager()
     entry_meta_data_manager = CrfMetaDataManager(InfantVisit)
 
+    def __str__(self):
+        return "{0}".format(self.infant_visit.appointment.registered_subject.subject_identifier)
+
     def get_consenting_subject_identifier(self):
         """Returns mother's identifier."""
         return self.get_visit().appointment.registered_subject.relative_identifier
