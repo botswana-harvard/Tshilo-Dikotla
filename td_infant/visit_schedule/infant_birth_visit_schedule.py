@@ -120,7 +120,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(50, 'td_infant', 'infantarvproph', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL))}
     visit_definitions['2020'] = {
         'title': 'Infant 2 Month Visit',
@@ -142,7 +142,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfuimmunizations', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(50, 'td_infant', 'infantarvproph', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL))}
 
     visit_definitions['2060'] = {
@@ -164,7 +164,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(50, 'td_infant', 'infantarvproph', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(70, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
 
@@ -187,7 +187,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(50, 'td_infant', 'infantarvproph', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(70, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
 
@@ -210,7 +210,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(50, 'td_infant', 'infantarvproph', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(70, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
 
@@ -233,7 +233,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(50, 'td_infant', 'infantarvproph', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(70, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
 
@@ -256,7 +256,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(50, 'td_infant', 'infantarvproph', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(70, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
 
@@ -279,7 +279,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             CrfTuple(20, 'td_infant', 'infantfuphysical', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(30, 'td_infant', 'infantfudx', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(40, 'td_infant', 'infantfunewmed', REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(50, 'td_infant', 'InfantArvProph', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(50, 'td_infant', 'infantarvproph', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(70, 'td_infant', 'solidfoodassessment', REQUIRED, NOT_ADDITIONAL))}
 
