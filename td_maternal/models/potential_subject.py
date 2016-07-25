@@ -7,7 +7,12 @@ from edc_constants.choices import GENDER
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from django_crypto_fields.fields import IdentityField, FirstnameField, LastnameField, EncryptedCharField
-# from .managers import PotentialSubjectManager
+
+
+class PotentialSubjectManager(models.Manager):
+
+    def get_by_natural_key(self, subject_identifier):
+        return self.get(subject_identifier=subject_identifier)
 
 
 class PotentialSubject(SyncModelMixin, BaseUuidModel):
@@ -52,8 +57,7 @@ class PotentialSubject(SyncModelMixin, BaseUuidModel):
 
     history = SyncHistoricalRecords()
 
-    objects = models.Manager()
-#     objects = PotentialSubjectManager()
+    objects = PotentialSubjectManager()
 
     def natural_key(self):
         return (self.subject_identifier, )

@@ -3,7 +3,7 @@
 
 {% block extra-scripts %}
 {{ block.super }}
-<script type="text/javascript" charset="utf8" class="init" src="{% static "bcpp_interview/js/home.js" %}"></script>
+<script type="text/javascript" charset="utf8" class="init" src="{% static "tshilo_dikotla/js/home.js" %}"></script>
 {% endblock extra-scripts %} 
 
 {% block main %}
@@ -15,13 +15,13 @@
                 <span class="glyphicon glyphicon-home pull-right" aria-hidden="true"></span>
           </a></li>
           <li>
-            <a id="pill-verify-consent" class="dropdown-toggle" data-toggle="dropdown" href="#">Subjects
+            <a id="pill-subjects" class="dropdown-toggle" data-toggle="dropdown" href="#">Subjects
                 <span class="caret pull-right"></span>
             </a>
             <ul class="dropdown-menu">
               <li class="dropdown-header">Subjects</li>
-              <li><a id="link-verify-consent-subjects" href="{% url 'section_url' 'maternal' %}">Maternal</a></li>
-              <li><a id="link-verify-consent-nurses" href="{% url 'section_url' 'infant' %}">Infant</a></li>
+              <li><a id="link-maternal" href="{% url 'section_url' 'maternal' %}">Maternal</a></li>
+              <li><a id="link-infant" href="{% url 'section_url' 'infant' %}">Infant</a></li>
           </ul>
           </li>
           <li><a id="pill-call-manager" href="#">Call Subjects
@@ -31,16 +31,10 @@
                 <span id="bdg-potential-subjects" class="badge pull-right"></span>
                 <span class="fa fa-user fa-2x pull-right" aria-hidden="true"></span>
           </a></li>
-          <li>
-            <a id="pill-verify-consent" class="dropdown-toggle" data-toggle="dropdown" href="#">Consent Verification
-                <span class="caret pull-right"></span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="dropdown-header">Consent Verification</li>
-              <li><a id="link-verify-consent-subjects" href="#">Subjects</a></li>
-              <li><a id="link-verify-consent-nurses" href="#">Nurses</a></li>
-          </ul>
-          </li>
+          <li><a id="link-verify-consent-subjects" href="#">Consent Verification
+                <span id="bdg-consent-verified" class="badge pull-right"></span>
+          </a></li>
+       </ul>
     </div>
     <div id="div-home" class="col-md-4">
         <div class="panel panel-warning">
@@ -53,9 +47,6 @@
             <li role="presentation"><a id="link-not-contacted" href="#">Subjects never contacted<span id="bdg-not-contacted" class="badge pull-right"></span></a></li>
             <li role="presentation"><a id="link-contacted-retry" href="#">Subjects contacted, try again<span id="bdg-contacted-retry" class="badge pull-right"></span></a></li>
             <li role="presentation"><a id="link-not-consented" href="#">Subjects not consented<span id="bdg-not-consented" class="badge pull-right"></span></a></li>
-            <!--<li role="presentation"><a id="link-not-interviewed" href="#">Subjects not interviewed<span id="bdg-not-interviewed" class="badge pull-right"></span></a></li>
-            <li role="presentation"><a id="link-idi-not-verified" href="#">IDIs not verified<span id="bdg-idi-not-verified" class="badge pull-right"></span></a></li>
-            <li role="presentation"><a id="link-fgd-not-verified" href="#">FGDs not verified<span id="bdg-fgd-not-verified" class="badge pull-right"></span></a></li>-->
             </ul>
             </div>
         </div>

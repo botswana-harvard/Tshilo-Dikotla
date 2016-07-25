@@ -77,6 +77,7 @@ urlpatterns = [
     #'',
     url(r'', include('edc_base.urls')),
     url(r'^edc-consent/', include('edc_consent.urls')),
+    url(r'^edc-sync/', include('edc_sync.urls')),
     url(r'^call_manager/$', RedirectView.as_view(pattern_name='home_url')),
     url(r'^call_manager/', include('edc_call_manager.urls', 'call_manager')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

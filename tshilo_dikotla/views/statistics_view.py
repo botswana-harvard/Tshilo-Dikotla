@@ -15,7 +15,6 @@ from edc_sync.models.outgoing_transaction import OutgoingTransaction
 
 from call_manager.models import Call
 
-#from ..models import PotentialSubject, InterviewRecording, GroupDiscussionRecording
 from td_maternal.models import MaternalConsent, PotentialSubject
 
 tz = pytz.timezone(settings.TIME_ZONE)
@@ -31,16 +30,9 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
             'consented_today',
             'contacted_retry',
             'contacted_today',
-#             'idi_not_verified',
-            'interviewed_today',
-#             'fgd_not_verified',
-#             'fgd_complete',
-#             'fgd_complete_today',
-#             'idi_complete',
-#             'idi_complete_today',
             'not_consented',
             'not_contacted',
-            'not_interviewed',
+            'consent_verified',
             'pending_transactions',
             'potential_subjects']
 
@@ -110,12 +102,8 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
                 'potential_subjects': int(potential_subjects['id'].count()),
                 'not_contacted': int(potential_subjects.query('contacted == False')['contacted'].count()),
                 'not_consented': int(potential_subjects.query('consented == False')['consented'].count()),
-#                 'not_interviewed': int(potential_subjects.query('interviewed == False')['interviewed'].count()),
                 'consented': int(potential_subjects.query('consented == True')['consented'].count()),
-#                 'idi_complete': int(potential_subjects.query('idi == True')['idi'].count()),
-#                 'fgd_complete': int(potential_subjects.query('fgd == True')['fgd'].count()),
-#                 'idi_not_verified': InterviewRecording.objects.filter(verified=NO).count(),
-#                 'fgd_not_verified': GroupDiscussionRecording.objects.filter(verified=NO).count(),
+                'consent_verified': int(potential_subjects.query('consented == True')['consented'].count()),
             })
             d = date.today()
             local_date = tz.localize(datetime(d.year, d.month, d.day, 0, 0, 0))
@@ -123,11 +111,6 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
             response_data.update({
                 'contacted_today': int(potential_subjects.query('contacted == True')['contacted'].count()),
                 'consented_today': int(potential_subjects.query('consented == True')['consented'].count()),
-#                 'interviewed_today': int(potential_subjects.query('interviewed == True')['interviewed'].count()),
-#                 'idi_complete_today': InterviewRecording.objects.filter(
-#                     verified=YES, **self.modified_option).count(),
-#                 'fgd_complete_today': GroupDiscussionRecording.objects.filter(
-#                     verified=YES, **self.modified_option).count(),
             })
         future.set_result(self.verified_response_data(response_data))
 

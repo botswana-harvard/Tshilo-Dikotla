@@ -25,20 +25,9 @@ class ModelAdminStackedInlineMixin(ModelAdminAuditFieldsMixin, StackedInline):
 
 @admin.register(Call, site=call_manager_admin)
 class CallAdmin(BaseModelAdmin, ModelAdminCallMixin, SimpleHistoryAdmin):
-
-    subject_app = 'tshilo_dikotla'
-    subject_model = 'maternalconsent'
-
-#     list_display_pos = ((1, 'map_button'), )
-
-#     list_filter = ('potential_subject__category', 'potential_subject__sub_category', 'potential_subject__community')
-
-#     def map_button(self, obj):
-#         return self.button(
-#             'location_url',
-#             (obj.potential_subject.map_area, obj.potential_subject.subject_identifier, ),
-#             label='map')
-#     map_button.short_description = 'map'
+    pass
+#     subject_app = 'td_maternal'
+#     subject_model = 'maternalconsent'
 
 
 class LogEntryInlineAdmin(ModelAdminLogEntryInlineMixin, ModelAdminStackedInlineMixin):
@@ -48,16 +37,11 @@ class LogEntryInlineAdmin(ModelAdminLogEntryInlineMixin, ModelAdminStackedInline
 
 @admin.register(Log, site=call_manager_admin)
 class LogAdmin(BaseModelAdmin, ModelAdminModelRedirectMixin, ModelAdminLogMixin, SimpleHistoryAdmin):
-    pass
-    # inlines = [LogEntryInlineAdmin]
 
-#     list_filter = ('call__potential_subject__category', 'call__potential_subject__sub_category',
-#                    'call__potential_subject__community')
+    inlines = [LogEntryInlineAdmin]
 
 
 @admin.register(LogEntry, site=call_manager_admin)
 class LogEntryAdmin(BaseModelAdmin, ModelAdminLogEntryMixin, SimpleHistoryAdmin):
 
-#     list_filter = ('log__call__potential_subject__category', 'log__call__potential_subject__sub_category',
-#                    'log__call__potential_subject__community')
     pass
