@@ -136,7 +136,8 @@ if 'test' in sys.argv:
                          "td_lab": None,
                          "td_infant": None,
                          "td_maternal": None,
-                         "td_list": None}
+                         "td_list": None,
+                         "call_manager": None}
 
 
 MIDDLEWARE_CLASSES = (
