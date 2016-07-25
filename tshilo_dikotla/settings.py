@@ -80,7 +80,6 @@ INSTALLED_APPS = [
     'edc_appointment',
     'edc_base',
     'edc_configuration',
-    'edc_call_manager',
 #     'edc_consent',
     'edc_constants',
     'edc_content_type_map',
@@ -97,6 +96,8 @@ INSTALLED_APPS = [
     'edc_code_lists',
     'edc_visit_schedule',
     'edc_visit_tracking',
+    'edc_call_manager.apps.EdcCallManagerAppConfig',
+    'call_manager',
     'tshilo_dikotla.apps.DjangoCryptoFieldsAppConfig',
     'tshilo_dikotla.apps.ConsentAppConfig',
     'tshilo_dikotla.apps.EdcSyncAppConfig',
@@ -270,6 +271,8 @@ STATICFILES_FINDERS = (
 GIT_DIR = BASE_DIR.ancestor(1)
 
 STUDY_OPEN_DATETIME = timezone.datetime(2015, 10, 18, 0, 0, 0)
+
+APP_LABEL = 'tshilo_dikotla'
 
 SUBJECT_APP_LIST = ['maternal', 'infant']
 SUBJECT_TYPES = ['maternal', 'infant']

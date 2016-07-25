@@ -20,6 +20,7 @@ except AttributeError:
 
 class TshiloDikotlaConfig(AppConfig):
     name = 'tshilo_dikotla'
+    institution = 'Botswana Harvard AIDS Institute Partnership'
     verbose_name = 'Tshilo Dikotla'
 
 
