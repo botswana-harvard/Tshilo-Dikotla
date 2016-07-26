@@ -83,9 +83,5 @@ class PotentialSubject(SyncModelMixin, BaseUuidModel):
         return '{}. {}. {}'.format(
             name, self.get_category_display(), self.subject_identifier)
 
-    @property
-    def map_area(self):
-        return self.community.replace(' ', '_').lower()
-
     class Meta:
         app_label = 'td_maternal'

@@ -33,7 +33,7 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalV
 
 #     history = AuditTrail()
 
-    def __unicode__(self):
+    def __str__(self):
         return '{} {} {}'.format(self.appointment.registered_subject.subject_identifier,
                                  self.appointment.registered_subject.first_name,
                                  self.appointment.visit_definition.code)
