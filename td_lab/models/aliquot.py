@@ -34,6 +34,9 @@ class Aliquot(BaseAliquot, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
         verbose_name='rejected',
         default=False)
 
+    def __str__(self):
+        return self.aliquot_type.name
+
     objects = AliquotManager()
 
     history = SyncHistoricalRecords()
