@@ -31,6 +31,11 @@ class Result(BaseResult, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMode
         self.subject_identifier = self.order.aliquot.receive.registered_subject.subject_identifier
         super(Result, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return "{}: {}: order: {}".format(self.__class__._meta.model_name,
+                                          self.subject_identifier,
+                                          self.order_item.order_identifier)
+
     def panel(self):
         try:
             return str(self.order_item.panel.edc_name)

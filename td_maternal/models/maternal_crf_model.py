@@ -34,7 +34,8 @@ class MaternalCrfModel(SyncModelMixin, CrfModelMixin, ExportTrackingFieldsMixin,
     entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
 
     def __str__(self):
-        return "{0}".format(self.maternal_visit.appointment.registered_subject.subject_identifier)
+        return "{}: {}".format(self.__class__._meta.model_name,
+                               self.maternal_visit.appointment.registered_subject.subject_identifier)
 
     def natural_key(self):
         return self.maternal_visit.natural_key()

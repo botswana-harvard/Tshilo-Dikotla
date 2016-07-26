@@ -139,7 +139,7 @@ class EnrollmentMixin(models.Model):
         null=True,
         editable=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return "{0} {1}".format(
             self.registered_subject.subject_identifier,
             self.registered_subject.first_name)

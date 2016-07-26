@@ -59,7 +59,7 @@ class InfantBirth(SyncModelMixin, OffStudyMixin, AppointmentMixin, ExportTrackin
         return self.maternal_labour_del.natural_key()
     natural_key.dependencies = ['td_maternal.maternallabourdel', 'edc_registration.registered_subject']
 
-    def __unicode__(self):
+    def __str__(self):
         return "{} ({}) {}".format(self.first_name, self.initials, self.gender)
 
     def prepare_appointments(self, using):
