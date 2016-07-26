@@ -1,6 +1,6 @@
 from django import forms
 
-from edc_constants.constants import YES
+from edc_constants.constants import YES, NO
 
 from ..models import InfantFuImmunizations, VaccinesReceived, VaccinesMissed, InfantBirth
 
@@ -11,34 +11,7 @@ class InfantFuImmunizationsForm(BaseInfantModelForm):
 
     def clean(self):
         cleaned_data = super(InfantFuImmunizationsForm, self).clean()
-        self.validate_received_vaccine_table()
-        self.validate_missed_vaccine_table()
         return cleaned_data
-
-    def validate_received_vaccine_table(self):
-        cleaned_data = self.cleaned_data
-        vaccine_table = self.data.get('vaccinesreceived_set-0-received_vaccine_name')
-        if cleaned_data.get('vaccines_received') == YES:
-            if not vaccine_table:
-                raise forms.ValidationError("You mentioned that vaccines where received. Please"
-                                            " indicate which ones on the Received Vaccines table.")
-        else:
-            if vaccine_table:
-                raise forms.ValidationError('No vaccines received. Do not fill Received Vaccines'
-                                            ' table')
-
-    def validate_missed_vaccine_table(self):
-        cleaned_data = self.cleaned_data
-        missed_vaccine_table = self.data.get('vaccinesmissed_set-0-missed_vaccine_name')
-        if cleaned_data.get('vaccines_missed') == YES:
-            if not missed_vaccine_table:
-                raise forms.ValidationError("You mentioned that the child missed some vaccines."
-                                            " Please indicate which ones in the Missed Vaccines "
-                                            "table.")
-        else:
-            if missed_vaccine_table:
-                raise forms.ValidationError('No vaccines missed. Do not fill Missed Vaccines'
-                                            ' table.')
 
     class Meta:
         model = InfantFuImmunizations
@@ -49,6 +22,7 @@ class VaccinesReceivedForm(BaseInfantModelForm):
 
     def clean(self):
         cleaned_data = super(VaccinesReceivedForm, self).clean()
+        self.validate_received_vaccine_table()
         self.validate_received_vaccine_fields()
         self.validate_vaccination_at_birth()
         self.validate_hepatitis_vaccine()
@@ -60,21 +34,34 @@ class VaccinesReceivedForm(BaseInfantModelForm):
         self.validate_measles_vaccine()
         self.validate_pentavalent_vaccine()
         self.validate_vitamin_a_vaccine()
-        validate_date_not_before_birth()
+        self.validate_date_not_before_birth()
         return cleaned_data
 
+    def validate_received_vaccine_table(self):
+        cleaned_data = self.cleaned_data
+        if cleaned_data.get('infant_fu_immunizations').vaccines_received == YES:
+            if not cleaned_data.get('received_vaccine_name'):
+                raise forms.ValidationError("You mentioned that vaccines where received. Please"
+                                            " indicate which ones on the Received Vaccines table.")
+        else:
+            if(cleaned_data.get('received_vaccine_name') or cleaned_data.get('date_given') or
+               cleaned_data.get('infant_age')):
+                raise forms.ValidationError('No vaccines received. Do not fill Received Vaccines'
+                                            ' table')
+
     def get_infant_birth_date(self, infant_identifier):
-        try:
-            infant_birth = InfantBirth.objects.get(infant_identifier)
-            return infant_birth.dob
-        except:
-            pass
+            try:
+                infant_birth = InfantBirth.objects.get(registered_subject__subject_identifier=infant_identifier)
+                return infant_birth.dob
+            except Exception as e:
+                print(e)
 
     def validate_date_not_before_birth(self):
         cleaned_data = self.cleaned_data
-        infant_identifier = cleaned_data.get('infant_visit').subject_identifier
-        if cleaned_data.get('date_given') < self.get_infant_birth_date(infant_identifier):
-            raise forms.ValidationError("Vaccine date cannot be greater than the date of birth")
+        infant_identifier = cleaned_data.get('infant_fu_immunizations').infant_visit.subject_identifier
+        infant_birth_date = self.get_infant_birth_date(infant_identifier)
+        if cleaned_data.get('date_given') < infant_birth_date:
+            raise forms.ValidationError("Vaccine date cannot be before infant date of birth. ")
 
     def validate_received_vaccine_fields(self):
         cleaned_data = self.cleaned_data
@@ -107,7 +94,7 @@ class VaccinesReceivedForm(BaseInfantModelForm):
         if cleaned_data.get('received_vaccine_name') == 'DPT':
             if cleaned_data.get('infant_age') not in ['2', '3', '4']:
                 raise forms.ValidationError("DPT. Diphtheria, Pertussis and Tetanus can only"
-                                            " be admistered at 2 or 3 or 4 months ONLY.")
+                                            " be administered at 2 or 3 or 4 months ONLY.")
 
     def validate_haemophilus_vaccine(self):
         cleaned_data = self.cleaned_data
@@ -168,8 +155,20 @@ class VaccinesMissedForm(BaseInfantModelForm):
 
     def clean(self):
         cleaned_data = super(VaccinesMissedForm, self).clean()
+        self.validate_missed_vaccine_table()
         self.validate_missed_vaccine_fields()
         return cleaned_data
+
+    def validate_missed_vaccine_table(self):
+        cleaned_data = self.cleaned_data
+        if cleaned_data.get('infant_fu_immunizations').vaccines_missed == YES:
+            if not cleaned_data.get('missed_vaccine_name'):
+                raise forms.ValidationError("You mentioned that the child missed some vaccines. Please"
+                                            " indicate which ones in the Missed Vaccines table.")
+        else:
+            if(cleaned_data.get('missed_vaccine_name') or cleaned_data.get('reason_missed') or
+               cleaned_data.get('reason_missed_other')):
+                raise forms.ValidationError('No vaccines missed. Do not fill Missed Vaccines table')
 
     def validate_missed_vaccine_fields(self):
         cleaned_data = self.cleaned_data
