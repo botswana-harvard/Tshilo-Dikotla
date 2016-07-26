@@ -107,6 +107,7 @@ INSTALLED_APPS = [
     'td_lab.apps.TdLabConfig',
     'td_list.apps.TdListConfig',
     'td_maternal.apps.TdMaternalConfig',
+    'crispy_forms',
 ]
 
 if 'test' in sys.argv:
