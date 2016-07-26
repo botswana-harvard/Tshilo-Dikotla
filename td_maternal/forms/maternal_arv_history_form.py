@@ -77,6 +77,9 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
                         'In Maternal Obsterical History form you indicated there were no previous '
                         'pregnancies. triple ARVs during a prev pregnancy should '
                         'be NOT APPLICABLE')
+                if cleaned_data.get('prev_preg_haart') == YES:
+                    if not cleaned_data.get('haart_start_date'):
+                        raise forms.ValidationError('Please give date triple antiretrovirals first started.')
 
     class Meta:
         model = MaternalLifetimeArvHistory
