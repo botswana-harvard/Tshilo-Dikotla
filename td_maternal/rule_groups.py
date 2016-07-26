@@ -60,6 +60,7 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
                       ('td_maternal', 'maternalinterimidcc'),
                       ('td_maternal', 'maternalhivinterimhx'),
                       ('td_maternal', 'maternalarvpreg'),
+                      ('td_maternal', 'maternallifetimearvhistory'),
                       ('td_maternal', 'maternalarvpost'),
                       ('td_maternal', 'maternalarvpostadh')])
 
