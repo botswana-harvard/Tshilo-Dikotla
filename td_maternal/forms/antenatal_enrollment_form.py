@@ -5,7 +5,7 @@ from edc_constants.constants import YES
 
 from td_maternal.models.enrollment_helper import EnrollmentHelper
 
-from ..models import AntenatalEnrollment, PostnatalEnrollment, MaternalEligibility
+from ..models import AntenatalEnrollment, MaternalEligibility
 
 from .base_enrollment_form import BaseEnrollmentForm
 
@@ -42,40 +42,17 @@ class AntenatalEnrollmentForm(BaseEnrollmentForm):
 
     def clean_rapid_test_date(self):
         rapid_test_date = self.cleaned_data['rapid_test_date']
+        registered_subject = self.cleaned_data['registered_subject']
         if rapid_test_date:
             try:
                 initial = AntenatalEnrollment.objects.get(
-                    registered_subject=self.instance.registered_subject)
+                    registered_subject=registered_subject)
                 if initial:
                     if rapid_test_date != initial.rapid_test_date:
                         raise forms.ValidationError('The rapid test result cannot be changed')
             except AntenatalEnrollment.DoesNotExist:
                 pass
         return rapid_test_date
-
-#     def fill_postnatal_enrollment_if_recently_delivered(self):
-#         cleaned_data = self.cleaned_data
-#         registered_subject = cleaned_data.get('registered_subject')
-#         try:
-#             MaternalEligibility.objects.get(
-#                 registered_subject=registered_subject,
-#                 recently_delivered=YES)
-#             if not self.get_postnatal_enrollment():
-#                 raise forms.ValidationError(
-#                     'According to the Maternal Eligibility form the participant has just delivered. '
-#                     'Please fill the Postnatal Enrollment form instead.')
-#         except MaternalEligibility.DoesNotExist:
-#             pass
-
-#     def get_postnatal_enrollment(self):
-#         cleaned_data = self.cleaned_data
-#         registered_subject = cleaned_data.get('registered_subject')
-#         try:
-#             postnatal_enrollment = PostnatalEnrollment.objects.get(
-#                 registered_subject=registered_subject)
-#         except PostnatalEnrollment.DoesNotExist:
-#             postnatal_enrollment = None
-#         return postnatal_enrollment
 
     class Meta:
         model = AntenatalEnrollment
