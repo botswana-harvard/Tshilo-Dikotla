@@ -40,33 +40,6 @@ class MaternalInterimIdcc(MaternalCrfModel):
         blank=True,
         null=True)
 
-    recent_hepb = models.DecimalField(
-        max_digits=8,
-        decimal_places=2,
-        blank=True,
-        null=True,
-        verbose_name="Most recent Hep B sAg available",
-        help_text="",)
-
-    recent_hepb_date = models.DateField(
-        verbose_name="Date of recent Hep B",
-        blank=True,
-        null=True)
-
-    recent_hepc = models.DecimalField(
-        max_digits=8,
-        decimal_places=2,
-        blank=True,
-        null=True,
-        verbose_name="Most recent Hep C Ab available",
-        help_text="",)
-
-    recent_hepc_date = models.DateField(
-        verbose_name="Date of recent Hep C",
-        blank=True,
-        null=True)
-
-
     class Meta:
         app_label = 'td_maternal'
         verbose_name = "Maternal Interim Idcc Data"
