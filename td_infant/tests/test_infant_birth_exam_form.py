@@ -55,9 +55,9 @@ class TestInfantBirthExam(BaseTestCase):
         self.antenatal_visit_2 = MaternalVisitFactory(
             appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
                                                 visit_definition__code='1020M'))
-        self.maternal_visit_1100 = MaternalVisitFactory(
+        self.maternal_visit_2000 = MaternalVisitFactory(
             appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
-                                                visit_definition__code='1100M'))
+                                                visit_definition__code='2000M'))
 
         infant_registered_subject = RegisteredSubject.objects.get(
             relative_identifier=self.registered_subject.subject_identifier,
