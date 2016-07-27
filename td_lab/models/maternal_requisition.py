@@ -41,7 +41,7 @@ class MaternalRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin,
 
     entry_meta_data_manager = RequisitionMetaDataManager(MaternalVisit)
 
-    def __unicode__(self):
+    def __str__(self):
         return '{0} {1}'.format(str(self.panel), self.requisition_identifier)
 
     def natural_key(self):

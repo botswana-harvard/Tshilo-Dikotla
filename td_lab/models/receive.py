@@ -28,7 +28,7 @@ class Receive(BaseReceive, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
         self.subject_type = self.registered_subject.subject_type
         super(Receive, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.receive_identifier or u''
 
     def deserialize_get_missing_fk(self, attrname):

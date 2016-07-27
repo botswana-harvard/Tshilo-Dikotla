@@ -43,8 +43,8 @@ def func_require_cd4(visit_instance):
 
 def show_postpartum_depression(visit_instance):
     """Return true if postpartum depression has to be filled."""
-    if (visit_instance.appointment.visit_definition.code != '1200M' and not
-        MaternalPostPartumDep.objects.filter(maternal_visit__appointment__visit_definition__code='1200M').exists()):
+    if (visit_instance.appointment.visit_definition.code != '2010M' and not
+        MaternalPostPartumDep.objects.filter(maternal_visit__appointment__visit_definition__code='2010M').exists()):
         return True
     return False
 
@@ -60,6 +60,7 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
                       ('td_maternal', 'maternalinterimidcc'),
                       ('td_maternal', 'maternalhivinterimhx'),
                       ('td_maternal', 'maternalarvpreg'),
+                      ('td_maternal', 'maternallifetimearvhistory'),
                       ('td_maternal', 'maternalarvpost'),
                       ('td_maternal', 'maternalarvpostadh')])
 
@@ -77,28 +78,37 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
             alternative=NOT_REQUIRED),
         target_model=[('td_maternal', 'maternalpostpartumdep')])
 
-#     require_vl = RequisitionRule(
-#         logic=Logic(
-#             predicate=func_mother_pos,
-#             consequence=UNKEYED,
-#             alternative=NOT_REQUIRED),
-#         target_model=[('td_lab', 'maternalrequisition')],
-#         target_requisition_panels=['Viral Load'])
-# 
-#     require_cd4 = RequisitionRule(
-#         logic=Logic(
-#             predicate=func_require_cd4,
-#             consequence=UNKEYED,
-#             alternative=NOT_REQUIRED),
-#         target_model=[('td_lab', 'maternalrequisition')],
-#         target_requisition_panels=['CD4'])
-
     class Meta:
         app_label = 'td_maternal'
         source_fk = None
         source_model = RegisteredSubject
 
 site_rule_groups.register(MaternalRegisteredSubjectRuleGroup)
+
+
+class MaternalRequisitionRuleGroup(RuleGroup):
+
+    require_vl = RequisitionRule(
+        logic=Logic(
+            predicate=func_mother_pos,
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_lab', 'maternalrequisition')],
+        target_requisition_panels=['Viral Load'])
+ 
+    require_cd4 = RequisitionRule(
+        logic=Logic(
+            predicate=func_require_cd4,
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_lab', 'maternalrequisition')],
+        target_requisition_panels=['CD4'])
+
+    class Meta:
+        app_label = 'td_maternal'
+        source_fk = None
+        source_model = None
+site_rule_groups.register(MaternalRequisitionRuleGroup)
 
 
 class MaternalUltrasoundInitialRuleGroup(RuleGroup):

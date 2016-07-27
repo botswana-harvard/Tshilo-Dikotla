@@ -1,4 +1,6 @@
 Django==1.9.5
+django-braces==1.8.1
+django-cors-headers==1.1.0
 django-crispy-forms==1.6.0
 -e git+https://github.com/erikvw/django-crypto-fields@67c46e89f9738b474452d22bc1f4fd6db228c6fb#egg=django_crypto_fields
 django-extensions==1.6.1
@@ -29,6 +31,7 @@ djangorestframework==3.3.3
 -e git+https://github.com/botswana-harvard/edc-offstudy@f1b2d2c1a5b64e16e2d03cf5a12ade564b891e5b#egg=edc_offstudy
 -e git+https://github.com/botswana-harvard/edc-quota@7ea1d99ec2140428df38386434e3403cf44f464a#egg=edc_quota
 -e git+https://github.com/botswana-harvard/edc-registration@7a289d2c06d35e7af3e5ac70ebb8d8ec8f0c9bb0#egg=edc_registration
+-e git+https://github.com/botswana-harvard/edc-rest@bcbf35de88a7c4d76e395d8b89b0c772dd1112b8#egg=edc_rest
 -e git+https://github.com/botswana-harvard/edc-rule-groups@5772b7d003a461b3ae85e81f4df5bc580f423ca3#egg=edc_rule_groups
 -e git+https://github.com/botswana-harvard/edc-sync@86fb69ba34a734f0cc77d8b21c8fcebd3e4e61d5#egg=edc_sync
 -e git+https://github.com/botswana-harvard/edc-templates@c79a1d3a541fed424451f6da455bce2b6c84e07c#egg=edc_templates
@@ -43,7 +46,7 @@ gitdb==0.6.4
 gitflow==0.5.1
 GitPython==2.0.5
 -e git+https://github.com/botswana-harvard/lab-requisition@e90bfd28465c10565edd3d37d15a91f39fe51f2e#egg=lab_requisition
--e git+https://github.com/botswana-harvard/lis@780cb9b56aaa87d71bacd90037185f680bb4e734#egg=lis
+-e git+https://github.com/botswana-harvard/lis@5efb6e9f1ee63ca9ad640986838ffb8a4ed6e246#egg=lis
 mccabe==0.4.0
 mysqlclient==1.3.7
 numpy==1.11.0
