@@ -3,7 +3,7 @@ from django.db import models
 from edc_base.model.fields import OtherCharField
 from edc_constants.choices import YES_NO_UNKNOWN
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import datetime_not_future
+from edc_base.model.validators import date_not_future
 from edc_visit_tracking.models import CrfInlineModelMixin
 from edc_sync.models import SyncModelMixin
 
@@ -46,12 +46,14 @@ class VaccinesReceived(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
     received_vaccine_name = models.CharField(
         verbose_name="Received vaccine name",
         choices=IMMUNIZATIONS,
-        max_length=100)
+        max_length=100,
+        null=True,
+        blank=True)
 
     date_given = models.DateField(
         verbose_name="Date Given",
         validators=[
-            datetime_not_future, ],
+            date_not_future, ],
         null=True,
         blank=True)
 
@@ -63,7 +65,6 @@ class VaccinesReceived(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
         max_length=35)
 
     objects = VaccinesReceivedManager()
-
 
     def natural_key(self):
         return (self.received_vaccine_name, ) + self.infant_fu_immunizations.natural_key()
@@ -86,7 +87,9 @@ class VaccinesMissed(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
     missed_vaccine_name = models.CharField(
         verbose_name="Missed vaccine name",
         choices=IMMUNIZATIONS,
-        max_length=100)
+        max_length=100,
+        null=True,
+        blank=True)
 
     reason_missed = models.CharField(
         verbose_name="Reasons infant missed vaccines",
