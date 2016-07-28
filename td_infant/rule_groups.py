@@ -9,7 +9,7 @@ from td_maternal.models import MaternalVisit
 
 from .models import InfantArvProph
 
-from .models import InfantVisit, InfantFu, InfantBirthData
+from .models import InfantVisit, InfantFu, InfantBirthData, InfantFeeding
 
 def get_previous_visit(visit_instance, timepoints, visit_model):
     registered_subject = visit_instance.appointment.registered_subject
@@ -77,7 +77,22 @@ class InfantFuRuleGroup(RuleGroup):
 
 site_rule_groups.register(InfantFuRuleGroup)
 
+class InfantFeedingRuleGroup(RuleGroup):
 
+    solid_foods = CrfRule(
+        logic=Logic(
+            predicate=('formula_intro_occur', 'equals', YES),
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_infant', 'solidfoodassessment'),])
+
+    class Meta:
+        app_label = 'td_infant'
+        source_fk = (InfantVisit, 'infant_visit')
+        source_model = InfantFeeding
+
+site_rule_groups.register(InfantFeedingRuleGroup)
+    
 class InfantBirthDataRuleGroup(RuleGroup):
 
     congenital_anomalities_yes = CrfRule(
@@ -108,13 +123,6 @@ class InfantRegisteredSubjectRuleGroup(RuleGroup):
             consequence=UNKEYED,
             alternative=NOT_REQUIRED),
         target_model=[('td_infant', 'infantarvproph'),])
-
-    solid_foods = CrfRule(
-        logic=Logic(
-            predicate=('formula_intro_occur', 'equals', YES),
-            consequence=UNKEYED,
-            alternative=NOT_REQUIRED),
-        target_model=[('td_infant', 'solidfoodassessment'),])
 
     class Meta:
         app_label = 'td_infant'

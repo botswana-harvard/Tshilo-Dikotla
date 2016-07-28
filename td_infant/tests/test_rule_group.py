@@ -604,3 +604,62 @@ class TestRuleGroups(BaseTestCase):
                 crf_entry__app_label='td_infant',
                 crf_entry__model_name='infantbirtharv',
                 appointment=self.appointment).count(), 1)
+
+def test_infant_arv_proph_not_required_at_2060(self):
+        options = {'registered_subject': self.registered_subject,
+                   'current_hiv_status': POS,
+                   'evidence_hiv_status': YES,
+                   'will_get_arvs': YES,
+                   'is_diabetic': NO,
+                   'will_remain_onstudy': YES,
+                   'rapid_test_done': NOT_APPLICABLE,
+                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+
+        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.assertTrue(self.antenatal_enrollment.is_eligible)
+        self.maternal_visit = MaternalVisit.objects.get(
+            appointment__registered_subject=self.registered_subject,
+            reason=SCHEDULED,
+            appointment__visit_definition__code='1000M')
+        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+            maternal_visit=self.maternal_visit, number_of_gestations=1,)
+        self.maternal_visits_membership = AntenatalVisitMembershipFactory(registered_subject=self.registered_subject)
+        self.maternal_labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject,
+                                                            live_infants_to_register=1)
+        self.antenatal_visit_1 = MaternalVisitFactory(
+            appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
+                                                visit_definition__code='1010M'))
+        self.antenatal_visit_2 = MaternalVisitFactory(
+            appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
+                                                visit_definition__code='1020M'))
+        self.maternal_visit_2000 = MaternalVisitFactory(
+            appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
+                                                visit_definition__code='2000M'))
+        infant_registered_subject = RegisteredSubject.objects.get(
+            relative_identifier=self.registered_subject.subject_identifier,
+            subject_type='infant')
+        self.infant_birth = InfantBirthFactory(
+            registered_subject=infant_registered_subject,
+            maternal_labour_del=self.maternal_labour_del)
+        self.appointment = Appointment.objects.get(
+            registered_subject=infant_registered_subject,
+            visit_definition__code='2000')
+        self.infant_visit = InfantVisitFactory(appointment=self.appointment)
+        self.appointment = Appointment.objects.get(
+            registered_subject=infant_registered_subject,
+            visit_definition__code='2010')
+        self.infant_visit = InfantVisitFactory(appointment=self.appointment)
+        self.appointment = Appointment.objects.get(
+            registered_subject=infant_registered_subject,
+            visit_definition__code='2020')
+        self.infant_visit = InfantVisitFactory(appointment=self.appointment)
+        self.appointment = Appointment.objects.get(
+            registered_subject=infant_registered_subject,
+            visit_definition__code='2060')
+        self.infant_visit = InfantVisitFactory(appointment=self.appointment)
+        self.assertEqual(
+            CrfMetaData.objects.filter(
+                entry_status=NEW,
+                crf_entry__app_label='td_infant',
+                crf_entry__model_name='solidfoodassessment',
+                appointment=self.appointment).count(), 1)
