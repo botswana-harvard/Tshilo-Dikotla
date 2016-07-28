@@ -65,7 +65,7 @@ class InfantFeeding(InfantCrfModel):
         null=True,
         help_text="provide date if this is first reporting of infant formula")
 
-    est_date_first_formula = models.DateField(
+    est_date_first_formula = models.CharField(
         verbose_name="Is date infant formula introduced estimated?",
         max_length=15,
         choices=YES_NO,
@@ -146,7 +146,7 @@ class InfantFeeding(InfantCrfModel):
     rehydration_salts = models.CharField(
         verbose_name="Since the last attended scheduled visit where an infant feeding form was completed "
                      "did the participant take Oral rehydaration salts",
-        max_length=3,
+        max_length=12,
         choices=YES_NO_UNSURE_NA,
         default=NOT_APPLICABLE)
 
