@@ -41,6 +41,6 @@ from .maternal_randomization import MaternalRando
 from .base_substance_use_mixin import BaseSubstanceUseMixin
 from .maternal_substance_use import MaternalSubstanceUse
 from .maternal_substance_use_two import MaternalSubstanceUseTwo
-from .potential_subject import PotentialSubject
+from .potential_call import PotentialCall
 from .signals import *
 

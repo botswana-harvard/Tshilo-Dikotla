@@ -15,7 +15,7 @@ from edc_sync.models.outgoing_transaction import OutgoingTransaction
 
 from call_manager.models import Call
 
-from td_maternal.models import MaternalConsent, PotentialSubject
+from td_maternal.models import MaternalConsent, PotentialCall
 
 tz = pytz.timezone(settings.TIME_ZONE)
 
@@ -34,7 +34,7 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
             'not_contacted',
             'consent_verified',
             'pending_transactions',
-            'potential_subjects']
+            'potential_calls']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -58,7 +58,7 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
             future_b = asyncio.Future()
             future_c = asyncio.Future()
             tasks = [
-                self.potential_subject_data(future_a),
+                self.potential_call_data(future_a),
                 self.transaction_data(future_b),
                 self.contact_data(future_c),
             ]
@@ -90,27 +90,27 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
         future.set_result(self.verified_response_data(response_data))
 
     @asyncio.coroutine
-    def potential_subject_data(self, future):
+    def potential_call_data(self, future):
         response_data = {}
         columns = ['id', 'contacted', 'consented', 'modified']
-        qs = PotentialSubject.objects.values_list(*columns).all()
+        qs = PotentialCall.objects.values_list(*columns).all()
 #         columns = ['id', 'consented', 'modified']
 #         qs = MaternalConsent.objects.values_list(*columns).all()
-        potential_subjects = pd.DataFrame(list(qs), columns=columns)
-        if not potential_subjects.empty:
+        potential_calls = pd.DataFrame(list(qs), columns=columns)
+        if not potential_calls.empty:
             response_data.update({
-                'potential_subjects': int(potential_subjects['id'].count()),
-                'not_contacted': int(potential_subjects.query('contacted == False')['contacted'].count()),
-                'not_consented': int(potential_subjects.query('consented == False')['consented'].count()),
-                'consented': int(potential_subjects.query('consented == True')['consented'].count()),
-                'consent_verified': int(potential_subjects.query('consented == True')['consented'].count()),
+                'potential_calls': int(potential_calls['id'].count()),
+                'not_contacted': int(potential_calls.query('contacted == False')['contacted'].count()),
+                'not_consented': int(potential_calls.query('consented == False')['consented'].count()),
+                'consented': int(potential_calls.query('consented == True')['consented'].count()),
+                'consent_verified': int(potential_calls.query('consented == True')['consented'].count()),
             })
             d = date.today()
             local_date = tz.localize(datetime(d.year, d.month, d.day, 0, 0, 0))
-            potential_subjects = potential_subjects[(potential_subjects['modified'] >= local_date)]
+            potential_calls = potential_calls[(potential_calls['modified'] >= local_date)]
             response_data.update({
-                'contacted_today': int(potential_subjects.query('contacted == True')['contacted'].count()),
-                'consented_today': int(potential_subjects.query('consented == True')['consented'].count()),
+                'contacted_today': int(potential_calls.query('contacted == True')['contacted'].count()),
+                'consented_today': int(potential_calls.query('consented == True')['consented'].count()),
             })
         future.set_result(self.verified_response_data(response_data))
 

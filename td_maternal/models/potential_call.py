@@ -9,23 +9,28 @@ from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from django_crypto_fields.fields import IdentityField, FirstnameField, LastnameField, EncryptedCharField
 
 
-class PotentialSubjectManager(models.Manager):
+class PotentialCallManager(models.Manager):
 
     def get_by_natural_key(self, subject_identifier):
         return self.get(subject_identifier=subject_identifier)
 
 
-class PotentialSubject(SyncModelMixin, BaseUuidModel):
+class PotentialCall(SyncModelMixin, BaseUuidModel):
+
+    approximate_date = models.DateField(
+        verbose_name="The approximate date that this participant will come for an appointment",
+        help_text='This date can be modified.')
+
+    visit_code = models.CharField(
+        max_length=10)
 
     identity = IdentityField(
         verbose_name="Identity",
-        unique=True,
         help_text=("Use Omang, Passport number, driver's license number or Omang receipt number")
     )
 
     subject_identifier = models.CharField(
-        max_length=25,
-        unique=True)
+        max_length=25)
 
     first_name = FirstnameField(
         null=True,
@@ -57,7 +62,7 @@ class PotentialSubject(SyncModelMixin, BaseUuidModel):
 
     history = SyncHistoricalRecords()
 
-    objects = PotentialSubjectManager()
+    objects = PotentialCallManager()
 
     def natural_key(self):
         return (self.subject_identifier, )
@@ -74,14 +79,15 @@ class PotentialSubject(SyncModelMixin, BaseUuidModel):
     def __str__(self):
         from .maternal_consent import MaternalConsent
         try:
-            subject_consent = MaternalConsent.objects.get(potential_subject=self)
+            subject_consent = MaternalConsent.objects.get(potential_call=self)
             first_name = subject_consent.first_name
             last_name = subject_consent.last_name
             name = first_name + ' ' + last_name
         except MaternalConsent.DoesNotExist:
             name = 'not consented'
-        return '{}. {}. {}'.format(
-            name, self.get_category_display(), self.subject_identifier)
+        return '{}. {}'.format(
+            name, self.subject_identifier)
 
     class Meta:
         app_label = 'td_maternal'
+        unique_together = ('visit_code', 'subject_identifier')
