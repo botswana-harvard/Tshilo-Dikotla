@@ -139,5 +139,23 @@
 		"hostname_modified": "bcpp025", 
 		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
 	}
+},
+{
+	"model": "td_list.deliverycomplications", 
+	"pk": "746893c7-379a-473c-afba-b2d57334206f", 
+	"fields": {
+		"name": "None", 
+		"short_name": "None", 
+		"display_index": 8, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-27T16:49:23.862", 
+		"modified": "2016-07-27T16:49:23.863", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-124-g2b095e4:develop:2b095e444691f14559d77ded1bb951c81dc38e3e"
+	}
 }
 ]
