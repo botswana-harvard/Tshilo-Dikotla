@@ -16,10 +16,10 @@ class InfantFuDxFactory(factory.DjangoModelFactory):
     infant_visit = factory.SubFactory(InfantVisitFactory)
 
 # class InfantFuDxItemsFactory(factory.DjangoModelFactory):
-# 
+#
 #     class Meta:
 #         model = InfantFuDxItems
-# 
+#
 #     infant_fu_dx = factory.SubFactory(InfantFuDx)
 #     fu_dx = DX_INFANT[0][0]
 #     health_facility = YES

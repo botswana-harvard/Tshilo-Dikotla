@@ -2,7 +2,7 @@ from edc_constants.constants import (
     NOT_APPLICABLE, UNKNOWN, OTHER, UNSCHEDULED, SCHEDULED, MISSED_VISIT, LOST_VISIT,
     OFF_STUDY, ON_STUDY, COMPLETED_PROTOCOL_VISIT, FAILED_ELIGIBILITY, PARTICIPANT)
 
-from .constants import NO_MODIFICATIONS, START, BREASTFEED_ONLY
+from .constants import NO_MODIFICATIONS, START, BREASTFEED_ONLY, DISCONTINUED, NEVER_STARTED, MODIFIED
 
 STUDY_SITES = (
     ('40', 'Gaborone'),
@@ -697,9 +697,9 @@ CONTINUOUS_LOOSE_STOOLS = (
 ARV_STATUS_WITH_NEVER = (
     (NO_MODIFICATIONS, '1. No modifications made since the last attended scheduled visit or today'),
     (START, '2. Starting today or has started since last attended scheduled visit'),
-    ('discontinued', '3. Permanently discontinued at or before the last attended scheduled visit'),
-    ('never_started', '4. Never started'),
-    ('modified', '5. Change in at least one medication since the last attended scheduled visit or today'),
+    (DISCONTINUED, '3. Permanently discontinued at or before the last attended scheduled visit'),
+    (NEVER_STARTED, '4. Never started'),
+    (MODIFIED, '5. Change in at least one medication since the last attended scheduled visit or today'),
     (NOT_APPLICABLE, 'Not applicable'),
 )
 
@@ -712,8 +712,7 @@ GESTATIONS_NUMBER = (
     ('0', '0'),
     ('1', '1'),
     ('2', '2'),
-    ('3', '3'),
-    ('>3', 'greater than 3')
+    ('3', '3')
 )
 
 ZERO_ONE = (
