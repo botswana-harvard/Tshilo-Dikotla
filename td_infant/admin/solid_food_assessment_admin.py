@@ -12,8 +12,6 @@ class SolidFoodAssessmentAdmin(BaseModelAdmin):
     
     form = SolidFoodAssessementForm
 
-    list_display = ()
-    list_filter = ('rations_receviced', 'solid_foods')
     radio_fields = {'porridge': admin.VERTICAL,
                     'tsabana': admin.VERTICAL,
                     'mother_tsabana': admin.VERTICAL,
@@ -32,6 +30,6 @@ class SolidFoodAssessmentAdmin(BaseModelAdmin):
                     'rations': admin.VERTICAL,
                      
                     }
-    filter_horizontal = ()
+    filter_horizontal = ('rations_receviced', 'solid_foods')
 
 admin.site.register(SolidFoodAssessment, SolidFoodAssessmentAdmin)
