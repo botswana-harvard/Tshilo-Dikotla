@@ -109,6 +109,13 @@ class InfantRegisteredSubjectRuleGroup(RuleGroup):
             alternative=NOT_REQUIRED),
         target_model=[('td_infant', 'infantarvproph'),])
 
+    solid_foods = CrfRule(
+        logic=Logic(
+            predicate=('formula_intro_occur', 'equals', YES),
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_infant', 'solidfoodassessment'),])
+
     class Meta:
         app_label = 'td_infant'
         source_fk = None
