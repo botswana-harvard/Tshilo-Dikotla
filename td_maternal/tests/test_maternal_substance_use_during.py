@@ -4,7 +4,7 @@ from django.utils import timezone
 from edc_constants.constants import UNKNOWN, YES, NO, NEG, NOT_APPLICABLE, SCHEDULED
 
 from td_maternal.models import MaternalVisit, RegisteredSubject, Appointment
-from td_maternal.forms import MaternalSubstanceUseForm
+from td_maternal.forms import MaternalSubstanceUseDuringPregForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
@@ -12,10 +12,10 @@ from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory
                         MaternalVisitFactory)
 
 
-class TestMaternalSubstanceUse(BaseTestCase):
+class TestMaternalSubstanceUseDuringPreg(BaseTestCase):
 
     def setUp(self):
-        super(TestMaternalSubstanceUse, self).setUp()
+        super(TestMaternalSubstanceUseDuringPreg, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
         self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
         self.registered_subject = self.maternal_consent.registered_subject
@@ -51,80 +51,49 @@ class TestMaternalSubstanceUse(BaseTestCase):
 
         self.options = {
             'maternal_visit': self.antenatal_visit_2.id,
-            'smoked_prior_to_preg': YES,
-            'smoking_prior_preg_freq': 'daily',
             'smoked_during_pregnancy': YES,
             'smoking_during_preg_freq': 'daily',
             'alcohol_during_pregnancy': YES,
             'alcohol_during_preg_freq': 'daily',
-            'marijuana_prior_preg': YES,
-            'marijuana_prior_preg_freq': 'daily',
             'marijuana_during_preg': YES,
             'marijuana_during_preg_freq': 'daily',
-            'other_illicit_substances_prior_preg': None,
             'other_illicit_substances_during_preg': None}
-
-    def test_smoked_prior_to_pregnancy_yes(self):
-        self.options['smoking_prior_preg_freq'] = None
-        form = MaternalSubstanceUseForm(data=self.options)
-        errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('Participant has smoked tobacco prior to this pregnancy, please give a frequency.', errors)
-
-    def test_smoked_prior_to_pregnancy_no(self):
-        self.options['smoked_prior_to_preg'] = NO
-        form = MaternalSubstanceUseForm(data=self.options)
-        errors = ''.join(form.errors.get('__all__'))
-        self.assertIn(
-            'Participant has never smoked tobacco prior to this pregnancy, please do not give a frequency.', errors)
 
     def test_smoked_during_pregnancy_yes(self):
         self.options['smoking_during_preg_freq'] = None
-        form = MaternalSubstanceUseForm(data=self.options)
+        form = MaternalSubstanceUseDuringPregForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Participant has smoked tobacco during this pregnancy, please give a frequency.', errors)
 
     def test_smoked_during_pregnancy_no(self):
         self.options['smoked_during_pregnancy'] = NO
-        form = MaternalSubstanceUseForm(data=self.options)
+        form = MaternalSubstanceUseDuringPregForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
             'Participant has never smoked tobacco during this pregnancy, please do not give a frequency.', errors)
 
     def test_alcohol_during_pregnancy_yes(self):
         self.options['alcohol_during_preg_freq'] = None
-        form = MaternalSubstanceUseForm(data=self.options)
+        form = MaternalSubstanceUseDuringPregForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Participant has drank alcohol during this pregnancy, please give a frequency.', errors)
 
     def test_alcohol_during_pregnancy_no(self):
         self.options['alcohol_during_pregnancy'] = NO
-        form = MaternalSubstanceUseForm(data=self.options)
+        form = MaternalSubstanceUseDuringPregForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
             'Participant has never drank alcohol during this pregnancy, please do not give a frequency.', errors)
 
-    def test_marijuana_prior_preg_yes(self):
-        self.options['marijuana_prior_preg_freq'] = None
-        form = MaternalSubstanceUseForm(data=self.options)
-        errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('Participant has smoked marijuana prior to this pregnancy, please give a frequency.', errors)
-
-    def test_marijuana_prior_preg_no(self):
-        self.options['marijuana_prior_preg'] = NO
-        form = MaternalSubstanceUseForm(data=self.options)
-        errors = ''.join(form.errors.get('__all__'))
-        self.assertIn(
-            'Participant has never smoked marijuana prior to this pregnancy, please do not give a frequency.', errors)
-
     def test_marijuana_during_preg_yes(self):
         self.options['marijuana_during_preg_freq'] = None
-        form = MaternalSubstanceUseForm(data=self.options)
+        form = MaternalSubstanceUseDuringPregForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('Participant has smoked marijuana during to this pregnancy, please give a frequency.', errors)
+        self.assertIn('Participant has smoked marijuana during this pregnancy, please give a frequency.', errors)
 
     def test_marijuana_during_preg_no(self):
         self.options['marijuana_during_preg'] = NO
-        form = MaternalSubstanceUseForm(data=self.options)
+        form = MaternalSubstanceUseDuringPregForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
-            'Participant has never smoked marijuana during to this pregnancy, please do not give a frequency.', errors)
+            'Participant has never smoked marijuana during this pregnancy, please do not give a frequency.', errors)
