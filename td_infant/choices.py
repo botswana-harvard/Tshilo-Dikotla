@@ -162,3 +162,15 @@ ARV_DRUG_LIST = (
     ('Atripla', 'ATR'),
     ('HAART,unknown', 'HAART,unknown'),
 )
+
+SOLID_FOODS = (
+    ('Grains, roots and tubers', 'Grains, roots and tubers'),
+    ('Legumes and nuts', 'Legumes and nuts'),
+    (' Dairy products (milk, yogurt, cheese)', ' Dairy products (milk, yogurt, cheese)'),
+    ('Flesh foods', 'Flesh foods (meat, fish, poultry and liver/organ meat)'),
+    ('Eggs', 'Eggs'),
+    ('Vitamin A rich fruts and vegetables (carrots)', 'Vitamin A rich fruts and vegetables (carrots)'),
+    ('Other fruits and vegetables', 'Other fruits and vegetables'),
+    ('Other', 'Other')
+
+)

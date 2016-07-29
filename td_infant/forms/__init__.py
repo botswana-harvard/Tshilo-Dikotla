@@ -19,3 +19,4 @@ from .infant_fu_immunizations_form import (InfantFuImmunizationsForm, VaccinesRe
 from .infant_feeding_form import InfantFeedingForm
 from .infant_fu_new_med_form import (InfantFuNewMedForm, InfantFuNewMedItemsForm)
 from .infant_arv_proph_form import (InfantArvProphForm, InfantArvProphModForm)
+from .solid_food_assessment_form import SolidFoodAssessementForm

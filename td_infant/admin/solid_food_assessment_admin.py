@@ -9,7 +9,7 @@ from ..forms import SolidFoodAssessementForm
 from ..models import SolidFoodAssessment
 
 class SolidFoodAssessmentAdmin(BaseModelAdmin):
-    
+
     form = SolidFoodAssessementForm
 
     radio_fields = {'porridge': admin.VERTICAL,
@@ -27,9 +27,8 @@ class SolidFoodAssessmentAdmin(BaseModelAdmin):
                     'eggs': admin.VERTICAL,
                     'yogurt': admin.VERTICAL,
                     'cheese': admin.VERTICAL,
-                    'rations': admin.VERTICAL,
-                     
+                    'rations': admin.VERTICAL,                     
                     }
-    filter_horizontal = ('rations_receviced', 'solid_foods')
+    filter_horizontal = ('solid_foods', 'rations_receviced')
 
 admin.site.register(SolidFoodAssessment, SolidFoodAssessmentAdmin)
