@@ -4,10 +4,10 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 from edc_registration.models import RegisteredSubject
+from edc_appointment.models import Appointment
 from edc_constants.constants import (
     FEMALE, SCHEDULED, SCREENED, CONSENTED, FAILED_ELIGIBILITY, ALIVE, OFF_STUDY, ON_STUDY)
 from edc_visit_schedule.models.visit_definition import VisitDefinition
-from edc_appointment.models.appointment import Appointment
 from edc_identifier.subject.classes import InfantIdentifier
 
 from tshilo_dikotla.constants import INFANT
@@ -20,6 +20,7 @@ from .maternal_eligibility_loss import MaternalEligibilityLoss
 from .maternal_off_study import MaternalOffStudy
 from .maternal_visit import MaternalVisit
 from .maternal_labour_del import MaternalLabourDel
+from .potential_call import PotentialCall
 
 
 @receiver(post_save, weak=False, dispatch_uid="maternal_eligibility_on_post_save")
@@ -233,3 +234,32 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
                         registration_status='DELIVERED',
                         relative_identifier=maternal_consent.subject_identifier,
                         study_site=maternal_consent.study_site)
+
+
+@receiver(post_save, weak=False, dispatch_uid='create_potential_calls_on_post_save')
+def create_potential_calls_on_post_save(sender, instance, raw, created, using, **kwargs):
+    if not raw:
+        if isinstance(instance, Appointment):
+            try:
+                PotentialCall.objects.get(
+                    visit_code=instance.visit_definition.code,
+                    identity=instance.registered_subject.identity,
+                    subject_identifier=instance.registered_subject.subject_identifier,
+                    first_name=instance.registered_subject.first_name,
+                    last_name=instance.registered_subject.last_name,
+                    initials=instance.registered_subject.initials,
+                    gender=instance.registered_subject.gender,
+                    dob=instance.registered_subject.dob)
+            except PotentialCall.DoesNotExist:
+                PotentialCall.objects.create(
+                    approximate_date=instance.appt_datetime.date(),
+                    visit_code=instance.visit_definition.code,
+                    identity=instance.registered_subject.identity,
+                    subject_identifier=instance.registered_subject.subject_identifier,
+                    first_name=instance.registered_subject.first_name,
+                    last_name=instance.registered_subject.last_name,
+                    initials=instance.registered_subject.initials,
+                    gender=instance.registered_subject.gender,
+                    dob=instance.registered_subject.dob,
+                    consented=True)
+

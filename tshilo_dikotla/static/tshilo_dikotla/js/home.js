@@ -7,7 +7,7 @@
             updateBadges();
         });
         updateBadges();              
-        updatePotentialSubjectLinks();
+        updatePotentialCallLinks();
         updateVerifyConsentLinks();
         callUrl =  $('#pill-call-manager').attr('href');
         updateCallLinks(callUrl);
@@ -32,8 +32,8 @@
         $('#link-verify-consent-subjects').attr('href', url+'?is_verified__exact=0');
     }
 
-    function updatePotentialSubjectLinks() {
-        url = Urls['admin:td_maternal_potentialsubject_changelist']()
+    function updatePotentialCallLinks() {
+        url = Urls['admin:td_maternal_potentialcall_changelist']()
         $('#link-not-consented').attr('href', url+'?consented__exact=0');
         $('#link-consented').attr('href', url+'?consented__exact=1');
         $('#link-consented-today').attr('href', url+'?consented__exact=1&'+todayString('modified'));
@@ -45,7 +45,7 @@
             type:'GET',
             url: Urls['update-statistics'](),
             success:function(json){
-                $("#bdg-potential-subjects").text(json.potential_subjects);
+                $("#bdg-potential-calls").text(json.potential_calls);
                 $("#bdg-not-contacted").text(json.not_contacted);
                 $("#bdg-contacted-retry").text(json.contacted_retry);
                 $("#bdg-not-consented").text(json.not_consented);

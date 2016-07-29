@@ -5,7 +5,7 @@ from edc_base.modeladmin.mixins import (ModelAdminChangelistModelButtonMixin, Mo
                                         ModelAdminAuditFieldsMixin)
 from simple_history.admin import SimpleHistoryAdmin
 
-from td_maternal.models import PotentialSubject, MaternalConsent
+from td_maternal.models import PotentialCall, MaternalConsent
 
 
 class BaseModelAdmin(ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
@@ -16,21 +16,26 @@ class BaseModelAdmin(ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMi
     empty_value_display = '-'
 
 
-@admin.register(PotentialSubject)
-class PotentialSubjectAdmin(ModelAdminRedirectMixin, ModelAdminChangelistModelButtonMixin,
-                            BaseModelAdmin):
+@admin.register(PotentialCall)
+class PotentialCallAdmin(ModelAdminRedirectMixin, ModelAdminChangelistModelButtonMixin,
+                         BaseModelAdmin):
 
-    list_display = ['subject_identifier', 'identity', 'contacted']
+    fields = ['subject_identifier', 'approximate_date', 'identity', 'first_name', 'last_name',
+              'visit_code', 'dob']
 
-    list_filter = ['subject_identifier', 'identity', 'contacted']
+    list_display = ['subject_identifier', 'identity', 'contacted', 'first_name', 'last_name',
+                    'approximate_date', 'visit_code', 'dob']
+
+    list_filter = ['subject_identifier', 'identity', 'contacted', 'approximate_date', 'visit_code']
 
     radio_fields = {
         'gender': admin.VERTICAL
     }
 
-    search_fields = ['identity', 'subject_identifier', ]
+    search_fields = ['identity', 'subject_identifier', 'visit_code', 'first_name']
 
-    readonly_fields = ['subject_identifier', 'identity']
+    readonly_fields = ['subject_identifier', 'identity', 'visit_code', 'first_name', 'last_name',
+                       'initials', 'dob']
 
 #     def consent_button(self, obj):
 #         reverse_args = None

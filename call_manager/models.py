@@ -9,12 +9,12 @@ from edc_call_manager.managers import CallManager, LogManager, LogEntryManager
 from edc_call_manager.models import CallModelMixin, LogModelMixin, LogEntryModelMixin
 from edc_sync.models.sync_model_mixin import SyncModelMixin
 
-from td_maternal.models import PotentialSubject
+from td_maternal.models import PotentialCall
 
 
 class Call(SyncModelMixin, CallModelMixin, BaseUuidModel):
 
-    potential_subject = models.ForeignKey(PotentialSubject)
+    potential_call = models.ForeignKey(PotentialCall)
 
     history = SyncHistoricalRecords()
 
@@ -25,7 +25,7 @@ class Call(SyncModelMixin, CallModelMixin, BaseUuidModel):
 
     @property
     def subject(self):
-        return self.potential_subject
+        return self.potential_call
 
     class Meta:
         app_label = 'call_manager'
@@ -59,5 +59,5 @@ class LogEntry(SyncModelMixin, LogEntryModelMixin, BaseUuidModel):
 def post_save_tshilo_dikotla_call(sender, instance, raw, created, using, update_fields, **kwargs):
     if not raw:
         if instance.contact_type != NO_CONTACT:
-            instance.log.call.potential_subject.contacted = True
-            instance.log.call.potential_subject.save(update_fields=['contacted', 'modified'])
+            instance.log.call.potential_call.contacted = True
+            instance.log.call.potential_call.save(update_fields=['contacted', 'modified'])

@@ -17,7 +17,7 @@ from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
 
 from ..maternal_choices import RECRUIT_SOURCE, RECRUIT_CLINIC
 
-from .potential_subject import PotentialSubject
+from .potential_call import PotentialCall
 
 
 class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMixin,
@@ -33,7 +33,7 @@ class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMi
 
     registered_subject = models.ForeignKey(RegisteredSubject, null=True)
 
-    potential_subject = models.ForeignKey(PotentialSubject, null=True)
+    potential_call = models.ForeignKey(PotentialCall, null=True)
 
     recruit_source = models.CharField(
         max_length=75,
