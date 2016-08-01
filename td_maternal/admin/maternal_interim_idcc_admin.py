@@ -15,10 +15,11 @@ class MaternalInterimIdccAdmin(BaseMaternalModelAdmin):
 
     form = MaternalInterimIdccForm
 
-    radio_fields = {'info_since_lastvisit': admin.VERTICAL}
+    radio_fields = {'info_since_lastvisit': admin.VERTICAL,
+                    'value_vl_size': admin.VERTICAL}
 
-    list_display = ('report_datetime', 'recent_cd4', 'recent_vl',)
+    list_display = ('report_datetime', 'recent_cd4', 'value_vl',)
 
-    list_filter = ('info_since_lastvisit', 'recent_cd4_date', 'recent_vl_date',)
+    list_filter = ('info_since_lastvisit', 'recent_cd4_date', 'value_vl_size', 'recent_vl_date')
 
 admin.site.register(MaternalInterimIdcc, MaternalInterimIdccAdmin)

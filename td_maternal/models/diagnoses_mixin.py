@@ -20,6 +20,8 @@ class DiagnosesMixin(models.Model):
     diagnoses = models.ManyToManyField(
         MaternalDiagnoses,
         verbose_name="Have any of the following diagnoses occured since last visit?",
+        blank=True,
+        null=True,
         help_text="",
     )
 

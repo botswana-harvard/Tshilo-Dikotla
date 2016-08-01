@@ -4,9 +4,9 @@ from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
 
 from td_maternal.maternal_choices import SMOKING_DRINKING_FREQUENCY
+from .maternal_crf_model import MaternalCrfModel
 
-
-class BaseSubstanceUseMixin(models.Model):
+class MaternalSubstanceUsePriorPreg(MaternalCrfModel):
 
     smoked_prior_to_preg = models.CharField(
         max_length=3,
@@ -22,27 +22,13 @@ class BaseSubstanceUseMixin(models.Model):
         null=True,
         help_text="")
 
-    smoked_during_pregnancy = models.CharField(
+    alcohol_prior_pregnancy = models.CharField(
         max_length=3,
         choices=YES_NO,
-        verbose_name="Has the participant ever smoked cigarettes during this pregnancy?  ",
+        verbose_name="Has the participant ever drank alcohol prior to this pregnancy?",
         help_text="")
 
-    smoking_during_preg_freq = models.CharField(
-        max_length=30,
-        choices=SMOKING_DRINKING_FREQUENCY,
-        verbose_name="If yes, please indicate how much: ",
-        blank=True,
-        null=True,
-        help_text="")
-
-    alcohol_during_pregnancy = models.CharField(
-        max_length=3,
-        choices=YES_NO,
-        verbose_name="Has the participant ever drank alcohol during this pregnancy?",
-        help_text="")
-
-    alcohol_during_preg_freq = models.CharField(
+    alcohol_prior_preg_freq = models.CharField(
         max_length=30,
         choices=SMOKING_DRINKING_FREQUENCY,
         verbose_name="If yes, please indicate how much: ",
@@ -64,20 +50,6 @@ class BaseSubstanceUseMixin(models.Model):
         null=True,
         help_text="")
 
-    marijuana_during_preg = models.CharField(
-        max_length=3,
-        choices=YES_NO,
-        verbose_name="Has the participant ever used marijuana during this pregnancy?",
-        help_text="")
-
-    marijuana_during_preg_freq = models.CharField(
-        max_length=30,
-        choices=SMOKING_DRINKING_FREQUENCY,
-        verbose_name="If yes, please indicate how much: ",
-        blank=True,
-        null=True,
-        help_text="")
-
     other_illicit_substances_prior_preg = models.CharField(
         max_length=500,
         verbose_name="Please list any other illicit substances that the participant reports using prior to this pregnancy.",
@@ -85,12 +57,7 @@ class BaseSubstanceUseMixin(models.Model):
         null=True,
         help_text="")
 
-    other_illicit_substances_during_preg = models.TextField(
-        max_length=500,
-        verbose_name="Please list any other illicit substances that the participant reports using during to this pregnancy.",
-        blank=True,
-        null=True,
-        help_text="")
-
     class Meta:
-        abstract = True
+        app_label = 'td_maternal'
+        verbose_name = 'Substance Use Prior to Pregnancy'
+        verbose_name_plural = 'Substance Use Prior to Pregnancy'

@@ -2,8 +2,11 @@ from django.db import models
 
 # from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import YES_NO
+from edc_base.model.fields.custom_fields import OtherCharField
 
 from .maternal_crf_model import MaternalCrfModel
+
+from td_maternal.maternal_choices import SIZE_CHECK
 
 
 class MaternalInterimIdcc(MaternalCrfModel):
@@ -27,16 +30,37 @@ class MaternalInterimIdcc(MaternalCrfModel):
         blank=True,
         null=True)
 
-    recent_vl = models.DecimalField(
+#     recent_vl = models.DecimalField(
+#         max_digits=10,
+#         decimal_places=2,
+#         blank=True,
+#         null=True,
+#         verbose_name="Most recent VL available",
+#         help_text="",)
+
+    value_vl_size = models.CharField(
+        max_length=25,
+        verbose_name="Is the value for the most recent VL available “=” , “<”, or “>” a number? ",
+        choices=SIZE_CHECK,
+        blank=True,
+        null=True)
+
+    value_vl = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         blank=True,
         null=True,
-        verbose_name="Most recent VL available",
+        verbose_name="Value of VL ",
         help_text="",)
 
     recent_vl_date = models.DateField(
         verbose_name="Date of recent VL",
+        blank=True,
+        null=True)
+
+    other_diagnoses = OtherCharField(
+        max_length=25,
+        verbose_name="Please specify any other diagnoses found in the IDCC since the last visit ",
         blank=True,
         null=True)
 

@@ -408,3 +408,9 @@ SMOKING_DRINKING_FREQUENCY = (
     ('weekly', 'Weekly'),
     ('2-3 times per month or less', '2-3 times per month or less'),
 )
+
+SIZE_CHECK = (
+    ('equal', '='),
+    ('less_than', '<'),
+    ('greater_than', '>'),
+)
