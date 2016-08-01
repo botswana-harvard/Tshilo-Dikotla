@@ -18,7 +18,7 @@ class PotentialCallManager(models.Manager):
 class PotentialCall(SyncModelMixin, BaseUuidModel):
 
     approximate_date = models.DateField(
-        verbose_name="The approximate date that this participant will come for an appointment",
+        verbose_name="approximate appointment date",
         help_text='This date can be modified.')
 
     visit_code = models.CharField(
@@ -57,8 +57,6 @@ class PotentialCall(SyncModelMixin, BaseUuidModel):
     dob = models.DateField(null=True)
 
     contacted = models.BooleanField(default=False, editable=False)
-
-    consented = models.BooleanField(default=False, editable=False)
 
     history = SyncHistoricalRecords()
 

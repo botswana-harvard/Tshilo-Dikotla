@@ -82,6 +82,7 @@ urlpatterns = [
     url(r'^call_manager/', include('edc_call_manager.urls', 'call_manager')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/logout/$', RedirectView.as_view(url='/{app_name}/logout/'.format(app_name=APP_NAME))),
+#     url(r'^admin/', call_manager_admin.urls),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^{app_name}/dashboard/'.format(app_name=APP_NAME),

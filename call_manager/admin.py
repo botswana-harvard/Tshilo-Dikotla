@@ -24,7 +24,9 @@ class ModelAdminStackedInlineMixin(ModelAdminAuditFieldsMixin, StackedInline):
 
 
 class CallAdmin(BaseModelAdmin, ModelAdminCallMixin, SimpleHistoryAdmin):
-    pass
+    subject_app = 'td_maternal'
+    subject_model = 'potentialcall'
+
 admin.site.register(Call, CallAdmin)
 
 

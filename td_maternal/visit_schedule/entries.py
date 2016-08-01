@@ -14,7 +14,6 @@ maternal_enrollment_entries = (
     CrfTuple(90, 'td_maternal', 'maternaloffstudy', NOT_REQUIRED, ADDITIONAL))
 
 maternal_antenatal1_entries = (
-    CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(20, 'td_maternal', 'maternalultrasoundfu', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(30, 'td_maternal', 'maternalrando', NOT_REQUIRED, ADDITIONAL),
     CrfTuple(40, 'td_maternal', 'maternalinterimidcc', NOT_REQUIRED, ADDITIONAL),
@@ -22,7 +21,6 @@ maternal_antenatal1_entries = (
 )
 
 maternal_antenatal2_entries = (
-    CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(20, 'td_maternal', 'maternalultrasoundfu', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(30, 'td_maternal', 'maternalaztnvp', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(40, 'td_maternal', 'maternalinterimidcc', REQUIRED, NOT_ADDITIONAL),
@@ -32,7 +30,6 @@ maternal_antenatal2_entries = (
 )
 
 maternal_birth_entries = (
-    CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(20, 'td_maternal', 'maternaldiagnoses', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(30, 'td_maternal', 'maternalhivinterimhx', NOT_REQUIRED, ADDITIONAL),
     CrfTuple(40, 'td_maternal', 'maternalarvpreg', NOT_REQUIRED, ADDITIONAL),
@@ -41,7 +38,6 @@ maternal_birth_entries = (
 )
 
 maternal_followup1_entries = (
-    CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(20, 'td_maternal', 'maternalpostpartumfu', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(30, 'td_maternal', 'maternalpostpartumdep', NOT_REQUIRED, ADDITIONAL),
     CrfTuple(40, 'td_maternal', 'maternalarvpost', NOT_REQUIRED, ADDITIONAL),
@@ -54,7 +50,6 @@ maternal_followup1_entries = (
 )
 
 maternal_followup2_entries = (
-    CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(20, 'td_maternal', 'maternalpostpartumfu', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(30, 'td_maternal', 'maternalpostpartumdep', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(40, 'td_maternal', 'maternalarvpost', REQUIRED, NOT_ADDITIONAL),
@@ -64,7 +59,6 @@ maternal_followup2_entries = (
 )
 
 maternal_followup3_entries = (
-    CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(20, 'td_maternal', 'maternalpostpartumfu', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(30, 'td_maternal', 'maternalpostpartumdep', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(40, 'td_maternal', 'maternalarvpost', REQUIRED, NOT_ADDITIONAL),

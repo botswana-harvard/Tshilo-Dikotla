@@ -23,6 +23,8 @@ from django.core.exceptions import ImproperlyConfigured
 from .databases import (
     PRODUCTION_POSTGRES, TEST_HOSTS_POSTGRES, TRAVIS_POSTGRES, PRODUCTION_SECRET_KEY)
 
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
 # EDC specific settings
 APP_NAME = 'td'
 LIVE_SERVER = 'td.bhp.org.bw'
@@ -80,6 +82,8 @@ INSTALLED_APPS = [
     'edc_appointment',
     'edc_base',
     'edc_configuration',
+    'corsheaders',
+    'crispy_forms',
 #     'edc_consent',
     'edc_constants',
     'edc_content_type_map',
@@ -96,8 +100,8 @@ INSTALLED_APPS = [
     'edc_code_lists',
     'edc_visit_schedule',
     'edc_visit_tracking',
-    'edc_call_manager.apps.EdcCallManagerAppConfig',
     'call_manager',
+    'edc_call_manager.apps.EdcCallManagerAppConfig',
     'tshilo_dikotla.apps.DjangoCryptoFieldsAppConfig',
     'tshilo_dikotla.apps.ConsentAppConfig',
     'tshilo_dikotla.apps.EdcSyncAppConfig',
@@ -106,8 +110,8 @@ INSTALLED_APPS = [
     'td_infant.apps.TdInfantConfig',
     'td_lab.apps.TdLabConfig',
     'td_list.apps.TdListConfig',
+    'registration.apps.RegistrationConfig',
     'td_maternal.apps.TdMaternalConfig',
-    'crispy_forms',
 ]
 
 if 'test' in sys.argv:
@@ -119,7 +123,7 @@ if 'test' in sys.argv:
                          "edc_visit_schedule": None,
                          "edc_visit_tracking": None,
                          "edc_appointment": None,
-                         "edc_call_manager": None,
+                         "call_manager": None,
                          "edc_death_report": None,
                          "edc_identifier": None,
                          "edc_meta_data": None,

@@ -106,6 +106,7 @@ def maternal_consent_on_post_save(sender, instance, raw, created, using, **kwarg
             instance.registered_subject.registration_status = CONSENTED
             instance.registered_subject.subject_identifier = instance.subject_identifier
             instance.registered_subject.initials = instance.initials
+            instance.registered_subject.first_name = instance.first_name
             instance.registered_subject.last_name = instance.last_name
             instance.registered_subject.identity = instance.identity
             instance.registered_subject.dob = instance.dob
