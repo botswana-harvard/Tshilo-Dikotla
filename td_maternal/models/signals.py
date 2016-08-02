@@ -261,6 +261,5 @@ def create_potential_calls_on_post_save(sender, instance, raw, created, using, *
                     last_name=instance.registered_subject.last_name,
                     initials=instance.registered_subject.initials,
                     gender=instance.registered_subject.gender,
-                    dob=instance.registered_subject.dob,
-                    consented=True)
+                    dob=instance.registered_subject.dob)
 
