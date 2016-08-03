@@ -1,31 +1,43 @@
+from django.utils import timezone
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch.dispatcher import receiver
 from edc_sync.models import SyncHistoricalRecords
 
 from edc_base.model.models.base_uuid_model import BaseUuidModel
-from edc_call_manager.constants import NO_CONTACT
 from edc_call_manager.managers import CallManager, LogManager, LogEntryManager
 from edc_call_manager.models import CallModelMixin, LogModelMixin, LogEntryModelMixin
 from edc_sync.models.sync_model_mixin import SyncModelMixin
-
-from td_maternal.models import PotentialCall
+from edc_registration.models.registered_subject_model_mixin import RegisteredSubject
 
 
 class Call(SyncModelMixin, CallModelMixin, BaseUuidModel):
 
-    potential_call = models.ForeignKey(PotentialCall)
+    registered_subject = models.ForeignKey(RegisteredSubject)
+
+    call_datetime = models.DateTimeField(
+        default=timezone.now(),
+        verbose_name='Date of this call')
 
     history = SyncHistoricalRecords()
 
     objects = CallManager()
 
     def __str__(self):
-        return self.subject_identifier
+        return self.registered_subject.subject_identifier
 
     @property
     def subject(self):
-        return self.potential_call
+        return self
+
+    def get_gender_display(self):
+        return self.registered_subject.gender
+
+    @property
+    def dob(self):
+        return self.registered_subject.dob
+
+    @property
+    def last_name(self):
+        return self.registered_subject.last_name
 
     class Meta:
         app_label = 'call_manager'
@@ -54,10 +66,3 @@ class LogEntry(SyncModelMixin, LogEntryModelMixin, BaseUuidModel):
     class Meta:
         app_label = 'call_manager'
 
-
-@receiver(post_save, sender=LogEntry, dispatch_uid='post_save_tshilo_dikotla_call')
-def post_save_tshilo_dikotla_call(sender, instance, raw, created, using, update_fields, **kwargs):
-    if not raw:
-        if instance.contact_type != NO_CONTACT:
-            instance.log.call.potential_call.contacted = True
-            instance.log.call.potential_call.save(update_fields=['contacted', 'modified'])

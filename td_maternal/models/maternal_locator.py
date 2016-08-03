@@ -7,10 +7,8 @@ from edc_base.model.fields import OtherCharField
 from edc_base.model.validators import CellNumber, TelephoneNumber
 from edc_constants.choices import YES_NO
 from edc_locator.models import LocatorMixin
-from edc_meta_data.managers import CrfMetaDataManager
+from edc_appointment.models import Appointment
 
-from .potential_call import PotentialCall
-from .maternal_visit import MaternalVisit
 from .maternal_crf_model import MaternalCrfModel
 
 
@@ -21,7 +19,7 @@ class MaternalLocator(LocatorMixin, MaternalCrfModel):
 
     registered_subject = models.OneToOneField(RegisteredSubject, null=True)
 
-    potential_call = models.ForeignKey(PotentialCall, null=True)
+    appointment = models.ForeignKey(Appointment, null=True)
 
     care_clinic = OtherCharField(
         verbose_name="Health clinic where your infant will receive their routine care ",
@@ -57,10 +55,6 @@ class MaternalLocator(LocatorMixin, MaternalCrfModel):
         validators=[TelephoneNumber, ],
         blank=True,
         null=True)
-
-#     entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
-
-    #history = AuditTrail()
 
     class Meta:
         app_label = 'td_maternal'

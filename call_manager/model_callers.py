@@ -1,15 +1,19 @@
-from edc_call_manager.model_caller import ModelCaller
+from edc_call_manager.model_caller import ModelCaller, MONTHLY
 from edc_call_manager.decorators import register
-
-from td_maternal.models import PotentialCall, MaternalLocator, MaternalConsent
+from edc_appointment.models import Appointment
 from call_manager.models import Call, Log, LogEntry
 
+from td_maternal.models import MaternalLocator, MaternalConsent, AntenatalEnrollment
+from td_maternal.models.maternal_off_study import MaternalOffStudy
 
-@register(PotentialCall)
-class PotentialSubjectModelCaller(ModelCaller):
-    call_model = (Call, 'potential_call')
+
+@register(AntenatalEnrollment)
+class MaternalModelCaller(ModelCaller):
+    call_model = (Call, 'registered_subject')
     label = 'subjects'
-    locator_model = (MaternalLocator, 'potential_call__subject_identifier')
+    locator_model = (MaternalLocator, 'registered_subject__subject_identifier')
+    consent_model = (MaternalConsent, 'registered_subject')
     log_entry_model = LogEntry
     log_model = Log
-    unscheduling_model = MaternalConsent
+    interval = MONTHLY
+    unscheduling_model = MaternalOffStudy

@@ -26,7 +26,7 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
     def __init__(self):
         self._response_data = {}
         self.columns = [
-            'consented',
+#             'is_verified',
             'consented_today',
             'contacted_retry',
             'contacted_today',
@@ -92,7 +92,7 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
     @asyncio.coroutine
     def potential_call_data(self, future):
         response_data = {}
-        columns = ['id', 'contacted', 'consented', 'modified']
+        columns = ['id', 'contacted', 'modified']
         qs = PotentialCall.objects.values_list(*columns).all()
 #         columns = ['id', 'consented', 'modified']
 #         qs = MaternalConsent.objects.values_list(*columns).all()
@@ -100,17 +100,14 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
         if not potential_calls.empty:
             response_data.update({
                 'potential_calls': int(potential_calls['id'].count()),
-                'not_contacted': int(potential_calls.query('contacted == False')['contacted'].count()),
-                'not_consented': int(potential_calls.query('consented == False')['consented'].count()),
-                'consented': int(potential_calls.query('consented == True')['consented'].count()),
-                'consent_verified': int(potential_calls.query('consented == True')['consented'].count()),
+#                 'consent_verified': int(potential_calls.query('is_verified == True')['is_verified'].count()),
+                'consent_verified': int(potential_calls['id'].count()),
             })
             d = date.today()
             local_date = tz.localize(datetime(d.year, d.month, d.day, 0, 0, 0))
             potential_calls = potential_calls[(potential_calls['modified'] >= local_date)]
             response_data.update({
                 'contacted_today': int(potential_calls.query('contacted == True')['contacted'].count()),
-                'consented_today': int(potential_calls.query('consented == True')['consented'].count()),
             })
         future.set_result(self.verified_response_data(response_data))
 

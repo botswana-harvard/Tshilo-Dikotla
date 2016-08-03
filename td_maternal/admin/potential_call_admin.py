@@ -5,7 +5,8 @@ from edc_base.modeladmin.mixins import (ModelAdminChangelistModelButtonMixin, Mo
                                         ModelAdminAuditFieldsMixin)
 from simple_history.admin import SimpleHistoryAdmin
 
-from td_maternal.models import PotentialCall, MaternalConsent
+from call_manager.models import Call
+from td_maternal.models import PotentialCall
 
 
 class BaseModelAdmin(ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
@@ -24,7 +25,7 @@ class PotentialCallAdmin(ModelAdminRedirectMixin, ModelAdminChangelistModelButto
               'visit_code', 'dob']
 
     list_display = ['subject_identifier', 'identity', 'contacted', 'first_name', 'last_name',
-                    'approximate_date', 'visit_code', 'dob']
+                    'approximate_date', 'visit_code', 'dob', 'jum_to_call_button']
 
     list_filter = ['subject_identifier', 'identity', 'contacted', 'approximate_date', 'visit_code']
 
@@ -37,14 +38,14 @@ class PotentialCallAdmin(ModelAdminRedirectMixin, ModelAdminChangelistModelButto
     readonly_fields = ['subject_identifier', 'identity', 'visit_code', 'first_name', 'last_name',
                        'initials', 'dob']
 
-#     def consent_button(self, obj):
-#         reverse_args = None
-#         try:
-#             subject_consent = MaternalConsent.objects.get(potential_subject=obj)
-#             reverse_args = (subject_consent.pk, )
-#         except MaternalConsent.DoesNotExist:
-#             pass
-#         return self.changelist_model_button(
-#             'td_maternal', 'MaternalConsent', reverse_args=reverse_args,
-#             change_label='consent')
-#     consent_button.short_description = 'Consent'
+    def jum_to_call_button(self, obj):
+        reverse_args = None
+        try:
+            call = Call.objects.get(potential_call=obj)
+            reverse_args = (call.pk, )
+        except Call.DoesNotExist:
+            pass
+        return self.changelist_model_button(
+            'call_manager', 'call', reverse_args=reverse_args,
+            change_label='goto_call')
+    jum_to_call_button.short_description = 'go to call'
