@@ -37,6 +37,8 @@ class MaternalLifetimeArvHistory(MaternalCrfModel):
         null=True)
 
     is_date_estimated = IsDateEstimatedField(
+        blank=True,
+        null=True,
         verbose_name=("Is the subject's date of triple antiretrovirals estimated?"))
 
     preg_on_haart = models.CharField(
@@ -47,7 +49,8 @@ class MaternalLifetimeArvHistory(MaternalCrfModel):
 
     haart_changes = models.IntegerField(
         validators=[MinValueValidator(0)],
-        verbose_name="How many times did you change your triple antiretrovirals medicines?")
+        verbose_name="How many times did you change your triple antiretrovirals medicines?",
+        help_text='If there was no change please enter 0.')
 
     prior_preg = models.CharField(
         max_length=80,

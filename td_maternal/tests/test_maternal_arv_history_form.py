@@ -11,7 +11,7 @@ from td_maternal.forms import MaternalLifetimeArvHistoryForm
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
                         AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalRandomizationFactory,
-                        MaternalVisitFactory)
+                        MaternalVisitFactory, MaternalObstericHistoryFactory)
 
 
 class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
@@ -49,7 +49,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
         self.options = {
             'maternal_visit': self.maternal_visit.id,
             'report_datetime': timezone.now(),
-            'haart_start_date': datetime.today() - relativedelta(weeks=7),
+            'haart_start_date': datetime.today() - relativedelta(months=9),
             'is_date_estimated': '-',
             'preg_on_haart': YES,
             'haart_changes': 0,
@@ -104,10 +104,14 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
     def test_haart_start_date(self):
         """ARV start date should be six weeks prior to today"""
+        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit, prev_pregnancies=1)
+        self.options['prev_sdnvp_labour'] = NOT_APPLICABLE
+        self.options['prev_preg_azt'] = NOT_APPLICABLE
+        self.options['prev_preg_haart'] = YES
         self.options['haart_start_date'] = timezone.now()
         form = MaternalLifetimeArvHistoryForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn("ARV start date must be six weeks prior to today's date or greater.", errors)
+        self.assertIn("ARV start date must be four weeks prior to today's date or greater.", errors)
 
     def test_haart_start_date_2(self):
         """Start date of ARVs CANNOT be before DOB"""
@@ -116,3 +120,36 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
         form = MaternalLifetimeArvHistoryForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn("Date of triple ARVs first started CANNOT be before DOB.", errors)
+
+    def test_prev_preg_azt(self):
+        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit, prev_pregnancies=0)
+        self.options['prev_preg_azt'] = YES
+        form = MaternalLifetimeArvHistoryForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn(
+            'In Maternal Obsterical History form you indicated there were no previous '
+            'pregnancies. Receive AZT monotherapy in previous pregancy should be '
+            'NOT APPLICABLE', errors)
+
+    def test_prev_sdnvp_labour(self):
+        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit, prev_pregnancies=0)
+        self.options['prev_sdnvp_labour'] = YES
+        self.options['prev_preg_azt'] = NOT_APPLICABLE
+        form = MaternalLifetimeArvHistoryForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn(
+            'In Maternal Obsterical History form you indicated there were no previous '
+            'pregnancies. Single sd-NVP in labour during a prev pregnancy should '
+            'be NOT APPLICABLE', errors)
+
+    def test_prev_preg_haart(self):
+        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit, prev_pregnancies=0)
+        self.options['prev_sdnvp_labour'] = NOT_APPLICABLE
+        self.options['prev_preg_azt'] = NOT_APPLICABLE
+        self.options['prev_preg_haart'] = YES
+        form = MaternalLifetimeArvHistoryForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn(
+            'In Maternal Obsterical History form you indicated there were no previous '
+            'pregnancies. triple ARVs during a prev pregnancy should '
+            'be NOT APPLICABLE', errors)

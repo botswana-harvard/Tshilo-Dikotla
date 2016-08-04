@@ -11,9 +11,10 @@ from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
 class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
-
+    
+    dashboard_type = 'maternal'
     form = MaternalLabourDelForm
-
+    
     list_display = ('registered_subject',
                     'delivery_datetime',
                     'labour_hrs',
@@ -41,10 +42,10 @@ class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
                     id__exact=request.GET.get('registered_subject', 0))
             else:
                 self.readonly_fields = list(self.readonly_fields)
-                try:
-                    self.readonly_fields.index('registered_subject')
-                except ValueError:
-                    self.readonly_fields.append('registered_subject')
+#                 try:
+#                     self.readonly_fields.index('registered_subject')
+#                 except ValueError:
+#                     self.readonly_fields.append('registered_subject')
         return super(MaternalLabourDelAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(MaternalLabourDel, MaternalLabourDelAdmin)
