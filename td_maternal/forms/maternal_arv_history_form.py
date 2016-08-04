@@ -55,6 +55,7 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
             raise forms.ValidationError('Maternal Consent does not exist.')
 
     def validate_prev_preg(self, cleaned_data):
+        cleaned_data = self.cleaned_data
         ob_history = MaternalObstericalHistory.objects.filter(
             maternal_visit__appointment__registered_subject=cleaned_data.get(
                 'maternal_visit').appointment.registered_subject)

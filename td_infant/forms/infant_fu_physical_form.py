@@ -1,10 +1,11 @@
 from django import forms
+from datetime import date
 
 from edc_constants.constants import NO, NOT_EVALUATED, YES
 
 from td_maternal.models import MaternalConsent
 
-from ..models import InfantFuPhysical
+from ..models import InfantFuPhysical, InfantBirth
 
 from .base_infant_model_form import BaseInfantModelForm
 
@@ -27,7 +28,8 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
 
     def validate_height(self):
         cleaned_data = self.cleaned_data
-        visit = ['2000', '2010', '2030', '2060', '2090', '2120']
+        visit = ['2000', '2010', '2020', '2060', '2120', '2180', '2240', '2300', '2360']
+
         if (not cleaned_data.get('infant_visit').appointment.visit_definition.code == '2000' and
                 not cleaned_data.get('infant_visit').appointment.visit_definition.code == '2010'):
             prev_visit = visit.index(cleaned_data.get('infant_visit').appointment.visit_definition.code) - 1
@@ -48,7 +50,7 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
 
     def validate_head_circum(self):
         cleaned_data = self.cleaned_data
-        visit = ['2000', '2010', '2030', '2060', '2090', '2120']
+        visit = ['2000', '2010', '2020', '2060', '2120', '2180', '2240', '2300', '2360']
 
         if (not cleaned_data.get('infant_visit').appointment.visit_definition.code == '2000' and
                 not cleaned_data.get('infant_visit').appointment.visit_definition.code == '2000'):
@@ -73,8 +75,11 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
     def validate_report_datetime(self):
         cleaned_data = self.cleaned_data
         try:
+            subject_identifier = cleaned_data.get(
+                'infant_visit').appointment.registered_subject.subject_identifier
+            infant_birth = InfantBirth.objects.get(registered_subject__subject_identifier=subject_identifier)
             if (cleaned_data.get('report_datetime').date() <
-                    cleaned_data.get('infant_visit').appointment.registered_subject.dob):
+                    infant_birth.dob):
                 raise forms.ValidationError('Report date {} cannot be before infant DOB of {}'.format(
                     cleaned_data.get('report_datetime').date(),
                     cleaned_data.get('infant_visit').appointment.registered_subject.dob))
@@ -84,6 +89,8 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
             if cleaned_data.get('report_datetime') < maternal_consent.consent_datetime:
                 raise forms.ValidationError(
                     "Report date of {} CANNOT be before consent datetime".format(cleaned_data.get('report_datetime')))
+        except InfantBirth.DoesNotExist:
+            raise forms.ValidationError('Infant Birth does not exist.')
         except MaternalConsent.DoesNotExist:
             raise forms.ValidationError('Maternal Consent does not exist.')
 
