@@ -27,67 +27,87 @@
           <li><a id="pill-call-manager" href="{% url 'admin:call_manager_call_changelist' %}">Call Subjects
                 <span class="glyphicon glyphicon-earphone pull-right" aria-hidden="true"></span>
           </a></li>
-          <li><a id="pill-potential-subjects" href="{% url 'admin:td_maternal_potentialcall_changelist' %}">Potential Calls
-                <span id="bdg-potential-calls" class="badge pull-right"></span>
-                <span class="fa fa-user fa-2x pull-right" aria-hidden="true"></span>
+          <li><a id="link-verify-consent-subjects" href="{% url 'admin:td_maternal_maternalconsent_changelist' %}">Verify Consents
+                <!--<span id="bdg-consent-verified" class="badge pull-right"></span>-->
           </a></li>
-          <li><a id="link-verify-consent-subjects" href="#">Consent Verification
-                <span id="bdg-consent-verified" class="badge pull-right"></span>
-          </a></li>
+          <li role="presentation"><a id="link-pending-transactions" href="#">Manage transactions
+          		<!--<span id="bdg-pending-transactions" class="badge pull-right"></span></a>-->
+          </li>
        </ul>
     </div>
     <div id="div-home" class="col-md-4">
-        <div class="panel panel-warning">
-          <!-- Default panel contents -->
-            <div class="panel-heading">Worklist
-              <a id="link-refresh" href=""><i id="bdg-refresh" class="fa fa-refresh fa-1x fa-fw pull-right"></i></a>
-            </div>
-            <div class="panel-body">
-            <ul class="nav nav-pills nav-stacked">
-            <li role="presentation"><a id="link-not-contacted" href="#">Subjects never contacted<span id="bdg-not-contacted" class="badge pull-right"></span></a></li>
-            <li role="presentation"><a id="link-contacted-retry" href="#">Subjects contacted, try again<span id="bdg-contacted-retry" class="badge pull-right"></span></a></li>
-            <li role="presentation"><a id="link-not-consented" href="#">Subjects not consented<span id="bdg-not-consented" class="badge pull-right"></span></a></li>
-            </ul>
-            </div>
+        <div class="panel panel-success">
+          <div class="panel-heading" style="background-color:#85c1e9;"><b>Overall Stats</b>
+          	<a id="link-refresh" href=""><i id="bdg-refresh" class="fa fa-refresh fa-1x fa-fw pull-right"></i></a>
+          </div>
+          <div class="panel-body">
+           <ul class="nav nav-pills nav-stacked">
+           	<li role="presentation"><a id="link-consented" href="#">Consented Mothers
+           		<span id="bdg-consented" class="badge pull-right"></span></a>
+           		<ul>
+           			<li role="presentation"><a id="link-verified-consents" href="#">Verified
+	            		<span id="bdg-verified-consents" class="badge pull-right"></span></a>
+	            	</li>
+	            	<li role="presentation"><a id="link-notverified-consents" href="#">Not Verified
+	            		<span id="bdg-notverified-consents" class="badge pull-right"></span></a>
+	            	</li>
+           		</ul>
+           	</li>
+           	<li role="presentation"><a id="link-del" href="#">Delivered Mothers
+           		<span id="bdg-del" class="badge pull-right"></span></a>
+           		<ul>
+           			<li role="presentation"><a id="link-del-pos" href="#">POS at enrollment
+	            		<span id="bdg-del-pos" class="badge pull-right"></span></a>
+	            	</li>
+	            	<li role="presentation"><a id="link-del-neg" href="#">NEG at enrollment
+	            		<span id="bdg-del-neg" class="badge pull-right"></span></a>
+	            	</li>
+           		</ul>
+           	</li>
+           	<li role="presentation"><a id="link-consented" href="#">Pregnant Mothers
+           		<span id="bdg-preg" class="badge pull-right"></span></a>
+           		<ul>
+           			<li role="presentation"><a id="link-preg-pos" href="#">POS at enrollment
+	            		<span id="bdg-preg-pos" class="badge pull-right"></span></a>
+	            	</li>
+	            	<li role="presentation"><a id="link-preg-neg" href="#">NEG at enrollment
+	            		<span id="bdg-preg-neg" class="badge pull-right"></span></a>
+	            	</li>
+           		</ul>
+           	</li> 
+           	<li role="presentation"><a id="link-offstudy" href="#">Mother/Infant Offstudy
+           		<span id="bdg-offstudy" class="badge pull-right"></span></a>
+           	</li>          	
+           </ul>
+         </div>
         </div>
-        <div class="panel panel-default">
-          <!-- Default panel contents -->
-          <div class="panel-heading">Administration</div>
-            <div class="panel-body">
-            <ul class="nav nav-pills nav-stacked">
-            <li role="presentation"><a id="link-pending-transactions" href="#">Pending transactions<span id="bdg-pending-transactions" class="badge pull-right"></span></a></li>
-            </ul>
-            </div>
-        </div>
-
-
-
-        </div>
+    </div>
     <div id="div-home" class="col-md-4">
         <div class="panel panel-success">
           <!-- Default panel contents -->
           <div class="panel-heading"><span id="today">Today</span><span id="todays-date" class="pull-right"></span></div>
             <div class="panel-body">
-            <ul class="nav nav-pills nav-stacked">
-            <li role="presentation"><a id="link-contacted-today" href="#">Contacted<span id="bdg-contacted-today" class="badge pull-right"></span></a></li>
-            <li role="presentation"><a id="link-consented-today" href="#">Consented<span id="bdg-consented-today" class="badge pull-right"></span></a></li>
-            <!--<li role="presentation"><a id="link-idi-complete-today" href="#">IDIs complete<span id="bdg-idi-complete-today" class="badge pull-right"></span></a></li>
-            <li role="presentation"><a id="link-fgd-complete-today" href="#">FGDs complete<span id="bdg-fgd-complete-today" class="badge pull-right"></span></a></li>-->
-            </ul>
+	            <ul class="nav nav-pills nav-stacked">
+		            <li role="presentation"><a id="link-contacted-today" href="#">Contacted
+		            	<span id="bdg-contacted-today" class="badge pull-right"></span></a>
+		            </li>
+		            <li role="presentation"><a id="link-appointment-today" href="#">Appointments
+		            	<span id="bdg-appointment-today" class="badge pull-right"></span></a>
+		            </li>
+		            <li role="presentation"><a id="link-edd-1week" href="#">EDD &lt= 1week
+		            	<span id="bdg-edd-1week" class="badge pull-right"></span></a>
+		            </li>
+		            <li role="presentation"><a id="link-consented-today" href="#">Consented
+		            	<span id="bdg-consented-today" class="badge pull-right"></span></a>
+		            </li>
+		            <li role="presentation"><a id="link-pending-transactions" href="#">Pending Transactions
+		            	<span id="bdg-pending-transactions" class="badge pull-right"></span></a>
+		            </li>
+		            
+	            </ul>
             </div>
         </div>
-        <div class="panel panel-success">
-          <!-- Default panel contents -->
-          <div class="panel-heading">Overall</div>
-            <div class="panel-body">
-            <ul class="nav nav-pills nav-stacked">
-            <li role="presentation"><a id="link-consented" href="#">Consented<span id="bdg-consented" class="badge pull-right"></span></a></li>
-            <!--<li role="presentation"><a id="link-idi-complete" href="#">IDIs complete<span id="bdg-idi-complete" class="badge pull-right"></span></a></li>
-            <li role="presentation"><a id="link-fgd-complete" href="#">FGDs complete<span id="bdg-fgd-complete" class="badge pull-right"></span></a></li>-->
-            </ul>
-            </div>
-        </div>
-        </div>
+   </div>
 
 </div>
 {% endblock main %}
