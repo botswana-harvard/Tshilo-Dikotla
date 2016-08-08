@@ -74,7 +74,7 @@ class TestMaternalArvPregForm(BaseTestCase):
         self.options['new_diagnoses'] = NO
         form = MaternalDiagnosesForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('Participant has new diagnoses, please add new diagnoses.', errors)
+        self.assertIn('Participant does not have any new diagnoses, new diagnosis should be Not Applicable.', errors)
 
     def test_has_who_diagnosis(self):
         self.options['who'] = None

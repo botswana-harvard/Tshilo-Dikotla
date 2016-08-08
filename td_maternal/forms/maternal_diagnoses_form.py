@@ -21,8 +21,8 @@ class MaternalDiagnosesForm(BaseMaternalModelForm):
             if not cleaned_data.get('diagnoses'):
                 raise forms.ValidationError('No new diagnoses, do not answer question on new diagnosis.')
         else:
-            if cleaned_data.get('diagnoses'):
-                raise forms.ValidationError('Participant has new diagnoses, please add new diagnoses.')
+            if cleaned_data.get('diagnoses') not in [NOT_APPLICABLE]:
+                raise forms.ValidationError('Participant does not have any new diagnoses, new diagnosis should be Not Applicable.')
 
     def validate_who_dignoses(self):
         cleaned_data = self.cleaned_data

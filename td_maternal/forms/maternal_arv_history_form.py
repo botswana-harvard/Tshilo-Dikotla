@@ -1,6 +1,6 @@
 from django import forms
 
-from edc_constants.constants import NO, STOPPED, CONTINUOUS, RESTARTED
+from edc_constants.constants import YES, NO, STOPPED, CONTINUOUS, RESTARTED, NOT_APPLICABLE
 from tshilo_dikotla.utils import weeks_between
 
 from ..models import MaternalLifetimeArvHistory, MaternalConsent, MaternalObstericalHistory
@@ -40,9 +40,13 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
         cleaned_data = self.cleaned_data
         report_datetime = cleaned_data.get("report_datetime")
         haart_start_date = cleaned_data.get('haart_start_date')
-        if weeks_between(haart_start_date, report_datetime.date()) < 6:
-            raise forms.ValidationError(
-                "ARV start date must be six weeks prior to today's date or greater.")
+        if cleaned_data.get('prev_preg_haart') == YES:
+            if weeks_between(haart_start_date, report_datetime.date()) < 4:
+                raise forms.ValidationError(
+                    "ARV start date must be four weeks prior to today's date or greater.")
+        if cleaned_data.get('haart_start_date'):
+            if not cleaned_data.get('is_date_estimated'):
+                raise forms.ValidationError('Please answer: Is the subject\'s date of triple antiretrovirals estimated?')
         try:
             maternal_consent = MaternalConsent.objects.get(
                 registered_subject__subject_identifier=cleaned_data.get(
@@ -54,7 +58,7 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
         except MaternalConsent.DoesNotExist:
             raise forms.ValidationError('Maternal Consent does not exist.')
 
-    def validate_prev_preg(self, cleaned_data):
+    def validate_prev_preg(self):
         cleaned_data = self.cleaned_data
         ob_history = MaternalObstericalHistory.objects.filter(
             maternal_visit__appointment__registered_subject=cleaned_data.get(
@@ -81,7 +85,7 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
                 if cleaned_data.get('prev_preg_haart') == YES:
                     if not cleaned_data.get('haart_start_date'):
                         raise forms.ValidationError('Please give date triple antiretrovirals first started.')
-
+        
     class Meta:
         model = MaternalLifetimeArvHistory
         fields = '__all__'

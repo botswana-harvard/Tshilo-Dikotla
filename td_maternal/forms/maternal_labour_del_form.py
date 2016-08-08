@@ -3,7 +3,8 @@ from django import forms
 
 from edc_constants.constants import YES, NO, NOT_APPLICABLE, POS
 
-from ..models import MaternalLabourDel, MaternalHivInterimHx
+from ..models import MaternalLabourDel, MaternalHivInterimHx, MaternalVisit
+from ..classes import MaternalStatusHelper
 
 from .base_maternal_model_form import BaseMaternalModelForm
 
@@ -12,13 +13,30 @@ class MaternalLabourDelForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalLabourDelForm, self).clean()
-        if (cleaned_data.get('valid_regiment_duration') == YES and
+        self.validate_valid_regimen_hiv_pos_only()
+        return cleaned_data
+    
+    def validate_valid_regimen_hiv_pos_only(self):
+        cleaned_data = self.cleaned_data
+        registered_subject = cleaned_data.get('registered_subject')
+        latest_visit = MaternalVisit.objects.filter(subject_identifier=registered_subject.subject_identifier).order_by('-created').first()
+        maternal_status_helper = MaternalStatusHelper(latest_visit)
+        if maternal_status_helper.hiv_status == POS:
+            if cleaned_data.get('valid_regiment_duration') not in YES:
+                raise forms.ValidationError('Participant is HIV+ valid regimen duration should be YES. Please correct.')
+            if cleaned_data.get('valid_regiment_duration') == YES and not cleaned_data.get('arv_initiation_date'): 
+                raise forms.ValidationError('You indicated participant was on valid regimen, please give a valid arv initiation date.')
+            if (cleaned_data.get('valid_regiment_duration') == YES and
             (cleaned_data.get('delivery_datetime').date() - relativedelta(weeks=4) <
              cleaned_data.get('arv_initiation_date'))):
-            raise forms.ValidationError('You indicated that the mother was on REGIMENT for a valid duration, but'
-                                        ' delivery date is within 4weeks of art initiation date. Please correct.')
-        return cleaned_data
-
+                raise forms.ValidationError('You indicated that the mother was on REGIMEN for a valid duration, but'
+                                            ' delivery date is within 4weeks of art initiation date. Please correct.')
+        else:
+            if cleaned_data.get('valid_regiment_duration'):
+                raise forms.ValidationError('Participant\'s HIV status is {}, valid regimen duration should Not Applicable.'.format(maternal_status_helper.hiv_status))
+            if cleaned_data.get('arv_initiation_date'):
+                raise forms.ValidationError('Participant\'s HIV status is {}, arv initiation date should not filled.'.format(maternal_status_helper.hiv_status))
+    
     class Meta:
         model = MaternalLabourDel
         fields = '__all__'
