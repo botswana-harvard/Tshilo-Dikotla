@@ -19,19 +19,21 @@ class MaternalDiagnosesForm(BaseMaternalModelForm):
         cleaned_data = self.cleaned_data
         if cleaned_data.get('new_diagnoses') in [YES]:
             if not cleaned_data.get('diagnoses'):
-                raise forms.ValidationError('No new diagnoses, do not answer question on new diagnosis.')
+                raise forms.ValidationError('Participant has new diagnoses, please give a diagnosis.')
+            if self.validate_not_applicable_in_there('diagnoses'):
+                raise forms.ValidationError('New Diagnoses cannot have Not Applicable in the list. Please correct.')
         else:
-            if cleaned_data.get('diagnoses') not in [NOT_APPLICABLE]:
+            if self.validate_not_applicable_not_there('diagnoses'):
                 raise forms.ValidationError('Participant does not have any new diagnoses, new diagnosis should be Not Applicable.')
 
     def validate_who_dignoses(self):
         cleaned_data = self.cleaned_data
         if cleaned_data.get('has_who_dx') == YES:
-            if not cleaned_data.get('who') or cleaned_data.get('who') in [NOT_APPLICABLE]:
+            if not cleaned_data.get('who') or self.validate_not_applicable_in_there('who'):
                 raise forms.ValidationError('WHO diagnosis is Yes, please give who diagnosis.')
         if cleaned_data.get('has_who_dx') in [NO, NOT_APPLICABLE]:
-            if cleaned_data.get('who') not in [NOT_APPLICABLE]:
-                raise forms.ValidationError('WHO diagnoses is {}, please do not give WHO Stage III/IV'.format(cleaned_data.get('has_who_dx')))
+            if self.validate_not_applicable_not_there('who'):
+                raise forms.ValidationError('WHO diagnoses is {}, WHO Stage III/IV should be Not Applicable.'.format(cleaned_data.get('has_who_dx')))
 
 
     class Meta:

@@ -17,10 +17,10 @@ from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory
                         MaternalVisitFactory, MaternalArvPregFactory)
 
 
-class TestMaternalArvPregForm(BaseTestCase):
+class TestMaternalDiagnosesForm(BaseTestCase):
 
     def setUp(self):
-        super(TestMaternalArvPregForm, self).setUp()
+        super(TestMaternalDiagnosesForm, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
         self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
         self.registered_subject = self.maternal_consent.registered_subject
@@ -43,7 +43,7 @@ class TestMaternalArvPregForm(BaseTestCase):
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(
             maternal_visit=self.maternal_visit, number_of_gestations=1,)
 
-        diagnoses = MaternalDiagnoses.objects.create(
+        self.diagnoses = MaternalDiagnoses.objects.create(
             hostname_created="django", name="Gestational Hypertension", 
             short_name="Gestational Hypertension", created=timezone.datetime.now(), 
             user_modified="", modified=timezone.datetime.now(), 
@@ -51,15 +51,29 @@ class TestMaternalArvPregForm(BaseTestCase):
             display_index=1, user_created="django", field_name=None, 
             revision=":develop:")
         
+        self.diagnoses_na = MaternalDiagnoses.objects.create(
+            hostname_created="django", name="Not Applicable", 
+            short_name="N/A", created=timezone.datetime.now(), 
+            user_modified="", modified=timezone.datetime.now(), 
+            hostname_modified="django", version="1.0", 
+            display_index=1, user_created="django", field_name=None, 
+            revision=":develop:")
+
         self.who_dx = WcsDxAdult.objects.create(
             hostname_created="cabel", code="CS4003", short_name="Recurrent severe bacterial pneumo",
             created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(), hostname_modified="cabel",
             long_name="Recurrent severe bacterial pneumonia", user_created="abelc", 
             list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
+
+        self.who_dx_na = WcsDxAdult.objects.create(
+            hostname_created="cabel", code="CS4002", short_name="N/A",
+            created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(), hostname_modified="cabel",
+            long_name="Not Applicable", user_created="abelc", 
+            list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
     
         self.options = {
                 'new_diagnoses': YES,
-                'diagnoses': [diagnoses.id],
+                'diagnoses': [self.diagnoses.id],
                 'has_who_dx': YES,
                 'who': [self.who_dx.id]
                 }
@@ -68,7 +82,13 @@ class TestMaternalArvPregForm(BaseTestCase):
         self.options['diagnoses'] = None
         form = MaternalDiagnosesForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('No new diagnoses, do not answer question on new diagnosis.', errors)
+        self.assertIn('Participant has new diagnoses, please give a diagnosis.', errors)
+
+    def test_has_diagnoses_not_applicable_selected(self):
+        self.options['diagnoses'] = [self.diagnoses.id, self.diagnoses_na.id]
+        form = MaternalDiagnosesForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn('New Diagnoses cannot have Not Applicable in the list. Please correct.', errors)
 
     def test_has_no_dx_but_listed(self):
         self.options['new_diagnoses'] = NO
@@ -86,4 +106,6 @@ class TestMaternalArvPregForm(BaseTestCase):
         self.options['has_who_dx'] = NO
         form = MaternalDiagnosesForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('WHO diagnoses is No, please do not give WHO Stage III/IV', errors)
+        self.assertIn(
+            'WHO diagnoses is {}, WHO Stage III/IV should be Not Applicable.'.format(self.options['has_who_dx']), 
+            errors)
