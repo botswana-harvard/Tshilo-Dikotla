@@ -88,7 +88,7 @@ class TestMaternalDiagnosesForm(BaseTestCase):
         self.options['diagnoses'] = [self.diagnoses.id, self.diagnoses_na.id]
         form = MaternalDiagnosesForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('New Diagnoses cannot have Not Applicable in the list. Please correct.', errors)
+        self.assertIn('New Diagnoses is Yes, diagnoses list cannot have Not Applicable. Please correct.', errors)
 
     def test_has_no_dx_but_listed(self):
         self.options['new_diagnoses'] = NO
@@ -101,6 +101,12 @@ class TestMaternalDiagnosesForm(BaseTestCase):
         form = MaternalDiagnosesForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('WHO diagnosis is Yes, please give who diagnosis.', errors)
+
+    def test_has_who_diagnosis_not_applicable_selected(self):
+        self.options['who'] = [self.who_dx.id, self.who_dx_na.id]
+        form = MaternalDiagnosesForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn('WHO Stage III/IV cannot have Not Applicable in the list. Please correct.', errors)
 
     def test_has_now_who_dx_but_listed(self):
         self.options['has_who_dx'] = NO
