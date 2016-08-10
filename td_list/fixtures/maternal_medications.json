@@ -105,5 +105,24 @@
 		"hostname_modified": "bcpp025", 
 		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
 	}
+},
+
+{
+	"model": "td_list.maternalmedications", 
+	"pk": "cb4ad445-7cb7-45e3-8b0b-d9f358f591f1", 
+	"fields": {
+		"name": "None", 
+		"short_name": "None", 
+		"display_index": 6, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-08-10T15:54:27", 
+		"modified": "2016-08-10T15:54:27", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "edc4.bhp.org.bw", 
+		"hostname_modified": "edc4.bhp.org.bw", "revision": 
+		"dev01-stable-188-g5f17201:develop:5f17201db3454b7046b6926759e0e2db5367c5a9"}
 }
 ]
+ 
