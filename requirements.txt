@@ -2,7 +2,7 @@ Django
 django-braces==1.8.1
 django-cors-headers==1.1.0
 django-crispy-forms==1.6.0
-django-crypto-fields==0.1.7
+-e git+https://github.com/erikvw/django-crypto-fields@e8854322875d381bc6e118fc884ae93c15cd4a11#egg=django_crypto_fields
 django-extensions==1.6.1
 django-js-reverse==0.7.2
 django-model-utils==2.5
