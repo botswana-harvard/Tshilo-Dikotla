@@ -10,12 +10,10 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 from edc_base.views import EdcBaseViewMixin
-from edc_constants.constants import CLOSED
 from edc_sync.models.outgoing_transaction import OutgoingTransaction
 
-from call_manager.models import Call
-
-from td_maternal.models import (MaternalConsent, MaternalLabourDel, MaternalOffStudy, MaternalUltraSoundInitial)
+from td_maternal.models import (MaternalConsent, MaternalLabourDel, MaternalOffStudy, MaternalUltraSoundInitial,
+                                AntenatalEnrollment)
 from dateutil.relativedelta import relativedelta
 
 tz = pytz.timezone(settings.TIME_ZONE)
@@ -32,8 +30,11 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
             'not_verified_consents',
             'consented',
             'is_verified',
+            'pregnant',
+            'pregnant_pos',
+            'pregnant_neg',
             'delivered',
-            'delivered_po',
+            'delivered_pos',
             'delivered_neg',
             'edd_1week',
             'consented_today',
@@ -68,12 +69,14 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
             future_c = asyncio.Future()
             future_d = asyncio.Future()
             future_e = asyncio.Future()
+            future_f = asyncio.Future()
             tasks = [
                 self.consent_stats(future_a),
                 self.transaction_data(future_b),
-                self.pregnant_delivery_stats(future_c),
+                self.delivery_stats(future_c),
                 self.offstudy_stats(future_d),
-                self.weekly_edd_stats(future_e)
+                self.weekly_edd_stats(future_e),
+                self.pregnancy_status(future_f)
             ]
             loop.run_until_complete(asyncio.wait(tasks))
             self.response_data.update(future_a.result())
@@ -81,8 +84,8 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
             self.response_data.update(future_c.result())
             self.response_data.update(future_d.result())
             self.response_data.update(future_e.result())
+            self.response_data.update(future_f.result())
             loop.close()
-            print('****{}*****'.format(self.response_data))
             return HttpResponse(json.dumps(self.response_data), content_type='application/json')
         return self.render_to_response(context)
 
@@ -107,7 +110,7 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
         future.set_result(self.verified_response_data(response_data))
 
     @asyncio.coroutine
-    def pregnant_delivery_stats(self, future):
+    def delivery_stats(self, future):
         response_data = {}
         columns = ['id', 'valid_regiment_duration', 'modified']
         qs = MaternalLabourDel.objects.values_list(*columns).all()
@@ -115,10 +118,35 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
         if not deliveries.empty:
             response_data.update({
                 'delivered': int(deliveries['id'].count()),
-                'delivered_po': int(deliveries.query(
-                    'valid_regiment_duration != N/A')['valid_regiment_duration'].count()),
+                'delivered_pos': int(deliveries.query(
+                    'valid_regiment_duration != "{}"'.format('N/A'))['valid_regiment_duration'].count()),
                 'delivered_neg': int(deliveries.query(
-                    'valid_regiment_duration == N/A')['valid_regiment_duration'].count()),
+                    'valid_regiment_duration == "{}"'.format('N/A'))['valid_regiment_duration'].count()),
+            })
+        future.set_result(self.verified_response_data(response_data))
+
+    @asyncio.coroutine
+    def pregnancy_status(self, future):
+        response_data = {}
+        delivery_columns = ['registered_subject__subject_identifier', ]
+        deliveries = MaternalLabourDel.objects.values_list(*delivery_columns, flat=True).all()
+        consent_columns = ['subject_identifier']
+        consent_qs = MaternalConsent.objects.values_list(*consent_columns, flat=True).all()
+        pregnant_list = []
+        for item in consent_qs:
+            if item not in deliveries:
+                pregnant_list.append(item)
+        columns = ['id', 'enrollment_hiv_status', 'modified']
+        qs = AntenatalEnrollment.objects.filter(
+            registered_subject__subject_identifier__in=pregnant_list).values_list(*columns).all()
+        pregnancies = pd.DataFrame(list(qs), columns=columns)
+        if not pregnancies.empty:
+            response_data.update({
+                'pregnant': int(pregnancies['id'].count()),
+                'pregnant_pos': int(pregnancies.query(
+                    'enrollment_hiv_status == "{}"'.format('POS'))['enrollment_hiv_status'].count()),
+                'pregnant_neg': int(pregnancies.query(
+                    'enrollment_hiv_status == "{}"'.format('NEG'))['enrollment_hiv_status'].count()),
             })
         future.set_result(self.verified_response_data(response_data))
 
@@ -161,20 +189,6 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
         tx = OutgoingTransaction.objects.filter(is_consumed_server=False)
         if tx:
             response_data.update(pending_transactions=tx.count())
-        future.set_result(self.verified_response_data(response_data))
-
-    #######################
-    #STOP
-    ######################
-    @asyncio.coroutine
-    def contact_data(self, future):
-        response_data = {}
-        calls = Call.objects.filter(call_attempts__gte=1)
-        if calls:
-            response_data.update(contacted_retry=calls.exclude(call_status=CLOSED).count())
-            calls.filter(**self.modified_option)
-            if calls:
-                response_data.update(contacted_today=calls.count())
         future.set_result(self.verified_response_data(response_data))
 
     @asyncio.coroutine
