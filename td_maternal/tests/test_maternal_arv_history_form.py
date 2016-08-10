@@ -102,24 +102,29 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
             'yet you indicated that ARVs were interrupted and never restarted. Please correct.', 
             form.errors.get('__all__'))
 
-    def test_haart_start_date(self):
-        """ARV start date should be six weeks prior to today"""
+    def test_haart_start_date_2(self):
+        """Start date of ARVs CANNOT be before DOB"""
         MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit, prev_pregnancies=1)
         self.options['prev_sdnvp_labour'] = NOT_APPLICABLE
         self.options['prev_preg_azt'] = NOT_APPLICABLE
         self.options['prev_preg_haart'] = YES
-        self.options['haart_start_date'] = timezone.now()
-        form = MaternalLifetimeArvHistoryForm(data=self.options)
-        errors = ''.join(form.errors.get('__all__'))
-        self.assertIn("ARV start date must be four weeks prior to today's date or greater.", errors)
-
-    def test_haart_start_date_2(self):
-        """Start date of ARVs CANNOT be before DOB"""
         self.options['haart_start_date'] = date(1987, 10, 10)
         self.options['report_datetime'] = datetime.today()
         form = MaternalLifetimeArvHistoryForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn("Date of triple ARVs first started CANNOT be before DOB.", errors)
+
+    def test_haart_start_date_none(self):
+        """Start date of ARVs CANNOT be None"""
+        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit, prev_pregnancies=1)
+        self.options['prev_sdnvp_labour'] = NOT_APPLICABLE
+        self.options['prev_preg_azt'] = NOT_APPLICABLE
+        self.options['prev_preg_haart'] = YES
+        self.options['haart_start_date'] = None
+        self.options['report_datetime'] = datetime.today()
+        form = MaternalLifetimeArvHistoryForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn("Please give a valid arv initiation date.", errors)
 
     def test_prev_preg_azt(self):
         MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit, prev_pregnancies=0)
