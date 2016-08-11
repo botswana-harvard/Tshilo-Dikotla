@@ -28,7 +28,7 @@
                 $("#bdg-verified-consents").text(json.verified_consents);
                 $("#bdg-notverified-consents").text(json.not_verified_consents);
                 $("#bdg-del").text(json.delivered);
-                $("#bdg-del-pos").text(json.delivered_po);
+                $("#bdg-del-pos").text(json.delivered_pos);
                 $("#bdg-del-neg").text(json.delivered_neg);
                 $("#bdg-preg").text(json.pregnant);
                 $("#bdg-preg-neg").text(json.pregnant_neg);
