@@ -95,6 +95,14 @@ class MaternalRequisitionRuleGroup(RuleGroup):
         target_model=[('td_lab', 'maternalrequisition')],
         target_requisition_panels=['Viral Load'])
 
+    require_elisa = RequisitionRule(
+        logic=Logic(
+            predicate=func_mother_pos,
+            consequence=NOT_REQUIRED,
+            alternative=UNKEYED),
+        target_model=[('td_lab', 'maternalrequisition')],
+        target_requisition_panels=['ELISA'])
+
     require_cd4 = RequisitionRule(
         logic=Logic(
             predicate=func_require_cd4,
