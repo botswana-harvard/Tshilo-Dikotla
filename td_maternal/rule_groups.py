@@ -1,7 +1,6 @@
-from edc_constants.constants import YES, UNKEYED, NOT_REQUIRED, POS, NEG, UNK
+from edc_constants.constants import UNKEYED, NOT_REQUIRED, POS, NEG, UNK
 from edc_rule_groups.classes import RuleGroup, site_rule_groups, Logic, CrfRule, RequisitionRule
 from edc_registration.models import RegisteredSubject
-from edc_appointment.models import Appointment
 
 from tshilo_dikotla.constants import ONE
 
@@ -95,7 +94,15 @@ class MaternalRequisitionRuleGroup(RuleGroup):
             alternative=NOT_REQUIRED),
         target_model=[('td_lab', 'maternalrequisition')],
         target_requisition_panels=['Viral Load'])
- 
+
+    require_elisa = RequisitionRule(
+        logic=Logic(
+            predicate=func_mother_pos,
+            consequence=NOT_REQUIRED,
+            alternative=UNKEYED),
+        target_model=[('td_lab', 'maternalrequisition')],
+        target_requisition_panels=['ELISA'])
+
     require_cd4 = RequisitionRule(
         logic=Logic(
             predicate=func_require_cd4,
@@ -107,7 +114,8 @@ class MaternalRequisitionRuleGroup(RuleGroup):
     class Meta:
         app_label = 'td_maternal'
         source_fk = None
-        source_model = None
+        source_model = RegisteredSubject
+
 site_rule_groups.register(MaternalRequisitionRuleGroup)
 
 

@@ -44,6 +44,11 @@ class TestMaternalStatusHelper(BaseTestCase):
                 visit_definition__code='2020M'))
         status_helper = MaternalStatusHelper(maternal_visit_2020M)
         self.assertEqual(status_helper.hiv_status, POS)
+        self.assertEqual(RequisitionMetaData.objects.filter(entry_status='NEW',
+                                                            lab_entry__app_label='td_lab',
+                                                            lab_entry__model_name='maternalrequisition',
+                                                            lab_entry__requisition_panel__name='Viral Load',
+                                                            appointment=self.antenatal_visit_1.appointment).count(), 1)
 
     def test_pos_status_from_rapid_test(self):
         """test that we can figure out a posetive status taking in to consideration rapid tests."""
