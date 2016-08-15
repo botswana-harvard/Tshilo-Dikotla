@@ -18,7 +18,7 @@ class MaternalPostPartumFu(MaternalCrfModel, DiagnosesMixin):
         max_length=25,
         verbose_name="Has the mother been hospitalized since delivery?",
         choices=YES_NO,
-        help_text="If No, end here.",
+        help_text="",
     )
 
     hospitalization_reason = models.ManyToManyField(
