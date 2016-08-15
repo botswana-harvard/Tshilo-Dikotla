@@ -56,10 +56,6 @@ class MaternalPostPartumFuForm(BaseMaternalModelForm):
     def validate_hospitalized_no(self):
         cleaned_data = self.cleaned_data
         if cleaned_data.get('hospitalized') == NO:
-            if self.validate_many_to_many_not_blank('hospitalization_reason'):
-                raise forms.ValidationError(
-                    'Question7: Patient was hospitalized, please give hospitalization_reason.')
-
             if self.validate_not_applicable_not_there('hospitalization_reason'):
                 raise forms.ValidationError(
                     'Question7: Participant was not hospitalized, reason should be N/A')
@@ -81,13 +77,12 @@ class MaternalPostPartumFuForm(BaseMaternalModelForm):
         subject_status = status_helper.hiv_status
 
         if subject_status == NEG:
-
-            if self.validate_many_to_many_not_blank('who'):
-                raise forms.ValidationError('Question11: WHO Diagnosis field should not be left empty')
-
             if cleaned_data.get('has_who_dx') != NOT_APPLICABLE:
                 raise forms.ValidationError('The mother is Negative, question 10 for WHO Stage III/IV should be N/A')
 
+            if self.validate_many_to_many_not_blank('who'):
+                raise forms.ValidationError('Question11: Participant is HIV {}, WHO Diagnosis field should be N/A'.format(status_helper.hiv_status))
+            
             if self.validate_not_applicable_not_there('who'):
                 raise forms.ValidationError(
                     'The mother is Negative, question 11 for WHO Stage III/IV listing should be N/A')
@@ -102,13 +97,12 @@ class MaternalPostPartumFuForm(BaseMaternalModelForm):
         subject_status = status_helper.hiv_status
 
         if subject_status == POS:
-
-            if self.validate_many_to_many_not_blank('who'):
-                raise forms.ValidationError('Question11: WHO Diagnosis field should not be left empty')
-
             if cleaned_data.get('has_who_dx') == NOT_APPLICABLE:
                 raise forms.ValidationError(
                     'The mother is positive, question 10 for WHO Stage III/IV should not be N/A')
+
+            if self.validate_many_to_many_not_blank('who'):
+                raise forms.ValidationError('Question11: WHO Diagnosis field should not be left empty')
 
             if cleaned_data.get('has_who_dx') == YES:
                 if self.validate_not_applicable_in_there('who'):
