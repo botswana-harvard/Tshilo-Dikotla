@@ -4,14 +4,14 @@ from django.contrib import admin
 
 from lab_requisition.admin import RequisitionAdminMixin
 
-from tshilo_dikotla.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
 from td_maternal.models import MaternalVisit
 
 from ..forms import MaternalRequisitionForm
 from ..models import MaternalRequisition, Panel
 
 
-class MaternalRequisitionAdmin(RequisitionAdminMixin, BaseModelAdmin):
+class MaternalRequisitionAdmin(RequisitionAdminMixin, MembershipBaseModelAdmin):
 
     dashboard_type = 'maternal'
     form = MaternalRequisitionForm
