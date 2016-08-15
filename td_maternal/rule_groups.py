@@ -58,6 +58,7 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
         target_model=[('td_maternal', 'maternalrando'),
                       ('td_maternal', 'maternalinterimidcc'),
                       ('td_maternal', 'maternalhivinterimhx'),
+                      ('td_maternal', 'maternalaztnvp'),
                       ('td_maternal', 'maternalarvpreg'),
                       ('td_maternal', 'maternallifetimearvhistory'),
                       ('td_maternal', 'maternalarvpost'),

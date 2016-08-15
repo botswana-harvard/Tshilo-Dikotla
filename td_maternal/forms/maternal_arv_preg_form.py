@@ -95,13 +95,12 @@ class MaternalArvForm(BaseMaternalModelForm):
             maternal_visit = cleaned_data.get('maternal_arv_preg').maternal_visit
             arv_history = MaternalLifetimeArvHistory.objects.get(maternal_visit=maternal_visit)
             if arv_history:
-                mydate = cleaned_data.get('start_date')
-                arv_table_date = parse_date(mydate).date()
-                if arv_table_date < arv_history.haart_start_date:
+                start_date = cleaned_data.get('start_date')
+                if start_date < arv_history.haart_start_date:
                     raise forms.ValidationError(
                         "Your ARV start date {} in this pregnancy cannot be before your "
                         "Historical ARV date {}".format(
-                            arv_table_date, arv_history.haart_start_date))
+                            start_date, arv_history.haart_start_date))
         except MaternalLifetimeArvHistory.DoesNotExist:
             pass
 

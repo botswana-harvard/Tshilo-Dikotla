@@ -11,7 +11,7 @@ from td_maternal.forms import MaternalArvPregForm, MaternalArvForm
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
                         AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalRandomizationFactory,
-                        MaternalVisitFactory, MaternalArvPregFactory)
+                        MaternalVisitFactory, MaternalArvPregFactory, MaternalArvHistoryFactory)
 
 
 class TestMaternalArvPregForm(BaseTestCase):
@@ -102,3 +102,20 @@ class TestMaternalArvPregForm(BaseTestCase):
             'Your stop date of {} is prior to start date of {}. '
             'Please correct'.format(
                 self.options['stop_date'], self.options['start_date']), form.errors.get('__all__'))
+
+    def test_validate_historical_and_present_arv_start_dates(self):
+        """"""
+        maternal_arv_preg = MaternalArvPregFactory(maternal_visit = self.maternal_visit, took_arv=YES)
+        maternalarvhistory = MaternalArvHistoryFactory(
+            maternal_visit=self.maternal_visit, haart_start_date=(timezone.datetime.now() - relativedelta(weeks=9)).date())
+        inline_data = {
+            'maternal_arv_preg': maternal_arv_preg.id,
+            'arv_code': 'Zidovudine', 
+            'start_date':timezone.now().date() - timezone.timedelta(weeks=10),
+            'stop_date': timezone.now().date()
+        }
+        form = MaternalArvForm(data=inline_data)
+        self.assertIn(
+            "Your ARV start date {} in this pregnancy cannot be before your "
+            "Historical ARV date {}".format(
+            inline_data['start_date'], maternalarvhistory.haart_start_date), form.errors.get('__all__'))
