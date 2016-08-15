@@ -1,11 +1,13 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
-from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES, NO, NEG, NOT_APPLICABLE, UNK
+from edc_constants.constants import SCHEDULED, POS, YES, NO, NEG, NOT_APPLICABLE, UNK
 from edc_meta_data.models import RequisitionMetaData
 from edc_appointment.models import Appointment
+from edc_registration.models import RegisteredSubject
 
 from td_maternal.models import MaternalVisit
 from td_maternal.classes import MaternalStatusHelper
+from td_infant.tests.factories import InfantVisitFactory, InfantBirthFactory
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
@@ -49,6 +51,57 @@ class TestMaternalStatusHelper(BaseTestCase):
                                                             lab_entry__model_name='maternalrequisition',
                                                             lab_entry__requisition_panel__name='Viral Load',
                                                             appointment=self.antenatal_visit_1.appointment).count(), 1)
+
+    def test_dnapcr_for_heu_infant(self):
+        """test that for an HEU infant, then the DNA PCR requisition is made available."""
+        self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
+        randomization = MaternalRandomizationFactory(maternal_visit=self.antenatal_visit_1)
+        MaternalVisitFactory(
+            appointment=Appointment.objects.get(
+                registered_subject=randomization.maternal_visit.appointment.registered_subject,
+                visit_definition__code='1020M'))
+        labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        infant_registered_subject = RegisteredSubject.objects.get(
+            relative_identifier=labour_del.registered_subject.subject_identifier)
+        InfantBirthFactory(maternal_labour_del=labour_del, registered_subject=infant_registered_subject)
+        InfantVisitFactory(
+            appointment=Appointment.objects.get(
+                registered_subject=infant_registered_subject,
+                visit_definition__code='2000'))
+        InfantVisitFactory(
+            appointment=Appointment.objects.get(
+                registered_subject=infant_registered_subject,
+                visit_definition__code='2010'))
+        self.assertEqual(RequisitionMetaData.objects.filter(entry_status='NEW',
+                                                            lab_entry__app_label='td_lab',
+                                                            lab_entry__model_name='infantrequisition',
+                                                            lab_entry__requisition_panel__name='DNA PCR',
+                                                            appointment__visit_definition__code='2010').count(), 1)
+
+    def test_dnapcr_for_non_heu_infant(self):
+        """test that for a NON HEU infant, then the DNA PCR requisition is NOT made available."""
+        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
+        MaternalVisitFactory(
+            appointment=Appointment.objects.get(
+                registered_subject=self.registered_subject,
+                visit_definition__code='1020M'))
+        labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        infant_registered_subject = RegisteredSubject.objects.get(
+            relative_identifier=labour_del.registered_subject.subject_identifier)
+        InfantBirthFactory(maternal_labour_del=labour_del, registered_subject=infant_registered_subject)
+        InfantVisitFactory(
+            appointment=Appointment.objects.get(
+                registered_subject=infant_registered_subject,
+                visit_definition__code='2000'))
+        InfantVisitFactory(
+            appointment=Appointment.objects.get(
+                registered_subject=infant_registered_subject,
+                visit_definition__code='2010'))
+        self.assertEqual(RequisitionMetaData.objects.filter(entry_status='NOT_REQUIRED',
+                                                            lab_entry__app_label='td_lab',
+                                                            lab_entry__model_name='infantrequisition',
+                                                            lab_entry__requisition_panel__name='DNA PCR',
+                                                            appointment__visit_definition__code='2010').count(), 1)
 
     def test_pos_status_from_rapid_test(self):
         """test that we can figure out a posetive status taking in to consideration rapid tests."""

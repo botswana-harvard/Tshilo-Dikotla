@@ -237,29 +237,3 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
                         study_site=maternal_consent.study_site)
 
 
-# @receiver(post_save, weak=False, dispatch_uid='create_potential_calls_on_post_save')
-# def create_potential_calls_on_post_save(sender, instance, raw, created, using, **kwargs):
-#     if not raw:
-#         if isinstance(instance, Appointment):
-#             try:
-#                 PotentialCall.objects.get(
-#                     visit_code=instance.visit_definition.code,
-#                     identity=instance.registered_subject.identity,
-#                     subject_identifier=instance.registered_subject.subject_identifier,
-#                     first_name=instance.registered_subject.first_name,
-#                     last_name=instance.registered_subject.last_name,
-#                     initials=instance.registered_subject.initials,
-#                     gender=instance.registered_subject.gender,
-#                     dob=instance.registered_subject.dob)
-#             except PotentialCall.DoesNotExist:
-#                 PotentialCall.objects.create(
-#                     approximate_date=instance.appt_datetime.date(),
-#                     visit_code=instance.visit_definition.code,
-#                     identity=instance.registered_subject.identity,
-#                     subject_identifier=instance.registered_subject.subject_identifier,
-#                     first_name=instance.registered_subject.first_name,
-#                     last_name=instance.registered_subject.last_name,
-#                     initials=instance.registered_subject.initials,
-#                     gender=instance.registered_subject.gender,
-#                     dob=instance.registered_subject.dob)
-
