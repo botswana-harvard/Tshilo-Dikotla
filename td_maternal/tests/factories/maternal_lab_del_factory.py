@@ -1,10 +1,9 @@
 import factory
 
-from datetime import datetime
 from django.utils import timezone
 
 from edc_registration.tests.factories import RegisteredSubjectFactory
-from edc_constants.choices import YES, NO, POS, NEG, NOT_APPLICABLE
+from edc_constants.choices import YES, NO, NOT_APPLICABLE
 
 from td_maternal.models import MaternalLabourDel
 
@@ -22,7 +21,6 @@ class MaternalLabourDelFactory(factory.DjangoModelFactory):
     delivery_hospital = 'Lesirane'
     mode_delivery = 'spontaneous vaginal'
     csection_reason = NOT_APPLICABLE
-#     delivery_complications = NO
     live_infants_to_register = 1
     valid_regiment_duration = YES
 
