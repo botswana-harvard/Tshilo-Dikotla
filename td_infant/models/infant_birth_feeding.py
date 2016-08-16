@@ -58,4 +58,4 @@ class InfantVaccines(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
         app_label = 'td_infant'
         verbose_name = "Infant Vaccines"
         verbose_name_plural = "Infant Vaccines"
-        unique_together = ('infant_birth_feed_vaccine', 'vaccination')
+        unique_together = ('infant_birth_feed_vaccine', 'vaccination', 'vaccine_date')
