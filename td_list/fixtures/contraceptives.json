@@ -1,0 +1,252 @@
+[
+{
+	"model": "td_list.contraceptives", 
+	"pk": "cfa35c33-5b9f-422a-afec-0bab6f5af840", 
+	"fields": {"name": "Other, specify", 
+		"short_name": "Other, specify", 
+		"display_index": 0, 
+		"field_name": null, "version": "1.0", 
+		"created": "2016-07-14T12:53:19.043", 
+		"modified": "2016-07-14T12:53:19.044", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.contraceptives", 
+	"pk": "ec23f71a-1290-4ea9-997a-b1781bcc8994", 
+	"fields": {"name": "Condom", 
+	    "short_name": "condom", 
+		"display_index": 1, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T12:53:59.581", 
+		"modified": "2016-07-14T12:53:59.581", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+}
+}, 
+{
+	"model": "td_list.contraceptives", 
+	"pk": "f1a8bae5-b24e-4cff-bbe4-5898b0eb882a", 
+	"fields": {"name": "Pills", 
+		"short_name": "pill", 
+		"display_index": 2, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T12:55:52.629", 
+		"modified": "2016-07-14T12:55:52.629", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+},
+
+{
+	"model": "td_list.contraceptives", 
+	"pk": "e9f3ab10-34d0-414b-b9b0-9aa5c8d9fd91", 
+	"fields": {"name": "Diapraghm", 
+		"short_name": "diapraghm", 
+		"display_index": 4, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T12:56:38.104", 
+		"modified": "2016-07-14T12:56:38.104", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+{
+	"model": "td_list.contraceptives", 
+	"pk": "e0977f09-1479-4d85-ae2b-6e8202be50f7", 
+	"fields": {"name": "Spemicide", 
+		"short_name": "spemicide", 
+		"display_index": 5, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T12:57:23.327", 
+		"modified": "2016-07-14T12:57:23.327", 
+		"user_created": "", "user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+{
+	"model": "td_list.contraceptives", 
+	"pk": "025eb909-97d0-4018-8a66-310297d9029c", 
+	"fields": {"name": "Oral contraceptive pills", 
+		"short_name": "Oral contraceptive pills", 
+		"display_index": 9, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T12:59:18.551", 
+		"modified": "2016-07-14T12:59:18.551", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.contraceptives", 
+	"pk": "4dbc6d7f-b68f-4fde-80fa-81342300954f", 
+	"fields": {"name": "Abstinence", 
+		"short_name": "Abstinence", 
+		"display_index": 6, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T12:57:58.758", 
+		"modified": "2016-07-14T12:57:58.758", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+
+{
+	"model": "td_list.contraceptives", 
+	"pk": "8dbb2d6d-6bf7-4847-aec3-ae1dee24e87b", 
+	"fields": {"name": "IUD", 
+		"short_name": "IUD", 
+		"display_index": 3, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T12:56:13.582", 
+		"modified": "2016-07-14T12:56:13.582", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+
+
+
+
+{
+	"model": "td_list.contraceptives", 
+	"pk": "d0cde13f-6a3d-4375-97b6-db9a3244ba95", 
+	"fields": {"name": "Menstrual timing", 
+		"short_name": "Menstrual timing", 
+		"display_index": 7, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T12:58:21.384", 
+		"modified": "2016-07-14T12:58:21.384", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.contraceptives", 
+	"pk": "dfc59a08-351c-4a6c-a6ef-a6bbe9494699", 
+	"fields": {"name": "Withdrawal", 
+		"short_name": "Withdrawal", 
+		"display_index": 8, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T12:58:45.338", 
+		"modified": "2016-07-14T12:58:45.338", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.contraceptives", 
+	"pk": "aabaa259-950c-4a8c-8189-22b452a99e25", 
+	"fields": {"name": "Depo Provera (Injection)", 
+		"short_name": "Depo Provera (Injection)", 
+		"display_index": 10, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T12:59:51.989", 
+		"modified": "2016-07-14T12:59:51.989", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.contraceptives", 
+	"pk": "b3340b7b-2fe2-4aa7-bcc0-a788946e1569", 
+	"fields": {"name": "Hormonal Implant", 
+		"short_name": "Hormonal Implant", 
+		"display_index": 11, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T13:00:31.740", 
+		"modified": "2016-07-14T13:00:31.740", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.contraceptives", 
+	"pk": "549b453b-4724-46b3-8087-e43358e633ce", 
+	"fields": {"name": "Intrauterine Device", 
+		"short_name": "Intrauterine Device", 
+		"display_index": 12, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T13:01:02.858", 
+		"modified": "2016-07-14T13:01:02.858", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.contraceptives", 
+	"pk": "4699d190-b230-4721-952c-1662fba83e54", 
+	"fields": {"name": "Not Applicable", 
+		"short_name": "N/A", 
+		"display_index": 13, 
+		"field_name": null, "version": "1.0", 
+		"created": "2016-07-14T13:01:26.206", 
+		"modified": "2016-07-14T13:01:26.206", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}
+]

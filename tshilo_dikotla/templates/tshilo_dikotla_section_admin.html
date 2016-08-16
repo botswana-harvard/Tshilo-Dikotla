@@ -1,0 +1,72 @@
+{% extends "section_administration.html"%}
+{% load admin_urls %}
+
+{% block admin_sections %}
+    <H5>Appointments</H5>
+    <ul>
+    <li><A href="{% url 'admin:edc_appointment_appointment_changelist' %}?registered_subject__subject_type=maternal">Maternal Appointments</A>
+    &nbsp(<A href="{% url 'admin:edc_appointment_appointment_changelist' %}?appt_status__exact=new&registered_subject__subject_type=maternal">New</A>,&nbsp
+    <A href="{% url 'admin:edc_appointment_appointment_changelist' %}?appt_status__exact=in_progress&registered_subject__subject_type=maternal">In Progress</A>,&nbsp
+    <A href="{% url 'admin:edc_appointment_appointment_changelist' %}?appt_status__exact=incomplete&registered_subject__subject_type=maternal">Incomplete</A>,&nbsp
+    <A href="{% url 'admin:edc_appointment_appointment_changelist' %}?appt_status__exact=done&registered_subject__subject_type=maternal">Done</A>)
+    <li><A href="{% url 'admin:edc_appointment_appointment_changelist' %}?registered_subject__subject_type=infant">Infant Appointments</A>
+    &nbsp(<A href="{% url 'admin:edc_appointment_appointment_changelist' %}?appt_status__exact=new&registered_subject__subject_type=infant">New</A>,&nbsp
+    <A href="{% url 'admin:edc_appointment_appointment_changelist' %}?appt_status__exact=in_progress&registered_subject__subject_type=infant">In Progress</A>,&nbsp
+    <A href="{% url 'admin:edc_appointment_appointment_changelist' %}?appt_status__exact=incomplete&registered_subject__subject_type=infant">Incomplete</A>,&nbsp
+    <A href="{% url 'admin:edc_appointment_appointment_changelist' %}?appt_status__exact=done&registered_subject__subject_type=infant">Done</A>)
+    </ul>
+
+    <H5>Labs</H5>
+    <ul>
+    <li><A href="{% url 'admin:td_lab_maternalrequisition_changelist' %}">Maternal Requisition</A>
+    <li><A href="{% url 'admin:td_lab_infantrequisition_changelist' %}">Infant Requisition</A>
+    <li><A href="{% url 'admin:td_lab_packinglist_changelist' %}">Packing Lists</A>
+    <li><A href="{% url 'admin:td_lab_aliquot_changelist' %}">Aliquot</A>
+	</ul>
+	
+    <H5>Maternal</H5>
+    <ul>
+    Go to <A href="{% url 'admin:app_list' app_label='td_maternal' %}">All Maternal Forms</A> or select one:
+    <ul>
+    <li><A href="{% url 'admin:td_maternal_maternaleligibility_changelist' %}">Maternal Eligibility</A>
+    <li><A href="{% url 'admin:td_maternal_maternaleligibilityloss_changelist' %}">Maternal Eligibility Loss</A>
+    <li><A href="{% url 'admin:td_maternal_maternalconsent_changelist' %}">Maternal Consents</A>
+    <li><A href="{% url 'admin:td_maternal_specimenconsent_changelist' %}">Maternal Specimen Consents</A>
+    <li><A href="{% url 'admin:td_maternal_antenatalenrollment_changelist' %}">Antenatal Enrollment</A>
+    <li><A href="{% url 'admin:td_maternal_maternaloffstudy_changelist' %}">Maternal Off Study</A>
+    <li><A href="{% url 'admin:td_maternal_maternaldeathreport_changelist' %}">Maternal Death Report</A>
+    </ul>
+    </ul>
+
+    <H5>Infant</H5>
+    <ul>
+    Go to <A href="{% url 'admin:app_list' app_label='td_infant' %}">All Infant Forms</A> or select one:
+    <ul>
+    <li><A href="{% url 'admin:td_infant_infantbirth_changelist' %}">Infant Birth</A>
+    <li><A href="{% url 'admin:td_infant_infantoffstudy_changelist' %}">Infant Off Study</A>
+    <li><A href="{% url 'admin:td_infant_infantdeathreport_changelist' %}">Infant Death Report</A>
+    </ul>
+    </ul>
+  
+{% endblock admin_sections%}
+
+{% block device_sync %}
+{% endblock device_sync %}
+
+{% block edc_birt_reports %}
+{% endblock edc_birt_reports %}
+
+{% block lab_clinic_api %}
+{% endblock lab_clinic_api %}
+
+{% block ph_dispenser %}
+{% endblock ph_dispenser %}
+
+{% block visit_schedule %}
+{% endblock visit_schedule %}
+
+{% block edc_import %}
+{% endblock edc_import %}
+
+{% block edc_export %}
+{% endblock edc_export %}

@@ -1,0 +1,55 @@
+[
+{
+	"model": "td_list.maternalhospitalization", 
+	"pk": "06d450b6-b30f-4231-aab0-4032342891fc", 
+	"fields": {"name": "Other, specify", 
+		"short_name": "Other, specify", 
+		"display_index": 0, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T15:49:27.034", 
+		"modified": "2016-07-14T15:49:27.034", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.maternalhospitalization", 
+	"pk": "9b9033a2-edd8-46bd-9f32-d239b4440ab0", 
+	"fields": {"name": "Pneumonia or other respiratory disease", 
+		"short_name": "Pneumonia or other respiratory disease", 
+		"display_index": 1, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T15:49:55.224", 
+		"modified": "2016-07-14T15:49:55.224", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+},
+{
+		"model": "td_list.maternalhospitalization", 
+		"pk": "b2bd24ce-d7c9-491f-892e-deb6aeb440bf", 
+		"fields": {
+		"name": "Not Applicable", 
+		"short_name": "N/A", 
+		"display_index": 2, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-15T12:01:27.273", 
+		"modified": "2016-07-15T12:01:27.273", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-60-g4c2ba36:develop:4c2ba36e2611ccd46a2275338ae53e0493538f23"
+	}
+}
+]

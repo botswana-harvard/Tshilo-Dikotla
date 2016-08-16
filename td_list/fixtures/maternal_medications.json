@@ -1,0 +1,128 @@
+[
+{
+	"model": "td_list.maternalmedications", 
+	"pk": "019ed1a3-0401-4fb8-b152-0c7197518d25", 
+	"fields": {"name": "Not Applicable", 
+		"short_name": "N/A", 
+		"display_index": 5, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T14:22:44.510", 
+		"modified": "2016-07-14T14:22:44.510", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.maternalmedications", 
+	"pk": "55e61f96-46af-4e56-8b7d-698433ffa7a0", 
+	"fields": {"name": "Cholesterol medications", 
+		"short_name": "Cholesterol medications", 
+		"display_index": 4, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T14:22:12.561", 
+		"modified": "2016-07-14T14:22:12.561", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.maternalmedications", 
+	"pk": "b15ea2bc-2b7d-49be-8329-fc1ae1ff122c", 
+	"fields": {"name": "Vitamin D supplement", 
+		"short_name": "Vitamin D supplement", 
+		"display_index": 1, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T14:21:07.988", 
+		"modified": "2016-07-14T14:21:07.988", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.maternalmedications", 
+	"pk": "cf141222-ae56-4703-8e75-76f25abf948d", 
+	"fields": {"name": "Traditional medications", 
+		"short_name": "Traditional medications", 
+		"display_index": 2, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T14:21:25.911", 
+		"modified": "2016-07-14T14:21:25.911", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.maternalmedications", 
+	"pk": "d3b0f2b0-1f38-4e61-a912-15995cd7d809", 
+	"fields": {"name": "Hypertensive medications", 
+		"short_name": "Hypertensive medications", 
+		"display_index": 3, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T14:21:51.775", 
+		"modified": "2016-07-14T14:21:51.775", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.maternalmedications", 
+	"pk": "e3b11aa0-cc25-44f1-a69d-e381cefcbcce", 
+	"fields": {"name": "Prenatal Vitamins", 
+		"short_name": "Prenatal Vitamins", 
+		"display_index": 0, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T14:20:44.515", 
+		"modified": "2016-07-14T14:20:44.515", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+},
+
+{
+	"model": "td_list.maternalmedications", 
+	"pk": "cb4ad445-7cb7-45e3-8b0b-d9f358f591f1", 
+	"fields": {
+		"name": "None", 
+		"short_name": "None", 
+		"display_index": 6, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-08-10T15:54:27", 
+		"modified": "2016-08-10T15:54:27", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "edc4.bhp.org.bw", 
+		"hostname_modified": "edc4.bhp.org.bw", "revision": 
+		"dev01-stable-188-g5f17201:develop:5f17201db3454b7046b6926759e0e2db5367c5a9"}
+}
+]
+ 

@@ -1,0 +1,182 @@
+[
+{
+	"model": "td_list.chronicconditions", 
+	"pk": "b0f8ff19-ada1-4934-ab0d-bab2077ed4e6", 
+	"fields": {
+		"name": "Asthma", 
+		"short_name": "Asthma", 
+		"display_index": 0, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T11:02:18.362", 
+		"modified": "2016-07-14T11:02:18.362", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-55-g98ff1dd:develop:98ff1dde02fc61fcc518f01e875294d42e7ad93f"
+	}
+},
+{
+	"model": "td_list.chronicconditions", 
+	"pk": "cbb3f838-93bf-43de-8660-508b15cd9c3d", 
+	"fields": {
+	    "name": "Hypertension", 
+		"short_name": "Hypertension", 
+		"display_index": 1, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T11:25:53.455", 
+		"modified": "2016-07-14T11:25:53.455", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-55-g98ff1dd:develop:98ff1dde02fc61fcc518f01e875294d42e7ad93f"
+	}
+},
+{
+	"model": "td_list.chronicconditions", 
+	"pk": "1df3848a-c4d5-4ed6-a94d-ed6329042020", 
+	"fields": {
+		"name": "Hypercholesterolemia",
+		"short_name": "Hypercholesterolemia", 
+		"display_index": 2, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T11:26:42.342", 
+		"modified": "2016-07-14T11:26:42.342", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-55-g98ff1dd:develop:98ff1dde02fc61fcc518f01e875294d42e7ad93f"
+	}
+}, 
+{
+	"model": "td_list.chronicconditions", 
+	"pk": "2c2b3ec7-5ba6-4f6a-b746-10ddf232e798", 
+	"fields": {
+		"name": "Heart disease", 
+		"short_name": "Heart disease", 
+		"display_index": 3, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T11:27:12.807", 
+		"modified": "2016-07-14T11:27:12.807", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-55-g98ff1dd:develop:98ff1dde02fc61fcc518f01e875294d42e7ad93f"
+	}
+},
+{
+	"model": "td_list.chronicconditions", 
+	"pk": "fe71cf95-dc98-46c4-92d6-77c7eab0824e", 
+	"fields": {
+		"name": "Hepatitis B surface Ag positive", 
+		"short_name": "Hepatitis B surface Ag positive", 
+		"display_index": 4, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T11:27:33.972", 
+		"modified": "2016-07-14T11:27:33.972", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-55-g98ff1dd:develop:98ff1dde02fc61fcc518f01e875294d42e7ad93f"
+	}
+}, 
+{
+	"model": "td_list.chronicconditions", 
+	"pk": "2b1d1101-1815-4122-8ca8-c4e0f0508fba", 
+	"fields": {
+		"name": "Chronic Hepatitis B carrier", 
+		"short_name": "Chronic Hepatitis B carrier", 
+		"display_index": 5, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T11:27:50.816", 
+		"modified": "2016-07-14T11:27:50.816", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-55-g98ff1dd:develop:98ff1dde02fc61fcc518f01e875294d42e7ad93f"
+	}
+},  
+{
+	"model": "td_list.chronicconditions", 
+	"pk": "76ee726d-837b-41a1-a34b-a6f26a8fc54d", 
+	"fields": {
+		"name": "Hepatitis C", 
+		"short_name": "Hepatitis C", 
+		"display_index": 6, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T11:28:08.379", 
+		"modified": "2016-07-14T11:28:54.075", 
+		"user_created": "django", 
+		"user_modified": "django", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-55-g98ff1dd:develop:98ff1dde02fc61fcc518f01e875294d42e7ad93f"
+	}
+},
+{
+	"model": "td_list.chronicconditions",
+	"pk": "1eb64bd1-f84a-4ed9-a2fc-592e954a80da",
+	"fields": {
+		"name": "Diabetes", 
+		"short_name": "Diabetes", 
+		"display_index": 8, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T11:29:51.893", 
+		"modified": "2016-07-14T11:29:51.893", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-55-g98ff1dd:develop:98ff1dde02fc61fcc518f01e875294d42e7ad93f"
+	}
+},
+{
+	"model": "td_list.chronicconditions", 
+	"pk": "f19b3274-ae24-410e-b3a0-2223e7775c73", 
+	"fields": {
+		"name": "Other, specify", 
+		"short_name": "Other, specify", 
+		"display_index": 7, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T11:29:33.014", 
+		"modified": "2016-07-14T11:29:33.014", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-55-g98ff1dd:develop:98ff1dde02fc61fcc518f01e875294d42e7ad93f"
+	}
+}, 
+{
+	"model": "td_list.chronicconditions", 
+	"pk": "814e5fff-53d9-4dd6-9ad6-06423fcd62e8", 
+	"fields": {
+		"name": "Not Applicable", 
+		"short_name": "N/A", 
+		"display_index": 9, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T11:30:48.983", 
+		"modified": "2016-07-14T11:30:48.983", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-55-g98ff1dd:develop:98ff1dde02fc61fcc518f01e875294d42e7ad93f"
+	}
+}   
+]

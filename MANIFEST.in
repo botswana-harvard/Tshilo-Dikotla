@@ -1,0 +1,5 @@
+recursive-include tshilo_dikotla/td/templates *
+recursive-include tshilo_dikotla/td_dashboard/templates *
+recursive-include tshilo_dikotla/td_infant/templates *
+recursive-include tshilo_dikotla/td_maternal/templates *
+recursive-include tshilo_dikotla/templates *

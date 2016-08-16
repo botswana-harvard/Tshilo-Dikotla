@@ -1,0 +1,161 @@
+[
+{
+	"model": "td_list.deliverycomplications", 
+	"pk": "157b6d5c-8274-4696-bc79-77cc4912a889", 
+	"fields": {"name": "Uterine rupture", 
+		"short_name": "Uterine rupture", 
+		"display_index": 3, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T15:27:33.699", 
+		"modified": "2016-07-14T15:27:33.699", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.deliverycomplications", 
+	"pk": "29f27851-8519-4525-8530-4731a95c1ecc", 
+	"fields": {"name": "Hemorrhage req. transfusion", 
+		"short_name": "Hemorrhage req. transfusion", 
+		"display_index": 5, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T15:28:19.433", 
+		"modified": "2016-07-14T15:28:19.434", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.deliverycomplications", 
+	"pk": "421dcde0-ad45-4fa5-87c6-f8bed2baec2a", 
+	"fields": {"name": "Pre-eclampsia/eclampsia", 
+		"short_name": "Pre-eclampsia/eclampsia",
+		"display_index": 2,  
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T15:27:11.183",
+		"modified": "2016-07-14T15:27:11.183", 
+		"user_created": "", 
+		"user_modified": "",
+		"hostname_created": "bcpp025",
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.deliverycomplications", 
+	"pk": "4fb77071-2dd8-4cc7-8652-a3d62ce916fe", 
+	"fields": {"name": "Placenta previa", 
+		"short_name": "Placenta previa", 
+		"display_index": 0, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T15:26:14.492", 
+		"modified": "2016-07-14T15:26:14.492", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.deliverycomplications", 
+	"pk": "5afbee29-dd60-4b89-93f8-e2fd8f9f1747", 
+	"fields": {"name": "Placental abruption", 
+		"short_name": "Placental abruption", 
+		"display_index": 1, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T15:26:42.023",
+		"modified": "2016-07-14T15:26:42.023",
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+{
+	"model": "td_list.deliverycomplications", 
+	"pk": "9611974e-7523-43a7-8658-df7cfb1dfe31", 
+	"fields": {"name": "Chorioamnioitis or sus. chorioamnionitis", 
+		"short_name": "Chorioamnioitis or sus. chorioamnionitis", 
+		"display_index": 6, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T15:28:56.351", 
+		"modified": "2016-07-14T15:28:56.351", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.deliverycomplications", 
+	"pk": "bd89b6b5-ed3c-4e78-a3f6-0f195636382b", 
+	"fields": {"name": "Other", 
+		"short_name": "Other", 
+		"display_index": 7, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T15:29:14.813", 
+		"modified": "2016-07-14T15:29:14.813", 
+		"user_created": "", "user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+}, 
+
+{
+	"model": "td_list.deliverycomplications", 
+	"pk": "c5fa44c6-5d4d-445c-a66e-4baf81d662ec", 
+	"fields": {"name": "Intrapartum fever", 
+		"short_name": "Intrapartum fever", 
+		"display_index": 4, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-14T15:27:54.301", 
+		"modified": "2016-07-14T15:27:54.301", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "bcpp025", 
+		"hostname_modified": "bcpp025", 
+		"revision": "dev01-stable-52-gefa7239:develop:efa72399012ffd3ffd36437484dfe2eaac8a3fdf"
+	}
+},
+{
+	"model": "td_list.deliverycomplications", 
+	"pk": "746893c7-379a-473c-afba-b2d57334206f", 
+	"fields": {
+		"name": "None", 
+		"short_name": "None", 
+		"display_index": 8, 
+		"field_name": null, 
+		"version": "1.0", 
+		"created": "2016-07-27T16:49:23.862", 
+		"modified": "2016-07-27T16:49:23.863", 
+		"user_created": "", 
+		"user_modified": "", 
+		"hostname_created": "otse.bhp.org.bw", 
+		"hostname_modified": "otse.bhp.org.bw", 
+		"revision": "dev01-stable-124-g2b095e4:develop:2b095e444691f14559d77ded1bb951c81dc38e3e"
+	}
+}
+]

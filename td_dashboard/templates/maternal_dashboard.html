@@ -1,0 +1,43 @@
+{% extends "base_registered_subject_dashboard.html"%}
+{% load common_tags %}
+{% load crypto_tags%}
+{% load admin_urls %}
+
+{% block clinic_dashboard_marquee %}
+<table>
+    <tr style="background:lightyellow;">
+        <td><B>Name:</B> {{maternal_consent.first_name|encrypted }} ({{ maternal_consent.initials|encrypted }}) </td>
+        <td><B>Born:</B> {{maternal_consent.dob|date:"Y-m-d" }}</td> 
+        <td><B>Age:</B> {{maternal_consent.dob|age }}</td>
+        <td><B>Consented:</B> {{maternal_consent.consent_datetime|date:"Y-m-d H:i" }}</td>
+    </tr>
+</table>
+<table>
+	<tr style=background:lightyellow;>
+		<td><B>Antenatal enrollment status: </B>{% if antenatal_enrollment.pending_ultrasound %} pending ultrasound {% elif antenatal_enrollment.is_eligible %} passed {% elif antenatal_enrollment.is_eligible == False %} failed {%else%}<i>not filled</i>{% endif %}</td>
+        <td><B>Enrollment HIV status:</B> <i>{{enrollment_hiv_status}}</i></td>
+        <td><B>Current HIV status:</B> <i>{{current_hiv_status}}</i></td>
+        <td><B>{% if currently_pregnant == True %} Pregnant, GA:</B><i>{{gestational_age}} weeks</i>{% else %}<B>Delivery GA:</B> <i>{{gestational_age}} weeks</i>{% endif %}</td>
+        <td><B>{% if currently_pregnant == True %} Planned delivery site:</B><i>{{planned_delivery_site}}</i>{% else %}<B>Delivery Clinic:</B> <i>{{delivery_site}}</i>{% endif %}</td>
+    </tr>
+</table>
+{% endblock %}
+
+{% block infants %}
+    <tr name="top right"><td>
+    <H3>Registered Infant</H3>
+    {% if infants %}
+        <ol>
+          <li>
+          {% for subject_identifier,infant in infants.items %}
+           <A href="{% url 'subject_dashboard_url' dashboard_type='infant' dashboard_model='registered_subject' dashboard_id=infant.dashboard_id show='appointments' %}">
+             {{subject_identifier}} {{ infant.gender }} {{ infant.first_name|encrypted }}
+          </A>
+          {% endfor %}
+        </ol>        
+    {% else %}    
+        no infants
+    {% endif %}
+
+    </td></tr>
+{% endblock infants %}  
