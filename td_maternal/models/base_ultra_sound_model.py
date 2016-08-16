@@ -28,28 +28,28 @@ class BaseUtraSoundModel(MaternalCrfModel):
         validators=[validate_bpd, ],
         max_digits=6,
         decimal_places=2,
-        help_text='Units in mm.')
+        help_text='Units in cm.')
 
     hc = models.DecimalField(
         verbose_name="HC?",
         validators=[validate_hc, ],
         max_digits=6,
         decimal_places=2,
-        help_text='Units in mm.')
+        help_text='Units in cm.')
 
     ac = models.DecimalField(
         verbose_name="AC?",
         validators=[validate_ac, ],
         max_digits=6,
         decimal_places=2,
-        help_text='Units in mm.')
+        help_text='Units in cm.')
 
     fl = models.DecimalField(
         verbose_name="FL?",
         validators=[validate_fl, ],
         max_digits=6,
         decimal_places=2,
-        help_text='Units in mm.')
+        help_text='Units in cm.')
 
     amniotic_fluid_volume = models.CharField(
         verbose_name="Amniotic fluid volume?",

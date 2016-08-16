@@ -5,9 +5,9 @@ from edc_base.form.old_forms import BaseModelForm
 from edc_constants.constants import ON_STUDY, MISSED_VISIT
 from edc_visit_tracking.forms import VisitFormMixin
 
-from tshilo_dikotla.choices import VISIT_REASON, VISIT_INFO_SOURCE, MATERNAL_VISIT_STUDY_STATUS, INFO_PROVIDER
+from tshilo_dikotla.choices import VISIT_REASON, VISIT_INFO_SOURCE, MATERNAL_VISIT_STUDY_STATUS
 
-from ..models import MaternalVisit, MaternalConsent
+from ..models import MaternalVisit, MaternalUltraSoundInitial
 
 
 class MaternalVisitForm (VisitFormMixin, BaseModelForm):
@@ -41,8 +41,17 @@ class MaternalVisitForm (VisitFormMixin, BaseModelForm):
         else:
             instance = MaternalVisit(**self.cleaned_data)
         instance.subject_failed_eligibility(forms.ValidationError)
+        self.check_creation_of_antenatal_visit_2(cleaned_data)
 
         return cleaned_data
+
+    def check_creation_of_antenatal_visit_2(self, cleaned_data):
+        appointment = cleaned_data.get('appointment')
+        gestational_age = MaternalUltraSoundInitial.objects.get(
+            maternal_visit__appointment__registered_subject=appointment.registered_subject).ga_confirmed
+        if appointment.visit_definition.code == '1020M' and gestational_age < 32:
+            raise forms.ValidationError('Antenatal Visit 2 cannot occur before 32 weeks. Current GA is "{}" weeks'.
+                                        format(gestational_age))
 
     class Meta:
         model = MaternalVisit
