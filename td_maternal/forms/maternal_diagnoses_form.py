@@ -23,7 +23,7 @@ class MaternalDiagnosesForm(BaseMaternalModelForm):
             if self.validate_not_applicable_in_there('diagnoses'):
                 raise forms.ValidationError('New Diagnoses is Yes, diagnoses list cannot have Not Applicable. Please correct.')
         else:
-            if self.validate_not_applicable_not_there('diagnoses'):
+            if self.validate_not_applicable_not_there('diagnoses') or self.validate_not_applicable_and_other_options('diagnoses'):
                 raise forms.ValidationError('Participant does not have any new diagnoses, new diagnosis should be Not Applicable.')
 
     def validate_who_dignoses(self):
