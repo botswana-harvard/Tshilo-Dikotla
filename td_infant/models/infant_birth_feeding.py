@@ -1,6 +1,5 @@
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_visit_tracking.models import CrfInlineModelMixin
 from edc_sync.models import SyncModelMixin
@@ -49,6 +48,8 @@ class InfantVaccines(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
         blank=True)
 
     objects = InfantVaccinesManager()
+
+    history = SyncHistoricalRecords()
 
     def natural_key(self):
         return (self.vaccination, ) + self.infant_birth_feed_vaccine.natural_key()

@@ -4,7 +4,7 @@ from django.db import models
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
 from edc_visit_tracking.models import CrfInlineModelMixin
-# from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_base.model.models import BaseUuidModel
 
 from tshilo_dikotla.choices import ARV_STATUS_WITH_NEVER
@@ -39,7 +39,7 @@ class InfantArvProph(InfantCrfModel):
         verbose_name_plural = 'Infant NVP or AZT Proph'
 
 
-class InfantArvProphMod(CrfInlineModelMixin, BaseUuidModel):
+class InfantArvProphMod(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
     """ A model completed by the user on the infant's nvp or azt prophylaxis modifications. """
 
     infant_arv_proph = models.ForeignKey(InfantArvProph)
@@ -73,6 +73,8 @@ class InfantArvProphMod(CrfInlineModelMixin, BaseUuidModel):
         blank=True)
 
     objects = InfantArvProphModManager()
+    
+    history = SyncHistoricalRecords()
 
     def natural_key(self):
         return (self.arv_code, ) + self.infant_arv_proph.natural_key()

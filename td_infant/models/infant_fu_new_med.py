@@ -2,11 +2,10 @@ from django.db import models
 
 from edc_base.model.fields.custom_fields import OtherCharField
 from edc_base.model.models import BaseUuidModel
-# from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import DRUG_ROUTE
 from edc_constants.choices import YES_NO
 from edc_visit_tracking.models import CrfInlineModelMixin
-# from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from tshilo_dikotla.choices import MEDICATIONS
 
@@ -34,7 +33,7 @@ class InfantFuNewMed(InfantCrfModel):
         verbose_name_plural = "Infant FollowUp: New Medication"
 
 
-class InfantFuNewMedItems(CrfInlineModelMixin, BaseUuidModel):
+class InfantFuNewMedItems(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
 
     """A model completed by the user on the infant's follow up medication items."""
 
@@ -65,6 +64,8 @@ class InfantFuNewMedItems(CrfInlineModelMixin, BaseUuidModel):
     )
 
     objects = InfantFuNewMedItemsManager()
+
+    history = SyncHistoricalRecords()
 
     def natural_key(self):
         return (self.medication, ) + self.infant_fu_med.natural_key()

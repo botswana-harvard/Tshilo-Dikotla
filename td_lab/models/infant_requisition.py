@@ -1,6 +1,5 @@
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_meta_data.managers import RequisitionMetaDataManager

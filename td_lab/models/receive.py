@@ -1,7 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_registration.models import RegisteredSubject
