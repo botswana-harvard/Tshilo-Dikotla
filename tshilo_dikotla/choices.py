@@ -348,6 +348,7 @@ OFF_STUDY_REASON = [
     ('multiple_vialble_gestations', 'Multiple (2 or more) viable gestations seen on ultrasound'),
     ('miscarriage_or_arbotion_lt_20wks', 'Miscarriage or arbotion (fetal demise < 20 weeks GA)'),
     ('fetal_death_gt_20wks', 'fetal Death at >= 20weeks GA (IUFD) or still born'),
+    ('maternal_seroconversion_gt_33wks', 'Maternal seroconversion after 33 weeks GA'),
     ('took_art_less_than_4weeks',
      'Mother took ART for less than 4 weeks during pregnancy'),
     ('maternal_death_pre_deliv', 'Maternal death PRIOR to delivery (complete the Death Report Form AF005)'),
