@@ -96,6 +96,13 @@ class TestMaternalDiagnosesForm(BaseTestCase):
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Participant does not have any new diagnoses, new diagnosis should be Not Applicable.', errors)
 
+    def test_has_no_dx_but_listed_with_not_applicable(self):
+        self.options['new_diagnoses'] = NO
+        self.options['diagnoses'] = [self.diagnoses.id, self.diagnoses_na.id]
+        form = MaternalDiagnosesForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn('Participant does not have any new diagnoses, new diagnosis should be Not Applicable.', errors)
+
     def test_has_who_diagnosis(self):
         self.options['who'] = None
         form = MaternalDiagnosesForm(data=self.options)
