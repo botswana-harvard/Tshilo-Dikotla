@@ -17,7 +17,7 @@ class AliquotProfileItem(BaseProfileItem, BaseUuidModel):
 
     objects = ProfileItemManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.aliquot_type)
 
     def natural_key(self):
