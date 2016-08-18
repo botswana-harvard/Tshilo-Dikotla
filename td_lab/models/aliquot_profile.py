@@ -19,6 +19,9 @@ class AliquotProfile(BaseProfile, BaseUuidModel):
     def natural_key(self):
         return (self.name,)
 
+    def __str__(self):
+        return "{}".format(self.name)
+
     class Meta:
         app_label = 'td_lab'
         db_table = 'td_lab_profile'
