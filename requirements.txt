@@ -24,7 +24,7 @@ djangorestframework==3.3.3
 -e git+https://github.com/botswana-harvard/edc-device@e641387fbe9d672b73723e624105b503a907fd66#egg=edc_device
 -e git+https://github.com/botswana-harvard/edc-export@aca36b5c147550194d1adcbd4bd0a92bc0a9ce6c#egg=edc_export
 -e git+https://github.com/botswana-harvard/edc-identifier@d5e030cd844f12a660f19e370e7d4044e4fe1b73#egg=edc_identifier
--e git+https://github.com/botswana-harvard/edc-lab@f5eabf655fb338dd710c5b882c1f538d07021af1#egg=edc_lab
+-e git+https://github.com/botswana-harvard/edc-lab@96372724b8b0861ec67775b6799c15a363f4b0f4#egg=edc_lab
 -e git+https://github.com/botswana-harvard/edc-locator@2275ddff0c119a4666902d2fac0dba6159993bc0#egg=edc_locator
 -e git+https://github.com/botswana-harvard/edc-meta-data@fe3ee7f855aad41f68c60fc97b8a9b3713239847#egg=edc_meta_data
 -e git+https://github.com/botswana-harvard/edc-notification@7de21100ecccd46afd3fa3ea4d03390d2bab033c#egg=edc_notification
