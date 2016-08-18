@@ -85,7 +85,7 @@ class Aliquot(BaseAliquot, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
 #             return None
 # 
     def processing(self):
-        url = reverse('admin:mb_lab_aliquotprocessing_add')
+        url = reverse('admin:td_lab_aliquotprocessing_add')
         return '<a href="{0}?aliquot={1}">process</a>'.format(url, self.pk)
     processing.allow_tags = True
 # 
