@@ -41,17 +41,28 @@ class MaternalVisitForm (VisitFormMixin, BaseModelForm):
         else:
             instance = MaternalVisit(**self.cleaned_data)
         instance.subject_failed_eligibility(forms.ValidationError)
+        self.clean_ultrasound_form(cleaned_data)
         self.check_creation_of_antenatal_visit_2(cleaned_data)
 
         return cleaned_data
 
+    def clean_ultrasound_form(self, cleaned_data):
+        registered_subject = cleaned_data['appointment'].registered_subject
+        if cleaned_data['appointment'].visit_definition.code == '1020M':
+            try:
+                MaternalUltraSoundInitial.objects.get(maternal_visit__appointment__registered_subject=registered_subject)
+            except MaternalUltraSoundInitial.DoesNotExist:
+                raise forms.ValidationError('Please ensure you have filled Maternal Ultrasound Initial Form before'
+                                            ' continuing.')
+
     def check_creation_of_antenatal_visit_2(self, cleaned_data):
         appointment = cleaned_data.get('appointment')
-        gestational_age = MaternalUltraSoundInitial.objects.get(
-            maternal_visit__appointment__registered_subject=appointment.registered_subject).ga_confirmed
-        if appointment.visit_definition.code == '1020M' and gestational_age < 32:
-            raise forms.ValidationError('Antenatal Visit 2 cannot occur before 32 weeks. Current GA is "{}" weeks'.
-                                        format(gestational_age))
+        if appointment.visit_definition.code == '1020M':
+            gestational_age = MaternalUltraSoundInitial.objects.get(
+                maternal_visit__appointment__registered_subject=appointment.registered_subject).ga_confirmed
+            if gestational_age < 32:
+                raise forms.ValidationError('Antenatal Visit 2 cannot occur before 32 weeks. Current GA is "{}" weeks'.
+                                            format(gestational_age))
 
     class Meta:
         model = MaternalVisit

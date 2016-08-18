@@ -42,7 +42,6 @@ class InfantBirthData(InfantCrfModel):
         help_text="If 'No' go to question 10. Otherwise continue")
 
     apgar_score_min_1 = models.IntegerField(
-        max_length=2,
         verbose_name="At 1 minute: ",
         help_text="",
         blank=True,
@@ -51,7 +50,6 @@ class InfantBirthData(InfantCrfModel):
                     MinValueValidator(0)])
 
     apgar_score_min_5 = models.IntegerField(
-        max_length=2,
         verbose_name="At 5 minutes: ",
         help_text="",
         blank=True,
@@ -60,7 +58,6 @@ class InfantBirthData(InfantCrfModel):
                     MinValueValidator(0)])
 
     apgar_score_min_10 = models.IntegerField(
-        max_length=2,
         verbose_name="At 10 minutes: ",
         help_text="",
         blank=True,

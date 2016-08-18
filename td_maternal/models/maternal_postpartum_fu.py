@@ -25,7 +25,6 @@ class MaternalPostPartumFu(MaternalCrfModel, DiagnosesMixin):
         MaternalHospitalization,
         verbose_name="Was the hospitalization for any of the following reasons?",
         blank=True,
-        null=True,
         help_text="",
     )
 
