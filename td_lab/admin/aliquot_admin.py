@@ -19,7 +19,7 @@ class AliquotAdmin(MembershipBaseModelAdmin):
                             'hostname_modified', 'user_created', 'user_modified'],)]
 
     list_display = ("aliquot_identifier", 'subject_identifier',
-#                     'processing', 'related',
+                    'processing', 'related',
                     'to_receive', 'drawn', "aliquot_type",
                     'aliquot_condition', 'is_packed', 'is_rejected', 'created',
                     'user_created', 'hostname_created')
