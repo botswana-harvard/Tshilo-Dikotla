@@ -108,6 +108,7 @@ urlpatterns = [
     url(r'^home/', HomeView.as_view(), name='home_url'),
     url(r'^', HomeView.as_view(), name='home_url'),
     url(r'', RedirectView.as_view(url='/{app_name}/section/'.format(app_name=APP_NAME))),
+    url(r'^edc_label/', include('edc_label.urls', namespace='edc-label')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
