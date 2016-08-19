@@ -84,7 +84,6 @@ INSTALLED_APPS = [
     'edc_configuration',
     'corsheaders',
     'crispy_forms',
-#     'edc_consent',
     'edc_constants',
     'edc_content_type_map',
     'edc_dashboard',
@@ -96,12 +95,11 @@ INSTALLED_APPS = [
     'edc_offstudy',
     'edc_registration',
     'edc_rule_groups',
-#     'edc_sync',
     'edc_code_lists',
     'edc_visit_schedule',
     'edc_visit_tracking',
     'call_manager',
-    'edc_call_manager.apps.EdcCallManagerAppConfig',
+    'edc_call_manager.apps.AppConfig',
     'tshilo_dikotla.apps.DjangoCryptoFieldsAppConfig',
     'tshilo_dikotla.apps.ConsentAppConfig',
     'tshilo_dikotla.apps.EdcSyncAppConfig',
@@ -112,6 +110,7 @@ INSTALLED_APPS = [
     'td_list.apps.TdListConfig',
     'registration.apps.RegistrationConfig',
     'td_maternal.apps.TdMaternalConfig',
+    'tshilo_dikotla.apps.EdcLabelAppConfig'
 ]
 
 if 'test' in sys.argv:
