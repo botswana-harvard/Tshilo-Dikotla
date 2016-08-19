@@ -4,9 +4,9 @@ from django.utils import timezone
 from django.apps import AppConfig
 from django.conf import settings
 
-from django_crypto_fields.apps import DjangoCryptoFieldsAppConfig as DjangoCryptoFieldsAppConfigParent
+from django_crypto_fields.apps import AppConfig as DjangoCryptoFieldsAppConfigParent
 from edc_consent.apps import EdcConsentAppConfig
-from edc_sync.apps import EdcSyncAppConfig as EdcSyncAppConfigParent
+from edc_sync.apps import AppConfig as EdcSyncAppConfigParent
 from edc_sync.constants import SERVER
 
 study_start_datetime = timezone.datetime(2016, 4, 1, 0, 0, 0)
