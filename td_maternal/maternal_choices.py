@@ -1,5 +1,5 @@
 from edc_constants.choices import YES, NO
-from edc_constants.constants import CONTINUOUS, RESTARTED, OTHER, STOPPED, NOT_APPLICABLE, NEW
+from edc_constants.constants import CONTINUOUS, RESTARTED, OTHER, STOPPED, NOT_APPLICABLE, NEW, NEG, POS, IND
 
 from tshilo_dikotla.constants import LIVE, STILL_BIRTH
 
@@ -414,4 +414,10 @@ SIZE_CHECK = (
     ('equal', '='),
     ('less_than', '<'),
     ('greater_than', '>'),
+)
+
+POS_NEG_IND = (
+    (POS, 'Positive'),
+    (NEG, 'Negative'),
+    (IND, 'Indeterminate')
 )

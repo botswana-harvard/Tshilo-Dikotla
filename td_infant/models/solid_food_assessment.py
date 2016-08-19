@@ -1,6 +1,5 @@
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
 from edc_constants.constants import NOT_APPLICABLE
 from edc_constants.choices import (NORMAL_ABNORMAL, YES_NO_UNKNOWN,

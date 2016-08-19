@@ -21,7 +21,6 @@ class DiagnosesMixin(models.Model):
         MaternalDiagnoses,
         verbose_name="Have any of the following diagnoses occured since last visit?",
         blank=True,
-        null=True,
         help_text="",
     )
 

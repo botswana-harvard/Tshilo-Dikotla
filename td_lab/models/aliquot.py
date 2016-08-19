@@ -1,7 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
@@ -85,10 +84,10 @@ class Aliquot(BaseAliquot, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
 #         except AttributeError:
 #             return None
 # 
-#     def processing(self):
-#         url = reverse('admin:mb_lab_aliquotprocessing_add')
-#         return '<a href="{0}?aliquot={1}">process</a>'.format(url, self.pk)
-#     processing.allow_tags = True
+    def processing(self):
+        url = reverse('admin:td_lab_aliquotprocessing_add')
+        return '<a href="{0}?aliquot={1}">process</a>'.format(url, self.pk)
+    processing.allow_tags = True
 # 
 #     def related(self):
 #         url = reverse('admin:mb_lab_aliquot_changelist')

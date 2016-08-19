@@ -8,7 +8,7 @@ from edc_constants.constants import (
     YES, POS, NEG, FAILED_ELIGIBILITY)
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.models import OffStudyMixin
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.constants import VISIT_REASON_NO_FOLLOW_UP_CHOICES, COMPLETED_PROTOCOL_VISIT, LOST_VISIT
 from edc_visit_tracking.models import VisitModelMixin, PreviousVisitMixin, CaretakerFieldsMixin
 
@@ -31,7 +31,7 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalV
 
     death_report_model = ('td_maternal', 'MaternalDeathReport')
 
-#     history = AuditTrail()
+    history = SyncHistoricalRecords()
 
     def __str__(self):
         return '{} {} {}'.format(self.appointment.registered_subject.subject_identifier,

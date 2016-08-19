@@ -5,7 +5,7 @@ from edc_constants.choices import YES_NO_UNKNOWN
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import date_not_future
 from edc_visit_tracking.models import CrfInlineModelMixin
-from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from tshilo_dikotla.choices import REASONS_VACCINES_MISSED
 
@@ -66,6 +66,8 @@ class VaccinesReceived(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
 
     objects = VaccinesReceivedManager()
 
+    history = SyncHistoricalRecords()
+
     def natural_key(self):
         return (self.received_vaccine_name, ) + self.infant_fu_immunizations.natural_key()
 
@@ -101,6 +103,8 @@ class VaccinesMissed(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
     reason_missed_other = OtherCharField()
 
     objects = VaccinesMissedManager()
+
+    history = SyncHistoricalRecords()
 
     def natural_key(self):
         return (self.missed_vaccine_name, ) + self.infant_fu_immunizations.natural_key()

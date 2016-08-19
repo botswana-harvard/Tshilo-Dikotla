@@ -18,14 +18,12 @@ class BaseMaternalClinicalMeasurements(MaternalCrfModel):
         help_text="Measured in Kilograms (kg)")
 
     systolic_bp = models.IntegerField(
-        max_length=3,
         verbose_name="Mother's systolic blood pressure?",
         validators=[MinValueValidator(75), MaxValueValidator(220), ],
         help_text="in mm e.g. 120, should be between 75 and 220."
     )
 
     diastolic_bp = models.IntegerField(
-        max_length=3,
         verbose_name="Mother's diastolic blood pressure?",
         validators=[MinValueValidator(35), MaxValueValidator(130), ],
         help_text="in hg e.g. 80, should be between 35 and 130.")

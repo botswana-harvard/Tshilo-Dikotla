@@ -5,9 +5,9 @@ from edc_base.form.old_forms import BaseModelForm
 from edc_constants.constants import ON_STUDY, MISSED_VISIT
 from edc_visit_tracking.forms import VisitFormMixin
 
-from tshilo_dikotla.choices import VISIT_REASON, VISIT_INFO_SOURCE, MATERNAL_VISIT_STUDY_STATUS, INFO_PROVIDER
+from tshilo_dikotla.choices import VISIT_REASON, VISIT_INFO_SOURCE, MATERNAL_VISIT_STUDY_STATUS
 
-from ..models import MaternalVisit, MaternalConsent
+from ..models import MaternalVisit, MaternalUltraSoundInitial
 
 
 class MaternalVisitForm (VisitFormMixin, BaseModelForm):
@@ -41,8 +41,28 @@ class MaternalVisitForm (VisitFormMixin, BaseModelForm):
         else:
             instance = MaternalVisit(**self.cleaned_data)
         instance.subject_failed_eligibility(forms.ValidationError)
+        self.clean_ultrasound_form(cleaned_data)
+        self.check_creation_of_antenatal_visit_2(cleaned_data)
 
         return cleaned_data
+
+    def clean_ultrasound_form(self, cleaned_data):
+        registered_subject = cleaned_data['appointment'].registered_subject
+        if cleaned_data['appointment'].visit_definition.code == '1020M':
+            try:
+                MaternalUltraSoundInitial.objects.get(maternal_visit__appointment__registered_subject=registered_subject)
+            except MaternalUltraSoundInitial.DoesNotExist:
+                raise forms.ValidationError('Please ensure you have filled Maternal Ultrasound Initial Form before'
+                                            ' continuing.')
+
+    def check_creation_of_antenatal_visit_2(self, cleaned_data):
+        appointment = cleaned_data.get('appointment')
+        if appointment.visit_definition.code == '1020M':
+            gestational_age = MaternalUltraSoundInitial.objects.get(
+                maternal_visit__appointment__registered_subject=appointment.registered_subject).ga_confirmed
+            if gestational_age < 32:
+                raise forms.ValidationError('Antenatal Visit 2 cannot occur before 32 weeks. Current GA is "{}" weeks'.
+                                            format(gestational_age))
 
     class Meta:
         model = MaternalVisit

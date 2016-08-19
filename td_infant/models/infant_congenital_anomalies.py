@@ -5,7 +5,7 @@ from edc_base.model.fields import OtherCharField
 from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_constants.choices import CONFIRMED_SUSPECTED
 from edc_visit_tracking.models import CrfInlineModelMixin
-# from edc_sync.models import SyncModelMixin
+from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from tshilo_dikotla.choices import (
     CNS_ABNORMALITIES, FACIAL_DEFECT, CLEFT_DISORDER, MOUTH_UP_GASTROINT_DISORDER,
@@ -31,9 +31,11 @@ class InfantCongenitalAnomalies(InfantCrfModel):
         verbose_name = "Congenital Anomalies"
 
 
-class BaseCnsItem(CrfInlineModelMixin, BaseUuidModel):
+class BaseCnsItem(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
 
     congenital_anomalies = models.ForeignKey(InfantCongenitalAnomalies)
+
+    history = SyncHistoricalRecords()
 
     class Meta:
         abstract = True
@@ -95,7 +97,7 @@ class InfantFacialDefect(BaseCnsItem):
     objects = InfantFacialDefectManager()
 
     def natural_key(self):
-        return (self.facial_defect, ) + self.   congenital_anomalies.natural_key()
+        return (self.facial_defect, ) + self.congenital_anomalies.natural_key()
 
     class Meta:
         app_label = 'td_infant'

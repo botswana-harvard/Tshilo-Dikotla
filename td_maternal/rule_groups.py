@@ -43,7 +43,21 @@ def func_require_cd4(visit_instance):
 def show_postpartum_depression(visit_instance):
     """Return true if postpartum depression has to be filled."""
     if (visit_instance.appointment.visit_definition.code != '2010M' and not
-        MaternalPostPartumDep.objects.filter(maternal_visit__appointment__visit_definition__code='2010M').exists()):
+        MaternalPostPartumDep.objects.filter(
+            maternal_visit__appointment__visit_definition__code='2010M',
+            maternal_visit__appointment=visit_instance.appointment).exists()):
+        return True
+    return False
+
+
+def show_ultrasound_form(visit_instance):
+    """Return true if ultrasound form has to be filled."""
+    if (visit_instance.appointment.visit_definition.code == '1000M'):
+        return True
+    elif (visit_instance.appointment.visit_definition.code == '1010M' and not
+          MaternalUltraSoundInitial.objects.filter(
+            maternal_visit__appointment__visit_definition__code='1000M',
+            maternal_visit__appointment=visit_instance.appointment).exists()):
         return True
     return False
 
@@ -77,6 +91,13 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
             consequence=UNKEYED,
             alternative=NOT_REQUIRED),
         target_model=[('td_maternal', 'maternalpostpartumdep')])
+
+    require_ultrasound = CrfRule(
+        logic=Logic(
+            predicate=show_ultrasound_form,
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_maternal', 'maternalultrasoundinitial')])
 
     class Meta:
         app_label = 'td_maternal'

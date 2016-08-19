@@ -1,6 +1,5 @@
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields.custom_fields import OtherCharField
 from edc_base.model.validators import date_not_future
 from edc_constants.choices import YES_NO, YES_NO_NA, YES_NO_UNSURE_NA
@@ -199,8 +198,6 @@ class InfantFeeding(InfantCrfModel):
         verbose_name="List any comments about participant's feeding that are not answered above",
         blank=True,
         null=True)
-
-#     history = AuditTrail()
 
     def save(self, *args, **kwargs):
         if self.previous_infant_feeding:

@@ -12,7 +12,7 @@ from ..managers import PanelManager
 
 class Panel(BasePanel):
 
-    test_code = models.ManyToManyField(TestCode, null=True, blank=True, related_name='+')
+    test_code = models.ManyToManyField(TestCode, blank=True, related_name='+')
 
     aliquot_type = models.ManyToManyField(
         AliquotType,

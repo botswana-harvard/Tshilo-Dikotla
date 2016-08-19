@@ -1,6 +1,6 @@
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
-from edc_consent.models import ConsentType
+# from edc_consent.models import ConsentType
 from edc_registration.models import RegisteredSubject
 from edc_constants.constants import (FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES,
                                      NO, NEG, NOT_APPLICABLE, SCREENED)
@@ -22,8 +22,8 @@ class TestMaternalUltrasound(BaseTestCase):
         self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
         self.assertEqual(self.maternal_consent.version, '1')
         self.registered_subject = self.maternal_consent.registered_subject
-        self.assertEqual(ConsentType.objects.all().count(), 1)
-        self.assertEqual(ConsentType.objects.all()[0].version, self.maternal_consent.version)
+#         self.assertEqual(ConsentType.objects.all().count(), 1)
+#         self.assertEqual(ConsentType.objects.all()[0].version, self.maternal_consent.version)
         self.assertEqual(self.registered_subject.subject_identifier, self.maternal_consent.subject_identifier)
         # maternal visit created here.
         self.assertEqual(RegisteredSubject.objects.all().count(), 1)

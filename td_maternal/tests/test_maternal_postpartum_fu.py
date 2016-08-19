@@ -148,7 +148,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
         self.options['hospitalization_reason'] = None
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('Question7: Patient was hospitalized, please give hospitalization_reason.', errors)
+        self.assertIn('Question7: Participant was not hospitalized, reason should be N/A', errors)
 
     def test_hospitalized_no_hospitalization_reason_listed(self):
         """Check if the field for hospitalization reason is none"""
@@ -204,7 +204,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
         self.options['who'] = None
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('Question11: WHO Diagnosis field should not be left empty', errors)
+        self.assertIn('Question11: Participant is HIV NEG, WHO Diagnosis field should be N/A', errors)
 
     def test_mother_negative_who_listing_not_not_applicable(self):
         """checks if who listing is N/A given that the mother is negative"""
