@@ -48,7 +48,7 @@ class EdcSyncAppConfig(EdcSyncAppConfigParent):
 
 
 class EdcLabelAppConfig(EdcLabelConfigParent):
-    default_cups_server_ip = '10.113.201.203'
-    default_printer_label = 'tshilo_testing'
+    default_cups_server_ip = '10.113.201.114'
+    default_printer_label = 'leslie_testing'
     default_template_file = os.path.join(settings.STATIC_ROOT, 'tshilo_dikotla', 'label_templates', 'aliquot.lbl')
     default_label_identifier_name = ''
