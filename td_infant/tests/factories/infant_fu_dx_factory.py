@@ -3,7 +3,6 @@ import factory
 from edc_constants.constants import YES
 
 from td_infant.models import InfantFuDx, InfantFuDxItems
-# from microbiome.apps.mb.choices import DX_INFANT
 
 from .infant_visit_factory import InfantVisitFactory
 

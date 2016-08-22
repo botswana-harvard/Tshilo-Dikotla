@@ -13,7 +13,7 @@ from ..managers import ReceiveManager
 
 class Receive(BaseReceive, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
-    registered_subject = models.ForeignKey(RegisteredSubject, null=True, related_name='microbiome_receive')
+    registered_subject = models.ForeignKey(RegisteredSubject, null=True, related_name='tshilo_dikotla_receive')
 
     requisition_model_name = models.CharField(max_length=25, null=True, editable=False)
 

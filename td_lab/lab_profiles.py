@@ -6,7 +6,7 @@ from .models import (Aliquot, AliquotType, Receive, MaternalRequisition, InfantR
                      AliquotProfile, AliquotProfileItem, Panel)
 
 
-class BaseMicrobiomeProfile(LabProfile):
+class BaseTshiloDikotlaProfile(LabProfile):
     aliquot_model = Aliquot
     aliquot_type_model = AliquotType
     profile_model = AliquotProfile
@@ -15,13 +15,13 @@ class BaseMicrobiomeProfile(LabProfile):
     panel_model = Panel
 
 
-class MaternalProfile(BaseMicrobiomeProfile):
+class MaternalProfile(BaseTshiloDikotlaProfile):
     requisition_model = MaternalRequisition
     name = MaternalRequisition._meta.object_name
 site_lab_profiles.register(MaternalProfile)
 
 
-class InfantProfile(BaseMicrobiomeProfile):
+class InfantProfile(BaseTshiloDikotlaProfile):
     requisition_model = InfantRequisition
     name = InfantRequisition._meta.object_name
 site_lab_profiles.register(InfantProfile)
