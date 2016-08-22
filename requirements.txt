@@ -6,7 +6,7 @@ django-crispy-forms==1.6.0
 django-extensions==1.6.1
 django-js-reverse==0.7.2
 django-model-utils==2.5
-django-revision==0.1.9
+git+https://github.com/erikvw/django-revision@develop#egg=django_revision
 django-simple-history==1.8.1
 django-tastypie==0.13.3
 djangorestframework==3.3.3
