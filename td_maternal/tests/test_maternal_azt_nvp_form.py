@@ -1,8 +1,6 @@
-from edc_constants.choices import YES_NO
-
 from tshilo_dikotla.choices import AZT_NVP
 from .base_test_case import BaseTestCase
-from td_maternal.forms import MaternalAztNvpForm
+
 
 class TestMaternalAztNvp(BaseTestCase):
 

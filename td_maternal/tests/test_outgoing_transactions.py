@@ -28,10 +28,9 @@ class TestOutgoingTransactions(BaseTestCase):
                         'will_remain_onstudy': YES,
                         'rapid_test_done': NOT_APPLICABLE,
                         'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        MaternalConsentFactory(registered_subject=maternal_eligibility.registered_subject)
+        MaternalConsentFactory(maternal_eligibility=maternal_eligibility)
         self.assertTrue(OutgoingTransaction.objects.filter(tx_name='td_maternal.maternalconsent').exists())
         AntenatalEnrollmentFactory(**self.options)
         self.assertTrue(OutgoingTransaction.objects.filter(tx_name='td_maternal.antenatalenrollment').exists())
         self.assertTrue(MaternalVisit.objects.all().exists())
         self.assertTrue(OutgoingTransaction.objects.filter(tx_name='td_maternal.maternalvisit').exists())
-

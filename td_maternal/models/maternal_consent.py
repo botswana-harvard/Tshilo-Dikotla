@@ -18,6 +18,7 @@ from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
 from ..maternal_choices import RECRUIT_SOURCE, RECRUIT_CLINIC
 
 from .potential_call import PotentialCall
+from .maternal_eligibility import MaternalEligibility
 
 
 class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMixin,
@@ -31,9 +32,11 @@ class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMi
 
     off_study_model = ('td_maternal', 'MaternalOffStudy')
 
-    registered_subject = models.ForeignKey(RegisteredSubject, null=True)
+#     registered_subject = models.ForeignKey(RegisteredSubject, null=True)
 
     potential_call = models.ForeignKey(PotentialCall, null=True)
+
+    maternal_eligibility = models.ForeignKey(MaternalEligibility)
 
     recruit_source = models.CharField(
         max_length=75,
@@ -64,7 +67,8 @@ class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMi
                                           self.last_name, self.initials)
 
     def save(self, *args, **kwargs):
-        previous_consent = self.__class__.objects.filter(registered_subject=self.registered_subject)
+        previous_consent = self.__class__.objects.filter(
+            subject_identifier=self.subject_identifier)
         if not self.id and previous_consent.exists():
             self.subject_identifier = previous_consent.first().subject_identifier
         elif not self.id:

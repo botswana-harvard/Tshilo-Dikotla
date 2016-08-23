@@ -13,8 +13,7 @@ from td_maternal.forms import MaternalDiagnosesForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalRandomizationFactory,
-                        MaternalVisitFactory, MaternalArvPregFactory)
+                        AntenatalEnrollmentFactory)
 
 
 class TestMaternalDiagnosesForm(BaseTestCase):
@@ -22,8 +21,9 @@ class TestMaternalDiagnosesForm(BaseTestCase):
     def setUp(self):
         super(TestMaternalDiagnosesForm, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.assertEqual(RegisteredSubject.objects.all().count(), 1)
         options = {'registered_subject': self.registered_subject,
@@ -50,7 +50,7 @@ class TestMaternalDiagnosesForm(BaseTestCase):
             hostname_modified="django", version="1.0", 
             display_index=1, user_created="django", field_name=None, 
             revision=":develop:")
-        
+
         self.diagnoses_na = MaternalDiagnoses.objects.create(
             hostname_created="django", name="Not Applicable", 
             short_name="N/A", created=timezone.datetime.now(), 

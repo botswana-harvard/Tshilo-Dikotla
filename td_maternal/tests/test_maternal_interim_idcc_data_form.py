@@ -19,8 +19,9 @@ class TestMaternalInterimIdccDataForm(BaseTestCase):
     def setUp(self):
         super(TestMaternalInterimIdccDataForm, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
 

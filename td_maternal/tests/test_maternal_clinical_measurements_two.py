@@ -2,8 +2,6 @@ from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
 from edc_constants.constants import UNKNOWN, YES, NEG, NOT_APPLICABLE, SCHEDULED, NO, POS
-from edc_registration.models import RegisteredSubject
-from edc_identifier.models import SubjectIdentifier
 from edc_appointment.models import Appointment
 
 from td_maternal.forms import MaternalClinicalMeasurementsTwoForm
@@ -19,8 +17,9 @@ class TestMaternalClinicalMeasurementsTwo(BaseTestCase):
     def setUp(self):
         super(TestMaternalClinicalMeasurementsTwo, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
         self.antenatal_visit_1 = None
 
         self.options = {

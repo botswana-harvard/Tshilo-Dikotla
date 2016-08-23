@@ -1,12 +1,9 @@
 from dateutil.relativedelta import relativedelta
-from datetime import datetime, date
 from django.utils import timezone
 
 from edc_constants.constants import SCREENED
-from edc_registration.models import RegisteredSubject
-from edc_identifier.models import SubjectIdentifier
 from edc_constants.constants import (
-    FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, UNKEYED, POS, NEG, YES, NO, NOT_APPLICABLE, UNK, UNKNOWN, NEW)
+    FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, UNKEYED, POS, YES, NO, NOT_APPLICABLE, UNK, NEW)
 from edc_meta_data.models import RequisitionMetaData, CrfMetaData
 from edc_appointment.models import Appointment
 
@@ -15,16 +12,17 @@ from td_maternal.models import MaternalVisit
 
 from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,
                                          MaternalConsentFactory, AntenatalEnrollmentFactory,
-                                         AntenatalVisitMembershipFactory, MaternalLabourDelFactory,
-                                         MaternalVisitFactory, MaternalRandomizationFactory)
+                                         AntenatalVisitMembershipFactory, MaternalVisitFactory)
+
 
 class TestMaternalRuleGroups(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalRuleGroups, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
     def test_maternal_hiv_maternalrando(self):
         options = {'registered_subject': self.registered_subject,
@@ -47,7 +45,7 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(registered_subject=options.get('registered_subject'),
-                                                visit_definition__code='1010M')
+                                                   visit_definition__code='1010M')
         self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment)
         self.assertEqual(
             CrfMetaData.objects.filter(
@@ -77,7 +75,7 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(registered_subject=options.get('registered_subject'),
-                                                visit_definition__code='1010M')
+                                                   visit_definition__code='1010M')
         self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment)
         self.assertEqual(
             CrfMetaData.objects.filter(
@@ -86,7 +84,7 @@ class TestMaternalRuleGroups(BaseTestCase):
                 crf_entry__model_name='maternalinterimidcc',
                 appointment=self.appointment).count(), 1)
 
-    def test_maternal_hiv_maternallifetimearvhistory(self):
+    def test_maternal_hiv_maternallifetimearvhistory_2(self):
         options = {'registered_subject': self.registered_subject,
                    'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
@@ -107,7 +105,7 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(registered_subject=options.get('registered_subject'),
-                                                visit_definition__code='1010M')
+                                                   visit_definition__code='1010M')
         self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment)
         self.assertEqual(
             CrfMetaData.objects.filter(

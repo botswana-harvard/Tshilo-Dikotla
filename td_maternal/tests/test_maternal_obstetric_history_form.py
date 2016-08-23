@@ -10,8 +10,7 @@ from td_maternal.forms import MaternalObstericalHistoryForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalRandomizationFactory,
-                        MaternalVisitFactory)
+                        AntenatalEnrollmentFactory)
 
 
 class TestMaternalObstericalHistoryForm(BaseTestCase):
@@ -19,8 +18,9 @@ class TestMaternalObstericalHistoryForm(BaseTestCase):
     def setUp(self):
         super(TestMaternalObstericalHistoryForm, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.assertEqual(RegisteredSubject.objects.all().count(), 1)
         options = {'registered_subject': self.registered_subject,
@@ -33,7 +33,6 @@ class TestMaternalObstericalHistoryForm(BaseTestCase):
                    'knows_lmp': NO,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=20)).date()}
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
-        #self.assertTrue(self.antenatal_enrollment.is_eligible)
         self.maternal_visit = MaternalVisit.objects.get(
             appointment__registered_subject=self.registered_subject,
             reason=SCHEDULED,

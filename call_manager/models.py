@@ -13,6 +13,13 @@ class Call(SyncModelMixin, CallModelMixin, BaseUuidModel):
 
     registered_subject = models.ForeignKey(RegisteredSubject)
 
+#     subject_identifier = models.CharField(
+#         verbose_name="Subject Identifier",
+#         max_length=50,
+#         blank=True,
+#         db_index=True,
+#         unique=True)
+
     call_datetime = models.DateTimeField(
         default=timezone.now(),
         verbose_name='Date of this call')

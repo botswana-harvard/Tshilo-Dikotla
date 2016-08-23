@@ -12,9 +12,7 @@ from td_list.models import ChronicConditions, MaternalMedications
 from edc_appointment.models import Appointment
 
 from .base_test_case import BaseTestCase
-from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalRandomizationFactory,
-                        MaternalVisitFactory, MaternalLabourDelFactory)
+from .factories import (MaternalEligibilityFactory, MaternalConsentFactory, MaternalLabourDelFactory)
 
 
 class TestMaternalMedicalHistory(BaseTestCase):
@@ -22,8 +20,9 @@ class TestMaternalMedicalHistory(BaseTestCase):
     def setUp(self):
         super(TestMaternalMedicalHistory, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.chronic_cond = ChronicConditions.objects.create(
             hostname_created="silverapple", name="Asthma", short_name="Asthma",

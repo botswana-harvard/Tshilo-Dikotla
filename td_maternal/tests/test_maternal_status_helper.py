@@ -20,8 +20,9 @@ class TestMaternalStatusHelper(BaseTestCase):
     def setUp(self):
         super(TestMaternalStatusHelper, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
     def test_pos_status_from_enrollment(self):
         """test that we can figure out a posetive status with just the enrollment status."""

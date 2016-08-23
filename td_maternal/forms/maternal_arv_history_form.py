@@ -46,7 +46,7 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
                     raise forms.ValidationError('Please answer: Is the subject\'s date of triple antiretrovirals estimated?')
                 try:
                     maternal_consent = MaternalConsent.objects.get(
-                        registered_subject__subject_identifier=cleaned_data.get(
+                        subject_identifier=cleaned_data.get(
                             'maternal_visit').appointment.registered_subject.subject_identifier)
                     if report_datetime < maternal_consent.consent_datetime:
                         raise forms.ValidationError("Report datetime CANNOT be before consent datetime")
