@@ -12,9 +12,7 @@ from td_maternal.models import MaternalVisit, RegisteredSubject
 from td_maternal.forms import MaternalPostPartumFuForm
 
 from .base_test_case import BaseTestCase
-from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalRandomizationFactory,
-                        MaternalVisitFactory, MaternalArvPregFactory, MaternalLabourDelFactory)
+from .factories import (MaternalEligibilityFactory, MaternalConsentFactory, MaternalLabourDelFactory)
 
 
 class TestMaternalPostPartumFu(BaseTestCase):
@@ -23,8 +21,8 @@ class TestMaternalPostPartumFu(BaseTestCase):
         super(TestMaternalPostPartumFu, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
         self.maternal_consent = MaternalConsentFactory(
-            registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.assertEqual(RegisteredSubject.objects.all().count(), 1)
 

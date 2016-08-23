@@ -18,7 +18,6 @@ from edc_consent.consent_type import site_consent_types
 from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
 
 from ..managers import MaternalEligibilityManager
-from ..models import MaternalConsent
 
 
 class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
@@ -108,17 +107,20 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
 
     @property
     def have_latest_consent(self):
+        MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
         return (MaternalConsent.objects.filter(
             subject_identifier=self.registered_subject.subject_identifier).order_by('-version').first().version ==
             site_consent_types.get_by_consent_datetime(MaternalConsent, timezone.now()).version)
 
     @property
     def previous_consents(self):
+        MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
         return MaternalConsent.objects.filter(
             subject_identifier=self.registered_subject.subject_identifier).order_by('version')
 
     @property
     def current_consent_version(self):
+        MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
         return site_consent_types.get_by_consent_datetime(MaternalConsent, timezone.now()).version
 
     def set_uuid_for_eligibility_if_none(self):

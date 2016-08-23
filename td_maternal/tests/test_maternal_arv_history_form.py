@@ -2,16 +2,15 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime, date
 from django.utils import timezone
 
-from edc_constants.constants import (UNKNOWN, 
-    YES, NEG, NOT_APPLICABLE, POS, NO, SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
+from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO,
+                                     SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
 from td_list.models import PriorArv
 from td_maternal.models import MaternalVisit, RegisteredSubject
 from td_maternal.forms import MaternalLifetimeArvHistoryForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalRandomizationFactory,
-                        MaternalVisitFactory, MaternalObstericHistoryFactory)
+                        AntenatalEnrollmentFactory, MaternalObstericHistoryFactory)
 
 
 class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
@@ -19,8 +18,9 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
     def setUp(self):
         super(TestMaternalLifetimeArvHistoryForm, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.assertEqual(RegisteredSubject.objects.all().count(), 1)
         options = {'registered_subject': self.registered_subject,
@@ -41,7 +41,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
             maternal_visit=self.maternal_visit, number_of_gestations=1,)
 
         prior_arv = PriorArv.objects.create(
-            hostname_created= "django", name="Atripla", short_name="Atripla", 
+            hostname_created= "django", name="Atripla", short_name="Atripla",
             created="2016-23-20T15:05:12.799", user_modified="", modified="2016-23-20T15:05:12.799", 
             hostname_modified="django", version="1.0", display_index=1, user_created="django", 
             field_name=None, revision=":develop")

@@ -2,8 +2,9 @@ from django.db import models
 
 from ..maternal_choices import POS_NEG_IND
 
+
 class RapidTestMixin(models.Model):
-    
+
     last_rapid_test_date = models.DateField(
         verbose_name='What was the date of the last HIV Rapid Test of the participant?'
     )

@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from edc_constants.constants import SCREENED, UNKNOWN
 from edc_registration.models import RegisteredSubject
-from edc_identifier.models import SubjectIdentifier
 from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES, NO, NEG, NOT_APPLICABLE
 from edc_meta_data.models import RequisitionMetaData
 from edc_appointment.models import Appointment
@@ -23,8 +22,9 @@ class TestMaternalRandomization(BaseTestCase):
     def setUp(self):
         super(TestMaternalRandomization, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
     def test_verify_hiv_status(self):
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))

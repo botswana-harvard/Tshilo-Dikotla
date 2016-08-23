@@ -3,13 +3,12 @@ from django.utils import timezone
 
 from edc_constants.constants import UNKNOWN, YES, NO, NEG, NOT_APPLICABLE, SCHEDULED
 
-from td_maternal.models import MaternalVisit, RegisteredSubject, Appointment
+from td_maternal.models import MaternalVisit, Appointment
 from td_maternal.forms import MaternalSubstanceUseDuringPregForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalRandomizationFactory,
-                        MaternalVisitFactory)
+                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalVisitFactory)
 
 
 class TestMaternalSubstanceUseDuringPreg(BaseTestCase):
@@ -17,8 +16,9 @@ class TestMaternalSubstanceUseDuringPreg(BaseTestCase):
     def setUp(self):
         super(TestMaternalSubstanceUseDuringPreg, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
         maternal_options = {
             'registered_subject': self.registered_subject,

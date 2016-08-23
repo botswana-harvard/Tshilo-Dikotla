@@ -4,12 +4,12 @@ from django.utils import timezone
 
 from edc_consent.models import ConsentType
 from edc_registration.models import RegisteredSubject
-from edc_constants.constants import SCHEDULED, YES, NO, UNKNOWN, NOT_APPLICABLE, NEG, POS
+from edc_constants.constants import SCHEDULED, YES, NO, NOT_APPLICABLE, POS
 
 from td_maternal.models import MaternalVisit, MaternalUltraSoundInitial
 
 from .base_test_case import BaseTestCase
-from .factories import MaternalEligibilityFactory, MaternalConsentFactory, AntenatalEnrollmentFactory, MaternalUltraSoundIniFactory
+from .factories import MaternalEligibilityFactory, MaternalConsentFactory, AntenatalEnrollmentFactory
 
 
 class TestMaternalUltraSoundInitial(BaseTestCase):

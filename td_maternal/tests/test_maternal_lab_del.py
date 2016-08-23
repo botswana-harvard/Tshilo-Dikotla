@@ -3,7 +3,7 @@ from dateutil.relativedelta import relativedelta
 from edc_constants.constants import SCREENED
 from edc_registration.models import RegisteredSubject
 from edc_identifier.models import SubjectIdentifier
-from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES, NO, NEG, NOT_APPLICABLE
+from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES, NO, NOT_APPLICABLE
 from edc_meta_data.models import RequisitionMetaData
 
 from td_maternal.models import MaternalVisit
@@ -22,8 +22,9 @@ class TestMaternalLabourDel(BaseTestCase):
     def setUp(self):
         super(TestMaternalLabourDel, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
         # maternal visit created here.
         options = {'registered_subject': self.registered_subject,
                    'current_hiv_status': POS,

@@ -4,18 +4,14 @@ from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from datetime import date
 
-from edc_constants.constants import (UNKNOWN,
-    YES, NEG, NOT_APPLICABLE, POS, NO, SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
-from edc_code_lists.models import WcsDxAdult
+from edc_constants.constants import (YES, NEG, NOT_APPLICABLE, POS, NO,
+                                     SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
 from edc_appointment.models import Appointment
 
-from td_list.models import MaternalDiagnoses
-from td_maternal.models import MaternalVisit, RegisteredSubject
-from td_maternal.forms import MaternalPostPartumFuForm
+from td_maternal.models import MaternalVisit
 
-from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalRandomizationFactory,
-                        MaternalVisitFactory, MaternalArvPregFactory, MaternalLabourDelFactory)
+from .factories import (MaternalUltraSoundIniFactory, AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory,
+                        MaternalVisitFactory)
 
 
 from tshilo_dikotla.load_edc import load_edc

@@ -1,20 +1,15 @@
 from dateutil.relativedelta import relativedelta
-from datetime import datetime, date
 from django.utils import timezone
 
-from edc_constants.constants import (UNKNOWN, 
-    YES, NEG, NOT_APPLICABLE, POS, NO, SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
-from edc_code_lists.models import WcsDxAdult
+from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO, SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
 from edc_registration.models import RegisteredSubject
 
-from td_list.models import MaternalDiagnoses
 from td_maternal.models import MaternalVisit
 from td_maternal.forms import MaternalArvPostForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalRandomizationFactory,
-                        MaternalVisitFactory, MaternalArvPregFactory)
+                        AntenatalEnrollmentFactory)
 
 
 class TestMaternalArvPost(BaseTestCase):
@@ -22,8 +17,9 @@ class TestMaternalArvPost(BaseTestCase):
     def setUp(self):
         super(TestMaternalArvPost, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.assertEqual(RegisteredSubject.objects.all().count(), 1)
         options = {'registered_subject': self.registered_subject,

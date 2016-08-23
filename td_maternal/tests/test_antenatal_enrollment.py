@@ -2,8 +2,8 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
 from edc_appointment.models import Appointment
-from edc_constants.constants import (POS, YES, NO, NEG, NOT_APPLICABLE,
-    UNKNOWN, FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY,SCHEDULED)
+from edc_constants.constants import (POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN,
+    FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY,SCHEDULED)
 
 from .factories import (
     AntenatalEnrollmentFactory, MaternalEligibilityFactory, MaternalConsentFactory)
@@ -20,8 +20,8 @@ class TestAntenatalEnrollment(BaseTestCase):
     def setUp(self):
         super(TestAntenatalEnrollment, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.registered_subject = self.maternal_eligibility.registered_subject
+        self.maternal_consent = MaternalConsentFactory(maternal_eligibility=self.maternal_eligibility)
         self.data = {
             'registered_subject': self.registered_subject}
 

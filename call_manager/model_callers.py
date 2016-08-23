@@ -12,7 +12,7 @@ class MaternalModelCaller(ModelCaller):
     call_model = (Call, 'registered_subject')
     label = 'subjects'
     locator_model = (MaternalLocator, 'registered_subject__subject_identifier')
-    consent_model = (MaternalConsent, 'registered_subject')
+    consent_model = (MaternalConsent, 'subject_identifier')
     log_entry_model = LogEntry
     log_model = Log
     interval = MONTHLY

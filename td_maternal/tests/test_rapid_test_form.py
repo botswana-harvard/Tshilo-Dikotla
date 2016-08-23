@@ -1,14 +1,14 @@
 from django.utils import timezone
 
-from edc_constants.constants import YES, NO, POS, NEG, IND
+from edc_constants.constants import YES, NO, NEG
 
 from .factories import MaternalEligibilityFactory
 from .factories import MaternalConsentFactory
-from td_maternal.forms import RapidTestResultForm, BaseMaternalModelForm
+from td_maternal.forms import RapidTestResultForm
 
-from ..models import RapidTestResult
 from .base_test_case import BaseTestCase
-from datetime import date, datetime
+from datetime import date
+
 
 class TestRapidTestForm(BaseTestCase):
 
@@ -17,8 +17,8 @@ class TestRapidTestForm(BaseTestCase):
         self.maternal_eligibility = MaternalEligibilityFactory()
         self.assertTrue(self.maternal_eligibility.is_eligible)
         self.maternal_consent = MaternalConsentFactory(
-            registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
         self.data = {'rapid_test_done': YES,
                      'result_date': timezone.now(),
                      'result': NEG, }
