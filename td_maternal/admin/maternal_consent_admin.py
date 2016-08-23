@@ -14,7 +14,7 @@ class MaternalConsentAdmin(BaseModelAdmin):
 
     form = MaternalConsentForm
 
-    fields = ('registered_subject',
+    fields = ('maternal_eligibility',
               'first_name',
               'last_name',
               'initials',
@@ -40,7 +40,7 @@ class MaternalConsentAdmin(BaseModelAdmin):
               'consent_signature',
               'consent_copy')
 
-    search_fields = ('registered_subject__subject_identifier', 'id', 'identity', 'first_name', 'last_name')
+    search_fields = ('subject_identifier', 'id', 'identity', 'first_name', 'last_name')
 
     radio_fields = {
         'assessment_score': admin.VERTICAL,
@@ -57,7 +57,6 @@ class MaternalConsentAdmin(BaseModelAdmin):
         'study_questions': admin.VERTICAL}
 
     list_display = ('subject_identifier',
-                    'registered_subject',
                     'is_verified',
                     'is_verified_datetime',
                     'first_name',
@@ -87,10 +86,10 @@ class MaternalConsentAdmin(BaseModelAdmin):
                      'hostname_modified', 'last_name', 'identity', 'confirm_identity', 'first_name', 'legal_marriage',
                      'marriage_certificate', 'marriage_certificate_no'],
             extra_fields=OrderedDict(
-                {'subject_identifier': 'registered_subject__subject_identifier',
-                 'gender': 'registered_subject__gender',
-                 'dob': 'registered_subject__dob',
-                 'registered': 'registered_subject__registration_datetime'}),
+                {'subject_identifier': 'subject_identifier',
+                 'gender': 'gender',
+                 'dob': 'dob',
+                 'registered': 'consent_datetime'}),
         )]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
