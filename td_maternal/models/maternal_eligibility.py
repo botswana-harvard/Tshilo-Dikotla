@@ -90,7 +90,7 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
         return (is_eligible, ','.join(error_message))
 
     def __str__(self):
-        return "{0} ({1})".format(self.eligibility_id, self.age_in_years)
+        return "Screened, age ({})".format(self.age_in_years)
 
     def natural_key(self):
         return self.eligibility_id

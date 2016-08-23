@@ -29,7 +29,7 @@ class MaternalConsentForm(BaseConsentForm):
         cleaned_data = super(MaternalConsentForm, self).clean()
         if cleaned_data.get('identity_type') == OMANG and cleaned_data.get('identity')[4] != '2':
             raise forms.ValidationError('Identity provided indicates participant is Male. Please correct.')
-        eligibility = MaternalEligibility.objects.get(registered_subject=cleaned_data.get('registered_subject'))
+        eligibility = cleaned_data.get('maternal_eligibility')
         if cleaned_data.get('citizen') != eligibility.has_omang:
             raise forms.ValidationError(
                 "In eligibility you said has_omang is {}. Yet you wrote citizen is {}. "
@@ -47,8 +47,7 @@ class MaternalConsentForm(BaseConsentForm):
             consent_age = relativedelta(consent_v1.consent_datetime.date(), consent_v1.dob).years
         except MaternalConsent.DoesNotExist:
             consent_age = relativedelta(timezone.now().date(), cleaned_data.get('dob')).years
-        eligibility_age = MaternalEligibility.objects.get(
-            registered_subject=cleaned_data.get('registered_subject')).age_in_years
+        eligibility_age = cleaned_data.get('maternal_eligibility').age_in_years
         if consent_age != eligibility_age:
             raise forms.ValidationError(
                 'In Maternal Eligibility you indicated the participant is {}, '
