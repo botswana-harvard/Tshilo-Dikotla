@@ -6,12 +6,11 @@ from edc_export.models import ExportTrackingFieldsMixin
 from edc_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
-from lis.specimen.lab_receive.models import BaseReceive
+from edc_lab.lab_receive.model_mixins import ReceiveModelMixin
+from edc_lab.lab_receive.managers import ReceiveManager
 
-from ..managers import ReceiveManager
 
-
-class Receive(BaseReceive, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class Receive(ReceiveModelMixin, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     registered_subject = models.ForeignKey(RegisteredSubject, null=True, related_name='microbiome_receive')
 

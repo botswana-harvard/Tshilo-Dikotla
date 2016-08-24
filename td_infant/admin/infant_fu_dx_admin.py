@@ -2,25 +2,26 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from edc_base.modeladmin.admin import BaseTabularInline
+from edc_base.modeladmin.mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, DashboardRedirectUrlMixin
 
 from ..models import InfantFuDx, InfantVisit, InfantFuDxItems
 from ..forms import InfantFuDxItemsForm
 
-from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
+from .admin_mixins import InfantScheduleModelModelAdminMixin
 
 
-class InfantFuDxItemsInline(BaseTabularInline):
+class InfantFuDxItemsInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantFuDxItems
     form = InfantFuDxItemsForm
     extra = 0
 
 
-class InfantFuDxItemsAdmin(BaseModelAdmin):
+@admin.register(InfantFuDxItems)
+class InfantFuDxItemsAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, admin.ModelAdmin):
     form = InfantFuDxItemsForm
 
     actions = [
@@ -38,10 +39,9 @@ class InfantFuDxItemsAdmin(BaseModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantFuDxItems, InfantFuDxItemsAdmin)
 
-
-class InfantFuDxAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantFuDx)
+class InfantFuDxAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
 
     inlines = [InfantFuDxItemsInline, ]
 
@@ -58,10 +58,3 @@ class InfantFuDxAdmin(BaseInfantScheduleModelAdmin):
                  'dob': 'infant_visit__appointment__registered_subject__dob',
                  }),
         )]
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "infant_visit":
-                kwargs["queryset"] = InfantVisit.objects.filter(id=request.GET.get('infant_visit'))
-        return super(InfantFuDxAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-admin.site.register(InfantFuDx, InfantFuDxAdmin)

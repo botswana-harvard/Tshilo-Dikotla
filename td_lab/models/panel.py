@@ -3,7 +3,7 @@ from django.db import models
 from edc_lab.lab_clinic_api.choices import PANEL_TYPE
 from edc_lab.lab_clinic_api.models import TestCode
 
-from lis.specimen.lab_panel.models import BasePanel
+from edc_lab.lab_panel.models import BasePanel
 
 from .aliquot_type import AliquotType
 

@@ -1,22 +1,15 @@
-from edc_registration.models import RegisteredSubject
-
-from django.contrib import messages
-
-from edc_label.label import Label
+from edc_label.actions import print_labels_action
 
 
-def print_aliquot_label(modeladmin, request, aliquots):
+def print_aliquot_label(modeladmin, request, qs):
     """ Prints an aliquot label."""
-    subject_identifier = aliquots[0].get_subject_identifier()
-    registered_subject = RegisteredSubject.objects.get(subject_identifier=subject_identifier)
-    primary = ''
-    if aliquots[0].aliquot_identifier[-2:] == '01':
-        primary = "<"
-    context = {}
-    context.update({
-            'aliquot_identifier': [al.aliquot_identifier for al in aliquots],})
-    label_name = 'aliquot'
-    labelling = Label(context, label_name)
-    labelling.print_label(aliquots.count())
-    messages.add_message(request, messages.SUCCESS, str(labelling.message))
+    registered_subject = RegisteredSubject.objects.get(subject_identifier=qs[0].subject_identifier())
+    extra_context = {
+        'subject_identifier': registered_subject.subject_identifier,
+        'gender': registered_subject.gender,
+        'dob': registered_subject.dob,
+        'initials': registered_subject.initials,
+    }
+    print_labels_action('aliquot', qs, request, extra_context)
+
 print_aliquot_label.short_description = "LABEL: print aliquot label"

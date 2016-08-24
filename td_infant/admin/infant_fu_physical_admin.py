@@ -5,12 +5,13 @@ from django.contrib import admin
 from edc_export.actions import export_as_csv_action
 
 from ..forms import InfantFuPhysicalForm
-from ..models import InfantVisit, InfantFuPhysical
+from ..models import InfantFuPhysical
 
-from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
+from .admin_mixins import InfantScheduleModelModelAdminMixin
 
 
-class InfantFuPhysicalAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantFuPhysical)
+class InfantFuPhysicalAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantFuPhysicalForm
 
     radio_fields = {
@@ -37,10 +38,3 @@ class InfantFuPhysicalAdmin(BaseInfantScheduleModelAdmin):
                  'dob': 'infant_visit__appointment__registered_subject__dob',
                  }),
         )]
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "infant_visit":
-                kwargs["queryset"] = InfantVisit.objects.filter(id=request.GET.get('infant_visit'))
-        return super(InfantFuPhysicalAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-admin.site.register(InfantFuPhysical, InfantFuPhysicalAdmin)

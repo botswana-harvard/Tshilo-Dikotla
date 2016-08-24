@@ -7,10 +7,11 @@ from edc_export.actions import export_as_csv_action
 from ..forms import InfantBirthDataForm
 from ..models import InfantBirthData
 
-from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
+from .admin_mixins import InfantScheduleModelModelAdminMixin
 
 
-class InfantBirthDataAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantBirthData)
+class InfantBirthDataAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
 
     form = InfantBirthDataForm
 
@@ -43,5 +44,3 @@ class InfantBirthDataAdmin(BaseInfantScheduleModelAdmin):
                  'dob': 'infant_visit__appointment__registered_subject__dob',
                  }),
         )]
-
-admin.site.register(InfantBirthData, InfantBirthDataAdmin)

@@ -2,29 +2,31 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from edc_base.modeladmin.admin import BaseTabularInline
+from edc_base.modeladmin.mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, DashboardRedirectUrlMixin
 
 from ..forms import InfantFuImmunizationsForm, VaccinesReceivedForm, VaccinesMissedForm
 from ..models import InfantFuImmunizations, VaccinesReceived, VaccinesMissed
-from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
+
+from .admin_mixins import InfantScheduleModelModelAdminMixin
 
 
-class VaccinesReceivedInlineAdmin(BaseTabularInline):
+class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
     model = VaccinesReceived
     form = VaccinesReceivedForm
     extra = 1
 
 
-class VaccinesMissedInlineAdmin(BaseTabularInline):
+class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
     model = VaccinesMissed
     form = VaccinesMissedForm
     extra = 1
 
 
-class VaccinesReceivedAdmin(BaseModelAdmin):
+@admin.register(VaccinesReceived)
+class VaccinesReceivedAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, admin.ModelAdmin):
     form = VaccinesReceivedForm
 
     actions = [
@@ -44,7 +46,8 @@ class VaccinesReceivedAdmin(BaseModelAdmin):
         )]
 
 
-class VaccinesMissedAdmin(BaseModelAdmin):
+@admin.register(VaccinesMissed)
+class VaccinesMissedAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, admin.ModelAdmin):
     form = VaccinesMissedForm
 
     actions = [
@@ -64,7 +67,8 @@ class VaccinesMissedAdmin(BaseModelAdmin):
         )]
 
 
-class InfantFuImmunizationsAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantFuImmunizations)
+class InfantFuImmunizationsAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantFuImmunizationsForm
     inlines = [VaccinesReceivedInlineAdmin, VaccinesMissedInlineAdmin, ]
     radio_fields = {'vaccines_received': admin.VERTICAL,
@@ -83,5 +87,3 @@ class InfantFuImmunizationsAdmin(BaseInfantScheduleModelAdmin):
                  'dob': 'infant_visit__appointment__registered_subject__dob',
                  }),
         )]
-
-admin.site.register(InfantFuImmunizations, InfantFuImmunizationsAdmin)

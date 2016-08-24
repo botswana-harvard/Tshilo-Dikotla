@@ -1,16 +1,19 @@
 from django.core.urlresolvers import reverse
-from django.contrib import admin
+
 from edc_base.modeladmin.mixins import (
     ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
     ModelAdminAuditFieldsMixin)
 
 
-class BaseModelAdmin(ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
-                     ModelAdminAuditFieldsMixin, admin.ModelAdmin):
+class EdcBaseModelAdminMixin(ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
+                             ModelAdminAuditFieldsMixin):
 
     list_per_page = 10
     date_hierarchy = 'modified'
     empty_value_display = '-'
+
+
+class SectionRedirectUrlMixin(ModelAdminNextUrlRedirectMixin):
 
     def redirect_url(self, request, obj, post_url_continue=None):
         url_name = request.GET.get(self.querystring_name)
@@ -18,12 +21,7 @@ class BaseModelAdmin(ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsM
         return reverse(url_name, kwargs={'section_name': section_name})
 
 
-class MembershipBaseModelAdmin(ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin,
-                               ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin, admin.ModelAdmin):
-
-    list_per_page = 10
-    date_hierarchy = 'modified'
-    empty_value_display = '-'
+class DashboardRedirectUrlMixin(ModelAdminNextUrlRedirectMixin):
 
     def redirect_url(self, request, obj, post_url_continue=None):
         url_name = request.GET.get(self.querystring_name)

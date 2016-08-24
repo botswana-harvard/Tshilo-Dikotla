@@ -1,15 +1,9 @@
-from django.db import models
-
-from lis.specimen.lab_aliquot_list.models import BaseAliquotType
-
-
-class AliquotTypeManager(models.Manager):
-
-    def get_by_natural_key(self, alpha_code, numeric_code):
-        return self.get(alpha_code=alpha_code, numeric_code=numeric_code)
+from edc_base.model.models.base_uuid_model import BaseUuidModel
+from edc_lab.lab_aliquot.model_mixins import AliquotTypeModelMixin
+from edc_lab.lab_aliquot.managers import AliquotTypeManager
 
 
-class AliquotType(BaseAliquotType):
+class AliquotType(AliquotTypeModelMixin, BaseUuidModel):
 
     objects = AliquotTypeManager()
 

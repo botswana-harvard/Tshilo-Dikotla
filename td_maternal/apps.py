@@ -1,7 +1,6 @@
-from django.apps import AppConfig
+from django.apps import AppConfig as DjangoAppConfig
 
 
-class TdMaternalConfig(AppConfig):
+class AppConfig(DjangoAppConfig):
     name = 'td_maternal'
-    verbose_name = 'td_maternal'
-
+    verbose_name = 'Mothers'

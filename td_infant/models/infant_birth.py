@@ -6,7 +6,7 @@ from edc_base.model.validators import datetime_not_before_study_start, datetime_
 from edc_base.model.validators.date import date_not_future
 from edc_constants.choices import GENDER_UNDETERMINED
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_offstudy.models import OffStudyMixin
+from edc_offstudy.model_mixins import OffStudyMixin
 from edc_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 

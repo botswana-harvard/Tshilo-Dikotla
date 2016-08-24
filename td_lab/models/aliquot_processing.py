@@ -2,16 +2,15 @@ from django.db import models
 
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_lab.lab_profile.models import BaseProcessing
+from edc_lab.lab_aliquot.managers import AliquotProcessingManager
+from edc_lab.lab_aliquot.model_mixins import AliquotProcessingModelMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-
-from ..managers import AliquotProcessingManager
 
 from .aliquot import Aliquot
 from .aliquot_profile import AliquotProfile
 
 
-class AliquotProcessing(BaseProcessing, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class AliquotProcessing(AliquotProcessingModelMixin, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     aliquot = models.ForeignKey(
         Aliquot,
@@ -36,4 +35,3 @@ class AliquotProcessing(BaseProcessing, SyncModelMixin, ExportTrackingFieldsMixi
 
     class Meta:
         app_label = 'td_lab'
-        db_table = 'td_lab_processing'

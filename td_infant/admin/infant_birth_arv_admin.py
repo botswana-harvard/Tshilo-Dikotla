@@ -6,10 +6,11 @@ from edc_export.actions import export_as_csv_action
 
 from ..models import InfantBirthArv, InfantVisit
 
-from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
+from .admin_mixins import InfantScheduleModelModelAdminMixin
 
 
-class InfantBirthArvAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantBirthArv)
+class InfantBirthArvAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
 
     list_display = (
         'infant_visit', 'azt_after_birth',
@@ -38,10 +39,3 @@ class InfantBirthArvAdmin(BaseInfantScheduleModelAdmin):
                  'dob': 'infant_visit__appointment__registered_subject__dob',
                  }),
         )]
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "infant_visit":
-                kwargs["queryset"] = InfantVisit.objects.filter(id=request.GET.get('infant_visit'))
-        return super(InfantBirthArvAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-admin.site.register(InfantBirthArv, InfantBirthArvAdmin)

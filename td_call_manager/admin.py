@@ -67,9 +67,9 @@ class LogEntryInlineAdmin(ModelAdminLogEntryInlineMixin, ModelAdminStackedInline
     model = LogEntry
 
 
+@admin.register(Log)
 class LogAdmin(BaseModelAdmin, ModelAdminModelRedirectMixin, ModelAdminLogMixin, SimpleHistoryAdmin):
-    inlines = [LogEntryInlineAdmin]
-admin.site.register(Log, LogAdmin)
+    pass
 
 
 class LogEntryAdmin(BaseModelAdmin, ModelAdminLogEntryMixin, SimpleHistoryAdmin):

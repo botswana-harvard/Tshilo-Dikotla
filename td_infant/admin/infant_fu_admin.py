@@ -7,10 +7,11 @@ from edc_export.actions import export_as_csv_action
 from ..forms import InfantFuForm
 from ..models import InfantVisit, InfantFu
 
-from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
+from .admin_mixins import InfantScheduleModelModelAdminMixin
 
 
-class InfantFuAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantFu)
+class InfantFuAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantFuForm
 
     list_display = (
@@ -41,10 +42,3 @@ class InfantFuAdmin(BaseInfantScheduleModelAdmin):
                  'dob': 'infant_visit__appointment__registered_subject__dob',
                  }),
         )]
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "infant_visit":
-                kwargs["queryset"] = InfantVisit.objects.filter(id=request.GET.get('infant_visit'))
-        return super(InfantFuAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-admin.site.register(InfantFu, InfantFuAdmin)

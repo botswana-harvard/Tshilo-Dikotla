@@ -5,14 +5,15 @@ from django.contrib import admin
 from edc_registration.models import RegisteredSubject
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
 from td_maternal.models import MaternalLabourDel
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, SectionRedirectUrlMixin
 
 from ..forms import InfantBirthForm
 from ..models import InfantBirth
 
 
-class InfantBirthAdmin(MembershipBaseModelAdmin):
+@admin.register(InfantBirth)
+class InfantBirthAdmin(EdcBaseModelAdminMixin, SectionRedirectUrlMixin, admin.ModelAdmin):
 
     form = InfantBirthForm
 
@@ -62,5 +63,3 @@ class InfantBirthAdmin(MembershipBaseModelAdmin):
                 kwargs["queryset"] = MaternalLabourDel.objects.filter(
                     registered_subject__subject_identifier=maternal_subject_identifier)
         return super(InfantBirthAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-admin.site.register(InfantBirth, InfantBirthAdmin)

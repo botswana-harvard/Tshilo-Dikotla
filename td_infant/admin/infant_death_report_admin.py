@@ -5,13 +5,14 @@ from django.contrib import admin
 from edc_export.actions import export_as_csv_action
 from edc_registration.models import RegisteredSubject
 
-from tshilo_dikotla.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, DashboardRedirectUrlMixin
 
 from ..forms import InfantDeathReportForm
 from ..models import InfantDeathReport, InfantVisit
 
 
-class InfantDeathReportAdmin(BaseModelAdmin):
+@admin.register(InfantDeathReport)
+class InfantDeathReportAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, admin.ModelAdmin):
 
     form = InfantDeathReportForm
 
@@ -79,5 +80,3 @@ class InfantDeathReportAdmin(BaseModelAdmin):
                 kwargs["queryset"] = RegisteredSubject.objects.filter(
                     subject_identifier=infant_visit.appointment.registered_subject.subject_identifier)
         return super(InfantDeathReportAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-admin.site.register(InfantDeathReport, InfantDeathReportAdmin)

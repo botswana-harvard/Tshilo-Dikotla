@@ -1,7 +1,6 @@
-from django.apps import AppConfig
+from django.apps import AppConfig as DjangoAppConfig
 
 
-class TdListConfig(AppConfig):
+class AppConfig(DjangoAppConfig):
     name = 'td_list'
-    verbose_name = 'td_list'
-
+    verbose_name = 'Lists'

@@ -1,7 +1,6 @@
-from django.apps import AppConfig
+from django.apps import AppConfig as DjangoAppConfig
 
 
-class TdLabConfig(AppConfig):
+class AppConfig(DjangoAppConfig):
     name = 'td_lab'
-    verbose_name = 'td_lab'
-
+    verbose_name = 'Labs'

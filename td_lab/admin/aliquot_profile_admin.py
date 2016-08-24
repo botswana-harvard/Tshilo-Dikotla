@@ -1,22 +1,23 @@
 from django.contrib import admin
 
-from edc_base.modeladmin.admin import BaseTabularInline
-from edc_lab.lab_profile.admin import BaseProfileAdmin, BaseProfileItemAdmin
+from edc_base.modeladmin.mixins import TabularInlineMixin
+from edc_lab.lab_aliquot.admin import (
+    AliquotProfileModelAdminMixin, AliquotProfileItemModelAdminMixin)
 
-from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
+from tshilo_dikotla.base_model_admin import MembershipModelAdminMixin
 
 from ..models import AliquotProfileItem, AliquotProfile
 
 
-class AliquotProfileItemAdmin(BaseProfileItemAdmin):
+@admin.register(AliquotProfileItem)
+class AliquotProfileItemAdmin(AliquotProfileItemModelAdminMixin, admin.ModelAdmin):
     pass
-admin.site.register(AliquotProfileItem, AliquotProfileItemAdmin)
 
 
-class AliquotProfileItemInlineAdmin(BaseTabularInline, MembershipBaseModelAdmin):
+class AliquotProfileItemInlineAdmin(TabularInlineMixin, MembershipModelAdminMixin, admin.TabularInline):
     model = AliquotProfileItem
 
 
-class AliquotProfileAdmin(BaseProfileAdmin):
+@admin.register(AliquotProfile)
+class AliquotProfileAdmin(AliquotProfileModelAdminMixin, admin.ModelAdmin):
     inlines = [AliquotProfileItemInlineAdmin]
-admin.site.register(AliquotProfile, AliquotProfileAdmin)

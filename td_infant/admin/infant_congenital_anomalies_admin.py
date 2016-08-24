@@ -2,8 +2,7 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
-from edc_base.modeladmin.admin import BaseTabularInline
+from edc_base.modeladmin.mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
 from tshilo_dikotla.constants import INFANT
 
@@ -12,10 +11,7 @@ from ..models import (
     InfantCleftDisorder, InfantMouthUpGi, InfantCardioDisorder,
     InfantRespiratoryDefect, InfantLowerGi, InfantMaleGenital,
     InfantFemaleGenital, InfantRenal, InfantMusculoskeletal,
-    InfantSkin, InfantTrisomies, InfantVisit
-)
-
-
+    InfantSkin, InfantTrisomies, InfantVisit)
 from ..forms import (
     InfantCongenitalAnomaliesForm, InfantFacialDefectForm,
     InfantCleftDisorderForm, InfantMouthUpGiForm,
@@ -25,11 +21,13 @@ from ..forms import (
     InfantMaleGenitalForm, InfantRenalForm,
     InfantMusculoskeletalForm,
     InfantSkinForm, InfantTrisomiesForm,
-    InfantCnsForm
-)
+    InfantCnsForm)
+
+from .admin_mixins import InfantScheduleModelModelAdminMixin
 
 
-class InfantCnsAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantCns)
+class InfantCnsAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantCnsForm
     list_display = ('congenital_anomalies', 'abnormality_status',)
 
@@ -54,17 +52,16 @@ class InfantCnsAdmin(BaseInfantScheduleModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantCns, InfantCnsAdmin)
 
-
-class InfantCnsInline(BaseTabularInline):
+class InfantCnsInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantCns
     form = InfantCnsForm
     extra = 0
 
 
-class InfantFacialDefectAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantFacialDefect)
+class InfantFacialDefectAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantFacialDefectForm
     list_display = ('congenital_anomalies',)
 
@@ -87,17 +84,17 @@ class InfantFacialDefectAdmin(BaseInfantScheduleModelAdmin):
                  'dob': 'congenital_anomalies__infant_visit__appointment__registered_subject__dob',
                  }),
         )]
-admin.site.register(InfantFacialDefect, InfantFacialDefectAdmin)
 
 
-class InfantFacialDefectInline(BaseTabularInline):
+class InfantFacialDefectInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantFacialDefect
     form = InfantFacialDefectForm
     extra = 0
 
 
-class InfantCleftDisorderAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantCleftDisorder)
+class InfantCleftDisorderAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantCleftDisorderForm
 
     list_display = ('congenital_anomalies',)
@@ -122,17 +119,15 @@ class InfantCleftDisorderAdmin(BaseInfantScheduleModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantCleftDisorder, InfantCleftDisorderAdmin)
 
-
-class InfantCleftDisorderInline(BaseTabularInline):
+class InfantCleftDisorderInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantCleftDisorder
     form = InfantCleftDisorderForm
     extra = 0
 
 
-class InfantMouthUpGiAdmin(BaseInfantScheduleModelAdmin):
+class InfantMouthUpGiAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantMouthUpGiForm
 
     list_display = ('congenital_anomalies',)
@@ -160,14 +155,15 @@ class InfantMouthUpGiAdmin(BaseInfantScheduleModelAdmin):
 admin.site.register(InfantMouthUpGi, InfantMouthUpGiAdmin)
 
 
-class InfantMouthUpGiInline(BaseTabularInline):
+class InfantMouthUpGiInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantMouthUpGi
     form = InfantMouthUpGiForm
     extra = 0
 
 
-class InfantCardioDisorderAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantCardioDisorder)
+class InfantCardioDisorderAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantCardioDisorderForm
 
     list_display = ('congenital_anomalies',)
@@ -192,17 +188,16 @@ class InfantCardioDisorderAdmin(BaseInfantScheduleModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantCardioDisorder, InfantCardioDisorderAdmin)
 
-
-class InfantCardioDisorderInline(BaseTabularInline):
+class InfantCardioDisorderInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantCardioDisorder
     form = InfantCardioDisorderForm
     extra = 0
 
 
-class InfantRespiratoryDefectAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantRespiratoryDefect)
+class InfantRespiratoryDefectAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantRespiratoryDefectForm
 
     list_display = ('congenital_anomalies',)
@@ -227,17 +222,16 @@ class InfantRespiratoryDefectAdmin(BaseInfantScheduleModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantRespiratoryDefect, InfantRespiratoryDefectAdmin)
 
-
-class InfantRespiratoryDefectInline(BaseTabularInline):
+class InfantRespiratoryDefectInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantRespiratoryDefect
     form = InfantRespiratoryDefectForm
     extra = 0
 
 
-class InfantLowerGiAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantLowerGi)
+class InfantLowerGiAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantLowerGiForm
 
     list_display = ('congenital_anomalies',)
@@ -262,17 +256,16 @@ class InfantLowerGiAdmin(BaseInfantScheduleModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantLowerGi, InfantLowerGiAdmin)
 
-
-class InfantLowerGiInline(BaseTabularInline):
+class InfantLowerGiInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantLowerGi
     form = InfantLowerGiForm
     extra = 0
 
 
-class InfantFemaleGenitalAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantFemaleGenital)
+class InfantFemaleGenitalAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantFemaleGenitalForm
 
     list_display = ('congenital_anomalies',)
@@ -297,17 +290,16 @@ class InfantFemaleGenitalAdmin(BaseInfantScheduleModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantFemaleGenital, InfantFemaleGenitalAdmin)
 
-
-class InfantFemaleGenitalInline(BaseTabularInline):
+class InfantFemaleGenitalInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantFemaleGenital
     form = InfantFemaleGenitalForm
     extra = 0
 
 
-class InfantMaleGenitalAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantMaleGenital)
+class InfantMaleGenitalAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantMaleGenitalForm
 
     list_display = ('congenital_anomalies',)
@@ -332,17 +324,16 @@ class InfantMaleGenitalAdmin(BaseInfantScheduleModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantMaleGenital, InfantMaleGenitalAdmin)
 
-
-class InfantMaleGenitalInline(BaseTabularInline):
+class InfantMaleGenitalInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantMaleGenital
     form = InfantMaleGenitalForm
     extra = 0
 
 
-class InfantRenalAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantRenal)
+class InfantRenalAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = form = InfantRenalForm
 
     list_display = ('congenital_anomalies',)
@@ -367,17 +358,16 @@ class InfantRenalAdmin(BaseInfantScheduleModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantRenal, InfantRenalAdmin)
 
-
-class InfantRenalInline(BaseTabularInline):
+class InfantRenalInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantRenal
     form = InfantRenalForm
     extra = 0
 
 
-class InfantMusculoskeletalAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantMusculoskeletal)
+class InfantMusculoskeletalAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = form = InfantMusculoskeletalForm
 
     list_display = ('congenital_anomalies',)
@@ -402,17 +392,16 @@ class InfantMusculoskeletalAdmin(BaseInfantScheduleModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantMusculoskeletal, InfantMusculoskeletalAdmin)
 
-
-class InfantMusculoskeletalInline(BaseTabularInline):
+class InfantMusculoskeletalInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantMusculoskeletal
     form = InfantMusculoskeletalForm
     extra = 0
 
 
-class InfantSkinAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantSkin)
+class InfantSkinAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = form = InfantSkinForm
 
     list_display = ('congenital_anomalies',)
@@ -437,17 +426,16 @@ class InfantSkinAdmin(BaseInfantScheduleModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantSkin, InfantSkinAdmin)
 
-
-class InfantSkinInline(BaseTabularInline):
+class InfantSkinInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantSkin
     form = InfantSkinForm
     extra = 0
 
 
-class InfantTrisomiesAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantTrisomies)
+class InfantTrisomiesAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
     form = InfantTrisomiesForm
 
     list_display = ('congenital_anomalies',)
@@ -472,17 +460,16 @@ class InfantTrisomiesAdmin(BaseInfantScheduleModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantTrisomies, InfantTrisomiesAdmin)
 
-
-class InfantTrisomiesInline(BaseTabularInline):
+class InfantTrisomiesInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantTrisomies
     form = InfantTrisomiesForm
     extra = 0
 
 
-class InfantCongenitalAnomaliesAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantCongenitalAnomalies)
+class InfantCongenitalAnomaliesAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
 
     form = InfantCongenitalAnomaliesForm
     dashboard_type = INFANT
@@ -504,11 +491,3 @@ class InfantCongenitalAnomaliesAdmin(BaseInfantScheduleModelAdmin):
         InfantMusculoskeletalInline,
         InfantSkinInline,
         InfantTrisomiesInline]
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "infant_visit":
-            if request.GET.get('infant_visit'):
-                kwargs["queryset"] = InfantVisit.objects.filter(id=request.GET.get('infant_visit'))
-        return super(InfantCongenitalAnomaliesAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-admin.site.register(InfantCongenitalAnomalies, InfantCongenitalAnomaliesAdmin)

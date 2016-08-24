@@ -9,7 +9,7 @@ from edc_consent.models.fields import (
 from edc_consent.models.fields.bw import IdentityFieldsMixin
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_identifier.subject.classes import SubjectIdentifier
-from edc_offstudy.models import OffStudyMixin
+from edc_offstudy.model_mixins import OffStudyMixin
 from edc_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin
 

@@ -1,7 +1,6 @@
-from django.apps import AppConfig
+from django.apps import AppConfig as DjangoAppConfig
 
 
-class TdDashboardConfig(AppConfig):
+class AppConfig(DjangoAppConfig):
     name = 'td_dashboard'
     verbose_name = 'td_dashboard'
-

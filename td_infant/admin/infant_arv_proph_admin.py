@@ -2,23 +2,24 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from edc_base.modeladmin.admin import BaseTabularInline
+from edc_base.modeladmin.mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
 
 from ..models import InfantArvProphMod, InfantArvProph
 from ..forms import InfantArvProphForm, InfantArvProphModForm
 
-from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
+from .admin_mixins import InfantScheduleModelModelAdminMixin
 
 
-class InfantArvProphModInline(BaseTabularInline):
+class InfantArvProphModInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantArvProphMod
     form = InfantArvProphModForm
     extra = 1
 
 
-class InfantArvProphAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantArvProph)
+class InfantArvProphAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
 
     form = InfantArvProphForm
     inlines = [InfantArvProphModInline, ]
@@ -41,10 +42,9 @@ class InfantArvProphAdmin(BaseInfantScheduleModelAdmin):
                  }),
         )]
 
-admin.site.register(InfantArvProph, InfantArvProphAdmin)
 
-
-class InfantArvProphModAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantArvProphMod)
+class InfantArvProphModAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
 
     form = InfantArvProphModForm
 
@@ -66,5 +66,3 @@ class InfantArvProphModAdmin(BaseInfantScheduleModelAdmin):
                  'arv_status': 'infant_arv_proph__arv_status',
                  }),
         )]
-
-admin.site.register(InfantArvProphMod, InfantArvProphModAdmin)

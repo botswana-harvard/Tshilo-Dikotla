@@ -7,7 +7,7 @@ from edc_consent.models import RequiresConsentMixin
 from edc_constants.constants import (
     YES, POS, NEG, FAILED_ELIGIBILITY)
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_offstudy.models import OffStudyMixin
+from edc_offstudy.model_mixins import OffStudyMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.constants import VISIT_REASON_NO_FOLLOW_UP_CHOICES, COMPLETED_PROTOCOL_VISIT, LOST_VISIT
 from edc_visit_tracking.models import VisitModelMixin, PreviousVisitMixin, CaretakerFieldsMixin

@@ -2,24 +2,26 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from edc_base.modeladmin.admin import BaseTabularInline
+from edc_base.modeladmin.mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, DashboardRedirectUrlMixin
 
 from ..forms import InfantFuNewMedItemsForm, InfantFuNewMedForm
 from ..models import InfantFuNewMed, InfantFuNewMedItems
-from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
+
+from .admin_mixins import InfantScheduleModelModelAdminMixin
 
 
-class InfantFuNewMedItemsInline(BaseTabularInline):
+class InfantFuNewMedItemsInline(TabularInlineMixin, admin.TabularInline):
 
     model = InfantFuNewMedItems
     form = InfantFuNewMedItemsForm
     extra = 0
 
 
-class InfantFuNewMedItemsAdmin(BaseModelAdmin):
+@admin.register(InfantFuNewMedItems)
+class InfantFuNewMedItemsAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, admin.ModelAdmin):
 
     form = InfantFuNewMedItemsForm
 
@@ -38,10 +40,10 @@ class InfantFuNewMedItemsAdmin(BaseModelAdmin):
                  'new_medications': 'infant_fu_med__new_medications',
                  }),
         )]
-admin.site.register(InfantFuNewMedItems, InfantFuNewMedItemsAdmin)
 
 
-class InfantFuNewMedAdmin(BaseInfantScheduleModelAdmin):
+@admin.register(InfantFuNewMed)
+class InfantFuNewMedAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
 
     radio_fields = {'new_medications': admin.VERTICAL, }
     inlines = [InfantFuNewMedItemsInline, ]
@@ -60,5 +62,3 @@ class InfantFuNewMedAdmin(BaseInfantScheduleModelAdmin):
                  'dob': 'infant_visit__appointment__registered_subject__dob',
                  }),
         )]
-
-admin.site.register(InfantFuNewMed, InfantFuNewMedAdmin)

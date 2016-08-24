@@ -9,7 +9,7 @@ from edc_consent.models import RequiresConsentMixin
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO, YES
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_offstudy.models import OffStudyMixin
+from edc_offstudy.model_mixins import OffStudyMixin
 from edc_sync.models import SyncModelMixin
 
 # from ..managers import PostnatalEnrollmentManager

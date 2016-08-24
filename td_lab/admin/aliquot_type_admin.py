@@ -1,12 +1,12 @@
 from django.contrib import admin
 
+from edc_lab.lab_aliquot.admin import AliquotTypeModelAdminMixin
+
 from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
 
 from ..models import AliquotType
 
 
-class AliquotTypeAdmin(MembershipBaseModelAdmin):
-
-    list_display = ('name', 'alpha_code', 'numeric_code')
-
-admin.site.register(AliquotType, AliquotTypeAdmin)
+@admin.register(AliquotType)
+class AliquotTypeAdmin(AliquotTypeModelAdminMixin, MembershipBaseModelAdmin, admin.ModelAdmin):
+    pass

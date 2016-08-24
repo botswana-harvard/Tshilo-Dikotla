@@ -2,49 +2,49 @@ import os
 
 from django.utils import timezone
 
-from django.apps import AppConfig
+from django.apps import AppConfig as DjangoAppConfig
 from django.conf import settings
 
-from django_crypto_fields.apps import AppConfig as DjangoCryptoFieldsAppConfigParent
-from edc_consent.apps import EdcConsentAppConfig
+from edc_base.apps import AppConfig as EdcBaseAppConfigParent
+from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
 from edc_label.apps import AppConfig as EdcLabelConfigParent
-from edc_sync.apps import AppConfig as EdcSyncAppConfigParent
-from edc_sync.constants import SERVER
-
-study_start_datetime = timezone.datetime(2016, 4, 1, 0, 0, 0)
-study_end_datetime = timezone.datetime(2016, 12, 1, 0, 0, 0)
-
-try:
-    edc_sync_role = settings.EDC_SYNC_ROLE
-except AttributeError:
-    edc_sync_role = SERVER
+from edc_protocol.apps import AppConfig as EdcProtocolAppConfigParent
+from edc_registration.apps import AppConfig as EdcRegistrationAppConfigParent
 
 
-class TshiloDikotlaConfig(AppConfig):
+class AppConfig(DjangoAppConfig):
     name = 'tshilo_dikotla'
-    institution = 'Botswana Harvard AIDS Institute Partnership'
     verbose_name = 'Tshilo Dikotla'
 
 
-class ConsentAppConfig(EdcConsentAppConfig):
+class EdcRegistrationAppConfig(EdcRegistrationAppConfigParent):
+    app_label = 'td_registration'
 
+
+class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
+    protocol = 'BHP085'
+    protocol_number = '085'
+    protocol_name = 'Tshilo Dikotla'
+    protocol_title = ''
+    study_start_datetime = timezone.datetime(2016, 4, 1, 0, 0, 0)
+    study_end_datetime = timezone.datetime(2016, 12, 1, 0, 0, 0)
+    subject_types = ['maternal', 'infant']
+    max_subjects = {'maternal': -1, 'infant': -1}
+
+
+class EdcBaseAppConfig(EdcBaseAppConfigParent):
+    institution = 'Botswana Harvard AIDS Institute Partnership'
+    project_name = 'Tshilo Dikotla'
+
+
+class EdcConsentAppConfig(EdcConsentAppConfigParent):
     consent_type_setup = [
         {'app_label': 'td_maternal',
          'model_name': 'maternalconsent',
-         'start_datetime': study_start_datetime,
-         'end_datetime': study_end_datetime,
+         'start_datetime': timezone.datetime(2016, 4, 1, 0, 0, 0),
+         'end_datetime': timezone.datetime(2016, 12, 1, 0, 0, 0),
          'version': '1'}
     ]
-
-
-class DjangoCryptoFieldsAppConfig(DjangoCryptoFieldsAppConfigParent):
-    name = 'django_crypto_fields'
-    model = ('django_crypto_fields', 'crypt')
-
-
-class EdcSyncAppConfig(EdcSyncAppConfigParent):
-    name = 'edc_sync'
-    role = edc_sync_role
 
 
 class EdcLabelAppConfig(EdcLabelConfigParent):

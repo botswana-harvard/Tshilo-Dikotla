@@ -1,14 +1,13 @@
-from collections import OrderedDict
-
 from django.contrib import admin
 
-from edc_export.actions import export_as_csv_action
-
-from tshilo_dikotla.base_model_admin import BaseModelAdmin
 from ..forms import SolidFoodAssessementForm
 from ..models import SolidFoodAssessment
 
-class SolidFoodAssessmentAdmin(BaseModelAdmin):
+from .admin_mixins import InfantScheduleModelModelAdminMixin
+
+
+@admin.register(SolidFoodAssessment)
+class SolidFoodAssessmentAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
 
     form = SolidFoodAssessementForm
 
@@ -27,8 +26,6 @@ class SolidFoodAssessmentAdmin(BaseModelAdmin):
                     'eggs': admin.VERTICAL,
                     'yogurt': admin.VERTICAL,
                     'cheese': admin.VERTICAL,
-                    'rations': admin.VERTICAL,                     
+                    'rations': admin.VERTICAL,
                     }
     filter_horizontal = ('solid_foods', 'rations_receviced')
-
-admin.site.register(SolidFoodAssessment, SolidFoodAssessmentAdmin)

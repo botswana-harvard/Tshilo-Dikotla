@@ -15,15 +15,11 @@ import os
 import socket
 from unipath import Path
 
-from Crypto.Cipher import AES
-
 from django.utils import timezone
-from django.core.exceptions import ImproperlyConfigured
 
 from .databases import (
     PRODUCTION_POSTGRES, TEST_HOSTS_POSTGRES, TRAVIS_POSTGRES, PRODUCTION_SECRET_KEY)
 
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # EDC specific settings
 APP_NAME = 'td'
@@ -32,23 +28,15 @@ TEST_HOSTS = ['edc4.bhp.org.bw']
 DEVELOPER_HOSTS = [
     'mac2-2.local', 'ckgathi', 'one-2.local', 'One-2.local', 'tsetsiba', 'leslie']
 
-PROJECT_TITLE = 'Tshilo Dikotla'
-INSTITUTION = 'Botswana-Harvard AIDS Institute'
-PROTOCOL_REVISION = 'v1.0'
-PROTOCOL_NUMBER = '085'
-
 SOURCE_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
 BASE_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
-MEDIA_ROOT = BASE_DIR.child('media')
-PROJECT_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
-PROJECT_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
 
 if socket.gethostname() == LIVE_SERVER:
     KEY_PATH = '/home/django/source/tshilo_dikotla/keys'
 elif socket.gethostname() in TEST_HOSTS + DEVELOPER_HOSTS:
-    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
+    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields')
 elif 'test' in sys.argv:
-    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
+    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields')
 else:
     raise TypeError(
         'Warning! Unknown hostname for KEY_PATH. \n'
@@ -58,8 +46,7 @@ else:
         'Got hostname=\'{}\'\n'.format(socket.gethostname()))
 
 DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 INSTALLED_APPS = [
@@ -73,48 +60,48 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_js_reverse',
-    'django_revision',
-    'edc_templates',
-    'edc_identifier',
-    'edc_lab.lab_packing',
-    'edc_lab.lab_clinic_api',
-    'edc_lab.lab_clinic_reference',
-    'edc_appointment',
-    'edc_base',
-    'edc_configuration',
     'corsheaders',
     'crispy_forms',
-    'edc_constants',
-    'edc_content_type_map',
-    'edc_dashboard',
-    'edc_data_manager',
-    'edc_death_report',
-    'edc_device',
-    'edc_locator',
-    'edc_meta_data',
-    'edc_offstudy',
-    'edc_registration',
-    'edc_rule_groups',
-    'edc_code_lists',
-    'edc_visit_schedule',
-    'edc_visit_tracking',
-    'call_manager',
+    'edc_templates',  # for what?
+    'edc_configuration',  # ???
+    'edc_identifier.apps.AppConfig',
+    'edc_appointment.apps.AppConfig',
+    'django_revision.apps.AppConfig',
+    'edc_sync.apps.AppConfig',
+    'django_crypto_fields.apps.AppConfig',
     'edc_call_manager.apps.AppConfig',
-    'tshilo_dikotla.apps.DjangoCryptoFieldsAppConfig',
-    'tshilo_dikotla.apps.ConsentAppConfig',
-    'tshilo_dikotla.apps.EdcSyncAppConfig',
-    'tshilo_dikotla.apps.TshiloDikotlaConfig',
-    'td_dashboard.apps.TdDashboardConfig',
-    'td_infant.apps.TdInfantConfig',
-    'td_lab.apps.TdLabConfig',
-    'td_list.apps.TdListConfig',
-    'registration.apps.RegistrationConfig',
-    'td_maternal.apps.TdMaternalConfig',
-    'tshilo_dikotla.apps.EdcLabelAppConfig'
+    # 'edc_code_lists',
+    # 'edc_constants',
+    # 'edc_lab.lab_clinic_api',
+    # 'edc_lab.lab_clinic_reference',
+    'edc_lab.lab_packing',
+    'edc_content_type_map.apps.AppConfig',
+    'edc_dashboard.apps.AppConfig',
+    # 'edc_data_manager.apps.AppConfig', # not ready
+    'edc_death_report.apps.AppConfig',
+    'edc_device.apps.AppConfig',
+    'edc_locator.apps.AppConfig',
+    'edc_meta_data.apps.AppConfig',
+    'edc_offstudy.apps.AppConfig',
+    'edc_rule_groups.apps.AppConfig',
+    'edc_visit_schedule.apps.AppConfig',
+    'edc_visit_tracking.apps.AppConfig',
+    'td_call_manager.apps.AppConfig',
+    'td_dashboard.apps.AppConfig',
+    'td_infant.apps.AppConfig',
+    'td_lab.apps.AppConfig',
+    'td_list.apps.AppConfig',
+    'td_maternal.apps.AppConfig',
+    'td_registration.apps.AppConfig',
+    'tshilo_dikotla.apps.EdcProtocolAppConfig',
+    'tshilo_dikotla.apps.EdcBaseAppConfig',
+    'tshilo_dikotla.apps.EdcConsentAppConfig',
+    'tshilo_dikotla.apps.EdcLabelAppConfig',
+    'tshilo_dikotla.apps.EdcRegistrationAppConfig',
+    'tshilo_dikotla.apps.AppConfig',
 ]
 
 if 'test' in sys.argv:
-#     INSTALLED_APPS.append('edc_testing')
     # TODO: Make this list auto generate from INSTALLED_APPS
     # Ignore running migrations on unit tests, greately speeds up tests.
     MIGRATION_MODULES = {"edc_registration": None,
@@ -216,8 +203,6 @@ TEMPLATES = [
 #     }
 # }
 
-SOUTH_TESTS_MIGRATE = False
-
 if socket.gethostname() in DEVELOPER_HOSTS:
     DATABASES = {
         'default': {
@@ -233,13 +218,6 @@ elif socket.gethostname() in TEST_HOSTS:
 elif 'test' in sys.argv:
     DATABASES = TRAVIS_POSTGRES
 
-# django auth
-AUTH_PROFILE_MODULE = "bhp_userprofile.userprofile"
-
-PROJECT_NUMBER = 'BHP085'
-PROJECT_IDENTIFIER_PREFIX = '085'
-PROJECT_IDENTIFIER_MODULUS = 7
-IS_SECURE_DEVICE = True
 FIELD_MAX_LENGTH = 'default'
 
 # Internationalization
@@ -258,11 +236,6 @@ USE_TZ = False
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR.child('static')
 
-# admin
-LOGIN_URL = '/{app_name}/login/'.format(app_name=APP_NAME)
-LOGIN_REDIRECT_URL = '/{app_name}/'.format(app_name=APP_NAME)
-LOGOUT_URL = '/{app_name}/logout/'.format(app_name=APP_NAME)
-
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -277,41 +250,7 @@ GIT_DIR = BASE_DIR.ancestor(1)
 
 STUDY_OPEN_DATETIME = timezone.datetime(2015, 10, 18, 0, 0, 0)
 
-APP_LABEL = 'tshilo_dikotla'
-
-SUBJECT_APP_LIST = ['maternal', 'infant']
-SUBJECT_TYPES = ['maternal', 'infant']
-MAX_SUBJECTS = {'maternal': 3000, 'infant': 3000}
-MINIMUM_AGE_OF_CONSENT = 18
-MAXIMUM_AGE_OF_CONSENT = 64
-AGE_IS_ADULT = 18
-GENDER_OF_CONSENT = ['F']
-DISPATCH_APP_LABELS = []
-
-if socket.gethostname() == LIVE_SERVER:
-    DEVICE_ID = 99
-    PROJECT_TITLE = '{} Live Server'.format(PROJECT_TITLE)
-elif socket.gethostname() in TEST_HOSTS:
-    DEVICE_ID = 99
-    PROJECT_TITLE = 'TEST (postgres): {}'.format(PROJECT_TITLE)
-elif socket.gethostname() in DEVELOPER_HOSTS:
-    DEVICE_ID = 99
-    PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
-elif 'test' in sys.argv:
-    DEVICE_ID = 99
-    PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
-else:
-    raise ImproperlyConfigured(
-        'Unknown hostname for full PROJECT_TITLE. Expected hostname to appear in one of '
-        'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
-        'Got hostname=\'{}\''.format(socket.gethostname()))
-
 SITE_CODE = '40'
-SERVER_DEVICE_ID_LIST = [91, 92, 93, 94, 95, 96, 97, 99]
-MIDDLEMAN_DEVICE_ID_LIST = [98]
-if str(DEVICE_ID) == '98':
-    PROJECT_TITLE = 'RESERVED FOR MIDDLE MAN'
-
 CELLPHONE_REGEX = '^[7]{1}[12345678]{1}[0-9]{6}$'
 TELEPHONE_REGEX = '^[2-8]{1}[0-9]{6}$'
 DEFAULT_STUDY_SITE = '40'
@@ -335,3 +274,5 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+MEDIA_ROOT = BASE_DIR.child('media')

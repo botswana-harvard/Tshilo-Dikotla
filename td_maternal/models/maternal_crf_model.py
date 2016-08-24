@@ -4,7 +4,7 @@ from edc_meta_data.managers import CrfMetaDataManager
 from edc_base.model.models import BaseUuidModel
 from edc_consent.models import RequiresConsentMixin
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_offstudy.models import OffStudyMixin
+from edc_offstudy.model_mixins import OffStudyMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.models import CrfModelMixin
 
