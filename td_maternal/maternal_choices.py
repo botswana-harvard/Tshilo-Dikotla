@@ -37,6 +37,7 @@ RECRUIT_CLINIC = (
     ('PMH', 'Gaborone(PMH)'),
     ('G.West Clinic', 'G.West Clinic'),
     ('BH3 Clinic', 'BH3 Clinic'),
+    ('Ext12', 'Extension 12'),
     ('Nkoyaphiri', 'Nkoyaphiri Clinic'),
     ('Lesirane', 'Lesirane Clinic'),
     ('Old Naledi', 'Old Naledi'),

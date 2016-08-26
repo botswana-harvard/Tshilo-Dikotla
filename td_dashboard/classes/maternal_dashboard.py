@@ -63,7 +63,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             currently_pregnant=self.currently_pregnant,
             gestational_age=self.gestational_age,
             planned_delivery_site=self.planned_delivery_site,
-            delivery_site=self.delivery_site
+            delivery_site=self.delivery_site,
+            randomized=self.randomized
         )
         return self.context
 
@@ -76,6 +77,15 @@ class MaternalDashboard(RegisteredSubjectDashboard):
         except MaternalConsent.DoesNotExist:
             self._consent = None
         return self._consent
+
+    @property
+    def randomized(self):
+        try:
+            randomization = MaternalRando.objects.get(
+                subject_visit__appointment__registred_subject__subject_identifier=self.subject_identifier)
+            return randomization.rx
+        except MaternalRando.DoesNotExist:
+            return None
 
     @property
     def latest_visit(self):

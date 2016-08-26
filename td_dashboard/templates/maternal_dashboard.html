@@ -19,6 +19,7 @@
         <td><B>Current HIV status:</B> <i>{{current_hiv_status}}</i></td>
         <td><B>{% if currently_pregnant == True %} Pregnant, GA:</B><i>{{gestational_age}} weeks</i>{% else %}<B>Delivery GA:</B> <i>{{gestational_age}} weeks</i>{% endif %}</td>
         <td><B>{% if currently_pregnant == True %} Planned delivery site:</B><i>{{planned_delivery_site}}</i>{% else %}<B>Delivery Clinic:</B> <i>{{delivery_site}}</i>{% endif %}</td>
+        <td><B>Randomized:</B><i>{{randomized}}</i></td>
     </tr>
 </table>
 {% endblock %}
