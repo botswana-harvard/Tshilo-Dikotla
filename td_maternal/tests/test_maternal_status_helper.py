@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
-from edc_constants.constants import SCHEDULED, POS, YES, NO, NEG, NOT_APPLICABLE, UNK
+from edc_constants.constants import SCHEDULED, POS, YES, NO, NEG, NOT_APPLICABLE, UNK, IND
 from edc_meta_data.models import RequisitionMetaData
 from edc_appointment.models import Appointment
 from edc_registration.models import RegisteredSubject
@@ -104,7 +104,7 @@ class TestMaternalStatusHelper(BaseTestCase):
                                                             lab_entry__requisition_panel__name='DNA PCR',
                                                             appointment__visit_definition__code='2010').count(), 1)
 
-    def test_pos_status_from_rapid_test(self):
+    def test_ind_status_from_rapid_test(self):
         """test that we can figure out a posetive status taking in to consideration rapid tests."""
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
         delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
@@ -122,7 +122,7 @@ class TestMaternalStatusHelper(BaseTestCase):
                 visit_definition__code='2010M'))
         status_helper = MaternalStatusHelper(maternal_visit_2010M)
         self.assertEqual(status_helper.hiv_status, NEG)
-        rapid_test = RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result=POS)
+        rapid_test = RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result=IND)
         MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
@@ -132,7 +132,7 @@ class TestMaternalStatusHelper(BaseTestCase):
                 registered_subject=self.registered_subject,
                 visit_definition__code='2060M'))
         status_helper = MaternalStatusHelper(maternal_visit_2060M)
-        self.assertEqual(status_helper.hiv_status, POS)
+        self.assertEqual(status_helper.hiv_status, IND)
 
     def test_neg_status_from_enrollment(self):
         """test that we can figure out a negative status with just the enrollment status."""

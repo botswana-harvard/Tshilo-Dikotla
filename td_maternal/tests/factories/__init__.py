@@ -12,3 +12,4 @@ from .maternal_arv_preg_factory import MaternalArvPregFactory
 from .rapid_test_result_factory import RapidTestResultFactory
 from .maternal_obsteric_history_factory import MaternalObstericHistoryFactory
 from .maternal_arv_history_factory import MaternalArvHistoryFactory
+from .maternal_interim_idcc_factory import MaternalInterimIdccFactory

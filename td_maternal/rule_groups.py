@@ -1,10 +1,10 @@
-from edc_constants.constants import UNKEYED, NOT_REQUIRED, POS, NEG, UNK
+from edc_constants.constants import UNKEYED, NOT_REQUIRED, POS, NEG, UNK, IND
 from edc_rule_groups.classes import RuleGroup, site_rule_groups, Logic, CrfRule, RequisitionRule
 from edc_registration.models import RegisteredSubject
 
 from tshilo_dikotla.constants import ONE
 
-from .models import MaternalUltraSoundInitial, MaternalVisit, MaternalPostPartumDep
+from .models import MaternalUltraSoundInitial, MaternalVisit, MaternalPostPartumDep, RapidTestResult
 from .classes import MaternalStatusHelper
 
 
@@ -24,10 +24,18 @@ def func_mother_neg(visit_instance):
     return False
 
 
-def show_rapid_testresult_form(visit_instance):
-    """return True if Mother is HIV- and last HIV- result > 3months."""
+# def show_rapid_testresult_form(visit_instance):
+#     """return True if Mother is HIV- and last HIV- result > 3months."""
+#     maternal_status_helper = MaternalStatusHelper(visit_instance)
+#     if maternal_status_helper.hiv_status == UNK:
+#         return True
+#     return False
+
+
+def show_elisa_requisition_hiv_status_ind(visit_instance):
+    """return True if Mother's Rapid Test Result is Inditerminate"""
     maternal_status_helper = MaternalStatusHelper(visit_instance)
-    if maternal_status_helper.hiv_status == UNK:
+    if maternal_status_helper.hiv_status == IND:
         return True
     return False
 
@@ -35,8 +43,8 @@ def show_rapid_testresult_form(visit_instance):
 def func_require_cd4(visit_instance):
     """Return true if mother is HIV+ and does not have a CD4 in the last 3 months."""
     maternal_status_helper = MaternalStatusHelper(visit_instance)
-    if maternal_status_helper.eligible_for_cd4:
-        return True
+    if maternal_status_helper.hiv_status == POS:
+        return maternal_status_helper.eligible_for_cd4
     return False
 
 
@@ -62,6 +70,38 @@ def show_ultrasound_form(visit_instance):
     return False
 
 
+def show_rapid_test_form(visit_instance):
+    """
+        Return true if the the day of the last rapid test is
+       (EDD confirmed) – (Date of Last HIV Rapid Test) > 56 OR Unknown
+    """
+    subject_identifier = visit_instance.appointment.registered_subject.subject_identifier
+    maternal_status_helper = MaternalStatusHelper(visit_instance)
+
+    if visit_instance.appointment.visit_definition.code == '2000M':
+        if maternal_status_helper.hiv_status == NEG:
+            # Get the last date the Rapid Test was processed.
+            prev_rapid_test = RapidTestResult.objects.filter(
+                maternal_visit__appointment__registered_subject__subject_identifier=subject_identifier)\
+                .order_by('-created').first()
+
+            # Get the EDD confirmed.
+            maternal_ultrasound = MaternalUltraSoundInitial.objects.filter(
+                maternal_visit__appointment__registered_subject__subject_identifier=subject_identifier)\
+                .order_by('-created').first()
+            if prev_rapid_test and maternal_ultrasound:
+                if (maternal_ultrasound.edd_confirmed - prev_rapid_test.result_date).days < 56:
+                    return False
+                if (maternal_ultrasound.edd_confirmed - prev_rapid_test.result_date).days > 56:
+                    return True
+            else:
+                return True
+    else:
+        if maternal_status_helper.hiv_status == UNK:
+            return True
+        return False
+
+
 class MaternalRegisteredSubjectRuleGroup(RuleGroup):
 
     hiv_pos_forms = CrfRule(
@@ -80,7 +120,7 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
 
     rapid_testresult_forms = CrfRule(
         logic=Logic(
-            predicate=show_rapid_testresult_form,
+            predicate=show_rapid_test_form,
             consequence=UNKEYED,
             alternative=NOT_REQUIRED),
         target_model=[('td_maternal', 'rapidtestresult')])
@@ -116,6 +156,14 @@ class MaternalRequisitionRuleGroup(RuleGroup):
             alternative=NOT_REQUIRED),
         target_model=[('td_lab', 'maternalrequisition')],
         target_requisition_panels=['Viral Load'])
+
+    require_elisa_status_ind = RequisitionRule(
+        logic=Logic(
+            predicate=show_elisa_requisition_hiv_status_ind,
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_lab', 'maternalrequisition')],
+        target_requisition_panels=['ELISA'])
 
     require_elisa = RequisitionRule(
         logic=Logic(
