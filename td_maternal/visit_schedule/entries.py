@@ -19,6 +19,7 @@ maternal_antenatal1_entries = (
     CrfTuple(30, 'td_maternal', 'maternalrando', NOT_REQUIRED, ADDITIONAL),
     CrfTuple(40, 'td_maternal', 'maternalinterimidcc', NOT_REQUIRED, ADDITIONAL),
     CrfTuple(50, 'td_maternal', 'maternalclinicalmeasurementstwo', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(60, 'td_maternal', 'rapidtestresult', NOT_REQUIRED, ADDITIONAL),
 )
 
 maternal_antenatal2_entries = (
@@ -28,6 +29,7 @@ maternal_antenatal2_entries = (
     CrfTuple(50, 'td_maternal', 'maternaldiagnoses', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(60, 'td_maternal', 'maternalsubstanceusepriorpreg', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(70, 'td_maternal', 'maternalclinicalmeasurementstwo', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(80, 'td_maternal', 'rapidtestresult', NOT_REQUIRED, ADDITIONAL),
 )
 
 maternal_birth_entries = (
@@ -36,6 +38,7 @@ maternal_birth_entries = (
     CrfTuple(40, 'td_maternal', 'maternalarvpreg', NOT_REQUIRED, ADDITIONAL),
     CrfTuple(50, 'td_maternal', 'maternalinterimidcc', NOT_REQUIRED, ADDITIONAL),
     CrfTuple(60, 'td_maternal', 'maternalsubstanceuseduringpreg', REQUIRED, ADDITIONAL),
+    CrfTuple(70, 'td_maternal', 'rapidtestresult', NOT_REQUIRED, ADDITIONAL),
 )
 
 maternal_followup1_entries = (

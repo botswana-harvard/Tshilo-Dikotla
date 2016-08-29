@@ -2,9 +2,9 @@ from django.db.models import Q
 from dateutil.relativedelta import relativedelta
 
 from edc_registration.models import RegisteredSubject
-from edc_constants.constants import POS, NEG, UNK
+from edc_constants.constants import POS, NEG, UNK, IND
 
-from td_maternal.models import AntenatalEnrollment, RapidTestResult
+from td_maternal.models import AntenatalEnrollment, RapidTestResult, MaternalInterimIdcc
 from django.core.exceptions import ValidationError
 
 
@@ -23,7 +23,7 @@ class MaternalStatusHelper(object):
                 rapid_test_result = RapidTestResult.objects.get(maternal_visit=visit)
                 status = self._evaluate_status_from_rapid_tests(visit,
                                                                 (rapid_test_result, 'result', 'result_date'))
-                if status in [POS, NEG, UNK]:
+                if status in [POS, NEG, UNK, IND]:
                     return status
                 elif status is None:
                     # Keep trying more past visits
@@ -54,20 +54,17 @@ class MaternalStatusHelper(object):
                 registered_subject=self.maternal_visit.appointment.registered_subject).enrollment_hiv_status
 
     @property
-    def eligible_for_cd4(self, ):
-#         latest_interim_idcc = None
-#         latest_cd4_requisition = None
-#         latest_visit = self.previous_visits.first()
-#         try:
-#             latest_interim_idcc = MaternalInterimIdcc.objects.get(maternal_visit=latest_visit)
-#         except MaternalInterimIdcc.DoesNotExist:
-#             pass
-#         try:
-#             latest_cd4_requisition = MaternalRequisition.objects.get(maternal_visit=latest_visit)
-#         except MaternalRequisition.DoesNotExist:
-#             pass
-#         
-#         if self.hiv_status == POS and
+    def eligible_for_cd4(self):
+        latest_interim_idcc = None
+        latest_visit = self.previous_visits.first()
+        try:
+            latest_interim_idcc = MaternalInterimIdcc.objects.get(maternal_visit=latest_visit)
+            if ((latest_visit.report_datetime.date() - relativedelta(months=3)) > latest_interim_idcc.recent_cd4_date) and self.hiv_status == POS:
+                return True
+            else:
+                return False
+        except MaternalInterimIdcc.DoesNotExist:
+            pass
         return True
 
     @property
@@ -84,6 +81,8 @@ class MaternalStatusHelper(object):
         if intance_result_date_tuple[0]:
             if getattr(intance_result_date_tuple[0], intance_result_date_tuple[1]) == POS:
                 return POS
+            if getattr(intance_result_date_tuple[0], intance_result_date_tuple[1]) == IND:
+                return IND
             elif (getattr(intance_result_date_tuple[0], intance_result_date_tuple[1]) == NEG and
                   getattr(intance_result_date_tuple[0], intance_result_date_tuple[2]) and
                   getattr(intance_result_date_tuple[0], intance_result_date_tuple[2]) >

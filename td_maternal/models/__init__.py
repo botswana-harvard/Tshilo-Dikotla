@@ -41,7 +41,4 @@ from .maternal_randomization import MaternalRando
 from .maternal_substance_during_preg import MaternalSubstanceUseDuringPreg
 from .maternal_substance_prior_preg import MaternalSubstanceUsePriorPreg
 from .potential_call import PotentialCall
-from .hiv_rapid_testing_antenatal import RapidTestingAntenatal
-from .hiv_rapid_testing_delivery import RapidTestingDelivery
 from .signals import *
-
