@@ -82,7 +82,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
     def randomized(self):
         try:
             randomization = MaternalRando.objects.get(
-                maternal_visit__appointment__registred_subject__subject_identifier=self.subject_identifier)
+                maternal_visit__appointment__registered_subject__subject_identifier=self.subject_identifier)
             return randomization.rx
         except MaternalRando.DoesNotExist:
             return None
