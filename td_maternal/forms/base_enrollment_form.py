@@ -1,5 +1,6 @@
 from dateutil import rrule
 from django import forms
+from django.core.exceptions import FieldError
 
 from edc_constants.constants import POS, NEG, NOT_APPLICABLE, YES, NO, DWTA, UNKNOWN, NEVER
 from edc_base.form.old_forms import BaseModelForm
@@ -146,6 +147,10 @@ class BaseEnrollmentForm(BaseModelForm):
         cleaned_data = self.cleaned_data
         obj = None
         try:
+            obj = model_class.objects.get(
+                subject_identifier=cleaned_data.get(
+                    'registered_subject').subject_identifier)
+        except (FieldError, AttributeError):
             obj = model_class.objects.get(
                 registered_subject__subject_identifier=cleaned_data.get(
                     'registered_subject').subject_identifier)
