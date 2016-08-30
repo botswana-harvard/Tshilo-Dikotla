@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     'edc_lab.lab_packing',
     'edc_lab.lab_clinic_api',
     'edc_lab.lab_clinic_reference',
+    'lis.labeling',
     'edc_appointment',
     'edc_base',
     'edc_configuration',
