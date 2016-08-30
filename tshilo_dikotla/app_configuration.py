@@ -112,17 +112,31 @@ class AppConfiguration(BaseAppConfiguration):
                            PanelTuple('ELISA', 'TEST', 'WB')],
                  'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
                                   AliquotTypeTuple('Plasma', 'PL', '32'),
-                                  AliquotTypeTuple('Glucose', 'GLUC', '03'),
                                   AliquotTypeTuple('PBMC', 'PBMC', '31')],
                  'profile': [ProfileTuple('Viral Load', 'WB'),
-                             ProfileTuple('Glucose', 'GLUC'),
+                             ProfileTuple('Glucose', 'WB'),
                              ProfileTuple('ELISA', 'WB')],
                  'profile_item': [ProfileItemTuple('Viral Load', 'PL', 1.0, 4),
                                   ProfileItemTuple('Viral Load', 'PBMC', 0.5, 4),
                                   ProfileItemTuple('Glucose', 'PL', 1, 3),
                                   ProfileItemTuple('ELISA', 'PL', 1.0, 1),
                                   ProfileItemTuple('ELISA', 'BC', 0.5, 1)]}}
-    labeling_setup = {}
+    labeling_setup = {
+        'zpl_template': [
+            aliquot_label or ZplTemplateTuple(
+                'aliquot_label', (
+                    ('^XA\n' +
+                     ('^FO315,15^A0N,17,20^FD${protocol} Site ${site} ${clinician_initials}   '
+                      '${aliquot_type} ${aliquot_count}${primary}^FS\n') +
+                     '^FO320,34^BY1,3.0^BCN,50,N,N,N\n'
+                     '^BY^FD${aliquot_identifier}^FS\n'
+                     '^FO315,92^A0N,18,20^FD${aliquot_identifier}^FS\n'
+                     '^FO315,109^A0N,16,20^FD${panel}^FS\n'
+                     '^FO315,125^A0N,19,20^FD${subject_identifier} (${initials})^FS\n'
+                     '^FO315,145^A0N,18,20^FDDOB: ${dob} ${gender}^FS\n'
+                     '^FO315,165^A0N,18,20^FD${drawn_datetime}^FS\n'
+                     '^XZ')), False)]
+    }
 #     labeling_setup = {
 #         'label_printer': [LabelPrinterTuple('Zebra_Technologies_ZTC_GK420t',
 #                                             'mpepu02', '192.168.1.230', True),
