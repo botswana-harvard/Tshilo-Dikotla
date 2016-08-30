@@ -119,7 +119,7 @@ class AppConfiguration(BaseAppConfiguration):
                              ProfileTuple('ELISA', 'WB')],
                  'profile_item': [ProfileItemTuple('Viral Load', 'PL', 1.0, 4),
                                   ProfileItemTuple('Viral Load', 'PBMC', 0.5, 4),
-                                  ProfileItemTuple('Glucose', 'GLUC', 1, 1),
+                                  ProfileItemTuple('Glucose', 'PL', 1, 3),
                                   ProfileItemTuple('ELISA', 'PL', 1.0, 1),
                                   ProfileItemTuple('ELISA', 'BC', 0.5, 1)]}}
     labeling_setup = {}
