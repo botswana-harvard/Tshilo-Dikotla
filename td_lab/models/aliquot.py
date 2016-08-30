@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.core.urlresolvers import reverse
 from django.db import models
 
@@ -56,34 +57,34 @@ class Aliquot(BaseAliquot, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
     def visit_code(self):
         return self.receive.visit
 
-#     @property
-#     def subject_visit(self):
-#         MaternalVisit = models.get_model('maternal', 'MaternalVisit')
-#         try:
-#             return MaternalVisit.objects.get(
-#                 appointment__visit_definition__code=self.visit_code,
-#                 appointment__registered_subject=self.registered_subject)
-#         except MaternalVisit.DoesNotExist:
-#             return None
-# 
-#     @property
-#     def subject_requisition(self):
-#         model = self.receive.requisition_model_name
-#         RequisitionModel = models.get_model('mb_lab', model)
-#         try:
-#             return RequisitionModel.objects.get(
-#                 requisition_identifier=self.receive.requisition_identifier)
-#         except RequisitionModel.DoesNotExist:
-#             return None
-# 
-#     @property
-#     def optional_description(self):
-#         """See PackingListHelper."""
-#         try:
-#             return self.subject_requisition.optional_description
-#         except AttributeError:
-#             return None
-# 
+    @property
+    def subject_visit(self):
+        MaternalVisit = apps.get_model('td_maternal', 'MaternalVisit')
+        try:
+            return MaternalVisit.objects.get(
+                appointment__visit_definition__code=self.visit_code,
+                appointment__registered_subject=self.registered_subject)
+        except MaternalVisit.DoesNotExist:
+            return None
+ 
+    @property
+    def subject_requisition(self):
+        model = self.receive.requisition_model_name
+        RequisitionModel = apps.get_model('td_lab', model)
+        try:
+            return RequisitionModel.objects.get(
+                requisition_identifier=self.receive.requisition_identifier)
+        except RequisitionModel.DoesNotExist:
+            return None
+ 
+    @property
+    def optional_description(self):
+        """See PackingListHelper."""
+        try:
+            return self.subject_requisition.optional_description
+        except AttributeError:
+            return None
+ 
     def processing(self):
         url = reverse('admin:td_lab_aliquotprocessing_add')
         return '<a href="{0}?aliquot={1}">process</a>'.format(url, self.pk)
