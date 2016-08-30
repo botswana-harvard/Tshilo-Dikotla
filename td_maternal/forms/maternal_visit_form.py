@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
 from edc_base.form.old_forms import BaseModelForm
@@ -45,6 +46,33 @@ class MaternalVisitForm (VisitFormMixin, BaseModelForm):
         self.check_creation_of_antenatal_visit_2(cleaned_data)
 
         return cleaned_data
+
+    def get_consent(self, registered_subject):
+        """Return an instance of the consent model.
+
+        If no consent model is defined, as with infants, try for the birth_model."""
+        try:
+            consent = self._meta.model.consent_model.objects.get(
+                subject_identifier=registered_subject.subject_identifier)
+        except self._meta.model.consent_model.MultipleObjectsReturned:
+            consent = self._meta.model.consent_model.objects.filter(
+                subject_identifier=registered_subject.subject_identifier).order_by('version').first()
+        except ObjectDoesNotExist:
+            raise forms.ValidationError(
+                '\'{}\' does not exist for subject.'.format(self._meta.model.consent_model._meta.verbose_name))
+        except AttributeError:
+            consent = self.get_birth_model_as_consent(registered_subject)
+        return consent
+
+#     def get_birth_model_as_consent(self, registered_subject):
+#         """Return the birth model in place of the consent_model."""
+#         try:
+#             birth_model = self._meta.model.birth_model.objects.get(
+#                 subject_identifier=registered_subject.subject_identifier)
+#         except ObjectDoesNotExist:
+#             raise forms.ValidationError(
+#                 '\'{}\' does not exist for subject.'.format(self._meta.model.consent_model._meta.verbose_name))
+#         return birth_model
 
     def clean_ultrasound_form(self, cleaned_data):
         registered_subject = cleaned_data['appointment'].registered_subject
