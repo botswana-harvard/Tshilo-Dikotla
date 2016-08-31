@@ -17,7 +17,7 @@ class PackingListItemAdmin(BasePackingListItemAdmin):
 
     form = PackingListItemForm
 
-    search_fields = ('packing_list__pk', 'packing_list__timestamp',
+    search_fields = ('packing_list__id', 'packing_list__timestamp',
                      'item_description', 'item_reference', )
     list_display = ('specimen', 'priority', 'panel', 'description', 'gender',
                     'drawn_datetime', 'clinician', 'view_packing_list',
