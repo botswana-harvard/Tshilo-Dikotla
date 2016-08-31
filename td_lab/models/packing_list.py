@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.db import models
 
 from edc_base.model.models import BaseUuidModel
@@ -14,17 +15,17 @@ class PackingList(PackingListMixin, SyncModelMixin, ExportTrackingFieldsMixin, B
 
     history = SyncHistoricalRecords()
 
-#     @property
-#     def item_models(self):
-#         item_m = []
-#         item_m.append(models.get_model('mb_lab', 'InfantRequisition'))
-#         item_m.append(models.get_model('mb_lab', 'MaternalRequisition'))
-#         item_m.append(models.get_model('mb_lab', 'Aliquot'))
-#         return item_m
-# 
-#     @property
-#     def packing_list_item_model(self):
-#         return models.get_model('mb_lab', 'PackingListItem')
+    @property
+    def item_models(self):
+        item_m = []
+        item_m.append(apps.get_model('td_lab', 'InfantRequisition'))
+        item_m.append(apps.get_model('td_lab', 'MaternalRequisition'))
+        item_m.append(apps.get_model('td_lab', 'Aliquot'))
+        return item_m
+ 
+    @property
+    def packing_list_item_model(self):
+        return models.get_model('td_lab', 'PackingListItem')
 
     class Meta:
         app_label = 'td_lab'

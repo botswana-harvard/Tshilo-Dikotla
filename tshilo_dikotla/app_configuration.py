@@ -93,9 +93,9 @@ class AppConfiguration(BaseAppConfiguration):
                   PanelTuple('PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB'),
                   PanelTuple('ELISA', 'TEST', 'WB'),],
         'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
-                         AliquotTypeTuple('Glucose', 'GLUC', '03'),
                          AliquotTypeTuple('Plasma', 'PL', '32'),
-                         AliquotTypeTuple('Buffy Coat', 'BC', '16'),]}
+                         AliquotTypeTuple('Buffy Coat', 'BC', '16'),
+                         AliquotTypeTuple('PBMC', 'PBMC', '31')]}
 
     lab_setup = {'tshilo_dikotla': {
                  'destination': [DestinationTuple('BHHRL', 'Botswana-Harvard HIV Reference Laboratory',
@@ -116,7 +116,8 @@ class AppConfiguration(BaseAppConfiguration):
                                   AliquotTypeTuple('PBMC', 'PBMC', '31')],
                  'profile': [ProfileTuple('Viral Load', 'WB'),
                              ProfileTuple('Glucose', 'WB'),
-                             ProfileTuple('ELISA', 'WB')],
+                             ProfileTuple('ELISA', 'WB'),
+                             ProfileTuple('CD4', 'WB')],
                  'profile_item': [ProfileItemTuple('Viral Load', 'PL', 1.0, 4),
                                   ProfileItemTuple('Viral Load', 'PBMC', 0.5, 4),
                                   ProfileItemTuple('Glucose', 'PL', 1, 3),
