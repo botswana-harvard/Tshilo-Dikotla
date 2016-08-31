@@ -112,6 +112,7 @@ class AppConfiguration(BaseAppConfiguration):
                            PanelTuple('ELISA', 'TEST', 'WB')],
                  'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
                                   AliquotTypeTuple('Plasma', 'PL', '32'),
+                                  AliquotTypeTuple('Buffy Coat', 'BC', '16'),
                                   AliquotTypeTuple('PBMC', 'PBMC', '31')],
                  'profile': [ProfileTuple('Viral Load', 'WB'),
                              ProfileTuple('Glucose', 'WB'),
