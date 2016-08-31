@@ -22,10 +22,14 @@ class PackingList(PackingListMixin, SyncModelMixin, ExportTrackingFieldsMixin, B
         item_m.append(apps.get_model('td_lab', 'MaternalRequisition'))
         item_m.append(apps.get_model('td_lab', 'Aliquot'))
         return item_m
- 
+
     @property
     def packing_list_item_model(self):
         return apps.get_model('td_lab', 'PackingListItem')
+
+    def specimen_count(self):
+        lst = self.list_items.replace('\r', '').split('\n')
+        return len(lst)
 
     class Meta:
         app_label = 'td_lab'
