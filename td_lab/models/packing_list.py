@@ -31,6 +31,14 @@ class PackingList(PackingListMixin, SyncModelMixin, ExportTrackingFieldsMixin, B
         lst = self.list_items.replace('\r', '').split('\n')
         return len(lst)
 
+    def view_list_items(self):
+        return '<a href="/admin/{app_label}/{object_name}item/?q={reference}">{count} items</a>'.format(
+            app_label=self._meta.app_label,
+            object_name=self._meta.object_name.lower(),
+            reference=self.timestamp,
+            count=self.specimen_count())
+    view_list_items.allow_tags = True
+
     class Meta:
         app_label = 'td_lab'
         verbose_name = 'Packing List'
