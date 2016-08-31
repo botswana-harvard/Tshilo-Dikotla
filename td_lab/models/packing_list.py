@@ -25,7 +25,7 @@ class PackingList(PackingListMixin, SyncModelMixin, ExportTrackingFieldsMixin, B
  
     @property
     def packing_list_item_model(self):
-        return models.get_model('td_lab', 'PackingListItem')
+        return apps.get_model('td_lab', 'PackingListItem')
 
     class Meta:
         app_label = 'td_lab'
