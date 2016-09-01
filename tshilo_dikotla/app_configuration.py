@@ -137,7 +137,19 @@ class AppConfiguration(BaseAppConfiguration):
                      '^FO315,125^A0N,19,20^FD${subject_identifier} (${initials})^FS\n'
                      '^FO315,145^A0N,18,20^FDDOB: ${dob} ${gender}^FS\n'
                      '^FO315,165^A0N,18,20^FD${drawn_datetime}^FS\n'
-                     '^XZ')), False)]
+                     '^XZ')), False),
+            ZplTemplateTuple(
+                'requisition_label', (
+                    ('^XA\n' +
+                     ('^FO310,15^A0N,20,20^FD${protocol} Site ${site} ${clinician_initials}   '
+                      '${aliquot_type} ${aliquot_count}${primary}^FS\n') +
+                     '^FO310,34^BY1,3.0^BCN,50,N,N,N\n'
+                     '^BY^FD${requisition_identifier}^FS\n'
+                     '^FO310,92^A0N,20,20^FD${requisition_identifier} ${panel}^FS\n'
+                     '^FO310,112^A0N,20,20^FD${subject_identifier} (${initials})^FS\n'
+                     '^FO310,132^A0N,20,20^FDDOB: ${dob} ${gender}^FS\n'
+                     '^FO310,152^A0N,25,20^FD${drawn_datetime}^FS\n'
+                     '^XZ')), True)]
     }
 #     labeling_setup = {
 #         'label_printer': [LabelPrinterTuple('Zebra_Technologies_ZTC_GK420t',
