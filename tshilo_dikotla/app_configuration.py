@@ -141,14 +141,14 @@ class AppConfiguration(BaseAppConfiguration):
             ZplTemplateTuple(
                 'requisition_label', (
                     ('^XA\n' +
-                     ('^FO310,15^A0N,20,20^FD${protocol} Site ${site} ${clinician_initials}   '
+                     ('^FO315,15^A0N,20,20^FD${protocol} Site ${site} ${clinician_initials}   '
                       '${aliquot_type} ${aliquot_count}${primary}^FS\n') +
-                     '^FO310,34^BY1,3.0^BCN,50,N,N,N\n'
+                     '^FO315,34^BY1,3.0^BCN,50,N,N,N\n'
                      '^BY^FD${requisition_identifier}^FS\n'
-                     '^FO310,92^A0N,20,20^FD${requisition_identifier} ${panel}^FS\n'
-                     '^FO310,112^A0N,20,20^FD${subject_identifier} (${initials})^FS\n'
-                     '^FO310,132^A0N,20,20^FDDOB: ${dob} ${gender}^FS\n'
-                     '^FO310,152^A0N,25,20^FD${drawn_datetime}^FS\n'
+                     '^FO315,92^A0N,20,20^FD${requisition_identifier} ${panel}^FS\n'
+                     '^FO315,112^A0N,20,20^FD${subject_identifier} (${initials})^FS\n'
+                     '^FO315,132^A0N,20,20^FDDOB: ${dob} ${gender}^FS\n'
+                     '^FO315,152^A0N,25,20^FD${drawn_datetime}^FS\n'
                      '^XZ')), True)]
     }
 #     labeling_setup = {
