@@ -114,15 +114,18 @@ class AppConfiguration(BaseAppConfiguration):
                                   AliquotTypeTuple('Plasma', 'PL', '32'),
                                   AliquotTypeTuple('Buffy Coat', 'BC', '16'),
                                   AliquotTypeTuple('PBMC', 'PBMC', '31')],
-                 'profile': [ProfileTuple('Viral Load', 'WB'),
+                 'profile': [ProfileTuple('PBMC VL', 'WB'),
                              ProfileTuple('Glucose', 'WB'),
                              ProfileTuple('ELISA', 'WB'),
-                             ProfileTuple('CD4', 'WB')],
+                             ProfileTuple('CD4', 'WB'),
+                             ProfileTuple('PBMC Plasma (STORE ONLY)', 'WB')],
                  'profile_item': [ProfileItemTuple('Viral Load', 'PL', 1.0, 4),
                                   ProfileItemTuple('Viral Load', 'PBMC', 0.5, 4),
                                   ProfileItemTuple('Glucose', 'PL', 1, 3),
                                   ProfileItemTuple('ELISA', 'PL', 1.0, 1),
-                                  ProfileItemTuple('ELISA', 'BC', 0.5, 1)]}}
+                                  ProfileItemTuple('ELISA', 'BC', 0.5, 1),
+                                  ProfileItemTuple('PBMC Plasma (STORE ONLY)', 'PL', 1, 4),
+                                  ProfileItemTuple('PBMC Plasma (STORE ONLY)', 'PBMC', 1, 4)]}}
     labeling_setup = {
         'zpl_template': [
             aliquot_label or ZplTemplateTuple(
