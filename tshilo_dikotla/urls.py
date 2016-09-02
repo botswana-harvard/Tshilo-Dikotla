@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import RedirectView
 
 from edc_dashboard.subject.views import additional_requisition
+from edc_sync.admin import edc_sync_admin
 
 from .load_edc import load_edc
 
@@ -77,12 +78,14 @@ urlpatterns = [
     #'',
     url(r'', include('edc_base.urls')),
     url(r'^edc-consent/', include('edc_consent.urls')),
-    url(r'^edc-sync/', include('edc_sync.urls')),
+    url(r'^edc-sync/', include('edc_sync.urls', 'edc-sync')),
+    url(r'^edc-sync-files/', include('edc_sync_files.urls', 'edc-sync-files')),
     url(r'^call_manager/$', RedirectView.as_view(pattern_name='home_url')),
     url(r'^call_manager/', include('edc_call_manager.urls', 'call_manager')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/logout/$', RedirectView.as_view(url='/{app_name}/logout/'.format(app_name=APP_NAME))),
 #     url(r'^admin/', call_manager_admin.urls),
+    url(r'^admin/', edc_sync_admin.urls),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^{app_name}/dashboard/'.format(app_name=APP_NAME),
