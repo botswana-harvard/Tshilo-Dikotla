@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import sys
 import os
+import configparser
 import socket
 from unipath import Path
 
@@ -30,6 +31,10 @@ DEVELOPER_HOSTS = [
 
 SOURCE_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
 BASE_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
+MEDIA_ROOT = BASE_DIR.child('media')
+PROJECT_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
+PROJECT_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
+ETC_DIR = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(2).child('etc')
 
 if socket.gethostname() == LIVE_SERVER:
     KEY_PATH = '/home/django/source/tshilo_dikotla/keys'
@@ -70,6 +75,7 @@ INSTALLED_APPS = [
     'edc_sync.apps.AppConfig',
     'django_crypto_fields.apps.AppConfig',
     'edc_call_manager.apps.AppConfig',
+    'django_appconfig_ini',
     # 'edc_code_lists',
     # 'edc_constants',
     # 'edc_lab.lab_clinic_api',
@@ -274,5 +280,24 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+<<<<<<< HEAD
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 MEDIA_ROOT = BASE_DIR.child('media')
+=======
+try:
+    config = configparser.ConfigParser()
+    config.read(os.path.join(ETC_DIR, 'edc_sync.ini'))
+    CORS_ORIGIN_WHITELIST = tuple(config['corsheaders'].get('cors_origin_whitelist').split(','))
+    CORS_ORIGIN_ALLOW_ALL = config['corsheaders'].getboolean('cors_origin_allow_all', True)
+except KeyError:
+    CORS_ORIGIN_WHITELIST = None
+    CORS_ORIGIN_ALLOW_ALL = True
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 1,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
+# EDC_SYNC_ROLE = 'client'
+>>>>>>> master
