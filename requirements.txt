@@ -7,13 +7,14 @@ django-extensions==1.6.1
 django-js-reverse==0.7.2
 django-model-utils==2.5
 git+https://github.com/erikvw/django-revision@develop#egg=django_revision
+git+https://github.com/erikvw/django-appconfig-ini@develop#egg=django_appconfig_ini
 django-simple-history==1.8.1
 django-tastypie==0.13.3
 djangorestframework==3.3.3
 -e git+https://github.com/botswana-harvard/edc-appointment@85e9833ff43912d5f8cdd80a8530e8d1f6e46ad5#egg=edc_appointment
 -e git+https://github.com/botswana-harvard/edc-base@c6f2c87a9a1090a97e7a7902fce288b25990ca50#egg=edc_base
 -e git+https://github.com/botswana-harvard/edc-call-manager@f70ed1fe60edecd683df2e2292471adf5ca3d20d#egg=edc_call_manager
--e git+https://github.com/botswana-harvard/edc-code-lists@6419b356bc3d63a4d30686ce47c10222e790b484#egg=edc_code_lists
+-e git+https://github.com/botswana-harvard/edc-code-lists@4984ef83aecb8dc7ec0428278a867dd38ce0cf68#egg=edc_code_lists
 -e git+https://github.com/botswana-harvard/edc-configuration@eb843e6b83e970c35bb4f6197deb3fd0cd0804d8#egg=edc_configuration
 -e git+https://github.com/botswana-harvard/edc-consent@0a5545f6c991d32f02e57947b2b283ef27fff2f5#egg=edc_consent
 -e git+https://github.com/botswana-harvard/edc-constants@6a06b691a15894759e9a279892c0ba4961e9bed0#egg=edc_constants
@@ -33,7 +34,8 @@ djangorestframework==3.3.3
 -e git+https://github.com/botswana-harvard/edc-registration@7a289d2c06d35e7af3e5ac70ebb8d8ec8f0c9bb0#egg=edc_registration
 -e git+https://github.com/botswana-harvard/edc-rest@bcbf35de88a7c4d76e395d8b89b0c772dd1112b8#egg=edc_rest
 -e git+https://github.com/botswana-harvard/edc-rule-groups@a567afc226da0771e94015564d38fc845f81ddc0#egg=edc_rule_groups
--e git+https://github.com/botswana-harvard/edc-sync@77147e46a1c08f5f9115eaf2c5942f80364eae1b#egg=edc_sync
+-e git+https://github.com/botswana-harvard/edc-sync-files@24c5cc971f82754ed2e39ee453d875dd0a3bb7f2#egg=edc_sync_files
+-e git+https://github.com/botswana-harvard/edc-sync@cce0ddf918df85e2d2add033188509e4ae0d8692#egg=edc_sync
 -e git+https://github.com/botswana-harvard/edc-templates@c79a1d3a541fed424451f6da455bce2b6c84e07c#egg=edc_templates
 -e git+https://github.com/botswana-harvard/edc-testing@d0444af275efc731e923b3239111e7a470802e42#egg=edc_testing
 -e git+https://github.com/botswana-harvard/edc-visit-schedule@2aa61cec1950ee092f3ed1fa3098015a7100cc08#egg=edc_visit_schedule
