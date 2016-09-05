@@ -4,7 +4,7 @@ from edc_registration.models import RegisteredSubject
 
 from tshilo_dikotla.constants import ONE
 
-from .models import MaternalUltraSoundInitial, MaternalVisit, MaternalPostPartumDep, RapidTestResult
+from .models import (MaternalUltraSoundInitial, MaternalVisit, MaternalPostPartumDep, RapidTestResult, MaternalInterimIdcc)
 from .classes import MaternalStatusHelper
 
 
@@ -155,7 +155,15 @@ class MaternalRequisitionRuleGroup(RuleGroup):
             consequence=UNKEYED,
             alternative=NOT_REQUIRED),
         target_model=[('td_lab', 'maternalrequisition')],
-        target_requisition_panels=['Viral Load'])
+        target_requisition_panels=['PBMC VL'])
+
+    require_pbmc_storage = RequisitionRule(
+        logic=Logic(
+            predicate=func_mother_neg,
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_lab', 'maternalrequisition')],
+        target_requisition_panels=['PBMC Plasma (STORE ONLY)'])
 
     require_elisa_status_ind = RequisitionRule(
         logic=Logic(
@@ -173,6 +181,16 @@ class MaternalRequisitionRuleGroup(RuleGroup):
         target_model=[('td_lab', 'maternalrequisition')],
         target_requisition_panels=['ELISA'])
 
+    class Meta:
+        app_label = 'td_maternal'
+        source_fk = None
+        source_model = RegisteredSubject
+
+site_rule_groups.register(MaternalRequisitionRuleGroup)
+
+
+class MaternalRequisitionRuleGroupCD4(RuleGroup):
+
     require_cd4 = RequisitionRule(
         logic=Logic(
             predicate=func_require_cd4,
@@ -183,10 +201,9 @@ class MaternalRequisitionRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_maternal'
-        source_fk = None
-        source_model = RegisteredSubject
-
-site_rule_groups.register(MaternalRequisitionRuleGroup)
+        source_fk = (MaternalVisit, 'maternal_visit')
+        source_model = MaternalInterimIdcc
+site_rule_groups.register(MaternalRequisitionRuleGroupCD4)
 
 
 class MaternalUltrasoundInitialRuleGroup(RuleGroup):

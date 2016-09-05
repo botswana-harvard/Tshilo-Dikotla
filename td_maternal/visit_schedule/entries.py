@@ -76,7 +76,7 @@ maternal_requisition_antenatal1 = (
         'CD4', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
         20, 'td_lab', 'maternalrequisition',
-        'Viral Load', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        'PBMC VL', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
         30, 'td_lab', 'maternalrequisition',
         'Fasting Glucose', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
@@ -86,6 +86,9 @@ maternal_requisition_antenatal1 = (
     RequisitionPanelTuple(
         50, 'td_lab', 'maternalrequisition',
         'Glucose 2h', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
+    RequisitionPanelTuple(
+        60, 'td_lab', 'maternalrequisition',
+        'PBMC Plasma (STORE ONLY)', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
 )
 
 maternal_requisition_antenatal2 = (
@@ -97,5 +100,5 @@ maternal_requisition_antenatal2 = (
 maternal_requisition_followup = (
     RequisitionPanelTuple(
         20, 'td_lab', 'maternalrequisition',
-        'Viral Load', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        'PBMC VL', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
 )
