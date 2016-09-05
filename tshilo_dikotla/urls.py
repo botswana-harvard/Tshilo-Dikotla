@@ -106,9 +106,9 @@ urlpatterns = [
     url(r'^{app_name}/$'.format(app_name=APP_NAME),
         RedirectView.as_view(url='/{app_name}/section/'.format(app_name=APP_NAME))),
     url(r'^statistics/', StatisticsView.as_view(), name='update-statistics'),
-    url(r'^admin/', edc_sync_admin.urls),
+#     url(r'^admin/', edc_sync_admin.urls),
 #     url(r'^admin/', include(admin.site.urls)),
-#     url(r'^home/', HomeView.as_view(), name='home_url'),
+    url(r'^home/', HomeView.as_view(), name='home_url'),
     url(r'^', HomeView.as_view(), name='home_url'),
     url(r'', RedirectView.as_view(url='/{app_name}/section/'.format(app_name=APP_NAME))),
 ]
