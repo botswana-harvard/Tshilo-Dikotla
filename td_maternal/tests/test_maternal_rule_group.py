@@ -142,7 +142,6 @@ class TestMaternalRuleGroups(BaseTestCase):
         MaternalInterimIdccFactory(
             maternal_visit=self.antenatal_visit_1,
             recent_cd4_date=(timezone.datetime.now() - relativedelta(months=4)).date())
-
         self.appointment = Appointment.objects.get(
             registered_subject=self.registered_subject,
             visit_definition__code='1010M')
@@ -182,10 +181,9 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.antenatal_visit_2 = MaternalVisitFactory(
             appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
                                                 visit_definition__code='1020M'))
-        idcc_factory = MaternalInterimIdccFactory(
+        MaternalInterimIdccFactory(
             maternal_visit=self.antenatal_visit_2, recent_cd4=15,
             recent_cd4_date=(timezone.datetime.now() - relativedelta(weeks=2)).date())
-        self.antenatal_visit_1.save()
         self.assertEqual(
             RequisitionMetaData.objects.filter(
                 entry_status='NEW',
@@ -240,4 +238,80 @@ class TestMaternalRuleGroups(BaseTestCase):
                 entry_status=NEW,
                 crf_entry__app_label='td_maternal',
                 crf_entry__model_name='rapidtestresult',
+                appointment=self.appointment).count(), 1)
+
+    def test_maternal_pbmc_pl_not_req_hiv_pos(self):
+        """"""
+        options = {'registered_subject': self.registered_subject,
+                   'current_hiv_status': POS,
+                   'evidence_hiv_status': YES,
+                   'will_get_arvs': YES,
+                   'is_diabetic': NO,
+                   'will_remain_onstudy': YES,
+                   'rapid_test_done': NOT_APPLICABLE,
+                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.maternal_visit_1000 = MaternalVisit.objects.get(
+            appointment__registered_subject=options.get('registered_subject'),
+            reason=SCHEDULED,
+            appointment__visit_definition__code='1000M')
+        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
+                                                                number_of_gestations=1,
+                                                                )
+        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=options.get('registered_subject'))
+        self.appointment = Appointment.objects.get(registered_subject=options.get('registered_subject'),
+                                                visit_definition__code='1010M')
+        self.maternal_labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject,
+                                                            live_infants_to_register=1)
+        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment)
+        self.antenatal_visit_2 = MaternalVisitFactory(
+            appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
+                                                visit_definition__code='1020M'))
+        self.assertEqual(
+            RequisitionMetaData.objects.filter(
+                entry_status='NEW',
+                lab_entry__app_label='td_lab',
+                lab_entry__model_name='maternalrequisition',
+                lab_entry__requisition_panel__name='PBMC Plasma (STORE ONLY)',
+                appointment=self.appointment).count(), 0)
+
+    def test_maternal_required_pbmc_pl_hiv_neg(self):
+        """"""
+        options = {'registered_subject': self.registered_subject,
+                   'current_hiv_status': NEG,
+                   'evidence_hiv_status': YES,
+                   'week32_test': YES,
+                   'week32_test_date': (timezone.datetime.now() - relativedelta(weeks=4)).date(),
+                   'week32_result': NEG,
+                   'evidence_32wk_hiv_status': YES,
+                   'will_get_arvs': NOT_APPLICABLE,
+                   'rapid_test_done': YES,
+                   'rapid_test_date': timezone.now().date(),
+                   'rapid_test_result': NEG,
+                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.maternal_visit_1000 = MaternalVisit.objects.get(
+            appointment__registered_subject=options.get('registered_subject'),
+            reason=SCHEDULED,
+            appointment__visit_definition__code='1000M')
+        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
+                                                                number_of_gestations=1,
+                                                                )
+        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=options.get('registered_subject'))
+        self.appointment = Appointment.objects.get(registered_subject=options.get('registered_subject'),
+                                                visit_definition__code='1010M')
+        self.maternal_labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject,
+                                                            live_infants_to_register=1)
+        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment)
+        self.antenatal_visit_2 = MaternalVisitFactory(
+            appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
+                                                visit_definition__code='1020M'))
+        self.assertEqual(
+            RequisitionMetaData.objects.filter(
+                entry_status='NEW',
+                lab_entry__app_label='td_lab',
+                lab_entry__model_name='maternalrequisition',
+                lab_entry__requisition_panel__name='PBMC Plasma (STORE ONLY)',
                 appointment=self.appointment).count(), 1)

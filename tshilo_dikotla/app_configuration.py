@@ -83,7 +83,7 @@ class AppConfiguration(BaseAppConfiguration):
 
     lab_clinic_api_setup = {
         'panel': [PanelTuple('CD4', 'TEST', 'WB'),
-                  PanelTuple('Viral Load', 'TEST', 'WB'),
+                  PanelTuple('PBMC VL', 'TEST', 'WB'),
                   PanelTuple('Infant Glucose', 'TEST', 'WB'),
                   PanelTuple('Fasting Glucose', 'TEST', 'WB'),
                   PanelTuple('Glucose 1h', 'TEST', 'WB'),
@@ -95,13 +95,14 @@ class AppConfiguration(BaseAppConfiguration):
         'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
                          AliquotTypeTuple('Plasma', 'PL', '32'),
                          AliquotTypeTuple('Buffy Coat', 'BC', '16'),
-                         AliquotTypeTuple('PBMC', 'PBMC', '31')]}
+                         AliquotTypeTuple('PBMC', 'PBMC', '31'),
+                         AliquotTypeTuple('Serum', 'SERUM', '06')]}
 
     lab_setup = {'tshilo_dikotla': {
                  'destination': [DestinationTuple('BHHRL', 'Botswana-Harvard HIV Reference Laboratory',
                                                   'Gaborone', '3902671', 'bhhrl@bhp.org.bw')],
                  'panel': [PanelTuple('CD4', 'TEST', 'WB'),
-                           PanelTuple('Viral Load', 'TEST', 'WB'),
+                           PanelTuple('PBMC VL', 'TEST', 'WB'),
                            PanelTuple('Infant Glucose', 'TEST', 'WB'),
                            PanelTuple('Fasting Glucose', 'TEST', 'WB'),
                            PanelTuple('Glucose 1h', 'TEST', 'WB'),
@@ -109,23 +110,33 @@ class AppConfiguration(BaseAppConfiguration):
                            PanelTuple('Infant Insulin', 'TEST', 'WB'),
                            PanelTuple('DNA PCR', 'TEST', 'WB'),
                            PanelTuple('PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB'),
-                           PanelTuple('ELISA', 'TEST', 'WB')],
+                           PanelTuple('ELISA', 'TEST', 'WB'),
+                           PanelTuple('Insulin', 'TEST', 'WB'),
+                           PanelTuple('Infant PBMC PL', 'TEST', 'WB')],
                  'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
                                   AliquotTypeTuple('Plasma', 'PL', '32'),
                                   AliquotTypeTuple('Buffy Coat', 'BC', '16'),
-                                  AliquotTypeTuple('PBMC', 'PBMC', '31')],
+                                  AliquotTypeTuple('PBMC', 'PBMC', '31'),
+                                  AliquotTypeTuple('Serum', 'SERUM', '06')],
                  'profile': [ProfileTuple('PBMC VL', 'WB'),
                              ProfileTuple('Glucose', 'WB'),
                              ProfileTuple('ELISA', 'WB'),
                              ProfileTuple('CD4', 'WB'),
-                             ProfileTuple('PBMC Plasma (STORE ONLY)', 'WB')],
-                 'profile_item': [ProfileItemTuple('Viral Load', 'PL', 1.0, 4),
-                                  ProfileItemTuple('Viral Load', 'PBMC', 0.5, 4),
+                             ProfileTuple('PBMC Plasma (STORE ONLY)', 'WB'),
+                             ProfileTuple('Infant Insulin', 'SERUM'),
+                             ProfileTuple('Infant Glucose', 'WB'),
+                             ProfileTuple('Infant PBMC PL', 'WB')],
+                 'profile_item': [ProfileItemTuple('PBMC VL', 'PL', 1.0, 4),
+                                  ProfileItemTuple('PBMC VL', 'PBMC', 0.5, 4),
                                   ProfileItemTuple('Glucose', 'PL', 1, 3),
                                   ProfileItemTuple('ELISA', 'PL', 1.0, 1),
                                   ProfileItemTuple('ELISA', 'BC', 0.5, 1),
                                   ProfileItemTuple('PBMC Plasma (STORE ONLY)', 'PL', 1, 4),
-                                  ProfileItemTuple('PBMC Plasma (STORE ONLY)', 'PBMC', 1, 4)]}}
+                                  ProfileItemTuple('PBMC Plasma (STORE ONLY)', 'PBMC', 1, 4),
+                                  ProfileItemTuple('Infant Insulin', 'SERUM', 0.5, 1),
+                                  ProfileItemTuple('Infant Glucose', 'PL', 0.5, 1),
+                                  ProfileItemTuple('Infant PBMC PL', 'PL', 1.0, 2),
+                                  ProfileItemTuple('Infant PBMC PL', 'PBMC', 1.0, 2)]}}
     labeling_setup = {
         'zpl_template': [
             aliquot_label or ZplTemplateTuple(
