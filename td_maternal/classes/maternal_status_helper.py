@@ -59,10 +59,11 @@ class MaternalStatusHelper(object):
         latest_visit = self.previous_visits.first()
         try:
             latest_interim_idcc = MaternalInterimIdcc.objects.get(maternal_visit=latest_visit)
-            if ((latest_visit.report_datetime.date() - relativedelta(months=3)) > latest_interim_idcc.recent_cd4_date) and self.hiv_status == POS:
-                return True
-            else:
-                return False
+            if latest_interim_idcc.recent_cd4_date:
+                if ((latest_visit.report_datetime.date() - relativedelta(months=3)) > latest_interim_idcc.recent_cd4_date) and self.hiv_status == POS:
+                    return True
+                else:
+                    return False
         except MaternalInterimIdcc.DoesNotExist:
             pass
         return True
