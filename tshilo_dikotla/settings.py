@@ -283,6 +283,7 @@ GIT_DIR = BASE_DIR.ancestor(1)
 STUDY_OPEN_DATETIME = timezone.datetime(2015, 10, 18, 0, 0, 0)
 
 APP_LABEL = 'tshilo_dikotla'
+LABEL_PRINTER_MAKE_AND_MODEL = ['Zebra ZPL Label Printer']
 
 SUBJECT_APP_LIST = ['maternal', 'infant']
 SUBJECT_TYPES = ['maternal', 'infant']
