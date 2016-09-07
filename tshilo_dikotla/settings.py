@@ -257,6 +257,36 @@ GIT_DIR = BASE_DIR.ancestor(1)
 
 STUDY_OPEN_DATETIME = timezone.datetime(2015, 10, 18, 0, 0, 0)
 
+APP_LABEL = 'tshilo_dikotla'
+LABEL_PRINTER_MAKE_AND_MODEL = ['Zebra ZPL Label Printer']
+
+SUBJECT_APP_LIST = ['maternal', 'infant']
+SUBJECT_TYPES = ['maternal', 'infant']
+MAX_SUBJECTS = {'maternal': 3000, 'infant': 3000}
+MINIMUM_AGE_OF_CONSENT = 18
+MAXIMUM_AGE_OF_CONSENT = 64
+AGE_IS_ADULT = 18
+GENDER_OF_CONSENT = ['F']
+DISPATCH_APP_LABELS = []
+
+if socket.gethostname() == LIVE_SERVER:
+    DEVICE_ID = 99
+    PROJECT_TITLE = '{} Live Server'.format(PROJECT_TITLE)
+elif socket.gethostname() in TEST_HOSTS:
+    DEVICE_ID = 99
+    PROJECT_TITLE = 'TEST (postgres): {}'.format(PROJECT_TITLE)
+elif socket.gethostname() in DEVELOPER_HOSTS:
+    DEVICE_ID = 99
+    PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
+elif 'test' in sys.argv:
+    DEVICE_ID = 99
+    PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
+else:
+    raise ImproperlyConfigured(
+        'Unknown hostname for full PROJECT_TITLE. Expected hostname to appear in one of '
+        'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
+        'Got hostname=\'{}\''.format(socket.gethostname()))
+
 SITE_CODE = '40'
 CELLPHONE_REGEX = '^[7]{1}[12345678]{1}[0-9]{6}$'
 TELEPHONE_REGEX = '^[2-8]{1}[0-9]{6}$'
@@ -281,10 +311,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-<<<<<<< HEAD
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 MEDIA_ROOT = BASE_DIR.child('media')
-=======
+
 try:
     config = configparser.ConfigParser()
     config.read(os.path.join(ETC_DIR, 'edc_sync.ini'))
@@ -301,4 +330,3 @@ REST_FRAMEWORK = {
 }
 
 # EDC_SYNC_ROLE = 'client'
->>>>>>> master
