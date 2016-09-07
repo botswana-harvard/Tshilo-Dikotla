@@ -41,9 +41,6 @@ class RapidTestResult(MaternalCrfModel):
     def get_test_code(self):
         return 'HIV'
 
-    def __str__(self):
-        return "{0}".format(self.registered_subject.subject_identifier)
-
     def natural_key(self):
         return self.registered_subject.natural_key()
     natural_key.dependencies = ['edc_registration.registeredsubject']
