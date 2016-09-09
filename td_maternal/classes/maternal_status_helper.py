@@ -38,6 +38,10 @@ class MaternalStatusHelper(object):
             registered_subject=self.maternal_visit.appointment.registered_subject)
         status = self._evaluate_status_from_rapid_tests(
             visit, (antenatal_enrollment, 'enrollment_hiv_status', 'rapid_test_date'))
+        if status == UNK:
+            # Check that the week32_test_date is still within 3 months
+            status = self._evaluate_status_from_rapid_tests(
+                visit, (antenatal_enrollment, 'enrollment_hiv_status', 'week32_test_date'))
         if status in [POS, NEG, UNK]:
                 return status
         elif status is None:
