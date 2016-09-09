@@ -50,7 +50,7 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.assertEqual(RequisitionMetaData.objects.filter(entry_status='NEW',
                                                             lab_entry__app_label='td_lab',
                                                             lab_entry__model_name='maternalrequisition',
-                                                            lab_entry__requisition_panel__name='Viral Load',
+                                                            lab_entry__requisition_panel__name='PBMC VL',
                                                             appointment=self.antenatal_visit_1.appointment).count(), 1)
 
     def test_dnapcr_for_heu_infant(self):
@@ -188,7 +188,7 @@ class TestMaternalStatusHelper(BaseTestCase):
     def test_unkown_status(self):
         """test that a negative result that is more than 3months old will lead to UNK status."""
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        MaternalLabourDelFactory(registered_subject=self.registered_subject)
         MaternalVisitFactory(
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
@@ -203,10 +203,13 @@ class TestMaternalStatusHelper(BaseTestCase):
                 visit_definition__code='2010M'))
         status_helper = MaternalStatusHelper(maternal_visit_2010M)
         self.assertEqual(status_helper.hiv_status, NEG)
-        rapid_test = RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result=NEG)
+        rapid_test = RapidTestResultFactory(
+            maternal_visit=maternal_visit_2010M,
+            result_date=(timezone.now() - relativedelta(months=4)).date(),
+            result=NEG)
         # Visit within 3months of rapid test.
         maternal_visit_2020M = MaternalVisitFactory(
-            report_datetime=rapid_test.result_date + relativedelta(months=4),
+            # report_datetime=rapid_test.result_date + relativedelta(months=1),
             appointment=Appointment.objects.get(
                 registered_subject=self.registered_subject,
                 visit_definition__code='2020M'))
@@ -214,6 +217,7 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.assertEqual(status_helper.hiv_status, UNK)
 
     def test_eligible_for_cd4(self):
+        # See rule group tests.
         pass
 
     def test_return_previous_visit_ordering(self):
@@ -235,6 +239,41 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.assertEqual(len(status_helper.previous_visits), 5)
         self.assertEqual(status_helper.previous_visits[0].appointment.visit_definition.code, '2010M')
         self.assertEqual(status_helper.previous_visits[4].appointment.visit_definition.code, '1000M')
+
+    def test_valid_hiv_neg_week32_test_date(self):
+        """Test that NEG status is valid for week32_test_date"""
+        options = {'registered_subject': self.registered_subject,
+                   'current_hiv_status': NEG,
+                   'evidence_hiv_status': None,
+                   'week32_test': YES,
+                   'week32_test_date': (timezone.datetime.now() - relativedelta(weeks=4)).date(),
+                   'week32_result': NEG,
+                   'evidence_32wk_hiv_status': YES,
+                   'will_get_arvs': NOT_APPLICABLE,
+                   'rapid_test_done': NO,
+                   'rapid_test_date': None,
+                   'rapid_test_result': None,
+                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
+        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.maternal_visit_1000 = MaternalVisit.objects.get(
+            appointment__registered_subject=options.get('registered_subject'),
+            reason=SCHEDULED,
+            appointment__visit_definition__code='1000M')
+        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
+                                                                number_of_gestations=1,
+                                                                )
+        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=options.get('registered_subject'))
+        self.antenatal_visit_1 = MaternalVisitFactory(
+            appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
+                                                visit_definition__code='1010M'))
+        MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        maternal_visit_1020M = MaternalVisitFactory(
+            appointment=Appointment.objects.get(
+                registered_subject=self.registered_subject,
+                visit_definition__code='1020M'))
+        status_helper = MaternalStatusHelper(maternal_visit_1020M)
+        self.assertEqual(status_helper.hiv_status, NEG)
 
     def create_mother(self, status_options):
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**status_options)

@@ -40,7 +40,8 @@ class EnrollmentHelper(object):
 
         Note: the EnrollmentError should never be excepted!!"""
         pos = self.known_hiv_pos_with_evidence() or self.tested_pos_at32wks() or self.tested_pos_rapidtest()
-        neg = self.tested_neg_at32wks() or self.tested_neg_rapidtest()
+        neg = (self.tested_neg_at32wks() or self.tested_neg_rapidtest() or
+               self.tested_neg_previously_result_within_3_months())
         if neg and not pos:
             return NEG
         elif pos and not neg:
@@ -86,6 +87,14 @@ class EnrollmentHelper(object):
             return True
         return False
 
+    def tested_neg_previously_result_within_3_months(self):
+        """Returns true if the 32 week test date is within 3months else false"""
+        if (self.instance_antenatal.week32_test == YES and self.instance_antenatal.week32_result == NEG and
+           self.instance_antenatal.week32_test_date >
+           (self.instance_antenatal.report_datetime.date() - relativedelta(months=3))):
+            return True
+        return False
+
     def test_date_is_on_or_after_32wks(self):
         """Returns True if the test date is on or after 32 weeks gestational age."""
         if self.instance_antenatal.rapid_test_date:
@@ -102,7 +111,8 @@ class EnrollmentHelper(object):
 
     def raise_validation_error_for_rapidtest(self):
         if (not self.validate_rapid_test and self.instance_antenatal.rapid_test_done != YES and
-                self.instance_antenatal.rapid_test_result not in [POS, NEG]):
+                self.instance_antenatal.rapid_test_result not in [POS, NEG] and
+                not self.tested_neg_previously_result_within_3_months):
                     raise self.exception_cls('A rapid test with a valid result of either POS or NEG is required. Ensure'
                                              ' this is the case.')
 

@@ -234,6 +234,7 @@ class TestAntenatalEnrollment(BaseTestCase):
         """Test for a mother who tested POS BEFORE 32weeks, with documentation then rapid test not enforced"""
 
         options = {'registered_subject': self.registered_subject,
+                   'report_datetime': timezone.now(),
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
@@ -291,6 +292,27 @@ class TestAntenatalEnrollment(BaseTestCase):
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, NEG)
         self.assertTrue(enrollment_helper.validate_rapid_test)
+
+#     def test_mother_tested_NEG_after_32weeks_then_rapidtest_notenforced(self):
+#         """Test for a mother who tested NEG AFTER 32weeks, with documentation then rapid test not enforced"""
+# 
+#         options = {'registered_subject': self.registered_subject,
+#                    'current_hiv_status': UNKNOWN,
+#                    'evidence_hiv_status': None,
+#                    'week32_test': YES,
+#                    'week32_test_date': (timezone.datetime.now() + relativedelta(weeks=5)).date(),
+#                    'week32_result': NEG,
+#                    'evidence_32wk_hiv_status': YES,
+#                    'will_get_arvs': NOT_APPLICABLE,
+#                    'rapid_test_done': NOT_APPLICABLE,
+#                    'rapid_test_result': None,
+#                    'rapid_test_date': None,
+#                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
+# 
+#         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+#         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
+#         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, NEG)
+#         self.assertTrue(enrollment_helper.validate_rapid_test)
 
     def test_mother_tested_NEG_no_LMP_rapidtest_enforced(self):
         """Test for a mother who tested NEG with documentation but no LMP then rapid test is enforced"""
