@@ -95,8 +95,13 @@ class MaternalConsentAdmin(BaseModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "maternal_eligibility":
             kwargs["queryset"] = MaternalEligibility.objects.filter(
-                registered_subject__id__exact=request.GET.get('registered_subject', 0))
-
+                registered_subject__id__exact=request.GET.get('registered_subject'))
+        else:
+                self.readonly_fields = list(self.readonly_fields)
+                try:
+                    self.readonly_fields.index('registered_subject')
+                except ValueError:
+                    self.readonly_fields.append('registered_subject')
         return super(MaternalConsentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(MaternalConsent, MaternalConsentAdmin)
