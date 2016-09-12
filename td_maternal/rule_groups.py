@@ -64,8 +64,7 @@ def show_ultrasound_form(visit_instance):
         return True
     elif (visit_instance.appointment.visit_definition.code == '1010M' and not
           MaternalUltraSoundInitial.objects.filter(
-            maternal_visit__appointment__visit_definition__code='1000M',
-            maternal_visit__appointment=visit_instance.appointment).exists()):
+            maternal_visit__appointment__visit_definition__code='1000M').exists()):
         return True
     return False
 
@@ -81,14 +80,14 @@ def show_rapid_test_form(visit_instance):
     if visit_instance.appointment.visit_definition.code == '2000M':
         if maternal_status_helper.hiv_status == NEG:
             # Get the last date the Rapid Test was processed.
-            prev_rapid_test = RapidTestResult.objects.filter(
-                maternal_visit__appointment__registered_subject__subject_identifier=subject_identifier)\
-                .order_by('-created').first()
+            prev_rapid_test = (RapidTestResult.objects.filter(
+                maternal_visit__appointment__registered_subject__subject_identifier=subject_identifier).
+                order_by('-created').first())
 
             # Get the EDD confirmed.
-            maternal_ultrasound = MaternalUltraSoundInitial.objects.filter(
-                maternal_visit__appointment__registered_subject__subject_identifier=subject_identifier)\
-                .order_by('-created').first()
+            maternal_ultrasound = (MaternalUltraSoundInitial.objects.filter(
+                maternal_visit__appointment__registered_subject__subject_identifier=subject_identifier)
+                .order_by('-created').first())
             if prev_rapid_test and maternal_ultrasound:
                 if (maternal_ultrasound.edd_confirmed - prev_rapid_test.result_date).days < 56:
                     return False
