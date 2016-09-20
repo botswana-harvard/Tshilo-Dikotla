@@ -72,6 +72,14 @@ maternal_followup3_crfs = (
 )
 
 maternal_requisition_antenatal1 = (
-    Requisition(show_order=10, model='td_maternal.MaternalRequisition', panel=rdb_panel),
-    Requisition(show_order=20, model='td_maternal.MaternalRequisition', panel=viral_load_panel),
+    Requisition(show_order=10, model='td_maternal.maternalrequisition', panel=cd4_panel),
+    Requisition(show_order=20, model='td_maternal.maternalrequisition', panel=pbmc_vl_panel),
+    Requisition(show_order=30, model='td_maternal.maternalrequisition', panel=pbmc_panel),
+    Requisition(show_order=40, model='td_maternal.maternalrequisition', panel=fasting_glucose_panel),
+    Requisition(show_order=50, model='td_maternal.maternalrequisition', panel=glucose_1h_panel),
+    Requisition(show_order=60, model='td_maternal.maternalrequisition', panel=glucose_2h_panel),
+)
+
+maternal_requisition_antenatal2 = (
+    Requisition(show_order=10, model='td_maternal.maternalrequisition', panel=hiv_elisa_panel),
 )
