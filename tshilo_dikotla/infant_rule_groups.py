@@ -8,6 +8,7 @@ from edc_rule_groups.requisition_rule import RequisitionRule
 from edc_rule_groups.rule_group import RuleGroup
 
 from tshilo_dikotla.constants import NO_MODIFICATIONS, START, MODIFIED
+from tshilo_dikotla.infant_visit_schedule import schedule
 from tshilo_dikotla.td_infant_lab_profiles import (infant_pp1_heu_pbmc_pl_panel,
                                                    infant_pp1_huu_pbmc_pl_panel, infant_heelstick_panel,
                                                    infant_pp18_heu_insulin_panel, infant_pp18_huu_insulin_panel)
@@ -17,27 +18,7 @@ from td_maternal.models import MaternalVisit
 
 from td_registration.models import RegisteredSubject
 
-from td_infant.models import InfantArvProph, InfantVisit, InfantFu, InfantBirthData, InfantFeeding
-
-
-def get_previous_visit(visit_instance, timepoints, visit_model):
-    registered_subject = visit_instance.appointment.registered_subject
-    position = timepoints.index(visit_instance.appointment.visit_definition.code)
-    timepoints_slice = timepoints[:position]
-    if len(timepoints_slice) > 1:
-        timepoints_slice.reverse()
-    for point in timepoints_slice:
-        try:
-            previous_appointment = Appointment.objects.filter(
-                registered_subject=registered_subject, visit_definition__code=point).order_by('-created').first()
-            return visit_model.objects.filter(appointment=previous_appointment).order_by('-created').first()
-        except Appointment.DoesNotExist:
-            pass
-        except visit_model.DoesNotExist:
-            pass
-        except AttributeError:
-            pass
-    return None
+from td_infant.models import InfantArvProph, InfantVisit
 
 
 def maternal_hiv_status_visit(visit_instance):
@@ -53,10 +34,7 @@ def maternal_hiv_status_visit(visit_instance):
 
 
 def func_show_infant_arv_proph(visit_instance):
-    previous_visit = get_previous_visit(visit_instance,
-                                        ['2000', '2010', '2020', '2060', '2090', '2120', '2180', '2240', '2300',
-                                         '2360'],
-                                        InfantVisit)
+    previous_visit = schedule.get(visit_instance.appointment.visit_definition.code)
     if not previous_visit:
         return False
     try:
