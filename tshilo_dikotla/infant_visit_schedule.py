@@ -162,3 +162,6 @@ infant_birth_schedule.add_visit(
     base_interval=0,
     requisitions=infant_36month_requisitions,
     crfs=infant_followup_crfs)
+infant_visit_schedule.add_schedule(infant_birth_schedule)
+
+site_visit_schedules.register(infant_visit_schedule)
