@@ -107,10 +107,6 @@ infant_pp1_huu_pbmc_pl_panel = RequisitionPanel('Infant PBMC PL', wb)  # link th
 infant_pp1_huu_pbmc_pl_panel.processing_profile = infant_pp1_huu_pbmc_pl_processing
 lab_profile.add_panel(infant_pp1_huu_pbmc_pl_panel)
 
-infant_glucose_panel = RequisitionPanel('Infant Glucose', wb)
-infant_glucose_panel.processing_profile = infant_glucose_processing
-lab_profile.add_panel(infant_glucose_panel)
-
 infant_pp1_insulin_panel = RequisitionPanel('Infant Insulin', wb)
 infant_pp1_insulin_panel.processing_profile = infant_pp1_insulin_processing
 lab_profile.add_panel(infant_pp1_insulin_panel)
