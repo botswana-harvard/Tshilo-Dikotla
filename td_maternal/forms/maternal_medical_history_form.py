@@ -2,7 +2,7 @@ from django import forms
 from django.apps import apps
 
 from edc_constants.constants import NEG, YES, NOT_APPLICABLE, POS, NO
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 
 from .base_maternal_model_form import BaseMaternalModelForm
 

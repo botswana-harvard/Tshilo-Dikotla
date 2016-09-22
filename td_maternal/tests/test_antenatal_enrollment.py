@@ -1,7 +1,7 @@
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
-from edc_appointment.models import Appointment
+from td_appointment.models import Appointment
 from edc_constants.constants import (POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN,
     FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY,SCHEDULED)
 

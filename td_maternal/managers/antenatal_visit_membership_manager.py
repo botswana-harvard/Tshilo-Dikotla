@@ -1,5 +1,5 @@
 from django.db import models
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 
 
 class AntenatalVisitMembershipManager(models.Manager):

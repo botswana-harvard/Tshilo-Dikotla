@@ -1,6 +1,6 @@
-from edc_appointment.models import Appointment
+from td_appointment.models import Appointment
 from edc_constants.constants import YES, NOT_REQUIRED, UNKEYED
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_rule_groups.classes import RuleGroup, site_rule_groups, Logic, CrfRule, RequisitionRule
 
 from tshilo_dikotla.constants import NO_MODIFICATIONS, START, MODIFIED

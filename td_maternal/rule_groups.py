@@ -1,6 +1,6 @@
 from edc_constants.constants import UNKEYED, NOT_REQUIRED, POS, NEG, UNK, IND
 from edc_rule_groups.classes import RuleGroup, site_rule_groups, Logic, CrfRule, RequisitionRule
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 
 from tshilo_dikotla.constants import ONE
 

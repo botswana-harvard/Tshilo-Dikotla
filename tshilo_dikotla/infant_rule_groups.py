@@ -1,4 +1,4 @@
-from edc_appointment.models import Appointment
+from td_appointment.models import Appointment
 from edc_constants.constants import YES, NOT_REQUIRED, REQUIRED
 from edc_rule_groups.crf_rule import CrfRule
 from edc_rule_groups.decorators import register

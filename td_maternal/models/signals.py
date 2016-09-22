@@ -3,8 +3,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 
-from edc_registration.models import RegisteredSubject
-from edc_appointment.models import Appointment
+from td_registration.models import RegisteredSubject
+from td_appointment.models import Appointment
 from edc_constants.constants import (
     FEMALE, SCHEDULED, SCREENED, CONSENTED, FAILED_ELIGIBILITY, ALIVE, OFF_STUDY, ON_STUDY)
 from edc_visit_schedule.models.visit_definition import VisitDefinition

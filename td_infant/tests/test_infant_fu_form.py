@@ -3,11 +3,11 @@ from datetime import datetime, date
 from django.utils import timezone
 
 from edc_constants.constants import SCREENED
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_identifier.models import SubjectIdentifier
 from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES, NO, NOT_APPLICABLE
 from edc_meta_data.models import RequisitionMetaData
-from edc_appointment.models import Appointment
+from td_appointment.models import Appointment
 
 from td_maternal.models import MaternalVisit
 

@@ -2,7 +2,7 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime, date
 from django.utils import timezone
 
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_constants.constants import (UNKNOWN, 
     YES, NEG, NOT_APPLICABLE, POS, NO, SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
 from edc_code_lists.models import WcsDxAdult

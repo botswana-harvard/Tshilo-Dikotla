@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from django.utils import timezone
 
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_base.utils import convert_from_camel
 from edc_constants.constants import YES, POS, NEG, IND, NEVER, UNKNOWN, DWTA, OTHER
 from edc_dashboard.subject import RegisteredSubjectDashboard

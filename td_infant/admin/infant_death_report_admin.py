@@ -3,7 +3,7 @@ from collections import OrderedDict
 from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 
 from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, DashboardRedirectUrlMixin
 

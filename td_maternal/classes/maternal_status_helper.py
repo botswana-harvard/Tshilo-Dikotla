@@ -1,7 +1,7 @@
 from django.db.models import Q
 from dateutil.relativedelta import relativedelta
 
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_constants.constants import POS, NEG, UNK, IND
 
 from td_maternal.models import AntenatalEnrollment, RapidTestResult, MaternalInterimIdcc

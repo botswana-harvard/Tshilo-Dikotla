@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_meta_data.managers import CrfMetaDataManager
+from edc_metadata.managers import CrfMetaDataManager
 from edc_base.model.models import BaseUuidModel
 from edc_consent.models import RequiresConsentMixin
 from edc_export.models import ExportTrackingFieldsMixin

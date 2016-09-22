@@ -1,6 +1,6 @@
 from edc_call_manager.model_caller import ModelCaller, MONTHLY
 from edc_call_manager.decorators import register
-from edc_appointment.models import Appointment
+from td_appointment.models import Appointment
 from call_manager.models import Call, Log, LogEntry
 
 from td_maternal.models import MaternalLocator, MaternalConsent, AntenatalEnrollment

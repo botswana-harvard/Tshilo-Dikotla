@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 
 from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
 

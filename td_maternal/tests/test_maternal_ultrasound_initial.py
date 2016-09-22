@@ -3,7 +3,7 @@ from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
 from edc_consent.models import ConsentType
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_constants.constants import SCHEDULED, YES, NO, NOT_APPLICABLE, POS
 
 from td_maternal.models import MaternalVisit, MaternalUltraSoundInitial

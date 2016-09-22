@@ -6,7 +6,7 @@ from edc_base.model.validators import (date_not_before_study_start, date_not_fut
                                        datetime_not_future, datetime_not_before_study_start)
 from edc_constants.choices import POS_NEG_UNTESTED_REFUSAL, YES_NO_NA, POS_NEG, YES_NO
 from edc_constants.constants import NO, YES, POS, NEG
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 
 from .enrollment_helper import EnrollmentHelper
 

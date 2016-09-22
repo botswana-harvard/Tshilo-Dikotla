@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_appointment.models import AppointmentMixin
+from td_appointment.models import AppointmentMixin
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import (date_not_before_study_start, date_not_future)
 from edc_export.models import ExportTrackingFieldsMixin
@@ -8,7 +8,7 @@ from edc_consent.models import RequiresConsentMixin
 from edc_constants.constants import NO, YES
 from edc_constants.choices import YES_NO
 from edc_offstudy.model_mixins import OffStudyMixin
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from ..managers import AntenatalEnrollmentManager

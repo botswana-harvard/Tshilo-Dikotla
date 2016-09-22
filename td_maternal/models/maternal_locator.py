@@ -1,13 +1,13 @@
 from django.db import models
 
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 # from edc_base.audit_trail import AuditTrail
 from django_crypto_fields.fields import EncryptedCharField
 from edc_base.model.fields import OtherCharField
 from edc_base.model.validators import CellNumber, TelephoneNumber
 from edc_constants.choices import YES_NO
 from edc_locator.models import LocatorMixin
-from edc_appointment.models import Appointment
+from td_appointment.models import Appointment
 from edc_meta_data.managers import CrfMetaDataManager
 
 from .maternal_visit import MaternalVisit

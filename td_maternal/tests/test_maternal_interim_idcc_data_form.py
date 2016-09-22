@@ -7,7 +7,7 @@ from edc_constants.constants import UNKNOWN, YES, NEG, NOT_APPLICABLE, SCHEDULED
 from td_maternal.models import MaternalVisit
 from td_maternal.forms import MaternalInterimIdccForm
 
-from edc_appointment.models import Appointment
+from td_appointment.models import Appointment
 
 from .factories import (MaternalEligibilityFactory, MaternalConsentFactory)
 

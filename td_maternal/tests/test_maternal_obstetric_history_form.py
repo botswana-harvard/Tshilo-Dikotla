@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.utils import timezone
 
 from edc_constants.constants import UNKNOWN, YES, NEG, NOT_APPLICABLE, POS, NO, SCHEDULED
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 
 from td_maternal.models import MaternalVisit
 from td_maternal.forms import MaternalObstericalHistoryForm

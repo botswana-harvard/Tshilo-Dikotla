@@ -3,7 +3,7 @@ from django.db import models
 
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from edc_lab.lab_receive.model_mixins import ReceiveModelMixin

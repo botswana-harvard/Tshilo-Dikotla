@@ -204,24 +204,6 @@ class InfantFeeding(InfantCrfModel):
             self.last_att_sche_visit = self.previous_infant_feeding
         super(InfantFeeding, self).save(*args, **kwargs)
 
-    def previous_infant_instance(self, infant_visit):
-        """ Returns previous infant visit. """
-        from .infant_visit import InfantVisit
-        from edc_appointment.models import Appointment
-        visit = ['2000', '2010', '2030', '2060', '2090', '2120']
-        try:
-            registered_subject = infant_visit.appointment.registered_subject
-            previous_visit_code = visit[visit.index(self.infant_visit.appointment.visit_definition.code) - 1]
-            previous_appointment = Appointment.objects.get(registered_subject=registered_subject,
-                                                           visit_definition__code=previous_visit_code)
-            return InfantVisit.objects.get(appointment=previous_appointment)
-        except Appointment.DoesNotExist:
-            return None
-        except InfantVisit.DoesNotExist:
-            return None
-        except AttributeError:
-            return None
-
     @property
     def previous_infant_feeding(self):
         """ Return previous infant feeding from. """

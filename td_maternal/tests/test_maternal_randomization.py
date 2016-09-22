@@ -2,10 +2,10 @@ from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from edc_constants.constants import SCREENED, UNKNOWN
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES, NO, NEG, NOT_APPLICABLE
 from edc_meta_data.models import RequisitionMetaData
-from edc_appointment.models import Appointment
+from td_appointment.models import Appointment
 
 from tshilo_dikotla.constants import RANDOMIZED
 from td_maternal.models import MaternalVisit

@@ -5,7 +5,7 @@ from datetime import date
 from edc_constants.constants import (UNKNOWN,
     YES, NEG, NOT_APPLICABLE, POS, NO, SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
 from edc_code_lists.models import WcsDxAdult
-from edc_appointment.models import Appointment
+from td_appointment.models import Appointment
 
 from td_list.models import MaternalDiagnoses, MaternalHospitalization
 from td_maternal.models import MaternalVisit, RegisteredSubject

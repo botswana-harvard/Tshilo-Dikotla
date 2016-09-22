@@ -1,6 +1,6 @@
 from datetime import datetime, date
 
-from edc_lab.lab_packing.models import DestinationTuple
+# from edc_lab.lab_packing.models import DestinationTuple
 from edc_lab.lab_profile.classes import ProfileItemTuple, ProfileTuple
 from edc_configuration.base_app_configuration import BaseAppConfiguration
 from edc_device import Device
@@ -99,8 +99,8 @@ class AppConfiguration(BaseAppConfiguration):
                          AliquotTypeTuple('Serum', 'SERUM', '06')]}
 
     lab_setup = {'tshilo_dikotla': {
-                 'destination': [DestinationTuple('BHHRL', 'Botswana-Harvard HIV Reference Laboratory',
-                                                  'Gaborone', '3902671', 'bhhrl@bhp.org.bw')],
+#                  'destination': [DestinationTuple('BHHRL', 'Botswana-Harvard HIV Reference Laboratory',
+#                                                   'Gaborone', '3902671', 'bhhrl@bhp.org.bw')],
                  'panel': [PanelTuple('CD4', 'TEST', 'WB'),
                            PanelTuple('PBMC VL', 'TEST', 'WB'),
                            PanelTuple('Infant Glucose', 'TEST', 'WB'),

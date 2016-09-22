@@ -2,7 +2,7 @@ from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
 from edc_constants.constants import UNKNOWN, YES, NEG, NOT_APPLICABLE, SCHEDULED, NO, POS
-from edc_appointment.models import Appointment
+from td_appointment.models import Appointment
 
 from td_maternal.forms import MaternalClinicalMeasurementsTwoForm
 from td_maternal.models import MaternalVisit

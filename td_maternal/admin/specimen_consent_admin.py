@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 from edc_consent.actions import flag_as_verified_against_paper, unflag_as_verified_against_paper
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 
 from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
 

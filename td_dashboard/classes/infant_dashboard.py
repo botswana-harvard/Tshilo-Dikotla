@@ -1,5 +1,5 @@
 from edc_dashboard.subject import RegisteredSubjectDashboard
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 
 from tshilo_dikotla.constants import INFANT
 from td_infant.models import InfantVisit, InfantBirth

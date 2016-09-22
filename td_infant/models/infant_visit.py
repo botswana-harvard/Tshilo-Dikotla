@@ -1,27 +1,27 @@
 # from django.db.models import get_model
 
-from edc_appointment.models import Appointment
-from edc_meta_data.models import CrfMetaDataMixin
+from td_appointment.models import Appointment
+from edc_metadata.model_mixins import CreatesMetadataModelMixin
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
-from edc_constants.constants import (
-    UNSCHEDULED, SCHEDULED, COMPLETED_PROTOCOL_VISIT, DEAD, POS, MALE, MISSED_VISIT)
+from edc_constants.constants import (DEAD, POS, MALE)
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffStudyMixin
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-from edc_visit_tracking.constants import VISIT_REASON_NO_FOLLOW_UP_CHOICES, LOST_VISIT
-from edc_visit_tracking.models import PreviousVisitMixin
-from edc_visit_tracking.models import VisitModelMixin
+from edc_visit_tracking.constants import (
+    LOST_VISIT, UNSCHEDULED, SCHEDULED, COMPLETED_PROTOCOL_VISIT, MISSED_VISIT)
+from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
+from edc_visit_tracking.model_mixins import VisitModelMixin
 
-from tshilo_dikotla.choices import VISIT_REASON
-from edc_visit_tracking.models.caretaker_fields_mixin import CaretakerFieldsMixin
+# from tshilo_dikotla.choices import VISIT_REASON
+from edc_visit_tracking.model_mixins import CaretakerFieldsMixin
 
 from .infant_birth import InfantBirth
 
 
 class InfantVisit(
-        CrfMetaDataMixin, SyncModelMixin, PreviousVisitMixin, OffStudyMixin, VisitModelMixin,
+        CreatesMetadataModelMixin, SyncModelMixin, PreviousVisitModelMixin, OffStudyMixin, VisitModelMixin,
         CaretakerFieldsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ A model completed by the user on the infant visits. """
@@ -100,17 +100,17 @@ class InfantVisit(
         return self.appointment.natural_key()
     natural_key.dependencies = ['edc_appointment.appointment']
 
-    def get_visit_reason_choices(self):
-        return VISIT_REASON
-
-    def get_visit_reason_no_follow_up_choices(self):
-        """Returns the visit reasons that do not imply any data collection;
-        that is, the subject is not available."""
-        dct = {}
-        for item in VISIT_REASON_NO_FOLLOW_UP_CHOICES:
-            if item not in [COMPLETED_PROTOCOL_VISIT, LOST_VISIT]:
-                dct.update({item: item})
-        return dct
+#     def get_visit_reason_choices(self):
+#         return VISIT_REASON
+# 
+#     def get_visit_reason_no_follow_up_choices(self):
+#         """Returns the visit reasons that do not imply any data collection;
+#         that is, the subject is not available."""
+#         dct = {}
+#         for item in VISIT_REASON_NO_FOLLOW_UP_CHOICES:
+#             if item not in [COMPLETED_PROTOCOL_VISIT, LOST_VISIT]:
+#                 dct.update({item: item})
+#         return dct
 
     class Meta:
         app_label = 'td_infant'

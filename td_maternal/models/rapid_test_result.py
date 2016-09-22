@@ -3,7 +3,7 @@ from django.db import models
 # from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import YES_NO, POS_NEG
 
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 
 from ..maternal_choices import POS_NEG_IND
 from ..managers import RapidTestResultManager

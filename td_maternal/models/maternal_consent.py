@@ -10,7 +10,7 @@ from edc_consent.models.fields.bw import IdentityFieldsMixin
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_identifier.subject.classes import SubjectIdentifier
 from edc_offstudy.model_mixins import OffStudyMixin
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin
 
 from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT

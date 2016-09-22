@@ -133,7 +133,7 @@ infant_birth_schedule.add_visit(
 
 infant_birth_schedule.add_visit(
     code='2180',
-    title='Infant 18 Month Visit',
+    title='Infant 18 Month Visit', 
     timepoint=5,
     base_interval=5,
     requisitions=infant_18month_requisitions,

@@ -11,7 +11,7 @@ from edc_base.model.validators import datetime_not_before_study_start, datetime_
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_consent.consent_type import site_consent_types
 

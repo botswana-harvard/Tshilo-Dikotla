@@ -10,9 +10,9 @@ from edc_constants.choices import YES_NO, YES_NO_UNKNOWN, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE, YES, POS
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.models import CrfInlineModelMixin
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_consent.models import RequiresConsentMixin
-from edc_appointment.models import AppointmentMixin
+from edc_appointment.model_mixins import CreateAppointmentsMixin
 
 from tshilo_dikotla.choices import DX_MATERNAL
 from td_list.models import DeliveryComplications
@@ -24,7 +24,7 @@ from .maternal_consent import MaternalConsent
 from .maternal_crf_model import MaternalCrfModel
 
 
-class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
+class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin, CreateAppointmentsMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
 

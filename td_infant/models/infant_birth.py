@@ -1,13 +1,14 @@
 from django.db import models
 
-from edc_appointment.models import AppointmentMixin
+from edc_appointment.model_mixins import CreateAppointmentsMixin
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
+from edc_base.model.validators import datetime_not_future
+from edc_protocol.validators import datetime_not_before_study_start
 from edc_base.model.validators.date import date_not_future
 from edc_constants.choices import GENDER_UNDETERMINED
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffStudyMixin
-from edc_registration.models import RegisteredSubject
+from td_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from td_maternal.models import MaternalLabourDel
@@ -15,7 +16,7 @@ from td_maternal.models import MaternalLabourDel
 from ..managers import InfantBirthModelManager
 
 
-class InfantBirth(SyncModelMixin, OffStudyMixin, AppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class InfantBirth(SyncModelMixin, OffStudyMixin, CreateAppointmentsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
     """ A model completed by the user on the infant's birth. """
 
     off_study_model = ('td_infant', 'InfantOffStudy')

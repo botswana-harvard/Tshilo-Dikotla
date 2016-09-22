@@ -5,7 +5,7 @@ from edc_constants.constants import SCREENED
 from edc_constants.constants import (
     FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, UNKEYED, POS, NEG, YES, NO, NOT_APPLICABLE, UNK, NEW)
 from edc_meta_data.models import RequisitionMetaData, CrfMetaData
-from edc_appointment.models import Appointment
+from td_appointment.models import Appointment
 
 from td_maternal.tests import BaseTestCase
 from td_maternal.models import MaternalVisit, MaternalInterimIdcc
