@@ -6,7 +6,7 @@ from edc_constants.choices import ARV_STATUS_WITH_NEVER
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
 # from edc_sync.models import SyncModelMixin
-from edc_visit_tracking.models.crf_inline_model_mixin import CrfInlineModelMixin
+from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from ..managers import MaternalArvPostModManager
 from ..maternal_choices import REASON_FOR_HAART, ARV_DRUG_LIST, DOSE_STATUS, ARV_MODIFICATION_REASON

@@ -6,9 +6,10 @@ from django.utils import timezone
 from td_registration.models import RegisteredSubject
 from td_appointment.models import Appointment
 from edc_constants.constants import (
-    FEMALE, SCHEDULED, SCREENED, CONSENTED, FAILED_ELIGIBILITY, ALIVE, OFF_STUDY, ON_STUDY)
+    FEMALE, SCREENED, CONSENTED, FAILED_ELIGIBILITY, ALIVE, OFF_STUDY, ON_STUDY)
 from edc_visit_schedule.models.visit_definition import VisitDefinition
 from edc_identifier.subject.classes import InfantIdentifier
+from edc_visit_tracking.constants import SCHEDULED
 
 from tshilo_dikotla.constants import INFANT
 

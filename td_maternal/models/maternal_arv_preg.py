@@ -5,7 +5,7 @@ from edc_base.model.models import BaseUuidModel
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
 # from edc_sync.models import SyncModelMixin
-from edc_visit_tracking.models import CrfInlineModelMixin
+from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from tshilo_dikotla.choices import ARV_INTERRUPTION_REASON, ARV_DRUG_LIST, REASON_ARV_STOP
 

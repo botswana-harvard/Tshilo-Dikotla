@@ -1,15 +1,14 @@
 from django.db import models
 
 from edc_appointment.model_mixins import CreateAppointmentsMixin
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import (datetime_not_before_study_start, datetime_not_future, 
-    date_not_before_study_start, date_not_future)
-from edc_export.models import ExportTrackingFieldsMixin
-from edc_consent.models import RequiresConsentMixin
+from edc_base.model.validators import datetime_not_future, date_not_future
+from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO
-from td_registration.models import RegisteredSubject
+from edc_export.models import ExportTrackingFieldsMixin
+from edc_protocol.validators import datetime_not_before_study_start
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from td_registration.models import RegisteredSubject
 
 from ..managers import AntenatalVisitMembershipManager
 

@@ -1,6 +1,4 @@
-from edc_constants.constants import (
-    NOT_APPLICABLE, UNKNOWN, OTHER, UNSCHEDULED, SCHEDULED, MISSED_VISIT, LOST_VISIT,
-    OFF_STUDY, ON_STUDY, COMPLETED_PROTOCOL_VISIT, FAILED_ELIGIBILITY, PARTICIPANT)
+from edc_constants.constants import (NOT_APPLICABLE, UNKNOWN, OTHER, OFF_STUDY, ON_STUDY, PARTICIPANT)
 
 from .constants import NO_MODIFICATIONS, START, BREASTFEED_ONLY, DISCONTINUED, NEVER_STARTED, MODIFIED
 
@@ -17,13 +15,13 @@ VISIT_INFO_SOURCE = [
     ('chart', 'Hospital chart or other medical record'),
     (OTHER, 'Other')]
 
-VISIT_REASON = [
-    (SCHEDULED, 'Scheduled visit/contact'),
-    (MISSED_VISIT, 'Missed Scheduled visit'),
-    (UNSCHEDULED, 'Unscheduled visit at which lab samples or data are being submitted'),
-    (LOST_VISIT, 'Lost to follow-up (use only when taking subject off study)'),
-    (FAILED_ELIGIBILITY, 'Subject failed enrollment eligibility'),
-    (COMPLETED_PROTOCOL_VISIT, 'Subject has completed the study')]
+# VISIT_REASON = [
+#     (SCHEDULED, 'Scheduled visit/contact'),
+#     (MISSED_VISIT, 'Missed Scheduled visit'),
+#     (UNSCHEDULED, 'Unscheduled visit at which lab samples or data are being submitted'),
+#     (LOST_VISIT, 'Lost to follow-up (use only when taking subject off study)'),
+#     (FAILED_ELIGIBILITY, 'Subject failed enrollment eligibility'),
+#     (COMPLETED_PROTOCOL_VISIT, 'Subject has completed the study')]
 
 VISIT_UNSCHEDULED_REASON = (
     ('Routine oncology', 'Routine oncology clinic visit'),
