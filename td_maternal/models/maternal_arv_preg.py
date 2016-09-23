@@ -7,7 +7,7 @@ from edc_constants.constants import NOT_APPLICABLE
 # from edc_sync.models import SyncModelMixin
 from edc_visit_tracking.models import CrfInlineModelMixin
 
-from tshilo_dikotla.choices import ARV_INTERRUPTION_REASON, ARV_DRUG_LIST
+from tshilo_dikotla.choices import ARV_INTERRUPTION_REASON, ARV_DRUG_LIST, REASON_ARV_STOP
 
 from ..managers import MaternalArvManager
 
@@ -58,7 +58,8 @@ class MaternalArv(CrfInlineModelMixin, BaseUuidModel):
     arv_code = models.CharField(
         verbose_name="ARV code",
         max_length=35,
-        choices=ARV_DRUG_LIST)
+        choices=ARV_DRUG_LIST,
+        help_text='Regimen has to be at least 3.')
 
     start_date = models.DateField(
         verbose_name="Date Started",
@@ -69,6 +70,19 @@ class MaternalArv(CrfInlineModelMixin, BaseUuidModel):
         verbose_name="Date Stopped",
         null=True,
         blank=True)
+
+    reason_for_stop = models.CharField(
+        verbose_name="Reason for stop",
+        choices=REASON_ARV_STOP,
+        null=True,
+        blank=True,
+        help_text='If "Treatment Failure", notify study coordinator')
+
+    reason_for_stop_other = models.TextField(
+        max_length=250,
+        verbose_name="Other, specify ",
+        blank=True,
+        null=True)
 
     objects = MaternalArvManager()
 

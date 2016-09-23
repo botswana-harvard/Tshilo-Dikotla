@@ -16,7 +16,7 @@ class MaternalPostPartumFu(MaternalCrfModel, DiagnosesMixin):
 
     hospitalized = models.CharField(
         max_length=25,
-        verbose_name="Has the mother been hospitalized since delivery?",
+        verbose_name="Has the mother been hospitalized since the last study visit?",
         choices=YES_NO,
         help_text="",
     )
@@ -40,6 +40,7 @@ class MaternalPostPartumFu(MaternalCrfModel, DiagnosesMixin):
         validators=[MinValueValidator(1)],
         blank=True,
         null=True,
+        help_text=""
     )
 
     class Meta:
