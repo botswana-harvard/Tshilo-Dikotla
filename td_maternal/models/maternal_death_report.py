@@ -3,10 +3,10 @@ from django.db import models
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_death_report.model_mixins import DeathReportModelMixin
-from edc_export.model_mixins import ExportTrackingFieldsMixin
+from edc_export.models import ExportTrackingFieldsMixin
 # from edc_meta_data.managers import CrfMetaDataManager
 from edc_sync.models import SyncModelMixin
-from edc_visit_tracking.models.crf_model_mixin import CrfModelMixin
+from edc_visit_tracking.model_mixins import CrfModelMixin
 
 from .maternal_visit import MaternalVisit
 

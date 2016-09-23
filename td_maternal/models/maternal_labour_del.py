@@ -2,20 +2,23 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.apps import apps
 
+# from edc_code_lists.models import WcsDxAdult
+from edc_appointment.model_mixins import CreateAppointmentsMixin
 from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
-# from edc_code_lists.models import WcsDxAdult
+from edc_base.model.validators import datetime_not_future
+from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO, YES_NO_UNKNOWN, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE, YES, POS
+from edc_protocol.validators import datetime_not_before_study_start
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-from edc_visit_tracking.models import CrfInlineModelMixin
+from edc_visit_tracking.model_mixins import CrfInlineModelMixin
+
+
+from td_list.models import DeliveryComplications
 from td_registration.models import RegisteredSubject
-from edc_consent.models import RequiresConsentMixin
-from edc_appointment.model_mixins import CreateAppointmentsMixin
 
 from tshilo_dikotla.choices import DX_MATERNAL
-from td_list.models import DeliveryComplications
 
 from ..managers import MaternalLabourDelManager, MaternalLabDelDxTManager
 from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION_REASON

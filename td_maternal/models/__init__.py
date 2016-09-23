@@ -10,7 +10,6 @@ from .maternal_off_study import MaternalOffStudy
 from .maternal_death_report import MaternalDeathReport
 from .maternal_eligibility import MaternalEligibility
 from .maternal_eligibility_loss import MaternalEligibilityLoss
-from .postnatal_enrollment import PostnatalEnrollment
 from .maternal_labour_del import MaternalLabourDel
 from .base_ultra_sound_model import BaseUtraSoundModel
 from .maternal_ultrasound_initial import MaternalUltraSoundInitial
