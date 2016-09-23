@@ -70,7 +70,6 @@ ARV_DRUG_LIST = (
     ('Tenoforvir', 'TDF'),
     ('Lamivudine', '3TC'),
     ('Emtricitabine', 'FTC'),
-    ('Xtc', 'XTC'),
     ('Didanosine', 'DDI'),
     ('Stavudine', 'D4T'),
     ('Nevirapine', 'NVP'),
@@ -821,4 +820,11 @@ HARM = (
 AMNIOTIC_FLUID = (
     ('0', 'Normal'),
     ('1', 'Abnormal')
+)
+
+REASON_ARV_STOP = (
+    ('switch for tolerability', 'Switch for tolerability'),
+    ('switch for drug outage', 'Switch for drug outage'),
+    ('Treatment failure', 'Treatment failure'),
+    (OTHER, 'Other, specify:')
 )
