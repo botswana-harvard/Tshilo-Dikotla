@@ -3,17 +3,16 @@ from django.utils import timezone
 
 from django.db import models
 from django.apps import apps
-# from django.db.models import get_model
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
+from edc_base.model.validators import datetime_not_future
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
 from td_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-from edc_consent.consent_type import site_consent_types
+from edc_consent.site_consents import site_consents
+from edc_protocol.validators import datetime_not_before_study_start
 
 from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
 
@@ -110,7 +109,7 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
         MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
         return (MaternalConsent.objects.filter(
             subject_identifier=self.registered_subject.subject_identifier).order_by('-version').first().version ==
-            site_consent_types.get_by_consent_datetime(MaternalConsent, timezone.now()).version)
+            site_consents.get_by_datetime(MaternalConsent, timezone.now()).version)
 
     @property
     def previous_consents(self):
@@ -121,7 +120,7 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
     @property
     def current_consent_version(self):
         MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
-        return site_consent_types.get_by_consent_datetime(MaternalConsent, timezone.now()).version
+        return site_consents.get_by_datetime(MaternalConsent, timezone.now()).version
 
     def set_uuid_for_eligibility_if_none(self):
         if not self.eligibility_id:

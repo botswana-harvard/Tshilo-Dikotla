@@ -1,7 +1,7 @@
 from django.core.validators import RegexValidator
 from django.db import models
 from edc_base.model.models.base_uuid_model import BaseUuidModel
-from edc_consent.models.fields import (
+from edc_consent.field_mixins import (
     ReviewFieldsMixin, PersonalFieldsMixin, VulnerabilityFieldsMixin, CitizenFieldsMixin)
 from edc_constants.choices import GENDER
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords

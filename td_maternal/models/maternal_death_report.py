@@ -2,9 +2,9 @@ from django.db import models
 
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
-from edc_death_report.models import DeathReportModelMixin
-from edc_export.models import ExportTrackingFieldsMixin
-from edc_meta_data.managers import CrfMetaDataManager
+from edc_death_report.model_mixins import DeathReportModelMixin
+from edc_export.model_mixins import ExportTrackingFieldsMixin
+# from edc_meta_data.managers import CrfMetaDataManager
 from edc_sync.models import SyncModelMixin
 from edc_visit_tracking.models.crf_model_mixin import CrfModelMixin
 
@@ -20,7 +20,7 @@ class MaternalDeathReport(CrfModelMixin, SyncModelMixin, DeathReportModelMixin,
 
 #     history = AuditTrail()
 
-    entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
+#     entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
 
     def natural_key(self):
         return self.maternal_visit.natural_key()

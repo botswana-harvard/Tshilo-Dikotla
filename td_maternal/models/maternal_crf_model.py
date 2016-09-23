@@ -1,14 +1,13 @@
 from django.db import models
 
-from edc_metadata.managers import CrfMetaDataManager
 from edc_base.model.models import BaseUuidModel
-from edc_consent.models import RequiresConsentMixin
+from edc_consent.model_mixins import RequiresConsentMixin
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffStudyMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-from edc_visit_tracking.models import CrfModelMixin
+from edc_visit_tracking.model_mixins import CrfModelMixin
 
-from ..managers import VisitCrfModelManager
+# from ..managers import VisitCrfModelManager
 
 from .maternal_consent import MaternalConsent
 from .maternal_visit import MaternalVisit
@@ -29,9 +28,7 @@ class MaternalCrfModel(SyncModelMixin, CrfModelMixin, ExportTrackingFieldsMixin,
 
     history = SyncHistoricalRecords()
 
-    objects = VisitCrfModelManager()
-
-    entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
+#     objects = VisitCrfModelManager()
 
     def __str__(self):
         return "{}: {}".format(self.__class__._meta.model_name,

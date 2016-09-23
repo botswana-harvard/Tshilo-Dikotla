@@ -3,23 +3,23 @@ from django.apps import apps
 
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
-from edc_consent.models import RequiresConsentMixin
+from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.constants import (
     YES, POS, NEG, FAILED_ELIGIBILITY)
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffStudyMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-from edc_visit_tracking.constants import VISIT_REASON_NO_FOLLOW_UP_CHOICES, COMPLETED_PROTOCOL_VISIT, LOST_VISIT
-from edc_visit_tracking.models import VisitModelMixin, PreviousVisitMixin, CaretakerFieldsMixin
+from edc_visit_tracking.constants import COMPLETED_PROTOCOL_VISIT, LOST_VISIT
+from edc_visit_tracking.model_mixins import VisitModelMixin, PreviousVisitModelMixin, CaretakerFieldsMixin
 
-from tshilo_dikotla.choices import VISIT_REASON
+from edc_visit_tracking.choices import VISIT_REASON
 
 from .maternal_consent import MaternalConsent
 from .antenatal_enrollment import AntenatalEnrollment
 from .maternal_visit_crf_meta_data_mixin import MaternalVisitCrfMetaDataMixin
 
 
-class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalVisitCrfMetaDataMixin,
+class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, MaternalVisitCrfMetaDataMixin,
                     RequiresConsentMixin, CaretakerFieldsMixin, VisitModelMixin,
                     ExportTrackingFieldsMixin, BaseUuidModel):
 
@@ -63,14 +63,14 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalV
             raise exception_cls(
                 "Subject is eligible. Visit reason cannot be 'Failed Eligibility'")
 
-    def get_visit_reason_no_follow_up_choices(self):
-        """ Returns the visit reasons that do not imply any data
-        collection; that is, the subject is not available. """
-        dct = {}
-        for item in VISIT_REASON_NO_FOLLOW_UP_CHOICES:
-            if item not in [COMPLETED_PROTOCOL_VISIT, LOST_VISIT]:
-                dct.update({item: item})
-        return dct
+#     def get_visit_reason_no_follow_up_choices(self):
+#         """ Returns the visit reasons that do not imply any data
+#         collection; that is, the subject is not available. """
+#         dct = {}
+#         for item in VISIT_REASON_NO_FOLLOW_UP_CHOICES:
+#             if item not in [COMPLETED_PROTOCOL_VISIT, LOST_VISIT]:
+#                 dct.update({item: item})
+#         return dct
 
 #     @property
 #     def scheduled_rapid_test(self):

@@ -8,19 +8,19 @@ from edc_base.model.validators import CellNumber, TelephoneNumber
 from edc_constants.choices import YES_NO
 from edc_locator.models import LocatorMixin
 from td_appointment.models import Appointment
-from edc_meta_data.managers import CrfMetaDataManager
+# from edc_meta_data.managers import CrfMetaDataManager
 
-from .maternal_visit import MaternalVisit
+# from .maternal_visit import MaternalVisit
 from .maternal_crf_model import MaternalCrfModel
 
-
-class LocalCrfMetaDataManager(CrfMetaDataManager):
-
-    def create_meta_data(self):
-        if self.visit_instance.appointment.visit_definition.code == '1000M':
-            super(LocalCrfMetaDataManager, self).create_meta_data()
-        else:
-            pass
+# TODO: check why maternal locator is creating metadata from here.
+# class LocalCrfMetaDataManager(CrfMetaDataManager):
+# 
+#     def create_meta_data(self):
+#         if self.visit_instance.appointment.visit_definition.code == '1000M':
+#             super(LocalCrfMetaDataManager, self).create_meta_data()
+#         else:
+#             pass
 
 
 class MaternalLocator(LocatorMixin, MaternalCrfModel):
@@ -67,7 +67,7 @@ class MaternalLocator(LocatorMixin, MaternalCrfModel):
         blank=True,
         null=True)
 
-    entry_meta_data_manager = LocalCrfMetaDataManager(MaternalVisit)
+#     entry_meta_data_manager = LocalCrfMetaDataManager(MaternalVisit)
 
     class Meta:
         app_label = 'td_maternal'

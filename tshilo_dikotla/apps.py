@@ -10,7 +10,8 @@ from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
 from edc_label.apps import AppConfig as EdcLabelConfigParent
 from edc_protocol.apps import AppConfig as EdcProtocolAppConfigParent
 from edc_registration.apps import AppConfig as EdcRegistrationAppConfigParent
-
+from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
+from edc_timepoint.timepoint import Timepoint
 
 class AppConfig(DjangoAppConfig):
     name = 'tshilo_dikotla'
@@ -44,6 +45,17 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
          'start_datetime': timezone.datetime(2016, 4, 1, 0, 0, 0),
          'end_datetime': timezone.datetime(2016, 12, 1, 0, 0, 0),
          'version': '1'}
+    ]
+
+
+class EdcTimepointAppConfig(EdcTimepointAppConfigParent):
+    timepoints = [
+        Timepoint(
+            model='edc_example.appointment',
+            datetime_field='appt_datetime',
+            status_field='appt_status',
+            closed_status='CLOSED'
+        )
     ]
 
 

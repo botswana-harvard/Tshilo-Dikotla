@@ -3,8 +3,6 @@ corsheader
 
 git+https://github.com/botswana-harvard/edc-base@develop#egg=edc_base
 git+https://github.com/botswana-harvard/edc-protocol@develop#egg=edc_protocol
-git+https://github.com/erikvw/django-crypto-fields@develop#egg=django_crypto_fields
-git+https://github.com/erikvw/django-revision@develop#egg=django_revision
 git+https://github.com/botswana-harvard/edc-appointment@develop#egg=edc_appointment
 git+https://github.com/botswana-harvard/edc-call-manager@develop#egg=edc_call_manager
 git+https://github.com/botswana-harvard/edc-code-lists@develop#egg=edc_code_lists
@@ -27,9 +25,14 @@ git+https://github.com/botswana-harvard/edc-offstudy@develop#egg=edc_offstudy
 git+https://github.com/botswana-harvard/edc-registration@develop#egg=edc_registration
 git+https://github.com/botswana-harvard/edc-rest@develop#egg=edc_rest
 git+https://github.com/botswana-harvard/edc-rule-groups@develop#egg=edc_rule_groups
+git+https://github.com/botswana-harvard/edc-sync-files@develop#egg=edc_sync_files
 git+https://github.com/botswana-harvard/edc-sync@develop#egg=edc_sync
 git+https://github.com/botswana-harvard/edc-templates@develop#egg=edc_templates
+git+https://github.com/botswana-harvard/edc-timepoint@develop#egg=edc_timepoint
 git+https://github.com/botswana-harvard/edc-visit-schedule@develop#egg=edc_visit_schedule
 git+https://github.com/botswana-harvard/edc-visit-tracking@develop#egg=edc_visit_tracking
 git+https://github.com/botswana-harvard/lab-requisition@develop#egg=lab_requisition
 git+https://github.com/botswana-harvard/lis@develop#egg=lis
+git+https://github.com/erikvw/django-appconfig-ini@develop#egg=django_appconfig_ini
+git+https://github.com/erikvw/django-crypto-fields@develop#egg=django_crypto_fields
+git+https://github.com/erikvw/django-revision@develop#egg=django_revision

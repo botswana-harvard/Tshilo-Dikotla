@@ -1,12 +1,11 @@
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel
-from edc_consent.models.base_consent import BaseConsent
-from edc_consent.models.fields import (
-    PersonalFieldsMixin, CitizenFieldsMixin, ReviewFieldsMixin, VulnerabilityFieldsMixin)
-from edc_consent.models.fields.bw import IdentityFieldsMixin
+from edc_consent.model_mixins import ConsentModelMixin
+from edc_consent.field_mixins import (
+    PersonalFieldsMixin, CitizenFieldsMixin, ReviewFieldsMixin, VulnerabilityFieldsMixin,
+    IdentityFieldsMixin)
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_identifier.subject.classes import SubjectIdentifier
 from edc_offstudy.model_mixins import OffStudyMixin
@@ -21,7 +20,7 @@ from .potential_call import PotentialCall
 from .maternal_eligibility import MaternalEligibility
 
 
-class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMixin,
+class MaternalConsent(ConsentModelMixin, SyncModelMixin, OffStudyMixin, ReviewFieldsMixin,
                       IdentityFieldsMixin, PersonalFieldsMixin,
                       CitizenFieldsMixin, VulnerabilityFieldsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 

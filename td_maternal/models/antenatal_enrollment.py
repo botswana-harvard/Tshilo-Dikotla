@@ -1,15 +1,16 @@
 from django.db import models
 
-from td_appointment.models import AppointmentMixin
+from edc_appointment.model_mixins import CreateAppointmentsMixin
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import (date_not_before_study_start, date_not_future)
+from edc_base.model.validators import date_not_future
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_consent.models import RequiresConsentMixin
+from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.constants import NO, YES
 from edc_constants.choices import YES_NO
 from edc_offstudy.model_mixins import OffStudyMixin
 from td_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_protocol.validators import date_not_before_study_start
 
 from ..managers import AntenatalEnrollmentManager
 
@@ -17,7 +18,7 @@ from .enrollment_mixin import EnrollmentMixin
 from .maternal_consent import MaternalConsent
 
 
-class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, OffStudyMixin, AppointmentMixin,
+class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, OffStudyMixin, CreateAppointmentsMixin,
                           RequiresConsentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     consent_model = MaternalConsent

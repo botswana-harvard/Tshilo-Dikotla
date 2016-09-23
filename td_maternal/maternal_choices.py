@@ -1,5 +1,5 @@
 from edc_constants.choices import YES, NO
-from edc_constants.constants import CONTINUOUS, RESTARTED, OTHER, STOPPED, NOT_APPLICABLE, NEW, NEG, POS, IND
+from edc_constants.constants import CONTINUOUS, RESTARTED, OTHER, STOPPED, NOT_APPLICABLE, NEG, POS, IND
 
 from tshilo_dikotla.constants import LIVE, STILL_BIRTH
 
@@ -260,7 +260,7 @@ ARV_DRUG_LIST = (
 )
 
 DOSE_STATUS = (
-    (NEW, 'New'),
+    ('New', 'New'),
     ('Permanently discontinued', 'Permanently discontinued'),
     ('Temporarily held', 'Temporarily held'),
     ('Dose modified', 'Dose modified'),
