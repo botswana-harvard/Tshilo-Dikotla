@@ -7,7 +7,7 @@ from td_registration.models import RegisteredSubject
 from td_appointment.models import Appointment
 from edc_constants.constants import (
     FEMALE, SCREENED, CONSENTED, FAILED_ELIGIBILITY, ALIVE, OFF_STUDY, ON_STUDY)
-from edc_visit_schedule.models.visit_definition import VisitDefinition
+from td_maternal.maternal_visit_schedule import site_visit_schedules
 from edc_identifier.subject.classes import InfantIdentifier
 from edc_visit_tracking.constants import SCHEDULED
 
@@ -121,10 +121,10 @@ def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
         try:
             if not instance.is_eligible and not instance.pending_ultrasound:
                 report_datetime = instance.report_datetime
-                visit_definition = VisitDefinition.objects.get(code=instance.off_study_visit_code)
+                visit_schedule = site_visit_schedules.visit_schedules.get(code=instance.off_study_visit_code)
                 appointment = Appointment.objects.get(
                     registered_subject=instance.registered_subject,
-                    visit_definition=visit_definition)
+                    visit_code=visit_schedule)
                 maternal_visit = MaternalVisit.objects.get(appointment=appointment)
                 if maternal_visit.reason != FAILED_ELIGIBILITY:
                     maternal_visit.reason = FAILED_ELIGIBILITY
