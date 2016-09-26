@@ -2,7 +2,8 @@ from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_schedule.visit_schedule import VisitSchedule
 from edc_visit_schedule.visit import Crf, Requisition
 from edc_visit_schedule.schedule import Schedule
-from tshilo_dikotla.td_maternal_lab_profiles import (pbmc_vl_panel, pbmc_panel, fasting_glucose_panel,
+
+from .td_maternal_lab_profiles import (pbmc_vl_panel, pbmc_panel, fasting_glucose_panel,
                                                      glucose_1h_panel, glucose_2h_panel, hiv_elisa_panel, cd4_panel)
 
 maternal_requisition_antenatal1 = (

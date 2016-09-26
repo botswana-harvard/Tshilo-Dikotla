@@ -28,7 +28,7 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
     protocol_name = 'Tshilo Dikotla'
     protocol_title = ''
     study_start_datetime = timezone.datetime(2016, 4, 1, 0, 0, 0)
-    study_end_datetime = timezone.datetime(2016, 12, 1, 0, 0, 0)
+    study_end_datetime = timezone.datetime(2018, 12, 1, 0, 0, 0)
     subject_types = ['maternal', 'infant']
     max_subjects = {'maternal': -1, 'infant': -1}
 
@@ -51,7 +51,7 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
 class EdcTimepointAppConfig(EdcTimepointAppConfigParent):
     timepoints = [
         Timepoint(
-            model='edc_example.appointment',
+            model='td_maternal.appointment',
             datetime_field='appt_datetime',
             status_field='appt_status',
             closed_status='CLOSED'

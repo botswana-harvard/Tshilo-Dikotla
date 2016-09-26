@@ -29,6 +29,7 @@ TEST_HOSTS = ['edc4.bhp.org.bw', 'tdtest.bhp.org.bw']
 DEVELOPER_HOSTS = [
     'mac2-2.local', 'ckgathi', 'one-2.local', 'One-2.local', 'tsetsiba', 'leslie']
 
+PROJECT_TITLE = 'tshilo_dikotla.apps.AppConfig.verbose_name'
 SOURCE_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
 BASE_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
 MEDIA_ROOT = BASE_DIR.child('media')
@@ -80,18 +81,16 @@ INSTALLED_APPS = [
     # 'edc_constants',
     # 'edc_lab.lab_clinic_api',
     # 'edc_lab.lab_clinic_reference',
-    'edc_lab.lab_packing',
+    # 'edc_lab.lab_packing',
     'edc_content_type_map.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
     # 'edc_data_manager.apps.AppConfig', # not ready
     'edc_death_report.apps.AppConfig',
     'edc_device.apps.AppConfig',
     'edc_locator.apps.AppConfig',
-    'edc_meta_data.apps.AppConfig',
+    'edc_metadata.apps.AppConfig',
     'edc_offstudy.apps.AppConfig',
     'edc_rule_groups.apps.AppConfig',
-    'edc_visit_schedule.apps.AppConfig',
-    'edc_visit_tracking.apps.AppConfig',
     'td_call_manager.apps.AppConfig',
     'td_dashboard.apps.AppConfig',
     'td_infant.apps.AppConfig',
@@ -105,6 +104,8 @@ INSTALLED_APPS = [
     'tshilo_dikotla.apps.EdcLabelAppConfig',
     'tshilo_dikotla.apps.EdcRegistrationAppConfig',
     'tshilo_dikotla.apps.AppConfig',
+    'edc_visit_schedule.apps.AppConfig',
+    'edc_visit_tracking.apps.AppConfig',
 ]
 
 if 'test' in sys.argv:
@@ -122,7 +123,7 @@ if 'test' in sys.argv:
                          "edc_consent": None,
                          "edc_rule_groups": None,
                          "edc_data_manager": None,
-                         "lab_packing": None,
+                         #"lab_packing": None,
                          "lab_clinic_api": None,
                          'django_crypto_fields': None,
                          "lab_clinic_reference": None,
