@@ -4,13 +4,14 @@ from collections import OrderedDict
 from edc_consent.actions import flag_as_verified_against_paper, unflag_as_verified_against_paper
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
 from ..forms import MaternalConsentForm
 from ..models import MaternalConsent, MaternalEligibility
 
 
-class MaternalConsentAdmin(BaseModelAdmin):
+@admin.register(MaternalConsent)
+class MaternalConsentAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     form = MaternalConsentForm
 
@@ -103,5 +104,3 @@ class MaternalConsentAdmin(BaseModelAdmin):
                 except ValueError:
                     self.readonly_fields.append('registered_subject')
         return super(MaternalConsentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-admin.site.register(MaternalConsent, MaternalConsentAdmin)

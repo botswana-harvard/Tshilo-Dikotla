@@ -6,7 +6,8 @@ from ..models import MaternalObstericalHistory
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalObstericalHistoryAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalObstericalHistory)
+class MaternalObstericalHistoryAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalObstericalHistoryForm
     fields = ('maternal_visit',
@@ -24,5 +25,3 @@ class MaternalObstericalHistoryAdmin(BaseMaternalModelAdmin):
                     'lost_before_24wks',
                     'lost_after_24wks',
                     'live_children')
-
-admin.site.register(MaternalObstericalHistory, MaternalObstericalHistoryAdmin)

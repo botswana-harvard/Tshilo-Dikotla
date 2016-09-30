@@ -9,7 +9,8 @@ from ..models import MaternalAztNvp
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalAztNvpAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalAztNvp)
+class MaternalAztNvpAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalAztNvpForm
 
@@ -19,5 +20,3 @@ class MaternalAztNvpAdmin(BaseMaternalModelAdmin):
     list_display = ('report_datetime', 'date_given', 'azt_nvp', 'instructions_given')
 
     list_filter = ('report_datetime', 'date_given', 'azt_nvp', 'instructions_given')
-
-admin.site.register(MaternalAztNvp, MaternalAztNvpAdmin)

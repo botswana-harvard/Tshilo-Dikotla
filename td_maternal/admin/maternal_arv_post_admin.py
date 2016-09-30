@@ -3,7 +3,7 @@ from collections import OrderedDict
 from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
-from edc_base.modeladmin.admin import BaseTabularInline
+from edc_base.modeladmin.mixins import TabularInlineMixin
 
 from ..forms import MaternalArvPostForm, MaternalArvPostMedForm, MaternalArvPostAdhForm
 from ..models import MaternalVisit, MaternalArvPost, MaternalArvPostMed, MaternalArvPostAdh
@@ -11,14 +11,15 @@ from ..models import MaternalVisit, MaternalArvPost, MaternalArvPostMed, Materna
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalArvPostModInlineAdmin(BaseTabularInline):
+class MaternalArvPostModInlineAdmin(TabularInlineMixin):
 
     model = MaternalArvPostMed
     form = MaternalArvPostMedForm
     extra = 1
 
 
-class MaternalArvPostModAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalArvPostMed)
+class MaternalArvPostMedAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalArvPostMedForm
     list_display = ('maternal_arv_post', 'arv_code', 'dose_status', 'modification_date', 'modification_code')
@@ -48,10 +49,9 @@ class MaternalArvPostModAdmin(BaseMaternalModelAdmin):
                  }),
         )]
 
-admin.site.register(MaternalArvPostMed, MaternalArvPostModAdmin)
 
-
-class MaternalArvPostAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalArvPost)
+class MaternalArvPostAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalArvPostForm
 
@@ -88,10 +88,9 @@ class MaternalArvPostAdmin(BaseMaternalModelAdmin):
                 kwargs["queryset"] = MaternalVisit.objects.filter(id=request.GET.get('maternal_visit'))
         return super(MaternalArvPostAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-admin.site.register(MaternalArvPost, MaternalArvPostAdmin)
 
-
-class MaternalArvPostAdhAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalArvPostAdh)
+class MaternalArvPostAdhAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalArvPostAdhForm
     fields = (
@@ -114,5 +113,3 @@ class MaternalArvPostAdhAdmin(BaseMaternalModelAdmin):
                  'dob': 'maternal_visit__appointment__registered_subject__dob',
                  'registered': 'maternal_visit__appointment__registered_subject__registration_datetime'}),
         )]
-
-admin.site.register(MaternalArvPostAdh, MaternalArvPostAdhAdmin)

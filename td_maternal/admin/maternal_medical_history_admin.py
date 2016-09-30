@@ -5,7 +5,8 @@ from ..models import MaternalMedicalHistory
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalMedicalHistoryAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalMedicalHistory)
+class MaternalMedicalHistoryAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalMedicalHistoryForm
 #     fields = ('maternal_visit',
@@ -26,5 +27,3 @@ class MaternalMedicalHistoryAdmin(BaseMaternalModelAdmin):
                     'lowest_cd4_known': admin.VERTICAL,
                     'is_date_estimated': admin.VERTICAL}
     filter_horizontal = ('who', 'mother_chronic', 'father_chronic', 'mother_medications')
-
-admin.site.register(MaternalMedicalHistory, MaternalMedicalHistoryAdmin)

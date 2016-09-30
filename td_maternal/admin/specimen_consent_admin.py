@@ -6,13 +6,14 @@ from edc_export.actions import export_as_csv_action
 from edc_consent.actions import flag_as_verified_against_paper, unflag_as_verified_against_paper
 from td_registration.models import RegisteredSubject
 
-from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
 from ..forms import SpecimenConsentForm
 from ..models import SpecimenConsent
 
 
-class SpecimenConsentAdmin(MembershipBaseModelAdmin):
+@admin.register(SpecimenConsent)
+class SpecimenConsentAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     dashboard_type = 'maternal'
     form = SpecimenConsentForm
@@ -73,5 +74,3 @@ class SpecimenConsentAdmin(MembershipBaseModelAdmin):
                 except ValueError:
                     self.readonly_fields.append('registered_subject')
         return super(SpecimenConsentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-admin.site.register(SpecimenConsent, SpecimenConsentAdmin)

@@ -6,7 +6,8 @@ from ..models import MaternalLifetimeArvHistory
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalLifetimeArvHistoryAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalLifetimeArvHistory)
+class MaternalLifetimeArvHistoryAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     form = MaternalLifetimeArvHistoryForm
 
     list_display = ('maternal_visit', 'haart_start_date', 'preg_on_haart')
@@ -22,5 +23,3 @@ class MaternalLifetimeArvHistoryAdmin(BaseMaternalModelAdmin):
         'is_date_estimated': admin.VERTICAL}
 
     filter_horizontal = ('prior_arv', )
-
-admin.site.register(MaternalLifetimeArvHistory, MaternalLifetimeArvHistoryAdmin)

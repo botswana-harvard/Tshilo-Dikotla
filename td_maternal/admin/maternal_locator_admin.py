@@ -8,7 +8,8 @@ from ..models import MaternalLocator
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalLocatorAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalLocator)
+class MaternalLocatorAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalLocatorForm
 
@@ -57,6 +58,3 @@ class MaternalLocatorAdmin(BaseMaternalModelAdmin):
         if db_field.name == "registered_subject":
             kwargs["queryset"] = RegisteredSubject.objects.filter(id__exact=request.GET.get('registered_subject', 0))
         return super(MaternalLocatorAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-
-admin.site.register(MaternalLocator, MaternalLocatorAdmin)

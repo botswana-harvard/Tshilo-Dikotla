@@ -4,13 +4,14 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
 from ..forms import MaternalEligibilityLossForm
 from ..models import MaternalEligibilityLoss, MaternalEligibility
 
 
-class MaternalEligibilityLossAdmin(MembershipBaseModelAdmin):
+@admin.register(MaternalEligibilityLoss)
+class MaternalEligibilityLossAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     form = MaternalEligibilityLossForm
 
@@ -36,5 +37,3 @@ class MaternalEligibilityLossAdmin(MembershipBaseModelAdmin):
             if request.GET.get('maternal_eligibility'):
                 kwargs["queryset"] = MaternalEligibility.objects.filter(id=request.GET.get('maternal_eligibility'))
         return super(MaternalEligibilityLossAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-admin.site.register(MaternalEligibilityLoss, MaternalEligibilityLossAdmin)

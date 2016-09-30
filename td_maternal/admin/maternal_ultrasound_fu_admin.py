@@ -7,7 +7,8 @@ from ..models import MaternalUltraSoundFu
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalUltraSoundFuAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalUltraSoundFu)
+class MaternalUltraSoundFuAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalUltraSoundFuForm
 
@@ -16,17 +17,8 @@ class MaternalUltraSoundFuAdmin(BaseMaternalModelAdmin):
               'bpd',
               'hc',
               'ac',
-              'fl',
-#               'hl',
-#               'lateral_ventricle',
-#               'cerebellum',
-#               'cistema_magna'
-    )
+              'fl')
 
     list_display = ('maternal_visit', 'report_datetime')
 
     list_filter = ('report_datetime', )
-
-#     filter_horizontal = ('malformations',)
-
-admin.site.register(MaternalUltraSoundFu, MaternalUltraSoundFuAdmin)

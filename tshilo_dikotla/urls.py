@@ -2,12 +2,12 @@
 import sys
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
-from django.conf.urls import include, url, patterns
+from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import RedirectView
 
-from edc_dashboard.subject.views import additional_requisition
+#from edc_dashboard.subject.views import additional_requisition
 from edc_sync.admin import edc_sync_admin
 
 from .load_edc import load_edc
@@ -89,8 +89,8 @@ urlpatterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^{app_name}/dashboard/'.format(app_name=APP_NAME),
         include('{app_name}_dashboard.urls'.format(app_name=APP_NAME))),
-    url(r'^{app_name}/dashboard/visit/add_requisition/'.format(app_name=APP_NAME),
-        additional_requisition, name="add_requisition"),
+    #url(r'^{app_name}/dashboard/visit/add_requisition/'.format(app_name=APP_NAME),
+    #    additional_requisition, name="add_requisition"),
     url(r'^{app_name}/login/'.format(app_name=APP_NAME),
         'django.contrib.auth.views.login',
         name='{app_name}_login'.format(app_name=APP_NAME)),

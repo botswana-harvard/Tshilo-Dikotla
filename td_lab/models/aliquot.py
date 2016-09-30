@@ -5,30 +5,30 @@ from django.db import models
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-from edc_lab.lab_aliquot.model_mixins import AliquotModelMixin
-from edc_lab.lab_aliquot.managers import AliquotManager
+from edc_lab.aliquot.model_mixins import AliquotModelMixin
+from edc_lab.aliquot.managers import AliquotManager
 
-from .aliquot_condition import AliquotCondition
-from .aliquot_type import AliquotType
-from .receive import Receive
+# from .aliquot_condition import AliquotCondition
+# from .aliquot_type import AliquotType
+# from .receive import Receive
 
 
 class Aliquot(SyncModelMixin, AliquotModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
-    receive = models.ForeignKey(
-        Receive,
-        editable=False)
-
-    aliquot_type = models.ForeignKey(
-        AliquotType,
-        verbose_name="Aliquot Type",
-        null=True)
-
-    aliquot_condition = models.ForeignKey(
-        AliquotCondition,
-        verbose_name="Aliquot Condition",
-        null=True,
-        blank=True)
+#     receive = models.ForeignKey(
+#         Receive,
+#         editable=False)
+# 
+#     aliquot_type = models.ForeignKey(
+#         AliquotType,
+#         verbose_name="Aliquot Type",
+#         null=True)
+# 
+#     aliquot_condition = models.ForeignKey(
+#         AliquotCondition,
+#         verbose_name="Aliquot Condition",
+#         null=True,
+#         blank=True)
 
     objects = AliquotManager()
 
@@ -81,6 +81,6 @@ class Aliquot(SyncModelMixin, AliquotModelMixin, ExportTrackingFieldsMixin, Base
         })
         return label_context
 
-    class Meta:
+    class Meta(AliquotModelMixin.Meta):
         app_label = 'td_lab'
         unique_together = (('receive', 'count'), )

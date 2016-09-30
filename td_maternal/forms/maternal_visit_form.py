@@ -3,10 +3,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
 from edc_base.form.old_forms import BaseModelForm
-from edc_constants.constants import ON_STUDY, MISSED_VISIT
-from edc_visit_tracking.forms import VisitFormMixin
+from edc_constants.constants import ON_STUDY
+from edc_visit_tracking.form_mixins import VisitFormMixin
+from edc_visit_tracking.choices import VISIT_REASON, MISSED_VISIT
 
-from tshilo_dikotla.choices import VISIT_REASON, VISIT_INFO_SOURCE, MATERNAL_VISIT_STUDY_STATUS
+from tshilo_dikotla.choices import VISIT_INFO_SOURCE, MATERNAL_VISIT_STUDY_STATUS
 
 from ..models import MaternalVisit, MaternalUltraSoundInitial
 

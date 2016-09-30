@@ -4,13 +4,14 @@ from collections import OrderedDict
 from td_registration.models import RegisteredSubject
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
 from ..forms import AntenatalVisitMembershipForm
 from ..models import AntenatalVisitMembership
 
 
-class AntenataVisitMembershipAdmin(MembershipBaseModelAdmin):
+@admin.register(AntenatalVisitMembership)
+class AntenataVisitMembershipAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     dashboard_type = 'maternal'
     form = AntenatalVisitMembershipForm
@@ -45,5 +46,3 @@ class AntenataVisitMembershipAdmin(MembershipBaseModelAdmin):
                 except ValueError:
                     self.readonly_fields.append('registered_subject')
         return super(AntenataVisitMembershipAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-admin.site.register(AntenatalVisitMembership, AntenataVisitMembershipAdmin)

@@ -6,7 +6,8 @@ from ..models import MaternalSubstanceUseDuringPreg
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalSubstanceUseDuringPregAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalSubstanceUseDuringPreg)
+class MaternalSubstanceUseDuringPregAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalSubstanceUseDuringPregForm
 
@@ -26,5 +27,3 @@ class MaternalSubstanceUseDuringPregAdmin(BaseMaternalModelAdmin):
         'alcohol_during_preg_freq': admin.VERTICAL,
         'marijuana_during_preg': admin.VERTICAL,
         'marijuana_during_preg_freq': admin.VERTICAL}
-
-admin.site.register(MaternalSubstanceUseDuringPreg, MaternalSubstanceUseDuringPregAdmin)

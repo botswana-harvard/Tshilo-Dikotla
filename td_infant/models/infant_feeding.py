@@ -4,10 +4,10 @@ from edc_base.model.fields.custom_fields import OtherCharField
 from edc_base.model.validators import date_not_future
 from edc_constants.choices import YES_NO, YES_NO_NA, YES_NO_UNSURE_NA
 from edc_constants.constants import NOT_APPLICABLE
-from edc_visit_schedule.models import VisitDefinition
 
 from tshilo_dikotla.choices import COWS_MILK, TIMES_BREASTFED, WATER_USED
 
+# from td_infant.infant_visit_schedule import site_visit_schedules
 from .infant_crf_model import InfantCrfModel
 
 
@@ -207,22 +207,19 @@ class InfantFeeding(InfantCrfModel):
     @property
     def previous_infant_feeding(self):
         """ Return previous infant feeding from. """
-        visit_def = VisitDefinition.objects.all()
-        visit = []
-        for x in visit_def:
-            visit.append(x.code)
-
-        if not (self.infant_visit.appointment.visit_definition.code in ['2000', '2010']):
-            prev_visit_index = visit.index(self.infant_visit.appointment.visit_definition.code) - 1
-            registered_subject = self.infant_visit.appointment.registered_subject
-            while prev_visit_index > 0:
-                try:
-                    return InfantFeeding.objects.get(
-                        infant_visit__appointment__registered_subject=registered_subject,
-                        infant_visit__appointment__visit_definition__code=visit[prev_visit_index]
-                    ).report_datetime.date()
-                except InfantFeeding.DoesNotExist:
-                    prev_visit_index = prev_visit_index - 1
+#         visit_schedule = site_visit_schedules.get_schedule('Infant Enrollment')
+# 
+#         if not (self.infant_visit.appointment.visit_code in ['2000', '2010']):
+#             visit_code = self.infant_visit.appointment.visit_code
+#             registered_subject = self.infant_visit.appointment.registered_subject
+#             while visit_code != '2010':
+#                 try:
+#                     return InfantFeeding.objects.get(
+#                         infant_visit__appointment__registered_subject=registered_subject,
+#                         infant_visit__appointment__visit_code=visit_schedule.get_previous_visit(visit_code)
+#                     ).report_datetime.date()
+#                 except InfantFeeding.DoesNotExist:
+#                     visit_code = visit_schedule.get_previous_visit(visit_code).code
         return None
 
     class Meta:

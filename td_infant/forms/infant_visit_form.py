@@ -3,9 +3,10 @@ from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRender
 
 from edc_base.form.old_forms import BaseModelForm
 from edc_constants.constants import ON_STUDY
-from edc_visit_tracking.forms import VisitFormMixin
+from edc_visit_tracking.form_mixins import VisitFormMixin
+from edc_visit_tracking.choices import VISIT_REASON
 
-from tshilo_dikotla.choices import VISIT_REASON, VISIT_INFO_SOURCE, INFANT_VISIT_STUDY_STATUS, INFO_PROVIDER
+from tshilo_dikotla.choices import VISIT_INFO_SOURCE, INFANT_VISIT_STUDY_STATUS, INFO_PROVIDER
 from td_maternal.models import MaternalConsent, MaternalDeathReport
 
 from ..models import InfantVisit

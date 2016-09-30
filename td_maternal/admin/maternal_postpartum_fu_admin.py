@@ -5,7 +5,8 @@ from ..models import MaternalPostPartumFu
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalPostPartumFuAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalPostPartumFu)
+class MaternalPostPartumFuAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalPostPartumFuForm
     fields = ('maternal_visit',
@@ -25,5 +26,3 @@ class MaternalPostPartumFuAdmin(BaseMaternalModelAdmin):
                     'hospitalized': admin.VERTICAL,
                     'has_who_dx': admin.VERTICAL}
     filter_horizontal = ('who', 'diagnoses', 'hospitalization_reason')
-
-admin.site.register(MaternalPostPartumFu, MaternalPostPartumFuAdmin)

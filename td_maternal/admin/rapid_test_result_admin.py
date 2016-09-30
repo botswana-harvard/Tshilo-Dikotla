@@ -5,7 +5,8 @@ from ..models import RapidTestResult
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class RapidTestResultAdmin(BaseMaternalModelAdmin):
+@admin.register(RapidTestResult)
+class RapidTestResultAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     fields = ('maternal_visit',
               'rapid_test_done',
               'result_date',
@@ -18,5 +19,3 @@ class RapidTestResultAdmin(BaseMaternalModelAdmin):
     search_fields = ('result_date', )
     radio_fields = {"rapid_test_done": admin.VERTICAL,
                     "result": admin.VERTICAL, }
-
-admin.site.register(RapidTestResult, RapidTestResultAdmin)

@@ -6,7 +6,8 @@ from ..models import MaternalDeathReport
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalDeathReportAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalDeathReport)
+class MaternalDeathReportAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalDeathReportForm
     fields = (
@@ -36,5 +37,3 @@ class MaternalDeathReportAdmin(BaseMaternalModelAdmin):
         "diagnosis_code": admin.VERTICAL,
         "medical_responsibility": admin.VERTICAL,
         "reason_hospitalized": admin.VERTICAL}
-
-admin.site.register(MaternalDeathReport, MaternalDeathReportAdmin)

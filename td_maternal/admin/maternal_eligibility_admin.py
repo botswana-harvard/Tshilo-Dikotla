@@ -4,13 +4,14 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
 from ..forms import MaternalEligibilityForm
 from ..models import MaternalEligibility
 
 
-class MaternalEligibilityAdmin(BaseModelAdmin):
+@admin.register(MaternalEligibility)
+class MaternalEligibilityAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     form = MaternalEligibilityForm
 
@@ -39,5 +40,3 @@ class MaternalEligibilityAdmin(BaseModelAdmin):
                  'dob': 'registered_subject__dob',
                  }),
         )]
-
-admin.site.register(MaternalEligibility, MaternalEligibilityAdmin)

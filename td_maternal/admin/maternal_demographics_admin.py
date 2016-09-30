@@ -6,7 +6,8 @@ from ..models import MaternalDemographics
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalDemographicsAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalDemographics)
+class MaternalDemographicsAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalDemographicsForm
 #     fields = ('maternal_visit',
@@ -54,5 +55,3 @@ class MaternalDemographicsAdmin(BaseMaternalModelAdmin):
                     'toilet_facility': admin.VERTICAL,
                     'house_type': admin.VERTICAL}
 #     filter_horizontal = ('hh_goods',)
-
-admin.site.register(MaternalDemographics, MaternalDemographicsAdmin)

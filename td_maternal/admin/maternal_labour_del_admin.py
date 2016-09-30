@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from td_registration.models import RegisteredSubject
 
-from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
 from ..forms import MaternalLabourDelForm, MaternalHivInterimHxForm
 from ..models import MaternalLabourDel, MaternalHivInterimHx
@@ -10,11 +10,12 @@ from ..models import MaternalLabourDel, MaternalHivInterimHx
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
-    
+@admin.register(MaternalLabourDel)
+class MaternalLabourDelAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
+
     dashboard_type = 'maternal'
     form = MaternalLabourDelForm
-    
+
     list_display = ('registered_subject',
                     'delivery_datetime',
                     'labour_hrs',
@@ -42,21 +43,18 @@ class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
                     id__exact=request.GET.get('registered_subject', 0))
             else:
                 self.readonly_fields = list(self.readonly_fields)
-#                 try:
-#                     self.readonly_fields.index('registered_subject')
-#                 except ValueError:
-#                     self.readonly_fields.append('registered_subject')
+                # try:
+                #    self.readonly_fields.index('registered_subject')
+                # except ValueError:
+                #    self.readonly_fields.append('registered_subject')
         return super(MaternalLabourDelAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-admin.site.register(MaternalLabourDel, MaternalLabourDelAdmin)
 
-
-class MaternalHivInterimHxAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalHivInterimHx)
+class MaternalHivInterimHxAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalHivInterimHxForm
 
     radio_fields = {'has_cd4': admin.VERTICAL,
                     'has_vl': admin.VERTICAL,
                     'vl_detectable': admin.VERTICAL}
-
-admin.site.register(MaternalHivInterimHx, MaternalHivInterimHxAdmin)

@@ -3,7 +3,7 @@ from edc_visit_schedule.visit_schedule import VisitSchedule
 from edc_visit_schedule.visit import Crf, Requisition
 from edc_visit_schedule.schedule import Schedule
 
-from tshilo_dikotla.td_infant_lab_profiles import (
+from td_infant.td_infant_lab_profiles import (
     infant_birth_pbmc_pl_panel, infant_glucose_panel, infant_birth_insulin_panel,
     infant_pp1_heu_pbmc_pl_panel, infant_pp1_huu_pbmc_pl_panel, infant_pp1_insulin_panel,
     infant_heelstick_panel, infant_pp18_huu_pbmc_pl_panel, infant_pp18_heu_insulin_panel,
@@ -158,8 +158,8 @@ infant_birth_schedule.add_visit(
 infant_birth_schedule.add_visit(
     code='2360',
     title='Infant 36 Month Visit',
-    timepoint=0,
-    base_interval=0,
+    timepoint=8,
+    base_interval=8,
     requisitions=infant_36month_requisitions,
     crfs=infant_followup_crfs)
 infant_visit_schedule.add_schedule(infant_birth_schedule)

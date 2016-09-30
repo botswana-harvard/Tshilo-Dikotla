@@ -5,7 +5,8 @@ from ..forms import MaternalOffStudyForm
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalOffStudyAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalOffStudy)
+class MaternalOffStudyAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalOffStudyForm
 
@@ -16,5 +17,3 @@ class MaternalOffStudyAdmin(BaseMaternalModelAdmin):
         'reason',
         'reason_other',
         'comment')
-
-admin.site.register(MaternalOffStudy, MaternalOffStudyAdmin)

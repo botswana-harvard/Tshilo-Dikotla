@@ -5,7 +5,8 @@ from ..forms import MaternalRandomizationForm
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MartenalRandoAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalRando)
+class MartenalRandoAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalRandomizationForm
 
@@ -23,5 +24,3 @@ class MartenalRandoAdmin(BaseMaternalModelAdmin):
         'site',
         'randomization_datetime')
     radio_fields = {"delivery_clinic": admin.VERTICAL, }
-
-admin.site.register(MaternalRando, MartenalRandoAdmin)

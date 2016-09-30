@@ -5,8 +5,7 @@ from django.utils import timezone
 from edc_constants.constants import YES, NO, NOT_APPLICABLE
 from tshilo_dikotla.utils import weeks_between
 
-from ..models import (MaternalArvPreg, MaternalArv, MaternalLifetimeArvHistory, PostnatalEnrollment,
-                      AntenatalEnrollment)
+from ..models import (MaternalArvPreg, MaternalArv, MaternalLifetimeArvHistory, AntenatalEnrollment)
 
 from .base_maternal_model_form import BaseMaternalModelForm
 

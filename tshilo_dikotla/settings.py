@@ -68,53 +68,51 @@ INSTALLED_APPS = [
     'django_js_reverse',
     'corsheaders',
     'crispy_forms',
-    'edc_templates',  # for what?
-    'edc_configuration',  # ???
-    'edc_identifier.apps.AppConfig',
+#     'edc_templates',  # for what?
+#     'edc_configuration',  # ???
     'edc_appointment.apps.AppConfig',
     'django_revision.apps.AppConfig',
-    'edc_sync.apps.AppConfig',
     'django_crypto_fields.apps.AppConfig',
     'edc_call_manager.apps.AppConfig',
     'django_appconfig_ini',
-    # 'edc_code_lists',
-    # 'edc_constants',
-    # 'edc_lab.lab_clinic_api',
-    # 'edc_lab.lab_clinic_reference',
-    # 'edc_lab.lab_packing',
     'edc_content_type_map.apps.AppConfig',
-    'edc_dashboard.apps.AppConfig',
+#     'edc_dashboard.apps.AppConfig',
     # 'edc_data_manager.apps.AppConfig', # not ready
+    'edc_lab',
     'edc_death_report.apps.AppConfig',
     'edc_device.apps.AppConfig',
     'edc_locator.apps.AppConfig',
     'edc_metadata.apps.AppConfig',
     'edc_offstudy.apps.AppConfig',
     'edc_rule_groups.apps.AppConfig',
+    'edc_sync_files.apps.AppConfig',
     'td_call_manager.apps.AppConfig',
-    'td_dashboard.apps.AppConfig',
+#     'td_dashboard.apps.AppConfig',
     'td_infant.apps.AppConfig',
     'td_lab.apps.AppConfig',
     'td_list.apps.AppConfig',
     'td_maternal.apps.AppConfig',
     'td_registration.apps.AppConfig',
+    'edc_visit_schedule.apps.AppConfig',
+    'edc_visit_tracking.apps.AppConfig',
     'tshilo_dikotla.apps.EdcProtocolAppConfig',
     'tshilo_dikotla.apps.EdcBaseAppConfig',
     'tshilo_dikotla.apps.EdcConsentAppConfig',
     'tshilo_dikotla.apps.EdcLabelAppConfig',
     'tshilo_dikotla.apps.EdcRegistrationAppConfig',
+    'tshilo_dikotla.apps.EdcSyncAppConfig',
     'tshilo_dikotla.apps.AppConfig',
-    'edc_visit_schedule.apps.AppConfig',
-    'edc_visit_tracking.apps.AppConfig',
+    'edc_identifier.apps.AppConfig',
 ]
 
 if 'test' in sys.argv:
     # TODO: Make this list auto generate from INSTALLED_APPS
     # Ignore running migrations on unit tests, greately speeds up tests.
-    MIGRATION_MODULES = {"edc_registration": None,
+    MIGRATION_MODULES = {"td_lab": None,
+                         "td_infant": None,
+                         "td_maternal": None,
+                         "edc_registration": None,
                          "edc_content_type_map": None,
-                         "edc_visit_schedule": None,
-                         "edc_visit_tracking": None,
                          "edc_appointment": None,
                          "call_manager": None,
                          "edc_death_report": None,
@@ -131,22 +129,10 @@ if 'test' in sys.argv:
                          "edc_sync": None,
                          "edc_code_lists": None,
                          "edc_configuration": None,
-                         "td_lab": None,
-                         "td_infant": None,
-                         "td_maternal": None,
                          "td_list": None,
-                         "call_manager": None}
-
-
-# MIDDLEWARE_CLASSES = (
-#     'django.contrib.sessions.middleware.SessionMiddleware',
-#     'django.middleware.locale.LocaleMiddleware',
-#     'django.middleware.common.CommonMiddleware',
-#     'django.middleware.csrf.CsrfViewMiddleware',
-#     'django.contrib.auth.middleware.AuthenticationMiddleware',
-#     'django.contrib.messages.middleware.MessageMiddleware',
-#     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-#     'simple_history.middleware.HistoryRequestMiddleware',)
+                         "call_manager": None,
+                         "edc_visit_schedule": None,
+                         "edc_visit_tracking": None}
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -200,17 +186,6 @@ TEMPLATES = [
 ]
 
 
-
-# Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 if socket.gethostname() in DEVELOPER_HOSTS:
     DATABASES = {
         'default': {
@@ -257,9 +232,6 @@ STATICFILES_FINDERS = (
 GIT_DIR = BASE_DIR.ancestor(1)
 
 STUDY_OPEN_DATETIME = timezone.datetime(2015, 10, 18, 0, 0, 0)
-
-APP_LABEL = 'tshilo_dikotla'
-LABEL_PRINTER_MAKE_AND_MODEL = ['Zebra ZPL Label Printer']
 
 SUBJECT_APP_LIST = ['maternal', 'infant']
 SUBJECT_TYPES = ['maternal', 'infant']

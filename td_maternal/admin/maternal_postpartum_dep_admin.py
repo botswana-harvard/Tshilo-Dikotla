@@ -5,7 +5,8 @@ from ..models import MaternalPostPartumDep
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalPostPartumDepAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalPostPartumDep)
+class MaternalPostPartumDepAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalPostPartumDepForm
     list_display = ('maternal_visit', 'laugh', 'enjoyment', 'blame')
@@ -19,5 +20,3 @@ class MaternalPostPartumDepAdmin(BaseMaternalModelAdmin):
                     'sad': admin.VERTICAL,
                     'crying': admin.VERTICAL,
                     'self_harm': admin.VERTICAL}
-
-admin.site.register(MaternalPostPartumDep, MaternalPostPartumDepAdmin)

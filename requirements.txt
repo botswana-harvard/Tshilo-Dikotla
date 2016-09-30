@@ -31,8 +31,10 @@ git+https://github.com/botswana-harvard/edc-templates@develop#egg=edc_templates
 git+https://github.com/botswana-harvard/edc-timepoint@develop#egg=edc_timepoint
 git+https://github.com/botswana-harvard/edc-visit-schedule@develop#egg=edc_visit_schedule
 git+https://github.com/botswana-harvard/edc-visit-tracking@develop#egg=edc_visit_tracking
-git+https://github.com/botswana-harvard/lab-requisition@develop#egg=lab_requisition
+# git+https://github.com/botswana-harvard/lab-requisition@develop#egg=lab_requisition
 git+https://github.com/botswana-harvard/lis@develop#egg=lis
 git+https://github.com/erikvw/django-appconfig-ini@develop#egg=django_appconfig_ini
 git+https://github.com/erikvw/django-crypto-fields@develop#egg=django_crypto_fields
 git+https://github.com/erikvw/django-revision@develop#egg=django_revision
+pandas
+celery

@@ -4,7 +4,7 @@ from edc_base.model.fields.custom_fields import OtherCharField
 from edc_base.model.models import BaseUuidModel
 from edc_constants.choices import DRUG_ROUTE
 from edc_constants.choices import YES_NO
-from edc_visit_tracking.models import CrfInlineModelMixin
+from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from tshilo_dikotla.choices import MEDICATIONS

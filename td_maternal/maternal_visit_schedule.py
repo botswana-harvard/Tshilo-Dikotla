@@ -98,7 +98,8 @@ maternal_visit_schedule = VisitSchedule(
 # antenatal enrollment schedule
 maternal_antenatal_enrollment = Schedule(
     name='enrollment visit schedule',
-    enrollment_model='td_maternal.antenatalenrollment')
+    #enrollment_model='td_maternal.antenatalenrollment')
+    enrollment_model='')
 
 maternal_antenatal_enrollment.add_visit(
     code='1000M',

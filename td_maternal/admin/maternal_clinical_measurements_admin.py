@@ -6,19 +6,17 @@ from ..models import MaternalClinicalMeasurementsOne, MaternalClinicalMeasuremen
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalClinicalMeasurementsOneAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalClinicalMeasurementsOne)
+class MaternalClinicalMeasurementsOneAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalClinicalMeasurementsOneForm
 
     list_display = ('weight_kg', 'height', 'systolic_bp', 'diastolic_bp')
 
-admin.site.register(MaternalClinicalMeasurementsOne, MaternalClinicalMeasurementsOneAdmin)
 
-
-class MaternalClinicalMeasurementsTwoAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalClinicalMeasurementsTwo)
+class MaternalClinicalMeasurementsTwoAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalClinicalMeasurementsTwoForm
 
     list_display = ('weight_kg', 'systolic_bp', 'diastolic_bp')
-
-admin.site.register(MaternalClinicalMeasurementsTwo, MaternalClinicalMeasurementsTwoAdmin)

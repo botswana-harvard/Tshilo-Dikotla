@@ -9,7 +9,8 @@ from ..models import MaternalUltraSoundInitial
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalUltraSoundInitial)
+class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalUltraSoundInitialForm
 
@@ -20,7 +21,6 @@ class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin):
               'hc',
               'ac',
               'fl',
-#               'hl',
               'ga_by_lmp',
               'ga_by_ultrasound_wks',
               'ga_by_ultrasound_days',
@@ -28,10 +28,6 @@ class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin):
               'est_fetal_weight',
               'est_edd_ultrasound',
               'edd_confirmed',
-#               'lateral_ventricle',
-#               'cerebellum',
-#               'cistema_magna',
-#               'malformations',
               'amniotic_fluid_volume')
 
     readonly_fields = ('edd_confirmed', 'ga_confirmed', 'ga_by_lmp')
@@ -43,6 +39,3 @@ class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin):
                     'ga_confirmed', 'ga_by_lmp')
 
     list_filter = ('report_datetime', 'number_of_gestations', 'ga_confrimation_method')
-#     filter_horizontal = ('malformations',)
-
-admin.site.register(MaternalUltraSoundInitial, MaternalUltraSoundInitialAdmin)

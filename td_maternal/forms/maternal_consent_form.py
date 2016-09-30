@@ -7,7 +7,7 @@ from django.forms.utils import ErrorList
 from django.utils import timezone
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
-from edc_consent.forms.base_consent_form import BaseConsentForm
+from edc_consent.form_mixins import ConsentFormMixin
 from edc_constants.constants import FEMALE, OMANG, OTHER
 
 from tshilo_dikotla.choices import STUDY_SITES
@@ -15,7 +15,7 @@ from tshilo_dikotla.choices import STUDY_SITES
 from ..models import MaternalConsent, MaternalEligibility
 
 
-class MaternalConsentForm(BaseConsentForm):
+class MaternalConsentForm(ConsentFormMixin):
 
     study_site = forms.ChoiceField(
         label='Study site',

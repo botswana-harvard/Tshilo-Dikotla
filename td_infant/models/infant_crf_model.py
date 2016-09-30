@@ -2,10 +2,10 @@ from django.db import models
 
 from edc_base.model.models import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
-from edc_meta_data.managers import CrfMetaDataManager
+# from edc_meta_data.managers import CrfMetaDataManager
 from edc_offstudy.model_mixins import OffStudyMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-from edc_visit_tracking.models import CrfModelMixin
+from edc_visit_tracking.model_mixins import CrfModelMixin
 
 from ..managers import InfantVisitCrfManager
 from .infant_visit import InfantVisit
@@ -23,7 +23,7 @@ class InfantCrfModel(CrfModelMixin, SyncModelMixin, OffStudyMixin, ExportTrackin
     history = SyncHistoricalRecords()
 
     objects = InfantVisitCrfManager()
-    entry_meta_data_manager = CrfMetaDataManager(InfantVisit)
+#     entry_meta_data_manager = CrfMetaDataManager(InfantVisit)
 
     def __str__(self):
         return "{}: {}".format(self.__class__._meta.model_name,

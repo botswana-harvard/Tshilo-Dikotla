@@ -3,7 +3,7 @@ from django.db import models
 from edc_constants.choices import YES_NO
 from edc_base.model.models import BaseUuidModel
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-from edc_visit_tracking.models import CrfInlineModelMixin
+from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from tshilo_dikotla.choices import DX_INFANT
 

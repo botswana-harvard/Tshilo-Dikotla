@@ -5,7 +5,8 @@ from django.utils import timezone
 from datetime import date
 
 from edc_constants.constants import (YES, NEG, NOT_APPLICABLE, POS, NO,
-                                     SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
+                                     CONTINUOUS, STOPPED, RESTARTED)
+from edc_visit_tracking.constants import SCHEDULED
 from td_appointment.models import Appointment
 
 from td_maternal.models import MaternalVisit

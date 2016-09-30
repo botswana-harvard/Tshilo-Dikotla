@@ -5,7 +5,7 @@ from edc_base.modeladmin.mixins import (ModelAdminChangelistModelButtonMixin, Mo
                                         ModelAdminAuditFieldsMixin)
 from simple_history.admin import SimpleHistoryAdmin
 
-from call_manager.models import Call
+from td_call_manager.models import Call
 from td_maternal.models import PotentialCall
 
 

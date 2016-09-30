@@ -2,11 +2,11 @@ from collections import OrderedDict
 
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 from ..models import MaternalVisit
 
 
-class BaseMaternalModelAdmin(MembershipBaseModelAdmin):
+class BaseMaternalModelAdmin(EdcBaseModelAdminMixin):
 
     dashboard_type = 'maternal'
     visit_model_name = 'maternalvisit'

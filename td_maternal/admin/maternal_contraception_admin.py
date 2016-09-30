@@ -6,7 +6,8 @@ from ..forms import MaternalContraceptionForm
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalContraceptionAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalContraception)
+class MaternalContraceptionAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalContraceptionForm
 
@@ -42,5 +43,3 @@ class MaternalContraceptionAdmin(BaseMaternalModelAdmin):
                     'pap_smear_result_status': admin.VERTICAL,
                     'srh_referral': admin.VERTICAL}
     filter_horizontal = ('contraceptive_relative', 'contr',)
-
-admin.site.register(MaternalContraception, MaternalContraceptionAdmin)

@@ -6,7 +6,8 @@ from ..models import MaternalSubstanceUsePriorPreg
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalSubstanceUsePriorPregAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalSubstanceUsePriorPreg)
+class MaternalSubstanceUsePriorPregAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalSubstanceUsePriorPregForm
 
@@ -27,5 +28,3 @@ class MaternalSubstanceUsePriorPregAdmin(BaseMaternalModelAdmin):
         'marijuana_prior_preg': admin.VERTICAL,
         'marijuana_prior_preg_freq': admin.VERTICAL
     }
-
-admin.site.register(MaternalSubstanceUsePriorPreg, MaternalSubstanceUsePriorPregAdmin)

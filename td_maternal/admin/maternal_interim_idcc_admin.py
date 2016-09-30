@@ -4,14 +4,15 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
 from ..forms import MaternalInterimIdccForm
 from ..models import MaternalInterimIdcc
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalInterimIdccAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalInterimIdcc)
+class MaternalInterimIdccAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalInterimIdccForm
 
@@ -21,5 +22,3 @@ class MaternalInterimIdccAdmin(BaseMaternalModelAdmin):
     list_display = ('report_datetime', 'recent_cd4', 'value_vl',)
 
     list_filter = ('info_since_lastvisit', 'recent_cd4_date', 'value_vl_size', 'recent_vl_date')
-
-admin.site.register(MaternalInterimIdcc, MaternalInterimIdccAdmin)

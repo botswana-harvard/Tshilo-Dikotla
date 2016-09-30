@@ -4,7 +4,7 @@ from edc_base.model.fields import OtherCharField
 from edc_constants.choices import YES_NO_UNKNOWN
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import date_not_future
-from edc_visit_tracking.models import CrfInlineModelMixin
+from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from tshilo_dikotla.choices import REASONS_VACCINES_MISSED

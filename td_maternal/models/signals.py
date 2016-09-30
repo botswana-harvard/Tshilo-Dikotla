@@ -7,7 +7,7 @@ from td_registration.models import RegisteredSubject
 from td_appointment.models import Appointment
 from edc_constants.constants import (
     FEMALE, SCREENED, CONSENTED, FAILED_ELIGIBILITY, ALIVE, OFF_STUDY, ON_STUDY)
-from td_maternal.maternal_visit_schedule import site_visit_schedules
+#from td_maternal.maternal_visit_schedule import site_visit_schedules
 from edc_identifier.subject.classes import InfantIdentifier
 from edc_visit_tracking.constants import SCHEDULED
 
@@ -121,22 +121,23 @@ def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
         try:
             if not instance.is_eligible and not instance.pending_ultrasound:
                 report_datetime = instance.report_datetime
-                visit_schedule = site_visit_schedules.visit_schedules.get(code=instance.off_study_visit_code)
-                appointment = Appointment.objects.get(
-                    registered_subject=instance.registered_subject,
-                    visit_code=visit_schedule)
-                maternal_visit = MaternalVisit.objects.get(appointment=appointment)
-                if maternal_visit.reason != FAILED_ELIGIBILITY:
-                    maternal_visit.reason = FAILED_ELIGIBILITY
-                    maternal_visit.study_status = OFF_STUDY
-                    maternal_visit.save()
+#                 visit_schedule = site_visit_schedules.visit_schedules.get(code=instance.off_study_visit_code)
+#                 appointment = Appointment.objects.get(
+#                     registered_subject=instance.registered_subject,
+#                     visit_code=visit_schedule)
+#                 maternal_visit = MaternalVisit.objects.get(appointment=appointment)
+#                 if maternal_visit.reason != FAILED_ELIGIBILITY:
+#                     maternal_visit.reason = FAILED_ELIGIBILITY
+#                     maternal_visit.study_status = OFF_STUDY
+#                     maternal_visit.save()
         except MaternalVisit.DoesNotExist:
-            MaternalVisit.objects.create(
-                appointment=appointment,
-                report_datetime=report_datetime,
-                survival_status=ALIVE,
-                study_status=OFF_STUDY,
-                reason=FAILED_ELIGIBILITY)
+            pass
+#             MaternalVisit.objects.create(
+#                 appointment=appointment,
+#                 report_datetime=report_datetime,
+#                 survival_status=ALIVE,
+#                 study_status=OFF_STUDY,
+#                 reason=FAILED_ELIGIBILITY)
         except AttributeError as e:
             pass
 #             if 'is_eligible' not in str(e) and 'off_study_visit_code' not in str(e):
@@ -152,24 +153,24 @@ def put_back_on_study_from_failed_eligibility(instance):
     from off study."""
     with transaction.atomic():
         try:
-            visit_definition = VisitDefinition.objects.get(code='1000M')
-            appointment = Appointment.objects.get(
-                registered_subject=instance.registered_subject,
-                visit_definition=visit_definition)
-            maternal_visit = MaternalVisit.objects.get(
-                appointment=appointment)
-            maternal_visit.study_status = ON_STUDY
-            maternal_visit.reason = SCHEDULED
-            maternal_visit.save()
-        except MaternalVisit.DoesNotExist:
-            MaternalVisit.objects.create(
-                appointment=appointment,
-                report_datetime=instance.report_datetime,
-                survival_status=ALIVE,
-                study_status=ON_STUDY,
-                reason=SCHEDULED)
-        except VisitDefinition.DoesNotExist:
             pass
+#             visit_schedule = site_visit_schedules.visit_schedules.get(code='1000M')
+#             appointment = Appointment.objects.get(
+#                 registered_subject=instance.registered_subject,
+#                 visit_code=visit_schedule)
+#             maternal_visit = MaternalVisit.objects.get(
+#                 appointment=appointment)
+#             maternal_visit.study_status = ON_STUDY
+#             maternal_visit.reason = SCHEDULED
+#             maternal_visit.save()
+        except MaternalVisit.DoesNotExist:
+            pass
+#             MaternalVisit.objects.create(
+#                 appointment=appointment,
+#                 report_datetime=instance.report_datetime,
+#                 survival_status=ALIVE,
+#                 study_status=ON_STUDY,
+#                 reason=SCHEDULED)
         except Appointment.DoesNotExist:
             pass
 
@@ -234,5 +235,3 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
                         registration_status='DELIVERED',
                         relative_identifier=maternal_consent.subject_identifier,
                         study_site=maternal_consent.study_site)
-
-

@@ -53,7 +53,7 @@ infant_birth_insulin_panel.processing_profile = infant_birth_insulin_processing
 lab_profile.add_panel(infant_birth_insulin_panel)
 
 # infant postpartum 1 profiles
-infant_pp1_insulin_processing = ProcessingProfile('Infant Insulin', wb)
+infant_pp1_insulin_processing = ProcessingProfile('Infant Insulin 1M', wb)
 infant_pp1_insulin_processing.add_process(serum, 2)
 lab_profile.add_processing_profile(infant_pp1_insulin_processing)
 
@@ -64,7 +64,7 @@ infant_pp1_heu_pbmc_pl_processing.add_process(bc, 2)
 lab_profile.add_processing_profile(infant_pp1_heu_pbmc_pl_processing)
 
 # PBMC/ PL for HUU infants
-infant_pp1_huu_pbmc_pl_processing = ProcessingProfile('Infant PBMC PL', wb)
+infant_pp1_huu_pbmc_pl_processing = ProcessingProfile('Infant PBMC PL 1M', wb)
 infant_pp1_huu_pbmc_pl_processing.add_process(pl, 3)
 infant_pp1_huu_pbmc_pl_processing.add_process(bc, 2)
 lab_profile.add_processing_profile(infant_pp1_huu_pbmc_pl_processing)
@@ -74,12 +74,12 @@ infant_pp18_heu_insulin_processing = ProcessingProfile('Infant Insulin HIV Elisa
 infant_pp18_heu_insulin_processing.add_process(serum, 3)
 lab_profile.add_processing_profile(infant_pp18_heu_insulin_processing)
 
-infant_pp18_huu_insulin_processing = ProcessingProfile('Infant Insulin', wb)
+infant_pp18_huu_insulin_processing = ProcessingProfile('Infant Insulin 18M', wb)
 infant_pp18_huu_insulin_processing.add_process(serum, 2)
 lab_profile.add_processing_profile(infant_pp18_huu_insulin_processing)
 
 # PBMC/ PL and PCR for HEU infants
-infant_pp18_pbmc_pl_processing = ProcessingProfile('Infant PBMC PL', wb)
+infant_pp18_pbmc_pl_processing = ProcessingProfile('Infant PBMC PL 18M', wb)
 infant_pp18_pbmc_pl_processing.add_process(pl, 2)
 infant_pp18_pbmc_pl_processing.add_process(bc, 2)
 lab_profile.add_processing_profile(infant_pp18_pbmc_pl_processing)
@@ -88,12 +88,12 @@ infant_heu_heel_stick_processing = ProcessingProfile('Infant Heelstick', wb)
 lab_profile.add_processing_profile(infant_heu_heel_stick_processing)
 
 # infant postpartum 36 profiles
-infant_pp36_insulin_processing = ProcessingProfile('Infant Insulin', wb)
-infant_pp36_insulin_processing.add_process(serum, 2)
+infant_pp36_insulin_processing = ProcessingProfile('Infant Insulin 36M', wb)
+infant_pp36_insulin_processing.add_process(serum, 3)
 lab_profile.add_processing_profile(infant_pp36_insulin_processing)
 
 # PBMC/ PL and PCR for HEU infants
-infant_pp36_pbmc_pl_processing = ProcessingProfile('Infant PBMC PL', wb)
+infant_pp36_pbmc_pl_processing = ProcessingProfile('Infant PBMC PL 36M', wb)
 infant_pp36_pbmc_pl_processing.add_process(pl, 4)
 infant_pp36_pbmc_pl_processing.add_process(bc, 4)
 lab_profile.add_processing_profile(infant_pp36_pbmc_pl_processing)
@@ -103,11 +103,11 @@ infant_pp1_heu_pbmc_pl_panel = RequisitionPanel('Infant HIV PCR PBMC PL', wb)  #
 infant_pp1_heu_pbmc_pl_panel.processing_profile = infant_pp1_heu_pbmc_pl_processing
 lab_profile.add_panel(infant_pp1_heu_pbmc_pl_panel)
 
-infant_pp1_huu_pbmc_pl_panel = RequisitionPanel('Infant PBMC PL', wb)  # link this to the visit_schedule
+infant_pp1_huu_pbmc_pl_panel = RequisitionPanel('Infant PBMC PL 1M', wb)  # link this to the visit_schedule
 infant_pp1_huu_pbmc_pl_panel.processing_profile = infant_pp1_huu_pbmc_pl_processing
 lab_profile.add_panel(infant_pp1_huu_pbmc_pl_panel)
 
-infant_pp1_insulin_panel = RequisitionPanel('Infant Insulin', wb)
+infant_pp1_insulin_panel = RequisitionPanel('Infant Insulin 1M', wb)
 infant_pp1_insulin_panel.processing_profile = infant_pp1_insulin_processing
 lab_profile.add_panel(infant_pp1_insulin_panel)
 
@@ -116,7 +116,7 @@ infant_heelstick_panel.processing_profile = infant_heu_heel_stick_processing
 lab_profile.add_panel(infant_heelstick_panel)
 
 # infant post partum 18 requisitions
-infant_pp18_huu_pbmc_pl_panel = RequisitionPanel('Infant PBMC PL', wb)  # link this to the visit_schedule
+infant_pp18_huu_pbmc_pl_panel = RequisitionPanel('Infant PBMC PL 18M', wb)  # link this to the visit_schedule
 infant_pp18_huu_pbmc_pl_panel.processing_profile = infant_pp18_pbmc_pl_processing
 lab_profile.add_panel(infant_pp18_huu_pbmc_pl_panel)
 
@@ -124,16 +124,16 @@ infant_pp18_heu_insulin_panel = RequisitionPanel('Infant Insulin HIV Elisa', wb)
 infant_pp18_heu_insulin_panel.processing_profile = infant_pp18_heu_insulin_processing
 lab_profile.add_panel(infant_pp18_heu_insulin_panel)
 
-infant_pp18_huu_insulin_panel = RequisitionPanel('Infant Insulin', wb)
+infant_pp18_huu_insulin_panel = RequisitionPanel('Infant Insulin 18M', wb)
 infant_pp18_huu_insulin_panel.processing_profile = infant_pp18_huu_insulin_processing
 lab_profile.add_panel(infant_pp18_huu_insulin_panel)
 
 # infant post partum 36 requisitions
-infant_pp36_pbmc_pl_panel = RequisitionPanel('Infant PBMC PL', wb)  # link this to the visit_schedule
+infant_pp36_pbmc_pl_panel = RequisitionPanel('Infant PBMC PL 36M', wb)  # link this to the visit_schedule
 infant_pp36_pbmc_pl_panel.processing_profile = infant_pp36_pbmc_pl_processing
 lab_profile.add_panel(infant_pp36_pbmc_pl_panel)
 
-infant_pp36_insulin_panel = RequisitionPanel('Infant Insulin', wb)
+infant_pp36_insulin_panel = RequisitionPanel('Infant Insulin 36M', wb)
 infant_pp36_insulin_panel.processing_profile = infant_pp36_insulin_processing
 lab_profile.add_panel(infant_pp36_insulin_panel)
 

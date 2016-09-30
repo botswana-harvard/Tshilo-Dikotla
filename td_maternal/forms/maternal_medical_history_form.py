@@ -6,7 +6,7 @@ from td_registration.models import RegisteredSubject
 
 from .base_maternal_model_form import BaseMaternalModelForm
 
-from ..models import MaternalMedicalHistory, AntenatalEnrollment, PostnatalEnrollment
+from ..models import MaternalMedicalHistory, AntenatalEnrollment
 
 from td_maternal.classes import MaternalStatusHelper
 

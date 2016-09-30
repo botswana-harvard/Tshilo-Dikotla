@@ -5,7 +5,8 @@ from ..models import MaternalDiagnoses
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalDiagnosesAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalDiagnoses)
+class MaternalDiagnosesAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalDiagnosesForm
     list_display = ('maternal_visit', 'new_diagnoses', 'has_who_dx')
@@ -13,5 +14,3 @@ class MaternalDiagnosesAdmin(BaseMaternalModelAdmin):
     radio_fields = {'new_diagnoses': admin.VERTICAL,
                     'has_who_dx': admin.VERTICAL}
     filter_horizontal = ('who', 'diagnoses')
-
-admin.site.register(MaternalDiagnoses, MaternalDiagnosesAdmin)

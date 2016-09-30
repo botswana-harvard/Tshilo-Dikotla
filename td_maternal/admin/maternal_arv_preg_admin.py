@@ -3,7 +3,7 @@ from collections import OrderedDict
 from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
-from edc_base.modeladmin.admin import BaseTabularInline
+from edc_base.modeladmin.mixins import TabularInlineMixin
 
 from ..forms import MaternalArvPregForm, MaternalArvForm
 from ..models import MaternalArvPreg, MaternalArv
@@ -11,13 +11,14 @@ from ..models import MaternalArvPreg, MaternalArv
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalArvInlineAdmin(BaseTabularInline):
+class MaternalArvInlineAdmin(TabularInlineMixin):
     model = MaternalArv
     form = MaternalArvForm
     extra = 1
 
 
-class MaternalArvAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalArv)
+class MaternalArvAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     form = MaternalArvForm
 
     actions = [
@@ -63,5 +64,3 @@ class MaternalArvPregAdmin(BaseMaternalModelAdmin):
                  'dob': 'maternal_arv_preg__maternal_visit__appointment__registered_subject__dob',
                  }),
         )]
-
-admin.site.register(MaternalArvPreg, MaternalArvPregAdmin)

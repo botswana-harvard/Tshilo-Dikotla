@@ -5,5 +5,5 @@ from edc_registration.admin import RegisteredSubjectModelAdminMixin
 
 
 @admin.register(RegisteredSubject)
-class RegisteredSubjectAdmin(RegisteredSubjectModelAdminMixin):
+class RegisteredSubjectAdmin(RegisteredSubjectModelAdminMixin, admin.ModelAdmin):
     pass
