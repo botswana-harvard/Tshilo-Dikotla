@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
-from edc_base.form.old_forms import BaseModelForm
+# from edc_base.form.old_forms import BaseModelForm
 from edc_constants.constants import ON_STUDY
 from edc_visit_tracking.form_mixins import VisitFormMixin
 from edc_visit_tracking.choices import VISIT_REASON
@@ -12,7 +12,7 @@ from td_maternal.models import MaternalConsent, MaternalDeathReport
 from ..models import InfantVisit
 
 
-class InfantVisitForm(VisitFormMixin, BaseModelForm):
+class InfantVisitForm(VisitFormMixin, forms.ModelForm):
 
     participant_label = 'infant'
 

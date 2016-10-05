@@ -10,9 +10,9 @@ class ReceiveAdmin(MembershipBaseModelAdmin):
     date_hierarchy = 'receive_datetime'
 
     list_display = ("receive_identifier", "requisition", "receive_datetime", "drawn_datetime",
-                    'registered_subject', 'subject_type', 'created', 'modified', 'import_datetime')
+                    'registered_subject', 'created', 'modified', 'import_datetime')
 
-    search_fields = ('registered_subject__subject_identifier', 'subject_type',
+    search_fields = ('registered_subject__subject_identifier',
                      "receive_identifier", "requisition_identifier",)
 
     list_filter = ('created', "receive_datetime", "drawn_datetime", 'modified', 'import_datetime', )

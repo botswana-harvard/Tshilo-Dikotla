@@ -11,7 +11,7 @@ from ..models import MaternalVisit, MaternalArvPost, MaternalArvPostMed, Materna
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalArvPostModInlineAdmin(TabularInlineMixin):
+class MaternalArvPostModInlineAdmin(TabularInlineMixin, admin.TabularInline):
 
     model = MaternalArvPostMed
     form = MaternalArvPostMedForm

@@ -2,8 +2,9 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
 from td_appointment.models import Appointment
-from edc_constants.constants import (POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN,
-    FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY,SCHEDULED)
+from edc_constants.constants import (
+    POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN, FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY)
+from edc_visit_tracking.constants import SCHEDULED
 
 from .factories import (
     AntenatalEnrollmentFactory, MaternalEligibilityFactory, MaternalConsentFactory)

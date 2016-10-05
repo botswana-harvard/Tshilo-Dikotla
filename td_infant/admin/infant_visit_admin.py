@@ -11,9 +11,9 @@ from ..models import InfantVisit
 
 
 @admin.register(InfantVisit)
-class InfantVisitAdmin(VisitAdminMixin, EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, admin.ModelAdmin):
+class InfantVisitAdmin(VisitAdminMixin, DashboardRedirectUrlMixin, EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     form = InfantVisitForm
+    visit_attr = 'infant_visit'
     dashboard_type = INFANT
     requisition_model = InfantRequisition  # ??
-    visit_attr = 'infant_visit'

@@ -6,6 +6,7 @@ from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffStudyMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.model_mixins import CrfModelMixin
+from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
 
 # from ..managers import VisitCrfModelManager
 
@@ -14,7 +15,7 @@ from .maternal_visit import MaternalVisit
 
 
 class MaternalCrfModel(SyncModelMixin, CrfModelMixin, ExportTrackingFieldsMixin, OffStudyMixin,
-                       RequiresConsentMixin, BaseUuidModel):
+                       RequiresConsentMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel):
 
     """ Base model for all scheduled models (adds key to :class:`MaternalVisit`). """
 

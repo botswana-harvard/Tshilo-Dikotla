@@ -3,9 +3,9 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from edc_constants.constants import SCREENED, UNKNOWN
 from td_registration.models import RegisteredSubject
-from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES, NO, NEG, NOT_APPLICABLE
-from edc_meta_data.models import RequisitionMetaData
+from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, POS, YES, NO, NEG, NOT_APPLICABLE
 from td_appointment.models import Appointment
+from edc_visit_tracking.constants import SCHEDULED
 
 from tshilo_dikotla.constants import RANDOMIZED
 from td_maternal.models import MaternalVisit

@@ -56,6 +56,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 INSTALLED_APPS = [
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,7 +71,7 @@ INSTALLED_APPS = [
     'crispy_forms',
 #     'edc_templates',  # for what?
 #     'edc_configuration',  # ???
-    'edc_appointment.apps.AppConfig',
+#     'edc_appointment.apps.AppConfig',
     'django_revision.apps.AppConfig',
     'django_crypto_fields.apps.AppConfig',
     'edc_call_manager.apps.AppConfig',
@@ -79,6 +80,7 @@ INSTALLED_APPS = [
 #     'edc_dashboard.apps.AppConfig',
     # 'edc_data_manager.apps.AppConfig', # not ready
     'edc_lab',
+    'edc_code_lists',
     'edc_death_report.apps.AppConfig',
     'edc_device.apps.AppConfig',
     'edc_locator.apps.AppConfig',
@@ -92,17 +94,20 @@ INSTALLED_APPS = [
     'td_lab.apps.AppConfig',
     'td_list.apps.AppConfig',
     'td_maternal.apps.AppConfig',
+    'td_appointment.apps.AppConfig',
     'td_registration.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
-    'edc_visit_tracking.apps.AppConfig',
+#     'edc_visit_tracking.apps.AppConfig',
     'tshilo_dikotla.apps.EdcProtocolAppConfig',
     'tshilo_dikotla.apps.EdcBaseAppConfig',
     'tshilo_dikotla.apps.EdcConsentAppConfig',
     'tshilo_dikotla.apps.EdcLabelAppConfig',
     'tshilo_dikotla.apps.EdcRegistrationAppConfig',
+    'tshilo_dikotla.apps.EdcAppointmentAppConfig',
     'tshilo_dikotla.apps.EdcSyncAppConfig',
     'tshilo_dikotla.apps.AppConfig',
     'edc_identifier.apps.AppConfig',
+    'tshilo_dikotla.apps.EdcVisitTrackingAppConfig',
 ]
 
 if 'test' in sys.argv:

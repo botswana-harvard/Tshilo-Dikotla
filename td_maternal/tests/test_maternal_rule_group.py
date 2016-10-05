@@ -1,10 +1,11 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-from edc_constants.constants import SCREENED
-from edc_constants.constants import (
-    FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, UNKEYED, POS, NEG, YES, NO, NOT_APPLICABLE, UNK, NEW)
-from edc_meta_data.models import RequisitionMetaData, CrfMetaData
+from edc_constants.constants import (POS, NEG, YES, NO, NOT_APPLICABLE, UNK)
+from edc_metadata.constants import NOT_REQUIRED, REQUIRED, KEYED
+from td_lab.models import RequisitionMetadata
+from td_maternal.models import CrfMetadata
+from edc_visit_tracking.constants import SCHEDULED
 from td_appointment.models import Appointment
 
 from td_maternal.tests import BaseTestCase
@@ -49,8 +50,8 @@ class TestMaternalRuleGroups(BaseTestCase):
                                                    visit_definition__code='1010M')
         self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment)
         self.assertEqual(
-            CrfMetaData.objects.filter(
-                entry_status=NEW,
+            CrfMetadata.objects.filter(
+                entry_status=REQUIRED,
                 crf_entry__app_label='td_maternal',
                 crf_entry__model_name='maternalrando',
                 appointment=self.appointment).count(), 1)
@@ -78,8 +79,8 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
             registered_subject=options.get('registered_subject'))
         self.assertEqual(
-            CrfMetaData.objects.filter(
-                entry_status=NEW,
+            CrfMetadata.objects.filter(
+                entry_status=REQUIRED,
                 crf_entry__app_label='td_maternal',
                 crf_entry__model_name='maternallifetimearvhistory',
                 appointment=self.appointment).count(), 1)
@@ -108,8 +109,8 @@ class TestMaternalRuleGroups(BaseTestCase):
                                                    visit_definition__code='1010M')
         self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment)
         self.assertEqual(
-            CrfMetaData.objects.filter(
-                entry_status=NEW,
+            CrfMetadata.objects.filter(
+                entry_status=REQUIRED,
                 crf_entry__app_label='td_maternal',
                 crf_entry__model_name='maternalinterimidcc',
                 appointment=self.appointment).count(), 1)
@@ -146,8 +147,8 @@ class TestMaternalRuleGroups(BaseTestCase):
             registered_subject=self.registered_subject,
             visit_definition__code='1010M')
         self.assertEqual(
-            RequisitionMetaData.objects.filter(
-                entry_status='NEW',
+            RequisitionMetadata.objects.filter(
+                entry_status='REQUIRED',
                 lab_entry__app_label='td_lab',
                 lab_entry__model_name='maternalrequisition',
                 lab_entry__requisition_panel__name='CD4',
@@ -185,8 +186,8 @@ class TestMaternalRuleGroups(BaseTestCase):
             maternal_visit=self.antenatal_visit_2, recent_cd4=15,
             recent_cd4_date=(timezone.datetime.now() - relativedelta(weeks=2)).date())
         self.assertEqual(
-            RequisitionMetaData.objects.filter(
-                entry_status='NEW',
+            RequisitionMetadata.objects.filter(
+                entry_status='REQUIRED',
                 lab_entry__app_label='td_lab',
                 lab_entry__model_name='maternalrequisition',
                 lab_entry__requisition_panel__name='CD4',
@@ -234,8 +235,8 @@ class TestMaternalRuleGroups(BaseTestCase):
             visit_definition__code='2000M')
         self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment)
         self.assertEqual(
-            CrfMetaData.objects.filter(
-                entry_status=NEW,
+            CrfMetadata.objects.filter(
+                entry_status=REQUIRED,
                 crf_entry__app_label='td_maternal',
                 crf_entry__model_name='rapidtestresult',
                 appointment=self.appointment).count(), 1)
@@ -269,8 +270,8 @@ class TestMaternalRuleGroups(BaseTestCase):
             appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
                                                 visit_definition__code='1020M'))
         self.assertEqual(
-            RequisitionMetaData.objects.filter(
-                entry_status='NEW',
+            RequisitionMetadata.objects.filter(
+                entry_status='REQUIRED',
                 lab_entry__app_label='td_lab',
                 lab_entry__model_name='maternalrequisition',
                 lab_entry__requisition_panel__name='PBMC Plasma (STORE ONLY)',
@@ -309,8 +310,8 @@ class TestMaternalRuleGroups(BaseTestCase):
             appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
                                                 visit_definition__code='1020M'))
         self.assertEqual(
-            RequisitionMetaData.objects.filter(
-                entry_status='NEW',
+            RequisitionMetadata.objects.filter(
+                entry_status='REQUIRED',
                 lab_entry__app_label='td_lab',
                 lab_entry__model_name='maternalrequisition',
                 lab_entry__requisition_panel__name='PBMC Plasma (STORE ONLY)',
@@ -346,8 +347,8 @@ class TestMaternalRuleGroups(BaseTestCase):
                                                             live_infants_to_register=1)
         self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment)
         self.assertEqual(
-            CrfMetaData.objects.filter(
-                entry_status=NEW,
+            CrfMetadata.objects.filter(
+                entry_status=REQUIRED,
                 crf_entry__app_label='td_maternal',
                 crf_entry__model_name='maternalultrasoundinitial',
                 appointment=self.appointment).count(), 0)
@@ -377,8 +378,8 @@ class TestMaternalRuleGroups(BaseTestCase):
                                                    visit_definition__code='1010M')
         self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment)
         self.assertEqual(
-            CrfMetaData.objects.filter(
-                entry_status=NEW,
+            CrfMetadata.objects.filter(
+                entry_status=REQUIRED,
                 crf_entry__app_label='td_maternal',
                 crf_entry__model_name='maternalultrasoundinitial',
                 appointment=self.appointment).count(), 1)

@@ -2,9 +2,9 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 # from edc_consent.models import ConsentType
 from td_registration.models import RegisteredSubject
-from edc_constants.constants import (FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES,
+from edc_constants.constants import (FAILED_ELIGIBILITY, OFF_STUDY, POS, YES,
                                      NO, NOT_APPLICABLE, SCREENED)
-from edc_meta_data.models import RequisitionMetaData
+from edc_visit_tracking.constants import SCHEDULED
 
 from td_maternal.models import MaternalVisit
 

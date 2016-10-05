@@ -1,6 +1,6 @@
 import factory
 
-from django.utils import timezone
+from datetime import datetime
 
 from edc_constants.constants import YES, NO
 
@@ -12,5 +12,5 @@ class MaternalEligibilityFactory(factory.DjangoModelFactory):
     class Meta:
         model = MaternalEligibility
 
-    report_datetime = timezone.now()
+    report_datetime = datetime.today
     age_in_years = 26

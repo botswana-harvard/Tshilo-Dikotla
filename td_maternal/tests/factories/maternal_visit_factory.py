@@ -1,8 +1,8 @@
 import factory
 from django.utils import timezone
 
-from edc_appointment.tests.factories import AppointmentFactory
-from edc_constants.constants import SCHEDULED
+from .appointment_factory import AppointmentFactory
+from edc_visit_tracking.constants import SCHEDULED
 
 from td_maternal.models import MaternalVisit
 

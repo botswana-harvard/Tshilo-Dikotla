@@ -30,9 +30,9 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
         cleaned_data = self.cleaned_data
         visit = ['2000', '2010', '2020', '2060', '2120', '2180', '2240', '2300', '2360']
 
-        if (not cleaned_data.get('infant_visit').appointment.visit_definition.code == '2000' and
-                not cleaned_data.get('infant_visit').appointment.visit_definition.code == '2010'):
-            prev_visit = visit.index(cleaned_data.get('infant_visit').appointment.visit_definition.code) - 1
+        if (not cleaned_data.get('infant_visit').appointment.visit_code == '2000' and
+                not cleaned_data.get('infant_visit').appointment.visit_code == '2010'):
+            prev_visit = visit.index(cleaned_data.get('infant_visit').appointment.visit_code) - 1
             while prev_visit > 0:
                 try:
                     registered_subject = cleaned_data.get('infant_visit').appointment.registered_subject
@@ -52,9 +52,9 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
         cleaned_data = self.cleaned_data
         visit = ['2000', '2010', '2020', '2060', '2120', '2180', '2240', '2300', '2360']
 
-        if (not cleaned_data.get('infant_visit').appointment.visit_definition.code == '2000' and
-                not cleaned_data.get('infant_visit').appointment.visit_definition.code == '2000'):
-            prev_visit = visit.index(cleaned_data.get('infant_visit').appointment.visit_definition.code) - 1
+        if (not cleaned_data.get('infant_visit').appointment.visit_code == '2000' and
+                not cleaned_data.get('infant_visit').appointment.visit_code == '2000'):
+            prev_visit = visit.index(cleaned_data.get('infant_visit').appointment.visit_code) - 1
             while prev_visit > 0:
                 try:
                     registered_subject = cleaned_data.get('infant_visit').appointment.registered_subject

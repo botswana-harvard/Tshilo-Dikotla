@@ -1,31 +1,33 @@
+from django.db import models
 from django.core.exceptions import ValidationError
 from django.apps import apps
 
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_consent.model_mixins import RequiresConsentMixin
-from edc_constants.constants import (
-    YES, POS, NEG, FAILED_ELIGIBILITY)
+from edc_constants.constants import (YES, POS, NEG, FAILED_ELIGIBILITY)
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffStudyMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-from edc_visit_tracking.constants import COMPLETED_PROTOCOL_VISIT, LOST_VISIT
-from edc_visit_tracking.model_mixins import VisitModelMixin, PreviousVisitModelMixin, CaretakerFieldsMixin
-
 from edc_visit_tracking.choices import VISIT_REASON
+from edc_visit_tracking.constants import COMPLETED_PROTOCOL_VISIT, LOST_VISIT
+from edc_visit_tracking.model_mixins import (VisitModelMixin, PreviousVisitModelMixin, CaretakerFieldsMixin)
+from edc_metadata.model_mixins import CreatesMetadataModelMixin
 
+from td_appointment.models import Appointment
 from .maternal_consent import MaternalConsent
 from .antenatal_enrollment import AntenatalEnrollment
-from .maternal_visit_crf_meta_data_mixin import MaternalVisitCrfMetaDataMixin
 
 
-class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, MaternalVisitCrfMetaDataMixin,
+class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, CreatesMetadataModelMixin,
                     RequiresConsentMixin, CaretakerFieldsMixin, VisitModelMixin,
                     ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ Maternal visit form that links all antenatal/ postnatal follow-up forms """
 
     consent_model = MaternalConsent
+
+    appointment = models.OneToOneField(Appointment)
 
     off_study_model = ('td_maternal', 'MaternalOffStudy')
 
@@ -36,7 +38,7 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, Mate
     def __str__(self):
         return '{} {} {}'.format(self.appointment.registered_subject.subject_identifier,
                                  self.appointment.registered_subject.first_name,
-                                 self.appointment.visit_definition.code)
+                                 self.appointment.visit_code)
 
     def save(self, *args, **kwargs):
         self.subject_identifier = self.appointment.registered_subject.subject_identifier

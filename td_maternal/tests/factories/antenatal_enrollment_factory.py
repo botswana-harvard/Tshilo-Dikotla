@@ -3,7 +3,7 @@ import factory
 from datetime import datetime
 from django.utils import timezone
 
-from edc_registration.tests.factories import RegisteredSubjectFactory
+from .registered_subject_factory import RegisteredSubjectFactory
 from edc_constants.constants import YES, NO, POS, NEG, NOT_APPLICABLE
 
 from td_maternal.models import AntenatalEnrollment

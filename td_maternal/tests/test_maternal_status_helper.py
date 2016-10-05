@@ -1,9 +1,10 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
-from edc_constants.constants import SCHEDULED, POS, YES, NO, NEG, NOT_APPLICABLE, UNK, IND
-from edc_meta_data.models import RequisitionMetaData
+from edc_constants.constants import POS, YES, NO, NEG, NOT_APPLICABLE, UNK, IND
+from td_lab.models import RequisitionMetadata
 from td_appointment.models import Appointment
 from td_registration.models import RegisteredSubject
+from edc_visit_tracking.constants import SCHEDULED
 
 from td_maternal.models import MaternalVisit
 from td_maternal.classes import MaternalStatusHelper
@@ -47,7 +48,7 @@ class TestMaternalStatusHelper(BaseTestCase):
                 visit_definition__code='2020M'))
         status_helper = MaternalStatusHelper(maternal_visit_2020M)
         self.assertEqual(status_helper.hiv_status, POS)
-        self.assertEqual(RequisitionMetaData.objects.filter(entry_status='NEW',
+        self.assertEqual(RequisitionMetadata.objects.filter(entry_status='NEW',
                                                             lab_entry__app_label='td_lab',
                                                             lab_entry__model_name='maternalrequisition',
                                                             lab_entry__requisition_panel__name='PBMC VL',
@@ -73,7 +74,7 @@ class TestMaternalStatusHelper(BaseTestCase):
             appointment=Appointment.objects.get(
                 registered_subject=infant_registered_subject,
                 visit_definition__code='2010'))
-        self.assertEqual(RequisitionMetaData.objects.filter(entry_status='NEW',
+        self.assertEqual(RequisitionMetadata.objects.filter(entry_status='NEW',
                                                             lab_entry__app_label='td_lab',
                                                             lab_entry__model_name='infantrequisition',
                                                             lab_entry__requisition_panel__name='DNA PCR',
@@ -98,7 +99,7 @@ class TestMaternalStatusHelper(BaseTestCase):
             appointment=Appointment.objects.get(
                 registered_subject=infant_registered_subject,
                 visit_definition__code='2010'))
-        self.assertEqual(RequisitionMetaData.objects.filter(entry_status='NOT_REQUIRED',
+        self.assertEqual(RequisitionMetadata.objects.filter(entry_status='NOT_REQUIRED',
                                                             lab_entry__app_label='td_lab',
                                                             lab_entry__model_name='infantrequisition',
                                                             lab_entry__requisition_panel__name='DNA PCR',
@@ -237,8 +238,8 @@ class TestMaternalStatusHelper(BaseTestCase):
                 visit_definition__code='2010M'))
         status_helper = MaternalStatusHelper(maternal_visit_2010M)
         self.assertEqual(len(status_helper.previous_visits), 5)
-        self.assertEqual(status_helper.previous_visits[0].appointment.visit_definition.code, '2010M')
-        self.assertEqual(status_helper.previous_visits[4].appointment.visit_definition.code, '1000M')
+        self.assertEqual(status_helper.previous_visits[0].appointment.visit_code, '2010M')
+        self.assertEqual(status_helper.previous_visits[4].appointment.visit_code, '1000M')
 
     def test_valid_hiv_neg_week32_test_date(self):
         """Test that NEG status is valid for week32_test_date"""

@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
-from edc_base.form.old_forms import BaseModelForm
+# from edc_base.form.old_forms import BaseModelForm
 from edc_constants.constants import ON_STUDY
 from edc_visit_tracking.form_mixins import VisitFormMixin
 from edc_visit_tracking.choices import VISIT_REASON, MISSED_VISIT
@@ -12,7 +12,7 @@ from tshilo_dikotla.choices import VISIT_INFO_SOURCE, MATERNAL_VISIT_STUDY_STATU
 from ..models import MaternalVisit, MaternalUltraSoundInitial
 
 
-class MaternalVisitForm (VisitFormMixin, BaseModelForm):
+class MaternalVisitForm (VisitFormMixin, forms.ModelForm):
 
     participant_label = 'mother'
 
@@ -35,18 +35,6 @@ class MaternalVisitForm (VisitFormMixin, BaseModelForm):
         choices=[choice for choice in VISIT_INFO_SOURCE],
         widget=AdminRadioSelect(renderer=AdminRadioFieldRenderer))
 
-    def clean(self):
-        cleaned_data = super(MaternalVisitForm, self).clean()
-        instance = None
-        if self.instance.id:
-            instance = self.instance
-        else:
-            instance = MaternalVisit(**self.cleaned_data)
-        instance.subject_failed_eligibility(forms.ValidationError)
-        self.clean_ultrasound_form(cleaned_data)
-        self.check_creation_of_antenatal_visit_2(cleaned_data)
-
-        return cleaned_data
 
     def get_consent(self, registered_subject):
         """Return an instance of the consent model.
@@ -77,7 +65,7 @@ class MaternalVisitForm (VisitFormMixin, BaseModelForm):
 
     def clean_ultrasound_form(self, cleaned_data):
         registered_subject = cleaned_data['appointment'].registered_subject
-        if cleaned_data['appointment'].visit_definition.code == '1020M':
+        if cleaned_data['appointment'].visit_code == '1020M':
             try:
                 MaternalUltraSoundInitial.objects.get(maternal_visit__appointment__registered_subject=registered_subject)
             except MaternalUltraSoundInitial.DoesNotExist:
@@ -86,7 +74,7 @@ class MaternalVisitForm (VisitFormMixin, BaseModelForm):
 
     def check_creation_of_antenatal_visit_2(self, cleaned_data):
         appointment = cleaned_data.get('appointment')
-        if appointment.visit_definition.code == '1020M':
+        if appointment.visit_code == '1020M':
             gestational_age = MaternalUltraSoundInitial.objects.get(
                 maternal_visit__appointment__registered_subject=appointment.registered_subject).ga_confirmed
             if gestational_age < 32:

@@ -38,3 +38,4 @@ git+https://github.com/erikvw/django-crypto-fields@develop#egg=django_crypto_fie
 git+https://github.com/erikvw/django-revision@develop#egg=django_revision
 pandas
 celery
+factory-boy

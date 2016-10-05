@@ -15,7 +15,7 @@ from tshilo_dikotla.choices import STUDY_SITES
 from ..models import MaternalConsent, MaternalEligibility
 
 
-class MaternalConsentForm(ConsentFormMixin):
+class MaternalConsentForm(ConsentFormMixin, forms.ModelForm):
 
     study_site = forms.ChoiceField(
         label='Study site',

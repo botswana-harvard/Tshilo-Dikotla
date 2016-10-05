@@ -2,7 +2,7 @@ import factory
 
 from django.utils import timezone
 
-from edc_registration.tests.factories import RegisteredSubjectFactory
+from td_maternal.tests.factories import RegisteredSubjectFactory
 
 from td_infant.models import InfantBirth
 from td_maternal.tests.factories import MaternalLabourDelFactory

@@ -3,8 +3,8 @@ from dateutil.relativedelta import relativedelta
 from edc_constants.constants import SCREENED
 from td_registration.models import RegisteredSubject
 from edc_identifier.models import SubjectIdentifier
-from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES, NO, NOT_APPLICABLE
-from edc_meta_data.models import RequisitionMetaData
+from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, POS, YES, NO, NOT_APPLICABLE
+from edc_visit_tracking.constants import SCHEDULED
 
 from td_maternal.models import MaternalVisit
 from tshilo_dikotla.constants import INFANT

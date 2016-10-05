@@ -5,14 +5,17 @@ from django.utils import timezone
 from django.apps import AppConfig as DjangoAppConfig
 from django.conf import settings
 
+from edc_appointment.apps import AppConfig as EdcAppointmentAppConfigParent
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
 from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
+from edc_consent.consent_config import ConsentConfig
 from edc_label.apps import AppConfig as EdcLabelConfigParent
 from edc_protocol.apps import AppConfig as EdcProtocolAppConfigParent
 from edc_registration.apps import AppConfig as EdcRegistrationAppConfigParent
 from edc_sync.apps import AppConfig as EdcSyncAppConfigParent
 from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
 from edc_timepoint.timepoint import Timepoint
+from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
 
 from edc_sync.constants import SERVER
 
@@ -37,7 +40,8 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
     study_start_datetime = timezone.datetime(2016, 4, 1, 0, 0, 0)
     study_end_datetime = timezone.datetime(2018, 12, 1, 0, 0, 0)
     subject_types = ['maternal', 'infant']
-    enrollment_caps = {'td_maternal.antenatalenrollment': ('maternal', -1)}
+    enrollment_caps = {'td_maternal.antenatalenrollment': ('maternal', -1),
+                       'td_infant.infant_birth': ('infant', -1)}
 #     max_subjects = {'maternal': 3000, 'infant': 3000}
 
 
@@ -47,12 +51,15 @@ class EdcBaseAppConfig(EdcBaseAppConfigParent):
 
 
 class EdcConsentAppConfig(EdcConsentAppConfigParent):
-    consent_type_setup = [
-        {'app_label': 'td_maternal',
-         'model_name': 'maternalconsent',
-         'start_datetime': timezone.datetime(2016, 4, 1, 0, 0, 0),
-         'end_datetime': timezone.datetime(2016, 12, 1, 0, 0, 0),
-         'version': '1'}
+    consent_configs = [
+        ConsentConfig(
+            'td_maternal.maternalconsent',
+            start=timezone.datetime(2016, 4, 1, 0, 0, 0),
+            end=timezone.datetime(2018, 12, 1, 0, 0, 0),
+            version='1',
+            age_is_adult=18,
+            age_max=64,
+            gender=['F']),
     ]
 
 
@@ -77,3 +84,12 @@ class EdcLabelAppConfig(EdcLabelConfigParent):
 class EdcSyncAppConfig(EdcSyncAppConfigParent):
     edc_sync_files_using = True
     role = SERVER
+
+
+class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
+    app_label = 'td_appointment'
+
+
+class EdcVisitTrackingAppConfig(EdcVisitTrackingAppConfigParent):
+    visit_models = {'td_maternal': ('maternal_visit', 'td_maternal.maternalvisit'),
+                    'td_infant': ('infant_visit', 'td_infant.infantvisit')}

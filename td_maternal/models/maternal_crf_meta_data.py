@@ -1,7 +1,8 @@
-from edc_metadata.model_mixins import CreatesMetadataModelMixin
+from edc_base.model.models import BaseUuidModel
+from edc_metadata.model_mixins import CrfMetadataModelMixin
 
 
-class MaternalVisitCrfMetaDataMixin(CreatesMetadataModelMixin):
+class CrfMetadata(CrfMetadataModelMixin, BaseUuidModel):
 
     def custom_post_update_crf_meta_data(self):
         """Custom methods that manipulate meta data on the post save.
@@ -10,4 +11,4 @@ class MaternalVisitCrfMetaDataMixin(CreatesMetadataModelMixin):
         pass
 
     class Meta:
-        abstract = True
+        app_label = 'td_maternal'

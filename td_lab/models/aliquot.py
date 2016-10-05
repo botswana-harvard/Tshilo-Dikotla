@@ -83,4 +83,4 @@ class Aliquot(SyncModelMixin, AliquotModelMixin, ExportTrackingFieldsMixin, Base
 
     class Meta(AliquotModelMixin.Meta):
         app_label = 'td_lab'
-        unique_together = (('receive', 'count'), )
+        unique_together = (('parent_identifier', 'count'), )

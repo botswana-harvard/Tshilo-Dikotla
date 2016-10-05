@@ -47,7 +47,7 @@ def func_require_cd4(visit_instance):
 
 def show_postpartum_depression(visit_instance):
     """Return true if postpartum depression has to be filled."""
-    if (visit_instance.appointment.visit_definition.code != '2010M' and not
+    if (visit_instance.appointment.visit_code != '2010M' and not
         MaternalPostPartumDep.objects.filter(
             maternal_visit__appointment__visit_definition__code='2010M',
             maternal_visit__appointment=visit_instance.appointment).exists()):
@@ -57,9 +57,9 @@ def show_postpartum_depression(visit_instance):
 
 def show_ultrasound_form(visit_instance):
     """Return true if ultrasound form has to be filled."""
-    if (visit_instance.appointment.visit_definition.code == '1000M'):
+    if (visit_instance.appointment.visit_code == '1000M'):
         return True
-    elif (visit_instance.appointment.visit_definition.code == '1010M' and not
+    elif (visit_instance.appointment.visit_code == '1010M' and not
           MaternalUltraSoundInitial.objects.filter(
             maternal_visit__appointment__visit_definition__code='1000M').exists()):
         return True
@@ -74,7 +74,7 @@ def show_rapid_test_form(visit_instance):
     subject_identifier = visit_instance.appointment.registered_subject.subject_identifier
     maternal_status_helper = MaternalStatusHelper(visit_instance)
 
-    if visit_instance.appointment.visit_definition.code == '2000M':
+    if visit_instance.appointment.visit_code == '2000M':
         if maternal_status_helper.hiv_status == NEG:
             # Get the last date the Rapid Test was processed.
             prev_rapid_test = (RapidTestResult.objects.filter(

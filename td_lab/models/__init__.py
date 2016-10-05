@@ -15,3 +15,4 @@ from .panel import Panel
 # from .result_item import ResultItem
 from .infant_requisition import InfantRequisition
 from .maternal_requisition import MaternalRequisition
+from .requisition_meta_data import RequisitionMetadata

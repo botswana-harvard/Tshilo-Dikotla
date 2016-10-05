@@ -1,18 +1,19 @@
-# from django.db.models import get_model
+from django.db import models
 
-from td_appointment.models import Appointment
-from edc_metadata.model_mixins import CreatesMetadataModelMixin
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_constants.constants import (DEAD, POS, MALE)
 from edc_export.models import ExportTrackingFieldsMixin
+from edc_metadata.model_mixins import CreatesMetadataModelMixin
 from edc_offstudy.model_mixins import OffStudyMixin
-from td_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.constants import (
     LOST_VISIT, UNSCHEDULED, SCHEDULED, COMPLETED_PROTOCOL_VISIT, MISSED_VISIT)
 from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
 from edc_visit_tracking.model_mixins import VisitModelMixin
+
+from td_appointment.models import Appointment
+from td_registration.models import RegisteredSubject
 
 # from tshilo_dikotla.choices import VISIT_REASON
 from edc_visit_tracking.model_mixins import CaretakerFieldsMixin
@@ -26,6 +27,8 @@ class InfantVisit(
 
     """ A model completed by the user on the infant visits. """
 
+    appointment = models.OneToOneField(Appointment)
+
     off_study_model = ('td_infant', 'InfantOffStudy')
 
     death_report_model = ('td_infant', 'InfantDeathReport')
@@ -37,7 +40,7 @@ class InfantVisit(
     def __str__(self):
         return '{} {} {}'.format(self.appointment.registered_subject.subject_identifier,
                                  self.appointment.registered_subject.first_name,
-                                 self.appointment.visit_definition.code)
+                                 self.appointment.visit_code)
 
     def custom_post_update_crf_meta_data(self):
         """Calls custom methods that manipulate meta data on the post save.
@@ -83,12 +86,12 @@ class InfantVisit(
         infant_birth = InfantBirth.objects.get(
             registered_subject=self.appointment.registered_subject)
         if infant_birth.gender == MALE:
-            if self.appointment.visit_definition.code == '2030':
+            if self.appointment.visit_code == '2030':
                 self.crf_is_required(
                     self.appointment, 'td_infant', 'infantcircumcision')
-            if self.appointment.visit_definition.code == '2060':
+            if self.appointment.visit_code == '2060':
                 appointment = Appointment.objects.get(
-                    visit_definition__code='2030',
+                    visit_code='2030',
                     registered_subject=self.appointment.registered_subject)
                 if appointment:
                     infant_visit = InfantVisit.objects.get(appointment=appointment)
@@ -98,7 +101,7 @@ class InfantVisit(
 
     def natural_key(self):
         return self.appointment.natural_key()
-    natural_key.dependencies = ['edc_appointment.appointment']
+    natural_key.dependencies = ['td_appointment.appointment']
 
 #     def get_visit_reason_choices(self):
 #         return VISIT_REASON
