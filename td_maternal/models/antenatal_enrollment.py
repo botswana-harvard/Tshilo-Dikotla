@@ -18,7 +18,7 @@ from .enrollment_mixin import EnrollmentMixin
 from .maternal_consent import MaternalConsent
 
 
-class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, OffStudyMixin, CreateAppointmentsMixin,
+class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, CreateAppointmentsMixin, OffStudyMixin,
                           RequiresConsentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     consent_model = MaternalConsent
@@ -113,3 +113,5 @@ class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, OffStudyMixin, Create
         app_label = 'td_maternal'
         verbose_name = 'Antenatal Enrollment'
         verbose_name_plural = 'Antenatal Enrollment'
+        consent_model = 'td_maternal.maternalconsent'
+        visit_schedule_name = 'maternal_visit_schedule'

@@ -184,7 +184,7 @@ class EnrollmentMixin(models.Model):
         MaternalUltraSoundInitial = apps.get_model('td_maternal', 'MaternalUltraSoundInitial')
         try:
             return MaternalUltraSoundInitial.objects.get(
-                maternal_visit__appointment__registered_subject=self.registered_subject)
+                maternal_visit__appointment__subject_identifier=self.registered_subject)
         except MaternalUltraSoundInitial.DoesNotExist:
             return None
 

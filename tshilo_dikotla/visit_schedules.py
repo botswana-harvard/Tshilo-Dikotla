@@ -1,0 +1,6 @@
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from td_maternal.maternal_visit_schedule import maternal_visit_schedule
+from td_infant.infant_visit_schedule import infant_visit_schedule
+
+site_visit_schedules.register(maternal_visit_schedule)
+# site_visit_schedules.register(infant_visit_schedule)

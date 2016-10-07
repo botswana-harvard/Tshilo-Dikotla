@@ -4,7 +4,7 @@ from edc_visit_schedule.visit import Crf, Requisition
 from edc_visit_schedule.schedule import Schedule
 
 from .td_maternal_lab_profiles import (pbmc_vl_panel, pbmc_panel, fasting_glucose_panel,
-                                                     glucose_1h_panel, glucose_2h_panel, hiv_elisa_panel, cd4_panel)
+                                       glucose_1h_panel, glucose_2h_panel, hiv_elisa_panel, cd4_panel)
 
 maternal_requisition_antenatal1 = (
     Requisition(show_order=10, model='td_maternal.maternalrequisition', panel=cd4_panel),
@@ -58,7 +58,7 @@ maternal_birth_crfs = (
     Crf(show_order=30, model='td_maternal.maternalarvpreg'),
     Crf(show_order=40, model='td_maternal.maternalinterimidcc'),
     Crf(show_order=50, model='td_maternal.maternalsubstanceuseduringpreg'),
-    Crf(show_order=50, model='td_maternal.rapidtestresult'),
+    Crf(show_order=60, model='td_maternal.rapidtestresult'),
 )
 
 maternal_followup1_crfs = (
@@ -97,9 +97,8 @@ maternal_visit_schedule = VisitSchedule(
 
 # antenatal enrollment schedule
 maternal_antenatal_enrollment = Schedule(
-    name='enrollment visit schedule',
-    #enrollment_model='td_maternal.antenatalenrollment')
-    enrollment_model='')
+    name='maternal_antenatal_enrollment',
+    enrollment_model='td_maternal.antenatalenrollment')
 
 maternal_antenatal_enrollment.add_visit(
     code='1000M',
@@ -113,7 +112,7 @@ maternal_visit_schedule.add_schedule(maternal_antenatal_enrollment)
 
 # antenatal visit 1 and 2 schedule
 maternal_antenatal_schedule = Schedule(
-    name='antenatal visit schedule',
+    name='maternal_antenatal_schedule',
     enrollment_model='td_maternal.antenatalvisitmembership')
 
 maternal_antenatal_schedule.add_visit(
@@ -212,5 +211,3 @@ follow_up_visit_schedule.add_visit(
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup3_crfs)
 maternal_visit_schedule.add_schedule(follow_up_visit_schedule)
-
-site_visit_schedules.register(maternal_visit_schedule)

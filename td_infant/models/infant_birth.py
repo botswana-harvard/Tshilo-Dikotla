@@ -77,3 +77,4 @@ class InfantBirth(SyncModelMixin, OffStudyMixin, CreateAppointmentsMixin, Export
     class Meta:
         app_label = 'td_infant'
         verbose_name = "Infant Birth"
+        visit_schedule_name = 'infant_visit_schedule'

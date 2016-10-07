@@ -9,13 +9,17 @@ from edc_appointment.apps import AppConfig as EdcAppointmentAppConfigParent
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
 from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
 from edc_consent.consent_config import ConsentConfig
+from edc_identifier.apps import AppConfig as EdcIdentifierAppConfigParent
 from edc_label.apps import AppConfig as EdcLabelConfigParent
+from edc_metadata.apps import AppConfig as EdcMetadataAppConfigParent
 from edc_protocol.apps import AppConfig as EdcProtocolAppConfigParent
 from edc_registration.apps import AppConfig as EdcRegistrationAppConfigParent
 from edc_sync.apps import AppConfig as EdcSyncAppConfigParent
 from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
 from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
+
+from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
 from edc_sync.constants import SERVER
 
@@ -63,6 +67,15 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
     ]
 
 
+class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
+    app_label = 'td_appointment'
+    model_name = 'appointment'
+    appointments_days_forward = 0
+    appointments_per_day_max = 30
+    allowed_iso_weekdays = '12345'
+    default_appt_type = 'clinic'
+
+
 class EdcTimepointAppConfig(EdcTimepointAppConfigParent):
     timepoints = [
         Timepoint(
@@ -86,10 +99,20 @@ class EdcSyncAppConfig(EdcSyncAppConfigParent):
     role = SERVER
 
 
-class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
-    app_label = 'td_appointment'
-
-
 class EdcVisitTrackingAppConfig(EdcVisitTrackingAppConfigParent):
     visit_models = {'td_maternal': ('maternal_visit', 'td_maternal.maternalvisit'),
                     'td_infant': ('infant_visit', 'td_infant.infantvisit')}
+
+
+class EdcIdentifierAppConfig(EdcIdentifierAppConfigParent):
+    identifier_prefix = '085'
+
+
+class EdcMetadataAppConfig(EdcMetadataAppConfigParent):
+    app_label = 'tshilo_dikotla'
+    crf_model_name = 'crfmetadata'
+    requisition_model_name = 'requisitionmetadata'
+
+    reason_field = {'td_maternal.maternalvisit': 'reason', 'td_maternal.infantvisit': 'reason'}
+    create_on_reasons = [SCHEDULED, UNSCHEDULED]
+    delete_on_reasons = [LOST_VISIT]

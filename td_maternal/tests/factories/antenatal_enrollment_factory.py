@@ -31,3 +31,4 @@ class AntenatalEnrollmentFactory(factory.DjangoModelFactory):
     rapid_test_date = timezone.datetime.now().date()
     will_get_arvs = NOT_APPLICABLE
 #     valid_regimen_duration = NOT_APPLICABLE
+#     consent_model = None

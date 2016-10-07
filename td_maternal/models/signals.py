@@ -182,7 +182,7 @@ def eligible_put_back_on_study(sender, instance, raw, created, using, **kwargs):
         try:
             if isinstance(instance, AntenatalEnrollment) and (instance.pending_ultrasound or instance.is_eligible):
                 MaternalOffStudy.objects.get(
-                    maternal_visit__appointment__registered_subject=instance.registered_subject)
+                    maternal_visit__appointment__subject_identifier=instance.registered_subject)
         except AttributeError as e:
             if 'is_eligible' not in str(e) and 'registered_subject' not in str(e):
                 raise

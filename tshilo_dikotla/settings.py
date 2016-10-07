@@ -84,7 +84,6 @@ INSTALLED_APPS = [
     'edc_death_report.apps.AppConfig',
     'edc_device.apps.AppConfig',
     'edc_locator.apps.AppConfig',
-    'edc_metadata.apps.AppConfig',
     'edc_offstudy.apps.AppConfig',
     'edc_rule_groups.apps.AppConfig',
     'edc_sync_files.apps.AppConfig',
@@ -97,7 +96,7 @@ INSTALLED_APPS = [
     'td_appointment.apps.AppConfig',
     'td_registration.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
-#     'edc_visit_tracking.apps.AppConfig',
+    'tshilo_dikotla.apps.EdcVisitTrackingAppConfig',
     'tshilo_dikotla.apps.EdcProtocolAppConfig',
     'tshilo_dikotla.apps.EdcBaseAppConfig',
     'tshilo_dikotla.apps.EdcConsentAppConfig',
@@ -106,8 +105,9 @@ INSTALLED_APPS = [
     'tshilo_dikotla.apps.EdcAppointmentAppConfig',
     'tshilo_dikotla.apps.EdcSyncAppConfig',
     'tshilo_dikotla.apps.AppConfig',
-    'edc_identifier.apps.AppConfig',
-    'tshilo_dikotla.apps.EdcVisitTrackingAppConfig',
+    'tshilo_dikotla.apps.EdcIdentifierAppConfig',
+    'tshilo_dikotla.apps.EdcMetadataAppConfig',
+    'tshilo_dikotla.apps.EdcTimepointAppConfig'
 ]
 
 if 'test' in sys.argv:
@@ -137,7 +137,8 @@ if 'test' in sys.argv:
                          "td_list": None,
                          "call_manager": None,
                          "edc_visit_schedule": None,
-                         "edc_visit_tracking": None}
+                         "edc_visit_tracking": None,
+                         "edc_offstudy": None}
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',

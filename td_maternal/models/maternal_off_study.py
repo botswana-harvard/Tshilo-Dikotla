@@ -12,7 +12,7 @@ from .maternal_consent import MaternalConsent
 from .maternal_visit import MaternalVisit
 
 
-class MaternalOffStudy(OffStudyModelMixin, CrfModelMixin,
+class MaternalOffStudy(OffStudyModelMixin,
                        RequiresConsentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ A model completed by the user on the visit when the mother is taken off-study. """

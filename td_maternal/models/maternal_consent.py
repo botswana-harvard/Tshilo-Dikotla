@@ -21,7 +21,7 @@ from .potential_call import PotentialCall
 from .maternal_eligibility import MaternalEligibility
 
 
-class MaternalConsent(ConsentModelMixin, SyncModelMixin, OffStudyMixin, ReviewFieldsMixin,
+class MaternalConsent(ConsentModelMixin, SyncModelMixin, ReviewFieldsMixin, OffStudyMixin,
                       IdentityFieldsMixin, PersonalFieldsMixin, RegistrationMixin,
                       CitizenFieldsMixin, VulnerabilityFieldsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
@@ -31,8 +31,6 @@ class MaternalConsent(ConsentModelMixin, SyncModelMixin, OffStudyMixin, ReviewFi
     MAX_AGE_OF_CONSENT = MAX_AGE_OF_CONSENT
 
     off_study_model = ('td_maternal', 'MaternalOffStudy')
-
-#     registered_subject = models.ForeignKey(RegisteredSubject, null=True)
 
     potential_call = models.ForeignKey(PotentialCall, null=True)
 
