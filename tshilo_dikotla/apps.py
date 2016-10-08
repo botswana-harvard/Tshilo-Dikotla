@@ -22,6 +22,7 @@ from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
 from edc_sync.constants import SERVER
+from edc_lab.apps import AppConfig as EdcLabAppConfig
 
 
 class AppConfig(DjangoAppConfig):
@@ -43,7 +44,7 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
     protocol_title = ''
     study_start_datetime = timezone.datetime(2016, 4, 1, 0, 0, 0)
     study_end_datetime = timezone.datetime(2018, 12, 1, 0, 0, 0)
-    subject_types = ['maternal', 'infant']
+    subject_types = {'maternal': 'maternal', 'infant': 'infant'}
     enrollment_caps = {'td_maternal.antenatalenrollment': ('maternal', -1),
                        'td_infant.infant_birth': ('infant', -1)}
 #     max_subjects = {'maternal': 3000, 'infant': 3000}
@@ -116,3 +117,8 @@ class EdcMetadataAppConfig(EdcMetadataAppConfigParent):
     reason_field = {'td_maternal.maternalvisit': 'reason', 'td_maternal.infantvisit': 'reason'}
     create_on_reasons = [SCHEDULED, UNSCHEDULED]
     delete_on_reasons = [LOST_VISIT]
+
+
+class EdcLabAppConfig(EdcLabAppConfig):
+    app_label = 'td_lab'
+    requisition = 'td_lab.maternalrequisition'

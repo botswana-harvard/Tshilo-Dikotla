@@ -79,7 +79,6 @@ INSTALLED_APPS = [
     'edc_content_type_map.apps.AppConfig',
 #     'edc_dashboard.apps.AppConfig',
     # 'edc_data_manager.apps.AppConfig', # not ready
-    'edc_lab',
     'edc_code_lists',
     'edc_death_report.apps.AppConfig',
     'edc_device.apps.AppConfig',
@@ -88,6 +87,7 @@ INSTALLED_APPS = [
     'edc_rule_groups.apps.AppConfig',
     'edc_sync_files.apps.AppConfig',
     'td_call_manager.apps.AppConfig',
+    'tshilo_dikotla.apps.EdcLabAppConfig',
 #     'td_dashboard.apps.AppConfig',
     'td_infant.apps.AppConfig',
     'td_lab.apps.AppConfig',
