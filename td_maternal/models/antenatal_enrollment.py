@@ -18,7 +18,7 @@ from .enrollment_mixin import EnrollmentMixin
 from .maternal_consent import MaternalConsent
 
 
-class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, CreateAppointmentsMixin, OffStudyMixin,
+class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, CreateAppointmentsMixin,
                           RequiresConsentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     consent_model = MaternalConsent

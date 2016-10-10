@@ -10,7 +10,6 @@ from edc_registration.model_mixins import RegistrationMixin
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_identifier.subject.classes import SubjectIdentifier
 from edc_offstudy.model_mixins import OffStudyMixin
-from td_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin
 
 from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
@@ -21,7 +20,7 @@ from .potential_call import PotentialCall
 from .maternal_eligibility import MaternalEligibility
 
 
-class MaternalConsent(ConsentModelMixin, SyncModelMixin, ReviewFieldsMixin, OffStudyMixin,
+class MaternalConsent(ConsentModelMixin, SyncModelMixin, ReviewFieldsMixin,
                       IdentityFieldsMixin, PersonalFieldsMixin, RegistrationMixin,
                       CitizenFieldsMixin, VulnerabilityFieldsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
@@ -30,7 +29,7 @@ class MaternalConsent(ConsentModelMixin, SyncModelMixin, ReviewFieldsMixin, OffS
     MIN_AGE_OF_CONSENT = MIN_AGE_OF_CONSENT
     MAX_AGE_OF_CONSENT = MAX_AGE_OF_CONSENT
 
-    off_study_model = ('td_maternal', 'MaternalOffStudy')
+#     off_study_model = ('td_maternal', 'MaternalOffStudy')
 
     potential_call = models.ForeignKey(PotentialCall, null=True)
 

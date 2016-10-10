@@ -15,6 +15,7 @@ class MaternalConsentFactory(factory.DjangoModelFactory):
         model = MaternalConsent
 
 #     assessment_score = YES
+    maternal_eligibility = None
     citizen = YES
     confirm_identity = "111121111"
     consent_copy = YES
@@ -34,3 +35,4 @@ class MaternalConsentFactory(factory.DjangoModelFactory):
 #     report_datetime = timezone.now()
 #     study_questions = YES
     study_site = '40'
+    comment = ''

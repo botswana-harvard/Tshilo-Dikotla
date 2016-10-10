@@ -14,3 +14,4 @@ class MaternalEligibilityFactory(factory.DjangoModelFactory):
 
     report_datetime = timezone.now()
     age_in_years = 26
+    has_omang = YES
