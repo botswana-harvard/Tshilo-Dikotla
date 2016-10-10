@@ -36,12 +36,12 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, Crea
     history = SyncHistoricalRecords()
 
     def __str__(self):
-        return '{} {} {}'.format(self.appointment.registered_subject.subject_identifier,
+        return '{} {} {}'.format(self.appointment.subject_identifier,
                                  self.appointment.registered_subject.first_name,
                                  self.appointment.visit_code)
 
     def save(self, *args, **kwargs):
-        self.subject_identifier = self.appointment.registered_subject.subject_identifier
+        self.subject_identifier = self.appointment.subject_identifier
         if not self.is_eligible():
             self.reason = FAILED_ELIGIBILITY
         self.subject_failed_eligibility()
@@ -105,12 +105,12 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, Crea
     def antenatal_enrollment(self):
         try:
             return AntenatalEnrollment.objects.get(
-                registered_subject=self.appointment.registered_subject)
+                registered_subject=self.appointment.subject_identifier)
         except AntenatalEnrollment.DoesNotExist:
             return None
 
     def get_subject_identifier(self):
-        return self.appointment.registered_subject.subject_identifier
+        return self.appointment.subject_identifier
 
 #     @property
 #     def postnatal_enrollment(self):

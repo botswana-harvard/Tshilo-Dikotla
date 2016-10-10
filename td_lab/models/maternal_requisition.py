@@ -12,6 +12,7 @@ from edc_metadata.model_mixins import UpdatesRequisitionMetadataModelMixin
 from td_maternal.models import MaternalVisit
 
 from .aliquot import Aliquot
+from td_lab.models.panel import Panel
 # from .aliquot_type import AliquotType
 # from .packing_list import PackingList
 # from .panel import Panel
@@ -33,8 +34,8 @@ class MaternalRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, 
 #     packing_list = models.ForeignKey(PackingList, null=True, blank=True)
 # 
 #     aliquot_type = models.ForeignKey(AliquotType)
-# 
-#     panel = models.ForeignKey(Panel)
+#
+    panel = models.ForeignKey(Panel)
 
 #     objects = MaternalRequisitionManager()
 

@@ -39,7 +39,6 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.maternal_visit_1000 = MaternalVisit.objects.get(
             appointment__registered_subject=options.get('registered_subject'),
-            reason=SCHEDULED,
             appointment__visit_definition__code='1000M')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
                                                                 number_of_gestations=1,
@@ -165,23 +164,26 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.appointment = Appointment.objects.get(subject_identifier=options.get('registered_subject'), visit_code='1000M')
+        self.maternal_visit = MaternalVisitFactory(appointment=self.appointment)
+        print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+        print(MaternalVisit.objects.all())
         self.maternal_visit_1000 = MaternalVisit.objects.get(
-            appointment__registered_subject=options.get('registered_subject'),
-            reason=SCHEDULED,
-            appointment__visit_definition__code='1000M')
+            appointment__subject_identifier=options.get('registered_subject'),
+            appointment__visit_code='1000M')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
                                                                 number_of_gestations=1,
                                                                 )
         self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
             registered_subject=options.get('registered_subject'))
-        self.appointment = Appointment.objects.get(registered_subject=options.get('registered_subject'),
-                                                visit_definition__code='1010M')
+        self.appointment = Appointment.objects.get(subject_identifier=options.get('registered_subject'),
+                                                   visit_code='1010M')
         self.maternal_labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject,
                                                             live_infants_to_register=1)
         self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment)
         self.antenatal_visit_2 = MaternalVisitFactory(
-            appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
-                                                visit_definition__code='1020M'))
+            appointment=Appointment.objects.get(subject_identifier=options.get('registered_subject'),
+                                                visit_code='1020M'))
         MaternalInterimIdccFactory(
             maternal_visit=self.antenatal_visit_2, recent_cd4=15,
             recent_cd4_date=(timezone.datetime.now() - relativedelta(weeks=2)).date())

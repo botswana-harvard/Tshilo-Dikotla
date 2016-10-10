@@ -12,13 +12,14 @@ from edc_metadata.model_mixins import UpdatesRequisitionMetadataModelMixin
 from td_infant.models import InfantVisit
 
 from .aliquot import Aliquot
+from td_lab.models.panel import Panel
 # from .aliquot_type import AliquotType
 # from .packing_list import PackingList
 # from .panel import Panel
 
 
 # class InfantRequisitionManager(CrfModelManager):
-# 
+#
 #     def get_by_natural_key(self, requisition_identifier):
 #         return self.get(requisition_identifier=requisition_identifier)
 
@@ -34,7 +35,7 @@ class InfantRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, Ex
 
 #     aliquot_type = models.ForeignKey(AliquotType)
 
-#     panel = models.ForeignKey(Panel)
+    panel = models.ForeignKey(Panel)
 
 #     objects = InfantRequisitionManager()
 

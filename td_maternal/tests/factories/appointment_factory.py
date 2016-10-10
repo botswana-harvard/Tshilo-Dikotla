@@ -11,9 +11,9 @@ class AppointmentFactory(factory.DjangoModelFactory):
     class Meta:
         model = Appointment
 
-    registered_subject = factory.SubFactory(RegisteredSubjectFactory)
+    # registered_subject = factory.SubFactory(RegisteredSubjectFactory)
     appt_datetime = timezone.now()
     best_appt_datetime = timezone.now()
     appt_close_datetime = timezone.now()
-    study_site = '40'
+    # study_site = '40'
     visit_instance = '0'
