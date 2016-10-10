@@ -2,7 +2,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.apps import apps
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.constants import (YES, POS, NEG, FAILED_ELIGIBILITY)
@@ -15,8 +14,11 @@ from edc_visit_tracking.model_mixins import (VisitModelMixin, PreviousVisitModel
 from edc_metadata.model_mixins import CreatesMetadataModelMixin
 
 from td_appointment.models import Appointment
+from td_registration.models import RegisteredSubject
 from .maternal_consent import MaternalConsent
 from .antenatal_enrollment import AntenatalEnrollment
+
+from td_maternal.managers import MaternalVisitManager
 
 
 class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, CreatesMetadataModelMixin,
@@ -24,8 +26,6 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, Crea
                     ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ Maternal visit form that links all antenatal/ postnatal follow-up forms """
-
-    consent_model = MaternalConsent
 
     appointment = models.OneToOneField(Appointment)
 
@@ -35,10 +35,19 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, Crea
 
     history = SyncHistoricalRecords()
 
+    objects = MaternalVisitManager()
+
+    def natural_key(self):
+        return (self.subject_identifier)
+
     def __str__(self):
         return '{} {} {}'.format(self.appointment.subject_identifier,
                                  self.appointment.registered_subject.first_name,
                                  self.appointment.visit_code)
+
+    def is_off_study_on_previous_visit_or_raise(self):
+        print(self.off_study_model._meta.get_fields(), "<><>><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><")
+        #super().is_off_study_on_previous_visit_or_raises
 
     def save(self, *args, **kwargs):
         self.subject_identifier = self.appointment.subject_identifier
@@ -104,8 +113,10 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, Crea
     @property
     def antenatal_enrollment(self):
         try:
+            registered_subject = RegisteredSubject.objects.get(
+                subject_identifier=self.appointment.subject_identifier)
             return AntenatalEnrollment.objects.get(
-                registered_subject=self.appointment.subject_identifier)
+                registered_subject=registered_subject)
         except AntenatalEnrollment.DoesNotExist:
             return None
 
@@ -123,3 +134,4 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, Crea
     class Meta:
         app_label = 'td_maternal'
         verbose_name = 'Maternal Visit'
+        consent_model = 'td_maternal.maternalconsent'

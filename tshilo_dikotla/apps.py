@@ -30,7 +30,8 @@ class AppConfig(DjangoAppConfig):
     verbose_name = 'Tshilo Dikotla'
 
     def ready(self):
-        pass
+        from td_maternal.maternal_rule_groups import (MaternalRegisteredSubjectRuleGroup)
+
 
 
 class EdcRegistrationAppConfig(EdcRegistrationAppConfigParent):
@@ -116,11 +117,11 @@ class EdcIdentifierAppConfig(EdcIdentifierAppConfigParent):
 
 
 class EdcMetadataAppConfig(EdcMetadataAppConfigParent):
-    app_label = 'tshilo_dikotla'
+    app_label = 'td_maternal'
     crf_model_name = 'crfmetadata'
     requisition_model_name = 'requisitionmetadata'
 
-    reason_field = {'td_maternal.maternalvisit': 'reason', 'td_maternal.infantvisit': 'reason'}
+    reason_field = {'td_maternal.maternalvisit': 'reason', 'td_infant.infantvisit': 'reason'}
     create_on_reasons = [SCHEDULED, UNSCHEDULED]
     delete_on_reasons = [LOST_VISIT]
 

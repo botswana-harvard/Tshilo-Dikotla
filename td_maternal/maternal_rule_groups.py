@@ -1,4 +1,5 @@
-from edc_metadata.constants import NOT_REQUIRED, REQUIRED, POS, NEG, UNK, IND
+from edc_metadata.constants import NOT_REQUIRED, REQUIRED
+from edc_constants.constants import POS, NEG, UNK, IND
 from edc_rule_groups.crf_rule import CrfRule
 from edc_rule_groups.decorators import register
 from edc_rule_groups.logic import Logic
@@ -7,7 +8,7 @@ from edc_rule_groups.requisition_rule import RequisitionRule
 from edc_rule_groups.rule_group import RuleGroup
 
 from tshilo_dikotla.constants import ONE
-from tshilo_dikotla.td_maternal_lab_profiles import (cd4_panel, pbmc_vl_panel, pbmc_panel, hiv_elisa_panel)
+from .td_maternal_lab_profiles import (cd4_panel, pbmc_vl_panel, pbmc_panel, hiv_elisa_panel)
 
 from td_maternal.classes import MaternalStatusHelper
 from td_maternal.models import MaternalUltraSoundInitial, MaternalPostPartumDep, RapidTestResult
@@ -106,7 +107,7 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
             predicate=func_mother_pos,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model=['maternalrando', 'maternalinterimidcc', 'maternalhivinterimhx', 'maternalaztnvp',
+        target_models=['maternalrando', 'maternalinterimidcc', 'maternalhivinterimhx', 'maternalaztnvp',
                       'maternalarvpreg', 'maternallifetimearvhistory', 'maternalarvpost', 'maternalarvpostadh'])
 
     rapid_testresult_forms = CrfRule(
@@ -114,21 +115,21 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
             predicate=show_rapid_test_form,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model=['rapidtestresult'])
+        target_models=['rapidtestresult'])
 
     post_partumdepression_forms = CrfRule(
         logic=Logic(
             predicate=show_postpartum_depression,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model=['maternalpostpartumdep'])
+        target_models=['maternalpostpartumdep'])
 
     require_ultrasound = CrfRule(
         logic=Logic(
             predicate=show_ultrasound_form,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model=['maternalultrasoundinitial'])
+        target_models=['maternalultrasoundinitial'])
 
     class Meta:
         app_label = 'td_maternal'
@@ -143,32 +144,32 @@ class MaternalRequisitionRuleGroup(RuleGroup):
             predicate=func_mother_pos,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model=['maternalrequisition'],
-        target_requisition_panels=[pbmc_vl_panel])
+        target_model='maternalrequisition',
+        target_panels=[pbmc_vl_panel])
 
     require_pbmc_storage = RequisitionRule(
         logic=Logic(
             predicate=func_mother_neg,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model=['maternalrequisition'],
-        target_requisition_panels=[pbmc_panel])
+        target_model='maternalrequisition',
+        target_panels=[pbmc_panel])
 
     require_elisa_status_ind = RequisitionRule(
         logic=Logic(
             predicate=show_elisa_requisition_hiv_status_ind,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model=['maternalrequisition'],
-        target_requisition_panels=[hiv_elisa_panel])
+        target_model='maternalrequisition',
+        target_panels=[hiv_elisa_panel])
 
     require_elisa = RequisitionRule(
         logic=Logic(
             predicate=func_mother_pos,
             consequence=NOT_REQUIRED,
             alternative=REQUIRED),
-        target_model=['maternalrequisition'],
-        target_requisition_panels=[hiv_elisa_panel])
+        target_model='maternalrequisition',
+        target_panels=[hiv_elisa_panel])
 
     class Meta:
         app_label = 'td_maternal'
@@ -183,8 +184,8 @@ class MaternalRequisitionRuleGroupCD4(RuleGroup):
             predicate=func_require_cd4,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model=['maternalrequisition'],
-        target_requisition_panels=[cd4_panel])
+        target_model='maternalrequisition',
+        target_panels=[cd4_panel])
 
     class Meta:
         app_label = 'td_maternal'
@@ -196,10 +197,10 @@ class MaternalUltrasoundInitialRuleGroup(RuleGroup):
 
     antenatal_enrollment_pass = CrfRule(
         logic=Logic(
-            predicate=('number_of_gestations', 'equals', ONE),
+            predicate=P('number_of_gestations', 'equals', ONE),
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model=['maternalobstericalhistory', 'maternalmedicalhistory', 'maternaldemographics',
+        target_models=['maternalobstericalhistory', 'maternalmedicalhistory', 'maternaldemographics',
                       'maternallifetimearvhistory', 'maternalarvpreg', 'maternalclinicalmeasurementsone'])
 
     class Meta:

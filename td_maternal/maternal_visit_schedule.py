@@ -105,7 +105,7 @@ maternal_antenatal_enrollment.add_visit(
     title='Maternal Enrollment Visit',
     timepoint=0,
     base_interval=0,
-    requisitions=None,
+    requisitions=(),
     crfs=maternal_enrollment_crfs
 )
 maternal_visit_schedule.add_schedule(maternal_antenatal_enrollment)

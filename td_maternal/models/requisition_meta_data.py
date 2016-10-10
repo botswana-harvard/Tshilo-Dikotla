@@ -5,4 +5,4 @@ from edc_metadata.model_mixins import RequisitionMetadataModelMixin
 class RequisitionMetadata(RequisitionMetadataModelMixin, BaseUuidModel):
 
     class Meta(RequisitionMetadataModelMixin.Meta):
-        app_label = 'td_lab'
+        app_label = 'td_maternal'

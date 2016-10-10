@@ -12,16 +12,22 @@ from .maternal_consent import MaternalConsent
 from .maternal_visit import MaternalVisit
 
 
-class MaternalOffStudy(OffStudyModelMixin,
+class MaternalOffStudy(CrfModelMixin, OffStudyModelMixin,
                        RequiresConsentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ A model completed by the user on the visit when the mother is taken off-study. """
 
     consent_model = MaternalConsent
 
+    visit_model_attr = 'maternal_visit'
+
     maternal_visit = models.OneToOneField(MaternalVisit)
 
 #     entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
+
+    def is_off_study_on_previous_visit_or_raise(self):
+        print(self.off_study_model.visit_model, "<><>><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><")
+        #super().is_off_study_on_previous_visit_or_raise
 
     class Meta:
         app_label = 'td_maternal'
