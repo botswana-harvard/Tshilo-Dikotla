@@ -108,7 +108,7 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_models=['maternalrando', 'maternalinterimidcc', 'maternalhivinterimhx', 'maternalaztnvp',
-                      'maternalarvpreg', 'maternallifetimearvhistory', 'maternalarvpost', 'maternalarvpostadh'])
+                       'maternalarvpreg', 'maternallifetimearvhistory', 'maternalarvpost', 'maternalarvpostadh'])
 
     rapid_testresult_forms = CrfRule(
         logic=Logic(
@@ -133,7 +133,7 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_maternal'
-        source_model = 'td_registration.registeredsubject'
+        #source_model = 'td_registration.registeredsubject'
 
 
 @register()

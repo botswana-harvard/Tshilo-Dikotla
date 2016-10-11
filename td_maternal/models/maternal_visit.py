@@ -42,7 +42,7 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, Crea
 
     def __str__(self):
         return '{} {} {}'.format(self.appointment.subject_identifier,
-                                 self.appointment.registered_subject.first_name,
+                                 self.antenatal_enrollment.registered_subject.first_name,
                                  self.appointment.visit_code)
 
     def is_off_study_on_previous_visit_or_raise(self):

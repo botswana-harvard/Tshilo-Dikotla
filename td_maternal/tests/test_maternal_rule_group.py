@@ -132,8 +132,9 @@ class TestMaternalRuleGroups(BaseTestCase):
                                                                 )
         self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
             registered_subject=options.get('registered_subject'))
-        self.appointment = Appointment.objects.get(registered_subject=options.get('registered_subject'),
-                                                visit_code='1010M')
+        self.appointment = Appointment.objects.get(
+            registered_subject=options.get('registered_subject'),
+            visit_code='1010M')
         self.maternal_labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject,
                                                             live_infants_to_register=1)
         self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment)
@@ -169,9 +170,10 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.maternal_visit_1000 = MaternalVisit.objects.get(
             appointment__subject_identifier=options.get('registered_subject'),
             appointment__visit_code='1000M')
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
-                                                                number_of_gestations=1,
-                                                                )
+        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+            maternal_visit=self.maternal_visit_1000,
+            number_of_gestations=1)
+
         self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(subject_identifier=options.get('registered_subject'),

@@ -33,7 +33,6 @@ class AppConfig(DjangoAppConfig):
         from td_maternal.maternal_rule_groups import (MaternalRegisteredSubjectRuleGroup)
 
 
-
 class EdcRegistrationAppConfig(EdcRegistrationAppConfigParent):
     app_label = 'td_registration'
 
