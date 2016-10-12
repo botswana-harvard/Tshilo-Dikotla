@@ -3,14 +3,13 @@ from django.conf import settings
 from django.views.generic import TemplateView
 
 from edc_base.views import EdcBaseViewMixin
-from django.http.response import HttpResponse
 from edc_label.view_mixins import EdcLabelViewMixin
-import json
 from ..classes import MarqueeViewMixin, AppointmentSubjectVisitCRFViewMixin, LocatorResultsActionsViewMixin
 from td_maternal.models.maternal_consent import MaternalConsent
 from td_maternal.models.requisition_meta_data import RequisitionMetadata
-from td_lab.models.maternal_requisition import MaternalRequisition
 from edc_constants.constants import SUBJECT
+from td_maternal.models.maternal_locator import MaternalLocator
+from td_maternal.models.maternal_crf_meta_data import CrfMetadata
 
 
 class SubjectDashboardView(
@@ -34,12 +33,13 @@ class SubjectDashboardView(
         self.context.update({
             'markey_data': self.markey_data.items(),
             'markey_next_row': self.markey_next_row,
-            'requisitions': self.requistions,
+            'requistions_metadata': self.requistions_metadata,
             'scheduled_forms': self.scheduled_forms,
             'appointments': self.appointments,
             'subject_identifier': self.subject_identifier,
             'consents': [],
-            'dashboard_type': SUBJECT
+            'dashboard_type': SUBJECT,
+            'locator': self.locator
         })
         return self.context
 
@@ -51,32 +51,26 @@ class SubjectDashboardView(
         self.print_barcode_labels(request)
         return self.render_to_response(context)
 
-    def print_barcode_labels(self, request):
-        print_status = False
-        result = {}
-        if request.is_ajax():
-            requisitionsIds = request.GET.get('requisitionids')
-            for requisition_id in requisitionsIds:
-                try:
-                    subject_requistion = MaternalRequisition.objects.get(pk=requisition_id)
-                    super(SubjectDashboardView, self).print_label(
-                        'amp_requisition_label_template', context=subject_requistion.label_context())
-                    print_status = True
-                except MaternalRequisition.DoesNotExist:
-                    pass
-            result = {'labels_printed': len(requisitionsIds)}
-        if print_status:
-            return HttpResponse(json.dumps(result), content_type='application/json')
+    @property
+    def locator(self):
+        try:
+            maternal_locator = MaternalLocator.objects.get(
+                registered_subject__subject_identifier=self.subject_identifier)
+        except MaternalLocator.DoesNotExist:
+            maternal_locator = None
+        return maternal_locator
 
     @property
     def scheduled_forms(self):
-        return {}
+        scheduled_forms = CrfMetadata.objects.filter(
+            subject_identifier=self.subject_identifier)
+        return scheduled_forms
 
     @property
-    def requistions(self):
-        requistions = RequisitionMetadata.objects.filter(
+    def requistions_metadata(self):
+        requistions_metadata = RequisitionMetadata.objects.filter(
             subject_identifier=self.subject_identifier, appointment=self.appointment)
-        return requistions
+        return requistions_metadata
 
     @property
     def consent(self):

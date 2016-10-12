@@ -1,4 +1,7 @@
 
 
 class LocatorResultsActionsViewMixin:
-    pass
+
+    @property
+    def locator(self):
+        pass
