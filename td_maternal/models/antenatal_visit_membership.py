@@ -62,3 +62,5 @@ class AntenatalVisitMembership(SyncModelMixin, RequiresConsentMixin, CreateAppoi
         app_label = 'td_maternal'
         verbose_name = 'Antenatal Visit Membership'
         verbose_name_plural = 'Antenatal Visit Membership'
+        consent_model = 'td_maternal.maternalconsent'
+        visit_schedule_name = 'maternal_visit_schedule'

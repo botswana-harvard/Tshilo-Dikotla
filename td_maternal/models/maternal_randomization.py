@@ -90,7 +90,7 @@ class MaternalRando (MaternalCrfModel):
         blank=True,
         null=True, )
 
-    objects = MaternalRandoManager()
+    #objects = MaternalRandoManager() >>
 #     history = AuditTrail()
 
     def __str__(self):

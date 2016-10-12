@@ -7,6 +7,7 @@ from tshilo_dikotla.choices import GESTATIONS_NUMBER, ZERO_ONE
 from tshilo_dikotla.validators import validate_ga_by_ultrasound, validate_fetal_weight
 
 from .base_ultra_sound_model import BaseUtraSoundModel
+from .maternal_consent import MaternalConsent
 
 
 class MaternalUltraSoundInitial(BaseUtraSoundModel):
@@ -111,6 +112,6 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
     def evaluate_ga_confirmed(self):
         return int(abs(40 - ((self.edd_confirmed - self.report_datetime.date()).days / 7)))
 
-    class Meta:
+    class Meta(BaseUtraSoundModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Maternal Ultra Sound Initial"

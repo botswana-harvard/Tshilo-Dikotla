@@ -14,7 +14,7 @@ from td_maternal.classes import MaternalStatusHelper
 from td_maternal.models import MaternalUltraSoundInitial, MaternalPostPartumDep, RapidTestResult
 
 
-def func_mother_pos(visit_instance):
+def func_mother_pos(visit_instance, *args):
     """Returns true if mother is hiv positive."""
     maternal_status_helper = MaternalStatusHelper(visit_instance)
     if maternal_status_helper.hiv_status == POS:
@@ -46,33 +46,33 @@ def func_require_cd4(visit_instance):
     return False
 
 
-def show_postpartum_depression(visit_instance):
+def show_postpartum_depression(visit_instance, *args):
     """Return true if postpartum depression has to be filled."""
     if (visit_instance.appointment.visit_code != '2010M' and not
         MaternalPostPartumDep.objects.filter(
-            maternal_visit__appointment__visit_definition__code='2010M',
+            maternal_visit__appointment__visit_code='2010M',
             maternal_visit__appointment=visit_instance.appointment).exists()):
         return True
     return False
 
 
-def show_ultrasound_form(visit_instance):
+def show_ultrasound_form(visit_instance, *args):
     """Return true if ultrasound form has to be filled."""
     if (visit_instance.appointment.visit_code == '1000M'):
         return True
     elif (visit_instance.appointment.visit_code == '1010M' and not
           MaternalUltraSoundInitial.objects.filter(
-            maternal_visit__appointment__visit_definition__code='1000M').exists()):
+            maternal_visit__appointment__visit_code='1000M').exists()):
         return True
     return False
 
 
-def show_rapid_test_form(visit_instance):
+def show_rapid_test_form(visit_instance, *args):
     """
         Return true if the the day of the last rapid test is
        (EDD confirmed) – (Date of Last HIV Rapid Test) > 56 OR Unknown
     """
-    subject_identifier = visit_instance.appointment.registered_subject.subject_identifier
+    subject_identifier = visit_instance.appointment.subject_identifier
     maternal_status_helper = MaternalStatusHelper(visit_instance)
 
     if visit_instance.appointment.visit_code == '2000M':
@@ -102,6 +102,13 @@ def show_rapid_test_form(visit_instance):
 @register()
 class MaternalRegisteredSubjectRuleGroup(RuleGroup):
 
+    require_ultrasound = CrfRule(
+        logic=Logic(
+            predicate=show_ultrasound_form,
+            consequence=REQUIRED,
+            alternative=NOT_REQUIRED),
+        target_models=['maternalultrasoundinitial'])
+
     hiv_pos_forms = CrfRule(
         logic=Logic(
             predicate=func_mother_pos,
@@ -124,16 +131,9 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
             alternative=NOT_REQUIRED),
         target_models=['maternalpostpartumdep'])
 
-    require_ultrasound = CrfRule(
-        logic=Logic(
-            predicate=show_ultrasound_form,
-            consequence=REQUIRED,
-            alternative=NOT_REQUIRED),
-        target_models=['maternalultrasoundinitial'])
-
     class Meta:
         app_label = 'td_maternal'
-        #source_model = 'td_registration.registeredsubject'
+        source_model = 'td_registration.registeredsubject'
 
 
 @register()
@@ -172,7 +172,7 @@ class MaternalRequisitionRuleGroup(RuleGroup):
         target_panels=[hiv_elisa_panel])
 
     class Meta:
-        app_label = 'td_maternal'
+        app_label = 'td_lab'
         source_model = 'td_registration.registeredsubject'
 
 
@@ -188,7 +188,7 @@ class MaternalRequisitionRuleGroupCD4(RuleGroup):
         target_panels=[cd4_panel])
 
     class Meta:
-        app_label = 'td_maternal'
+        app_label = 'td_lab'
         source_model = 'td_maternal.maternalinterimidcc'
 
 
@@ -201,7 +201,7 @@ class MaternalUltrasoundInitialRuleGroup(RuleGroup):
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_models=['maternalobstericalhistory', 'maternalmedicalhistory', 'maternaldemographics',
-                      'maternallifetimearvhistory', 'maternalarvpreg', 'maternalclinicalmeasurementsone'])
+                       'maternallifetimearvhistory', 'maternalarvpreg', 'maternalclinicalmeasurementsone'])
 
     class Meta:
         app_label = 'td_maternal'

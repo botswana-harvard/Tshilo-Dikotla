@@ -58,7 +58,7 @@ class BaseUtraSoundModel(MaternalCrfModel):
     @property
     def antenatal_enrollment(self):
         AntenatalEnrollment = apps.get_model('td_maternal', 'antenatalenrollment')
-        return AntenatalEnrollment.objects.get(registered_subject=self.maternal_visit.appointment.registered_subject)
+        return AntenatalEnrollment.objects.get(registered_subject__subject_identifier=self.maternal_visit.appointment.subject_identifier)
 
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         abstract = True

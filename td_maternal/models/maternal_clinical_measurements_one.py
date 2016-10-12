@@ -15,7 +15,6 @@ class MaternalClinicalMeasurementsOne(BaseMaternalClinicalMeasurements):
         validators=[MinValueValidator(134), MaxValueValidator(195), ],
         help_text="Measured in Centimeters (cm)")
 
-
     class Meta:
         app_label = 'td_maternal'
         verbose_name = 'Maternal Clinical Measurements One'

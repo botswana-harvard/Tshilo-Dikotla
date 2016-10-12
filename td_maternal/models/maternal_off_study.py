@@ -25,9 +25,9 @@ class MaternalOffStudy(CrfModelMixin, OffStudyModelMixin,
 
 #     entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)
 
-    def is_off_study_on_previous_visit_or_raise(self):
-        print(self.off_study_model.visit_model, "<><>><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><")
-        #super().is_off_study_on_previous_visit_or_raise
+#     def is_off_study_on_previous_visit_or_raise(self):
+#         print(self.off_study_model.visit_model, "<><>><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><")
+#         #super().is_off_study_on_previous_visit_or_raise
 
     class Meta:
         app_label = 'td_maternal'

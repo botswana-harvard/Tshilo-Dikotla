@@ -12,14 +12,13 @@ from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
 
 from .maternal_consent import MaternalConsent
 from .maternal_visit import MaternalVisit
+from .maternal_off_study import MaternalOffStudy
 
 
 class MaternalCrfModel(SyncModelMixin, CrfModelMixin, ExportTrackingFieldsMixin, OffStudyMixin,
                        RequiresConsentMixin, UpdatesCrfMetadataModelMixin, BaseUuidModel):
 
     """ Base model for all scheduled models (adds key to :class:`MaternalVisit`). """
-
-    consent_model = MaternalConsent
 
     visit_model_attr = 'maternal_visit'
 
@@ -30,13 +29,25 @@ class MaternalCrfModel(SyncModelMixin, CrfModelMixin, ExportTrackingFieldsMixin,
     history = SyncHistoricalRecords()
 
 #     objects = VisitCrfModelManager()
+#     @property
+#     def off_study_model(self):
+#         return MaternalOffStudy
+    def is_off_study_on_previous_visit_or_raise(self):
+        pass
+
+    def is_off_study_or_raise(self):
+        pass
+
+    def has_off_study_report_or_raise(self, subject_identifier, report_date):
+        pass
 
     def __str__(self):
         return "{}: {}".format(self.__class__._meta.model_name,
-                               self.maternal_visit.appointment.registered_subject.subject_identifier)
+                               self.maternal_visit.appointment.subject_identifier)
 
     def natural_key(self):
         return self.maternal_visit.natural_key()
 
     class Meta:
+        consent_model = 'td_maternal.maternalconsent'
         abstract = True
