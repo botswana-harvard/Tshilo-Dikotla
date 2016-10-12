@@ -1,0 +1,4 @@
+
+
+class LocatorResultsActionsViewMixin:
+    pass

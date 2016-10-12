@@ -1,0 +1,108 @@
+{% extends "edc_base/base.html" %}
+{% load staticfiles %}
+
+{% block main %}
+<div class="container">
+
+<!-- Beginning of Demographic Div -->
+<div class="row" style="border:1px solid #eeeeee;">
+<address>
+  <strong>{{dashboard_type | capfirst}} Dashboard</strong> 
+  <hr style="margin-top:4px; margin-bottom:4px;">
+  	<mark>
+		{% for key, value in markey_data %}
+		    <strong>{{key}}:</strong><span style="margin-left:5px;">{{value}}</span>
+		    {% if forloop.counter == markey_next_row %}
+		    	<br>
+		    {% endif %}
+		{% endfor %}
+  	</mark>
+</address>
+</div>
+<!-- End of Demographic Div -->
+
+<!-- Begin Visits Div -->
+<div class="row">
+<!-- 9-col-visits -->
+	<div class="col-md-9" style="min-height:200px; border:1px solid #eeeeee;">
+	{% block membership_forms %}
+		<blockquote class="blockquote" style="margin:0px">
+  		<ul class="list-inline text-primary">
+  			<li class="list-inline-item small">
+  				 {% for consent in consents %}
+  				 	{% if forloop.counter > 1%}
+  				 		|
+  				 	{% endif %}
+  					<a href="{{consent.1.get_absolute_url}}?next={% url 'subject_dashboard_url' consent.1.subject_identifier %}">{{consent.0}}</a>
+	 			{% endfor %}
+  			</li>
+		</ul>
+	</blockquote>
+	{% endblock membership_forms %}
+	{% block appointments %}
+    	{% include "amp_dashboard/appointments_forms.html" %}
+	{% endblock appointments %}
+
+    {% block scheduled_data_collection %}
+ 		{% if show == 'forms' %}
+        	<p>{% include "amp_dashboard/scheduled_forms.html" %} </p>
+        {% endif %}
+        
+    {% endblock scheduled_data_collection %}
+
+    {% block scheduled_requisitions %}
+		{% if show == 'forms' %}
+        	<p> {% include "amp_dashboard/requisition_forms.html" %}</p>
+        {% endif %}
+        
+    {% endblock scheduled_requisitions %}
+	</div>
+<!-- End 9-col-visits -->
+
+<!-- Begin 3-col-visits -->
+	<div class="col-md-3" style="min-height:200px; border:1px solid #eeeeee;">
+	{% block locator_information %}
+		<p></p>
+		<hr>
+ 		<div class="panel-group">
+ 	    	<div class="panel panel-default">
+      			<div class="panel-heading">Infant</div>
+      			<div class="panel-body"></div>
+    		</div>
+ 		    <div class="panel panel-info">
+      			<div class="panel-heading">Contact Info</div>
+      			<div class="panel-body">
+      			<address>
+  						<b>May follow-up?</b> {{follow}}<br>
+  						<b>Home visits?</b> {{visits}}<br>
+  						<br>
+  						<em>Address:</em><br>
+  						<span style="margin-top:20px;">
+  						</span><br><br>
+  					<abbr title="Phone">Tel:</abbr>{{tel}}<br>
+  					<abbr title="Phone">Alt:</abbr> {{alt}}<br>
+  					<abbr title="Phone">Cell:</abbr> {{cell}}<br>
+  					<span>Name: {{name}}</span><br>
+  					<span>Relation: {{name}}</span><br>
+  					<br>
+  					<em>Address:</em><br>
+  					<span style="margin-top:20px;">
+  					</span>
+  					<br>
+				</address>
+      			</div>
+    		</div>
+       		<div class="panel panel-default">
+      			<div class="panel-heading">Action Items</div>
+      			<div class="panel-body"></div>
+    		</div>
+		</div>
+	{% endblock locator_information %}
+	</div>
+<!-- End 3-col-visits -->
+
+</div>
+<!-- End Visits Div -->
+
+</div>
+{% endblock main %}

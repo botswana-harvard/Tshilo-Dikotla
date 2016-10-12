@@ -1,0 +1,41 @@
+
+<h5>Scheduled Forms  for Visit '1000M'</h5>
+<i> Hint: To edit the forms below, change the selected appointment's status to 'In Progress'</i> 
+<table class="table table-bordered table-striped table-hover table-condensed">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Title</th>
+			<th>Status</th>
+			<th>Due</th>
+			<th>User</th>                        
+			<th>Created/Modified</th>                        
+			<th>Comment</th>        
+			<th>Browse</th>                        
+			<th>Audit</th>                
+		</tr>
+	</thead>
+	<tbody>
+		{% for crf in scheduled_forms %}
+			<tr>
+			    <td>{{forloop.counter}}</td>
+			    <td>
+			        {{crf.model}}
+			    </td>                
+			    <td>
+			         {{crf.entry_status}}
+			    </td>
+			    <td>{{crf.due_datetime|date:"Y-m-d D"| capfirst }}</td>
+			    <td>{{crf.user_created}}</td> 
+				<td>{{crf.user_modified |date:"Y-m-d D"| capfirst}}</td>            
+			    <td>{{crf.entry_comment}}</td>                  
+			    <td>
+			        <a href="#">Browse</a>
+			    </td>
+			    <td>
+			      <a href="#">Audit trail visit</a>
+			    </td>
+	  		</tr>
+	  	{% endfor %}
+	</tbody>
+</table>
