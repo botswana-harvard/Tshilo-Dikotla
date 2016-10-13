@@ -43,7 +43,7 @@ class MaternalArvPreg(MaternalCrfModel):
         blank=True,
         null=True)
 
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = 'Maternal ARV In This Preg'
         verbose_name_plural = 'Maternal ARV In This Preg'

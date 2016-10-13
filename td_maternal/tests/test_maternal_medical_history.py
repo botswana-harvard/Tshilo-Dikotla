@@ -3,7 +3,7 @@ from django.utils import timezone
 from datetime import date
 
 from edc_code_lists.models import WcsDxAdult
-from edc_constants.constants import UNKNOWN, YES, NEG, NOT_APPLICABLE, SCHEDULED, NO, POS
+from edc_constants.constants import YES, NO, NOT_APPLICABLE
 
 from td_maternal.models import MaternalVisit
 from td_maternal.forms import MaternalMedicalHistoryForm, antenatal_enrollment_form

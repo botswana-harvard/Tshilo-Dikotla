@@ -1,15 +1,16 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO,
-                                     SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
+from edc_constants.constants import YES, NOT_APPLICABLE, POS, NO
 
-from td_maternal.models import MaternalVisit, RegisteredSubject
+from td_appointment.models import Appointment
+from td_registration.models import RegisteredSubject
 from td_maternal.forms import MaternalArvPregForm, MaternalArvForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, MaternalArvPregFactory, MaternalArvHistoryFactory)
+                        AntenatalEnrollmentFactory, MaternalArvPregFactory, MaternalArvHistoryFactory,
+                        MaternalVisitFactory)
 
 
 class TestMaternalArvPregForm(BaseTestCase):
@@ -32,21 +33,20 @@ class TestMaternalArvPregForm(BaseTestCase):
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
-        self.maternal_visit = MaternalVisit.objects.get(
-            appointment__registered_subject=self.registered_subject,
-            reason=SCHEDULED,
-            appointment__visit_code='1000M')
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
+        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(
-            maternal_visit=self.maternal_visit, number_of_gestations=1,)
+            maternal_visit=self.maternal_visit_1000, number_of_gestations=1,)
 
         self.options = {
-            'maternal_visit': self.maternal_visit.id,
+            'maternal_visit': self.maternal_visit_1000,
             'report_datetime': timezone.now(),
             'took_arv': YES,
             'is_interrupt': NO,
             'interrupt': 'N/A',
             'interrupt_other': '',
-            'comment': '',}
+            'comment': ''}
 
 #     def test_valid_regimen_but_no_arv(self):
 #             """Assert that Enrollment shows participant on valid_regimen but now says
@@ -79,11 +79,11 @@ class TestMaternalArvPregForm(BaseTestCase):
 
     def test_took_arv(self):
         """Assert arv taken but none listed"""
-        maternal_arv_preg = MaternalArvPregFactory(maternal_visit = self.maternal_visit)
+        maternal_arv_preg = MaternalArvPregFactory(maternal_visit = self.maternal_visit_1000)
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
-            'arv_code': '3TC', 
-            'start_date':timezone.now().date() - timezone.timedelta(days=1),
+            'arv_code': '3TC',
+            'start_date': timezone.now().date() - timezone.timedelta(days=1),
             'stop_date': timezone.now().date()
         }
         form = MaternalArvForm(data=inline_data)
@@ -104,17 +104,17 @@ class TestMaternalArvPregForm(BaseTestCase):
 
     def test_validate_historical_and_present_arv_start_dates(self):
         """"""
-        maternal_arv_preg = MaternalArvPregFactory(maternal_visit = self.maternal_visit, took_arv=YES)
+        maternal_arv_preg = MaternalArvPregFactory(maternal_visit=self.maternal_visit_1000, took_arv=YES)
         maternalarvhistory = MaternalArvHistoryFactory(
-            maternal_visit=self.maternal_visit, haart_start_date=(timezone.datetime.now() - relativedelta(weeks=9)).date())
+            maternal_visit=self.maternal_visit_1000, haart_start_date=(timezone.datetime.now() - relativedelta(weeks=9)).date())
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
-            'arv_code': 'Zidovudine', 
-            'start_date':timezone.now().date() - timezone.timedelta(weeks=10),
+            'arv_code': 'Zidovudine',
+            'start_date': timezone.now().date() - timezone.timedelta(weeks=10),
             'stop_date': timezone.now().date()
         }
         form = MaternalArvForm(data=inline_data)
         self.assertIn(
             "Your ARV start date {} in this pregnancy cannot be before your "
-            "Historical ARV date {}".format(
-            inline_data['start_date'], maternalarvhistory.haart_start_date), form.errors.get('__all__'))
+            "Historical ARV date {}".format(inline_data['start_date'], maternalarvhistory.haart_start_date),
+            form.errors.get('__all__'))

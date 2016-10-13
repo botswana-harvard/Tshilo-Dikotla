@@ -2,15 +2,15 @@ from dateutil.relativedelta import relativedelta
 from datetime import timedelta
 from django.utils import timezone
 
-from edc_constants.constants import UNKNOWN, YES, NEG, NOT_APPLICABLE, POS, NO, SCHEDULED
-from td_registration.models import RegisteredSubject
+from edc_constants.constants import YES, NOT_APPLICABLE, POS, NO
 
-from td_maternal.models import MaternalVisit
+from td_appointment.models import Appointment
+from td_registration.models import RegisteredSubject
 from td_maternal.forms import MaternalObstericalHistoryForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory)
+                        AntenatalEnrollmentFactory, MaternalVisitFactory)
 
 
 class TestMaternalObstericalHistoryForm(BaseTestCase):
@@ -33,17 +33,17 @@ class TestMaternalObstericalHistoryForm(BaseTestCase):
                    'knows_lmp': NO,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=20)).date()}
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
-        self.maternal_visit = MaternalVisit.objects.get(
-            appointment__registered_subject=self.registered_subject,
-            reason=SCHEDULED,
-            appointment__visit_definition__code='1000M')
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
+
+        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(
-            maternal_visit=self.maternal_visit, number_of_gestations=1,
-            est_edd_ultrasound = timezone.now().date() + timedelta(days=120), ga_confrimation_method=1)
+            maternal_visit=self.maternal_visit_1000, number_of_gestations=1,
+            est_edd_ultrasound=timezone.now().date() + timedelta(days=120), ga_confrimation_method=1)
 
         self.options = {
             'report_datetime': timezone.now(),
-            'maternal_visit': self.maternal_visit.id,
+            'maternal_visit': self.maternal_visit_1000.id,
             'prev_pregnancies': 1,
             'pregs_24wks_or_more': 0,
             'lost_before_24wks': 0,
