@@ -1,0 +1,58 @@
+<hr>
+<div id ="print-status-div-con"style=" margin-bottom: 1cm;"><span class="alert alert-danger" id="print-status-div">Failed to print an error occurred.</span></div>
+<h5>Scheduled Labs  for Visit {{visit_code}}</h5>
+<i> Hint: To edit the labs below, change the selected appointment's status to 'In Progress'</i>
+<blockquote>
+	<small>
+	<label class="radio-inline"><input type="radio" id="all-records-radio" name="print-records-radio">All Records</label>
+	<label class="radio-inline"><input type="radio" id="selected-records-radio" name="print-records-radio">Selected Record(s)</label> 
+	<button type="button" id="btn-print-label" class="btn btn-primary btn-sm pull-right"><span class="glyphicon glyphicon-print"></span></button></small>
+</blockquote>
+<table class="table table-bordered table-striped table-hover table-condensed">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Title</th>
+			<th>Requisition</th>
+			<th>Requisition identifier</th>
+			<th>Status</th>
+			<th>Due</th>
+			<th>User</th>
+			<th>Created/Modified</th>                        
+			<th>Comment</th>
+			<th>Browse</th>
+			<th>Audit</th>                
+		</tr>
+	</thead>
+	<tbody>
+	{% for requisition_meta_data in requistions_metadata %}
+    	<tr>
+    		<small>
+    		<td><label><input type="checkbox" name="requisition-checkbox" value="{{requisition.subject_requisition.pk}}"></label></td>
+    		<td><small>{{requisition_meta_data.panel_name}}</small></td>
+    		<td>
+    			{% if requisition_meta_data.subject_requisition %}
+    				<a href="{% url 'admin:amp_subjectrequisition_change' requisition_meta_data.subject_requisition.pk %}?subject_visit={{requisition_meta_data.subject_visit.pk}}&subject_identifier={{requisition_meta_data.appointment.subject_identifier}}&next={% url 'subject_dashboard_url' requisition_meta_data.appointment.str_pk requisition_meta_data.appointment.subject_identifier %}&show=forms">Subject Requisition</a>
+    			{% else %}
+    				<a href="{% url 'admin:amp_subjectrequisition_add' %}?subject_visit={{requisition_meta_data.subject_visit.pk}}&subject_identifier={{requisition_meta_data.appointment.subject_identifier}}&next={% url 'subject_dashboard_url' requisition_meta_data.appointment.str_pk requisition_meta_data.appointment.subject_identifier %}&show=forms">Add Subject Requisition</a>
+    			{% endif %}
+    		</td>
+    		<td>
+    		{% if requisition_meta_data.subject_requisition %}
+    			{{ requisition_meta_data.subject_requisition.requisition_identifier }}
+    		{% else %}
+    			---
+    		{% endif %}
+    		</td>
+    		<td>{{requisition_meta_data.entry_status}}</td>
+    		<td>{{requisition_meta_data.due_datetime|date:"Y-m-d"|lower}}</td>
+    		<td>{{requisition_meta_data.user_created}}</td>
+    		<td>{{requisition_meta_data.created|date:"Y-m-d"|lower}}</td>
+    		<td>{{requisition_meta_data.entry_comment}}</td>
+    		<td>{{requisition_meta_data.entry_comment}}</td>                        
+			<td>{{requisition_meta_data.visit_code}}</td>
+			</smal>
+    	</tr>
+    {% endfor %}
+	</tbody>
+</table>

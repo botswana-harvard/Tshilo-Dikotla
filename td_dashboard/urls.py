@@ -1,17 +1,8 @@
-from django.conf.urls import url
-# from django.contrib.auth.decorators import login_required
-# from .classes import MaternalDashboard, InfantDashboard
 
-urlpatterns = []
-#
-# for pattern in MaternalDashboard.get_urlpatterns():
-#     urlpatterns.append(
-#         url(pattern,
-#             login_required(MaternalDashboard.as_view()),
-#             name=MaternalDashboard.dashboard_url_name))
-#
-# for pattern in InfantDashboard.get_urlpatterns():
-#     urlpatterns.append(
-#         url(pattern,
-#             login_required(InfantDashboard.as_view()),
-#             name=InfantDashboard.dashboard_url_name))
+from django.conf.urls import url
+from td_dashboard.views.subject_dashboard_view import SubjectDashboardView
+
+urlpatterns = [
+    url(r'^subject_dashboard/(?P<subject_identifier>[0-9A-Z-]+)/', SubjectDashboardView.as_view(), name='subject_dashboard_url'),
+    url(r'^subject_dashboard/(?P<appointment_pk>[0-9a-z-]+)/(?P<subject_identifier>[0-9A-Z-]+)/', SubjectDashboardView.as_view(), name='subject_dashboard_url'),
+]
