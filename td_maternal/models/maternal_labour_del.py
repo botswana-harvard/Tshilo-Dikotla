@@ -209,7 +209,7 @@ class MaternalLabDelMed(MaternalCrfModel):
         blank=True,
         null=True)
 
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Delivery: Medical"
         verbose_name_plural = "Delivery: Medical"
@@ -268,7 +268,7 @@ class MaternalHivInterimHx(MaternalCrfModel):
         blank=True,
         null=True)
 
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Maternal Hiv Interim Hx"
         verbose_name_plural = "Maternal Hiv Interim Hx"

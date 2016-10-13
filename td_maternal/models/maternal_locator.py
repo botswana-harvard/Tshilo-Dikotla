@@ -69,7 +69,7 @@ class MaternalLocator(LocatorMixin, MaternalCrfModel):
 
 #     entry_meta_data_manager = LocalCrfMetaDataManager(MaternalVisit)
 
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = 'Maternal Locator'
         verbose_name_plural = 'Maternal Locator'

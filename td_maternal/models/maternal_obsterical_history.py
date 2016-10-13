@@ -1,8 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-# from edc_base.audit_trail import AuditTrail
-
 from .maternal_crf_model import MaternalCrfModel
 
 

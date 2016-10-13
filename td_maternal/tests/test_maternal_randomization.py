@@ -1,15 +1,13 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from edc_constants.constants import SCREENED, UNKNOWN
-from td_registration.models import RegisteredSubject
-from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, POS, YES, NO, NEG, NOT_APPLICABLE
-from td_appointment.models import Appointment
-from edc_visit_tracking.constants import SCHEDULED
+from edc_constants.constants import POS, YES, NO, NEG, NOT_APPLICABLE
+from edc_constants.constants import UNKNOWN
 
-from tshilo_dikotla.constants import RANDOMIZED
-from td_maternal.models import MaternalVisit
+from td_appointment.models import Appointment
 from td_list.models import RandomizationItem
+from td_registration.models import RegisteredSubject
+from tshilo_dikotla.constants import RANDOMIZED
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
@@ -62,18 +60,20 @@ class TestMaternalRandomization(BaseTestCase):
 
     def create_mother(self, status_options):
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**status_options)
-        self.maternal_visit_1000 = MaternalVisit.objects.get(
-            appointment__registered_subject=status_options.get('registered_subject'),
-            reason=SCHEDULED,
-            appointment__visit_definition__code='1000M')
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
+        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
                                                                 number_of_gestations=1
                                                                 )
         self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
             registered_subject=status_options.get('registered_subject'))
-        self.antenatal_visit_1 = MaternalVisitFactory(
-            appointment=Appointment.objects.get(registered_subject=status_options.get('registered_subject'),
-                                                visit_definition__code='1010M'))
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
+        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
 
     def hiv_pos_mother_options(self, registered_subject):
         options = {'registered_subject': registered_subject,

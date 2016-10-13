@@ -154,8 +154,7 @@ class MaternalContraception(MaternalCrfModel):
         choices=YES_NO_DWTA,
         help_text='')
 
-
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = 'Maternal Contraception'
         verbose_name_plural = 'Maternal Contraception'

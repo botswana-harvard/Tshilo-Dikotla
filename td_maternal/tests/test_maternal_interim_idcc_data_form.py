@@ -1,13 +1,8 @@
 from dateutil.relativedelta import relativedelta
-from django.utils import timezone
 from datetime import date
 
-from edc_constants.constants import UNKNOWN, YES, NEG, NOT_APPLICABLE, SCHEDULED, NO, POS
-
-from td_maternal.models import MaternalVisit
+from edc_constants.constants import YES, NO
 from td_maternal.forms import MaternalInterimIdccForm
-
-from td_appointment.models import Appointment
 
 from .factories import (MaternalEligibilityFactory, MaternalConsentFactory)
 
@@ -87,4 +82,3 @@ class TestMaternalInterimIdccDataForm(BaseTestCase):
         forms = MaternalInterimIdccForm(data=self.options)
         self.assertIn("You indicated that there has not been any lab information since the last visit"
                       " please do not answer the questions on CD4, VL and diagnoses found", forms.errors.get('__all__'))
-

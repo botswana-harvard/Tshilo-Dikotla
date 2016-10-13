@@ -1,6 +1,5 @@
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
 from edc_code_lists.models import WcsDxAdult
 from edc_constants.choices import YES_NO, YES_NO_NA
@@ -125,8 +124,7 @@ class MaternalMedicalHistory(MaternalCrfModel):
         blank=True,
         null=True)
 
-
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Maternal Medical History"
         verbose_name_plural = "Maternal Medical History"

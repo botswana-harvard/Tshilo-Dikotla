@@ -43,7 +43,7 @@ class MaternalPostPartumFu(MaternalCrfModel, DiagnosesMixin):
         help_text=""
     )
 
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Maternal Post Partum Fu"
         verbose_name_plural = "Maternal Post Partum Fu"

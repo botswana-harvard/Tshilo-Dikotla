@@ -51,7 +51,7 @@ class MaternalArvPost (MaternalCrfModel):
     def __str__(self):
         return str(self.maternal_visit)
 
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Maternal ARV Post"
         verbose_name_plural = "Maternal ARV Post"
@@ -118,7 +118,7 @@ class MaternalArvPostAdh(MaternalCrfModel):
         verbose_name="Comment",
         blank=True,
         null=True)
-    
+
     class Meta:
         app_label = 'td_maternal'
         verbose_name = "Maternal ARVs Post: Adherence"

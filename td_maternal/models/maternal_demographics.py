@@ -1,11 +1,8 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
 from edc_constants.choices import YES_NO
-
-# from tshilo_dikotla.apps.td_list.models import HouseholdGoods
 
 from ..maternal_choices import (MARITAL_STATUS, ETHNICITY, HIGHEST_EDUCATION,
                                 CURRENT_OCCUPATION, MONEY_PROVIDER, MONEY_EARNED,
@@ -142,8 +139,7 @@ class MaternalDemographics(MaternalCrfModel):
         choices=HOUSE_TYPE,
         help_text="Indicate the primary type of housing used over the past 30 days",)
 
-
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Maternal Demographics"
         verbose_name_plural = "Maternal Demographics"

@@ -28,7 +28,7 @@ class MaternalAztNvp(MaternalCrfModel):
         help_text="",
     )
 
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Maternal Azt Nvp"
         verbose_name_plural = "Maternal Azt Nvp"
