@@ -43,6 +43,14 @@ class MaternalRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, 
 
 #     entry_meta_data_manager = RequisitionMetaDataManager(MaternalVisit)
 
+#     @property
+#     def metadata_query_options(self):
+#         options = self.visit.metadata_query_options
+#         options.update({
+#             'subject_identifier': self.visit.subject_identifier,
+#             'model': 'td_lab.maternalrequisition'})
+#         return options
+
     def __str__(self):
         return '{0} {1}'.format(str(self.panel_name), self.requisition_identifier)
 

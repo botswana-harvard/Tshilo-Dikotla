@@ -64,10 +64,10 @@ class MaternalVisitForm (VisitFormMixin, forms.ModelForm):
 #         return birth_model
 
     def clean_ultrasound_form(self, cleaned_data):
-        registered_subject = cleaned_data['appointment'].registered_subject
+        registered_subject = cleaned_data['appointment'].subject_identifier
         if cleaned_data['appointment'].visit_code == '1020M':
             try:
-                MaternalUltraSoundInitial.objects.get(maternal_visit__appointment__registered_subject=registered_subject)
+                MaternalUltraSoundInitial.objects.get(maternal_visit__appointment__subject_identifier=subject_identifier)
             except MaternalUltraSoundInitial.DoesNotExist:
                 raise forms.ValidationError('Please ensure you have filled Maternal Ultrasound Initial Form before'
                                             ' continuing.')
@@ -76,7 +76,7 @@ class MaternalVisitForm (VisitFormMixin, forms.ModelForm):
         appointment = cleaned_data.get('appointment')
         if appointment.visit_code == '1020M':
             gestational_age = MaternalUltraSoundInitial.objects.get(
-                maternal_visit__appointment__registered_subject=appointment.registered_subject).ga_confirmed
+                maternal_visit__appointment__subject_identifier=appointment.subject_identifier).ga_confirmed
             if gestational_age < 32:
                 raise forms.ValidationError('Antenatal Visit 2 cannot occur before 32 weeks. Current GA is "{}" weeks'.
                                             format(gestational_age))

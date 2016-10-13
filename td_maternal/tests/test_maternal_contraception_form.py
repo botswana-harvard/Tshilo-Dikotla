@@ -38,7 +38,7 @@ class TestMaternalContraceptionForm(BaseTestCase):
         self.maternal_visit = MaternalVisit.objects.get(
             appointment__registered_subject=self.registered_subject,
             reason=SCHEDULED,
-            appointment__visit_definition__code='1000M')
+            appointment__visit_code='1000M')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(
             maternal_visit=self.maternal_visit, number_of_gestations=1,)
 

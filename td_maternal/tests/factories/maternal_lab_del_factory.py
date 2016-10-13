@@ -1,6 +1,7 @@
 import factory
 
 from django.utils import timezone
+from datetime import datetime
 
 from .registered_subject_factory import RegisteredSubjectFactory
 from edc_constants.choices import YES, NO, NOT_APPLICABLE
@@ -13,9 +14,9 @@ class MaternalLabourDelFactory(factory.DjangoModelFactory):
     class Meta:
         model = MaternalLabourDel
 
-    report_datetime = timezone.now()
+    report_datetime = datetime.today()
     registered_subject = factory.SubFactory(RegisteredSubjectFactory)
-    delivery_datetime = timezone.now()
+    delivery_datetime = datetime.today()
     delivery_time_estimated = NO
     labour_hrs = '3'
     delivery_hospital = 'Lesirane'

@@ -135,7 +135,6 @@ maternal_antenatal_schedule.add_visit(
 )
 maternal_visit_schedule.add_schedule(maternal_antenatal_schedule)
 
-"""
 # follow up visit
 follow_up_visit_schedule = Schedule(
     name='Follow up visit schedule',
@@ -213,4 +212,3 @@ follow_up_visit_schedule.add_visit(
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup3_crfs)
 maternal_visit_schedule.add_schedule(follow_up_visit_schedule)
-"""

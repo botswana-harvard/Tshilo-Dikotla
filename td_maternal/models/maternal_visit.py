@@ -46,8 +46,8 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, Crea
                                  self.appointment.visit_code)
 
     def is_off_study_on_previous_visit_or_raise(self):
-        print(self.off_study_model._meta.get_fields(), "<><>><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><")
-        #super().is_off_study_on_previous_visit_or_raises
+        pass
+        # super().is_off_study_on_previous_visit_or_raises
 
     def save(self, *args, **kwargs):
         self.subject_identifier = self.appointment.subject_identifier

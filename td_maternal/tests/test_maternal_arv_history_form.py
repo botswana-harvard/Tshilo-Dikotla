@@ -2,15 +2,17 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime, date
 from django.utils import timezone
 
-from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO,
-                                     SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
+from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO, CONTINUOUS, STOPPED, RESTARTED)
+from edc_visit_tracking.constants import SCHEDULED
+
+from td_appointment.models import Appointment
 from td_list.models import PriorArv
 from td_maternal.models import MaternalVisit, RegisteredSubject
 from td_maternal.forms import MaternalLifetimeArvHistoryForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, MaternalObstericHistoryFactory)
+                        AntenatalEnrollmentFactory, MaternalObstericHistoryFactory, MaternalVisitFactory)
 
 
 class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
@@ -33,12 +35,12 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
-        self.maternal_visit = MaternalVisit.objects.get(
-            appointment__registered_subject=self.registered_subject,
-            reason=SCHEDULED,
-            appointment__visit_definition__code='1000M')
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
+        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(
-            maternal_visit=self.maternal_visit, number_of_gestations=1,)
+            maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
 
         prior_arv = PriorArv.objects.create(
             hostname_created= "django", name="Atripla", short_name="Atripla",
@@ -47,7 +49,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
             field_name=None, revision=":develop")
 
         self.options = {
-            'maternal_visit': self.maternal_visit.id,
+            'maternal_visit': self.maternal_visit_1000.id,
             'report_datetime': timezone.now(),
             'haart_start_date': datetime.today() - relativedelta(months=9),
             'is_date_estimated': '-',
@@ -104,7 +106,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
     def test_haart_start_date_2(self):
         """Start date of ARVs CANNOT be before DOB"""
-        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit, prev_pregnancies=1)
+        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit_1000, prev_pregnancies=1)
         self.options['prev_sdnvp_labour'] = NOT_APPLICABLE
         self.options['prev_preg_azt'] = NOT_APPLICABLE
         self.options['prev_preg_haart'] = YES
@@ -116,7 +118,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
     def test_haart_start_date_none(self):
         """Start date of ARVs CANNOT be None"""
-        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit, prev_pregnancies=1)
+        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit_1000, prev_pregnancies=1)
         self.options['prev_sdnvp_labour'] = NOT_APPLICABLE
         self.options['prev_preg_azt'] = NOT_APPLICABLE
         self.options['prev_preg_haart'] = YES
@@ -127,7 +129,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
         self.assertIn("Please give a valid arv initiation date.", errors)
 
     def test_prev_preg_azt(self):
-        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit, prev_pregnancies=0)
+        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit_1000, prev_pregnancies=0)
         self.options['prev_preg_azt'] = YES
         form = MaternalLifetimeArvHistoryForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
@@ -137,7 +139,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
             'NOT APPLICABLE', errors)
 
     def test_prev_sdnvp_labour(self):
-        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit, prev_pregnancies=0)
+        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit_1000, prev_pregnancies=0)
         self.options['prev_sdnvp_labour'] = YES
         self.options['prev_preg_azt'] = NOT_APPLICABLE
         form = MaternalLifetimeArvHistoryForm(data=self.options)
@@ -148,7 +150,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
             'be NOT APPLICABLE', errors)
 
     def test_prev_preg_haart(self):
-        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit, prev_pregnancies=0)
+        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit_1000, prev_pregnancies=0)
         self.options['prev_sdnvp_labour'] = NOT_APPLICABLE
         self.options['prev_preg_azt'] = NOT_APPLICABLE
         self.options['prev_preg_haart'] = YES

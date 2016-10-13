@@ -120,11 +120,11 @@ def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
     if not raw:
         try:
             if not instance.is_eligible and not instance.pending_ultrasound:
-                report_datetime = instance.report_datetime
-#                 visit_schedule = site_visit_schedules.visit_schedules.get(code=instance.off_study_visit_code)
+                pass
+#                 report_datetime = instance.report_datetime
 #                 appointment = Appointment.objects.get(
-#                     registered_subject=instance.registered_subject,
-#                     visit_code=visit_schedule)
+#                     subject_identifier=instance.registered_subject.subject_identifier,
+#                     visit_code='1000M')
 #                 maternal_visit = MaternalVisit.objects.get(appointment=appointment)
 #                 if maternal_visit.reason != FAILED_ELIGIBILITY:
 #                     maternal_visit.reason = FAILED_ELIGIBILITY
@@ -154,10 +154,9 @@ def put_back_on_study_from_failed_eligibility(instance):
     with transaction.atomic():
         try:
             pass
-#             visit_schedule = site_visit_schedules.visit_schedules.get(code='1000M')
 #             appointment = Appointment.objects.get(
-#                 registered_subject=instance.registered_subject,
-#                 visit_code=visit_schedule)
+#                 subject_identifier=instance.registered_subject.subject_identifier,
+#                 visit_code='1000M')
 #             maternal_visit = MaternalVisit.objects.get(
 #                 appointment=appointment)
 #             maternal_visit.study_status = ON_STUDY
@@ -215,7 +214,7 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
                 maternal_consent = MaternalConsent.objects.get(
                     subject_identifier=maternal_registered_subject.subject_identifier)
                 maternal_ultrasound = MaternalUltraSoundInitial.objects.get(
-                    maternal_visit__appointment__registered_subject=instance.registered_subject)
+                    maternal_visit__appointment__subject_identifier=instance.registered_subject.subject_identifier)
                 with transaction.atomic():
                     infant_identifier = InfantIdentifier(
                         maternal_identifier=maternal_registered_subject.subject_identifier,

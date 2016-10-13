@@ -45,7 +45,7 @@ class RapidTestResult(MaternalCrfModel):
         return self.registered_subject.natural_key()
     natural_key.dependencies = ['edc_registration.registeredsubject']
 
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = 'Rapid Test Result'
         verbose_name_plural = 'Rapid Test Result'

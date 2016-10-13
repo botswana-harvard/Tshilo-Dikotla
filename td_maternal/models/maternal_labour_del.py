@@ -8,7 +8,7 @@ from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_future
 from edc_consent.model_mixins import RequiresConsentMixin
-from edc_constants.choices import YES_NO, YES_NO_UNKNOWN, YES_NO_NA
+from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE, YES, POS
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
@@ -157,6 +157,8 @@ class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin, CreateAppointments
         app_label = 'td_maternal'
         verbose_name = "Delivery"
         verbose_name_plural = "Deliveries"
+        consent_model = 'td_maternal.maternalconsent'
+        visit_schedule_name = 'maternal_visit_schedule'
 
 
 class MaternalLabDelMed(MaternalCrfModel):
@@ -206,7 +208,6 @@ class MaternalLabDelMed(MaternalCrfModel):
         max_length=250,
         blank=True,
         null=True)
-
 
     class Meta:
         app_label = 'td_maternal'
@@ -266,7 +267,6 @@ class MaternalHivInterimHx(MaternalCrfModel):
         max_length=250,
         blank=True,
         null=True)
-
 
     class Meta:
         app_label = 'td_maternal'

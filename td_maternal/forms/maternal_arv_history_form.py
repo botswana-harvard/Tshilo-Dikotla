@@ -47,7 +47,7 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
                 try:
                     maternal_consent = MaternalConsent.objects.get(
                         subject_identifier=cleaned_data.get(
-                            'maternal_visit').appointment.registered_subject.subject_identifier)
+                            'maternal_visit').appointment.subject_identifier)
                     if report_datetime < maternal_consent.consent_datetime:
                         raise forms.ValidationError("Report datetime CANNOT be before consent datetime")
                     if haart_start_date < maternal_consent.dob:
@@ -60,8 +60,8 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
     def validate_prev_preg(self):
         cleaned_data = self.cleaned_data
         ob_history = MaternalObstericalHistory.objects.filter(
-            maternal_visit__appointment__registered_subject=cleaned_data.get(
-                'maternal_visit').appointment.registered_subject)
+            maternal_visit__appointment__subject_identifier=cleaned_data.get(
+                'maternal_visit').appointment.subject_identifier)
         if not ob_history:
             raise forms.ValidationError('Please fill in the Maternal Obsterical History form first.')
         else:
@@ -84,7 +84,7 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
                         'In Maternal Obsterical History form you indicated there were no previous '
                         'pregnancies. triple ARVs during a prev pregnancy should '
                         'be NOT APPLICABLE')
-        
+
     class Meta:
         model = MaternalLifetimeArvHistory
         fields = '__all__'

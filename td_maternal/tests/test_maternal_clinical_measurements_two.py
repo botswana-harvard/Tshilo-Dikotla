@@ -62,7 +62,7 @@ class TestMaternalClinicalMeasurementsTwo(BaseTestCase):
         self.maternal_visit_1000 = MaternalVisit.objects.get(
             appointment__registered_subject=status_options.get('registered_subject'),
             reason=SCHEDULED,
-            appointment__visit_definition__code='1000M')
+            appointment__visit_code='1000M')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
                                                                 number_of_gestations=1
                                                                 )
@@ -70,7 +70,7 @@ class TestMaternalClinicalMeasurementsTwo(BaseTestCase):
             registered_subject=status_options.get('registered_subject'))
         self.antenatal_visit_1 = MaternalVisitFactory(
             appointment=Appointment.objects.get(registered_subject=status_options.get('registered_subject'),
-                                                visit_definition__code='1010M'))
+                                                visit_code='1010M'))
 
     def hiv_pos_mother_options(self, registered_subject):
         options = {'registered_subject': registered_subject,

@@ -22,7 +22,7 @@ def func_mother_pos(visit_instance, *args):
     return False
 
 
-def func_mother_neg(visit_instance):
+def func_mother_neg(visit_instance, *args):
     """Returns true if mother is hiv neg."""
     maternal_status_helper = MaternalStatusHelper(visit_instance)
     if maternal_status_helper.hiv_status == NEG:
@@ -30,7 +30,7 @@ def func_mother_neg(visit_instance):
     return False
 
 
-def show_elisa_requisition_hiv_status_ind(visit_instance):
+def show_elisa_requisition_hiv_status_ind(visit_instance, *args):
     """return True if Mother's Rapid Test Result is Inditerminate"""
     maternal_status_helper = MaternalStatusHelper(visit_instance)
     if maternal_status_helper.hiv_status == IND:
@@ -38,12 +38,13 @@ def show_elisa_requisition_hiv_status_ind(visit_instance):
     return False
 
 
-def func_require_cd4(visit_instance):
+def func_require_cd4(visit_instance, *args):
     """Return true if mother is HIV+ and does not have a CD4 in the last 3 months."""
-    maternal_status_helper = MaternalStatusHelper(visit_instance)
-    if maternal_status_helper.hiv_status == POS:
-        return maternal_status_helper.eligible_for_cd4
     return False
+#     maternal_status_helper = MaternalStatusHelper(visit_instance)
+#     if maternal_status_helper.hiv_status == POS:
+#         return maternal_status_helper.eligible_for_cd4
+#     return False
 
 
 def show_postpartum_depression(visit_instance, *args):
@@ -189,7 +190,7 @@ class MaternalRequisitionRuleGroupCD4(RuleGroup):
 
     class Meta:
         app_label = 'td_lab'
-        source_model = 'td_maternal.maternalinterimidcc'
+#         source_model = 'td_maternal.maternalinterimidcc'
 
 
 @register()

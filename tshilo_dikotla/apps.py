@@ -20,6 +20,7 @@ from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
 
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
+from edc_constants.constants import FAILED_ELIGIBILITY
 
 from edc_sync.constants import SERVER
 from edc_lab.apps import AppConfig as EdcLabAppConfig
@@ -30,7 +31,9 @@ class AppConfig(DjangoAppConfig):
     verbose_name = 'Tshilo Dikotla'
 
     def ready(self):
-        from td_maternal.maternal_rule_groups import (MaternalRegisteredSubjectRuleGroup)
+        from td_maternal.maternal_rule_groups import (
+            MaternalRegisteredSubjectRuleGroup, MaternalRequisitionRuleGroup,
+            MaternalRequisitionRuleGroupCD4, MaternalUltrasoundInitialRuleGroup)
 
 
 class EdcRegistrationAppConfig(EdcRegistrationAppConfigParent):
@@ -122,7 +125,7 @@ class EdcMetadataAppConfig(EdcMetadataAppConfigParent):
 
     reason_field = {'td_maternal.maternalvisit': 'reason', 'td_infant.infantvisit': 'reason'}
     create_on_reasons = [SCHEDULED, UNSCHEDULED]
-    delete_on_reasons = [LOST_VISIT]
+    delete_on_reasons = [LOST_VISIT, FAILED_ELIGIBILITY]
 
 
 class EdcLabAppConfig(EdcLabAppConfig):

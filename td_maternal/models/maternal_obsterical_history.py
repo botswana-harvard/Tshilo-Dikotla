@@ -51,8 +51,7 @@ class MaternalObstericalHistory(MaternalCrfModel):
         validators=[MinValueValidator(0), MaxValueValidator(20), ],
         help_text="")
 
-
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Maternal Obsterical History"
         verbose_name_plural = "Maternal Obsterical History"

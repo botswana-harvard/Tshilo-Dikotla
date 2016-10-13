@@ -7,7 +7,7 @@ from edc_constants.constants import (
 from edc_visit_tracking.constants import SCHEDULED
 
 from .factories import (
-    AntenatalEnrollmentFactory, MaternalEligibilityFactory, MaternalConsentFactory)
+    AntenatalEnrollmentFactory, MaternalEligibilityFactory, MaternalConsentFactory, MaternalVisitFactory)
 
 
 from ..models import MaternalVisit, EnrollmentHelper, MaternalOffStudy
@@ -425,17 +425,23 @@ class TestAntenatalEnrollment(BaseTestCase):
         self.scheduled_visit_on_eligible_or_pending(self.registered_subject.subject_identifier)
 
     def off_study_visit_on_ineligible(self, subject_identifier):
+        self.appointment = Appointment.objects.get(
+            subject_identifier=subject_identifier, visit_code='1000M')
+        MaternalVisitFactory(appointment=self.appointment, reason='failed eligibility', study_status=OFF_STUDY)
         self.assertEqual(MaternalVisit.objects.all().count(), 1)
         self.assertEqual(MaternalVisit.objects.filter(
             reason=FAILED_ELIGIBILITY,
             study_status=OFF_STUDY,
-            appointment__registered_subject__subject_identifier=subject_identifier).count(), 1)
+            appointment__subject_identifier=subject_identifier).count(), 1)
 
     def scheduled_visit_on_eligible_or_pending(self, subject_identifier):
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
+        MaternalVisitFactory(appointment=self.appointment, reason='scheduled', study_status=ON_STUDY)
         self.assertEqual(MaternalVisit.objects.all().count(), 1)
         self.assertEqual(MaternalOffStudy.objects.all().count(), 0)
         self.assertEqual(MaternalVisit.objects.filter(
             reason=SCHEDULED,
             study_status=ON_STUDY,
-            appointment__registered_subject__subject_identifier=subject_identifier).count(), 1)
+            appointment__subject_identifier=subject_identifier).count(), 1)
 

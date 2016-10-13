@@ -26,18 +26,20 @@ class BaseTestCase(TestCase):
 
     def create_mother(self, options):
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
-        self.maternal_visit_1000 = MaternalVisit.objects.get(
-            appointment__registered_subject=options.get('registered_subject'),
-            reason=SCHEDULED,
-            appointment__visit_definition__code='1000M')
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
-                                                                number_of_gestations=1,
-                                                                )
+        self.appointment = Appointment.objects.get(
+            subject_identifier=options.get('registered_subject'), visit_code='1000M')
+
+        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+            maternal_visit=self.maternal_visit_1000,
+            number_of_gestations=1)
+
         self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
             registered_subject=options.get('registered_subject'))
-        self.antenatal_visit_1 = MaternalVisitFactory(
-            appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
-                                                visit_definition__code='1010M'))
+        self.appointment = Appointment.objects.get(
+            subject_identifier=options.get('registered_subject'), visit_code='1010M')
+        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
 
     def hiv_pos_mother_options(self, registered_subject):
         options = {'registered_subject': registered_subject,
