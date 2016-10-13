@@ -339,4 +339,3 @@ class MaternalLabDelDxT (CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
         app_label = 'td_maternal'
         verbose_name = "Delivery: Preg DxT"
         verbose_name_plural = "Delivery: Preg DxT"
-        visit_schedule_name = 'follow_up_visit_schedule'

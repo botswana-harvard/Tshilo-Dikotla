@@ -46,11 +46,11 @@ class TestMaternalLabourDel(BaseTestCase):
         self.maternal_visits_membership = AntenatalVisitMembershipFactory(registered_subject=self.registered_subject)
 
         complications = DeliveryComplications.objects.create(
-            hostname_created="django", name="None", 
-            short_name="None", created=timezone.datetime.now(), 
-            user_modified="", modified=timezone.datetime.now(), 
-            hostname_modified="django", version="1.0", 
-            display_index=1, user_created="django", field_name=None, 
+            hostname_created="django", name="None",
+            short_name="None", created=timezone.datetime.now(),
+            user_modified="", modified=timezone.datetime.now(),
+            hostname_modified="django", version="1.0",
+            display_index=1, user_created="django", field_name=None,
             revision=":develop:")
 
         self.options = {
@@ -58,7 +58,7 @@ class TestMaternalLabourDel(BaseTestCase):
             'report_datetime': timezone.now(),
             'delivery_datetime': timezone.now(),
             'delivery_time_estimated': NO,
-            'labour_hrs':'3',
+            'labour_hrs': '3',
             'delivery_complications': [complications.id],
             'delivery_hospital': 'Lesirane',
             'mode_delivery': 'spontaneous vaginal',
