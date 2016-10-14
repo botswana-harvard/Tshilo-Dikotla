@@ -1,7 +1,7 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-from edc_constants.constants import UNKNOWN, YES, NO, NEG, NOT_APPLICABLE, SCHEDULED
+from edc_constants.constants import UNKNOWN, YES, NO, NEG, NOT_APPLICABLE
 
 from td_maternal.models import MaternalVisit, Appointment
 from td_maternal.forms import MaternalSubstanceUsePriorPregForm

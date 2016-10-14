@@ -2,17 +2,17 @@ from dateutil.relativedelta import relativedelta
 from datetime import date
 from django.utils import timezone
 
+from td_appointment.models import Appointment
 from td_registration.models import RegisteredSubject
-from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO,
-                                     SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
+from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO)
 
 from td_list.models import Contraceptives, MaternalRelatives
-from td_maternal.models import MaternalVisit
 from td_maternal.forms import MaternalContraceptionForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory)
+                        AntenatalEnrollmentFactory, MaternalVisitFactory, AntenatalVisitMembershipFactory,
+                        MaternalLabourDelFactory)
 
 
 class TestMaternalContraceptionForm(BaseTestCase):
@@ -35,12 +35,30 @@ class TestMaternalContraceptionForm(BaseTestCase):
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
-        self.maternal_visit = MaternalVisit.objects.get(
-            appointment__registered_subject=self.registered_subject,
-            reason=SCHEDULED,
-            appointment__visit_code='1000M')
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
+        self.maternal_visit = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(
             maternal_visit=self.maternal_visit, number_of_gestations=1,)
+
+        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=options.get('registered_subject'))
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
+        self.maternal_visit = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
+
+        MaternalLabourDelFactory(registered_subject=self.registered_subject)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
+        MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
+        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
 
         contraceptives = Contraceptives.objects.create(
             hostname_created="django", name="Condom", short_name="Condom", created=timezone.datetime.now(), 

@@ -1,9 +1,9 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-from edc_constants.constants import UNKNOWN, YES, NO, NEG, NOT_APPLICABLE, SCHEDULED
+from edc_constants.constants import UNKNOWN, YES, NO, NEG, NOT_APPLICABLE
 
-from td_maternal.models import MaternalVisit, Appointment
+from td_appointment.models import Appointment
 from td_maternal.forms import MaternalSubstanceUseDuringPregForm
 
 from .base_test_case import BaseTestCase
@@ -33,21 +33,20 @@ class TestMaternalSubstanceUseDuringPreg(BaseTestCase):
             'rapid_test_result': NEG,
             'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**maternal_options)
-        self.maternal_visit_1000 = MaternalVisit.objects.get(
-            appointment__registered_subject=maternal_options.get('registered_subject'),
-            reason=SCHEDULED,
-            appointment__visit_definition__code='1000M')
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
+        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
                                                                 number_of_gestations=1
                                                                 )
         self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
             registered_subject=maternal_options.get('registered_subject'))
-        self.antenatal_visit_1 = MaternalVisitFactory(
-            appointment=Appointment.objects.get(registered_subject=maternal_options.get('registered_subject'),
-                                                visit_definition__code='1010M'))
-        self.antenatal_visit_2 = MaternalVisitFactory(
-            appointment=Appointment.objects.get(registered_subject=maternal_options.get('registered_subject'),
-                                                visit_definition__code='1020M'))
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
+        MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
+        self.antenatal_visit_2 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
 
         self.options = {
             'maternal_visit': self.antenatal_visit_2.id,
