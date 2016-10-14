@@ -111,7 +111,7 @@ class MaternalRando (MaternalCrfModel):
         AntenatalEnrollment = apps.get_model('td_maternal', 'antenatalenrollment')
         return AntenatalEnrollment.objects.get(registered_subject__subject_identifier=self.maternal_visit.appointment.subject_identifier)
 
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = "td_maternal"
         verbose_name = "Maternal Randomization"
         verbose_name_plural = "Maternal Randomization"

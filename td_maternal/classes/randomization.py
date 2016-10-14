@@ -33,17 +33,17 @@ class Randomization(object):
         else:
             next_to_pick = self.maternal_rando.__class__.objects.all().order_by('-sid').first().sid + 1
         next_randomization_item = RandomizationItem.objects.get(name=str(next_to_pick))
-        subject_identifier = self.maternal_rando.maternal_visit.appointment.registered_subject.subject_identifier
+        subject_identifier = self.maternal_rando.maternal_visit.appointment.subject_identifier
         consent = MaternalConsent.objects.filter(subject_identifier=subject_identifier).first()
         self.site = consent.study_site
         self.sid = int(next_randomization_item.name)
         self.rx = next_randomization_item.field_name
         self.subject_identifier = subject_identifier
         self.randomization_datetime = timezone.datetime.now()
-        self.initials = self.maternal_rando.maternal_visit.appointment.registered_subject.initials
+        self.initials = consent.maternal_eligibility.registered_subject.initials
 
         dte = timezone.datetime.today()
-        registered_subject = self.maternal_rando.maternal_visit.appointment.registered_subject
+        registered_subject = consent.maternal_eligibility.registered_subject
         registered_subject.sid = self.sid
         registered_subject.randomization_datetime = self.randomization_datetime
         registered_subject.modified = dte
