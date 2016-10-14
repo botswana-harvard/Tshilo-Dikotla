@@ -16,7 +16,7 @@ class PotentialCallManager(models.Manager):
 
 
 class PotentialCall(SyncModelMixin, BaseUuidModel):
-
+    
     approximate_date = models.DateField(
         verbose_name="approximate appointment date",
         help_text='This date can be modified.')

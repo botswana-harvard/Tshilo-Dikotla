@@ -12,6 +12,10 @@ class TdRegisteredSubjectManager(RegisteredSubjectManager):
         options = {'subject_identifier': subject_identifier}
         return self.filter(**options)
 
+    def get_for_visit(self, visit):
+        options = {'subject_identifier': visit.subject_identifier}
+        return self.get(**options)
+
 
 class RegisteredSubject(SyncModelMixin, RegisteredSubjectModelMixin, BaseUuidModel):
 

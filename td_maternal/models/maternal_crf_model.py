@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps
 
 from edc_base.model.models import BaseUuidModel
 from edc_consent.model_mixins import RequiresConsentMixin
@@ -13,6 +14,7 @@ from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
 from .maternal_consent import MaternalConsent
 from .maternal_visit import MaternalVisit
 from .maternal_off_study import MaternalOffStudy
+from django.urls.base import reverse
 
 
 class MaternalCrfModel(SyncModelMixin, CrfModelMixin, ExportTrackingFieldsMixin, OffStudyMixin,

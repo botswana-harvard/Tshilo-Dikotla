@@ -53,6 +53,8 @@ class SpecimenConsent(SpecimenConsentMixin, SyncModelMixin, SampleCollectionFiel
         return self.consent_datetime
 
     class Meta:
+        consent_model = 'td_maternal.maternalconsent'
+        visit_schedule_name = 'maternal_visit_schedule'
         app_label = 'td_maternal'
         verbose_name = 'Specimen Consent'
         verbose_name_plural = 'Specimen Consent'

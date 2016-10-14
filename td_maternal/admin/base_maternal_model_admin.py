@@ -4,12 +4,19 @@ from edc_export.actions import export_as_csv_action
 
 from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 from ..models import MaternalVisit
+from django.urls.base import reverse
 
 
 class BaseMaternalModelAdmin(EdcBaseModelAdminMixin):
 
     dashboard_type = 'maternal'
     visit_model_name = 'maternalvisit'
+
+    def redirect_url(self, request, obj, post_url_continue=None):
+        url_name = request.GET.get(self.querystring_name)
+        subject_identifier = request.GET.get('subject_identifier')
+        appointment_id = request.GET.get('subject_identifier')
+        return reverse(url_name, kwargs={'appointment_pk': appointment_id, 'subject_identifier': subject_identifier})
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "maternal_visit":
