@@ -29,30 +29,30 @@
 		<blockquote class="blockquote" style="margin:0px">
   		<ul class="list-inline text-primary">
   			<li class="list-inline-item small">
-  				 {% for consent in consents %}
+  				 {% for label, url in subject_membership_models %}
   				 	{% if forloop.counter > 1%}
   				 		|
   				 	{% endif %}
-  					<a href="{{consent.1.get_absolute_url}}?next={% url 'subject_dashboard_url' consent.1.subject_identifier %}">{{consent.0}}</a>
+  					<a href="{{url}}?subject_identifier={{subject_identifier}}">{{label}}</a>
 	 			{% endfor %}
   			</li>
 		</ul>
 	</blockquote>
 	{% endblock membership_forms %}
 	{% block appointments %}
-    	{% include "amp_dashboard/appointments_forms.html" %}
+    	{% include "td_dashboard/appointments_forms.html" %}
 	{% endblock appointments %}
 
     {% block scheduled_data_collection %}
  		{% if show == 'forms' %}
-        	<p>{% include "amp_dashboard/scheduled_forms.html" %} </p>
+        	<p>{% include "td_dashboard/scheduled_forms.html" %} </p>
         {% endif %}
         
     {% endblock scheduled_data_collection %}
 
     {% block scheduled_requisitions %}
 		{% if show == 'forms' %}
-        	<p> {% include "amp_dashboard/requisition_forms.html" %}</p>
+        	<p> {% include "td_dashboard/requisition_forms.html" %}</p>
         {% endif %}
         
     {% endblock scheduled_requisitions %}
@@ -62,7 +62,7 @@
 <!-- Begin 3-col-visits -->
 	<div class="col-md-3" style="min-height:200px; border:1px solid #eeeeee;">
 	{% block locator_information %}
-		{% include "amp_dashboard/locator.html" %}
+		{% include "td_dashboard/locator.html" %}
 	{% endblock locator_information %}
 	</div>
 <!-- End 3-col-visits -->

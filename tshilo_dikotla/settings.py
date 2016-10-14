@@ -88,7 +88,7 @@ INSTALLED_APPS = [
     'edc_sync_files.apps.AppConfig',
     'td_call_manager.apps.AppConfig',
     'tshilo_dikotla.apps.EdcLabAppConfig',
-#     'td_dashboard.apps.AppConfig',
+    'td_dashboard.apps.AppConfig',
     'td_infant.apps.AppConfig',
     'td_lab.apps.AppConfig',
     'td_list.apps.AppConfig',

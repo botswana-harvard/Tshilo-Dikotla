@@ -22,6 +22,9 @@ class SubjectDashboardView(
         self.context = {}
         self.show = None
         self.template_name = 'td_dashboard/subject_dashboard.html'
+        self.membership_form_category = [
+            'td_maternal.specimenconsent', 'td_maternal.antenatalenrollment',
+            'td_maternal.antenatalvisitmembership']
 
     def get_context_data(self, **kwargs):
         self.context = super().get_context_data(**kwargs)
@@ -39,7 +42,8 @@ class SubjectDashboardView(
             'subject_identifier': self.subject_identifier,
             'consents': [],
             'dashboard_type': SUBJECT,
-            'locator': self.locator
+            'locator': self.locator,
+            'subject_membership_models': self.subject_membership_models()
         })
         return self.context
 
@@ -48,7 +52,6 @@ class SubjectDashboardView(
         context = self.get_context_data(**kwargs)
         self.show = request.GET.get('show', None)
         context.update({'show': self.show})
-        self.print_barcode_labels(request)
         return self.render_to_response(context)
 
     @property
@@ -69,7 +72,7 @@ class SubjectDashboardView(
     @property
     def requistions_metadata(self):
         requistions_metadata = RequisitionMetadata.objects.filter(
-            subject_identifier=self.subject_identifier, appointment=self.appointment)
+            subject_identifier=self.subject_identifier)
         return requistions_metadata
 
     @property
