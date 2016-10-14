@@ -1,6 +1,7 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from edc_constants.constants import POS, YES, NO, NEG, NOT_APPLICABLE
 from edc_constants.constants import UNKNOWN
 
@@ -32,7 +33,7 @@ class TestMaternalRandomization(BaseTestCase):
     def test_already_randomized(self):
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
         MaternalRandomizationFactory(maternal_visit=self.antenatal_visit_1)
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(IntegrityError):
             MaternalRandomizationFactory(maternal_visit=self.antenatal_visit_1)
 
     def test_pick_correct_next_randomization_item(self):
@@ -41,9 +42,27 @@ class TestMaternalRandomization(BaseTestCase):
         self.assertEqual(maternal_randomization.sid, 1)
         self.maternal_eligibility_2 = MaternalEligibilityFactory()
         self.maternal_consent_2 = MaternalConsentFactory(
-            registered_subject=self.maternal_eligibility_2.registered_subject)
-        self.registered_subject_2 = self.maternal_consent_2.registered_subject
-        self.create_mother(self.hiv_pos_mother_options(self.registered_subject_2))
+            maternal_eligibility=self.maternal_eligibility_2,
+            first_name='TATA', last_name='TATA', identity="111121112", confirm_identity="111121112")
+        self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
+
+        status_options = self.hiv_pos_mother_options(self.registered_subject_2)
+        self.antenatal_enrollment = AntenatalEnrollmentFactory(**status_options)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1000M')
+        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
+                                                                number_of_gestations=1
+                                                                )
+        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=self.registered_subject_2)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1010M')
+        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
         maternal_randomization_2 = MaternalRandomizationFactory(maternal_visit=self.antenatal_visit_1)
         self.assertEqual(maternal_randomization_2.sid, 2)
 
