@@ -33,7 +33,7 @@
   				 	{% if forloop.counter > 1%}
   				 		|
   				 	{% endif %}
-  					<a href="{{url}}?subject_identifier={{subject_identifier}}">{{label}}</a>
+  					<a href="{{url}}?next={% url 'subject_dashboard_url' subject_identifier %}">{{label}}</a>
 	 			{% endfor %}
   			</li>
 		</ul>

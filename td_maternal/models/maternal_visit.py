@@ -15,7 +15,6 @@ from edc_metadata.model_mixins import CreatesMetadataModelMixin
 
 from td_appointment.models import Appointment
 from td_registration.models import RegisteredSubject
-from .maternal_consent import MaternalConsent
 from .antenatal_enrollment import AntenatalEnrollment
 
 from td_maternal.managers import MaternalVisitManager
@@ -100,6 +99,17 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, Crea
 #                 raise AttributeError(str(e))
 #             scheduled_rapid_test = None
 #         return scheduled_rapid_test
+    def is_off_study_or_raise(self):
+        """Return True if the off-study report exists or
+        a previous visit reason is off study, otherwise False.
+
+        Once consented, a subject must be deliberately taken
+        "off study" using a model that uses the
+        :class:`edc_off_study.models.OffStudyModelMixin`."""
+        pass
+
+    def has_off_study_report_or_raise(self, subject_identifier, report_date):
+        pass
 
     @property
     def enrollment_hiv_status(self):

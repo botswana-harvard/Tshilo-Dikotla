@@ -151,8 +151,9 @@ class BaseEnrollmentForm(BaseModelForm):
                 subject_identifier=cleaned_data.get(
                     'registered_subject').subject_identifier)
         except (FieldError, AttributeError):
+            print ("get_consent_or_raise", cleaned_data.get('registered_subject'))
             obj = model_class.objects.get(
-                registered_subject__subject_identifier=cleaned_data.get(
+                maternal_eligibility__registered_subject__subject_identifier=cleaned_data.get(
                     'registered_subject').subject_identifier)
         except model_class.DoesNotExist:
             raise forms.ValidationError(

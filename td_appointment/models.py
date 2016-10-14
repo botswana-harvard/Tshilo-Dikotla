@@ -15,6 +15,18 @@ class Appointment(SyncModelMixin, AppointmentModelMixin, RequiresConsentMixin, B
 
     history = SyncHistoricalRecords()
 
+    @property
+    def str_pk(self):
+        return str(self.pk)
+
+    @property
+    def maternal_visit(self):
+        from td_maternal.models.maternal_visit import MaternalVisit
+        try:
+            return MaternalVisit.objects.get(appointment=self)
+        except MaternalVisit.DoesNotExist:
+            return None
+
     class Meta:
         app_label = 'td_appointment'
         consent_model = 'td_maternal.maternalconsent'

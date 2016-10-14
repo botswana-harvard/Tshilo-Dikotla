@@ -24,7 +24,7 @@ class SubjectDashboardView(
         self.template_name = 'td_dashboard/subject_dashboard.html'
         self.membership_form_category = [
             'td_maternal.specimenconsent', 'td_maternal.antenatalenrollment',
-            'td_maternal.antenatalvisitmembership']
+            'td_maternal.antenatalvisitmembership', 'td_maternal.maternallabourdel']
 
     def get_context_data(self, **kwargs):
         self.context = super().get_context_data(**kwargs)
@@ -66,7 +66,7 @@ class SubjectDashboardView(
     @property
     def scheduled_forms(self):
         scheduled_forms = CrfMetadata.objects.filter(
-            subject_identifier=self.subject_identifier)
+            subject_identifier=self.subject_identifier).order_by('-visit_code')
         return scheduled_forms
 
     @property

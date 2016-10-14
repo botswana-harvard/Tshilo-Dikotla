@@ -75,6 +75,7 @@ APP_NAME = settings.APP_NAME
 # )
 
 urlpatterns = [
+    url(r'^admin/', include(admin.site.urls)),
     url(r'login', LoginView.as_view(), name='login_url'),
     url(r'logout', LogoutView.as_view(pattern_name='login_url'), name='logout_url'),
     url(r'^edc-consent/', include('edc_consent.urls')),
@@ -84,7 +85,6 @@ urlpatterns = [
 #     url(r'^call_manager/', include('edc_call_manager.urls', 'call_manager')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/logout/$', RedirectView.as_view(url='/{app_name}/logout/'.format(app_name=APP_NAME))),
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^{app_name}/dashboard/'.format(app_name=APP_NAME),
         include('{app_name}_dashboard.urls'.format(app_name=APP_NAME))),
