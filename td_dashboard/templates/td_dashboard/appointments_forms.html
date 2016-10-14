@@ -26,12 +26,12 @@
 		        <td>{{appointment.schedule_name}}</td>
 				<td>{{appointment.appt_type | capfirst}}</td>
 				<td>{{appointment.appt_datetime|date:"Y-m-d D"| capfirst}}</td>
-				<td><a href="{% url 'admin:amp_appointment_change' appointment.pk %}?subject_identifier={{ appointment.subject_identifier }}">{{ appointment.appt_status | capfirst }}</a></td>
+				<td><a href="{% url 'admin:td_appointment_appointment_change' appointment.pk %}?subject_identifier={{ appointment.subject_identifier }}">{{ appointment.appt_status | capfirst }}</a></td>
 		        <td>
 		        	{% if appointment.subject_visit %}
-		        		<a href="{% url 'admin:amp_subjectvisit_change' appointment.subject_visit.pk %}?subject_identifier={{ appointment.subject_identifier }}">{{ appointment.subject_visit.report_datetime |date:"Y-m-d D"| capfirst }}</a>
+		        		<a href="{% url 'admin:td_maternal_subjectvisit_change' appointment.subject_visit.pk %}?subject_identifier={{ appointment.subject_identifier }}">{{ appointment.subject_visit.report_datetime |date:"Y-m-d D"| capfirst }}</a>
 		        	{% else %}
-		        		<a href="{% url 'admin:amp_subjectvisit_add' %}?subject_identifier={{ appointment.subject_identifier }}">Add Visit</a>
+		        		<a href="{% url 'admin:td_maternal_subjectvisit_add' %}?subject_identifier={{ appointment.subject_identifier }}">Add Visit</a>
 		        	{% endif %}
 		        </td>
 		        <td><b>{{appointment.appt_reason}}</b></td>

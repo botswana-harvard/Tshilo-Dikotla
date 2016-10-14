@@ -64,9 +64,9 @@ class SpecimenConsentAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "registered_subject":
-            if request.GET.get('registered_subject'):
+            if request.GET.get('subject_identifier'):
                 kwargs["queryset"] = RegisteredSubject.objects.filter(
-                    id__exact=request.GET.get('registered_subject', 0))
+                    subject_identifier=request.GET.get('subject_identifier', 0))
             else:
                 self.readonly_fields = list(self.readonly_fields)
                 try:

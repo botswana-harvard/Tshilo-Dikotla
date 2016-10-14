@@ -20,16 +20,18 @@
             </a>
             <ul class="dropdown-menu">
               <li class="dropdown-header">Subjects</li>
+              
+              <li><a id="link-maternal" href="{% url 'maternal_url' %}">Maternal</a></li>
               {% comment %}
-              <!--  <li><a id="link-maternal" href="{% url 'section_url' 'maternal' %}">Maternal</a></li>
               <li><a id="link-infant" href="{% url 'section_url' 'infant' %}">Infant</a></li> -->
               {% endcomment %}
           </ul>
           </li>
-          
+          {% comment %}
           <li><a id="pill-call-manager" href="{% url 'admin:call_manager_call_changelist' %}">Call Subjects
                 <span class="glyphicon glyphicon-earphone pull-right" aria-hidden="true"></span>
-          </a></li> 
+          </a></li>
+          {% endcomment %}
           <li><a id="link-verify-consent-subjects" href="{% url 'admin:td_maternal_maternalconsent_changelist' %}">Verify Consents
                 <!--<span id="bdg-consent-verified" class="badge pull-right"></span>-->
           </a></li>
