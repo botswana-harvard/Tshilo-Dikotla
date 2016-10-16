@@ -1,19 +1,18 @@
 from dateutil.relativedelta import relativedelta
-from datetime import datetime, date
 from django.utils import timezone
 
+from td_appointment.models import Appointment
 from td_registration.models import RegisteredSubject
-from edc_constants.constants import (UNKNOWN, 
-    YES, NEG, NOT_APPLICABLE, POS, NO, SCHEDULED, CONTINUOUS, STOPPED, RESTARTED)
+from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO)
 from edc_code_lists.models import WcsDxAdult
 
 from td_list.models import MaternalDiagnoses
-from td_maternal.models import MaternalVisit
 from td_maternal.forms import MaternalDiagnosesForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory)
+                        AntenatalEnrollmentFactory, MaternalVisitFactory, AntenatalVisitMembershipFactory,
+                        MaternalLabourDelFactory)
 
 
 class TestMaternalDiagnosesForm(BaseTestCase):
@@ -36,33 +35,52 @@ class TestMaternalDiagnosesForm(BaseTestCase):
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
-        self.maternal_visit = MaternalVisit.objects.get(
-            appointment__registered_subject=self.registered_subject,
-            reason=SCHEDULED,
-            appointment__visit_code='1000M')
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
+        self.maternal_visit = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(
             maternal_visit=self.maternal_visit, number_of_gestations=1,)
 
+        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=options.get('registered_subject'))
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
+        self.maternal_visit = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
+        MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        MaternalLabourDelFactory(registered_subject=self.registered_subject)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
+        MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
+        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
         self.diagnoses = MaternalDiagnoses.objects.create(
-            hostname_created="django", name="Gestational Hypertension", 
-            short_name="Gestational Hypertension", created=timezone.datetime.now(), 
-            user_modified="", modified=timezone.datetime.now(), 
-            hostname_modified="django", version="1.0", 
-            display_index=1, user_created="django", field_name=None, 
+            hostname_created="django", name="Gestational Hypertension",
+            short_name="Gestational Hypertension", created=timezone.datetime.now(),
+            user_modified="", modified=timezone.datetime.now(),
+            hostname_modified="django", version="1.0",
+            display_index=1, user_created="django", field_name=None,
             revision=":develop:")
 
         self.diagnoses_na = MaternalDiagnoses.objects.create(
-            hostname_created="django", name="Not Applicable", 
-            short_name="N/A", created=timezone.datetime.now(), 
-            user_modified="", modified=timezone.datetime.now(), 
-            hostname_modified="django", version="1.0", 
-            display_index=1, user_created="django", field_name=None, 
+            hostname_created="django", name="Not Applicable",
+            short_name="N/A", created=timezone.datetime.now(),
+            user_modified="", modified=timezone.datetime.now(),
+            hostname_modified="django", version="1.0",
+            display_index=1, user_created="django", field_name=None,
             revision=":develop:")
 
         self.who_dx = WcsDxAdult.objects.create(
             hostname_created="cabel", code="CS4003", short_name="Recurrent severe bacterial pneumo",
             created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(), hostname_modified="cabel",
-            long_name="Recurrent severe bacterial pneumonia", user_created="abelc", 
+            long_name="Recurrent severe bacterial pneumonia", user_created="abelc",
             list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
 
         self.who_dx_na = WcsDxAdult.objects.create(
@@ -70,13 +88,13 @@ class TestMaternalDiagnosesForm(BaseTestCase):
             created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(), hostname_modified="cabel",
             long_name="Not Applicable", user_created="abelc", 
             list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
-    
+
         self.options = {
-                'new_diagnoses': YES,
-                'diagnoses': [self.diagnoses.id],
-                'has_who_dx': YES,
-                'who': [self.who_dx.id]
-                }
+            'maternal_visit': self.maternal_visit_2000,
+            'new_diagnoses': YES,
+            'diagnoses': [self.diagnoses.id],
+            'has_who_dx': YES,
+            'who': [self.who_dx.id]}
 
     def test_has_diagnoses_no_dx(self):
         self.options['diagnoses'] = None

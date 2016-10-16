@@ -4,7 +4,7 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 
 from edc_constants.constants import NO
-from edc_constants.choices import YES_NO, YES_NO_NA
+from edc_constants.choices import YES_NO
 from django_crypto_fields.fields import EncryptedCharField
 
 from td_maternal.classes import Randomization

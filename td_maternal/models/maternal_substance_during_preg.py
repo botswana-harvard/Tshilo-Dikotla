@@ -1,11 +1,11 @@
 from django.db import models
 
 from edc_constants.choices import YES_NO
-from edc_constants.constants import NOT_APPLICABLE
 
 from td_maternal.maternal_choices import SMOKING_DRINKING_FREQUENCY
 
 from .maternal_crf_model import MaternalCrfModel
+
 
 class MaternalSubstanceUseDuringPreg(MaternalCrfModel):
 
@@ -58,7 +58,7 @@ class MaternalSubstanceUseDuringPreg(MaternalCrfModel):
         null=True,
         help_text="")
 
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = 'Maternal Substance Use During Pregnancy'
         verbose_name_plural = 'Maternal Substance Use During Pregnancy'

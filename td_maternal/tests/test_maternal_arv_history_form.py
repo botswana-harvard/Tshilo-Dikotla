@@ -43,7 +43,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
             maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
 
         prior_arv = PriorArv.objects.create(
-            hostname_created= "django", name="Atripla", short_name="Atripla",
+            hostname_created="django", name="Atripla", short_name="Atripla",
             created="2016-23-20T15:05:12.799", user_modified="", modified="2016-23-20T15:05:12.799", 
             hostname_modified="django", version="1.0", display_index=1, user_created="django", 
             field_name=None, revision=":develop")
@@ -56,7 +56,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
             'preg_on_haart': YES,
             'haart_changes': 0,
             'prior_preg': CONTINUOUS,
-            'prior_arv': [prior_arv.id],}
+            'prior_arv': [prior_arv.id]}
 
     def test_arv_interrupt_1(self):
         """Assert that if was not still on ARV then 'interruption never restarted'
