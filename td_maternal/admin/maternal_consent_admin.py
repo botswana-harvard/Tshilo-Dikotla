@@ -8,10 +8,12 @@ from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
 from ..forms import MaternalConsentForm
 from ..models import MaternalConsent, MaternalEligibility
+from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
+from django.urls.base import reverse
 
 
 @admin.register(MaternalConsent)
-class MaternalConsentAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
+class MaternalConsentAdmin(EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     form = MaternalConsentForm
 
@@ -92,6 +94,16 @@ class MaternalConsentAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
                  'dob': 'dob',
                  'registered': 'consent_datetime'}),
         )]
+
+    def redirect_url(self, request, obj, post_url_continue=None):
+        args = request.GET.dict()
+        args.pop(self.querystring_name)
+        redirect_url = super(ModelAdminNextUrlRedirectMixin, self).redirect_url(
+            request, obj, post_url_continue)
+        if request.GET.get(self.querystring_name):
+            url_name = request.GET.get(self.querystring_name)
+            return reverse(url_name)
+        return redirect_url
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "maternal_eligibility":

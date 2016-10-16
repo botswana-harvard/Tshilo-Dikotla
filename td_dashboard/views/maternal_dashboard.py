@@ -22,4 +22,4 @@ class MaternalDasboard(TemplateView):
 
     @property
     def maternal_eligibilities(self):
-        return MaternalEligibility.objects.all()
+        return MaternalEligibility.objects.all().order_by('-created')[:20]
