@@ -8,10 +8,11 @@ from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
 from ..forms import AntenatalEnrollmentForm
 from ..models import AntenatalEnrollment
+from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
 
 
 @admin.register(AntenatalEnrollment)
-class AntenatalEnrollmentAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
+class AntenatalEnrollmentAdmin(EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     dashboard_type = 'maternal'
     form = AntenatalEnrollmentForm
