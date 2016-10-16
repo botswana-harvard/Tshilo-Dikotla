@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 
 from edc_base.modeladmin.mixins import (
     ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
-    ModelAdminAuditFieldsMixin)
+    ModelAdminAuditFieldsMixin, ModelAdminModelRedirectMixin)
 
 
 class EdcBaseModelAdminMixin(ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
@@ -13,12 +13,17 @@ class EdcBaseModelAdminMixin(ModelAdminFormInstructionsMixin, ModelAdminFormAuto
     empty_value_display = '-'
 
 
-class SectionRedirectUrlMixin(ModelAdminNextUrlRedirectMixin):
+class SectionRedirectUrlMixin:
+    pass
 
-    def redirect_url(self, request, obj, post_url_continue=None):
-        url_name = request.GET.get(self.querystring_name)
-        section_name = request.GET.get('section_name')
-        return reverse(url_name, kwargs={'section_name': section_name})
+
+class SubjectDashboardRedirectUrlMixin(ModelAdminModelRedirectMixin):
+    pass
+
+#     def redirect_url(self, request, obj, post_url_continue=None):
+#         url_name = request.GET.get(self.querystring_name)
+#         section_name = request.GET.get('section_name')
+#         return reverse(url_name, kwargs={'section_name': section_name})
 
 
 class DashboardRedirectUrlMixin(ModelAdminNextUrlRedirectMixin):

@@ -40,7 +40,7 @@
 		        		<a href="{% url 'admin:td_maternal_maternalvisit_add' %}?next=next=subject_dashboard_url&subject_identifier={{ appointment.subject_identifier }}">Add Visit</a>
 		        	{% endif %}
 		        </td>
-		        <td><b>{{appointment.appt_reason}}</b></td>
+		        <td>{{appointment.maternal_visit.reason}}</td>
 			    <td>
 			    	{% if show %}
 			    		<a href="{% url 'subject_dashboard_url' subject_identifier %}">show appointments</a>

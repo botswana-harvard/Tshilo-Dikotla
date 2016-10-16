@@ -5,9 +5,10 @@ from edc_export.actions import export_as_csv_action
 from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 from ..models import MaternalVisit
 from django.urls.base import reverse
+from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
 
 
-class BaseMaternalModelAdmin(EdcBaseModelAdminMixin):
+class BaseMaternalModelAdmin(EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin):
 
     dashboard_type = 'maternal'
     visit_model_name = 'maternalvisit'
@@ -15,13 +16,16 @@ class BaseMaternalModelAdmin(EdcBaseModelAdminMixin):
     def redirect_url(self, request, obj, post_url_continue=None):
         url_name = request.GET.get(self.querystring_name)
         subject_identifier = request.GET.get('subject_identifier')
-        appointment_id = request.GET.get('subject_identifier')
-        return reverse(url_name, kwargs={'appointment_pk': appointment_id, 'subject_identifier': subject_identifier})
+        appointment_id = request.GET.get('appointment_pk')
+        dashboard_url = reverse(url_name, kwargs={'appointment_pk': appointment_id, 'subject_identifier': subject_identifier})
+        show = 'show={}'.format(request.GET.get('show', None))
+        next_url = "{}?{}".format(dashboard_url, show)
+        return next_url
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "maternal_visit":
-            if request.GET.get('maternal_visit'):
-                kwargs["queryset"] = MaternalVisit.objects.filter(id=request.GET.get('maternal_visit'))
+            if request.GET.get('subject_identifier'):
+                kwargs["queryset"] = MaternalVisit.objects.filter(appointment__subject_identifier=request.GET.get('subject_identifier'))
         return super(BaseMaternalModelAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     actions = [

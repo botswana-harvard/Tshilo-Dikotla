@@ -66,7 +66,7 @@ class SubjectDashboardView(
     @property
     def scheduled_forms(self):
         scheduled_forms = CrfMetadata.objects.filter(
-            subject_identifier=self.subject_identifier).order_by('-visit_code')
+            subject_identifier=self.subject_identifier).order_by('created')
         return scheduled_forms
 
     @property
