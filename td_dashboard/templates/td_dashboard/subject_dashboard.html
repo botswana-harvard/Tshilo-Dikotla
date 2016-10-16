@@ -30,10 +30,12 @@
   		<ul class="list-inline text-primary">
   			<li class="list-inline-item small">
   				 {% for label, url in subject_membership_models %}
-  				 	{% if forloop.counter > 1%}
-  				 		|
-  				 	{% endif %}
-  					<a href="{{url}}?next={% url 'subject_dashboard_url' subject_identifier %}">{{label}}</a>
+				 	{% if "complete" in label %}
+				 		|
+				 	{% else %}
+				 		|<span style="background:red;"> </span> 
+				 	{% endif %}
+  					<a href="{{url}}?next=subject_dashboard_url&subject_identifier={{subject_identifier}}">{{label}}</a>
 	 			{% endfor %}
   			</li>
 		</ul>

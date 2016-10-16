@@ -8,10 +8,11 @@ from td_lab.models import MaternalRequisition
 
 from ..forms import MaternalVisitForm
 from ..models import MaternalVisit
+from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
 
 
 @admin.register(MaternalVisit)
-class MaternalVisitAdmin(VisitAdminMixin, EdcBaseModelAdminMixin, admin.ModelAdmin):
+class MaternalVisitAdmin(VisitAdminMixin, EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     form = MaternalVisitForm
     visit_attr = 'maternal_visit'
