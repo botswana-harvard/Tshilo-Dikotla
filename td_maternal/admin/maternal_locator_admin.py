@@ -1,14 +1,17 @@
 from django.contrib import admin
 
 from td_registration.models import RegisteredSubject
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, SubjectDashboardRedirectUrlMixin
 
 from ..forms import MaternalLocatorForm
 from ..models import MaternalLocator
+from td_maternal.models.maternal_visit import MaternalVisit
+from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
+from td_maternal.admin.base_maternal_model_admin import BaseMaternalModelAdmin
 
 
 @admin.register(MaternalLocator)
-class MaternalLocatorAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
+class MaternalLocatorAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalLocatorForm
 
@@ -54,6 +57,10 @@ class MaternalLocatorAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
     actions = []  # do not allow export to CSV
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "registered_subject":
-            kwargs["queryset"] = RegisteredSubject.objects.filter(id__exact=request.GET.get('registered_subject', 0))
+
+        if db_field.name == 'maternal_visit' and request.GET.get('appointment_pk'):
+            kwargs["queryset"] = MaternalVisit.objects.filter(appointment__pk=request.GET.get('appointment_pk', 0))
+        elif db_field.name == "registered_subject":
+            kwargs["queryset"] = RegisteredSubject.objects.filter(subject_identifier=request.GET.get('subject_identifier', 0))
+
         return super(MaternalLocatorAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)

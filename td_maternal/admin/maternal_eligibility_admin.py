@@ -8,10 +8,11 @@ from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
 from ..forms import MaternalEligibilityForm
 from ..models import MaternalEligibility
+from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
 
 
 @admin.register(MaternalEligibility)
-class MaternalEligibilityAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
+class MaternalEligibilityAdmin(EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     form = MaternalEligibilityForm
 

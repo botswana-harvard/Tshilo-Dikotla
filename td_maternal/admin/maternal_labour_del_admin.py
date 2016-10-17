@@ -8,10 +8,11 @@ from ..forms import MaternalLabourDelForm, MaternalHivInterimHxForm
 from ..models import MaternalLabourDel, MaternalHivInterimHx
 
 from .base_maternal_model_admin import BaseMaternalModelAdmin
+from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
 
 
 @admin.register(MaternalLabourDel)
-class MaternalLabourDelAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
+class MaternalLabourDelAdmin(EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     dashboard_type = 'maternal'
     form = MaternalLabourDelForm

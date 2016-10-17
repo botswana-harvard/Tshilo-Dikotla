@@ -1,5 +1,5 @@
 
-<h5>Scheduled Forms  for Visit '1000M'</h5>
+<h5>Scheduled Forms  for Visit {{visit_code}}</h5>
 <i> Hint: To edit the forms below, change the selected appointment's status to 'In Progress'</i> 
 <table class="table table-bordered table-striped table-condensed">
 	<thead>
@@ -18,9 +18,13 @@
 	<tbody>
 		{% for crf in scheduled_forms %}
 			<tr>
-			    <td><span style="background:red; margin-right:20px">&nbsp;</span>{{forloop.counter}}</td>
+			    <td>{% if crf.entry_status == 'REQUIRED' %}<span style="background:red; margin-right:20px">&nbsp;</span>{% endif %} {{forloop.counter}}</td>
 			    <td>
-			        <a href="{{crf.crf_model_add_or_update.1}}?next={% url 'subject_dashboard_url' crf.appointment.str_pk subject_identifier %}&show=forms">{{crf.crf_model_add_or_update.0}}</a>
+			    	{% if crf.entry_status == 'NOT_REQUIRED' %}
+			        	<span>{{crf.crf_model_add_or_update.0}}</span>
+			        {% else %}
+			        	<a href="{{crf.crf_model_add_or_update.1}}?next=subject_dashboard_url&appointment_pk={{crf.appointment.str_pk}}&subject_identifier={{subject_identifier}}&show=forms">{{crf.crf_model_add_or_update.0}}</a>
+			   		{% endif %}
 			    </td>                
 			    <td>
 			         {{crf.entry_status}}

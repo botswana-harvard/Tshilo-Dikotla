@@ -31,7 +31,7 @@
 		                </ul>
 		            </td>
                 {% elif maternal_eligibility.is_eligible %}
-                    <td><A href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=section_url&section_name=maternal">add maternal consent (V{{maternal_eligibility.current_consent_version}})</A></td>
+                    <td><A href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=maternal_url">add maternal consent (V{{maternal_eligibility.current_consent_version}})</A></td>
                 {% else %}
                     <td>{{ maternal_eligibility.ineligibility }}</td>
                 {% endif %}

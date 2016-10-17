@@ -10,10 +10,11 @@ from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
 from ..forms import SpecimenConsentForm
 from ..models import SpecimenConsent
+from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
 
 
 @admin.register(SpecimenConsent)
-class SpecimenConsentAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
+class SpecimenConsentAdmin(EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     dashboard_type = 'maternal'
     form = SpecimenConsentForm
