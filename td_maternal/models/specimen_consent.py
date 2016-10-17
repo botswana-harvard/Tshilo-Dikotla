@@ -15,7 +15,7 @@ from .maternal_consent import MaternalConsent
 
 
 class SpecimenConsent(SpecimenConsentMixin, SyncModelMixin, SampleCollectionFieldsMixin, RequiresConsentMixin,
-                      VulnerabilityFieldsMixin, CreateAppointmentsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+                      VulnerabilityFieldsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ A model completed by the user when a mother gives consent for specimen storage. """
 
