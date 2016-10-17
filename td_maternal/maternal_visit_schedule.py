@@ -32,7 +32,7 @@ maternal_enrollment_crfs = (
     Crf(show_order=60, model='td_maternal.maternallifetimearvhistory'),
     Crf(show_order=70, model='td_maternal.maternalarvpreg'),
     Crf(show_order=80, model='td_maternal.maternalclinicalmeasurementsone'),
-    Crf(show_order=90, model='td_maternal.maternaloffstudy'),
+    Crf(show_order=90, model='td_maternal.maternaloffstudy', required=False),
 )
 
 maternal_antenatal1_crfs = (

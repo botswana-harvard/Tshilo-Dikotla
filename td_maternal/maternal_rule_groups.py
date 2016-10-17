@@ -80,12 +80,12 @@ def show_rapid_test_form(visit_instance, *args):
         if maternal_status_helper.hiv_status == NEG:
             # Get the last date the Rapid Test was processed.
             prev_rapid_test = (RapidTestResult.objects.filter(
-                maternal_visit__appointment__registered_subject__subject_identifier=subject_identifier).
+                maternal_visit__appointment__subject_identifier=subject_identifier).
                 order_by('-created').first())
 
             # Get the EDD confirmed.
             maternal_ultrasound = (MaternalUltraSoundInitial.objects.filter(
-                maternal_visit__appointment__registered_subject__subject_identifier=subject_identifier)
+                maternal_visit__appointment__subject_identifier=subject_identifier)
                 .order_by('-created').first())
             if prev_rapid_test and maternal_ultrasound:
                 if (maternal_ultrasound.edd_confirmed - prev_rapid_test.result_date).days < 56:
