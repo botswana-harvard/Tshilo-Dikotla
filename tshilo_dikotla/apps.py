@@ -45,7 +45,8 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
     protocol_number = '085'
     protocol_name = 'Tshilo Dikotla'
     protocol_title = ''
-    study_start_datetime = timezone.datetime(2016, 4, 1, 0, 0, 0)
+
+    study_open_datetime = timezone.datetime(2016, 4, 1, 0, 0, 0)
     study_end_datetime = timezone.datetime(2018, 12, 1, 0, 0, 0)
     subject_types = {'maternal': 'maternal', 'infant': 'infant'}
     enrollment_caps = {'td_maternal.antenatalenrollment': ('maternal', -1),
