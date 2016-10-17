@@ -10,6 +10,7 @@ from td_maternal.models.requisition_meta_data import RequisitionMetadata
 from edc_constants.constants import SUBJECT
 from td_maternal.models.maternal_locator import MaternalLocator
 from td_maternal.models.maternal_crf_meta_data import CrfMetadata
+from tshilo_dikotla.constants import MATERNAL
 
 
 class SubjectDashboardView(
@@ -37,11 +38,12 @@ class SubjectDashboardView(
             'markey_data': self.markey_data.items(),
             'markey_next_row': self.markey_next_row,
             'requistions_metadata': self.requistions_metadata,
-            'scheduled_forms': self.scheduled_forms,
+            'scheduled_forms': self.scheduled_forms[0],
+            'visit_code': self.scheduled_forms[1],
             'appointments': self.appointments,
             'subject_identifier': self.subject_identifier,
             'consents': [],
-            'dashboard_type': SUBJECT,
+            'dashboard_type': MATERNAL,
             'locator': self.locator,
             'subject_membership_models': self.subject_membership_models()
         })
@@ -65,9 +67,11 @@ class SubjectDashboardView(
 
     @property
     def scheduled_forms(self):
+        visit_code = self.appointment.visit_code if self.appointment else '1000M'
         scheduled_forms = CrfMetadata.objects.filter(
-            subject_identifier=self.subject_identifier).order_by('created')
-        return scheduled_forms
+            subject_identifier=self.subject_identifier,
+            visit_code=visit_code).order_by('created')
+        return (scheduled_forms, visit_code)
 
     @property
     def requistions_metadata(self):
