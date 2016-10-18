@@ -97,7 +97,7 @@ maternal_visit_schedule = VisitSchedule(
 
 # antenatal enrollment schedule
 maternal_antenatal_enrollment = Schedule(
-    name='maternal_enrollment_schedule',
+    name='maternal_enrolment_sched',
     enrollment_model='td_maternal.antenatalenrollment')
 
 maternal_antenatal_enrollment.add_visit(
@@ -112,7 +112,7 @@ maternal_visit_schedule.add_schedule(maternal_antenatal_enrollment)
 
 # antenatal visit 1 and 2 schedule
 maternal_antenatal_schedule = Schedule(
-    name='maternal_antenatal_membership_schedule',
+    name='maternal_ant_mem_sched',
     enrollment_model='td_maternal.antenatalvisitmembership')
 
 
@@ -137,7 +137,7 @@ maternal_visit_schedule.add_schedule(maternal_antenatal_schedule)
 
 # follow up visit
 follow_up_visit_schedule = Schedule(
-    name='Follow up visit schedule',
+    name='follow_up_visit_sched',
     enrollment_model='td_maternal.maternallabourdel')
 
 follow_up_visit_schedule.add_visit(
