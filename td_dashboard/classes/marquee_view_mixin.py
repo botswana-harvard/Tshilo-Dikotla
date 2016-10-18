@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from django.apps import apps
 from django.urls.base import reverse
 
@@ -6,7 +7,7 @@ class MarqueeViewMixin:
 
     def __init__(self):
         self.context = {}
-        self.markey_next_row = 15
+        self.markey_next_row = 4
         self.consent_model = None
         self.membership_form_category = []
 
@@ -15,20 +16,24 @@ class MarqueeViewMixin:
         return self.context
 
     @property
-    def markey_data(self):
-        markey_data = {}
+    def marquee_data(self):
+        marquee_data = OrderedDict()
         if self.consent:
-            markey_data = {
-                'Name': '{}({})'.format(self.consent.first_name, self.consent.initials),
-                'Born': self.consent.dob,
-                'Age': self.age,
-                'Consented': self.consent.consent_datetime,
-                'Omang': self.consent.identity,
-                'Gender': self.gender,
-                'Age Today': self.age_today,
-                'Identifier': self.consent.subject_identifier,
-            }
-        return markey_data
+            marquee_data['Name'] = '{}({})'.format(self.consent.first_name, self.consent.initials),
+            marquee_data['Born'] = self.consent.dob,
+            marquee_data['Age'] = self.age,
+            marquee_data['Consented'] = self.consent.consent_datetime,
+            marquee_data['Antenatal enrollment status'] = self.maternal_marquee_data.get('antenatal_enrollment_status'),
+            marquee_data['Enrollment HIV status'] = self.maternal_marquee_data.get('enrollment_hiv_status'),
+            marquee_data['Current HIV status'] = self.maternal_marquee_data.get('current_hiv_status'),
+            marquee_data['Pregnant, GA'] = self.maternal_marquee_data.get('gestational_age'),
+            marquee_data['Planned delivery site'] = self.maternal_marquee_data.get('delivery_site'),
+            marquee_data['Randomized'] = self.maternal_marquee_data.get('randomized')
+        return marquee_data
+
+    @property
+    def maternal_marquee_data(self):
+        return {}
 
     @property
     def consent(self):
@@ -41,11 +46,6 @@ class MarqueeViewMixin:
     @property
     def age_today(self):
         return None
-
-    @property
-    def gender(self):
-        gender = 'Female' if self.consent.gender == 'F' else 'Male'
-        return gender
 
     def subject_membership_models(self):
         """ """

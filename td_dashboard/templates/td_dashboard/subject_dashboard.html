@@ -6,12 +6,12 @@
 
 <!-- Beginning of Demographic Div -->
 <div class="row" style="border:1px solid #eeeeee;">
-<address>
+<address style="font-family: "Times New Roman", Times, serif;">
   <strong>{{dashboard_type | capfirst}} Dashboard</strong> 
   <hr style="margin-top:4px; margin-bottom:4px;">
   	<mark>
 		{% for key, value in markey_data %}
-		    <strong>{{key}}:</strong><span style="margin-left:5px;">{{value}}</span>
+		    <strong style="margin-left:10px;">{{key}}:</strong><span style="margin-left:5px;">{{value.0}}  </span>
 		    {% if forloop.counter == markey_next_row %}
 		    	<br>
 		    {% endif %}
@@ -26,7 +26,7 @@
 <!-- 9-col-visits -->
 	<div class="col-md-9" style="min-height:200px; border:1px solid #eeeeee;">
 	{% block membership_forms %}
-		<blockquote class="blockquote" style="margin:0px">
+		<blockquote class="blockquote" style="font-family: "Times New Roman", Times, serif;">
   		<ul class="list-inline text-primary">
   			<li class="list-inline-item small">
   				 {% for label, url in subject_membership_models %}
