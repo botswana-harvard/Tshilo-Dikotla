@@ -15,4 +15,5 @@ from .panel import Panel
 # from .result_item import ResultItem
 from .infant_requisition import InfantRequisition
 from .maternal_requisition import MaternalRequisition
+from .specimen_collection import SpecimenCollection, SpecimenCollectionItem
 # from td_maternal.models.requisition_meta_data import RequisitionMetadata

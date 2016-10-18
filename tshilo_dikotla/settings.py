@@ -69,16 +69,11 @@ INSTALLED_APPS = [
     'django_js_reverse',
     'corsheaders',
     'crispy_forms',
-#     'edc_templates',  # for what?
-#     'edc_configuration',  # ???
-#     'edc_appointment.apps.AppConfig',
     'django_revision.apps.AppConfig',
     'django_crypto_fields.apps.AppConfig',
     'edc_call_manager.apps.AppConfig',
     'django_appconfig_ini',
     'edc_content_type_map.apps.AppConfig',
-#     'edc_dashboard.apps.AppConfig',
-    # 'edc_data_manager.apps.AppConfig', # not ready
     'edc_code_lists',
     'edc_death_report.apps.AppConfig',
     'edc_device.apps.AppConfig',
@@ -126,7 +121,6 @@ if 'test' in sys.argv:
                          "edc_consent": None,
                          "edc_rule_groups": None,
                          "edc_data_manager": None,
-                         #"lab_packing": None,
                          "lab_clinic_api": None,
                          'django_crypto_fields': None,
                          "lab_clinic_reference": None,

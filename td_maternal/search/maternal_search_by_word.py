@@ -1,11 +1,11 @@
 from django.db.models import Q
 
-from edc_dashboard.search import BaseSearchByWord
+# from edc_dashboard.search import BaseSearchByWord
 
 from ..models import MaternalEligibility
 
 
-class MaternalSearchByWord(BaseSearchByWord):
+class MaternalSearchByWord():
 
     name = 'word'
     search_model = MaternalEligibility

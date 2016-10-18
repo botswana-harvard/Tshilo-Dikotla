@@ -32,7 +32,7 @@ class MaternalSubstanceUsePriorPregForm(BaseMaternalModelForm):
                 raise forms.ValidationError('Participant has drank alcohol prior this pregnancy, please give a frequency.')
         else:
             if cleaned_data.get('alcohol_prior_preg_freq'):
-                raise forms.ValidationError('Participant has never drank alcohol during this pregnancy, please do not give a frequency.')
+                raise forms.ValidationError('Participant has never drank alcohol prior this pregnancy, please do not give a frequency.')
 
     def validate_marijuana_prior_preg(self):
         cleaned_data = self.cleaned_data

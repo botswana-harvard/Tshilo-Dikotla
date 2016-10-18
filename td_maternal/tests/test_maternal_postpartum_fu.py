@@ -1,7 +1,7 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-from edc_constants.constants import (YES, POS, NOT_APPLICABLE, NO)
+from edc_constants.constants import (YES, POS, NEG, NOT_APPLICABLE, NO)
 from edc_code_lists.models import WcsDxAdult
 from td_appointment.models import Appointment
 
@@ -12,7 +12,7 @@ from td_maternal.forms import MaternalPostPartumFuForm
 from .base_test_case import BaseTestCase
 from .factories import (MaternalEligibilityFactory, MaternalConsentFactory, MaternalLabourDelFactory,
                         AntenatalEnrollmentFactory, MaternalVisitFactory, MaternalUltraSoundIniFactory,
-                        AntenatalVisitMembershipFactory)
+                        AntenatalVisitMembershipFactory, RapidTestResultFactory)
 
 
 class TestMaternalPostPartumFu(BaseTestCase):
@@ -114,9 +114,6 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
     def test_diagnosis_list_none(self):
         """check if the diagnosis list is empty"""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
-        self.options['maternal_visit'] = self.maternal_visit_2000.id
         self.options['diagnoses'] = None
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
@@ -125,9 +122,6 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
     def test_new_diagnoses_no_diagnosis_list_no_not_applicable(self):
         """checks if the diagnosis list is given when the patient has no new diagnoses"""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
-        self.options['maternal_visit'] = self.maternal_visit_2000.id
         self.options['new_diagnoses'] = NO
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
@@ -136,9 +130,6 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
     def test_new_diagnoses_no_diagnosis_list_listed_has_not_applicable(self):
         """Checks if multiple options are selected with N/A as one of them"""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
-        self.options['maternal_visit'] = self.maternal_visit_2000.id
         self.options['new_diagnoses'] = NO
         self.options['diagnoses'] = [self.diagnoses.id, self.diagnoses_na.id]
         form = MaternalPostPartumFuForm(data=self.options)
@@ -148,9 +139,6 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
     def test_new_diagnoses_yes_diagnosis_list_has_not_applicable(self):
         """Checks if diagnoses listing is N/A even though mother has new diagnoses"""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
-        self.options['maternal_visit'] = self.maternal_visit_2000.id
         self.options['diagnoses'] = [self.diagnoses_na.id]
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
@@ -227,8 +215,29 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
     def test_mother_negative_who_diagnosis_yes(self):
         """checks whether question 10 for WHO Stage III/IV is N/A if the mother is negative"""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        self.maternal_eligibility_2 = MaternalEligibilityFactory()
+        self.maternal_consent_2 = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility_2,
+            first_name='TATA', last_name='TATA', identity="111121112", confirm_identity="111121112")
+
+        self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
+        self.create_mother(self.hiv_neg_mother_options(self.registered_subject_2))
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1020M')
+        maternal_visit_1020M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        RapidTestResultFactory(maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
+        MaternalLabourDelFactory(registered_subject=self.registered_subject_2)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
+        maternal_visit_2010M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
+        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
         self.options['maternal_visit'] = self.maternal_visit_2000.id
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
@@ -236,8 +245,29 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
     def test_mother_negative_who_listing_none(self):
         """Checks if the field for who diagnosis listing is empty"""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        self.maternal_eligibility_2 = MaternalEligibilityFactory()
+        self.maternal_consent_2 = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility_2,
+            first_name='TATA', last_name='TATA', identity="111121112", confirm_identity="111121112")
+
+        self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
+        self.create_mother(self.hiv_neg_mother_options(self.registered_subject_2))
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1020M')
+        maternal_visit_1020M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        RapidTestResultFactory(maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
+        MaternalLabourDelFactory(registered_subject=self.registered_subject_2)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
+        maternal_visit_2010M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
+        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
         self.options['maternal_visit'] = self.maternal_visit_2000.id
         self.options['has_who_dx'] = NOT_APPLICABLE
         self.options['who'] = None
@@ -247,8 +277,29 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
     def test_mother_negative_who_listing_not_not_applicable(self):
         """checks if who listing is N/A given that the mother is negative"""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        self.maternal_eligibility_2 = MaternalEligibilityFactory()
+        self.maternal_consent_2 = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility_2,
+            first_name='TATA', last_name='TATA', identity="111121112", confirm_identity="111121112")
+
+        self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
+        self.create_mother(self.hiv_neg_mother_options(self.registered_subject_2))
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1020M')
+        maternal_visit_1020M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        RapidTestResultFactory(maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
+        MaternalLabourDelFactory(registered_subject=self.registered_subject_2)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
+        maternal_visit_2010M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
+        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
         self.options['maternal_visit'] = self.maternal_visit_2000.id
         self.options['has_who_dx'] = NOT_APPLICABLE
         self.options['who'] = [self.who_dx.id]
@@ -258,8 +309,29 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
     def test_mother_negative_who_listed_not_applicable_there(self):
         """checks if who listing is only N/A if multiple options are selected given that the mother is negative"""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        self.maternal_eligibility_2 = MaternalEligibilityFactory()
+        self.maternal_consent_2 = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility_2,
+            first_name='TATA', last_name='TATA', identity="111121112", confirm_identity="111121112")
+
+        self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
+        self.create_mother(self.hiv_neg_mother_options(self.registered_subject_2))
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1020M')
+        maternal_visit_1020M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        RapidTestResultFactory(maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
+        MaternalLabourDelFactory(registered_subject=self.registered_subject_2)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
+        maternal_visit_2010M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
+        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
         self.options['maternal_visit'] = self.maternal_visit_2000.id
         self.options['has_who_dx'] = NOT_APPLICABLE
         self.options['who'] = [self.who_dx.id, self.who_dx_na.id]

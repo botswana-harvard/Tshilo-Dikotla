@@ -18,8 +18,8 @@ class TestPotentialCalls(BaseTestCase):
     def setUp(self):
         super(TestPotentialCalls, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
     def test_appointment_creates_potential_call(self):
         """test that creating an appointment creates a similar potential call record"""
