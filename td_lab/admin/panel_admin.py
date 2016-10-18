@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
 
-from ..models import Panel
+from ..models import SpecimenCollection, SpecimenCollectionItem
 
 
 class PanelAdmin(MembershipBaseModelAdmin):
@@ -13,4 +13,4 @@ class PanelAdmin(MembershipBaseModelAdmin):
 
     list_filter = ('panel_type', )
 
-admin.site.register(Panel, PanelAdmin)
+admin.site.register(SpecimenCollection, PanelAdmin)

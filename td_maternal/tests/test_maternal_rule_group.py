@@ -187,8 +187,6 @@ class TestMaternalRuleGroups(BaseTestCase):
         MaternalInterimIdccFactory(
             maternal_visit=self.antenatal_visit_1, recent_cd4=15,
             recent_cd4_date=(timezone.datetime.now() - relativedelta(weeks=2)).date())
-        print((timezone.datetime.now() - relativedelta(weeks=2)).date())
-        print(RequisitionMetadata.objects.filter(model='td_lab.maternalrequisition', panel_name='CD4')[0].__dict__)
         self.assertEqual(
             RequisitionMetadata.objects.filter(
                 entry_status='REQUIRED',
@@ -273,8 +271,6 @@ class TestMaternalRuleGroups(BaseTestCase):
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
 
         self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        print('<><><><><><><><><><><><><')
-        print()
         self.assertEqual(
             RequisitionMetadata.objects.filter(
                 entry_status='REQUIRED',

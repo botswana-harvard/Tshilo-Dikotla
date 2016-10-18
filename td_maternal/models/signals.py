@@ -7,7 +7,6 @@ from td_registration.models import RegisteredSubject
 from td_appointment.models import Appointment
 from edc_constants.constants import (
     FEMALE, SCREENED, CONSENTED, FAILED_ELIGIBILITY, ALIVE, OFF_STUDY, ON_STUDY)
-#from td_maternal.maternal_visit_schedule import site_visit_schedules
 from edc_identifier.subject.classes import InfantIdentifier
 from edc_visit_tracking.constants import SCHEDULED
 
@@ -120,24 +119,22 @@ def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
     if not raw:
         try:
             if not instance.is_eligible and not instance.pending_ultrasound:
-                pass
-#                 report_datetime = instance.report_datetime
-#                 appointment = Appointment.objects.get(
-#                     subject_identifier=instance.registered_subject.subject_identifier,
-#                     visit_code='1000M')
-#                 maternal_visit = MaternalVisit.objects.get(appointment=appointment)
-#                 if maternal_visit.reason != FAILED_ELIGIBILITY:
-#                     maternal_visit.reason = FAILED_ELIGIBILITY
-#                     maternal_visit.study_status = OFF_STUDY
-#                     maternal_visit.save()
+                report_datetime = instance.report_datetime
+                appointment = Appointment.objects.get(
+                    subject_identifier=instance.registered_subject.subject_identifier,
+                    visit_code='1000M')
+                maternal_visit = MaternalVisit.objects.get(appointment=appointment)
+                if maternal_visit.reason != FAILED_ELIGIBILITY:
+                    maternal_visit.reason = FAILED_ELIGIBILITY
+                    maternal_visit.study_status = OFF_STUDY
+                    maternal_visit.save()
         except MaternalVisit.DoesNotExist:
-            pass
-#             MaternalVisit.objects.create(
-#                 appointment=appointment,
-#                 report_datetime=report_datetime,
-#                 survival_status=ALIVE,
-#                 study_status=OFF_STUDY,
-#                 reason=FAILED_ELIGIBILITY)
+            MaternalVisit.objects.create(
+                appointment=appointment,
+                report_datetime=report_datetime,
+                survival_status=ALIVE,
+                study_status=OFF_STUDY,
+                reason=FAILED_ELIGIBILITY)
         except AttributeError as e:
             pass
 #             if 'is_eligible' not in str(e) and 'off_study_visit_code' not in str(e):
@@ -153,23 +150,21 @@ def put_back_on_study_from_failed_eligibility(instance):
     from off study."""
     with transaction.atomic():
         try:
-            pass
-#             appointment = Appointment.objects.get(
-#                 subject_identifier=instance.registered_subject.subject_identifier,
-#                 visit_code='1000M')
-#             maternal_visit = MaternalVisit.objects.get(
-#                 appointment=appointment)
-#             maternal_visit.study_status = ON_STUDY
-#             maternal_visit.reason = SCHEDULED
-#             maternal_visit.save()
+            appointment = Appointment.objects.get(
+                subject_identifier=instance.registered_subject.subject_identifier,
+                visit_code='1000M')
+            maternal_visit = MaternalVisit.objects.get(
+                appointment=appointment)
+            maternal_visit.study_status = ON_STUDY
+            maternal_visit.reason = SCHEDULED
+            maternal_visit.save()
         except MaternalVisit.DoesNotExist:
-            pass
-#             MaternalVisit.objects.create(
-#                 appointment=appointment,
-#                 report_datetime=instance.report_datetime,
-#                 survival_status=ALIVE,
-#                 study_status=ON_STUDY,
-#                 reason=SCHEDULED)
+            MaternalVisit.objects.create(
+                appointment=appointment,
+                report_datetime=instance.report_datetime,
+                survival_status=ALIVE,
+                study_status=ON_STUDY,
+                reason=SCHEDULED)
         except Appointment.DoesNotExist:
             pass
 

@@ -17,7 +17,6 @@ class MaternalArvInlineAdmin(TabularInlineMixin):
     extra = 1
 
 
-@admin.register(MaternalArv)
 class MaternalArvAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     form = MaternalArvForm
 
@@ -40,7 +39,8 @@ class MaternalArvAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
         )]
 
 
-class MaternalArvPregAdmin(BaseMaternalModelAdmin):
+@admin.register(MaternalArvPreg)
+class MaternalArvPregAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     form = MaternalArvPregForm
     inlines = [MaternalArvInlineAdmin, ]
     list_display = ('maternal_visit', 'took_arv',)
