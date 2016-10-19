@@ -5,9 +5,9 @@ from ..forms import MaternalEligibilityCrispyForm
 from td_maternal.models.maternal_eligibility import MaternalEligibility
 
 
-class MaternalDasboard(TemplateView):
+class SearchDasboardView(TemplateView):
 
-    template_name = 'td_dashboard/maternal_dashboard.html'
+    template_name = 'td_dashboard/search_dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

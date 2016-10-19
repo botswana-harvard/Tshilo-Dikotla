@@ -15,7 +15,7 @@ class MaternalEligibilityCrispyForm(forms.Form):
         super(MaternalEligibilityCrispyForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper = FormHelper()
-        self.helper.form_action = reverse('maternal_url')
+        self.helper.form_action = reverse('search_url')
         self.helper.form_id = 'maternaleligibility-crispy-form-search'
         self.helper.form_method = 'post'
         self.helper.html5_required = True

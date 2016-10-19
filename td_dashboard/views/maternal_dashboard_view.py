@@ -3,11 +3,10 @@ from django.conf import settings
 from django.views.generic import TemplateView
 
 from edc_base.views import EdcBaseViewMixin
-from edc_label.view_mixins import EdcLabelViewMixin
 from ..classes import MarqueeViewMixin, AppointmentSubjectVisitCRFViewMixin, LocatorResultsActionsViewMixin
 from td_maternal.models.maternal_consent import MaternalConsent
 from td_maternal.models.requisition_meta_data import RequisitionMetadata
-from edc_constants.constants import SUBJECT, UNK, OTHER
+from edc_constants.constants import UNK, OTHER
 from td_maternal.models.maternal_locator import MaternalLocator
 from td_maternal.models.maternal_crf_meta_data import CrfMetadata
 from tshilo_dikotla.constants import MATERNAL
@@ -20,12 +19,12 @@ from td_maternal.models.maternal_labour_del import MaternalLabourDel
 from td_maternal.models.maternal_randomization import MaternalRando
 
 
-class SubjectDashboardView(
+class MaternalDashboardView(
         MarqueeViewMixin,
-        AppointmentSubjectVisitCRFViewMixin, LocatorResultsActionsViewMixin, EdcBaseViewMixin, EdcLabelViewMixin, TemplateView):
+        AppointmentSubjectVisitCRFViewMixin, LocatorResultsActionsViewMixin, EdcBaseViewMixin, TemplateView):
 
     def __init__(self, **kwargs):
-        super(SubjectDashboardView, self).__init__(**kwargs)
+        super(MaternalDashboardView, self).__init__(**kwargs)
         self.request = None
         self.context = {}
         self.show = None
@@ -80,6 +79,8 @@ class SubjectDashboardView(
         if self.antenatal_enrollment:
             if self.antenatal_enrollment.pending_ultrasound:
                 maternal_marquee_data.update({'antenatal_enrollment_status': 'pending ultrasound'})
+            elif self.antenatal_enrollment.is_eligible:
+                maternal_marquee_data.update({'antenatal_enrollment_status': 'passed'})
             elif not self.antenatal_enrollment.is_eligible:
                 maternal_marquee_data.update({'antenatal_enrollment_status': 'failed'})
             else:

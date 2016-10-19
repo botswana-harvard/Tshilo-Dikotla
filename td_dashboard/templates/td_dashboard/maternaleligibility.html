@@ -26,17 +26,17 @@
 		                		<li><A href="{% url 'subject_dashboard_url' consent.subject_identifier %}"><div nowrap>{{ consent.subject_identifier }} (V{{consent.version}})</div></A></li>
 		                	{% endfor %}
 		                	{% if not maternal_eligibility.have_latest_consent %}
-		                		<span style="color:red"><li><span><A href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=section_url&section_name=maternal">re-consent (V{{maternal_eligibility.current_consent_version}})</A></li>
+		                		<span style="color:red"><li><span><A href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=search_url">re-consent (V{{maternal_eligibility.current_consent_version}})</A></li>
 		                	{% endif %}
 		                </ul>
 		            </td>
                 {% elif maternal_eligibility.is_eligible %}
-                    <td><A href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=maternal_url">add maternal consent (V{{maternal_eligibility.current_consent_version}})</A></td>
+                    <td><A href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=search_url">add maternal consent (V{{maternal_eligibility.current_consent_version}})</A></td>
                 {% else %}
                     <td>{{ maternal_eligibility.ineligibility }}</td>
                 {% endif %}
 
-                <td><A href="{% url 'admin:td_maternal_maternaleligibility_change' maternal_eligibility.pk %}?&next=section_url&section_name=maternal">edit eligibility</A></td>
+                <td><A href="{% url 'admin:td_maternal_maternaleligibility_change' maternal_eligibility.pk %}?&next=search_url">edit eligibility</A></td>
                 <td>{{maternal_eligibility.maternal_eligibility_loss.reason_ineligible|default:"-----" }}</td>
                 <td>{{maternal_eligibility.report_datetime}}</td>
                 <td>{{maternal_eligibility.age_in_years}}</td>
