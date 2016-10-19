@@ -24,7 +24,7 @@ class AppointmentSubjectVisitCRFViewMixin:
             appointments = [self.appointment]
         else:
             appointments = Appointment.objects.filter(
-                subject_identifier=self.subject_identifier).order_by('visit_instance', 'appt_datetime')
+                subject_identifier=self.subject_identifier).order_by('visit_code')
         return appointments
 
     @property

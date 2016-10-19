@@ -43,7 +43,7 @@ class SubjectDashboardView(
             site_header=admin.site.site_header,
         )
         self.context.update({
-            'markey_data': self.marquee_data.items(),
+            'marquee_data': self.marquee_data.items(),
             'markey_next_row': self.markey_next_row,
             'requistions_metadata': self.requistions_metadata,
             'scheduled_forms': self.scheduled_forms[0],
@@ -77,14 +77,13 @@ class SubjectDashboardView(
     def maternal_marquee_data(self):
         self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
         maternal_marquee_data = {}
-        antenatal_enrollment = AntenatalEnrollment.objects.get(
-            registered_subject__subject_identifier=self.subject_identifier)
-        if antenatal_enrollment.pending_ultrasound:
-            maternal_marquee_data.update({'antenatal_enrollment_status': 'pending ultrasound'})
-        elif not antenatal_enrollment.is_eligible:
-            maternal_marquee_data.update({'antenatal_enrollment_status': 'failed'})
-        else:
-            maternal_marquee_data.update({'antenatal_enrollment_status': 'Not filled'})
+        if self.antenatal_enrollment:
+            if self.antenatal_enrollment.pending_ultrasound:
+                maternal_marquee_data.update({'antenatal_enrollment_status': 'pending ultrasound'})
+            elif not self.antenatal_enrollment.is_eligible:
+                maternal_marquee_data.update({'antenatal_enrollment_status': 'failed'})
+            else:
+                maternal_marquee_data.update({'antenatal_enrollment_status': 'Not filled'})
         maternal_marquee_data.update({'enrollment_hiv_status': self.maternal_status_helper.enrollment_hiv_status})
         maternal_marquee_data.update({'current_hiv_status': self.maternal_status_helper.hiv_status})
         maternal_marquee_data.update({'gestational_age': self.gestational_age})
@@ -102,8 +101,11 @@ class SubjectDashboardView(
 
     @property
     def requistions_metadata(self):
+        visit_code = self.appointment.visit_code if self.appointment else '1000M'
         requistions_metadata = RequisitionMetadata.objects.filter(
-            subject_identifier=self.subject_identifier)
+            subject_identifier=self.subject_identifier,
+            visit_code=visit_code
+        )
         return requistions_metadata
 
     @property

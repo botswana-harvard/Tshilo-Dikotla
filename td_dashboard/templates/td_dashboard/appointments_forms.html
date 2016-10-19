@@ -29,7 +29,7 @@
 	        {% for appointment in appointments %}
 	            <tr class="{% cycle 'row1' 'row2' %}">
 	            <td>{{appointment.visit_code}}</td>
-		        <td>{{appointment.schedule_name}}</td>
+		        <td>{{appointment.appt_title}}</td>
 				<td>{{appointment.appt_type | capfirst}}</td>
 				<td>{{appointment.appt_datetime|date:"Y-m-d D"| capfirst}}</td>
 				<td><a href="{% url 'admin:td_appointment_appointment_change' appointment.str_pk %}?next=subject_dashboard_url&subject_identifier={{ appointment.subject_identifier }}">{{ appointment.appt_status | capfirst }}</a></td>
