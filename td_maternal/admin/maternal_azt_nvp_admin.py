@@ -13,11 +13,11 @@ class MaternalAztNvpAdmin(BaseMaternalModelAdmin):
 
     form = MaternalAztNvpForm
 
-    radio_fields = {'azt_nvp': admin.VERTICAL,
+    radio_fields = {'azt_nvp_delivery': admin.VERTICAL,
                     'instructions_given': admin.VERTICAL}
 
-    list_display = ('report_datetime', 'date_given', 'azt_nvp', 'instructions_given')
+    list_display = ('report_datetime', 'date_given', 'azt_nvp_delivery', 'instructions_given')
 
-    list_filter = ('report_datetime', 'date_given', 'azt_nvp', 'instructions_given')
+    list_filter = ('report_datetime', 'date_given', 'azt_nvp_delivery', 'instructions_given')
 
 admin.site.register(MaternalAztNvp, MaternalAztNvpAdmin)

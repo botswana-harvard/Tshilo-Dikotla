@@ -74,6 +74,7 @@ class MaternalArv(CrfInlineModelMixin, BaseUuidModel):
     reason_for_stop = models.CharField(
         verbose_name="Reason for stop",
         choices=REASON_ARV_STOP,
+        max_length=50,
         null=True,
         blank=True,
         help_text='If "Treatment Failure", notify study coordinator')

@@ -3,17 +3,17 @@ from django.db import models
 # from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import YES_NO
 
-from tshilo_dikotla.choices import AZT_NVP
+# from tshilo_dikotla.choices import AZT_NVP
 
 from .maternal_crf_model import MaternalCrfModel
 
 
 class MaternalAztNvp(MaternalCrfModel):
 
-    azt_nvp = models.CharField(
+    azt_nvp_delivery = models.CharField(
         max_length=25,
-        verbose_name="Please check which infant prophylaxis regiment the mother was given.",
-        choices=AZT_NVP,
+        verbose_name="Please check if Nevirapine prophylaxis was given to the delivery site.",
+        choices=YES_NO,
         help_text="",
     )
 
