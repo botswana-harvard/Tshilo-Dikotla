@@ -37,7 +37,7 @@
 		        	{% if appointment.maternal_visit %}
 		        		<a href="{% url 'admin:td_maternal_maternalvisit_change' appointment.maternal_visit.pk %}?next=subject_dashboard_url&subject_identifier={{ appointment.subject_identifier }}">{{ appointment.maternal_visit.report_datetime |date:"Y-m-d D"| capfirst }}</a>
 		        	{% else %}
-		        		<a href="{% url 'admin:td_maternal_maternalvisit_add' %}?next=subject_dashboard_url&subject_identifier={{ appointment.subject_identifier }}">Add Visit</a>
+		        		<a href="{% url 'admin:td_maternal_maternalvisit_add' %}?next=subject_dashboard_url&subject_identifier={{ appointment.subject_identifier }}&visit_code={{ appointment.visit_code }}">Add Visit</a>
 		        	{% endif %}
 		        </td>
 		        <td>{{appointment.maternal_visit.reason}}</td>
