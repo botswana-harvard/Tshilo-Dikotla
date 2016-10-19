@@ -8,7 +8,6 @@ from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.constants import NO, YES
 from edc_constants.choices import YES_NO
 from edc_offstudy.model_mixins import OffStudyMixin
-from td_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_protocol.validators import date_not_before_study_start
 
