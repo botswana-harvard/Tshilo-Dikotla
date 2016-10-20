@@ -28,9 +28,12 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             'Infant Insulin', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
         RequisitionPanelTuple(
             20, 'td_lab', 'infantrequisition',
-            'Infant Glucose', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
+            'Infant Serum (Store Only)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
         RequisitionPanelTuple(
             30, 'td_lab', 'infantrequisition',
+            'Infant Glucose', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            40, 'td_lab', 'infantrequisition',
             'Infant PBMC PL', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL)
     )
 
