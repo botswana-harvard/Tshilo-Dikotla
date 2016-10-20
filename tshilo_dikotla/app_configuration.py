@@ -112,7 +112,8 @@ class AppConfiguration(BaseAppConfiguration):
                            PanelTuple('PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB'),
                            PanelTuple('ELISA', 'TEST', 'WB'),
                            PanelTuple('Insulin', 'TEST', 'WB'),
-                           PanelTuple('Infant PBMC PL', 'TEST', 'WB')],
+                           PanelTuple('Infant PBMC PL', 'TEST', 'WB'),
+                           PanelTuple('Infant Serum (Store Only)', 'WB')],
                  'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
                                   AliquotTypeTuple('Plasma', 'PL', '32'),
                                   AliquotTypeTuple('Buffy Coat', 'BC', '16'),
@@ -125,7 +126,8 @@ class AppConfiguration(BaseAppConfiguration):
                              ProfileTuple('PBMC Plasma (STORE ONLY)', 'WB'),
                              ProfileTuple('Infant Insulin', 'SERUM'),
                              ProfileTuple('Infant Glucose', 'WB'),
-                             ProfileTuple('Infant PBMC PL', 'WB')],
+                             ProfileTuple('Infant PBMC PL', 'WB'),
+                             ProfileTuple('Infant Serum (Store Only)', 'SERUM')],
                  'profile_item': [ProfileItemTuple('PBMC VL', 'PL', 1.0, 4),
                                   ProfileItemTuple('PBMC VL', 'PBMC', 0.5, 4),
                                   ProfileItemTuple('Glucose', 'PL', 1, 3),
@@ -135,6 +137,7 @@ class AppConfiguration(BaseAppConfiguration):
                                   ProfileItemTuple('PBMC Plasma (STORE ONLY)', 'PBMC', 1, 4),
                                   ProfileItemTuple('Infant Insulin', 'SERUM', 0.5, 1),
                                   ProfileItemTuple('Infant Glucose', 'PL', 0.5, 1),
+                                  ProfileItemTuple('Infant Serum (Store Only)', 'SERUM', 0.5, 1),
                                   ProfileItemTuple('Infant PBMC PL', 'PL', 1.0, 2),
                                   ProfileItemTuple('Infant PBMC PL', 'PBMC', 1.0, 2)]}}
     labeling_setup = {
