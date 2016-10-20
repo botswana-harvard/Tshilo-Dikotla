@@ -113,7 +113,7 @@ class AppConfiguration(BaseAppConfiguration):
                            PanelTuple('ELISA', 'TEST', 'WB'),
                            PanelTuple('Insulin', 'TEST', 'WB'),
                            PanelTuple('Infant PBMC PL', 'TEST', 'WB'),
-                           PanelTuple('Infant Serum (Store Only)', 'WB')],
+                           PanelTuple('Infant Serum (Store Only)', 'STORAGE', 'WB')],
                  'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
                                   AliquotTypeTuple('Plasma', 'PL', '32'),
                                   AliquotTypeTuple('Buffy Coat', 'BC', '16'),
