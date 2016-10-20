@@ -154,7 +154,7 @@ class EnrollmentMixin(models.Model):
         self.date_at_32wks = enrollment_helper.date_at_32wks
         if not self.ultrasound:
             self.pending_ultrasound = enrollment_helper.pending
-        self.is_eligible = True #self.antenatal_criteria(enrollment_helper)
+        self.is_eligible = self.antenatal_criteria(enrollment_helper)
         self.unenrolled = self.unenrolled_error_messages()
         super(EnrollmentMixin, self).save(*args, **kwargs)
 
