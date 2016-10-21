@@ -43,10 +43,6 @@ class MarqueeViewMixin:
     def age(self):
         return None
 
-    @property
-    def age_today(self):
-        return None
-
     def subject_membership_models(self):
         """ """
         self._subject_membership_models = []

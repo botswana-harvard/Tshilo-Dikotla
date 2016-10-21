@@ -1,5 +1,6 @@
 from django.db import models
 
+from django.apps import apps as django_apps
 from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_export.models import ExportTrackingFieldsMixin
 # from edc_meta_data.managers import RequisitionMetaDataManager
@@ -32,30 +33,52 @@ class MaternalRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, 
     maternal_visit = models.ForeignKey(MaternalVisit)
 
 #     packing_list = models.ForeignKey(PackingList, null=True, blank=True)
-# 
+#
 #     aliquot_type = models.ForeignKey(AliquotType)
 #
     panel = models.ForeignKey(Panel)
 
 #     objects = MaternalRequisitionManager()
 
+    @property
+    def subject_identifier(self):
+        return self.maternal_visit.appointment.subject_identifier
+
     history = SyncHistoricalRecords()
 
 #     entry_meta_data_manager = RequisitionMetaDataManager(MaternalVisit)
 
-#     @property
-#     def metadata_query_options(self):
-#         options = self.visit.metadata_query_options
-#         options.update({
-#             'subject_identifier': self.visit.subject_identifier,
-#             'model': 'td_lab.maternalrequisition'})
-#         return options
+#     @classmethod
+#     def visit_model_attr(cls):
+#         app_config = django_apps.get_app_config('edc_visit_tracking')
+#         print(cls._meta.label_lower, "cls._meta.label_lower, cls._meta.label_lower")
+#         return app_config.visit_model_attr(cls._meta.label_lower)
+
+    @property
+    def visit(self):
+        return getattr(self, 'maternal_visit')
+
+    @property
+    def metadata_query_options(self):
+        options = self.maternal_visit.metadata_query_options
+        options.update({
+            'subject_identifier': self.maternal_visit.appointment.subject_identifier,
+            'model': 'td_lab.maternalrequisition',
+            'visit_code': self.maternal_visit.visit_code,
+            'panel_name': self.panel_name,
+        })
+        return options
 
     def __str__(self):
         return '{0} {1}'.format(str(self.panel_name), self.requisition_identifier)
 
     def natural_key(self):
         return (self.requisition_identifier,)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.panel = Panel.objects.create(name=self.panel_name)
+        super(RequiresConsentMixin, self).save(*args, **kwargs)
 
     class Meta:
         app_label = 'td_lab'

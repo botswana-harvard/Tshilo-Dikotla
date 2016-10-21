@@ -6,7 +6,6 @@ from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED
 from edc_lab.requisition.forms import RequisitionFormMixin
 
 from tshilo_dikotla.choices import STUDY_SITES
-from td_maternal.models import MaternalVisit
 
 from ..models import MaternalRequisition
 
@@ -26,6 +25,7 @@ class MaternalRequisitionForm(RequisitionFormMixin):
 
     def clean(self):
         cleaned_data = super(MaternalRequisitionForm, self).clean()
+        print(cleaned_data, "cleaned_data, cleaned_data, cleaned_data, cleaned_data")
         if cleaned_data.get('drawn_datetime'):
             if cleaned_data.get('drawn_datetime').date() < cleaned_data.get('requisition_datetime').date():
                 raise forms.ValidationError(
@@ -34,10 +34,10 @@ class MaternalRequisitionForm(RequisitionFormMixin):
                         cleaned_data.get('drawn_datetime').date(),
                         cleaned_data.get('requisition_datetime').date()))
         if (
-            cleaned_data.get('panel').name == 'Vaginal swab (Storage)' or
-            cleaned_data.get('panel').name == 'Rectal swab (Storage)' or
-            cleaned_data.get('panel').name == 'Skin Swab (Storage)' or
-            cleaned_data.get('panel').name == 'Vaginal STI Swab (Storage)'
+            cleaned_data.get('panel_name') == 'Vaginal swab (Storage)' or
+            cleaned_data.get('panel_name') == 'Rectal swab (Storage)' or
+            cleaned_data.get('panel_name') == 'Skin Swab (Storage)' or
+            cleaned_data.get('panel_name') == 'Vaginal STI Swab (Storage)'
         ):
             if cleaned_data.get('item_type') != 'swab':
                 raise forms.ValidationError('Panel is a swab therefore collection type is swab. Please correct.')
@@ -45,10 +45,11 @@ class MaternalRequisitionForm(RequisitionFormMixin):
             if cleaned_data.get('item_type') != 'tube':
                 raise forms.ValidationError('Panel {} can only be tube therefore collection type is swab. '
                                             'Please correct.'.format(cleaned_data.get('panel').name))
-        maternal_visit = MaternalVisit.objects.get(
-            appointment__registered_subject=cleaned_data.get('maternal_visit').appointment.registered_subject,
-            appointment=cleaned_data.get('maternal_visit').appointment,
-            appointment__visit_instance=cleaned_data.get('maternal_visit').appointment.visit_instance)
+#         maternal_visit = MaternalVisit.objects.get(
+# #             appointment__registered_subject=cleaned_data.get('maternal_visit').appointment.registered_subject,
+#             appointment=cleaned_data.get('maternal_visit').appointment,
+#             appointment__visit_instance=cleaned_data.get('maternal_visit').appointment.visit_instance)
+        maternal_visit = cleaned_data.get('maternal_visit')
         if maternal_visit:
             if ((maternal_visit.reason == SCHEDULED or maternal_visit.reason == UNSCHEDULED) and
                     cleaned_data.get('reason_not_drawn') == 'absent'):

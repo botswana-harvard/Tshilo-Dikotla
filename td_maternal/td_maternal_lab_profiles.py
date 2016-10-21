@@ -75,4 +75,4 @@ cd4_panel = RequisitionPanel('CD4', wb)
 cd4_panel.processing_profile = cd4_processing
 lab_profile.add_panel(cd4_panel)
 
-site_lab_profiles.register('td_maternal.maternalrequisition', lab_profile)
+site_lab_profiles.register('td_lab.maternalrequisition', lab_profile)
