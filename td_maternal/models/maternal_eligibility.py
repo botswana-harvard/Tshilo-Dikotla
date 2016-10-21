@@ -119,8 +119,9 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
 
     @property
     def current_consent_version(self):
-        MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
-        return site_consents.get_by_datetime(MaternalConsent, timezone.now()).version
+        # MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
+        # return site_consents.get_by_datetime(MaternalConsent, timezone.now()).version
+        return 1
 
     def set_uuid_for_eligibility_if_none(self):
         if not self.eligibility_id:

@@ -16,6 +16,7 @@ import configparser
 import socket
 from unipath import Path
 
+from django.core.exceptions import ImproperlyConfigured
 from django.utils import timezone
 
 from .databases import (
@@ -29,7 +30,7 @@ TEST_HOSTS = ['edc4.bhp.org.bw', 'tdtest.bhp.org.bw', 'tdtest2.bhp.org.bw']
 DEVELOPER_HOSTS = [
     'mac2-2.local', 'ckgathi', 'one-2.local', 'One-2.local', 'tsetsiba', 'leslie']
 
-PROJECT_TITLE = 'tshilo_dikotla.apps.AppConfig.verbose_name'
+PROJECT_TITLE = 'Tshilo Dikotla'
 SOURCE_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
 BASE_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
 MEDIA_ROOT = BASE_DIR.child('media')
@@ -232,23 +233,12 @@ STATICFILES_FINDERS = (
 
 GIT_DIR = BASE_DIR.ancestor(1)
 
-STUDY_OPEN_DATETIME = timezone.datetime(2015, 10, 18, 0, 0, 0)
-
-SUBJECT_APP_LIST = ['maternal', 'infant']
-SUBJECT_TYPES = ['maternal', 'infant']
-MAX_SUBJECTS = {'maternal': 3000, 'infant': 3000}
-MINIMUM_AGE_OF_CONSENT = 18
-MAXIMUM_AGE_OF_CONSENT = 64
-AGE_IS_ADULT = 18
-GENDER_OF_CONSENT = ['F']
-DISPATCH_APP_LABELS = []
-
 if socket.gethostname() == LIVE_SERVER:
     DEVICE_ID = 99
     PROJECT_TITLE = '{} Live Server'.format(PROJECT_TITLE)
 elif socket.gethostname() in TEST_HOSTS:
     DEVICE_ID = 99
-    PROJECT_TITLE = 'TEST (postgres): {}'.format(PROJECT_TITLE)
+    PROJECT_TITLE = 'TEST (MySQL): {}'.format(PROJECT_TITLE)
 elif socket.gethostname() in DEVELOPER_HOSTS:
     DEVICE_ID = 99
     PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
@@ -261,9 +251,6 @@ else:
         'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
         'Got hostname=\'{}\''.format(socket.gethostname()))
 
-SITE_CODE = '40'
-CELLPHONE_REGEX = '^[7]{1}[12345678]{1}[0-9]{6}$'
-TELEPHONE_REGEX = '^[2-8]{1}[0-9]{6}$'
 DEFAULT_STUDY_SITE = '40'
 ALLOW_MODEL_SERIALIZATION = True
 
@@ -302,5 +289,3 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
 }
-
-# EDC_SYNC_ROLE = 'client'

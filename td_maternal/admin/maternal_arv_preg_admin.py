@@ -11,13 +11,14 @@ from ..models import MaternalArvPreg, MaternalArv
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-class MaternalArvInlineAdmin(TabularInlineMixin):
+class MaternalArvInlineAdmin(TabularInlineMixin, admin.TabularInline):
     model = MaternalArv
     form = MaternalArvForm
     extra = 1
 
 
-class MaternalArvAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
+@admin.register(MaternalArv)
+class MaternalArvAdmin(admin.ModelAdmin):
     form = MaternalArvForm
 
     actions = [
@@ -29,7 +30,7 @@ class MaternalArvAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
                      'hostname_modified'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
-                 'maternal_arv_preg__maternal_visit__appointment__registered_subject__subject_identifier',
+                 'maternal_arv_preg__maternal_visit__appointment__subject_identifier',
                  'gender': 'maternal_arv_preg__maternal_visit__appointment__registered_subject__gender',
                  'dob': 'maternal_arv_preg__maternal_visit__appointment__registered_subject__dob',
                  'took_arv': 'maternal_arv_preg__took_arv',

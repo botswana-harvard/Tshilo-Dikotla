@@ -8,6 +8,7 @@ from edc_base.model.validators.date import date_not_future
 from edc_constants.choices import GENDER_UNDETERMINED
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffStudyMixin
+from edc_registration.model_mixins import RegisteredSubjectMixin
 from td_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
@@ -16,7 +17,9 @@ from td_maternal.models import MaternalLabourDel
 from ..managers import InfantBirthModelManager
 
 
-class InfantBirth(SyncModelMixin, OffStudyMixin, CreateAppointmentsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+# TODO: Put back off study mixin
+class InfantBirth(SyncModelMixin, CreateAppointmentsMixin, RegisteredSubjectMixin,
+                  ExportTrackingFieldsMixin, BaseUuidModel):
     """ A model completed by the user on the infant's birth. """
 
     off_study_model = ('td_infant', 'InfantOffStudy')
@@ -56,20 +59,24 @@ class InfantBirth(SyncModelMixin, OffStudyMixin, CreateAppointmentsMixin, Export
 
     history = SyncHistoricalRecords()
 
+    @property
+    def subject_identifier(self):
+        return self.registered_subject.subject_identifier
+
     def natural_key(self):
         return self.maternal_labour_del.natural_key()
-    natural_key.dependencies = ['td_maternal.maternallabourdel', 'edc_registration.registered_subject']
+    natural_key.dependencies = ['td_maternal.maternallabourdel', 'td_registration.registered_subject']
 
     def __str__(self):
         return "{} ({}) {}".format(self.first_name, self.initials, self.gender)
 
-    def prepare_appointments(self, using):
-        """Creates infant appointments relative to the date-of-delivery"""
-        relative_identifier = self.registered_subject.relative_identifier
-        maternal_labour_del = MaternalLabourDel.objects.get(
-            registered_subject__subject_identifier=relative_identifier)
-        self.create_all(
-            base_appt_datetime=maternal_labour_del.delivery_datetime, using=using)
+#     def prepare_appointments(self, using):
+#         """Creates infant appointments relative to the date-of-delivery"""
+#         relative_identifier = self.registered_subject.relative_identifier
+#         maternal_labour_del = MaternalLabourDel.objects.get(
+#             registered_subject__subject_identifier=relative_identifier)
+#         self.create_all(
+#             base_appt_datetime=maternal_labour_del.delivery_datetime, using=using)
 
     def get_subject_identifier(self):
         return self.registered_subject.subject_identifier
@@ -77,4 +84,5 @@ class InfantBirth(SyncModelMixin, OffStudyMixin, CreateAppointmentsMixin, Export
     class Meta:
         app_label = 'td_infant'
         verbose_name = "Infant Birth"
+#         consent_model = 'td_maternal.maternalconsent'
         visit_schedule_name = 'infant_visit_schedule'

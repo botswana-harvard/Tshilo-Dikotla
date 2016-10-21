@@ -1,10 +1,8 @@
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
-# from edc_sync.models import SyncModelMixin
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from tshilo_dikotla.choices import ARV_INTERRUPTION_REASON, ARV_DRUG_LIST, REASON_ARV_STOP
@@ -79,8 +77,8 @@ class MaternalArv(CrfInlineModelMixin, BaseUuidModel):
         blank=True,
         help_text='If "Treatment Failure", notify study coordinator')
 
-    reason_for_stop_other = models.TextField(
-        max_length=250,
+    reason_for_stop_other = models.CharField(
+        max_length=100,
         verbose_name="Other, specify ",
         blank=True,
         null=True)

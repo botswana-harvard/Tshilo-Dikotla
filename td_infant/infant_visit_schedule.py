@@ -78,7 +78,7 @@ infant_followup_crfs = (
 
 
 infant_visit_schedule = VisitSchedule(
-    name='infant_birth_visit_schedule',
+    name='infant_visit_schedule',
     verbose_name='Infant Birth Visit Schedule',
     app_label='td_infant',
     visit_model='td_infant.infantvisit',
@@ -133,7 +133,7 @@ infant_birth_schedule.add_visit(
 
 infant_birth_schedule.add_visit(
     code='2180',
-    title='Infant 18 Month Visit', 
+    title='Infant 18 Month Visit',
     timepoint=5,
     base_interval=5,
     requisitions=infant_18month_requisitions,
