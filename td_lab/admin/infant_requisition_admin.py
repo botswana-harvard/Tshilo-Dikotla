@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from lab_requisition.admin import RequisitionAdminMixin
 
-from tshilo_dikotla.base_model_admin import BaseModelAdmin
+from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
 from tshilo_dikotla.constants import INFANT
 from td_infant.models import InfantVisit
 
@@ -12,7 +12,7 @@ from ..forms import InfantRequisitionForm
 from ..models import InfantRequisition, Panel
 
 
-class InfantRequisitionAdmin(RequisitionAdminMixin, BaseModelAdmin):
+class InfantRequisitionAdmin(RequisitionAdminMixin, MembershipBaseModelAdmin):
 
     dashboard_type = INFANT
     form = InfantRequisitionForm

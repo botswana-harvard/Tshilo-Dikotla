@@ -124,7 +124,6 @@ class AppConfiguration(BaseAppConfiguration):
                              ProfileTuple('ELISA', 'WB'),
                              ProfileTuple('CD4', 'WB'),
                              ProfileTuple('PBMC Plasma (STORE ONLY)', 'WB'),
-                             ProfileTuple('Infant Insulin', 'SERUM'),
                              ProfileTuple('Infant Glucose', 'WB'),
                              ProfileTuple('Infant PBMC PL', 'WB'),
                              ProfileTuple('Infant Serum (Store Only)', 'SERUM')],
@@ -135,7 +134,6 @@ class AppConfiguration(BaseAppConfiguration):
                                   ProfileItemTuple('ELISA', 'BC', 0.5, 1),
                                   ProfileItemTuple('PBMC Plasma (STORE ONLY)', 'PL', 1, 4),
                                   ProfileItemTuple('PBMC Plasma (STORE ONLY)', 'PBMC', 1, 4),
-                                  ProfileItemTuple('Infant Insulin', 'SERUM', 0.5, 1),
                                   ProfileItemTuple('Infant Glucose', 'PL', 0.5, 1),
                                   ProfileItemTuple('Infant Serum (Store Only)', 'SERUM', 0.5, 1),
                                   ProfileItemTuple('Infant PBMC PL', 'PL', 1.0, 2),
@@ -145,7 +143,7 @@ class AppConfiguration(BaseAppConfiguration):
             aliquot_label or ZplTemplateTuple(
                 'aliquot_label', (
                     ('^XA\n' +
-                     ('^FO315,15^A0N,17,20^FD${protocol} Site ${site} ${clinician_initials}   '
+                     ('~SD20^FO315,15^A0N,17,20^FD${protocol} Site ${site} ${clinician_initials}   '
                       '${aliquot_type} ${aliquot_count}${primary}^FS\n') +
                      '^FO320,34^BY1,3.0^BCN,50,N,N,N\n'
                      '^BY^FD${aliquot_identifier}^FS\n'
