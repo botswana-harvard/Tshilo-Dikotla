@@ -28,7 +28,7 @@ class TestInfantArvProph(BaseTestCase):
         self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.assertEqual(RegisteredSubject.objects.all().count(), 1)
-        options = {'registered_subject': self.registered_subject,
+        self.options = {'registered_subject': self.registered_subject,
                    'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
                    'will_get_arvs': YES,
@@ -37,9 +37,9 @@ class TestInfantArvProph(BaseTestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
 
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = AntenatalEnrollmentFactory(**self.options)
         self.appointment = Appointment.objects.get(
-            subject_identifier=options.get('registered_subject'), visit_code='1000M')
+            subject_identifier=self.options.get('registered_subject'), visit_code='1000M')
 
         self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
 
@@ -48,9 +48,9 @@ class TestInfantArvProph(BaseTestCase):
             number_of_gestations=1)
 
         self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
-            registered_subject=options.get('registered_subject'))
+            registered_subject=self.options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
-            subject_identifier=options.get('registered_subject'), visit_code='1010M')
+            subject_identifier=self.options.get('registered_subject'), visit_code='1010M')
 
         MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
 
@@ -67,8 +67,7 @@ class TestInfantArvProph(BaseTestCase):
         infant_registered_subject = RegisteredSubject.objects.get(
             relative_identifier=self.registered_subject.subject_identifier,
             subject_type='infant')
-        print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-        print(RegisteredSubject.objects.all()[0].__dict__)
+
         self.assertTrue(RegisteredSubject.objects.all().count(), 2)
 
         self.infant_birth = InfantBirthFactory(
@@ -76,8 +75,8 @@ class TestInfantArvProph(BaseTestCase):
             maternal_labour_del=self.maternal_labour_del)
 
         self.appointment = Appointment.objects.get(
-            registered_subject=infant_registered_subject,
-            visit_definition__code='2000')
+            subject_identifier=infant_registered_subject.subject_identifier,
+            visit_code='2000')
         self.infant_visit = InfantVisitFactory(appointment=self.appointment)
         self.infant_birth_arv = InfantBirthArvFactory(infant_visit=self.infant_visit, azt_discharge_supply=YES)
         self.appointment = Appointment.objects.get(
@@ -95,7 +94,8 @@ class TestInfantArvProph(BaseTestCase):
         """Test if the infant was not taking prophylactic arv and arv status is not Not Applicable"""
         self.data['prophylatic_nvp'] = NO
         self.data['arv_status'] = MODIFIED
-        infant_arv_proph = InfantArvProphForm(data=self.data)
+        infant_arv_proph = InfantArvProphForm(data=self.options)
+
         self.assertIn(u'Infant was not taking prophylactic arv, prophylaxis should be Never Started or Discontinued.',
                       infant_arv_proph.errors.get('__all__'))
 
@@ -105,7 +105,7 @@ class TestInfantArvProph(BaseTestCase):
         self.infant_birth_arv.save()
         self.data['prophylatic_nvp'] = NO
         self.data['arv_status'] = DISCONTINUED
-        infant_arv_proph = InfantArvProphForm(data=self.data)
+        infant_arv_proph = InfantArvProphForm(data=self.options)
         self.assertIn(
             u'The azt discharge supply in Infant birth arv was answered as NO or Unknown, '
             'therefore Infant ARV proph in this visit cannot be permanently discontinued.',
@@ -115,7 +115,7 @@ class TestInfantArvProph(BaseTestCase):
         """Test if the infant was not taking prophylactic arv and arv status is Never Started"""
         self.data['prophylatic_nvp'] = YES
         self.data['arv_status'] = NEVER_STARTED
-        infant_arv_proph = InfantArvProphForm(data=self.data)
+        infant_arv_proph = InfantArvProphForm(data=self.options)
         self.assertIn(u'Infant has been on prophylactic arv, cannot choose Never Started or Permanently discontinued.',
                       infant_arv_proph.errors.get('__all__'))
 

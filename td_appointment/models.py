@@ -7,6 +7,7 @@ from edc_sync.models import SyncHistoricalRecords, SyncModelMixin
 
 from .appointment_manager import AppointmentManager
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from td_registration.models import RegisteredSubject
 
 
 class Appointment(SyncModelMixin, AppointmentModelMixin, RequiresConsentMixin, BaseUuidModel):
@@ -21,6 +22,21 @@ class Appointment(SyncModelMixin, AppointmentModelMixin, RequiresConsentMixin, B
     @property
     def str_pk(self):
         return str(self.pk)
+
+    @property
+    def infant_registered_subject(self):
+        try:
+            RegisteredSubject.objects.get(
+                subject_identifier=self.subject_identifier,
+                subject_type='infant'
+            )
+        except RegisteredSubject.DoesNotExist:
+            return False
+        return True
+
+    def consented_for_period_or_raise(self, report_datetime=None, subject_identifier=None, exception_cls=None):
+        if not self.infant_registered_subject:
+            super().consented_for_period_or_raise(report_datetime, subject_identifier, exception_cls)
 
     @property
     def appt_title(self):

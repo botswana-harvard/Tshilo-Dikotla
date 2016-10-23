@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps as django_apps
 
 from edc_appointment.model_mixins import CreateAppointmentsMixin
 from edc_base.model.models import BaseUuidModel
@@ -59,9 +60,9 @@ class InfantBirth(SyncModelMixin, CreateAppointmentsMixin, RegisteredSubjectMixi
 
     history = SyncHistoricalRecords()
 
-    @property
-    def subject_identifier(self):
-        return self.registered_subject.subject_identifier
+#     @property
+#     def subject_identifier(self):
+#         return self.registered_subject.subject_identifier
 
     def natural_key(self):
         return self.maternal_labour_del.natural_key()
@@ -78,8 +79,20 @@ class InfantBirth(SyncModelMixin, CreateAppointmentsMixin, RegisteredSubjectMixi
 #         self.create_all(
 #             base_appt_datetime=maternal_labour_del.delivery_datetime, using=using)
 
+    @property
+    def registration_instance(self):
+        registration_instance = None
+        try:
+            model = django_apps.get_app_config('edc_registration').model
+            registration_instance = model.objects.get(subject_identifier=self.get_subject_identifier())
+        except model.DoesNotExist as e:
+            raise model.DoesNotExist('{} subject_identifier=\'{}\''.format(str(e), self.subject_identifier))
+        return registration_instance
+
     def get_subject_identifier(self):
-        return self.registered_subject.subject_identifier
+        relative_identifier = None #self.registered_subject.relative_identifier
+        identifier = relative_identifier if relative_identifier else self.registered_subject.subject_identifier
+        return identifier
 
     class Meta:
         app_label = 'td_infant'
