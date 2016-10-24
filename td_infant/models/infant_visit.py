@@ -13,11 +13,11 @@ from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
 from edc_visit_tracking.model_mixins import VisitModelMixin
 
 from td_appointment.models import Appointment
-from td_registration.models import RegisteredSubject
 
 # from tshilo_dikotla.choices import VISIT_REASON
 from edc_visit_tracking.model_mixins import CaretakerFieldsMixin
 
+from ..managers import InfantVisitCrfManager
 from .infant_birth import InfantBirth
 
 
@@ -35,12 +35,35 @@ class InfantVisit(
 
     consent_model = InfantBirth  # a bit weird, see visit_form_mixin clean()
 
+    objects = InfantVisitCrfManager()
+
     history = SyncHistoricalRecords()
 
+    @property
+    def get_infant_demographics(self):
+        return InfantBirth.objects.get(registered_subject__subject_identifier=self.appointment.subject_identifier)
+
     def __str__(self):
-        return '{} {} {}'.format(self.appointment.registered_subject.subject_identifier,
-                                 self.appointment.registered_subject.first_name,
+        return '{} {} {}'.format(self.appointment.subject_identifier,
+                                 self.get_infant_demographics.first_name,
                                  self.appointment.visit_code)
+
+    def natural_key(self):
+        return (self.subject_identifier, self.appointment.visit_code)
+    natural_key.dependencies = ['td_appointment.appointment']
+
+    def get_subject_identifier(self):
+        return self.appointment.subject_identifier
+
+    def is_off_study_or_raise(self):
+        pass
+
+    def is_off_study_on_previous_visit_or_raise(self):
+        pass
+
+    @property
+    def visit(self):
+        return getattr(self, 'infant_visit')
 
     def custom_post_update_crf_meta_data(self):
         """Calls custom methods that manipulate meta data on the post save.
@@ -98,10 +121,6 @@ class InfantVisit(
                     if infant_visit.reason == MISSED_VISIT:
                         self.crf_is_required(
                             self.appointment, 'td_infant', 'infantcircumcision')
-
-    def natural_key(self):
-        return self.appointment.natural_key()
-    natural_key.dependencies = ['td_appointment.appointment']
 
 #     def get_visit_reason_choices(self):
 #         return VISIT_REASON

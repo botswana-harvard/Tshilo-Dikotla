@@ -17,3 +17,4 @@ class InfantVisitFactory(factory.DjangoModelFactory):
     study_status = 'onstudy rando ondrug'
     survival_status = ALIVE
     last_alive_date = timezone.now().date()
+    reason = 'scheduled'

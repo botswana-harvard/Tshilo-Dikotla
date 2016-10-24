@@ -37,7 +37,7 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitModelMixin, Crea
     objects = MaternalVisitManager()
 
     def natural_key(self):
-        return (self.subject_identifier)
+        return (self.subject_identifier, self.appointment.visit_code)
 
     def __str__(self):
         return '{} {} {}'.format(self.appointment.subject_identifier,

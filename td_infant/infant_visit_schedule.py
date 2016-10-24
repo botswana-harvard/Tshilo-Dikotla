@@ -11,31 +11,31 @@ from td_infant.td_infant_lab_profiles import (
 
 
 infant_birth_requisitions = (
-    Requisition(show_order=10, model='td_infant.infantrequisition', panel=infant_birth_pbmc_pl_panel),
-    Requisition(show_order=20, model='td_infant.infantrequisition', panel=infant_glucose_panel),
-    Requisition(show_order=30, model='td_infant.infantrequisition', panel=infant_birth_insulin_panel),
+    Requisition(show_order=10, model='td_lab.infantrequisition', panel=infant_birth_pbmc_pl_panel),
+    Requisition(show_order=20, model='td_lab.infantrequisition', panel=infant_glucose_panel),
+    Requisition(show_order=30, model='td_lab.infantrequisition', panel=infant_birth_insulin_panel),
 )
 
 infant_1month_requisitions = (
-    Requisition(show_order=10, model='td_infant.infantrequisition', panel=infant_pp1_heu_pbmc_pl_panel),
-    Requisition(show_order=20, model='td_infant.infantrequisition', panel=infant_pp1_huu_pbmc_pl_panel),
-    Requisition(show_order=30, model='td_infant.infantrequisition', panel=infant_pp1_insulin_panel),
+    Requisition(show_order=10, model='td_lab.infantrequisition', panel=infant_pp1_heu_pbmc_pl_panel),
+    Requisition(show_order=20, model='td_lab.infantrequisition', panel=infant_pp1_huu_pbmc_pl_panel),
+    Requisition(show_order=30, model='td_lab.infantrequisition', panel=infant_pp1_insulin_panel),
 )
 
 infant_pp2_heelstick_requisition = (
-    Requisition(show_order=10, model='td_infant.infantrequisition', panel=infant_heelstick_panel),
+    Requisition(show_order=10, model='td_lab.infantrequisition', panel=infant_heelstick_panel),
 )
 
 infant_18month_requisitions = (
-    Requisition(show_order=10, model='td_infant.infantrequisition', panel=infant_pp18_huu_pbmc_pl_panel),
-    Requisition(show_order=20, model='td_infant.infantrequisition', panel=infant_pp18_heu_insulin_panel),
-    Requisition(show_order=30, model='td_infant.infantrequisition', panel=infant_pp18_huu_insulin_panel),
+    Requisition(show_order=10, model='td_lab.infantrequisition', panel=infant_pp18_huu_pbmc_pl_panel),
+    Requisition(show_order=20, model='td_lab.infantrequisition', panel=infant_pp18_heu_insulin_panel),
+    Requisition(show_order=30, model='td_lab.infantrequisition', panel=infant_pp18_huu_insulin_panel),
 )
 
 infant_36month_requisitions = (
-    Requisition(show_order=10, model='td_infant.infantrequisition', panel=infant_pp36_pbmc_pl_panel),
-    Requisition(show_order=20, model='td_infant.infantrequisition', panel=infant_pp36_insulin_panel),
-    Requisition(show_order=30, model='td_infant.infantrequisition', panel=infant_glucose_panel),
+    Requisition(show_order=10, model='td_lab.infantrequisition', panel=infant_pp36_pbmc_pl_panel),
+    Requisition(show_order=20, model='td_lab.infantrequisition', panel=infant_pp36_insulin_panel),
+    Requisition(show_order=30, model='td_lab.infantrequisition', panel=infant_glucose_panel),
 )
 
 infant_birth_crf = (

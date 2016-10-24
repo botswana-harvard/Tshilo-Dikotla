@@ -14,7 +14,7 @@ def get_birth_arv_visit_2000(infant_identifier):
     """Check if infant was given AZT at birth"""
     try:
         visit_2000 = InfantVisit.objects.get(
-            subject_identifier=infant_identifier, appointment__visit_definition__code=2000)
+            subject_identifier=infant_identifier, appointment__visit_code=2000)
         infant_birth_arv = InfantBirthArv.objects.get(infant_visit=visit_2000)
         return infant_birth_arv.azt_discharge_supply
     except Exception as e:
@@ -29,11 +29,10 @@ class InfantArvProphForm(BaseInfantModelForm):
         self.validate_taking_arv_proph_no()
         self.validate_taking_arv_proph_unknown()
         self.validate_taking_arv_proph_yes()
-        return cleaned_data
 
     def validate_taking_arv_proph_no(self):
         cleaned_data = self.cleaned_data
-        infant_identifier = cleaned_data.get('infant_visit').subject_identifier
+        infant_identifier = cleaned_data.get('infant_visit').appointment.subject_identifier
         if cleaned_data.get('prophylatic_nvp') == NO:
             if cleaned_data.get('arv_status') not in [NEVER_STARTED, DISCONTINUED]:
                 raise forms.ValidationError(
@@ -46,7 +45,7 @@ class InfantArvProphForm(BaseInfantModelForm):
 
     def validate_taking_arv_proph_unknown(self):
         cleaned_data = self.cleaned_data
-        infant_identifier = cleaned_data.get('infant_visit').subject_identifier
+        infant_identifier = cleaned_data.get('infant_visit').appointment.subject_identifier
         if cleaned_data.get('prophylatic_nvp') == UNKNOWN and cleaned_data.get('arv_status') not in ['modified']:
             if get_birth_arv_visit_2000(infant_identifier) not in [UNKNOWN]:
                 raise forms.ValidationError(
@@ -93,7 +92,7 @@ class InfantArvProphModForm(ModelForm):
 
     def validate_infant_arv_code(self):
         cleaned_data = self.cleaned_data
-        infant_identifier = cleaned_data.get('infant_arv_proph').infant_visit.subject_identifier
+        infant_identifier = cleaned_data.get('infant_arv_proph').infant_visit.appointment.subject_identifier
         if (cleaned_data.get('arv_code') == 'Zidovudine' and
            get_birth_arv_visit_2000(infant_identifier) in [YES]):
             if cleaned_data.get('modification_code') in ['Initial dose']:

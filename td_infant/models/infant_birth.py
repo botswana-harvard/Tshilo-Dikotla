@@ -80,6 +80,10 @@ class InfantBirth(SyncModelMixin, CreateAppointmentsMixin, RegisteredSubjectMixi
 #             base_appt_datetime=maternal_labour_del.delivery_datetime, using=using)
 
     @property
+    def visit(self):
+        return getattr(self, 'infant_visit')
+
+    @property
     def registration_instance(self):
         registration_instance = None
         try:
