@@ -31,9 +31,7 @@ class AppConfig(DjangoAppConfig):
     verbose_name = 'Tshilo Dikotla'
 
     def ready(self):
-        from td_maternal.maternal_rule_groups import (
-            MaternalRegisteredSubjectRuleGroup, MaternalRequisitionRuleGroup,
-            MaternalRequisitionRuleGroupCD4, MaternalUltrasoundInitialRuleGroup)
+        pass
 
 
 class EdcRegistrationAppConfig(EdcRegistrationAppConfigParent):
