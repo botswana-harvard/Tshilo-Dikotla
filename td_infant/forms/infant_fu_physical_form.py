@@ -1,5 +1,4 @@
 from django import forms
-from datetime import date
 
 from edc_constants.constants import NO, NOT_EVALUATED, YES
 
@@ -35,10 +34,10 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
             prev_visit = visit.index(cleaned_data.get('infant_visit').appointment.visit_code) - 1
             while prev_visit > 0:
                 try:
-                    registered_subject = cleaned_data.get('infant_visit').appointment.registered_subject
+                    subject_identifier = cleaned_data.get('infant_visit').appointment.subject_identifier
                     prev_fu_phy = InfantFuPhysical.objects.get(
-                        infant_visit__appointment__registered_subject=registered_subject,
-                        infant_visit__appointment__visit_definition__code=visit[prev_visit])
+                        infant_visit__appointment__subject_identifier=subject_identifier,
+                        infant_visit__appointment__visit_code=visit[prev_visit])
                     if cleaned_data.get('height') < prev_fu_phy.height:
                         raise forms.ValidationError(
                             'You stated that the height for the participant as {}, yet in visit {} '
@@ -57,10 +56,10 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
             prev_visit = visit.index(cleaned_data.get('infant_visit').appointment.visit_code) - 1
             while prev_visit > 0:
                 try:
-                    registered_subject = cleaned_data.get('infant_visit').appointment.registered_subject
+                    subject_identifier = cleaned_data.get('infant_visit').appointment.subject_identifier
                     prev_fu_phy = InfantFuPhysical.objects.get(
-                        infant_visit__appointment__registered_subject=registered_subject,
-                        infant_visit__appointment__visit_definition__code=visit[prev_visit])
+                        infant_visit__appointment__subject_identifier=subject_identifier,
+                        infant_visit__appointment__visit_code=visit[prev_visit])
                     if cleaned_data.get('head_circumference') < prev_fu_phy.head_circumference:
                         raise forms.ValidationError(
                             'You stated that the head circumference for the participant as {}, '
@@ -75,17 +74,15 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
     def validate_report_datetime(self):
         cleaned_data = self.cleaned_data
         try:
-            subject_identifier = cleaned_data.get(
-                'infant_visit').appointment.registered_subject.subject_identifier
+            subject_identifier = cleaned_data.get('infant_visit').appointment.subject_identifier
             infant_birth = InfantBirth.objects.get(registered_subject__subject_identifier=subject_identifier)
             if (cleaned_data.get('report_datetime').date() <
                     infant_birth.dob):
                 raise forms.ValidationError('Report date {} cannot be before infant DOB of {}'.format(
                     cleaned_data.get('report_datetime').date(),
-                    cleaned_data.get('infant_visit').appointment.registered_subject.dob))
-            relative_identifier = cleaned_data.get('infant_visit').appointment.registered_subject.relative_identifier
+                    infant_birth.registered_subject.dob))
             maternal_consent = MaternalConsent.objects.get(
-                registered_subject__subject_identifier=relative_identifier)
+                maternal_eligibility__registered_subject__subject_identifier=infant_birth.registered_subject.relative_identifier)
             if cleaned_data.get('report_datetime') < maternal_consent.consent_datetime:
                 raise forms.ValidationError(
                     "Report date of {} CANNOT be before consent datetime".format(cleaned_data.get('report_datetime')))
