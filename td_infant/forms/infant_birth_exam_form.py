@@ -2,6 +2,7 @@ from django import forms
 
 from edc_constants.constants import NO, NOT_EVALUATED, YES
 
+from td_registration.models import RegisteredSubject
 from td_maternal.models import MaternalConsent
 
 from .base_infant_model_form import BaseInfantModelForm
@@ -23,11 +24,14 @@ class InfantBirthExamForm(BaseInfantModelForm):
         self.validate_neuro_exam(cleaned_data)
         return cleaned_data
 
+    def relative_identifier(self, infant_identifier):
+        return RegisteredSubject.objects.get(subject_identifier=infant_identifier).relative_identifier
+
     def validate_report_datetime(self, cleaned_data, field):
         try:
-            relative_identifier = cleaned_data.get('infant_visit').appointment.registered_subject.relative_identifier
+            relative_identifier = self.relative_identifier(cleaned_data.get('infant_visit').appointment.subject_identifier)
             maternal_consent = MaternalConsent.objects.get(
-                registered_subject__subject_identifier=relative_identifier)
+                maternal_eligibility__registered_subject__subject_identifier=relative_identifier)
             if cleaned_data.get(field) < maternal_consent.consent_datetime:
                 raise forms.ValidationError("{} CANNOT be before consent datetime".format(field.title()))
             if cleaned_data.get(field).date() < maternal_consent.dob:
