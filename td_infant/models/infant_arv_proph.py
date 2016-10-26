@@ -37,6 +37,7 @@ class InfantArvProph(InfantCrfModel):
         app_label = 'td_infant'
         verbose_name = 'Infant NVP or AZT Proph'
         verbose_name_plural = 'Infant NVP or AZT Proph'
+        unique_together = ('infant_visit', 'prophylatic_nvp')
 
 
 class InfantArvProphMod(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
@@ -73,7 +74,7 @@ class InfantArvProphMod(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
         blank=True)
 
     objects = InfantArvProphModManager()
-    
+
     history = SyncHistoricalRecords()
 
     def natural_key(self):
@@ -83,4 +84,4 @@ class InfantArvProphMod(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
         app_label = 'td_infant'
         verbose_name = 'Infant NVP or AZT Proph: Mods'
         verbose_name_plural = 'Infant NVP or AZT Proph: Mods'
-        unique_together = ('infant_arv_proph', 'arv_code')
+        unique_together = ('infant_arv_proph', 'arv_code', 'modification_date')
