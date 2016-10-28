@@ -1,4 +1,3 @@
-from td_appointment.models import Appointment
 from edc_constants.constants import YES
 from edc_rule_groups.crf_rule import CrfRule
 from edc_rule_groups.decorators import register
@@ -14,48 +13,60 @@ from .td_infant_lab_profiles import (infant_pp1_heu_pbmc_pl_panel,
                                      infant_pp1_huu_pbmc_pl_panel, infant_heelstick_panel,
                                      infant_pp18_heu_insulin_panel, infant_pp18_huu_insulin_panel)
 
+from td_registration.models import RegisteredSubject
+
 from td_maternal.rule_groups import func_mother_pos
 from td_maternal.models import MaternalVisit
-
-from td_registration.models import RegisteredSubject
 
 from td_infant.models import InfantArvProph
 
 
-def maternal_hiv_status_visit(visit_instance):
-    maternal_registered_subject = RegisteredSubject.objects.get(
-        subject_identifier=visit_instance.appointment.registered_subject.relative_identifier)
+def maternal_hiv_status_visit(visit_instance, *args):
     try:
-        maternal_visit_2000 = MaternalVisit.objects.get(
-            subject_identifier=maternal_registered_subject.subject_identifier,
-            appointment__visit_definition__code='2000M')
-        return func_mother_pos(maternal_visit_2000)
+        relative_identifier = RegisteredSubject.objects.get(
+            subject_identifier=visit_instance.appointment.subject_identifier).relative_identifier
+        maternal_visit = MaternalVisit.objects.filter(
+            appointment__subject_identifier=relative_identifier).order_by('-created').first()
+        return func_mother_pos(maternal_visit)
     except Exception:
         pass
 
 
-def func_show_infant_arv_proph(visit_instance):
-    previous_visit = infant_birth_schedule.get_previous_visit(visit_instance.appointment.visit_definition.code)
+def func_show_infant_arv_proph(visit_instance, *args):
+    previous_visit = infant_birth_schedule.get_previous_visit(visit_instance.appointment.visit_code)
     if not previous_visit:
         return False
-    try:
-        infant_arv_proph = InfantArvProph.objects.get(infant_visit=previous_visit)
-        return infant_arv_proph.arv_status in [NO_MODIFICATIONS, START, MODIFIED]
-    except InfantArvProph.DoesNotExist:
-        if visit_instance.appointment.visit_definition.code == '2010':
-            return maternal_hiv_status_visit(visit_instance)
-        return False
+    else:
+        try:
+            infant_arv_proph = InfantArvProph.objects.get(
+                infant_visit__appointment__visit_code=previous_visit.code)
+            return infant_arv_proph.arv_status in [NO_MODIFICATIONS, START, MODIFIED]
+        except InfantArvProph.DoesNotExist:
+            if visit_instance.appointment.visit_code == '2010':
+                return maternal_hiv_status_visit(visit_instance)
+            return False
 
 
-def func_infant_heu(visit_instance):
+def func_infant_heu(visit_instance, *args):
     """Returns true if mother of the infant is hiv positive."""
-    appointment = visit_instance.appointment
-    maternal_visit = MaternalVisit.objects.filter(
-        appointment__registered_subject__subject_identifier=appointment.registered_subject.relative_identifier
-    ).order_by('-created').first()
-    if func_mother_pos(maternal_visit):
+    if maternal_hiv_status_visit(visit_instance):
         return True
     return False
+
+
+@register()
+class InfantRegisteredSubjectRuleGroup(RuleGroup):
+
+    arv_proph = CrfRule(
+        logic=Logic(
+            predicate=func_show_infant_arv_proph,
+            consequence=REQUIRED,
+            alternative=NOT_REQUIRED),
+        target_models=['infantarvproph'])
+
+    class Meta:
+        app_label = 'td_infant'
+        source_model = 'td_registration.registeredsubject'
 
 
 @register()
@@ -63,14 +74,14 @@ class InfantFuRuleGroup(RuleGroup):
 
     physical_assessment_yes = CrfRule(
         logic=Logic(
-            predicate=P('physical_assessment', 'equals', YES),
+            predicate=P('physical_assessment', 'eq', YES),
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_models=['infantfuphysical'])
 
     has_dx_yes = CrfRule(
         logic=Logic(
-            predicate=P('has_dx', 'equals', YES),
+            predicate=P('has_dx', 'eq', YES),
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_models=['infantfudx'])
@@ -85,7 +96,7 @@ class InfantFeedingRuleGroup(RuleGroup):
 
     solid_foods = CrfRule(
         logic=Logic(
-            predicate=P('formula_intro_occur', 'equals', YES),
+            predicate=P('formula_intro_occur', 'eq', YES),
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_models=['solidfoodassessment'])
@@ -100,7 +111,7 @@ class InfantBirthDataRuleGroup(RuleGroup):
 
     congenital_anomalities_yes = CrfRule(
         logic=Logic(
-            predicate=P('congenital_anomalities', 'equals', YES),
+            predicate=P('congenital_anomalities', 'eq', 'Yes'),
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_models=['infantcongenitalanomalies'])
