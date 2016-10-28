@@ -18,6 +18,28 @@ class RequisitionMetadata(RequisitionMetadataModelMixin, BaseUuidModel):
         return appt
 
     @property
+    def maternal_requisition(self):
+        from td_lab.models.maternal_requisition import MaternalRequisition
+        maternal_requisition = None
+        try:
+            maternal_requisition = MaternalRequisition.objects.get(
+                maternal_visit__appointment__visit_code=self.visit_code, panel_name=self.panel_name)
+        except MaternalRequisition.DoesNotExist:
+            pass
+        return maternal_requisition
+
+    @property
+    def infant_requisition(self):
+        from td_lab.models.infant_requisition import InfantRequisition
+        infant_requisition = None
+        try:
+            infant_requisition = InfantRequisition.objects.get(
+                infant_visit__appointment__visit_code=self.visit_code, panel_name=self.panel_name)
+        except InfantRequisition.DoesNotExist:
+            pass
+        return infant_requisition
+
+    @property
     def reqs_model_add_or_update(self):
         app_label, model_name = self.model.split('.')
         model = apps.get_app_config('td_lab').get_model(model_name)

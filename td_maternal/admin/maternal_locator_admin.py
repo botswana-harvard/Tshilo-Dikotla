@@ -57,10 +57,8 @@ class MaternalLocatorAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     actions = []  # do not allow export to CSV
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-
-        if db_field.name == 'maternal_visit' and request.GET.get('appointment_pk'):
-            kwargs["queryset"] = MaternalVisit.objects.filter(appointment__pk=request.GET.get('appointment_pk', 0))
-        elif db_field.name == "registered_subject":
+        super().formfield_for_foreignkey(db_field, request, **kwargs)
+        if db_field.name == "registered_subject":
             kwargs["queryset"] = RegisteredSubject.objects.filter(subject_identifier=request.GET.get('subject_identifier', 0))
-
+ 
         return super(MaternalLocatorAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)

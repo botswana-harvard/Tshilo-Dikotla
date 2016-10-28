@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, SectionRedirectUrlMixin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 from tshilo_dikotla.constants import INFANT
 
 from ..forms import InfantOffStudyForm
@@ -12,7 +12,7 @@ from ..models import InfantOffStudy
 
 
 @admin.register(InfantOffStudy)
-class InfantOffStudyAdmin(EdcBaseModelAdminMixin, SectionRedirectUrlMixin, admin.ModelAdmin):
+class InfantOffStudyAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     form = InfantOffStudyForm
     dashboard_type = INFANT

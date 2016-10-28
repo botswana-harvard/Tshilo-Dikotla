@@ -12,9 +12,8 @@ class EdcBaseModelAdminMixin(ModelAdminFormInstructionsMixin, ModelAdminFormAuto
     date_hierarchy = 'modified'
     empty_value_display = '-'
 
-
-class SectionRedirectUrlMixin:
-    pass
+    def redirect_url(self, request, obj, post_url_continue=None):
+        return request.GET.get('next')
 
 
 class SubjectDashboardRedirectUrlMixin(ModelAdminModelRedirectMixin):

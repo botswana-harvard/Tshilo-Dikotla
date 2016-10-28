@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
-from edc_base.views import EdcBaseViewMixin
+from edc_base.view_mixins import EdcBaseViewMixin
 
 
 class HomeView(EdcBaseViewMixin, TemplateView):

@@ -94,9 +94,7 @@ class InfantBirth(SyncModelMixin, CreateAppointmentsMixin, RegisteredSubjectMixi
         return registration_instance
 
     def get_subject_identifier(self):
-        relative_identifier = None #self.registered_subject.relative_identifier
-        identifier = relative_identifier if relative_identifier else self.registered_subject.subject_identifier
-        return identifier
+        return self.registered_subject.subject_identifier
 
     class Meta:
         app_label = 'td_infant'

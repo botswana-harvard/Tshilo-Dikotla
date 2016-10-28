@@ -1,0 +1,21 @@
+    <div class="panel-group">
+    	<div class="panel panel-success">
+          <div class="panel-heading clearfix">Enrollments</div>
+      <div class="panel-body"> 
+		<!--  <blockquote class="blockquote" style="font-family: "Times New Roman", Times, serif;"> -->
+	  		<ul class="list-inline text-primary">
+	  			<li class="list-inline-item medium">
+	  				 {% for label, url in enrollments %}
+					 	{% if "complete" in label %}
+					 		|
+					 	{% else %}
+					 		|<span style="background:red;"> </span> 
+					 	{% endif %}
+	  					<a href="{{url}}?next=subject_dashboard_url&subject_identifier={{subject_identifier}}">{{label}}</a>
+		 			{% endfor %}
+	  			</li>
+			</ul>
+		<!--  </blockquote>-->
+      </div>
+    </div>
+  </div>

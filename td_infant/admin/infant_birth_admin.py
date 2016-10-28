@@ -6,14 +6,14 @@ from td_registration.models import RegisteredSubject
 from edc_export.actions import export_as_csv_action
 
 from td_maternal.models import MaternalLabourDel
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, SectionRedirectUrlMixin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
 from ..forms import InfantBirthForm
 from ..models import InfantBirth
 
 
 @admin.register(InfantBirth)
-class InfantBirthAdmin(EdcBaseModelAdminMixin, SectionRedirectUrlMixin, admin.ModelAdmin):
+class InfantBirthAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     form = InfantBirthForm
 
@@ -47,9 +47,9 @@ class InfantBirthAdmin(EdcBaseModelAdminMixin, SectionRedirectUrlMixin, admin.Mo
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "registered_subject":
-            if request.GET.get('registered_subject'):
+            if request.GET.get('subject_identifier'):
                 kwargs["queryset"] = RegisteredSubject.objects.filter(
-                    id__exact=request.GET.get('registered_subject', 0))
+                    subject_identifier=request.GET.get('subject_identifier', 0))
             else:
                 self.readonly_fields = list(self.readonly_fields)
                 try:
@@ -57,9 +57,9 @@ class InfantBirthAdmin(EdcBaseModelAdminMixin, SectionRedirectUrlMixin, admin.Mo
                 except ValueError:
                     self.readonly_fields.append('registered_subject')
         if db_field.name == "maternal_labour_del":
-            if request.GET.get('registered_subject'):
+            if request.GET.get('subject_identifier'):
                 maternal_subject_identifier = RegisteredSubject.objects.get(
-                    id=request.GET.get('registered_subject')).relative_identifier
+                    subject_identifier=request.GET.get('subject_identifier')).relative_identifier
                 kwargs["queryset"] = MaternalLabourDel.objects.filter(
                     registered_subject__subject_identifier=maternal_subject_identifier)
         return super(InfantBirthAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)

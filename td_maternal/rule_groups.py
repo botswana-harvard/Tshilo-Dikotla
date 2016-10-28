@@ -71,7 +71,7 @@ def show_ultrasound_form(visit_instance, *args):
 def show_rapid_test_form(visit_instance, *args):
     """
         Return true if the the day of the last rapid test is
-       (EDD confirmed) – (Date of Last HIV Rapid Test) > 56 OR Unknown
+       (EDD confirmed) (Date of Last HIV Rapid Test) > 56 OR Unknown
     """
     subject_identifier = visit_instance.appointment.subject_identifier
     maternal_status_helper = MaternalStatusHelper(visit_instance)
@@ -190,7 +190,7 @@ class MaternalRequisitionRuleGroupCD4(RuleGroup):
 
     class Meta:
         app_label = 'td_lab'
-#         source_model = 'td_maternal.maternalinterimidcc'
+        source_model = 'td_maternal.maternalinterimidcc'
 
 
 @register()

@@ -24,13 +24,16 @@ class MaternalRequisitionAdmin(RequisitionAdminMixin, ModelAdminNextUrlRedirectM
     panel_model = Panel
 
     def redirect_url(self, request, obj, post_url_continue=None):
-        url_name = request.GET.get(self.querystring_name)
-        subject_identifier = request.GET.get('subject_identifier')
-        appointment_id = request.GET.get('appointment_pk')
-        dashboard_url = reverse(url_name, kwargs={'appointment_pk': appointment_id, 'subject_identifier': subject_identifier})
-        show = 'show={}'.format(request.GET.get('show', None))
-        next_url = "{}?{}".format(dashboard_url, show)
-        return next_url
+        return request.GET.get('next')
+
+#     def redirect_url(self, request, obj, post_url_continue=None):
+#         url_name = request.GET.get(self.querystring_name)
+#         subject_identifier = request.GET.get('subject_identifier')
+#         appointment_id = request.GET.get('appointment_pk')
+#         dashboard_url = reverse(url_name, kwargs={'appointment_pk': appointment_id, 'subject_identifier': subject_identifier})
+#         show = 'show={}'.format(request.GET.get('show', None))
+#         next_url = "{}?{}".format(dashboard_url, show)
+#         return next_url
 
     def save_form(self, request, form, change):
         form.panel_name = request.GET.get('panel_name', None)

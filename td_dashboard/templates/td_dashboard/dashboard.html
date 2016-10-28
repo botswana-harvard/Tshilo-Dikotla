@@ -1,0 +1,37 @@
+{% extends "edc_base/base.html" %}
+{% load staticfiles %}
+
+{% block main %}
+<div class="container">
+
+  <div class="col-md-12">
+    {% block demographics%}{% endblock demographics%}
+  </div>
+
+  {% if locator %}
+    <div class="col-md-9">
+  {% else %}
+    <div class="col-md-12">
+  {% endif %}
+    {% block enrollments %}
+  	{% endblock enrollments %}
+  
+  	{% block appointments %}
+  	{% endblock appointments %}
+
+    {% block crfs %}
+    {% endblock crfs %}
+
+    {% block requisitions %}
+    {% endblock requisitions %}
+	</div>
+
+  {% if locator %}
+  	<div class="col-md-3">
+    	{% block locator_information %}
+    	{% endblock locator_information %}
+  	</div>
+  {% endif %}
+
+</div>
+{% endblock main %}

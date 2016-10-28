@@ -2,14 +2,12 @@ from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
 
-from edc_base.views import EdcBaseViewMixin
-from ..classes import MarqueeViewMixin, AppointmentSubjectVisitCRFViewMixin, LocatorResultsActionsViewMixin
+from edc_base.view_mixins import EdcBaseViewMixin
+from ..classes import MarqueeViewMixin
 from td_maternal.models.maternal_consent import MaternalConsent
-from td_maternal.models.requisition_meta_data import RequisitionMetadata
 from edc_constants.constants import UNK, OTHER
 from td_maternal.models.maternal_locator import MaternalLocator
-from td_maternal.models.maternal_crf_meta_data import CrfMetadata
-from tshilo_dikotla.constants import MATERNAL
+from tshilo_dikotla.constants import MATERNAL, INFANT
 from td_maternal.models.antenatal_enrollment import AntenatalEnrollment
 from td_maternal.models.maternal_visit import MaternalVisit
 from td_maternal.classes.maternal_status_helper import MaternalStatusHelper
@@ -17,11 +15,15 @@ from td_maternal.models.enrollment_helper import EnrollmentHelper
 from django.utils import timezone
 from td_maternal.models.maternal_labour_del import MaternalLabourDel
 from td_maternal.models.maternal_randomization import MaternalRando
+from _collections import OrderedDict
+from td_registration.models import RegisteredSubject
+from edc_base.utils.convert_from_camel import convert_from_camel
+from td_infant.models.infant_birth import InfantBirth
+from td_dashboard.classes.dashboard_mixin import DashboardMixin
 
 
 class MaternalDashboardView(
-        MarqueeViewMixin,
-        AppointmentSubjectVisitCRFViewMixin, LocatorResultsActionsViewMixin, EdcBaseViewMixin, TemplateView):
+        MarqueeViewMixin, DashboardMixin, EdcBaseViewMixin, TemplateView):
 
     def __init__(self, **kwargs):
         super(MaternalDashboardView, self).__init__(**kwargs)
@@ -29,8 +31,13 @@ class MaternalDashboardView(
         self.context = {}
         self.show = None
         self.maternal_status_helper = None
-        self.template_name = 'td_dashboard/subject_dashboard.html'
-        self.membership_form_category = [
+        self._crfs = []
+        self._selected_appointment = None
+        self._appointments = None
+        self._requisitions = []
+        self.dashboard = 'td_maternal'
+        self.template_name = 'td_dashboard/maternal/subject_dashboard.html'
+        self.enrollments_models = [
             'td_maternal.specimenconsent', 'td_maternal.antenatalenrollment',
             'td_maternal.antenatalvisitmembership', 'td_maternal.maternallabourdel']
 
@@ -42,17 +49,18 @@ class MaternalDashboardView(
             site_header=admin.site.site_header,
         )
         self.context.update({
-            'marquee_data': self.marquee_data.items(),
+            'demographics': self.demographics,
             'markey_next_row': self.markey_next_row,
-            'requistions_metadata': self.requistions_metadata,
-            'scheduled_forms': self.scheduled_forms[0],
-            'visit_code': self.scheduled_forms[1],
+            'requisitions': self.requisitions,
+            'crfs': self.crfs,
             'appointments': self.appointments,
             'subject_identifier': self.subject_identifier,
             'consents': [],
             'dashboard_type': MATERNAL,
             'locator': self.locator,
-            'subject_membership_models': self.subject_membership_models()
+            'dashboard_url': self.dashboard_url,
+            'enrollments': self.enrollments(),
+            'infants': self.get_registered_infant_identifier
         })
         return self.context
 
@@ -73,41 +81,24 @@ class MaternalDashboardView(
         return maternal_locator
 
     @property
-    def maternal_marquee_data(self):
+    def demographics_data(self):
         self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
-        maternal_marquee_data = {}
+        demographics_data = {}
         if self.antenatal_enrollment:
             if self.antenatal_enrollment.pending_ultrasound:
-                maternal_marquee_data.update({'antenatal_enrollment_status': 'pending ultrasound'})
+                demographics_data.update({'antenatal_enrollment_status': 'pending ultrasound'})
             elif self.antenatal_enrollment.is_eligible:
-                maternal_marquee_data.update({'antenatal_enrollment_status': 'passed'})
+                demographics_data.update({'antenatal_enrollment_status': 'passed'})
             elif not self.antenatal_enrollment.is_eligible:
-                maternal_marquee_data.update({'antenatal_enrollment_status': 'failed'})
+                demographics_data.update({'antenatal_enrollment_status': 'failed'})
             else:
-                maternal_marquee_data.update({'antenatal_enrollment_status': 'Not filled'})
-        maternal_marquee_data.update({'enrollment_hiv_status': self.maternal_status_helper.enrollment_hiv_status})
-        maternal_marquee_data.update({'current_hiv_status': self.maternal_status_helper.hiv_status})
-        maternal_marquee_data.update({'gestational_age': self.gestational_age})
-        maternal_marquee_data.update({'delivery_site': self.delivery_site})
-        maternal_marquee_data.update({'randomized': self.randomized})
-        return maternal_marquee_data
-
-    @property
-    def scheduled_forms(self):
-        visit_code = self.appointment.visit_code if self.appointment else '1000M'
-        scheduled_forms = CrfMetadata.objects.filter(
-            subject_identifier=self.subject_identifier,
-            visit_code=visit_code).order_by('created')
-        return (scheduled_forms, visit_code)
-
-    @property
-    def requistions_metadata(self):
-        visit_code = self.appointment.visit_code if self.appointment else '1000M'
-        requistions_metadata = RequisitionMetadata.objects.filter(
-            subject_identifier=self.subject_identifier,
-            visit_code=visit_code
-        )
-        return requistions_metadata
+                demographics_data.update({'antenatal_enrollment_status': 'Not filled'})
+        demographics_data.update({'enrollment_hiv_status': self.maternal_status_helper.enrollment_hiv_status})
+        demographics_data.update({'current_hiv_status': self.maternal_status_helper.hiv_status})
+        demographics_data.update({'gestational_age': self.gestational_age})
+        demographics_data.update({'delivery_site': self.delivery_site})
+        demographics_data.update({'randomized': self.randomized})
+        return demographics_data
 
     @property
     def latest_visit(self):
@@ -127,10 +118,6 @@ class MaternalDashboardView(
     def show_forms(self):
         show = self.request.GET.get('show', None)
         return True if show == 'forms' else False
-
-    @property
-    def subject_identifier(self):
-        return self.context.get('subject_identifier')
 
     @property
     def maternal_randomization(self):
@@ -217,3 +204,28 @@ class MaternalDashboardView(
             return randomization.rx
         except MaternalRando.DoesNotExist:
             return None
+
+    @property
+    def get_registered_infant_identifier(self):
+        """Returns an infant identifier associated with the maternal identifier"""
+        infants = OrderedDict()
+        infant_registered_subject = None
+        try:
+            infant_registered_subject = RegisteredSubject.objects.get(
+                subject_type=INFANT, relative_identifier__iexact=self.subject_identifier)
+            try:
+                infant_birth = InfantBirth.objects.get(registered_subject__exact=infant_registered_subject)
+                dct = infant_birth.__dict__
+                dct['dashboard_model'] = convert_from_camel(infant_birth._meta.object_name)
+                dct['dashboard_id'] = convert_from_camel(str(infant_birth.pk))
+                dct['dashboard_type'] = INFANT
+                infants[infant_registered_subject.subject_identifier] = dct
+            except InfantBirth.DoesNotExist:
+                dct = {'subject_identifier': infant_registered_subject.subject_identifier}
+                dct['dashboard_model'] = 'registered_subject'
+                dct['dashboard_id'] = str(infant_registered_subject.pk)
+                dct['dashboard_type'] = INFANT
+                infants[infant_registered_subject.subject_identifier] = dct
+        except RegisteredSubject.DoesNotExist:
+            pass
+        return infants

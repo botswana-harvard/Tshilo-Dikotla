@@ -1,0 +1,43 @@
+
+<div id ="print-status-div-con"><span class="alert alert-danger" id="print-status-div">Failed to print an error occurred.</span></div>
+<div class="panel-group">
+	<div class="panel panel-warning">
+		<div class="panel-heading clearfix">Requisitions <span class="pull-right">
+			<button type="button" id="btn-print-label" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span> Print all</button>
+			<button type="button" id="btn-print-label" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-print"></span> Print selected</button>
+			</span>
+		</div>
+     	<div class="panel-body">
+			<table class="table table-bordered table-striped table-hover table-condensed">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Title</th>
+						<th>Requisition</th>
+						<th>Status</th>
+						<th>User</th>
+						<th>Created/Modified</th>                        
+					</tr>
+				</thead>
+				<tbody>
+				{% for requisition_meta_data in requisitions %}
+			    	<tr>
+			    		<td><label><input type="checkbox" name="requisition-checkbox" value="{{requisition.subject_requisition.pk}}"></label></td>
+			    		<td><small>{{requisition_meta_data.panel_name}}</small></td>
+			    		<td>
+			    			{% if requisition_meta_data.subject_requisition %}
+			    				<a href="#">{{ requisition_meta_data.subject_requisition.requisition_identifier }}</a>
+			    			{% else %}
+			    				<a href="#">Add</a>
+			    			{% endif %}
+			    		</td>
+			    		<td>{{ requisition_meta_data.get_entry_status_display}}</td>
+			    		<td>{{ requisition_meta_data.subject_requisition.user_created}}</td>
+			    		<td>{{ requisition_meta_data.subject_requisition.created|date:"Y-m-d" }}</td>
+			    	</tr>
+			    {% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

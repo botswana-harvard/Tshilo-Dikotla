@@ -1,0 +1,76 @@
+{% load crypto_tags %}
+{% load admin_urls %}
+
+<div class="panel-group">
+   	<div class="panel panel-info">
+ 
+   			{% if dashboard_type == 'infant' %}
+   				<div class="panel-heading">Mother</div>
+  	   			<div class="panel-body">
+ 						<a href="{% url 'subject_dashboard_url' consent.subject_identifier %}" class="btn btn-sm btn-default">
+ 							{{consent.subject_identifier}} {{consent.first_name}}
+ 						</a>
+	   			</div>
+   			{% else %}
+	   			<div class="panel-heading">Infant</div>
+	   			<div class="panel-body">
+	   				{%  if infants %}
+   						{% for infant, data in infants.items %}
+	   						<a href="{% url 'infant_subject_dashboard_url' data.subject_identifier %}" class="btn btn-sm btn-default">
+	   							{{data.subject_identifier}} {{data.gender}} {{data.first_name}}
+	   						</a>
+	   					{% endfor %}
+	   				{% else %}
+	   					<span>No Infants</span>
+	   				{% endif %}
+	   			</div>
+	   		{% endif %}
+ 		</div>
+    <div class="panel panel-info clearfix">
+   		<div class="panel-heading clearfix">Contact Info</div>
+   		<div class="panel-body">
+   			<address>
+   			<b>May follow-up?</b> {{locator.may_follow_up}}<br>
+   			{% if locator.may_follow_up.lower == 'yes' %}   
+					<b>Home visits?</b> {{locator.home_visit_permission }}<br>
+					<br>
+					<em><strong>Address:</strong></em><br>
+					<span style="margin-top:20px;">
+						{{locator.physical_address|safe|encrypted|wordwrap:25}}
+					</span><br><br>
+				<abbr title="Phone"><strong>Tel:</strong></abbr> {{locator.subject_phone|default:''|encrypted}}<br>
+				<abbr title="Phone"><strong>Alt:</strong></abbr> {{locator.subject_phone_alt|default:''|encrypted}}<br>
+				<abbr title="Phone"><strong>Cell:</strong></abbr> {{locator.subject_cell|default:''|encrypted}}<br>
+			{% endif%}
+			{% if locator.may_contact_someone.lower == 'yes' %}
+				<span><strong>Name:</strong> {{ locator.contact_name|encrypted }}</span><br>
+				<span><strong>Relation:</strong> {{ locator.contact_rel|encrypted }}</span><br>
+				<br>
+				<em><strong>Address:</strong></em><br>
+				<span style="margin-top:20px;">
+					{{ locator.contact_physical_address|safe|encrypted|wordwrap:25 }}
+				</span>
+				<br>
+				<abbr title="Phone"><strong>Tel:</strong></abbr> {{ locator.contact_physical_address|safe|encrypted|wordwrap:25 }}<br>
+				<abbr title="Phone"><strong>Alt Tel:</strong></abbr> {{ locator.contact_tel|encrypted }} <br>
+				<abbr title="Phone"><strong>Alt Cell:</strong></abbr> {{ locator.contact_cell|encrypted }} <br>
+			{% endif %}
+			
+			{% if locator.has_alt_contact.lower == 'yes' %}
+				<span>Name: {{ locator.alt_contact_name|encrypted }}</span><br>
+				<span>Cell: {{ locator.alt_contact_cell|encrypted }}</span><br>
+				<span>Tel: {{ locator.alt_contact_tel|encrypted }}</span><br>
+				<br>
+			{% endif %}
+            {% if locator.home_village %}
+               <b><i>Home Village:</i></b> {{ locator.home_village }}
+           {% endif%}
+			</address>
+   		</div>
+ 	</div>
+ 	<div class="panel panel-info">
+		<div class="panel-heading">Action Items</div>
+		<div class="panel-body">
+		</div>
+	</div>
+</div>
