@@ -39,7 +39,7 @@ from .maternal_contraception import MaternalContraception
 from .maternal_randomization import MaternalRando
 from .maternal_substance_during_preg import MaternalSubstanceUseDuringPreg
 from .maternal_substance_prior_preg import MaternalSubstanceUsePriorPreg
-from .potential_call import PotentialCall
+# from .potential_call import PotentialCall
 from .maternal_crf_meta_data import CrfMetadata
 from .requisition_meta_data import RequisitionMetadata
 from .signals import *

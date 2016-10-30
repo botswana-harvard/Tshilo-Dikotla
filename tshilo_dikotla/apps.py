@@ -7,8 +7,10 @@ from django.conf import settings
 
 from edc_appointment.apps import AppConfig as EdcAppointmentAppConfigParent
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
+from edc_call_manager.apps import AppConfig as EdcCallManagerAppConfigParent
 from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
 from edc_consent.consent_config import ConsentConfig
+from edc_device.apps import AppConfig as EdcDeviceAppConfigParent
 from edc_identifier.apps import AppConfig as EdcIdentifierAppConfigParent
 from edc_label.apps import AppConfig as EdcLabelConfigParent
 from edc_metadata.apps import AppConfig as EdcMetadataAppConfigParent
@@ -32,6 +34,10 @@ class AppConfig(DjangoAppConfig):
 
     def ready(self):
         pass
+
+
+class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
+    device_id = '99'
 
 
 class EdcRegistrationAppConfig(EdcRegistrationAppConfigParent):
@@ -130,3 +136,7 @@ class EdcMetadataAppConfig(EdcMetadataAppConfigParent):
 class EdcLabAppConfig(EdcLabAppConfig):
     app_label = 'td_lab'
     requisition = 'td_lab.maternalrequisition'
+
+
+class EdcCallManagerAppConfig(EdcCallManagerAppConfigParent):
+    app_label = 'td_call_manager'

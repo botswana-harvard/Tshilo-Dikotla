@@ -1,8 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db import models
 from edc_base.model.models.base_uuid_model import BaseUuidModel
-from edc_consent.field_mixins import (
-    ReviewFieldsMixin, PersonalFieldsMixin, VulnerabilityFieldsMixin, CitizenFieldsMixin)
 from edc_constants.choices import GENDER
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
@@ -16,7 +14,7 @@ class PotentialCallManager(models.Manager):
 
 
 class PotentialCall(SyncModelMixin, BaseUuidModel):
-    
+
     approximate_date = models.DateField(
         verbose_name="approximate appointment date",
         help_text='This date can be modified.')
@@ -69,7 +67,8 @@ class PotentialCall(SyncModelMixin, BaseUuidModel):
     def subject_consent(self):
         from .maternal_consent import MaternalConsent
         try:
-            subject_consent = MaternalConsent.objects.get(subject_identifier=self.subject_identifier)
+            subject_consent = MaternalConsent.objects.get(
+                maternal_eligibility__registered_subject__subject_identifier=self.subject_identifier)
         except MaternalConsent.DoesNotExist:
             return None
         return subject_consent
