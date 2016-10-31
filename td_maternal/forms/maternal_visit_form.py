@@ -64,7 +64,7 @@ class MaternalVisitForm (VisitFormMixin, forms.ModelForm):
 #         return birth_model
 
     def clean_ultrasound_form(self, cleaned_data):
-        registered_subject = cleaned_data['appointment'].subject_identifier
+        subject_identifier = cleaned_data['appointment'].subject_identifier
         if cleaned_data['appointment'].visit_code == '1020M':
             try:
                 MaternalUltraSoundInitial.objects.get(maternal_visit__appointment__subject_identifier=subject_identifier)

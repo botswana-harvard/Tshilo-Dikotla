@@ -19,15 +19,13 @@ class MaternalOffStudy(MaternalCrfModel, OffStudyModelMixin):
 
     consent_model = MaternalConsent
 
-    visit_model_attr = 'maternal_visit'
-
     visit_model = MaternalVisit
 
     maternal_visit = models.OneToOneField(MaternalVisit)
 
     @property
     def visit_model(self):
-#         app_config = django_apps.get_app_config('edc_visit_tracking')
+        # app_config = django_apps.get_app_config('edc_visit_tracking')
         return MaternalVisit
 
     class Meta:

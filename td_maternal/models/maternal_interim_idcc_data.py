@@ -64,8 +64,6 @@ class MaternalInterimIdcc(MaternalCrfModel):
         blank=True,
         null=True)
 
-    visit_model_attr = 'maternal_visit'
-
     @property
     def visit(self):
         return getattr(self, 'maternal_visit')

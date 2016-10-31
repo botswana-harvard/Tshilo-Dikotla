@@ -18,8 +18,6 @@ class MaternalCrfModel(SyncModelMixin, CrfModelMixin, ExportTrackingFieldsMixin,
 
     """ Base model for all scheduled models (adds key to :class:`MaternalVisit`). """
 
-    visit_model_attr = 'maternal_visit'
-
     off_study_model = ('td_maternal', 'MaternalOffStudy')
 
     maternal_visit = models.OneToOneField(MaternalVisit)
