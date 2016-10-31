@@ -16,10 +16,6 @@ class InfantOffStudy(CrfModelMixin, SyncModelMixin, OffStudyModelMixin, ExportTr
 
     infant_visit = models.OneToOneField(InfantVisit)
 
-    visit_model_attr = 'infant_visit'
-
-    # entry_meta_data_manager = CrfMetaDataManager(InfantVisit)
-
     history = SyncHistoricalRecords()
 
     class Meta:
