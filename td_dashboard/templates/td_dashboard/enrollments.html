@@ -11,7 +11,11 @@
 					 	{% else %}
 					 		|<span style="background:red;"> </span> 
 					 	{% endif %}
-	  					<a href="{{url}}?next=subject_dashboard_url&subject_identifier={{subject_identifier}}">{{label}}</a>
+					 	{% if dashboard_type == 'maternal' %}
+	  						<a href="{{url}}?next={% url 'subject_dashboard_url' subject_identifier %}&subject_identifier={{subject_identifier}}">{{label}}</a>
+	  					{% else %}
+	  						<a href="{{url}}?next={% url 'infant_subject_dashboard_url' subject_identifier %}&subject_identifier={{subject_identifier}}">{{label}}</a>
+	  					{% endif %}
 		 			{% endfor %}
 	  			</li>
 			</ul>
