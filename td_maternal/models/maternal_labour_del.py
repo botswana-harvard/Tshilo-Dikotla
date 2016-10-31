@@ -25,9 +25,10 @@ from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION
 
 from .maternal_consent import MaternalConsent
 from .maternal_crf_model import MaternalCrfModel
+from edc_base.model.models.url_mixin import UrlMixin
 
 
-class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin, CreateAppointmentsMixin, BaseUuidModel):
+class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
 

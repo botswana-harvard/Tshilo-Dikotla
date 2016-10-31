@@ -13,9 +13,10 @@ from td_registration.models import RegisteredSubject
 from ..managers import AntenatalVisitMembershipManager
 
 from .maternal_consent import MaternalConsent
+from edc_base.model.models.url_mixin import UrlMixin
 
 
-class AntenatalVisitMembership(SyncModelMixin, RequiresConsentMixin, CreateAppointmentsMixin, BaseUuidModel):
+class AntenatalVisitMembership(SyncModelMixin, RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin, BaseUuidModel):
 
     consent_model = MaternalConsent
 

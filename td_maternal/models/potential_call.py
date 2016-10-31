@@ -5,6 +5,7 @@ from edc_constants.choices import GENDER
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from django_crypto_fields.fields import IdentityField, FirstnameField, LastnameField, EncryptedCharField
+from edc_base.model.models.url_mixin import UrlMixin
 
 
 class PotentialCallManager(models.Manager):
@@ -13,7 +14,7 @@ class PotentialCallManager(models.Manager):
         return self.get(subject_identifier=subject_identifier)
 
 
-class PotentialCall(SyncModelMixin, BaseUuidModel):
+class PotentialCall(SyncModelMixin, UrlMixin, BaseUuidModel):
 
     approximate_date = models.DateField(
         verbose_name="approximate appointment date",

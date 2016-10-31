@@ -17,9 +17,10 @@ from edc_protocol.validators import datetime_not_before_study_start
 from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
 
 from ..managers import MaternalEligibilityManager
+from edc_base.model.models.url_mixin import UrlMixin
 
 
-class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
     """ A model completed by the user to test and capture the result of the pre-consent eligibility checks.
 
     This model has no PII."""

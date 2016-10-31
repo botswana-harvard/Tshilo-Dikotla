@@ -9,21 +9,22 @@ from edc_offstudy.model_mixins import OffStudyMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.constants import (
     LOST_VISIT, UNSCHEDULED, SCHEDULED, COMPLETED_PROTOCOL_VISIT, MISSED_VISIT)
-from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
+# from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
 from edc_visit_tracking.model_mixins import VisitModelMixin
 
 from td_appointment.models import Appointment
 
 # from tshilo_dikotla.choices import VISIT_REASON
 from edc_visit_tracking.model_mixins import CaretakerFieldsMixin
+from edc_base.model.models.url_mixin import UrlMixin
 
 from ..managers import InfantVisitCrfManager
 from .infant_birth import InfantBirth
 
 
 class InfantVisit(
-        CreatesMetadataModelMixin, SyncModelMixin, PreviousVisitModelMixin, OffStudyMixin, VisitModelMixin,
-        CaretakerFieldsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+        CreatesMetadataModelMixin, SyncModelMixin, OffStudyMixin, VisitModelMixin,
+        CaretakerFieldsMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on the infant visits. """
 

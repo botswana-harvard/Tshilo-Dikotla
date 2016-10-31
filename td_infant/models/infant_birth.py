@@ -16,11 +16,12 @@ from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from td_maternal.models import MaternalLabourDel
 
 from ..managers import InfantBirthModelManager
+from edc_base.model.models.url_mixin import UrlMixin
 
 
 # TODO: Put back off study mixin
 class InfantBirth(SyncModelMixin, CreateAppointmentsMixin, RegisteredSubjectMixin,
-                  ExportTrackingFieldsMixin, BaseUuidModel):
+                  ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
     """ A model completed by the user on the infant's birth. """
 
     off_study_model = ('td_infant', 'InfantOffStudy')

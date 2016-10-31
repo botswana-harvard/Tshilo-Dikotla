@@ -9,9 +9,10 @@ from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from .maternal_eligibility import MaternalEligibility
 
 from ..managers import MaternalEligibilityLossManager
+from edc_base.model.models.url_mixin import UrlMixin
 
 
-class MaternalEligibilityLoss(SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class MaternalEligibilityLoss(SyncModelMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
     """ A model triggered and completed by system when a mother is in-eligible. """
 
     maternal_eligibility = models.OneToOneField(MaternalEligibility)

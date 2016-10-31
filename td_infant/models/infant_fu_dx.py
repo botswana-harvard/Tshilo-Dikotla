@@ -10,6 +10,7 @@ from tshilo_dikotla.choices import DX_INFANT
 from ..managers import InfantFuDxItemsManager
 
 from .infant_crf_model import InfantCrfModel
+from edc_base.model.models.url_mixin import UrlMixin
 
 
 class InfantFuDx(InfantCrfModel):
@@ -22,7 +23,7 @@ class InfantFuDx(InfantCrfModel):
         verbose_name_plural = "Infant FollowUp: Dx"
 
 
-class InfantFuDxItems(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
+class InfantFuDxItems(CrfInlineModelMixin, SyncModelMixin, UrlMixin, BaseUuidModel):
 
     infant_fu_dx = models.ForeignKey(InfantFuDx)
 

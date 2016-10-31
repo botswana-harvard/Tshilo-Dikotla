@@ -40,7 +40,7 @@ class MaternalInterimIdcc(MaternalCrfModel):
 
     value_vl_size = models.CharField(
         max_length=25,
-        verbose_name="Is the value for the most recent VL available “=” , “<”, or “>” a number? ",
+        verbose_name="Is the value for the most recent VL available '=' , '<', or '>' a number? ",
         choices=SIZE_CHECK,
         blank=True,
         null=True)
@@ -63,6 +63,12 @@ class MaternalInterimIdcc(MaternalCrfModel):
         verbose_name="Please specify any other diagnoses found in the IDCC since the last visit ",
         blank=True,
         null=True)
+
+    visit_model_attr = 'maternal_visit'
+
+    @property
+    def visit(self):
+        return getattr(self, 'maternal_visit')
 
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'

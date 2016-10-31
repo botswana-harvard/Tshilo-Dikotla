@@ -1,7 +1,7 @@
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
-from edc_base.model.models import BaseUuidModel
+from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_consent.model_mixins import ConsentModelMixin
 from edc_consent.field_mixins import (
     PersonalFieldsMixin, CitizenFieldsMixin, ReviewFieldsMixin, VulnerabilityFieldsMixin,
@@ -9,7 +9,6 @@ from edc_consent.field_mixins import (
 from edc_registration.model_mixins import RegistrationMixin
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_identifier.subject.classes import SubjectIdentifier
-from edc_offstudy.model_mixins import OffStudyMixin
 from edc_sync.models import SyncModelMixin
 
 from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
@@ -22,7 +21,7 @@ from .maternal_eligibility import MaternalEligibility
 
 class MaternalConsent(ConsentModelMixin, SyncModelMixin, ReviewFieldsMixin,
                       IdentityFieldsMixin, PersonalFieldsMixin, RegistrationMixin,
-                      CitizenFieldsMixin, VulnerabilityFieldsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+                      CitizenFieldsMixin, VulnerabilityFieldsMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on the mother's consent. """
 

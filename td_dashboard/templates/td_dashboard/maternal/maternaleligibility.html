@@ -26,7 +26,7 @@
 		                		<li><A href="{% url 'subject_dashboard_url' consent.subject_identifier %}"><div nowrap>{{ consent.subject_identifier }} (V{{consent.version}})</div></A></li>
 		                	{% endfor %}
 		                	{% if not maternal_eligibility.have_latest_consent %}
-		                		<span style="color:red"><li><span><A href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=search_url">re-consent (V{{maternal_eligibility.current_consent_version}})</A></li>
+		                		<span style="color:red"><li><span><A href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next={% url 'search_url' %}">re-consent (V{{maternal_eligibility.current_consent_version}})</A></li>
 		                	{% endif %}
 		                </ul>
 		            </td>

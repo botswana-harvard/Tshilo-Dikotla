@@ -99,7 +99,7 @@ class DashboardMixin(object):
                             maternal_visit__appointment=self.selected_appointment, panel_name=requisition.panel_name)
                     else:
                         obj = requisition.model_class.objects.get(
-                            infant_visit__appointment=self.selected_appointment)
+                            infant_visit__appointment=self.selected_appointment, panel_name=requisition.panel_name)
                     requisition.instance = obj
                     requisition.url = obj.get_absolute_url()
                     requisition.title = obj._meta.verbose_name
