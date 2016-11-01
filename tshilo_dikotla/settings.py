@@ -28,7 +28,7 @@ APP_NAME = 'td'
 LIVE_SERVER = 'td.bhp.org.bw'
 TEST_HOSTS = ['edc4.bhp.org.bw', 'tdtest.bhp.org.bw', 'tdtest2.bhp.org.bw']
 DEVELOPER_HOSTS = [
-    'mac2-2.local', 'ckgathi', 'one-2.local', 'One-2.local', 'tsetsiba', 'leslie']
+    'mac2-2.local', 'ckgathi', 'one-2.local', 'One-2.local', 'tsetsiba', 'leslie', 'keletso-mac']
 
 PROJECT_TITLE = 'Tshilo Dikotla'
 SOURCE_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
