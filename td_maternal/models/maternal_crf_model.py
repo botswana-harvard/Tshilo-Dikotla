@@ -30,6 +30,10 @@ class MaternalCrfModel(SyncModelMixin, CrfModelMixin, ExportTrackingFieldsMixin,
     def is_off_study_or_raise(self):
         pass
 
+    @classmethod
+    def visit_model_attr(cls):
+        return 'maternal_visit'
+
     def has_off_study_report_or_raise(self, subject_identifier, report_date):
         pass
 
