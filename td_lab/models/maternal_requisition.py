@@ -1,7 +1,7 @@
 from django.db import models
 
 from django.apps import apps as django_apps
-from edc_base.model.models.base_uuid_model import BaseUuidModel
+from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_export.models import ExportTrackingFieldsMixin
 # from edc_meta_data.managers import RequisitionMetaDataManager
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
@@ -20,13 +20,13 @@ from td_lab.models.panel import Panel
 
 
 # class MaternalRequisitionManager(CrfModelManager):
-# 
+#
 #     def get_by_natural_key(self, requisition_identifier):
 #         return self.get(requisition_identifier=requisition_identifier)
 
 
 class MaternalRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, ExportTrackingFieldsMixin,
-                          RequiresConsentMixin, UpdatesRequisitionMetadataModelMixin, BaseUuidModel):
+                          RequiresConsentMixin, UpdatesRequisitionMetadataModelMixin, UrlMixin, BaseUuidModel):
 
     aliquot_model = Aliquot
 
