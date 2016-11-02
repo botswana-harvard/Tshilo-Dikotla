@@ -137,4 +137,4 @@ infant_pp36_insulin_panel = RequisitionPanel('Infant Insulin 36M', wb)
 infant_pp36_insulin_panel.processing_profile = infant_pp36_insulin_processing
 lab_profile.add_panel(infant_pp36_insulin_panel)
 
-site_lab_profiles.register('td_infant.infantrequisition', lab_profile)
+site_lab_profiles.register('td_lab.infantrequisition', lab_profile)
