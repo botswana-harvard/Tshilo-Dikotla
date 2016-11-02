@@ -6,7 +6,7 @@ from edc_base.modeladmin.mixins import (
 
 
 class EdcBaseModelAdminMixin(ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
-                             ModelAdminAuditFieldsMixin):
+                             ModelAdminAuditFieldsMixin, ModelAdminNextUrlRedirectMixin):
 
     list_per_page = 10
     date_hierarchy = 'modified'

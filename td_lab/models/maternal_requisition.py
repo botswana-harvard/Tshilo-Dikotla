@@ -78,7 +78,7 @@ class MaternalRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, 
     def save(self, *args, **kwargs):
         if not self.id:
             self.panel = Panel.objects.create(name=self.panel_name)
-        super(RequiresConsentMixin, self).save(*args, **kwargs)
+        super(MaternalRequisition, self).save(*args, **kwargs)
 
     class Meta:
         app_label = 'td_lab'

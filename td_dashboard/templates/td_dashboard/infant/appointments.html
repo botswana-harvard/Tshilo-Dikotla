@@ -26,8 +26,8 @@
 								<td>{{appointment.appt_datetime|date:"D d M Y"| capfirst}}</td>
 								<td><a href="{% url 'admin:td_appointment_appointment_change' appointment.str_pk %}?next={% url 'infant_subject_dashboard_url' appointment.subject_identifier %}">{{ appointment.get_appt_status_display | capfirst }}</a></td>
 						        <td>
-						        	{% if appointment.subject_visit %}
-						        		<a href="{% url 'admin:td_infant_infantvisit_change' appointment.subject_visit.pk %}?appointment={{appointment.str_pk}}&next={% url 'infant_subject_dashboard_url' appointment.subject_identifier %}">{{ appointment.subject_visit.report_datetime |date:"d M Y"| capfirst }}</a>
+						        	{% if appointment.infant_visit %}
+						        		<a href="{% url 'admin:td_infant_infantvisit_change' appointment.infant_visit.pk %}?appointment={{appointment.str_pk}}&next={% url 'infant_subject_dashboard_url' appointment.subject_identifier %}">{{ appointment.subject_visit.report_datetime |date:"d M Y"| capfirst }}</a>
 						        		<span class="pull-right"><a href="{% url 'infant_subject_dashboard_url' appointment.str_pk appointment.subject_identifier %}" role="button" class="btn btn-sm btn-default">forms</a></span>
 						        	{% else %}
 						        		<a href="{% url 'admin:td_infant_infantvisit_add' %}?appointment={{appointment.str_pk}}&next={% url 'infant_subject_dashboard_url' appointment.subject_identifier %}">Add Visit</a>

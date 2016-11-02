@@ -53,6 +53,14 @@ class Appointment(SyncModelMixin, AppointmentModelMixin, RequiresConsentMixin, B
         except MaternalVisit.DoesNotExist:
             return None
 
+    @property
+    def infant_visit(self):
+        from td_infant.models import InfantVisit
+        try:
+            return InfantVisit.objects.get(appointment=self)
+        except InfantVisit.DoesNotExist:
+            return None
+
     class Meta:
         app_label = 'td_appointment'
         consent_model = 'td_maternal.maternalconsent'

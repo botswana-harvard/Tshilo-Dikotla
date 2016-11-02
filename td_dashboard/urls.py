@@ -13,6 +13,6 @@ urlpatterns = [
     url(r'^infant_dashboard/(?P<subject_identifier>[0-9\-]{17})/',
         InfantDashboardView.as_view(), name='infant_subject_dashboard_url'),
     url(r'^infant_dashboard/(?P<appointment_pk>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/'
-        '(?P<subject_identifier>[0-9\-]{14})/',
+        '(?P<subject_identifier>[0-9\-]{17})/',
         InfantDashboardView.as_view(), name='infant_subject_dashboard_url'),
 ]

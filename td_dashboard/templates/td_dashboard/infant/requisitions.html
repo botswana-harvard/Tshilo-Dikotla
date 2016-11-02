@@ -1,5 +1,4 @@
 
-<div id ="print-status-div-con"><span class="alert alert-danger" id="print-status-div">Failed to print an error occurred.</span></div>
 <div class="panel-group">
 	<div class="panel panel-warning">
 		<div class="panel-heading clearfix">Requisitions <span class="pull-right">
@@ -20,20 +19,24 @@
 					</tr>
 				</thead>
 				<tbody>
-				{% for requisition_meta_data in requisitions %}
+				{% for reqs in requisitions %}
 			    	<tr>
-			    		<td><label><input type="checkbox" name="requisition-checkbox" value="{{requisition.subject_requisition.pk}}"></label></td>
-			    		<td><small>{{requisition_meta_data.panel_name}}</small></td>
+			    		<td><label><input type="checkbox" name="requisition-checkbox" value="{{reqs.subject_requisition.pk}}"></label></td>
+			    		<td><small>{{reqs.panel_name}}</small></td>
 			    		<td>
-			    			{% if requisition_meta_data.subject_requisition %}
-			    				<a href="#">{{ requisition_meta_data.subject_requisition.requisition_identifier }}</a>
+			    		{% if reqs.entry_status == 'NOT_REQUIRED' %}
+						     <del>{{ reqs.title|title }}</del>
+						{% else %}
+			    			{% if reqs.maternal_requisition %}
+			    				<a href="{{ reqs.url }}?visit_code={{ reqs.visit_code }}&appointment_pk={{reqs.appointment.str_pk}}&subject_identifier={{subject_identifier}}&panel_name={{reqs.panel_name}}&next={{ dashboard_url }}">{{ reqs.infant_requisition.requisition_identifier }}</a>
 			    			{% else %}
-			    				<a href="#">Add</a>
+			    				<a href="{{ reqs.url }}?visit_code={{ reqs.visit_code }}&appointment_pk={{reqs.appointment.str_pk}}&subject_identifier={{subject_identifier}}&panel_name={{reqs.panel_name}}&next={{ dashboard_url }}">Add</a>
 			    			{% endif %}
+			    		{% endif %}
 			    		</td>
-			    		<td>{{ requisition_meta_data.get_entry_status_display}}</td>
-			    		<td>{{ requisition_meta_data.subject_requisition.user_created}}</td>
-			    		<td>{{ requisition_meta_data.subject_requisition.created|date:"Y-m-d" }}</td>
+			    		<td>{{ reqs.get_entry_status_display}}</td>
+			    		<td>{{ reqs.subject_requisition.user_created}}</td>
+			    		<td>{{ reqs.subject_requisition.created|date:"Y-m-d" }}</td>
 			    	</tr>
 			    {% endfor %}
 				</tbody>

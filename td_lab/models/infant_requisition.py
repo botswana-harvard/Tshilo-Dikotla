@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_base.model.models.base_uuid_model import BaseUuidModel
+from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_export.models import ExportTrackingFieldsMixin
 # from edc_meta_data.managers import RequisitionMetaDataManager
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
@@ -25,7 +25,7 @@ from td_lab.models.panel import Panel
 
 
 class InfantRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, ExportTrackingFieldsMixin,
-                        RequiresConsentMixin, UpdatesRequisitionMetadataModelMixin, BaseUuidModel):
+                        RequiresConsentMixin, UpdatesRequisitionMetadataModelMixin, UrlMixin, BaseUuidModel):
 
     aliquot_model = Aliquot
 
