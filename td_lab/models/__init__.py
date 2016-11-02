@@ -1,4 +1,4 @@
-# from .aliquot import Aliquot
+from .aliquot import Aliquot
 # from .aliquot_condition import AliquotCondition
 # from .aliquot_processing import AliquotProcessing
 # from .aliquot_profile import AliquotProfile

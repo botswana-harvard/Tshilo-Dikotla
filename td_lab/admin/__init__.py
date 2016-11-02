@@ -1,5 +1,5 @@
 # from .receive_admin import ReceiveAdmin
-# from .aliquot_admin import AliquotAdmin
+from .aliquot_admin import AliquotAdmin
 # from .aliquot_profile_admin import AliquotProfileItemAdmin
 # from .aliquot_processing_admin import AliquotProcessingAdmin
 # from .aliquot_profile_admin import AliquotProfileAdmin
