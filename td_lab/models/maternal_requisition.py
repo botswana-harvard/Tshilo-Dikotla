@@ -48,11 +48,9 @@ class MaternalRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, 
 
 #     entry_meta_data_manager = RequisitionMetaDataManager(MaternalVisit)
 
-#     @classmethod
-#     def visit_model_attr(cls):
-#         app_config = django_apps.get_app_config('edc_visit_tracking')
-#         print(cls._meta.label_lower, "cls._meta.label_lower, cls._meta.label_lower")
-#         return app_config.visit_model_attr(cls._meta.label_lower)
+    def aliquot(self):
+        return """<a href="#" />aliquot</a>"""
+    aliquot.allow_tags = True
 
     @property
     def visit(self):
@@ -77,7 +75,10 @@ class MaternalRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, 
 
     def save(self, *args, **kwargs):
         if not self.id:
-            self.panel = Panel.objects.create(name=self.panel_name)
+            try:
+                self.panel = Panel.objects.get(name=self.panel_name)
+            except Panel.DoesNotExist:
+                self.panel = Panel.objects.create(name=self.panel_name)
         super(MaternalRequisition, self).save(*args, **kwargs)
 
     class Meta:

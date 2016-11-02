@@ -25,7 +25,7 @@ from td_lab.models.panel import Panel
 
 
 class InfantRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, ExportTrackingFieldsMixin,
-                        RequiresConsentMixin, UpdatesRequisitionMetadataModelMixin, UrlMixin, BaseUuidModel):
+                        UpdatesRequisitionMetadataModelMixin, UrlMixin, BaseUuidModel):
 
     aliquot_model = Aliquot
 
@@ -43,12 +43,31 @@ class InfantRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, Ex
 
 #     entry_meta_data_manager = RequisitionMetaDataManager(InfantVisit)
 
+    @property
+    def subject_identifier(self):
+        return self.infant_visit.appointment.subject_identifier
+
+    def aliquot(self):
+        return """<a href="#" />aliquot</a>"""
+    aliquot.allow_tags = True
+
+    @property
+    def visit(self):
+        return getattr(self, 'infant_visit')
+
     def get_visit(self):
         return self.infant_visit
 
+    def save(self, *args, **kwargs):
+        if not self.id:
+            try:
+                self.panel = Panel.objects.get(name=self.panel_name)
+            except Panel.DoesNotExist:
+                self.panel = Panel.objects.create(name=self.panel_name)
+        super(InfantRequisition, self).save(*args, **kwargs)
+
     class Meta:
         app_label = 'td_lab'
-        consent_model = 'td_maternal.maternalconsent'
         verbose_name = 'Infant Laboratory Requisition'
         verbose_name_plural = 'Infant Laboratory Requisition'
         unique_together = ('infant_visit', 'panel_name', 'is_drawn')
