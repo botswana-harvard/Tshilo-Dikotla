@@ -11,6 +11,8 @@ from td_infant.models.infant_visit import InfantVisit
 from _collections import OrderedDict
 from td_infant.models.infant_birth import InfantBirth
 from td_dashboard.classes.dashboard_mixin import DashboardMixin
+from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 
 
 class InfantDashboardView(
@@ -81,7 +83,7 @@ class InfantDashboardView(
         dob = self.infant_birth.dob if self.infant_birth else ''
         demographics['Name'] = name,
         demographics['Born'] = dob,
-        demographics['Age'] = '?',
+        demographics['Age'] = str(relativedelta(timezone.now().date(), dob).years)
         demographics.update({'Hiv status': '?'})
         return demographics
 

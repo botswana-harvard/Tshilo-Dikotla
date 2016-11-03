@@ -1,4 +1,6 @@
 from collections import OrderedDict
+from dateutil.relativedelta import relativedelta
+from django.utils import timezone
 
 
 class MarqueeViewMixin:
@@ -27,7 +29,7 @@ class MarqueeViewMixin:
             demographics['Current HIV status'] = self.demographics_data.get('current_hiv_status'),
             demographics['Pregnant, GA'] = self.demographics_data.get('gestational_age'),
             demographics['Planned delivery site'] = self.demographics_data.get('delivery_site'),
-            demographics['Randomized'] = self.demographics_data.get('randomized')
+            demographics['Randomized'] = (self.demographics_data.get('randomized'),)
         return demographics
 
     @property
@@ -40,4 +42,4 @@ class MarqueeViewMixin:
 
     @property
     def age(self):
-        return None
+        return relativedelta(timezone.now().date(), self.consent.dob).years
