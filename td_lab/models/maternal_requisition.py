@@ -52,6 +52,10 @@ class MaternalRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, 
         return """<a href="#" />aliquot</a>"""
     aliquot.allow_tags = True
 
+    @classmethod
+    def visit_model_attr(cls):
+        return 'maternal_visit'
+
     @property
     def visit(self):
         return getattr(self, 'maternal_visit')

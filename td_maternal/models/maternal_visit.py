@@ -1,15 +1,13 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.apps import apps
 
 from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_consent.model_mixins import RequiresConsentMixin
-from edc_constants.constants import (YES, POS, NEG, FAILED_ELIGIBILITY)
+from edc_constants.constants import (FAILED_ELIGIBILITY)
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffStudyMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.choices import VISIT_REASON
-from edc_visit_tracking.constants import COMPLETED_PROTOCOL_VISIT, LOST_VISIT
 from edc_visit_tracking.model_mixins import (VisitModelMixin, CaretakerFieldsMixin)
 from edc_metadata.model_mixins import CreatesMetadataModelMixin
 

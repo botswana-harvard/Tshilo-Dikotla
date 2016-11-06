@@ -40,11 +40,14 @@ def show_elisa_requisition_hiv_status_ind(visit_instance, *args):
 
 def func_require_cd4(visit_instance, *args):
     """Return true if mother is HIV+ and does not have a CD4 in the last 3 months."""
+    maternal_status_helper = MaternalStatusHelper(visit_instance)
+    if maternal_status_helper.hiv_status == POS:
+        return maternal_status_helper.eligible_for_cd4
     return False
-#     maternal_status_helper = MaternalStatusHelper(visit_instance)
-#     if maternal_status_helper.hiv_status == POS:
-#         return maternal_status_helper.eligible_for_cd4
-#     return False
+
+
+def func_not_required_cd4(visit_instance, *args):
+    return False if func_require_cd4(visit_instance) else True
 
 
 def show_postpartum_depression(visit_instance, *args):
@@ -145,7 +148,7 @@ class MaternalRequisitionRuleGroup(RuleGroup):
             predicate=func_mother_pos,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model='maternalrequisition',
+        target_model='td_lab.maternalrequisition',
         target_panels=[pbmc_vl_panel])
 
     require_pbmc_storage = RequisitionRule(
@@ -153,7 +156,7 @@ class MaternalRequisitionRuleGroup(RuleGroup):
             predicate=func_mother_neg,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model='maternalrequisition',
+        target_model='td_lab.maternalrequisition',
         target_panels=[pbmc_panel])
 
     require_elisa_status_ind = RequisitionRule(
@@ -161,7 +164,7 @@ class MaternalRequisitionRuleGroup(RuleGroup):
             predicate=show_elisa_requisition_hiv_status_ind,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model='maternalrequisition',
+        target_model='td_lab.maternalrequisition',
         target_panels=[hiv_elisa_panel])
 
     require_elisa = RequisitionRule(
@@ -169,11 +172,11 @@ class MaternalRequisitionRuleGroup(RuleGroup):
             predicate=func_mother_pos,
             consequence=NOT_REQUIRED,
             alternative=REQUIRED),
-        target_model='maternalrequisition',
+        target_model='td_lab.maternalrequisition',
         target_panels=[hiv_elisa_panel])
 
     class Meta:
-        app_label = 'td_lab'
+        app_label = 'td_maternal'
         source_model = 'td_registration.registeredsubject'
 
 
@@ -185,11 +188,11 @@ class MaternalRequisitionRuleGroupCD4(RuleGroup):
             predicate=func_require_cd4,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
-        target_model='maternalrequisition',
+        target_model='td_lab.maternalrequisition',
         target_panels=[cd4_panel])
 
     class Meta:
-        app_label = 'td_lab'
+        app_label = 'td_maternal'
         source_model = 'td_maternal.maternalinterimidcc'
 
 
