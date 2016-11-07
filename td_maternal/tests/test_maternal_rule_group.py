@@ -6,7 +6,7 @@ from edc_metadata.constants import NOT_REQUIRED, REQUIRED, KEYED
 from td_appointment.models import Appointment
 
 from td_maternal.tests import BaseTestCase
-from td_maternal.models import CrfMetadata, RequisitionMetadata
+from td_maternal.models import CrfMetadata, RequisitionMetadata, MaternalVisit, MaternalInterimIdcc
 
 from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,
                                          MaternalConsentFactory, AntenatalEnrollmentFactory,
@@ -151,7 +151,7 @@ class TestMaternalRuleGroups(BaseTestCase):
                 model='td_lab.maternalrequisition',
                 panel_name='CD4').count(), 1)
 
-    def test_maternal_cd4_not_required_recent_grt_3months(self):
+    def test_maternal_cd4_not_required_recent_lt_3months(self):
         """Test that CD4 requisition is required for all POS if recent CD4 > 3months."""
         options = {'registered_subject': self.registered_subject,
                    'current_hiv_status': POS,
@@ -176,20 +176,13 @@ class TestMaternalRuleGroups(BaseTestCase):
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
 
         self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-
-        self.assertEqual(
-            CrfMetadata.objects.filter(
-                entry_status='REQUIRED',
-                subject_identifier=self.registered_subject.subject_identifier,
-                model='td_maternal.maternalinterimidcc',
-                visit_code='1010M').count(), 1)
-
+        self.assertTrue(MaternalVisit.objects.all().count(), 2)
         MaternalInterimIdccFactory(
             maternal_visit=self.antenatal_visit_1, recent_cd4=15,
             recent_cd4_date=(timezone.datetime.now() - relativedelta(weeks=2)).date())
         self.assertEqual(
             RequisitionMetadata.objects.filter(
-                entry_status='REQUIRED',
+                entry_status=REQUIRED,
                 subject_identifier=self.registered_subject.subject_identifier,
                 model='td_lab.maternalrequisition',
                 panel_name='CD4',
