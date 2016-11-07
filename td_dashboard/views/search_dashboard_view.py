@@ -10,7 +10,7 @@ from edc_base.view_mixins import EdcBaseViewMixin
 
 class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
     form_class = MaternalEligibilityCrispyForm
-    template_name = 'td_dashboard/search_dashboard2.html'
+    template_name = 'td_dashboard/search_dashboard.html'
 
     def __init__(self, **kwargs):
         self.maternal_eligibility = None
