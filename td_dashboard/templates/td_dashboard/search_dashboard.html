@@ -1,0 +1,95 @@
+  {% extends 'edc_base/base.html' %}
+
+  {% load staticfiles %}
+  {% load crispy_forms_tags %}
+
+  {% block extra-scripts %}
+    <script type="text/javascript" src="{% static "" %}"></script>
+  {% endblock extra-scripts %}
+
+
+  {% block settings_url %}
+  <li id="li-topbar-settings"><a class="glyphicon glyphicon-wrench" title="settings" href="#"></a></li>
+  <li id="li-topbar-settings"><a class="fa fa-group" title="settings" href="#"></a></li>
+  {% endblock settings_url %}
+
+  {% block main %}
+
+   <div class="container">
+      <div class="col-md-12">
+        <div class="panel-group">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <span class="pull-left"><a title="add new maternal eligibility" href="{% url 'admin:td_maternal_maternaleligibility_add' %}?next={% url 'search_url' %}" class="btn btn-sm btn-primary" role="button">Add Maternal Eligibility</a></span>
+              <span class="pull-right">{% crispy form %}</span>
+              {% if maternal_eligibilities %}
+                <table class="table table-condensed table-striped table-responsive">
+                  <tbody>
+                    {% for maternal_eligibility in maternal_eligibilities %}
+                    <tr>
+                      <td>
+                      {% if maternal_eligibility.is_consented %}
+                		<ul>
+		                	{% for consent in maternal_eligibility.previous_consents %}
+		                		<li><a role="button" title="Go to maternal dashboard" class="btn btn-sm btn-primary" href="{% url 'subject_dashboard_url' consent.subject_identifier %}">{{ consent.subject_identifier }} (V{{consent.version}}</a></li>
+		                	{% endfor %}
+		                	{% if not maternal_eligibility.have_latest_consent %}
+		                		<a title="re-consent" role="button" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next={% url 'search_url' %}">re-consent (V{{maternal_eligibility.current_consent_version}})</a></li>
+		                	{% endif %}
+		                </ul>
+		               {% elif maternal_eligibility.is_eligible %}
+		               <ul>
+                            <li><A role="button" title="Add Maternal Consent" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=search_url">Add Consent (V{{maternal_eligibility.current_consent_version}})</A></li>
+                        </ul>
+	                	{% else %}
+	                		 {% if maternal_eligibility.ineligibility %}
+	                    		Ineligibility {{ maternal_eligibility.ineligibility }}
+	                    	 {% endif %}
+                		{% endif %}
+                      </td>
+                      <td><A href="{% url 'admin:td_maternal_maternaleligibility_change' maternal_eligibility.pk %}?&next=search_url">Edit Eligibility</A></td>
+                      <td>Ineligibility:{{ maternal_eligibility.maternal_eligibility_loss.reason_ineligible|default:"-----" }}</td>
+                      <td>{{maternal_eligibility.age_in_years}}y</td>
+                      <td>Enrolled {{ maternal_eligibility.report_datetime|date:"Y-m-d" }}</td>
+                      <td>{{maternal_eligibility.user_created}}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              {% endif %}
+            </div>
+          </div>          
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="panel panel-info">
+          <div class="panel-heading">Reports</div>
+            <div class="panel-body">
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-success">
+          <div class="panel-heading">Statistics</div>
+            <div class="panel-body">
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-warning">
+          <div class="panel-heading">Edc Administration</div>
+            <div class="panel-body">
+              <a role="button" class="btn btn-sm btn-default btn-block" href="#">Clinic Visit List</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="#">Visit Schedule</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="#">Registration List</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="#">Consents</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="#">Metadata List</a>
+              <a role="button" class="btn btn-sm btn-default btn-block" href="#">Identifiers</a>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock main %} s

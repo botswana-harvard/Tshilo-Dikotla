@@ -20,7 +20,7 @@
 			    		{% else %}
 			        		{% for appointment in appointments %}
 					            <tr>
-					            <td>{{appointment.visit_code}}</td>
+					            <td><span class="label bg-success">{{appointment.visit_code}}</span></td>
 						        <td>{{appointment.title}}</td>
 								<td>{{appointment.appt_type | capfirst}}</td>
 								<td>{{appointment.appt_datetime|date:"D d M Y"| capfirst}}</td>
