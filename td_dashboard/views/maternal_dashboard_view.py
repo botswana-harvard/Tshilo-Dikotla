@@ -53,6 +53,7 @@ class MaternalDashboardView(
             'markey_next_row': self.markey_next_row,
             'requisitions': self.requisitions,
             'crfs': self.crfs,
+            'selected_appointment': self.selected_appointment,
             'appointments': self.appointments,
             'subject_identifier': self.subject_identifier,
             'consents': [],
