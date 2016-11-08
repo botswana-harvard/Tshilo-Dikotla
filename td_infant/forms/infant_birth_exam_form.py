@@ -1,6 +1,7 @@
 from django import forms
 
 from edc_constants.constants import NO, NOT_EVALUATED, YES
+from edc_registration.models import RegisteredSubject
 
 from td_maternal.models import MaternalConsent
 
