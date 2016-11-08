@@ -45,9 +45,6 @@ class MaternalArvPost (MaternalCrfModel):
         choices=ARV_STATUS_WITH_NEVER,
         default=NOT_APPLICABLE,)
 
-    def visit(self):
-        return self.maternal_visit
-
     def __str__(self):
         return str(self.maternal_visit)
 
