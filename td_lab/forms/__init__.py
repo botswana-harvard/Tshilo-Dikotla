@@ -1,5 +1,5 @@
 from .maternal_requisition_form import MaternalRequisitionForm
 from .infant_requisition_form import InfantRequisitionForm
-from .specimen_collection_form import SpecimenCollectionForm, SubjectConsentItemForm
+from .specimen_collection_form import SpecimenCollectionForm, SpecimenCollectionItemForm
 # from .packing_list_form import PackingListForm
 # from .packing_list_form import PackingListItemForm

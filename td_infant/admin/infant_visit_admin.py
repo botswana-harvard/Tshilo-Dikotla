@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from edc_visit_tracking.admin import VisitAdminMixin
+from edc_visit_tracking.modeladmin_mixins import VisitModelAdminMixin
 
 from tshilo_dikotla.admin_mixins import DashboardRedirectUrlMixin, EdcBaseModelAdminMixin
 from tshilo_dikotla.constants import INFANT
@@ -11,7 +11,7 @@ from ..models import InfantVisit
 
 
 @admin.register(InfantVisit)
-class InfantVisitAdmin(VisitAdminMixin, EdcBaseModelAdminMixin, admin.ModelAdmin):
+class InfantVisitAdmin(VisitModelAdminMixin, EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     form = InfantVisitForm
     visit_attr = 'infant_visit'

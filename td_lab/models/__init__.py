@@ -10,7 +10,7 @@ from .aliquot import Aliquot
 # from .packing_list import PackingList
 # from .packing_list_item import PackingListItem
 from .panel import Panel
-# from .receive import Receive
+from .receive import Receive
 # from .result import Result
 # from .result_item import ResultItem
 from .infant_requisition import InfantRequisition

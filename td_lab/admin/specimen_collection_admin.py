@@ -1,13 +1,13 @@
 from django.contrib import admin
 
-from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 
-from ..forms import SpecimenCollectionForm, SubjectConsentItemForm
+from ..forms import SpecimenCollectionForm, SpecimenCollectionItemForm
 from ..models import SpecimenCollection, SpecimenCollectionItem
 
 
 @admin.register(SpecimenCollection)
-class SpecimenCollectionAdmin(MembershipBaseModelAdmin):
+class SpecimenCollectionAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     form = SpecimenCollectionForm
 #     list_display = ('', '')
@@ -18,6 +18,6 @@ class SpecimenCollectionAdmin(MembershipBaseModelAdmin):
 
 
 @admin.register(SpecimenCollectionItem)
-class SpecimenCollectionItem(MembershipBaseModelAdmin):
+class SpecimenCollectionItemAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     form = SpecimenCollectionItemForm

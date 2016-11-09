@@ -4,7 +4,7 @@ from edc_lab.lab_profile import LabProfile
 from edc_lab.requisition.requisition_panel import RequisitionPanel
 from edc_lab.site_lab_profiles import site_lab_profiles
 
-lab_profile = LabProfile('clinic_lab')
+lab_profile = LabProfile('td_lab')
 
 pl = AliquotType('Plasma', 'PL', '32')
 lab_profile.add_aliquot_type(pl)

@@ -10,7 +10,7 @@ class SpecimenCollectionForm(forms.ModelForm):
         fields = '__all__'
 
 
-class SubjectConsentItemForm(forms.ModelForm):
+class SpecimenCollectionItemForm(forms.ModelForm):
 
     class Meta:
         model = SpecimenCollectionItem

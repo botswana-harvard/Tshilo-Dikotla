@@ -2,7 +2,7 @@ from django.contrib import admin
 from copy import copy
 
 from django.core.urlresolvers import reverse
-from edc_visit_tracking.admin import VisitAdminMixin
+from edc_visit_tracking.modeladmin_mixins import VisitModelAdminMixin
 
 from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 from td_lab.models import MaternalRequisition
@@ -14,7 +14,7 @@ from td_appointment.models import Appointment
 
 
 @admin.register(MaternalVisit)
-class MaternalVisitAdmin(VisitAdminMixin, EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
+class MaternalVisitAdmin(VisitModelAdminMixin, EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     form = MaternalVisitForm
     visit_attr = 'maternal_visit'

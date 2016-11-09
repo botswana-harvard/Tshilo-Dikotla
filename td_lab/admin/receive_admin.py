@@ -1,11 +1,13 @@
 from django.contrib import admin
 
-from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
-
+from edc_lab.receive.admin_mixins import ReceiveModelAdminMixin
+# from tshilo_dikotla.admin_mixins import MembershipBaseModelAdmin
+from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 from ..models import Receive
 
 
-class ReceiveAdmin(MembershipBaseModelAdmin):
+@admin.register(Receive)
+class ReceiveAdmin(ReceiveModelAdminMixin, EdcBaseModelAdminMixin):
 
     date_hierarchy = 'receive_datetime'
 
@@ -22,5 +24,3 @@ class ReceiveAdmin(MembershipBaseModelAdmin):
     def get_readonly_fields(self, request, obj):
         return (['receive_identifier', 'requisition_model_name', 'clinician_initials'] +
                 [field.name for field in obj._meta.fields if field.editable])
-
-admin.site.register(Receive, ReceiveAdmin)
