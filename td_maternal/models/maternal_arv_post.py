@@ -116,7 +116,7 @@ class MaternalArvPostAdh(MaternalCrfModel):
         blank=True,
         null=True)
 
-    class Meta:
+    class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Maternal ARVs Post: Adherence"
         verbose_name_plural = "Maternal ARVs Post: Adherence"
