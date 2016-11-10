@@ -87,7 +87,8 @@ class MaternalVisitForm (VisitFormMixin, BaseModelForm):
         appointment = cleaned_data.get('appointment')
         if appointment.visit_definition.code == '1020M':
             gestational_age = MaternalUltraSoundInitial.objects.get(
-                maternal_visit__appointment__registered_subject=appointment.registered_subject).ga_confirmed
+                maternal_visit__appointment__registered_subject=appointment.registered_subject)
+            gestational_age = gestational_age.evaluate_ga_confirmed()
             if gestational_age < 32:
                 raise forms.ValidationError('Antenatal Visit 2 cannot occur before 32 weeks. Current GA is "{}" weeks'.
                                             format(gestational_age))
