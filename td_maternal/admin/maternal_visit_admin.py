@@ -11,26 +11,16 @@ from ..forms import MaternalVisitForm
 from ..models import MaternalVisit
 from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
 from td_appointment.models import Appointment
+from td_maternal.admin.base_maternal_model_admin import BaseMaternalModelAdmin
 
 
 @admin.register(MaternalVisit)
-class MaternalVisitAdmin(VisitModelAdminMixin, EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
+class MaternalVisitAdmin(VisitModelAdminMixin, BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalVisitForm
     visit_attr = 'maternal_visit'
     requisition_model = MaternalRequisition
     dashboard_type = 'maternal'
-
-    def redirect_url(self, request, obj, post_url_continue=None):
-        args = request.GET.dict()
-        args.pop(self.querystring_name)
-        args.pop('visit_code')
-        redirect_url = super(ModelAdminNextUrlRedirectMixin, self).redirect_url(
-            request, obj, post_url_continue)
-        if request.GET.get(self.querystring_name):
-            url_name = request.GET.get(self.querystring_name)
-            return reverse(url_name, args=[element for element in args.values()])
-        return redirect_url
 
     def get_fields(self, request, obj=None):
         fields = admin.ModelAdmin.get_fields(self, request, obj=obj)

@@ -24,7 +24,8 @@ class RequisitionMetadata(RequisitionMetadataModelMixin, UrlMixin, BaseUuidModel
         maternal_requisition = None
         try:
             maternal_requisition = MaternalRequisition.objects.get(
-                maternal_visit__appointment__visit_code=self.visit_code, panel_name=self.panel_name)
+                maternal_visit__appointment__visit_code=self.visit_code, panel_name=self.panel_name,
+                maternal_visit__appointment__subject_identifier=self.subject_identifier)
         except MaternalRequisition.DoesNotExist:
             pass
         return maternal_requisition

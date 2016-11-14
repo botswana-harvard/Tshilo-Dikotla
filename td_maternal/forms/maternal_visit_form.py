@@ -35,7 +35,6 @@ class MaternalVisitForm (VisitFormMixin, forms.ModelForm):
         choices=[choice for choice in VISIT_INFO_SOURCE],
         widget=AdminRadioSelect(renderer=AdminRadioFieldRenderer))
 
-
     def get_consent(self, registered_subject):
         """Return an instance of the consent model.
 
@@ -76,7 +75,8 @@ class MaternalVisitForm (VisitFormMixin, forms.ModelForm):
         appointment = cleaned_data.get('appointment')
         if appointment.visit_code == '1020M':
             gestational_age = MaternalUltraSoundInitial.objects.get(
-                maternal_visit__appointment__subject_identifier=appointment.subject_identifier).ga_confirmed
+                maternal_visit__appointment__subject_identifier=appointment.subject_identifier)
+            gestational_age = gestational_age.evaluate_ga_confirmed()
             if gestational_age < 32:
                 raise forms.ValidationError('Antenatal Visit 2 cannot occur before 32 weeks. Current GA is "{}" weeks'.
                                             format(gestational_age))
