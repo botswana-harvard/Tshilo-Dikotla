@@ -41,7 +41,9 @@ def show_elisa_requisition_hiv_status_ind(visit_instance, *args):
 def func_require_cd4(visit_instance, *args):
     """Return true if mother is HIV+ and does not have a CD4 in the last 3 months."""
     maternal_status_helper = MaternalStatusHelper(visit_instance)
-    return maternal_status_helper.eligible_for_cd4
+    if maternal_status_helper.hiv_status == POS:
+        return maternal_status_helper.eligible_for_cd4
+    return False
 
 
 def show_postpartum_depression(visit_instance, *args):
