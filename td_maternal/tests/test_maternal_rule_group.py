@@ -528,7 +528,7 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
 
-        MaternalLabourDelFactory(registered_subject=self.registered_subject_3)
+        MaternalLabourDelFactory(registered_subject=self.registered_subject)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
