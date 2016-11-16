@@ -42,4 +42,5 @@ from .maternal_substance_prior_preg import MaternalSubstanceUsePriorPreg
 # from .potential_call import PotentialCall
 from .maternal_crf_meta_data import CrfMetadata
 from .requisition_meta_data import RequisitionMetadata
+from .nvp_dispensing import NvpDispensing
 from .signals import *

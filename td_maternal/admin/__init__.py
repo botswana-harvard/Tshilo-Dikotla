@@ -35,3 +35,4 @@ from .maternal_randomization_admin import MartenalRandoAdmin
 from .maternal_substance_use_during_preg_admin import MaternalSubstanceUseDuringPregAdmin
 from .maternal_substance_use_prior_preg_admin import MaternalSubstanceUsePriorPregAdmin
 # from .potential_call_admin import PotentialCallAdmin
+from .nvp_dispensing_admin import NvpDispensingAdmin

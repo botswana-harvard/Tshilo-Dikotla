@@ -17,7 +17,7 @@ class MaternalRandomizationFactory(factory.DjangoModelFactory):
 
     maternal_visit = factory.SubFactory(MaternalVisitFactory)
     report_datetime = timezone.now()
-    site = 'Gsaborone'
+    site = 'Gaborone'
     sid = 1
     rx = 'NVP'
     subject_identifier = '085-0000000-1'

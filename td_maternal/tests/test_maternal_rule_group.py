@@ -11,7 +11,8 @@ from td_maternal.models import CrfMetadata, RequisitionMetadata, MaternalVisit, 
 from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,
                                          MaternalConsentFactory, AntenatalEnrollmentFactory,
                                          AntenatalVisitMembershipFactory, MaternalVisitFactory, RapidTestResultFactory,
-                                         MaternalInterimIdccFactory, MaternalLabourDelFactory)
+                                         MaternalInterimIdccFactory, MaternalLabourDelFactory, 
+                                         MaternalRandomizationFactory)
 
 
 class TestMaternalRuleGroups(BaseTestCase):
@@ -383,3 +384,159 @@ class TestMaternalRuleGroups(BaseTestCase):
                 entry_status=REQUIRED,
                 model='td_maternal.maternalultrasoundinitial',
                 visit_code='1010M').count(), 0)
+
+    def test_nvp_dispensing_required_2000M(self):
+        '''Test NVP Dispensing required for NVP randomized mother/infant at 2000M visit'''
+        options = {'registered_subject': self.registered_subject,
+                   'current_hiv_status': POS,
+                   'evidence_hiv_status': YES,
+                   'will_get_arvs': YES,
+                   'is_diabetic': NO,
+                   'will_remain_onstudy': YES,
+                   'rapid_test_done': NOT_APPLICABLE,
+                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.appointment = Appointment.objects.get(
+            subject_identifier=options.get('registered_subject'), visit_code='1000M')
+
+        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+            maternal_visit=self.maternal_visit_1000,
+            number_of_gestations=1)
+
+        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=options.get('registered_subject'))
+        self.appointment = Appointment.objects.get(
+            subject_identifier=options.get('registered_subject'), visit_code='1010M')
+
+        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        MaternalRandomizationFactory(maternal_visit=self.antenatal_visit_1)
+
+        """Second participant"""
+        self.maternal_eligibility_2 = MaternalEligibilityFactory()
+        self.maternal_consent_2 = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility_2,
+            first_name='TATAS', last_name='TATAS', identity="111121113", confirm_identity="111121113")
+        self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
+
+        options = {'registered_subject': self.registered_subject_2,
+                   'current_hiv_status': POS,
+                   'evidence_hiv_status': YES,
+                   'will_get_arvs': YES,
+                   'is_diabetic': NO,
+                   'will_remain_onstudy': YES,
+                   'rapid_test_done': NOT_APPLICABLE,
+                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1000M')
+        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
+                                                                number_of_gestations=1
+                                                                )
+        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=self.registered_subject_2)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1010M')
+        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        maternal_randomization_2 = MaternalRandomizationFactory(maternal_visit=self.antenatal_visit_1)
+        self.assertEqual(maternal_randomization_2.sid, 2)
+
+        """Third participant"""
+        self.maternal_eligibility_3 = MaternalEligibilityFactory()
+        self.maternal_consent_3 = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility_3,
+            first_name='TATAR', last_name='TATAR', identity="111121113", confirm_identity="111121113")
+        self.registered_subject_3 = self.maternal_consent_3.maternal_eligibility.registered_subject
+
+        options = {'registered_subject': self.registered_subject_3,
+                   'current_hiv_status': POS,
+                   'evidence_hiv_status': YES,
+                   'will_get_arvs': YES,
+                   'is_diabetic': NO,
+                   'will_remain_onstudy': YES,
+                   'rapid_test_done': NOT_APPLICABLE,
+                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_3.subject_identifier, visit_code='1000M')
+        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
+                                                                number_of_gestations=1
+                                                                )
+        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=self.registered_subject_3)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_3.subject_identifier, visit_code='1010M')
+        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        maternal_randomization_3 = MaternalRandomizationFactory(maternal_visit=self.antenatal_visit_1)
+        self.assertEqual(maternal_randomization_3.sid, 3)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_3.subject_identifier, visit_code='1020M')
+
+        MaternalLabourDelFactory(registered_subject=self.registered_subject_3)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject_3.subject_identifier, visit_code='2000M')
+        MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        self.assertEqual(
+            CrfMetadata.objects.filter(
+                subject_identifier=self.registered_subject_3.subject_identifier,
+                entry_status=REQUIRED,
+                model='td_maternal.nvpdispensing',
+                visit_code='2000M').count(), 1)
+
+    def test_nvp_dispensing_not_required_2000M(self):
+        '''Test NVP Dispensing not required for AZT randomized mother/infant at 2000M visit'''
+        options = {'registered_subject': self.registered_subject,
+                   'current_hiv_status': POS,
+                   'evidence_hiv_status': YES,
+                   'will_get_arvs': YES,
+                   'is_diabetic': NO,
+                   'will_remain_onstudy': YES,
+                   'rapid_test_done': NOT_APPLICABLE,
+                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.appointment = Appointment.objects.get(
+            subject_identifier=options.get('registered_subject'), visit_code='1000M')
+
+        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+            maternal_visit=self.maternal_visit_1000,
+            number_of_gestations=1)
+
+        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=options.get('registered_subject'))
+        self.appointment = Appointment.objects.get(
+            subject_identifier=options.get('registered_subject'), visit_code='1010M')
+
+        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        MaternalRandomizationFactory(maternal_visit=self.antenatal_visit_1)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
+
+        MaternalLabourDelFactory(registered_subject=self.registered_subject_3)
+
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
+        MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+
+        self.assertEqual(
+            CrfMetadata.objects.filter(
+                subject_identifier=self.registered_subject.subject_identifier,
+                entry_status=REQUIRED,
+                model='td_maternal.nvpdispensing',
+                visit_code='2000M').count(), 0)

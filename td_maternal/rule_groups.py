@@ -11,7 +11,7 @@ from tshilo_dikotla.constants import ONE
 from .td_maternal_lab_profiles import (cd4_panel, pbmc_vl_panel, pbmc_panel, hiv_elisa_panel)
 
 from td_maternal.classes import MaternalStatusHelper
-from td_maternal.models import MaternalUltraSoundInitial, MaternalPostPartumDep, RapidTestResult
+from td_maternal.models import MaternalUltraSoundInitial, MaternalPostPartumDep, RapidTestResult, MaternalRando
 
 
 def func_mother_pos(visit_instance, *args):
@@ -99,6 +99,17 @@ def show_rapid_test_form(visit_instance, *args):
         return False
 
 
+def func_show_nvp_dispensing_form(visit_instance, *args):
+    subject_identfier = visit_instance.appointment.subject_identifier
+    if func_mother_pos(visit_instance):
+        try:
+            randomization = MaternalRando.objects.get(
+                subject_identifier=subject_identfier)
+            return randomization.rx.strip('\n') == 'NVP'
+        except MaternalRando.DoesNotExist:
+            return False
+
+
 @register()
 class MaternalRegisteredSubjectRuleGroup(RuleGroup):
 
@@ -130,6 +141,13 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_models=['maternalpostpartumdep'])
+
+    nvp_dispensing_form = CrfRule(
+        logic=Logic(
+            predicate=func_show_nvp_dispensing_form,
+            consequence=REQUIRED,
+            alternative=NOT_REQUIRED),
+        target_models=['nvpdispensing'])
 
     class Meta:
         app_label = 'td_maternal'

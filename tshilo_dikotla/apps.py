@@ -91,13 +91,13 @@ class EdcTimepointAppConfig(EdcTimepointAppConfigParent):
             model='td_appointment.appointment',
             datetime_field='appt_datetime',
             status_field='appt_status',
-            closed_status='CLOSED'
+            closed_status='DONE'
         ),
         Timepoint(
             model='td_appointment.historicalappointment',
             datetime_field='appt_datetime',
             status_field='appt_status',
-            closed_status='CLOSED'
+            closed_status='DONE'
         )
     ]
 
