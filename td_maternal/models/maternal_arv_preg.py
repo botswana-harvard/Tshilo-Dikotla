@@ -4,6 +4,7 @@ from django.db import models
 from edc_base.model.models import BaseUuidModel
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
+from edc_base.model.validators import date_not_future
 # from edc_sync.models import SyncModelMixin
 from edc_visit_tracking.models import CrfInlineModelMixin
 
@@ -63,6 +64,7 @@ class MaternalArv(CrfInlineModelMixin, BaseUuidModel):
 
     start_date = models.DateField(
         verbose_name="Date Started",
+        validators=[date_not_future],
         null=True,
         blank=False)
 
@@ -94,4 +96,4 @@ class MaternalArv(CrfInlineModelMixin, BaseUuidModel):
         app_label = 'td_maternal'
         verbose_name = 'Maternal ARV'
         verbose_name_plural = 'Maternal ARV'
-        unique_together = ('maternal_arv_preg', 'arv_code')
+        unique_together = ('maternal_arv_preg', 'arv_code', 'start_date', 'stop_date')

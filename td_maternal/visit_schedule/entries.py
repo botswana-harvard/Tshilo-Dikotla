@@ -24,7 +24,7 @@ maternal_antenatal1_entries = (
 
 maternal_antenatal2_entries = (
     #CrfTuple(20, 'td_maternal', 'maternalultrasoundfu', REQUIRED, NOT_ADDITIONAL),
-    CrfTuple(30, 'td_maternal', 'maternalaztnvp', REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(30, 'td_maternal', 'maternalarvpreg', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(40, 'td_maternal', 'maternalinterimidcc', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(50, 'td_maternal', 'maternaldiagnoses', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(60, 'td_maternal', 'maternalsubstanceusepriorpreg', REQUIRED, NOT_ADDITIONAL),
