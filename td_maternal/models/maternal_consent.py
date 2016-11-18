@@ -7,9 +7,8 @@ from edc_consent.field_mixins import (
     PersonalFieldsMixin, CitizenFieldsMixin, ReviewFieldsMixin, VulnerabilityFieldsMixin,
     IdentityFieldsMixin)
 from edc_registration.model_mixins import RegistrationMixin
-from edc_export.models import ExportTrackingFieldsMixin
+from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_identifier.subject.classes import SubjectIdentifier
-from edc_sync.models import SyncModelMixin
 
 from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
 
@@ -19,8 +18,7 @@ from .potential_call import PotentialCall
 from .maternal_eligibility import MaternalEligibility
 
 
-class MaternalConsent(ConsentModelMixin, SyncModelMixin, ReviewFieldsMixin,
-                      IdentityFieldsMixin, PersonalFieldsMixin, RegistrationMixin,
+class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin, PersonalFieldsMixin, RegistrationMixin,
                       CitizenFieldsMixin, VulnerabilityFieldsMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on the mother's consent. """

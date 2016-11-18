@@ -2,7 +2,7 @@ from copy import copy
 
 from django.contrib import admin
 
-from edc_lab.requisition.admin import RequisitionAdminMixin
+from edc_lab.modeladmin_mixins import RequisitionAdminMixin
 
 from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 from tshilo_dikotla.constants import INFANT

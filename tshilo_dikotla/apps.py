@@ -37,7 +37,10 @@ class AppConfig(DjangoAppConfig):
 
 
 class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
+    role = SERVER
     device_id = '99'
+    server_id_list = [99]
+    middleman_id_list = []
 
 
 class EdcRegistrationAppConfig(EdcRegistrationAppConfigParent):
@@ -111,7 +114,6 @@ class EdcLabelAppConfig(EdcLabelConfigParent):
 
 class EdcSyncAppConfig(EdcSyncAppConfigParent):
     edc_sync_files_using = True
-    role = SERVER
 
 
 class EdcVisitTrackingAppConfig(EdcVisitTrackingAppConfigParent):

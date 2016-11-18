@@ -7,7 +7,7 @@ from edc_label.actions import print_labels_action
 # from ..actions import create_order, reject_aliquot_label
 # from ..classes.aliquot_label import print_aliquot_label
 from ..models import Aliquot
-from edc_lab.aliquot.admin_mixins import AliquotModelAdminMixin
+from edc_lab.modeladmin_mixins import AliquotModelAdminMixin
 
 
 @admin.register(Aliquot)

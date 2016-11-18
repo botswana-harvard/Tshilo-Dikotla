@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'edc_rule_groups.apps.AppConfig',
     'edc_sync_files.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
+    'edc_export.apps.AppConfig',
     'td_appointment.apps.AppConfig',
     'td_call_manager.apps.AppConfig',
     'td_dashboard.apps.AppConfig',
@@ -235,16 +236,16 @@ STATICFILES_FINDERS = (
 GIT_DIR = BASE_DIR.ancestor(1)
 
 if socket.gethostname() == LIVE_SERVER:
-    DEVICE_ID = 99
+    # DEVICE_ID = 99
     PROJECT_TITLE = '{} Live Server'.format(PROJECT_TITLE)
 elif socket.gethostname() in TEST_HOSTS:
-    DEVICE_ID = 99
+    # DEVICE_ID = 99
     PROJECT_TITLE = 'TEST (MySQL): {}'.format(PROJECT_TITLE)
 elif socket.gethostname() in DEVELOPER_HOSTS:
-    DEVICE_ID = 99
+    # DEVICE_ID = 99
     PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
 elif 'test' in sys.argv:
-    DEVICE_ID = 99
+    # DEVICE_ID = 99
     PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
 else:
     raise ImproperlyConfigured(
@@ -253,7 +254,7 @@ else:
         'Got hostname=\'{}\''.format(socket.gethostname()))
 
 DEFAULT_STUDY_SITE = '40'
-ALLOW_MODEL_SERIALIZATION = True
+ALLOW_MODEL_SERIALIZATION = False
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators

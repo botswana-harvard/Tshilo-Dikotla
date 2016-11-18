@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
 from edc_constants.constants import YES, NO
-from edc_lab.requisition.forms import RequisitionFormMixin
+from edc_lab.forms_mixins import RequisitionFormMixin
 
 from tshilo_dikotla.choices import STUDY_SITES
 # from tshilo_dikotla.td_infant.models import InfantStoolCollection

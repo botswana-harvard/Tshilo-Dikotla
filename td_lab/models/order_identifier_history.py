@@ -1,12 +1,12 @@
 from edc_base.model.models import BaseUuidModel
-from edc_export.models import ExportTrackingFieldsMixin
+from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_identifier.models import BaseIdentifierModel
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_base.model.models import HistoricalRecords
 
 
-class OrderIdentifierHistory(SyncModelMixin, BaseIdentifierModel, ExportTrackingFieldsMixin, BaseUuidModel):
+class OrderIdentifierHistory(BaseIdentifierModel, ExportTrackingFieldsMixin, BaseUuidModel):
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     class Meta:
         app_label = 'td_lab'

@@ -3,12 +3,12 @@ from django.db import models
 from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_call_manager.managers import CallManager, LogManager, LogEntryManager
 from edc_call_manager.models import CallModelMixin, LogModelMixin, LogEntryModelMixin
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_base.model.models import HistoricalRecords
 
 
-class Call(SyncModelMixin, CallModelMixin, BaseUuidModel):
+class Call(CallModelMixin, BaseUuidModel):
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     objects = CallManager()
 
@@ -16,11 +16,11 @@ class Call(SyncModelMixin, CallModelMixin, BaseUuidModel):
         app_label = 'td_call_manager'
 
 
-class Log(SyncModelMixin, LogModelMixin, BaseUuidModel):
+class Log(LogModelMixin, BaseUuidModel):
 
     call = models.ForeignKey(Call)
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     objects = LogManager()
 
@@ -28,11 +28,11 @@ class Log(SyncModelMixin, LogModelMixin, BaseUuidModel):
         app_label = 'td_call_manager'
 
 
-class LogEntry(SyncModelMixin, LogEntryModelMixin, BaseUuidModel):
+class LogEntry(LogEntryModelMixin, BaseUuidModel):
 
     log = models.ForeignKey(Log)
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     objects = LogEntryManager()
 

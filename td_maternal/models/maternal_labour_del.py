@@ -11,7 +11,7 @@ from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE, YES, POS
 from edc_protocol.validators import datetime_not_before_study_start
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_base.model.models import HistoricalRecords
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 
@@ -28,7 +28,7 @@ from .maternal_crf_model import MaternalCrfModel
 from edc_base.model.models.url_mixin import UrlMixin
 
 
-class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin, BaseUuidModel):
+class MaternalLabourDel(RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
 
@@ -118,7 +118,7 @@ class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin, CreateAppointments
         blank=True,
         null=True)
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     objects = MaternalLabourDelManager()
 
@@ -306,7 +306,7 @@ class MaternalLabDelDx(MaternalCrfModel):
         verbose_name_plural = "Delivery: Preg Dx"
 
 
-class MaternalLabDelDxT (CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
+class MaternalLabDelDxT (CrfInlineModelMixin, BaseUuidModel):
 
     """ Diagnosis during pregnancy collected during labor and delivery (transactions). """
 

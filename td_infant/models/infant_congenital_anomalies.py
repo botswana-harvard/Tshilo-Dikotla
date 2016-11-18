@@ -7,7 +7,7 @@ from edc_base.model.models.url_mixin import UrlMixin
 
 from edc_constants.choices import CONFIRMED_SUSPECTED
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_base.model.models import HistoricalRecords
 
 from tshilo_dikotla.choices import (
     CNS_ABNORMALITIES, FACIAL_DEFECT, CLEFT_DISORDER, MOUTH_UP_GASTROINT_DISORDER,
@@ -33,11 +33,11 @@ class InfantCongenitalAnomalies(InfantCrfModel):
         verbose_name = "Congenital Anomalies"
 
 
-class BaseCnsItem(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
+class BaseCnsItem(CrfInlineModelMixin, BaseUuidModel):
 
     congenital_anomalies = models.ForeignKey(InfantCongenitalAnomalies)
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     class Meta:
         abstract = True

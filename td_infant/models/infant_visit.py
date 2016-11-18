@@ -3,10 +3,10 @@ from django.db import models
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_constants.constants import (DEAD, POS, MALE)
-from edc_export.models import ExportTrackingFieldsMixin
+from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_metadata.model_mixins import CreatesMetadataModelMixin
-from edc_offstudy.model_mixins import OffStudyMixin
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_offstudy.model_mixins import OffstudyMixin
+from edc_base.model.models import HistoricalRecords
 from edc_visit_tracking.constants import (
     LOST_VISIT, UNSCHEDULED, SCHEDULED, COMPLETED_PROTOCOL_VISIT, MISSED_VISIT)
 # from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
@@ -23,7 +23,7 @@ from .infant_birth import InfantBirth
 
 
 class InfantVisit(
-        CreatesMetadataModelMixin, SyncModelMixin, OffStudyMixin, VisitModelMixin,
+        CreatesMetadataModelMixin, OffstudyMixin, VisitModelMixin,
         CaretakerFieldsMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on the infant visits. """
@@ -38,7 +38,7 @@ class InfantVisit(
 
     objects = InfantVisitCrfManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     @property
     def get_infant_demographics(self):

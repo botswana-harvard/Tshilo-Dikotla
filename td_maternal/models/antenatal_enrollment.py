@@ -3,12 +3,12 @@ from django.db import models
 from edc_appointment.model_mixins import CreateAppointmentsMixin
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import date_not_future
-from edc_export.models import ExportTrackingFieldsMixin
+from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.constants import NO, YES
 from edc_constants.choices import YES_NO
-from edc_offstudy.model_mixins import OffStudyMixin
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_offstudy.model_mixins import OffstudyMixin
+from edc_base.model.models import HistoricalRecords
 from edc_protocol.validators import date_not_before_study_start
 
 from ..managers import AntenatalEnrollmentManager
@@ -17,7 +17,7 @@ from .enrollment_mixin import EnrollmentMixin
 from .maternal_consent import MaternalConsent
 
 
-class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, CreateAppointmentsMixin,
+class AntenatalEnrollment(EnrollmentMixin, CreateAppointmentsMixin,
                           RequiresConsentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     consent_model = MaternalConsent
@@ -63,7 +63,7 @@ class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, CreateAppointmentsMix
 
     objects = AntenatalEnrollmentManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
         super(AntenatalEnrollment, self).save(*args, **kwargs)

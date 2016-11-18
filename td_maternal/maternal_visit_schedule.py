@@ -44,12 +44,11 @@ maternal_antenatal1_crfs = (
 )
 
 maternal_antenatal2_crfs = (
-    Crf(show_order=10, model='td_maternal.maternalaztnvp'),
-    Crf(show_order=20, model='td_maternal.maternalinterimidcc'),
-    Crf(show_order=30, model='td_maternal.maternaldiagnoses'),
-    Crf(show_order=40, model='td_maternal.maternalsubstanceusepriorpreg'),
-    Crf(show_order=50, model='td_maternal.maternalclinicalmeasurementstwo'),
-    Crf(show_order=60, model='td_maternal.rapidtestresult'),
+    Crf(show_order=10, model='td_maternal.maternalinterimidcc'),
+    Crf(show_order=20, model='td_maternal.maternaldiagnoses'),
+    Crf(show_order=30, model='td_maternal.maternalsubstanceusepriorpreg'),
+    Crf(show_order=40, model='td_maternal.maternalclinicalmeasurementstwo'),
+    Crf(show_order=50, model='td_maternal.rapidtestresult'),
 )
 
 maternal_birth_crfs = (
@@ -59,6 +58,7 @@ maternal_birth_crfs = (
     Crf(show_order=40, model='td_maternal.maternalinterimidcc'),
     Crf(show_order=50, model='td_maternal.maternalsubstanceuseduringpreg'),
     Crf(show_order=60, model='td_maternal.rapidtestresult'),
+    Crf(show_order=70, model='td_maternal.nvpdispensing'),
 )
 
 maternal_followup1_crfs = (
@@ -103,9 +103,9 @@ maternal_antenatal_enrollment = Schedule(
 maternal_antenatal_enrollment.add_visit(
     code='1000M',
     title='Maternal Enrollment Visit',
-    timepoint=0,
-    base_interval=0,
-    base_interval_unit='D',
+    timepoint=1,
+    base_interval=1,
+    base_interval_unit='M',
     requisitions=(),
     crfs=maternal_enrollment_crfs
 )
@@ -120,9 +120,9 @@ maternal_antenatal_schedule = Schedule(
 maternal_antenatal_schedule.add_visit(
     code='1010M',
     title='Antenatal Visit 1',
-    timepoint=5,
+    timepoint=1,
     base_interval=1,
-    base_interval_unit='D',
+    base_interval_unit='M',
     requisitions=maternal_requisition_antenatal1,
     crfs=maternal_antenatal1_crfs
 )
@@ -130,7 +130,7 @@ maternal_antenatal_schedule.add_visit(
 maternal_antenatal_schedule.add_visit(
     code='1020M',
     title='Antenatal Visit 2',
-    timepoint=10,
+    timepoint=3,
     base_interval=3,
     base_interval_unit='M',
     requisitions=maternal_requisition_antenatal2,
@@ -146,17 +146,17 @@ follow_up_visit_schedule = Schedule(
 follow_up_visit_schedule.add_visit(
     code='2000M',
     title='Delivery Visit',
-    timepoint=30,
-    base_interval=10,
-    base_interval_unit='D',
+    timepoint=4,
+    base_interval=4,
+    base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_birth_crfs)
 
 follow_up_visit_schedule.add_visit(
     code='2010M',
     title='1 Month Visit',
-    timepoint=50,
-    base_interval=1,
+    timepoint=5,
+    base_interval=5,
     base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup1_crfs)
@@ -164,8 +164,8 @@ follow_up_visit_schedule.add_visit(
 follow_up_visit_schedule.add_visit(
     code='2020M',
     title='2 Months Visit',
-    timepoint=110,
-    base_interval=2,
+    timepoint=7,
+    base_interval=7,
     base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup1_crfs)
@@ -173,8 +173,8 @@ follow_up_visit_schedule.add_visit(
 follow_up_visit_schedule.add_visit(
     code='2060M',
     title='6 Months Visit',
-    timepoint=170,
-    base_interval=6,
+    timepoint=11,
+    base_interval=11,
     base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup1_crfs)
@@ -182,8 +182,8 @@ follow_up_visit_schedule.add_visit(
 follow_up_visit_schedule.add_visit(
     code='2120M',
     title='12 Months Visit',
-    timepoint=230,
-    base_interval=12,
+    timepoint=17,
+    base_interval=17,
     base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup2_crfs)
@@ -191,8 +191,8 @@ follow_up_visit_schedule.add_visit(
 follow_up_visit_schedule.add_visit(
     code='2180M',
     title='18 Months Visit',
-    timepoint=290,
-    base_interval=18,
+    timepoint=23,
+    base_interval=23,
     base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup3_crfs)
@@ -200,8 +200,8 @@ follow_up_visit_schedule.add_visit(
 follow_up_visit_schedule.add_visit(
     code='2240M',
     title='24 Months Visit',
-    timepoint=350,
-    base_interval=24,
+    timepoint=29,
+    base_interval=29,
     base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup3_crfs)
@@ -209,8 +209,8 @@ follow_up_visit_schedule.add_visit(
 follow_up_visit_schedule.add_visit(
     code='2300M',
     title='30 Months Visit',
-    timepoint=410,
-    base_interval=30,
+    timepoint=35,
+    base_interval=35,
     base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup3_crfs)
@@ -218,8 +218,8 @@ follow_up_visit_schedule.add_visit(
 follow_up_visit_schedule.add_visit(
     code='2360M',
     title='36 Months Visit',
-    timepoint=420,
-    base_interval=36,
+    timepoint=41,
+    base_interval=41,
     base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup3_crfs)

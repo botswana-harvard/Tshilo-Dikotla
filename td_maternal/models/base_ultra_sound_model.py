@@ -1,18 +1,8 @@
 from django.db import models
 from django.apps import apps
 
-# from edc_base.audit_trail import AuditTrail
-from edc_base.model.fields import OtherCharField
-from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import datetime_not_future
-from edc_consent.model_mixins import RequiresConsentMixin
-from edc_export.models import ExportTrackingFieldsMixin
-from edc_offstudy.model_mixins import OffStudyModelMixin
-from edc_protocol.validators import datetime_not_before_study_start
-
-from td_list.models import Malformations
-from tshilo_dikotla.choices import MALFORMATIONS, AMNIOTIC_FLUID
-from tshilo_dikotla.validators import validate_bpd, validate_hc, validate_fl, validate_ac, validate_hl
+from tshilo_dikotla.choices import AMNIOTIC_FLUID
+from tshilo_dikotla.validators import validate_bpd, validate_hc, validate_fl, validate_ac
 
 from .maternal_crf_model import MaternalCrfModel
 

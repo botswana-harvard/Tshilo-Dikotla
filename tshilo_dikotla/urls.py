@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'login', LoginView.as_view(), name='login_url'),
     url(r'logout', LogoutView.as_view(pattern_name='login_url'), name='logout_url'),
     url(r'^edc-consent/', include('edc_consent.urls')),
+    
     url(r'^edc-sync/', include('edc_sync.urls', 'edc-sync')),
     url(r'^edc-sync-files/', include('edc_sync_files.urls', 'edc-sync-files')),
 #     url(r'^call_manager/$', RedirectView.as_view(pattern_name='home_url')),

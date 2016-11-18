@@ -5,7 +5,6 @@ from edc_base.model.models import BaseUuidModel
 from edc_constants.choices import ARV_STATUS_WITH_NEVER
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
-# from edc_sync.models import SyncModelMixin
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from ..managers import MaternalArvPostModManager

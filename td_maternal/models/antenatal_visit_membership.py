@@ -5,9 +5,9 @@ from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_future, date_not_future
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO
-from edc_export.models import ExportTrackingFieldsMixin
+from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_protocol.validators import datetime_not_before_study_start
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_base.model.models import HistoricalRecords
 from td_registration.models import RegisteredSubject
 
 from ..managers import AntenatalVisitMembershipManager
@@ -16,7 +16,7 @@ from .maternal_consent import MaternalConsent
 from edc_base.model.models.url_mixin import UrlMixin
 
 
-class AntenatalVisitMembership(SyncModelMixin, RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin, BaseUuidModel):
+class AntenatalVisitMembership(RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin, BaseUuidModel):
 
     consent_model = MaternalConsent
 
@@ -37,7 +37,7 @@ class AntenatalVisitMembership(SyncModelMixin, RequiresConsentMixin, CreateAppoi
 
     objects = AntenatalVisitMembershipManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
         super(AntenatalVisitMembership, self).save(*args, **kwargs)

@@ -6,11 +6,11 @@ from django.apps import apps
 
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_future
-from edc_export.models import ExportTrackingFieldsMixin
+from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
 from td_registration.models import RegisteredSubject
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_base.model.models import HistoricalRecords
 from edc_consent.site_consents import site_consents
 from edc_protocol.validators import datetime_not_before_study_start
 
@@ -20,7 +20,7 @@ from ..managers import MaternalEligibilityManager
 from edc_base.model.models.url_mixin import UrlMixin
 
 
-class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
+class MaternalEligibility (ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
     """ A model completed by the user to test and capture the result of the pre-consent eligibility checks.
 
     This model has no PII."""
@@ -68,7 +68,7 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, UrlMixin, 
 
     objects = MaternalEligibilityManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.set_uuid_for_eligibility_if_none()

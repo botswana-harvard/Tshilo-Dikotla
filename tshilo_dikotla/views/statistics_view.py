@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 from edc_base.view_mixins import EdcBaseViewMixin
-from edc_sync.models.outgoing_transaction import OutgoingTransaction
+from edc_sync.models import OutgoingTransaction
 
 from td_maternal.models import (MaternalConsent, MaternalLabourDel, MaternalOffStudy, MaternalUltraSoundInitial,
                                 AntenatalEnrollment)

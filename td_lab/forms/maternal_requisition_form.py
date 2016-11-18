@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED
-from edc_lab.requisition.forms import RequisitionFormMixin
+from edc_lab.forms_mixins import RequisitionFormMixin
 
 from tshilo_dikotla.choices import STUDY_SITES
 

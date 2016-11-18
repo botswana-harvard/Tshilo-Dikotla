@@ -2,8 +2,8 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 from edc_base.model.models import BaseUuidModel
-from edc_export.models import ExportTrackingFieldsMixin
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_export.model_mixins import ExportTrackingFieldsMixin
+from edc_base.model.models import HistoricalRecords
 from lis.specimen.lab_result.models import BaseResult
 
 from ..managers import ResultManager
@@ -11,7 +11,7 @@ from ..managers import ResultManager
 from .order_item import OrderItem
 
 
-class Result(BaseResult, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class Result(BaseResult, ExportTrackingFieldsMixin, BaseUuidModel):
     """Stores result information in a one-to-many relation with :class:`ResultItem`."""
     order_item = models.ForeignKey(OrderItem)
 
@@ -24,7 +24,7 @@ class Result(BaseResult, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMode
 
     objects = ResultManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.subject_identifier = self.order.aliquot.receive.registered_subject.subject_identifier

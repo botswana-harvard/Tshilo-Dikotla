@@ -3,8 +3,8 @@ from django.utils import timezone
 
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
-from edc_export.models import ExportTrackingFieldsMixin
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_export.model_mixins import ExportTrackingFieldsMixin
+from edc_base.model.models import HistoricalRecords
 
 from .maternal_eligibility import MaternalEligibility
 
@@ -12,7 +12,7 @@ from ..managers import MaternalEligibilityLossManager
 from edc_base.model.models.url_mixin import UrlMixin
 
 
-class MaternalEligibilityLoss(SyncModelMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
+class MaternalEligibilityLoss(ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
     """ A model triggered and completed by system when a mother is in-eligible. """
 
     maternal_eligibility = models.OneToOneField(MaternalEligibility)
@@ -29,7 +29,7 @@ class MaternalEligibilityLoss(SyncModelMixin, ExportTrackingFieldsMixin, UrlMixi
 
     objects = MaternalEligibilityLossManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def __str__(self):
         return "{0}".format(self.maternal_eligibility.eligibility_id)

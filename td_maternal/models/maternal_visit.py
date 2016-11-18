@@ -4,9 +4,9 @@ from django.core.exceptions import ValidationError
 from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.constants import (FAILED_ELIGIBILITY)
-from edc_export.models import ExportTrackingFieldsMixin
-from edc_offstudy.model_mixins import OffStudyMixin
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_export.model_mixins import ExportTrackingFieldsMixin
+from edc_offstudy.model_mixins import OffstudyMixin
+from edc_base.model.models import HistoricalRecords
 from edc_visit_tracking.choices import VISIT_REASON
 from edc_visit_tracking.model_mixins import (VisitModelMixin, CaretakerFieldsMixin)
 from edc_metadata.model_mixins import CreatesMetadataModelMixin
@@ -18,9 +18,8 @@ from .antenatal_enrollment import AntenatalEnrollment
 from td_maternal.managers import MaternalVisitManager
 
 
-class MaternalVisit(OffStudyMixin, SyncModelMixin, CreatesMetadataModelMixin,
-                    RequiresConsentMixin, CaretakerFieldsMixin, VisitModelMixin,
-                    ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
+class MaternalVisit(OffstudyMixin, CreatesMetadataModelMixin, RequiresConsentMixin, CaretakerFieldsMixin,
+                    VisitModelMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
 
     """ Maternal visit form that links all antenatal/ postnatal follow-up forms """
 
@@ -30,7 +29,7 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, CreatesMetadataModelMixin,
 
     death_report_model = ('td_maternal', 'MaternalDeathReport')
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     objects = MaternalVisitManager()
 

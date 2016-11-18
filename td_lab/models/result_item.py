@@ -1,10 +1,10 @@
 from django.db import models
 
 from edc_base.model.models import BaseUuidModel
-from edc_export.models import ExportTrackingFieldsMixin
+from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_lab.lab_clinic_api.models import TestCode
 from edc_lab.lab_clinic_reference.classes import ClinicReferenceFlag, ClinicGradeFlag
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_base.model.models import HistoricalRecords
 
 from lis.specimen.lab_result_item.models import BaseResultItem
 
@@ -12,7 +12,7 @@ from .result import Result
 from ..managers import ResultItemManager
 
 
-class ResultItem(BaseResultItem, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class ResultItem(BaseResultItem, ExportTrackingFieldsMixin, BaseUuidModel):
     """Stores each result item in a result in one-to-many relation with :class:`Result`."""
     test_code = models.ForeignKey(TestCode, related_name='+')
 
@@ -22,7 +22,7 @@ class ResultItem(BaseResultItem, SyncModelMixin, ExportTrackingFieldsMixin, Base
 
     objects = ResultItemManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.subject_identifier = self.result.order.aliquot.receive.registered_subject.subject_identifier

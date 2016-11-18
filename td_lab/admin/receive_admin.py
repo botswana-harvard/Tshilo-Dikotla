@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from edc_lab.receive.admin_mixins import ReceiveModelAdminMixin
-# from tshilo_dikotla.admin_mixins import MembershipBaseModelAdmin
+from edc_lab.modeladmin_mixins import ReceiveModelAdminMixin
 from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
 from ..models import Receive
 

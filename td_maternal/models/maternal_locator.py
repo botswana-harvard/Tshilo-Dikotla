@@ -6,7 +6,7 @@ from django_crypto_fields.fields import EncryptedCharField
 from edc_base.model.fields import OtherCharField
 from edc_base.model.validators import CellNumber, TelephoneNumber
 from edc_constants.choices import YES_NO
-from edc_locator.models import LocatorMixin
+from edc_locator.model_mixins import LocatorModelMixin
 from td_appointment.models import Appointment
 # from edc_meta_data.managers import CrfMetaDataManager
 
@@ -23,7 +23,7 @@ from .maternal_crf_model import MaternalCrfModel
 #             pass
 
 
-class MaternalLocator(LocatorMixin, MaternalCrfModel):
+class MaternalLocator(LocatorModelMixin, MaternalCrfModel):
 
     """ A model completed by the user to capture locator information and
     the details of the infant caretaker. """

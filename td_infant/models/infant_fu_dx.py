@@ -2,7 +2,7 @@ from django.db import models
 
 from edc_constants.choices import YES_NO
 from edc_base.model.models import BaseUuidModel
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_base.model.models import HistoricalRecords
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from tshilo_dikotla.choices import DX_INFANT
@@ -23,7 +23,7 @@ class InfantFuDx(InfantCrfModel):
         verbose_name_plural = "Infant FollowUp: Dx"
 
 
-class InfantFuDxItems(CrfInlineModelMixin, SyncModelMixin, UrlMixin, BaseUuidModel):
+class InfantFuDxItems(CrfInlineModelMixin, UrlMixin, BaseUuidModel):
 
     infant_fu_dx = models.ForeignKey(InfantFuDx)
 
@@ -50,7 +50,7 @@ class InfantFuDxItems(CrfInlineModelMixin, SyncModelMixin, UrlMixin, BaseUuidMod
 
     objects = InfantFuDxItemsManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def natural_key(self):
         return (self.fu_dx, ) + self.infant_fu_dx.natural_key()

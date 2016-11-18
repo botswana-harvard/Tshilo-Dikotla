@@ -5,7 +5,7 @@ from edc_constants.choices import YES_NO_UNKNOWN
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import date_not_future
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_base.model.models import HistoricalRecords
 
 from tshilo_dikotla.choices import REASONS_VACCINES_MISSED
 
@@ -37,7 +37,7 @@ class InfantFuImmunizations(InfantCrfModel):
         verbose_name_plural = "Infant FollowUp: Immunizations"
 
 
-class VaccinesReceived(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
+class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
 
     """ALL possible vaccines given to infant"""
 
@@ -66,7 +66,7 @@ class VaccinesReceived(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
 
     objects = VaccinesReceivedManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def natural_key(self):
         return (self.received_vaccine_name, ) + self.infant_fu_immunizations.natural_key()
@@ -78,7 +78,7 @@ class VaccinesReceived(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
         unique_together = ('received_vaccine_name', 'infant_fu_immunizations')
 
 
-class VaccinesMissed(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
+class VaccinesMissed(CrfInlineModelMixin, BaseUuidModel):
 
     """ALL vaccines missed by infant"""
 
@@ -104,7 +104,7 @@ class VaccinesMissed(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
 
     objects = VaccinesMissedManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def natural_key(self):
         return (self.missed_vaccine_name, ) + self.infant_fu_immunizations.natural_key()

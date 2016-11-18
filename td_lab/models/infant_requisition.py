@@ -1,11 +1,11 @@
 from django.db import models
 
 from edc_base.model.models import BaseUuidModel, UrlMixin
-from edc_export.models import ExportTrackingFieldsMixin
+from edc_export.model_mixins import ExportTrackingFieldsMixin
 # from edc_meta_data.managers import RequisitionMetaDataManager
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_base.model.models import HistoricalRecords
 from edc_visit_tracking.model_mixins import CrfModelMixin
-from edc_lab.requisition.model_mixins import RequisitionModelMixin
+from edc_lab.model_mixins import RequisitionModelMixin
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_metadata.model_mixins import UpdatesRequisitionMetadataModelMixin
 
@@ -24,7 +24,7 @@ from td_lab.models.panel import Panel
 #         return self.get(requisition_identifier=requisition_identifier)
 
 
-class InfantRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, ExportTrackingFieldsMixin,
+class InfantRequisition(CrfModelMixin, RequisitionModelMixin, ExportTrackingFieldsMixin,
                         UpdatesRequisitionMetadataModelMixin, UrlMixin, BaseUuidModel):
 
     aliquot_model = Aliquot
@@ -39,7 +39,7 @@ class InfantRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, Ex
 
 #     objects = InfantRequisitionManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
 #     entry_meta_data_manager = RequisitionMetaDataManager(InfantVisit)
 

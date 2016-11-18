@@ -1,7 +1,7 @@
-from edc_lab.aliquot.aliquot_type import AliquotType
-from edc_lab.aliquot.processing_profile import ProcessingProfile
+from edc_lab.aliquot_type import AliquotType
+from edc_lab.processing_profile import ProcessingProfile
 from edc_lab.lab_profile import LabProfile
-from edc_lab.requisition.requisition_panel import RequisitionPanel
+from edc_lab.requisition_panel import RequisitionPanel
 from edc_lab.site_lab_profiles import site_lab_profiles
 
 lab_profile = LabProfile('td_lab')

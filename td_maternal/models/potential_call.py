@@ -2,7 +2,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_constants.choices import GENDER
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_base.model.models import HistoricalRecords
 
 from django_crypto_fields.fields import IdentityField, FirstnameField, LastnameField, EncryptedCharField
 from edc_base.model.models.url_mixin import UrlMixin
@@ -14,7 +14,7 @@ class PotentialCallManager(models.Manager):
         return self.get(subject_identifier=subject_identifier)
 
 
-class PotentialCall(SyncModelMixin, UrlMixin, BaseUuidModel):
+class PotentialCall(UrlMixin, BaseUuidModel):
 
     approximate_date = models.DateField(
         verbose_name="approximate appointment date",
@@ -57,7 +57,7 @@ class PotentialCall(SyncModelMixin, UrlMixin, BaseUuidModel):
 
     contacted = models.BooleanField(default=False, editable=False)
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     objects = PotentialCallManager()
 

@@ -2,7 +2,7 @@ from copy import copy
 
 from django.contrib import admin
 
-from edc_lab.requisition.admin import RequisitionAdminMixin
+from edc_lab.modeladmin_mixins import RequisitionAdminMixin
 
 from td_maternal.models import MaternalVisit
 

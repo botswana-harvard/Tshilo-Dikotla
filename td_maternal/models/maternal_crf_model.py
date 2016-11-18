@@ -2,9 +2,9 @@ from django.db import models
 
 from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_consent.model_mixins import RequiresConsentMixin
-from edc_export.models import ExportTrackingFieldsMixin
-from edc_offstudy.model_mixins import OffStudyMixin
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_export.model_mixins import ExportTrackingFieldsMixin
+from edc_offstudy.model_mixins import OffstudyMixin
+from edc_base.model.models import HistoricalRecords
 from edc_visit_tracking.model_mixins import CrfModelMixin
 from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
 
@@ -13,7 +13,7 @@ from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
 from .maternal_visit import MaternalVisit
 
 
-class MaternalCrfModel(SyncModelMixin, CrfModelMixin, ExportTrackingFieldsMixin, OffStudyMixin,
+class MaternalCrfModel(CrfModelMixin, ExportTrackingFieldsMixin, OffstudyMixin,
                        RequiresConsentMixin, UpdatesCrfMetadataModelMixin, UrlMixin, BaseUuidModel):
 
     """ Base model for all scheduled models (adds key to :class:`MaternalVisit`). """
@@ -22,7 +22,7 @@ class MaternalCrfModel(SyncModelMixin, CrfModelMixin, ExportTrackingFieldsMixin,
 
     maternal_visit = models.OneToOneField(MaternalVisit)
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def is_off_study_on_previous_visit_or_raise(self):
         pass

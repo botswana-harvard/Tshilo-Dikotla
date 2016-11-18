@@ -3,17 +3,17 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 from edc_base.model.models import BaseUuidModel
-from edc_export.models import ExportTrackingFieldsMixin
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-from edc_lab.aliquot.model_mixins import AliquotModelMixin
-from edc_lab.aliquot.managers import AliquotManager
+from edc_export.model_mixins import ExportTrackingFieldsMixin
+from edc_base.model.models import HistoricalRecords
+from edc_lab.model_mixins import AliquotModelMixin
+from edc_lab.managers import AliquotManager
 
 # from .aliquot_condition import AliquotCondition
 # from .aliquot_type import AliquotType
 # from .receive import Receive
 
 
-class Aliquot(SyncModelMixin, AliquotModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class Aliquot(AliquotModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
 #     receive = models.ForeignKey(
 #         Receive,
@@ -32,7 +32,7 @@ class Aliquot(SyncModelMixin, AliquotModelMixin, ExportTrackingFieldsMixin, Base
 
     objects = AliquotManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.subject_identifier = self.receive.registered_subject.subject_identifier

@@ -3,17 +3,17 @@ from django.db import models
 from edc_base.model.models import BaseUuidModel, UrlMixin
 
 # from edc_meta_data.managers import CrfMetaDataManager
-from edc_export.models import ExportTrackingFieldsMixin
+from edc_base.model.models import HistoricalRecords
+from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
-from edc_offstudy.model_mixins import OffStudyMixin
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_offstudy.model_mixins import OffstudyMixin
 from edc_visit_tracking.model_mixins import CrfModelMixin
 
 from ..managers import InfantVisitCrfManager
 from .infant_visit import InfantVisit
 
 
-class InfantCrfModel(CrfModelMixin, SyncModelMixin, OffStudyMixin, ExportTrackingFieldsMixin,
+class InfantCrfModel(CrfModelMixin, OffstudyMixin, ExportTrackingFieldsMixin,
                      UpdatesCrfMetadataModelMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on the infant's scheduled visit. """
@@ -22,7 +22,7 @@ class InfantCrfModel(CrfModelMixin, SyncModelMixin, OffStudyMixin, ExportTrackin
 
     infant_visit = models.OneToOneField(InfantVisit)
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     objects = InfantVisitCrfManager()
 #     entry_meta_data_manager = CrfMetaDataManager(InfantVisit)

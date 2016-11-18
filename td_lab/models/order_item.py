@@ -2,8 +2,8 @@ from django.db import models
 from django.utils import timezone
 
 from edc_base.model.models import BaseUuidModel
-from edc_export.models import ExportTrackingFieldsMixin
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_export.model_mixins import ExportTrackingFieldsMixin
+from edc_base.model.models import HistoricalRecords
 
 from ..managers import OrderItemManager
 
@@ -12,7 +12,7 @@ from .order import Order
 from .panel import Panel
 
 
-class OrderItem(SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class OrderItem(ExportTrackingFieldsMixin, BaseUuidModel):
 
     order = models.ForeignKey(Order)
 
@@ -41,7 +41,7 @@ class OrderItem(SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     objects = OrderItemManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.subject_identifier = self.aliquot.receive.registered_subject.subject_identifier

@@ -2,15 +2,15 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 from edc_base.model.models import BaseUuidModel
-from edc_export.models import ExportTrackingFieldsMixin
+from edc_export.model_mixins import ExportTrackingFieldsMixin
 from td_registration.models import RegisteredSubject
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_base.model.models import HistoricalRecords
 
-from edc_lab.receive.model_mixins import ReceiveModelMixin
-from edc_lab.receive.managers import ReceiveManager
+from edc_lab.model_mixins import ReceiveModelMixin
+from edc_lab.managers import ReceiveManager
 
 
-class Receive(ReceiveModelMixin, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class Receive(ReceiveModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     registered_subject = models.ForeignKey(RegisteredSubject, null=True, related_name='td_receive')
 
@@ -20,7 +20,7 @@ class Receive(ReceiveModelMixin, SyncModelMixin, ExportTrackingFieldsMixin, Base
 
     objects = ReceiveManager()
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.subject_type = self.registered_subject.subject_type

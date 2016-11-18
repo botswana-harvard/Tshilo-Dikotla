@@ -1,7 +1,7 @@
 from django.db import models
 from edc_base.model.models import BaseUuidModel
 from edc_registration.model_mixins import RegisteredSubjectModelMixin
-from edc_sync.models import SyncHistoricalRecords, SyncModelMixin
+from edc_base.model.models import HistoricalRecords
 from edc_registration.managers import RegisteredSubjectManager
 
 
@@ -17,7 +17,7 @@ class TdRegisteredSubjectManager(RegisteredSubjectManager):
         return self.get(**options)
 
 
-class RegisteredSubject(SyncModelMixin, RegisteredSubjectModelMixin, BaseUuidModel):
+class RegisteredSubject(RegisteredSubjectModelMixin, BaseUuidModel):
 
     objects = TdRegisteredSubjectManager()
 
@@ -26,7 +26,7 @@ class RegisteredSubject(SyncModelMixin, RegisteredSubjectModelMixin, BaseUuidMod
         blank=True,
         null=True)
 
-    history = SyncHistoricalRecords()
+    history = HistoricalRecords()
 
     class Meta:
         app_label = 'td_registration'
