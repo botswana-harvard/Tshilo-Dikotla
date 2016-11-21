@@ -43,4 +43,5 @@ from .maternal_substance_prior_preg import MaternalSubstanceUsePriorPreg
 from .maternal_crf_meta_data import CrfMetadata
 from .requisition_meta_data import RequisitionMetadata
 from .nvp_dispensing import NvpDispensing
+from .maternaldisenrollment import MaternalDisenrollment
 from .signals import *
