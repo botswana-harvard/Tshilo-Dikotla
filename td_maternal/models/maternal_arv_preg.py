@@ -66,7 +66,8 @@ class MaternalArv(CrfInlineModelMixin, BaseUuidModel):
         verbose_name="Date Started",
         validators=[date_not_future],
         null=True,
-        blank=False)
+        blank=False,
+        help_text='WARNING: If date started is less than 4 weeks at delivery, complete off study.')
 
     stop_date = models.DateField(
         verbose_name="Date Stopped",
