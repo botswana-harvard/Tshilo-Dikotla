@@ -82,6 +82,8 @@ infant_visit_schedule = VisitSchedule(
     verbose_name='Infant Birth Visit Schedule',
     app_label='td_infant',
     visit_model='td_infant.infantvisit',
+    offstudy_model='td_infant.infantoffstudy',
+    disenrollment_model='td_infant.infantdisenrollment',
 )
 
 infant_birth_schedule = Schedule(

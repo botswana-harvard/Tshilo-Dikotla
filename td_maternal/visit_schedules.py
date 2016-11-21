@@ -93,6 +93,8 @@ maternal_visit_schedule = VisitSchedule(
     verbose_name='Maternal Visit Schedule',
     app_label='td_maternal',
     visit_model='td_maternal.maternalvisit',
+    offstudy_model='td_maternal.maternaloffstudy',
+    disenrollment_model='td_maternal.maternadisenrollment',
 )
 
 # antenatal enrollment schedule
@@ -224,3 +226,6 @@ follow_up_visit_schedule.add_visit(
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup3_crfs)
 maternal_visit_schedule.add_schedule(follow_up_visit_schedule)
+
+site_visit_schedules.register(maternal_visit_schedule)
+
