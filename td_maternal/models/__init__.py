@@ -21,6 +21,7 @@ from .maternal_crf_model import MaternalCrfModel
 from .maternal_death_report import MaternalDeathReport
 from .maternal_demographics import MaternalDemographics
 from .maternal_diagnoses import MaternalDiagnoses
+from .maternal_disenrollment import MaternalDisenrollment
 from .maternal_eligibility import MaternalEligibility
 from .maternal_eligibility_loss import MaternalEligibilityLoss
 from .maternal_interim_idcc_data import MaternalInterimIdcc
@@ -38,7 +39,6 @@ from .maternal_substance_prior_preg import MaternalSubstanceUsePriorPreg
 from .maternal_ultrasound_fu import MaternalUltraSoundFu
 from .maternal_ultrasound_initial import MaternalUltraSoundInitial
 from .maternal_visit import MaternalVisit
-from .maternaldisenrollment import MaternalDisenrollment
 from .nvp_dispensing import NvpDispensing
 from .rapid_test_result import RapidTestResult
 from .requisition_meta_data import RequisitionMetadata

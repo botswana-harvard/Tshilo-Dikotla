@@ -29,7 +29,7 @@ class InfantOffStudyAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
 
     list_display = (
         'infant_visit',
-        'offstudy_date',
+#         'offstudy_date',
         'reason')
 
     actions = [
