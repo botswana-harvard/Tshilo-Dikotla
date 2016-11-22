@@ -6,29 +6,22 @@ from edc_consent.model_mixins import ConsentModelMixin
 from edc_consent.field_mixins import (
     PersonalFieldsMixin, CitizenFieldsMixin, ReviewFieldsMixin, VulnerabilityFieldsMixin,
     IdentityFieldsMixin)
-from edc_registration.model_mixins import RegistrationMixin
+from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_identifier.subject.classes import SubjectIdentifier
 
-from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
-
 from ..maternal_choices import RECRUIT_SOURCE, RECRUIT_CLINIC
 
-from .potential_call import PotentialCall
 from .maternal_eligibility import MaternalEligibility
+from edc_base.model.models.historical_records import HistoricalRecords
+from edc_consent.managers import ConsentManager
 
 
-class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin, PersonalFieldsMixin, RegistrationMixin,
-                      CitizenFieldsMixin, VulnerabilityFieldsMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
+class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin, PersonalFieldsMixin,
+                      UpdatesOrCreatesRegistrationModelMixin, CitizenFieldsMixin, VulnerabilityFieldsMixin,
+                      ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on the mother's consent. """
-
-    MIN_AGE_OF_CONSENT = MIN_AGE_OF_CONSENT
-    MAX_AGE_OF_CONSENT = MAX_AGE_OF_CONSENT
-
-#     off_study_model = ('td_maternal', 'MaternalOffStudy')
-
-    potential_call = models.ForeignKey(PotentialCall, null=True)
 
     maternal_eligibility = models.ForeignKey(MaternalEligibility)
 
@@ -52,9 +45,11 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
         max_length=100,
         verbose_name="if other recruitment clinic, specify...",
         blank=True,
-        null=True, )
+        null=True)
 
-#     history = AuditTrail()
+    objects = ConsentManager()
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return '{0} {1} {2} ({3})'.format(self.subject_identifier, self.first_name,

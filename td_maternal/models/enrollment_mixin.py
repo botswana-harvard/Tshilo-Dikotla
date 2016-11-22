@@ -3,27 +3,19 @@ from django.apps import apps
 from django.core.exceptions import ValidationError
 
 from edc_base.model.models import UrlMixin
-from edc_base.model.validators import date_not_future, datetime_not_future
+from edc_base.model.validators import date_not_future
 from edc_constants.choices import POS_NEG_UNTESTED_REFUSAL, YES_NO_NA, POS_NEG, YES_NO
 from edc_constants.constants import NO, YES, POS, NEG
-from edc_protocol.validators import date_not_before_study_start, datetime_not_before_study_start
-from td_registration.models import RegisteredSubject
+from edc_protocol.validators import date_not_before_study_start
+
+from edc_visit_schedule.model_mixins import EnrollmentModelMixin as EdcVisitScheduleEnrollmentMixin
 
 from .enrollment_helper import EnrollmentHelper
 
 
-class EnrollmentMixin(UrlMixin, models.Model):
+class EnrollmentMixin(EdcVisitScheduleEnrollmentMixin, UrlMixin, models.Model):
 
     """Base Model for antenal enrollment"""
-
-    registered_subject = models.OneToOneField(RegisteredSubject)
-
-    report_datetime = models.DateTimeField(
-        verbose_name="Report date",
-        validators=[
-            datetime_not_before_study_start,
-            datetime_not_future, ],
-        help_text='')
 
     enrollment_hiv_status = models.CharField(
         max_length=15,
@@ -35,9 +27,6 @@ class EnrollmentMixin(UrlMixin, models.Model):
         null=True,
         editable=False,
         help_text='Auto-filled by enrollment helper')
-
-    is_eligible = models.BooleanField(
-        editable=False)
 
     pending_ultrasound = models.BooleanField(
         editable=False)
@@ -139,11 +128,6 @@ class EnrollmentMixin(UrlMixin, models.Model):
         max_length=350,
         null=True,
         editable=False)
-
-    def __str__(self):
-        return "{0} {1}".format(
-            self.registered_subject.subject_identifier,
-            self.registered_subject.first_name)
 
     def save(self, *args, **kwargs):
         enrollment_helper = EnrollmentHelper(instance_antenatal=self)

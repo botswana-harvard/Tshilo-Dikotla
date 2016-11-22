@@ -2,7 +2,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.apps import apps
 
-# from edc_code_lists.models import WcsDxAdult
 from edc_appointment.model_mixins import CreateAppointmentsMixin
 from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel

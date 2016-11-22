@@ -1,28 +1,22 @@
 from django.db import models
 
 from edc_appointment.model_mixins import CreateAppointmentsMixin
-from edc_base.model.models import BaseUuidModel
+from edc_base.model.models import BaseUuidModel, HistoricalRecords
 from edc_base.model.validators import date_not_future
-from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_consent.model_mixins import RequiresConsentMixin
-from edc_constants.constants import NO, YES
 from edc_constants.choices import YES_NO
+from edc_constants.constants import NO, YES
+from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffstudyMixin
-from edc_base.model.models import HistoricalRecords
 from edc_protocol.validators import date_not_before_study_start
 
 from ..managers import AntenatalEnrollmentManager
 
 from .enrollment_mixin import EnrollmentMixin
-from .maternal_consent import MaternalConsent
 
 
-class AntenatalEnrollment(EnrollmentMixin, CreateAppointmentsMixin,
+class AntenatalEnrollment(EnrollmentMixin, OffstudyMixin, CreateAppointmentsMixin,
                           RequiresConsentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
-
-    consent_model = MaternalConsent
-
-    off_study_model = ('td_maternal', 'MaternalOffStudy')
 
     weeks_base_field = 'ga_lmp_enrollment_wks'
 
