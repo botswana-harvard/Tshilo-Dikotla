@@ -35,11 +35,11 @@ class InfantCrfModel(CrfModelMixin, OffstudyMixin, ExportTrackingFieldsMixin,
         """Returns mother's identifier."""
         return self.get_visit().appointment.registered_subject.relative_identifier
 
-    def is_off_study_or_raise(self):
-        pass
-
-    def is_off_study_on_previous_visit_or_raise(self):
-        pass
+#     def is_off_study_or_raise(self):
+#         pass
+# 
+#     def is_off_study_on_previous_visit_or_raise(self):
+#         pass
 
     @property
     def visit(self):

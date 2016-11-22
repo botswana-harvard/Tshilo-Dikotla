@@ -6,5 +6,5 @@ from edc_visit_schedule.model_mixins import DisenrollmentModelMixin
 class InfantDisenrollment(DisenrollmentModelMixin, RequiresConsentMixin, BaseUuidModel):
 
     class Meta(DisenrollmentModelMixin.Meta):
-        visit_schedule_name = 'maternal_visit_schedule'
+        visit_schedule_name = 'infant_visit_schedule'
         app_label = 'td_infant'
