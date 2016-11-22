@@ -81,15 +81,15 @@ infant_visit_schedule = VisitSchedule(
     name='infant_visit_schedule',
     verbose_name='Infant Birth Visit Schedule',
     app_label='td_infant',
-    default_disenrollment_model='td_infant.infantdisenrollment',
-    death_report_model='td_infant.infantdeath',
+    death_report_model='td_infant.infantdeathreport',
     offstudy_model='td_infant.infantoffstudy',
     visit_model='td_infant.infantvisit',
 )
 
 infant_birth_schedule = Schedule(
-    name='Infant Enrollment',
-    enrollment_model='td_infant.infantbirth',)
+    name='infant_enrollment',
+    enrollment_model='td_infant.infantbirth',
+    disenrollment_model='td_infant.infantdisenrollment',)
 
 infant_birth_schedule.add_visit(
     code='2000',

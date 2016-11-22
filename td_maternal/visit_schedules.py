@@ -94,7 +94,8 @@ maternal_visit_schedule = VisitSchedule(
     app_label='td_maternal',
     visit_model='td_maternal.maternalvisit',
     offstudy_model='td_maternal.maternaloffstudy',
-    disenrollment_model='td_maternal.maternadisenrollment',
+    death_report_model='td_maternal.maternaldeathreport',
+    default_disenrollment_model='td_maternal.maternaldisenrollment',
 )
 
 # antenatal enrollment schedule
@@ -107,7 +108,6 @@ maternal_antenatal_enrollment.add_visit(
     title='Maternal Enrollment Visit',
     timepoint=1,
     base_interval=1,
-    base_interval_unit='M',
     requisitions=(),
     crfs=maternal_enrollment_crfs
 )
@@ -124,7 +124,6 @@ maternal_antenatal_schedule.add_visit(
     title='Antenatal Visit 1',
     timepoint=1,
     base_interval=1,
-    base_interval_unit='M',
     requisitions=maternal_requisition_antenatal1,
     crfs=maternal_antenatal1_crfs
 )
@@ -134,7 +133,6 @@ maternal_antenatal_schedule.add_visit(
     title='Antenatal Visit 2',
     timepoint=3,
     base_interval=3,
-    base_interval_unit='M',
     requisitions=maternal_requisition_antenatal2,
     crfs=maternal_antenatal2_crfs
 )
@@ -150,7 +148,6 @@ follow_up_visit_schedule.add_visit(
     title='Delivery Visit',
     timepoint=4,
     base_interval=4,
-    base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_birth_crfs)
 
@@ -159,7 +156,6 @@ follow_up_visit_schedule.add_visit(
     title='1 Month Visit',
     timepoint=5,
     base_interval=5,
-    base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup1_crfs)
 
@@ -168,7 +164,6 @@ follow_up_visit_schedule.add_visit(
     title='2 Months Visit',
     timepoint=7,
     base_interval=7,
-    base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup1_crfs)
 
@@ -177,7 +172,6 @@ follow_up_visit_schedule.add_visit(
     title='6 Months Visit',
     timepoint=11,
     base_interval=11,
-    base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup1_crfs)
 
@@ -186,7 +180,6 @@ follow_up_visit_schedule.add_visit(
     title='12 Months Visit',
     timepoint=17,
     base_interval=17,
-    base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup2_crfs)
 
@@ -195,7 +188,6 @@ follow_up_visit_schedule.add_visit(
     title='18 Months Visit',
     timepoint=23,
     base_interval=23,
-    base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup3_crfs)
 
@@ -204,7 +196,6 @@ follow_up_visit_schedule.add_visit(
     title='24 Months Visit',
     timepoint=29,
     base_interval=29,
-    base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup3_crfs)
 
@@ -213,7 +204,6 @@ follow_up_visit_schedule.add_visit(
     title='30 Months Visit',
     timepoint=35,
     base_interval=35,
-    base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup3_crfs)
 
@@ -222,7 +212,6 @@ follow_up_visit_schedule.add_visit(
     title='36 Months Visit',
     timepoint=41,
     base_interval=41,
-    base_interval_unit='M',
     requisitions=maternal_requisition_followup,
     crfs=maternal_followup3_crfs)
 maternal_visit_schedule.add_schedule(follow_up_visit_schedule)
