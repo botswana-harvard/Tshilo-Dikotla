@@ -1,12 +1,26 @@
+from edc_visit_schedule.constants import MONTHS, DAYS
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_schedule.visit_schedule import VisitSchedule
 from edc_visit_schedule.visit import Crf, Requisition
 from edc_visit_schedule.schedule import Schedule
 
+
 from .td_maternal_lab_profiles import (pbmc_vl_panel, pbmc_panel, fasting_glucose_panel,
                                        glucose_1h_panel, glucose_2h_panel, hiv_elisa_panel, cd4_panel)
 
-maternal_requisition_antenatal1 = (
+visit_schedule = VisitSchedule(
+    name='maternal_visit_schedule',
+    verbose_name='Maternal Visit Schedule',
+    app_label='td_maternal',
+    death_report_model='td_maternal.maternaldeathreport',
+    default_disenrollment_model='td_maternal.maternaldisenrollment',
+    default_enrollment_model=None,
+    offstudy_model='td_maternal.maternaloffstudy',
+    visit_model='td_maternal.maternalvisit',
+)
+
+# requisitions
+requisition_antenatal1 = (
     Requisition(show_order=10, model='td_lab.maternalrequisition', panel=cd4_panel),
     Requisition(show_order=20, model='td_lab.maternalrequisition', panel=pbmc_vl_panel),
     Requisition(show_order=30, model='td_lab.maternalrequisition', panel=pbmc_panel),
@@ -15,15 +29,16 @@ maternal_requisition_antenatal1 = (
     Requisition(show_order=60, model='td_lab.maternalrequisition', panel=glucose_2h_panel),
 )
 
-maternal_requisition_antenatal2 = (
+requisition_antenatal2 = (
     Requisition(show_order=10, model='td_lab.maternalrequisition', panel=hiv_elisa_panel),
 )
 
-maternal_requisition_followup = (
+requisition_followup = (
     Requisition(show_order=10, model='td_lab.maternalrequisition', panel=pbmc_vl_panel),
 )
 
-maternal_enrollment_crfs = (
+# crfs
+enrollment_crfs = (
     Crf(show_order=10, model='td_maternal.maternallocator'),
     Crf(show_order=20, model='td_maternal.maternalultrasoundinitial'),
     Crf(show_order=30, model='td_maternal.maternalobstericalhistory'),
@@ -35,7 +50,7 @@ maternal_enrollment_crfs = (
     Crf(show_order=90, model='td_maternal.maternaloffstudy', required=False),
 )
 
-maternal_antenatal1_crfs = (
+antenatal1_crfs = (
     Crf(show_order=10, model='td_maternal.maternalultrasoundinitial'),
     Crf(show_order=20, model='td_maternal.maternalrando'),
     Crf(show_order=30, model='td_maternal.maternalinterimidcc'),
@@ -43,7 +58,7 @@ maternal_antenatal1_crfs = (
     Crf(show_order=50, model='td_maternal.rapidtestresult'),
 )
 
-maternal_antenatal2_crfs = (
+antenatal2_crfs = (
     Crf(show_order=10, model='td_maternal.maternalinterimidcc'),
     Crf(show_order=20, model='td_maternal.maternaldiagnoses'),
     Crf(show_order=30, model='td_maternal.maternalsubstanceusepriorpreg'),
@@ -51,7 +66,7 @@ maternal_antenatal2_crfs = (
     Crf(show_order=50, model='td_maternal.rapidtestresult'),
 )
 
-maternal_birth_crfs = (
+delivery_crfs = (
     Crf(show_order=10, model='td_maternal.maternaldiagnoses'),
     Crf(show_order=20, model='td_maternal.maternalhivinterimhx'),
     Crf(show_order=30, model='td_maternal.maternalarvpreg'),
@@ -61,7 +76,7 @@ maternal_birth_crfs = (
     Crf(show_order=70, model='td_maternal.nvpdispensing'),
 )
 
-maternal_followup1_crfs = (
+followup1_crfs = (
     Crf(show_order=10, model='td_maternal.maternalpostpartumfu'),
     Crf(show_order=20, model='td_maternal.maternalpostpartumdep'),
     Crf(show_order=30, model='td_maternal.maternalarvpost'),
@@ -72,7 +87,7 @@ maternal_followup1_crfs = (
     Crf(show_order=80, model='td_maternal.maternalcontraception'),
 )
 
-maternal_followup2_crfs = (
+followup2_crfs = (
     Crf(show_order=10, model='td_maternal.maternalpostpartumfu'),
     Crf(show_order=20, model='td_maternal.maternalpostpartumdep'),
     Crf(show_order=30, model='td_maternal.maternalarvpost'),
@@ -80,141 +95,145 @@ maternal_followup2_crfs = (
     Crf(show_order=50, model='td_maternal.maternalinterimidcc'),
 )
 
-maternal_followup3_crfs = (
+followup3_crfs = (
     Crf(show_order=10, model='td_maternal.maternalpostpartumfu'),
     Crf(show_order=20, model='td_maternal.maternalpostpartumdep'),
     Crf(show_order=30, model='td_maternal.maternalarvpost'),
     Crf(show_order=40, model='td_maternal.maternalarvpostadh'),
     Crf(show_order=50, model='td_maternal.maternalinterimidcc'),
-)
-
-maternal_visit_schedule = VisitSchedule(
-    name='maternal_visit_schedule',
-    verbose_name='Maternal Visit Schedule',
-    app_label='td_maternal',
-    visit_model='td_maternal.maternalvisit',
-    offstudy_model='td_maternal.maternaloffstudy',
-    death_report_model='td_maternal.maternaldeathreport',
-    default_disenrollment_model='td_maternal.maternaldisenrollment',
 )
 
 # antenatal enrollment schedule
-maternal_antenatal_enrollment = Schedule(
-    name='maternal_enrolment_sched',
+antenatal_enrollment = Schedule(
+    name='maternal_enrollment',
     enrollment_model='td_maternal.antenatalenrollment')
 
-maternal_antenatal_enrollment.add_visit(
+antenatal_enrollment.add_visit(
     code='1000M',
     title='Maternal Enrollment Visit',
-    timepoint=1,
-    base_interval=1,
+    timepoint=0,
+    base_interval=0,
+    base_interval_unit=DAYS,
     requisitions=(),
-    crfs=maternal_enrollment_crfs
+    crfs=enrollment_crfs
 )
-maternal_visit_schedule.add_schedule(maternal_antenatal_enrollment)
 
-# antenatal visit 1 and 2 schedule
-maternal_antenatal_schedule = Schedule(
-    name='maternal_ant_mem_sched',
+# antenatal schedule
+antenatal = Schedule(
+    name='maternal_antenatal',
     enrollment_model='td_maternal.antenatalvisitmembership')
 
 
-maternal_antenatal_schedule.add_visit(
+antenatal.add_visit(
     code='1010M',
     title='Antenatal Visit 1',
-    timepoint=1,
-    base_interval=1,
-    requisitions=maternal_requisition_antenatal1,
-    crfs=maternal_antenatal1_crfs
+    timepoint=0,
+    base_interval=0,
+    base_interval_unit=DAYS,
+    requisitions=requisition_antenatal1,
+    crfs=antenatal1_crfs
 )
 
-maternal_antenatal_schedule.add_visit(
+antenatal.add_visit(
     code='1020M',
     title='Antenatal Visit 2',
-    timepoint=3,
+    timepoint=1,
     base_interval=3,
-    requisitions=maternal_requisition_antenatal2,
-    crfs=maternal_antenatal2_crfs
+    base_interval_unit=MONTHS,
+    requisitions=requisition_antenatal2,
+    crfs=antenatal2_crfs
 )
-maternal_visit_schedule.add_schedule(maternal_antenatal_schedule)
 
 # follow up visit
-follow_up_visit_schedule = Schedule(
-    name='follow_up_visit_sched',
+follow_up = Schedule(
+    name='follow_up',
     enrollment_model='td_maternal.maternallabourdel')
 
-follow_up_visit_schedule.add_visit(
+follow_up.add_visit(
     code='2000M',
     title='Delivery Visit',
-    timepoint=4,
-    base_interval=4,
-    requisitions=maternal_requisition_followup,
-    crfs=maternal_birth_crfs)
+    timepoint=0,
+    base_interval=0,
+    base_interval_unit=MONTHS,
+    requisitions=requisition_followup,
+    crfs=delivery_crfs)
 
-follow_up_visit_schedule.add_visit(
+follow_up.add_visit(
     code='2010M',
     title='1 Month Visit',
-    timepoint=5,
-    base_interval=5,
-    requisitions=maternal_requisition_followup,
-    crfs=maternal_followup1_crfs)
+    timepoint=1,
+    base_interval=1,
+    base_interval_unit=MONTHS,
+    requisitions=requisition_followup,
+    crfs=followup1_crfs)
 
-follow_up_visit_schedule.add_visit(
+follow_up.add_visit(
     code='2020M',
     title='2 Months Visit',
-    timepoint=7,
-    base_interval=7,
-    requisitions=maternal_requisition_followup,
-    crfs=maternal_followup1_crfs)
+    timepoint=2,
+    base_interval=2,
+    base_interval_unit=MONTHS,
+    requisitions=requisition_followup,
+    crfs=followup1_crfs)
 
-follow_up_visit_schedule.add_visit(
+follow_up.add_visit(
     code='2060M',
     title='6 Months Visit',
-    timepoint=11,
-    base_interval=11,
-    requisitions=maternal_requisition_followup,
-    crfs=maternal_followup1_crfs)
+    timepoint=3,
+    base_interval=6,
+    base_interval_unit=MONTHS,
+    requisitions=requisition_followup,
+    crfs=followup1_crfs)
 
-follow_up_visit_schedule.add_visit(
+follow_up.add_visit(
     code='2120M',
     title='12 Months Visit',
-    timepoint=17,
-    base_interval=17,
-    requisitions=maternal_requisition_followup,
-    crfs=maternal_followup2_crfs)
+    timepoint=4,
+    base_interval=12,
+    base_interval_unit=MONTHS,
+    requisitions=requisition_followup,
+    crfs=followup2_crfs)
 
-follow_up_visit_schedule.add_visit(
+follow_up.add_visit(
     code='2180M',
     title='18 Months Visit',
-    timepoint=23,
-    base_interval=23,
-    requisitions=maternal_requisition_followup,
-    crfs=maternal_followup3_crfs)
+    timepoint=5,
+    base_interval=18,
+    base_interval_unit=MONTHS,
+    requisitions=requisition_followup,
+    crfs=followup3_crfs)
 
-follow_up_visit_schedule.add_visit(
+follow_up.add_visit(
     code='2240M',
     title='24 Months Visit',
-    timepoint=29,
-    base_interval=29,
-    requisitions=maternal_requisition_followup,
-    crfs=maternal_followup3_crfs)
+    timepoint=6,
+    base_interval=24,
+    base_interval_unit=MONTHS,
+    requisitions=requisition_followup,
+    crfs=followup3_crfs)
 
-follow_up_visit_schedule.add_visit(
+follow_up.add_visit(
     code='2300M',
     title='30 Months Visit',
-    timepoint=35,
-    base_interval=35,
-    requisitions=maternal_requisition_followup,
-    crfs=maternal_followup3_crfs)
+    timepoint=7,
+    base_interval=30,
+    base_interval_unit=MONTHS,
+    requisitions=requisition_followup,
+    crfs=followup3_crfs)
 
-follow_up_visit_schedule.add_visit(
+follow_up.add_visit(
     code='2360M',
     title='36 Months Visit',
-    timepoint=41,
-    base_interval=41,
-    requisitions=maternal_requisition_followup,
-    crfs=maternal_followup3_crfs)
-maternal_visit_schedule.add_schedule(follow_up_visit_schedule)
+    timepoint=8,
+    base_interval=36,
+    base_interval_unit=MONTHS,
+    requisitions=requisition_followup,
+    crfs=followup3_crfs)
 
-site_visit_schedules.register(maternal_visit_schedule)
+# add schedules
+visit_schedule.add_schedule(antenatal)
+visit_schedule.add_schedule(antenatal_enrollment)
+visit_schedule.add_schedule(follow_up)
 
+# register
+site_visit_schedules.register(visit_schedule)
