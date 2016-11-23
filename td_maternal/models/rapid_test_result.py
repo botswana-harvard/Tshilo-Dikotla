@@ -1,12 +1,8 @@
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import YES_NO, POS_NEG
 
-from td_registration.models import RegisteredSubject
-
 from ..maternal_choices import POS_NEG_IND
-from ..managers import RapidTestResultManager
 from .maternal_crf_model import MaternalCrfModel
 
 
