@@ -24,11 +24,10 @@ class Aliquot(AliquotModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 #         verbose_name="Aliquot Type",
 #         null=True)
 # 
-#     aliquot_condition = models.ForeignKey(
-#         AliquotCondition,
-#         verbose_name="Aliquot Condition",
-#         null=True,
-#         blank=True)
+    aliquot_condition = models.CharField(
+        verbose_name="Aliquot Condition",
+        null=True,
+        blank=True)
 
     objects = AliquotManager()
 
