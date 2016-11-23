@@ -1,31 +1,32 @@
 import os
+import pytz
 
-from django.utils import timezone
-
+from datetime import datetime
+from dateutil.relativedelta import MO, TU, WE, TH, FR
 from django.apps import AppConfig as DjangoAppConfig
 from django.conf import settings
 
 from edc_appointment.apps import AppConfig as EdcAppointmentAppConfigParent
+from edc_appointment.facility import Facility
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
 from edc_call_manager.apps import AppConfig as EdcCallManagerAppConfigParent
 from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
 from edc_consent.consent_config import ConsentConfig
+from edc_constants.constants import FAILED_ELIGIBILITY
 from edc_device.apps import AppConfig as EdcDeviceAppConfigParent
 from edc_identifier.apps import AppConfig as EdcIdentifierAppConfigParent
+from edc_lab.apps import AppConfig as EdcLabAppConfig
 from edc_label.apps import AppConfig as EdcLabelConfigParent
 from edc_metadata.apps import AppConfig as EdcMetadataAppConfigParent
 from edc_protocol.apps import AppConfig as EdcProtocolAppConfigParent
 from edc_registration.apps import AppConfig as EdcRegistrationAppConfigParent
 from edc_sync.apps import AppConfig as EdcSyncAppConfigParent
+from edc_sync.constants import SERVER
 from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
 from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
-
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
-from edc_constants.constants import FAILED_ELIGIBILITY
-
-from edc_sync.constants import SERVER
-from edc_lab.apps import AppConfig as EdcLabAppConfig
+from django_crypto_fields.apps import AppConfig as DjangoCryptoFieldsAppConfigParent
 
 
 class AppConfig(DjangoAppConfig):
@@ -52,13 +53,11 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
     protocol_number = '085'
     protocol_name = 'Tshilo Dikotla'
     protocol_title = ''
-
-    study_open_datetime = timezone.make_aware(timezone.datetime(2016, 4, 1, 0, 0, 0))
-    study_end_datetime = timezone.make_aware(timezone.datetime(2018, 12, 1, 0, 0, 0))
+    study_open_datetime = datetime(2016, 4, 1, 0, 0, 0, tzinfo=pytz.timezone('UTC'))
+    study_end_datetime = datetime(2018, 12, 1, 0, 0, 0, tzinfo=pytz.timezone('UTC'))
     subject_types = {'maternal': 'maternal', 'infant': 'infant'}
     enrollment_caps = {'td_maternal.antenatalenrollment': ('maternal', -1),
                        'td_infant.infant_birth': ('infant', -1)}
-#     max_subjects = {'maternal': 3000, 'infant': 3000}
 
 
 class EdcBaseAppConfig(EdcBaseAppConfigParent):
@@ -70,8 +69,8 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
     consent_configs = [
         ConsentConfig(
             'td_maternal.maternalconsent',
-            start=timezone.datetime(2016, 4, 1, 0, 0, 0),
-            end=timezone.datetime(2018, 12, 1, 0, 0, 0),
+            start=datetime(2016, 5, 1, 0, 0, 0, tzinfo=pytz.timezone('UTC')),
+            end=datetime(2017, 10, 30, 0, 0, 0, tzinfo=pytz.timezone('UTC')),
             version='1',
             age_is_adult=18,
             age_max=64,
@@ -82,10 +81,11 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
 class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
     app_label = 'td_appointment'
     model_name = 'appointment'
-    appointments_days_forward = 0
-    appointments_per_day_max = 30
     allowed_iso_weekdays = '12345'
     default_appt_type = 'clinic'
+    default_appt_type = 'clinic'
+    facilities = {
+        'clinic': Facility(name='clinic', days=[MO, TU, WE, TH, FR], slots=[10, 10, 10, 10, 10])}
 
 
 class EdcTimepointAppConfig(EdcTimepointAppConfigParent):
@@ -142,3 +142,4 @@ class EdcLabAppConfig(EdcLabAppConfig):
 
 class EdcCallManagerAppConfig(EdcCallManagerAppConfigParent):
     app_label = 'td_call_manager'
+
