@@ -4,14 +4,10 @@ from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from datetime import date
 
-from edc_constants.constants import (YES, NEG, NOT_APPLICABLE, POS, NO,
-                                     CONTINUOUS, STOPPED, RESTARTED)
-from edc_visit_tracking.constants import SCHEDULED
+from edc_constants.constants import (YES, NEG, NOT_APPLICABLE, POS, NO)
 from td_appointment.models import Appointment
 
-from td_maternal.models import MaternalVisit
-
-from .factories import (MaternalUltraSoundIniFactory, AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory,
+from .factories import (MaternalUltraSoundIniFactory, AntenatalEnrollmentFactory, AntenatalEnrollmentTwoFactory,
                         MaternalVisitFactory)
 
 
@@ -35,7 +31,7 @@ class BaseTestCase(TestCase):
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = AntenatalEnrollmentTwoFactory(
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')

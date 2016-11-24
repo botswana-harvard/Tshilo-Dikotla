@@ -12,7 +12,7 @@ from tshilo_dikotla.constants import RANDOMIZED
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalRandomizationFactory,
+                        AntenatalEnrollmentFactory, AntenatalEnrollmentTwoFactory, MaternalRandomizationFactory,
                         MaternalVisitFactory)
 
 
@@ -56,7 +56,7 @@ class TestMaternalRandomization(BaseTestCase):
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
                                                                 number_of_gestations=1
                                                                 )
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = AntenatalEnrollmentTwoFactory(
             registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
@@ -87,7 +87,7 @@ class TestMaternalRandomization(BaseTestCase):
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
                                                                 number_of_gestations=1
                                                                 )
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = AntenatalEnrollmentTwoFactory(
             registered_subject=status_options.get('registered_subject'))
 
         self.appointment = Appointment.objects.get(

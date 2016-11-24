@@ -5,6 +5,7 @@ from td_appointment.models import Appointment
 from edc_constants.constants import (
     POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN, FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY)
 from edc_visit_tracking.constants import SCHEDULED
+from edc_sync.models import OutgoingTransaction
 
 from .factories import (
     AntenatalEnrollmentFactory, MaternalEligibilityFactory, MaternalConsentFactory, MaternalVisitFactory)
@@ -21,7 +22,6 @@ class TestAntenatalEnrollment(BaseTestCase):
     def setUp(self):
         super(TestAntenatalEnrollment, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.registered_subject = self.maternal_eligibility.registered_subject
         self.maternal_consent = MaternalConsentFactory(maternal_eligibility=self.maternal_eligibility)
         self.data = {
             'registered_subject': self.registered_subject}

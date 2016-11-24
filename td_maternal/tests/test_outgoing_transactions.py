@@ -11,7 +11,7 @@ from td_maternal.models import MaternalVisit
 from .base_test_case import BaseTestCase
 from .factories import (MaternalEligibilityFactory, MaternalConsentFactory, AntenatalEnrollmentFactory,
                         MaternalVisitFactory, MaternalLabourDelFactory, MaternalUltraSoundIniFactory,
-                        AntenatalVisitMembershipFactory)
+                        AntenatalEnrollmentTwoFactory)
 
 
 class TestOutgoingTransactions(BaseTestCase):
@@ -43,7 +43,7 @@ class TestOutgoingTransactions(BaseTestCase):
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
                                                                 number_of_gestations=1,)
 
-        AntenatalVisitMembershipFactory(registered_subject=self.options.get('registered_subject'))
+        AntenatalEnrollmentTwoFactory(registered_subject=self.options.get('registered_subject'))
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')

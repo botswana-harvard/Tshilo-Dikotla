@@ -10,7 +10,7 @@ from td_infant.tests.factories import InfantVisitFactory, InfantBirthFactory
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalVisitFactory,
+                        AntenatalEnrollmentFactory, AntenatalEnrollmentTwoFactory, MaternalVisitFactory,
                         MaternalRandomizationFactory, MaternalLabourDelFactory, RapidTestResultFactory)
 
 
@@ -226,7 +226,7 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
                                                                 number_of_gestations=1,)
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = AntenatalEnrollmentTwoFactory(
             registered_subject=options.get('registered_subject'))
 
         self.appointment = Appointment.objects.get(
@@ -247,7 +247,7 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
                                                                 number_of_gestations=1,
                                                                 )
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = AntenatalEnrollmentTwoFactory(
             registered_subject=status_options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')

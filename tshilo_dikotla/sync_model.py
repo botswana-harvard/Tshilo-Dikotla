@@ -84,7 +84,7 @@ sync_models = [
     'td_lab.specimencollection',
     'td_lab.specimencollectionitem',
     'td_appointment.appointment',
-    'td_registration.registeredsubject'
+    'td_registration.registeredsubject',
 ]
 
 site_sync_models.register(sync_models, SyncModel)

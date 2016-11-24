@@ -7,7 +7,6 @@ from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, POS, YES, NO,
 from edc_visit_tracking.constants import SCHEDULED
 
 from td_appointment.models import Appointment
-from td_maternal.models import MaternalVisit
 from tshilo_dikotla.constants import INFANT
 from td_list.models import DeliveryComplications
 
@@ -15,7 +14,7 @@ from ..forms import MaternalLabourDelForm
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalLabourDelFactory,
+                        AntenatalEnrollmentFactory, AntenatalEnrollmentTwoFactory, MaternalLabourDelFactory,
                         MaternalVisitFactory)
 
 
@@ -43,7 +42,7 @@ class TestMaternalLabourDel(BaseTestCase):
         self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
                                                                 number_of_gestations=1)
-        self.maternal_visits_membership = AntenatalVisitMembershipFactory(registered_subject=self.registered_subject)
+        self.maternal_visits_membership = AntenatalEnrollmentTwoFactory(registered_subject=self.registered_subject)
 
         complications = DeliveryComplications.objects.create(
             hostname_created="django", name="None",

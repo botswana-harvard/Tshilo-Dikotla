@@ -1,17 +1,15 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-from edc_call_manager.models import Call
 from edc_constants.constants import POS, YES, NO, NEG, NOT_APPLICABLE, UNK
 
 from td_appointment.models import Appointment
 
-# from td_maternal.models import PotentialCall
 from td_call_manager.models import Call
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalVisitFactory,
+                        AntenatalEnrollmentFactory, AntenatalEnrollmentTwoFactory, MaternalVisitFactory,
                         MaternalLabourDelFactory)
 
 
@@ -47,7 +45,7 @@ class TestPotentialCalls(BaseTestCase):
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
                                                                 number_of_gestations=1,
                                                                 )
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = AntenatalEnrollmentTwoFactory(
             registered_subject=status_options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')

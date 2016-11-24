@@ -15,9 +15,11 @@ class MaternalConsentFactory(factory.DjangoModelFactory):
         model = MaternalConsent
 
 #     assessment_score = YES
-    maternal_eligibility = None
+#     maternal_eligibility = None
     citizen = YES
+    identity = "111121111"
     confirm_identity = "111121111"
+    identity_type = "OMANG"
     consent_copy = YES
     consent_datetime = timezone.now()
     consent_reviewed = YES
@@ -25,8 +27,6 @@ class MaternalConsentFactory(factory.DjangoModelFactory):
     dob = date(1988, 7, 7)
     first_name = "DIMO"
     gender = FEMALE
-    identity = "111121111"
-    identity_type = "OMANG"
     initials = "DD"
     is_dob_estimated = NO
     is_literate = YES
