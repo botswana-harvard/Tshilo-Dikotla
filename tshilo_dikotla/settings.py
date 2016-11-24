@@ -28,7 +28,6 @@ DEVELOPER_HOSTS = [
     'mac2-2.local', 'ckgathi', 'one-2.local', 'One-2.local', 'tsetsiba', 'leslie', 'keletso-mac']
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE_DIR = Path(BASE_DIR)
 
 if socket.gethostname() == LIVE_SERVER:
     KEY_PATH = '/home/django/source/tshilo_dikotla/keys'
@@ -224,8 +223,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-MEDIA_ROOT = BASE_DIR.child('media')
-STATIC_ROOT = BASE_DIR.child('static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # try:
 #     config = configparser.ConfigParser()
