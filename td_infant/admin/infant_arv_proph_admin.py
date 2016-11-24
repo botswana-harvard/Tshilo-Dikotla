@@ -2,13 +2,13 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from edc_base.modeladmin.mixins import TabularInlineMixin
+from edc_base.modeladmin_mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
 
-from ..models import InfantArvProphMod, InfantArvProph
 from ..forms import InfantArvProphForm, InfantArvProphModForm
+from ..models import InfantArvProphMod, InfantArvProph
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 class InfantArvProphModInline(TabularInlineMixin, admin.TabularInline):
@@ -19,7 +19,7 @@ class InfantArvProphModInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantArvProph)
-class InfantArvProphAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantArvProphAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     form = InfantArvProphForm
     inlines = [InfantArvProphModInline, ]
@@ -44,7 +44,7 @@ class InfantArvProphAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
 
 
 @admin.register(InfantArvProphMod)
-class InfantArvProphModAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantArvProphModAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     form = InfantArvProphModForm
 

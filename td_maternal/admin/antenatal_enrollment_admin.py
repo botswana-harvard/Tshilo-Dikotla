@@ -4,15 +4,15 @@ from collections import OrderedDict
 from td_registration.models import RegisteredSubject
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
+from tshilo_dikotla.admin_mixins import ModelAdminMixin
 
 from ..forms import AntenatalEnrollmentForm
 from ..models import AntenatalEnrollment
-from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
+from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 
 
 @admin.register(AntenatalEnrollment)
-class AntenatalEnrollmentAdmin(EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
+class AntenatalEnrollmentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     dashboard_type = 'maternal'
     form = AntenatalEnrollmentForm

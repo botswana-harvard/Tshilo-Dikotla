@@ -5,13 +5,13 @@ from django.contrib import admin
 from edc_export.actions import export_as_csv_action
 
 from ..forms import InfantFuForm
-from ..models import InfantVisit, InfantFu
+from ..models import InfantFu
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 @admin.register(InfantFu)
-class InfantFuAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantFuAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantFuForm
 
     list_display = (

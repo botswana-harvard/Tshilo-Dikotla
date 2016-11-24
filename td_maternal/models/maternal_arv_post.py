@@ -1,16 +1,28 @@
+from django.apps import apps as django_apps
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
-from edc_base.model.models import BaseUuidModel
+from edc_base.model.models import BaseUuidModel, HistoricalRecords
 from edc_constants.choices import ARV_STATUS_WITH_NEVER
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
-from ..managers import MaternalArvPostModManager
 from ..maternal_choices import REASON_FOR_HAART, ARV_DRUG_LIST, DOSE_STATUS, ARV_MODIFICATION_REASON
 
 from .maternal_crf_model import MaternalCrfModel
+
+
+class MaternalArvPostModManager(models.Manager):
+
+    def get_by_natural_key(
+            self, arv_code, modification_date, report_datetime, visit_instance, appt_status,
+            visit_definition_code, subject_identifier_as_pk):
+        MaternalVisit = django_apps.get_model('mb_maternal', 'MaternalVisit')
+        MaternalArvPost = django_apps.get_model('mb_maternal', 'MaternalArvPost')
+        maternal_visit = MaternalVisit.objects.get_by_natural_key(
+            report_datetime, visit_instance, appt_status, visit_definition_code, subject_identifier_as_pk)
+        maternal_arv_post = MaternalArvPost.objects.get(maternal_visit=maternal_visit)
+        return self.get(arv_code=arv_code, modification_date=modification_date, maternal_arv_post=maternal_arv_post)
 
 
 class MaternalArvPost (MaternalCrfModel):
@@ -43,6 +55,10 @@ class MaternalArvPost (MaternalCrfModel):
         max_length=25,
         choices=ARV_STATUS_WITH_NEVER,
         default=NOT_APPLICABLE,)
+
+    objects = models.Manager()
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return str(self.maternal_visit)
@@ -81,6 +97,8 @@ class MaternalArvPostMed(CrfInlineModelMixin, BaseUuidModel):
 
     objects = MaternalArvPostModManager()
 
+    history = HistoricalRecords()
+
     def natural_key(self):
         return (self.arv_code, self.modification_date) + self.maternal_arv_post.natural_key()
 
@@ -114,6 +132,10 @@ class MaternalArvPostAdh(MaternalCrfModel):
         verbose_name="Comment",
         blank=True,
         null=True)
+
+    objects = models.Manager()
+
+    history = HistoricalRecords()
 
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'

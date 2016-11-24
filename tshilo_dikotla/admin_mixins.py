@@ -1,28 +1,11 @@
-from django.core.urlresolvers import reverse
+from django.contrib import admin
+from django.urls.base import reverse
+from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
 
-from edc_base.modeladmin.mixins import (
+from edc_base.modeladmin_mixins import (
     ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
-    ModelAdminAuditFieldsMixin, ModelAdminModelRedirectMixin)
-
-
-class EdcBaseModelAdminMixin(ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
-                             ModelAdminAuditFieldsMixin, ModelAdminNextUrlRedirectMixin):
-
-    list_per_page = 10
-    date_hierarchy = 'modified'
-    empty_value_display = '-'
-
-    def redirect_url(self, request, obj, post_url_continue=None):
-        return request.GET.get('next')
-
-
-class SubjectDashboardRedirectUrlMixin(ModelAdminModelRedirectMixin):
-    pass
-
-#     def redirect_url(self, request, obj, post_url_continue=None):
-#         url_name = request.GET.get(self.querystring_name)
-#         section_name = request.GET.get('section_name')
-#         return reverse(url_name, kwargs={'section_name': section_name})
+    ModelAdminReadOnlyMixin, ModelAdminAuditFieldsMixin,
+    TabularInlineMixin, StackedInlineMixin)
 
 
 class DashboardRedirectUrlMixin(ModelAdminNextUrlRedirectMixin):
@@ -38,3 +21,15 @@ class DashboardRedirectUrlMixin(ModelAdminNextUrlRedirectMixin):
             'dashboard_model': dashboard_model,
             'dashboard_id': dashboard_id,
             'show': show})
+
+
+class ModelAdminMixin(ModelAdminFormInstructionsMixin,
+                      ModelAdminFormAutoNumberMixin, ModelAdminRevisionMixin, ModelAdminAuditFieldsMixin,
+                      ModelAdminReadOnlyMixin, DashboardRedirectUrlMixin, admin.ModelAdmin):
+
+    list_per_page = 10
+    date_hierarchy = 'modified'
+    empty_value_display = '-'
+
+    def redirect_url(self, request, obj, post_url_continue=None):
+        return request.GET.get('next')

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from edc_base.modeladmin.mixins import (
+from edc_base.modeladmin_mixins import (
     ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
     ModelAdminAuditFieldsMixin)
 from td_appointment.models import Appointment

@@ -3,7 +3,7 @@ from django.contrib.admin.options import StackedInline
 
 from simple_history.admin import SimpleHistoryAdmin
 
-from edc_base.modeladmin.mixins import (
+from edc_base.modeladmin_mixins import (
     ModelAdminAuditFieldsMixin,
     ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin, ModelAdminModelRedirectMixin)
 from edc_call_manager.admin import (

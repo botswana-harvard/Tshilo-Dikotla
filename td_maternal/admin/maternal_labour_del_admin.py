@@ -2,17 +2,17 @@ from django.contrib import admin
 
 from td_registration.models import RegisteredSubject
 
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
+from tshilo_dikotla.admin_mixins import ModelAdminMixin
 
 from ..forms import MaternalLabourDelForm, MaternalHivInterimHxForm
 from ..models import MaternalLabourDel, MaternalHivInterimHx
 
 from .base_maternal_model_admin import BaseMaternalModelAdmin
-from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
+from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 
 
 @admin.register(MaternalLabourDel)
-class MaternalLabourDelAdmin(EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
+class MaternalLabourDelAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     dashboard_type = 'maternal'
     form = MaternalLabourDelForm

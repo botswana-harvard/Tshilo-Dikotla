@@ -2,13 +2,13 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from edc_base.modeladmin.mixins import TabularInlineMixin
+from edc_base.modeladmin_mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
 
-from ..models import InfantBirthFeedingVaccine, InfantVaccines
 from ..forms import InfantVaccinesForm, InfantBirthFeedinVaccineForm
+from ..models import InfantBirthFeedingVaccine, InfantVaccines
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 class InfantVaccinesInline(TabularInlineMixin, admin.TabularInline):
@@ -19,7 +19,7 @@ class InfantVaccinesInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantBirthFeedingVaccine)
-class InfantBirthFeedingVaccineAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantBirthFeedingVaccineAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantBirthFeedinVaccineForm
 
     list_display = ('feeding_after_delivery',)

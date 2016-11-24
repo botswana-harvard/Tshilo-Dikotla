@@ -10,6 +10,7 @@ from edc_offstudy.model_mixins import OffstudyMixin
 from edc_visit_tracking.model_mixins import CrfModelMixin
 
 from ..managers import InfantVisitCrfManager
+
 from .infant_visit import InfantVisit
 
 
@@ -18,14 +19,11 @@ class InfantCrfModel(CrfModelMixin, OffstudyMixin, ExportTrackingFieldsMixin,
 
     """ A model completed by the user on the infant's scheduled visit. """
 
-    off_study_model = ('td_infant', 'InfantOffStudy')
-
     infant_visit = models.OneToOneField(InfantVisit)
 
-    history = HistoricalRecords()
-
     objects = InfantVisitCrfManager()
-#     entry_meta_data_manager = CrfMetaDataManager(InfantVisit)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return "{}: {}".format(self.__class__._meta.model_name,
@@ -34,16 +32,6 @@ class InfantCrfModel(CrfModelMixin, OffstudyMixin, ExportTrackingFieldsMixin,
     def get_consenting_subject_identifier(self):
         """Returns mother's identifier."""
         return self.get_visit().appointment.registered_subject.relative_identifier
-
-#     def is_off_study_or_raise(self):
-#         pass
-# 
-#     def is_off_study_on_previous_visit_or_raise(self):
-#         pass
-
-    @property
-    def visit(self):
-        return getattr(self, 'infant_visit')
 
     class Meta:
         abstract = True

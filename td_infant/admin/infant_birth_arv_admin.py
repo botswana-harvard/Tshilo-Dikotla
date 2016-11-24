@@ -4,13 +4,13 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 
-from ..models import InfantBirthArv, InfantVisit
+from ..models import InfantBirthArv
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 @admin.register(InfantBirthArv)
-class InfantBirthArvAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantBirthArvAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     list_display = (
         'infant_visit', 'azt_after_birth',

@@ -4,20 +4,16 @@ from django.contrib import admin
 
 from edc_lab.modeladmin_mixins import RequisitionAdminMixin
 
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
+from tshilo_dikotla.admin_mixins import ModelAdminMixin
 from tshilo_dikotla.constants import INFANT
 from td_infant.models import InfantVisit
 
 from ..forms import InfantRequisitionForm
 from ..models import InfantRequisition, Panel
+from td_infant.models.infant_crf_model import InfantCrfModel
 
 
 @admin.register(InfantRequisition)
-class InfantRequisitionAdmin(RequisitionAdminMixin, EdcBaseModelAdminMixin, admin.ModelAdmin):
+class InfantRequisitionAdmin(InfantCrfModel, RequisitionAdminMixin, admin.ModelAdmin):
 
-    dashboard_type = INFANT
     form = InfantRequisitionForm
-    label_template_name = 'requisition_label'
-    visit_attr = 'infant_visit'
-    visit_model = InfantVisit
-    panel_model = Panel

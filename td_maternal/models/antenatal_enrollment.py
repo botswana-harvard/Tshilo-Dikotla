@@ -9,13 +9,18 @@ from edc_constants.constants import NO, YES
 from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffstudyMixin
 from edc_protocol.validators import date_not_before_study_start
+from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 
-from ..managers import AntenatalEnrollmentManager
-
-from .enrollment_mixin import EnrollmentMixin
+from .antenatal_enrollment_mixin import AntenatalEnrollmentMixin
 
 
-class AntenatalEnrollment(EnrollmentMixin, OffstudyMixin, CreateAppointmentsMixin,
+class Manager(models.Manager):
+
+    def get_by_natural_key(self, subject_identifier):
+        return self.get(subject_identifier=subject_identifier)
+
+
+class AntenatalEnrollment(AntenatalEnrollmentMixin, EnrollmentModelMixin, OffstudyMixin, CreateAppointmentsMixin,
                           RequiresConsentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     weeks_base_field = 'ga_lmp_enrollment_wks'
@@ -55,19 +60,15 @@ class AntenatalEnrollment(EnrollmentMixin, OffstudyMixin, CreateAppointmentsMixi
         blank=True,
         help_text="")
 
-    objects = AntenatalEnrollmentManager()
+    objects = Manager()
 
     history = HistoricalRecords()
 
-    def save(self, *args, **kwargs):
-        super(AntenatalEnrollment, self).save(*args, **kwargs)
-
     def __str__(self):
-        return "antenatal: {0}".format(self.registered_subject.subject_identifier)
+        return self.subject_identifier
 
     def natural_key(self):
-        return self.registered_subject.natural_key()
-    natural_key.dependencies = ['edc_registration.registeredsubject']
+        return (self.subject_identifier, )
 
     def unenrolled_error_messages(self):
         """Returns a tuple (True, None) if mother is eligible otherwise
@@ -97,12 +98,7 @@ class AntenatalEnrollment(EnrollmentMixin, OffstudyMixin, CreateAppointmentsMixi
             unenrolled_error_message = 'Diabetic'
         return unenrolled_error_message
 
-    @property
-    def off_study_visit_code(self):
-        """Returns the visit code for the off-study visit if eligibility criteria fail."""
-        return '1000M'
-
-    class Meta:
+    class Meta(EnrollmentModelMixin.Meta):
         app_label = 'td_maternal'
         verbose_name = 'Antenatal Enrollment'
         verbose_name_plural = 'Antenatal Enrollment'

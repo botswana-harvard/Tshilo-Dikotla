@@ -4,14 +4,14 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 
-from ..models import InfantBirthExam
 from ..forms import InfantBirthExamForm
+from ..models import InfantBirthExam
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 @admin.register(InfantBirthExam)
-class InfantBirthExamAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantBirthExamAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantBirthExamForm
 
     list_display = (

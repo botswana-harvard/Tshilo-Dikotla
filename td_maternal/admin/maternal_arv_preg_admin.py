@@ -3,7 +3,7 @@ from collections import OrderedDict
 from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
-from edc_base.modeladmin.mixins import TabularInlineMixin
+from edc_base.modeladmin_mixins import TabularInlineMixin
 
 from ..forms import MaternalArvPregForm, MaternalArvForm
 from ..models import MaternalArvPreg, MaternalArv

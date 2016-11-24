@@ -7,11 +7,11 @@ from edc_export.actions import export_as_csv_action
 from ..forms import InfantBirthDataForm
 from ..models import InfantBirthData
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 @admin.register(InfantBirthData)
-class InfantBirthDataAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantBirthDataAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     form = InfantBirthDataForm
 

@@ -2,15 +2,15 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from edc_base.modeladmin.mixins import TabularInlineMixin
+from edc_base.modeladmin_mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, DashboardRedirectUrlMixin
+from tshilo_dikotla.admin_mixins import ModelAdminMixin
 
-from ..models import InfantFuDx, InfantVisit, InfantFuDxItems
+from ..models import InfantFuDx, InfantFuDxItems
 from ..forms import InfantFuDxItemsForm
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 class InfantFuDxItemsInline(TabularInlineMixin, admin.TabularInline):
@@ -21,7 +21,7 @@ class InfantFuDxItemsInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantFuDxItems)
-class InfantFuDxItemsAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, admin.ModelAdmin):
+class InfantFuDxItemsAdmin(ModelAdminMixin, admin.ModelAdmin):
     form = InfantFuDxItemsForm
 
     actions = [
@@ -41,7 +41,7 @@ class InfantFuDxItemsAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, ad
 
 
 @admin.register(InfantFuDx)
-class InfantFuDxAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantFuDxAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     inlines = [InfantFuDxItemsInline, ]
 

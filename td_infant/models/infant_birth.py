@@ -9,7 +9,7 @@ from edc_base.model.validators.date import date_not_future
 from edc_constants.choices import GENDER_UNDETERMINED
 from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffstudyMixin
-from edc_registration.model_mixins import RegisteredSubjectMixin
+from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 from td_registration.models import RegisteredSubject
 from edc_base.model.models import HistoricalRecords
 
@@ -19,9 +19,8 @@ from ..managers import InfantBirthModelManager
 from edc_base.model.models.url_mixin import UrlMixin
 
 
-# TODO: Put back off study mixin
-class InfantBirth(CreateAppointmentsMixin, RegisteredSubjectMixin, ExportTrackingFieldsMixin,
-                  UrlMixin, BaseUuidModel):
+class InfantBirth(CreateAppointmentsMixin, UpdatesOrCreatesRegistrationModelMixin, ExportTrackingFieldsMixin,
+                  OffstudyMixin, UrlMixin, BaseUuidModel):
     """ A model completed by the user on the infant's birth. """
 
     off_study_model = ('td_infant', 'InfantOffStudy')

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from edc_base.modeladmin.mixins import (ModelAdminChangelistModelButtonMixin, ModelAdminRedirectMixin,
+from edc_base.modeladmin_mixins import (ModelAdminChangelistModelButtonMixin, ModelAdminRedirectMixin,
                                         ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
                                         ModelAdminAuditFieldsMixin)
 from simple_history.admin import SimpleHistoryAdmin

@@ -4,16 +4,16 @@ from collections import OrderedDict
 from edc_consent.actions import flag_as_verified_against_paper, unflag_as_verified_against_paper
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
+from tshilo_dikotla.admin_mixins import ModelAdminMixin
 
 from ..forms import MaternalConsentForm
 from ..models import MaternalConsent, MaternalEligibility
-from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
+from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 from django.urls.base import reverse
 
 
 @admin.register(MaternalConsent)
-class MaternalConsentAdmin(EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
+class MaternalConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     form = MaternalConsentForm
 

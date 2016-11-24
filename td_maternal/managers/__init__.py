@@ -1,5 +1,4 @@
 from .antenatal_enrollment_manager import AntenatalEnrollmentManager
-from .antenatal_visit_membership_manager import AntenatalVisitMembershipManager
 from .maternal_arv_history_manager import MaternalLifetimeArvHistoryManager
 from .maternal_arv_manager import MaternalArvManager
 from .maternal_arv_post_mod_manager import MaternalArvPostModManager

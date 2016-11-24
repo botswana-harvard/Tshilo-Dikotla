@@ -1,18 +1,20 @@
 from dateutil import rrule
+
 from django import forms
 from django.core.exceptions import FieldError
 
 from edc_constants.constants import POS, NEG, NOT_APPLICABLE, YES, NO, DWTA, UNKNOWN, NEVER
-from edc_base.form.old_forms import BaseModelForm
 
-from ..models import MaternalConsent, SpecimenConsent
-from td_maternal.models.enrollment_helper import EnrollmentHelper
+from .models import MaternalConsent, SpecimenConsent
+from .models import EnrollmentHelper
 
 
-class BaseEnrollmentForm(BaseModelForm):
+class EnrollmentFormMixin(forms.ModelForms):
+
+    """TODO: this does nothing."""
 
     def clean(self):
-        cleaned_data = super(BaseEnrollmentForm, self).clean()
+        cleaned_data = super(EnrollmentFormMixin, self).clean()
 #         self.requires_specimen_consent()
 #         self.requires_rapid_test_if_current_hiv_status_uknown()
 #         self.requires_week32_result_if_tested()

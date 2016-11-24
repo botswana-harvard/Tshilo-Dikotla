@@ -1,21 +1,19 @@
 from django.db import models
 from django.apps import apps
-from django.core.exceptions import ValidationError
 
 from edc_base.model.models import UrlMixin
 from edc_base.model.validators import date_not_future
 from edc_constants.choices import POS_NEG_UNTESTED_REFUSAL, YES_NO_NA, POS_NEG, YES_NO
 from edc_constants.constants import NO, YES, POS, NEG
 from edc_protocol.validators import date_not_before_study_start
-
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin as EdcVisitScheduleEnrollmentMixin
 
 from .enrollment_helper import EnrollmentHelper
 
 
-class EnrollmentMixin(EdcVisitScheduleEnrollmentMixin, UrlMixin, models.Model):
+class AntenatalEnrollmentMixin(EdcVisitScheduleEnrollmentMixin, UrlMixin, models.Model):
 
-    """Base Model for antenal enrollment"""
+    """Modelmixin for antenal enrollment"""
 
     enrollment_hiv_status = models.CharField(
         max_length=15,
@@ -141,7 +139,7 @@ class EnrollmentMixin(EdcVisitScheduleEnrollmentMixin, UrlMixin, models.Model):
             self.pending_ultrasound = enrollment_helper.pending
         self.is_eligible = self.antenatal_criteria(enrollment_helper)
         self.unenrolled = self.unenrolled_error_messages()
-        super(EnrollmentMixin, self).save(*args, **kwargs)
+        super(AntenatalEnrollmentMixin, self).save(*args, **kwargs)
 
     def antenatal_criteria(self, enrollment_helper):
         """Returns True if basic criteria is met for enrollment."""
@@ -161,9 +159,6 @@ class EnrollmentMixin(EdcVisitScheduleEnrollmentMixin, UrlMixin, models.Model):
         else:
             return False
 
-    def get_registration_datetime(self):
-        return self.report_datetime
-
     @property
     def ultrasound(self):
         MaternalUltraSoundInitial = apps.get_model('td_maternal', 'MaternalUltraSoundInitial')
@@ -181,13 +176,6 @@ class EnrollmentMixin(EdcVisitScheduleEnrollmentMixin, UrlMixin, models.Model):
                 registered_subject=self.registered_subject)
         except MaternalLabourDel.DoesNotExist:
             return None
-
-    @property
-    def subject_identifier(self):
-        return self.registered_subject.subject_identifier
-
-    def get_subject_identifier(self):
-        return self.registered_subject.subject_identifier
 
     class Meta:
         abstract = True

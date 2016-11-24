@@ -4,7 +4,6 @@ from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffstudyMixin
-from edc_base.model.models import HistoricalRecords
 from edc_visit_tracking.model_mixins import CrfModelMixin
 from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
 
@@ -18,23 +17,12 @@ class MaternalCrfModel(CrfModelMixin, ExportTrackingFieldsMixin, OffstudyMixin,
 
     """ Base model for all scheduled models (adds key to :class:`MaternalVisit`). """
 
-    off_study_model = ('td_maternal', 'MaternalOffStudy')
-
     maternal_visit = models.OneToOneField(MaternalVisit)
-
-    history = HistoricalRecords()
 
     def is_off_study_on_previous_visit_or_raise(self):
         pass
 
     def is_off_study_or_raise(self):
-        pass
-
-    @classmethod
-    def visit_model_attr(cls):
-        return 'maternal_visit'
-
-    def has_off_study_report_or_raise(self, subject_identifier, report_date):
         pass
 
     def __str__(self):

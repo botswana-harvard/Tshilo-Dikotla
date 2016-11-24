@@ -2,15 +2,15 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from edc_base.modeladmin.mixins import TabularInlineMixin
+from edc_base.modeladmin_mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, DashboardRedirectUrlMixin
+from tshilo_dikotla.admin_mixins import ModelAdminMixin
 
 from ..forms import InfantFuNewMedItemsForm, InfantFuNewMedForm
 from ..models import InfantFuNewMed, InfantFuNewMedItems
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 class InfantFuNewMedItemsInline(TabularInlineMixin, admin.TabularInline):
@@ -21,7 +21,7 @@ class InfantFuNewMedItemsInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantFuNewMedItems)
-class InfantFuNewMedItemsAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, admin.ModelAdmin):
+class InfantFuNewMedItemsAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     form = InfantFuNewMedItemsForm
 
@@ -43,7 +43,7 @@ class InfantFuNewMedItemsAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin
 
 
 @admin.register(InfantFuNewMed)
-class InfantFuNewMedAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantFuNewMedAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     radio_fields = {'new_medications': admin.VERTICAL, }
     inlines = [InfantFuNewMedItemsInline, ]

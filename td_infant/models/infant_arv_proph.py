@@ -1,11 +1,9 @@
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
+from edc_base.model.models import BaseUuidModel, HistoricalRecords
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
-from edc_base.model.models import HistoricalRecords
-from edc_base.model.models import BaseUuidModel
 
 from tshilo_dikotla.choices import ARV_STATUS_WITH_NEVER
 
@@ -32,6 +30,8 @@ class InfantArvProph(InfantCrfModel):
         default=NOT_APPLICABLE,
         choices=ARV_STATUS_WITH_NEVER,
         help_text="referring to prophylaxis other than single dose NVP")
+
+    history = HistoricalRecords()
 
     class Meta:
         app_label = 'td_infant'

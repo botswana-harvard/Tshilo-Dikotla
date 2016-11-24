@@ -2,8 +2,9 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from edc_base.modeladmin.mixins import TabularInlineMixin
+from edc_base.modeladmin_mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
+
 from tshilo_dikotla.constants import INFANT
 
 from ..models import (
@@ -11,7 +12,7 @@ from ..models import (
     InfantCleftDisorder, InfantMouthUpGi, InfantCardioDisorder,
     InfantRespiratoryDefect, InfantLowerGi, InfantMaleGenital,
     InfantFemaleGenital, InfantRenal, InfantMusculoskeletal,
-    InfantSkin, InfantTrisomies, InfantVisit)
+    InfantSkin, InfantTrisomies)
 from ..forms import (
     InfantCongenitalAnomaliesForm, InfantFacialDefectForm,
     InfantCleftDisorderForm, InfantMouthUpGiForm,
@@ -23,11 +24,11 @@ from ..forms import (
     InfantSkinForm, InfantTrisomiesForm,
     InfantCnsForm)
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 @admin.register(InfantCns)
-class InfantCnsAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantCnsAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantCnsForm
     list_display = ('congenital_anomalies', 'abnormality_status',)
 
@@ -61,7 +62,7 @@ class InfantCnsInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantFacialDefect)
-class InfantFacialDefectAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantFacialDefectAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantFacialDefectForm
     list_display = ('congenital_anomalies',)
 
@@ -94,7 +95,7 @@ class InfantFacialDefectInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantCleftDisorder)
-class InfantCleftDisorderAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantCleftDisorderAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantCleftDisorderForm
 
     list_display = ('congenital_anomalies',)
@@ -127,7 +128,7 @@ class InfantCleftDisorderInline(TabularInlineMixin, admin.TabularInline):
     extra = 0
 
 
-class InfantMouthUpGiAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantMouthUpGiAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantMouthUpGiForm
 
     list_display = ('congenital_anomalies',)
@@ -163,7 +164,7 @@ class InfantMouthUpGiInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantCardioDisorder)
-class InfantCardioDisorderAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantCardioDisorderAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantCardioDisorderForm
 
     list_display = ('congenital_anomalies',)
@@ -197,7 +198,7 @@ class InfantCardioDisorderInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantRespiratoryDefect)
-class InfantRespiratoryDefectAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantRespiratoryDefectAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantRespiratoryDefectForm
 
     list_display = ('congenital_anomalies',)
@@ -231,7 +232,7 @@ class InfantRespiratoryDefectInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantLowerGi)
-class InfantLowerGiAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantLowerGiAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantLowerGiForm
 
     list_display = ('congenital_anomalies',)
@@ -265,7 +266,7 @@ class InfantLowerGiInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantFemaleGenital)
-class InfantFemaleGenitalAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantFemaleGenitalAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantFemaleGenitalForm
 
     list_display = ('congenital_anomalies',)
@@ -299,7 +300,7 @@ class InfantFemaleGenitalInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantMaleGenital)
-class InfantMaleGenitalAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantMaleGenitalAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantMaleGenitalForm
 
     list_display = ('congenital_anomalies',)
@@ -333,7 +334,7 @@ class InfantMaleGenitalInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantRenal)
-class InfantRenalAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantRenalAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = form = InfantRenalForm
 
     list_display = ('congenital_anomalies',)
@@ -367,7 +368,7 @@ class InfantRenalInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantMusculoskeletal)
-class InfantMusculoskeletalAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantMusculoskeletalAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = form = InfantMusculoskeletalForm
 
     list_display = ('congenital_anomalies',)
@@ -401,7 +402,7 @@ class InfantMusculoskeletalInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantSkin)
-class InfantSkinAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantSkinAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = form = InfantSkinForm
 
     list_display = ('congenital_anomalies',)
@@ -435,7 +436,7 @@ class InfantSkinInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantTrisomies)
-class InfantTrisomiesAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantTrisomiesAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantTrisomiesForm
 
     list_display = ('congenital_anomalies',)
@@ -469,7 +470,7 @@ class InfantTrisomiesInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(InfantCongenitalAnomalies)
-class InfantCongenitalAnomaliesAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantCongenitalAnomaliesAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     form = InfantCongenitalAnomaliesForm
     dashboard_type = INFANT

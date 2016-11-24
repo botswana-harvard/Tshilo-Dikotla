@@ -5,13 +5,13 @@ from django.contrib import admin
 from edc_export.actions import export_as_csv_action
 
 from ..forms import InfantFeedingForm
-from ..models import InfantFeeding, InfantVisit
+from ..models import InfantFeeding
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 @admin.register(InfantFeeding)
-class InfantFeedingAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantFeedingAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     form = InfantFeedingForm
     fields = (

@@ -104,11 +104,11 @@ followup3_crfs = (
 )
 
 # antenatal enrollment schedule
-antenatal_enrollment = Schedule(
-    name='maternal_enrollment',
+antenatal_enrollment1 = Schedule(
+    name='maternal_enrollment_step1',
     enrollment_model='td_maternal.antenatalenrollment')
 
-antenatal_enrollment.add_visit(
+antenatal_enrollment1.add_visit(
     code='1000M',
     title='Maternal Enrollment Visit',
     timepoint=0,
@@ -119,12 +119,12 @@ antenatal_enrollment.add_visit(
 )
 
 # antenatal schedule
-antenatal = Schedule(
-    name='maternal_antenatal',
-    enrollment_model='td_maternal.antenatalvisitmembership')
+antenatal_enrollment2 = Schedule(
+    name='maternal_enrollment_step2',
+    enrollment_model='td_maternal.antenatalenrollmenttwo')
 
 
-antenatal.add_visit(
+antenatal_enrollment2.add_visit(
     code='1010M',
     title='Antenatal Visit 1',
     timepoint=0,
@@ -134,7 +134,7 @@ antenatal.add_visit(
     crfs=antenatal1_crfs
 )
 
-antenatal.add_visit(
+antenatal_enrollment2.add_visit(
     code='1020M',
     title='Antenatal Visit 2',
     timepoint=1,
@@ -231,8 +231,8 @@ follow_up.add_visit(
     crfs=followup3_crfs)
 
 # add schedules
-visit_schedule.add_schedule(antenatal)
-visit_schedule.add_schedule(antenatal_enrollment)
+visit_schedule.add_schedule(antenatal_enrollment1)
+visit_schedule.add_schedule(antenatal_enrollment2)
 visit_schedule.add_schedule(follow_up)
 
 # register

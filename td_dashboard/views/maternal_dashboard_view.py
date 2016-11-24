@@ -1,25 +1,24 @@
+from collections import OrderedDict
+
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView
-
-from edc_base.view_mixins import EdcBaseViewMixin
-from ..classes import MarqueeViewMixin
-from td_maternal.models.maternal_consent import MaternalConsent
-from edc_constants.constants import UNK, OTHER
-from td_maternal.models.maternal_locator import MaternalLocator
-from tshilo_dikotla.constants import MATERNAL, INFANT
-from td_maternal.models.antenatal_enrollment import AntenatalEnrollment
-from td_maternal.models.maternal_visit import MaternalVisit
-from td_maternal.classes.maternal_status_helper import MaternalStatusHelper
-from td_maternal.models.enrollment_helper import EnrollmentHelper
 from django.utils import timezone
-from td_maternal.models.maternal_labour_del import MaternalLabourDel
-from td_maternal.models.maternal_randomization import MaternalRando
-from _collections import OrderedDict
-from td_registration.models import RegisteredSubject
-from edc_base.utils.convert_from_camel import convert_from_camel
-from td_infant.models.infant_birth import InfantBirth
+
+from edc_base.utils import convert_from_camel
+from edc_base.view_mixins import EdcBaseViewMixin
+from edc_constants.constants import UNK, OTHER
+
 from td_dashboard.classes.dashboard_mixin import DashboardMixin
+from td_infant.models.infant_birth import InfantBirth
+from td_maternal.classes.maternal_status_helper import MaternalStatusHelper
+from td_maternal.models import (
+    EnrollmentHelper, AntenatalEnrollment, MaternalConsent, MaternalLabourDel, MaternalLocator,
+    MaternalRando, MaternalVisit)
+from td_registration.models import RegisteredSubject
+from tshilo_dikotla.constants import MATERNAL, INFANT
+
+from ..classes import MarqueeViewMixin
 
 
 class MaternalDashboardView(
@@ -176,8 +175,8 @@ class MaternalDashboardView(
             enrollment_helper = EnrollmentHelper(instance_antenatal=antenatal)
             if enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and self.currently_pregnant:
                 return enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date())
-            elif (not enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and self.currently_pregnant
-                  and antenatal.ultrasound):
+            elif ((not enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and
+                   self.currently_pregnant and antenatal.ultrasound)):
                 return antenatal.ultrasound.ga_confirmed
             elif enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and not self.currently_pregnant:
                 delivery = self.maternal_delivery

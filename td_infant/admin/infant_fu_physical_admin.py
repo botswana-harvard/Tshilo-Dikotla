@@ -7,11 +7,11 @@ from edc_export.actions import export_as_csv_action
 from ..forms import InfantFuPhysicalForm
 from ..models import InfantFuPhysical
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 @admin.register(InfantFuPhysical)
-class InfantFuPhysicalAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantFuPhysicalAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantFuPhysicalForm
 
     radio_fields = {

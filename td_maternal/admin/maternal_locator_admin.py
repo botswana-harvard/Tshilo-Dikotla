@@ -1,17 +1,13 @@
 from django.contrib import admin
 
-from td_registration.models import RegisteredSubject
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, SubjectDashboardRedirectUrlMixin
-
 from ..forms import MaternalLocatorForm
 from ..models import MaternalLocator
-from td_maternal.models.maternal_visit import MaternalVisit
-from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
-from td_maternal.admin.base_maternal_model_admin import BaseMaternalModelAdmin
+
+from .admin_mixins import CrfModelAdminMixin
 
 
 @admin.register(MaternalLocator)
-class MaternalLocatorAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
+class MaternalLocatorAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     form = MaternalLocatorForm
 
@@ -55,10 +51,3 @@ class MaternalLocatorAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
                     'has_caretaker': admin.VERTICAL, }
 
     actions = []  # do not allow export to CSV
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        super().formfield_for_foreignkey(db_field, request, **kwargs)
-        if db_field.name == "registered_subject":
-            kwargs["queryset"] = RegisteredSubject.objects.filter(subject_identifier=request.GET.get('subject_identifier', 0))
- 
-        return super(MaternalLocatorAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)

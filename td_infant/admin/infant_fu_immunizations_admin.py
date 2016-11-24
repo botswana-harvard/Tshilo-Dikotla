@@ -2,15 +2,15 @@ from collections import OrderedDict
 
 from django.contrib import admin
 
-from edc_base.modeladmin.mixins import TabularInlineMixin
+from edc_base.modeladmin_mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin, DashboardRedirectUrlMixin
+from tshilo_dikotla.admin_mixins import ModelAdminMixin
 
 from ..forms import InfantFuImmunizationsForm, VaccinesReceivedForm, VaccinesMissedForm
 from ..models import InfantFuImmunizations, VaccinesReceived, VaccinesMissed
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
@@ -26,7 +26,7 @@ class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(VaccinesReceived)
-class VaccinesReceivedAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, admin.ModelAdmin):
+class VaccinesReceivedAdmin(ModelAdminMixin, admin.ModelAdmin):
     form = VaccinesReceivedForm
 
     actions = [
@@ -47,7 +47,7 @@ class VaccinesReceivedAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, a
 
 
 @admin.register(VaccinesMissed)
-class VaccinesMissedAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, admin.ModelAdmin):
+class VaccinesMissedAdmin(ModelAdminMixin, admin.ModelAdmin):
     form = VaccinesMissedForm
 
     actions = [
@@ -68,7 +68,7 @@ class VaccinesMissedAdmin(EdcBaseModelAdminMixin, DashboardRedirectUrlMixin, adm
 
 
 @admin.register(InfantFuImmunizations)
-class InfantFuImmunizationsAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class InfantFuImmunizationsAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = InfantFuImmunizationsForm
     inlines = [VaccinesReceivedInlineAdmin, VaccinesMissedInlineAdmin, ]
     radio_fields = {'vaccines_received': admin.VERTICAL,

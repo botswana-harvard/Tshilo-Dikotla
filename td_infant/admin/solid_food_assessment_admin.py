@@ -3,11 +3,11 @@ from django.contrib import admin
 from ..forms import SolidFoodAssessementForm
 from ..models import SolidFoodAssessment
 
-from .admin_mixins import InfantScheduleModelModelAdminMixin
+from .admin_mixins import CrfModelAdminMixin
 
 
 @admin.register(SolidFoodAssessment)
-class SolidFoodAssessmentAdmin(InfantScheduleModelModelAdminMixin, admin.ModelAdmin):
+class SolidFoodAssessmentAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     form = SolidFoodAssessementForm
 

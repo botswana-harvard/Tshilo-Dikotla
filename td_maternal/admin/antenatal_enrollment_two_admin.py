@@ -4,18 +4,18 @@ from collections import OrderedDict
 from td_registration.models import RegisteredSubject
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
+from tshilo_dikotla.admin_mixins import ModelAdminMixin
 
-from ..forms import AntenatalVisitMembershipForm
-from ..models import AntenatalVisitMembership
-from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
+from ..forms import AntenatalEnrollmentTwoForm
+from ..models import AntenatalEnrollmentTwo
+from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 
 
-@admin.register(AntenatalVisitMembership)
-class AntenataVisitMembershipAdmin(EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
+@admin.register(AntenatalEnrollmentTwo)
+class AntenatalEnrollmentTwoAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     dashboard_type = 'maternal'
-    form = AntenatalVisitMembershipForm
+    form = AntenatalEnrollmentTwoForm
 
     radio_fields = {'antenatal_visits': admin.VERTICAL}
 
@@ -46,4 +46,4 @@ class AntenataVisitMembershipAdmin(EdcBaseModelAdminMixin, ModelAdminNextUrlRedi
                     self.readonly_fields.index('registered_subject')
                 except ValueError:
                     self.readonly_fields.append('registered_subject')
-        return super(AntenataVisitMembershipAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        return super(AntenatalEnrollmentTwoAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)

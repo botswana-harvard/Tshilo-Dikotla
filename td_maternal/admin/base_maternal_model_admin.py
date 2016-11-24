@@ -2,13 +2,13 @@ from collections import OrderedDict
 
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
+from tshilo_dikotla.admin_mixins import ModelAdminMixin
 from ..models import MaternalVisit
 # from django.urls.base import reverse
-from edc_base.modeladmin.mixins import ModelAdminNextUrlRedirectMixin
+from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 
 
-class BaseMaternalModelAdmin(EdcBaseModelAdminMixin, ModelAdminNextUrlRedirectMixin):
+class BaseMaternalModelAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin):
 
     dashboard_type = 'maternal'
     visit_model_name = 'maternalvisit'

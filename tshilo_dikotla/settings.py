@@ -12,12 +12,9 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import sys
 import os
-import configparser
 import socket
-from unipath import Path
 
-from django.core.exceptions import ImproperlyConfigured
-from django.utils import timezone
+from unipath import Path
 
 from .databases import (
     PRODUCTION_POSTGRES, TEST_HOSTS_POSTGRES, TRAVIS_POSTGRES, PRODUCTION_SECRET_KEY)
@@ -30,20 +27,15 @@ TEST_HOSTS = ['edc4.bhp.org.bw', 'tdtest.bhp.org.bw', 'tdtest2.bhp.org.bw']
 DEVELOPER_HOSTS = [
     'mac2-2.local', 'ckgathi', 'one-2.local', 'One-2.local', 'tsetsiba', 'leslie', 'keletso-mac']
 
-PROJECT_TITLE = 'Tshilo Dikotla'
-SOURCE_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
-BASE_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
-MEDIA_ROOT = BASE_DIR.child('media')
-PROJECT_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
-PROJECT_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
-ETC_DIR = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(2).child('etc')
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(BASE_DIR)
 
 if socket.gethostname() == LIVE_SERVER:
     KEY_PATH = '/home/django/source/tshilo_dikotla/keys'
 elif socket.gethostname() in TEST_HOSTS + DEVELOPER_HOSTS:
-    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields')
+    KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 elif 'test' in sys.argv:
-    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields')
+    KEY_PATH = os.path.join(BASE_DIR, 'crypto_fields')
 else:
     raise TypeError(
         'Warning! Unknown hostname for KEY_PATH. \n'
@@ -53,6 +45,7 @@ else:
         'Got hostname=\'{}\'\n'.format(socket.gethostname()))
 
 DEBUG = True
+
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
@@ -135,45 +128,25 @@ if 'test' in sys.argv:
                          "edc_visit_tracking": None,
                          "edc_offstudy": None}
 
-MIDDLEWARE_CLASSES = [
+SECRET_KEY = 'sdfsd32fs#*@(@dfsdf'
+
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.request",
-    "django.contrib.messages.context_processors.messages")
-
 ROOT_URLCONF = 'tshilo_dikotla.urls'
-
-TEMPLATE_DIRS = ()
-
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    'django.template.loaders.eggs.Loader')
-
-WSGI_APPLICATION = 'tshilo_dikotla.wsgi.application'
-
-SECRET_KEY = 'sdfsd32fs#*@(@dfsdf'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -185,6 +158,8 @@ TEMPLATES = [
         },
     },
 ]
+
+WSGI_APPLICATION = 'tshilo_dikotla.wsgi.application'
 
 
 if socket.gethostname() in DEVELOPER_HOSTS:
@@ -205,50 +180,27 @@ elif 'test' in sys.argv:
 FIELD_MAX_LENGTH = 'default'
 
 # Internationalization
+# https://docs.djangoproject.com/en/1.10/topics/i18n/
+
 LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'UTC'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = True
 
 LANGUAGES = (
     ('tn', 'Setswana'),
     ('en', 'English'))
 
-TIME_ZONE = 'Africa/Gaborone'
 
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR.child('static')
-
-# List of finder classes that know how to find static files in
-# various locations.
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
-
-# edc.crytpo_fields encryption keys
-# developers should set by catching their hostname instead of setting explicitly
-
-GIT_DIR = BASE_DIR.ancestor(1)
-
-if socket.gethostname() == LIVE_SERVER:
-    # DEVICE_ID = 99
-    PROJECT_TITLE = '{} Live Server'.format(PROJECT_TITLE)
-elif socket.gethostname() in TEST_HOSTS:
-    # DEVICE_ID = 99
-    PROJECT_TITLE = 'TEST (MySQL): {}'.format(PROJECT_TITLE)
-elif socket.gethostname() in DEVELOPER_HOSTS:
-    # DEVICE_ID = 99
-    PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
-elif 'test' in sys.argv:
-    # DEVICE_ID = 99
-    PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
-else:
-    raise ImproperlyConfigured(
-        'Unknown hostname for full PROJECT_TITLE. Expected hostname to appear in one of '
-        'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
-        'Got hostname=\'{}\''.format(socket.gethostname()))
 
 DEFAULT_STUDY_SITE = '40'
 ALLOW_MODEL_SERIALIZATION = False
@@ -273,18 +225,19 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 MEDIA_ROOT = BASE_DIR.child('media')
+STATIC_ROOT = BASE_DIR.child('static')
 
-try:
-    config = configparser.ConfigParser()
-    config.read(os.path.join(ETC_DIR, 'edc_sync.ini'))
-    CORS_ORIGIN_WHITELIST = tuple(config['corsheaders'].get('cors_origin_whitelist').split(','))
-    CORS_ORIGIN_ALLOW_ALL = config['corsheaders'].getboolean('cors_origin_allow_all', True)
-except KeyError:
-    CORS_ORIGIN_WHITELIST = None
-    CORS_ORIGIN_ALLOW_ALL = True
-REST_FRAMEWORK = {
-    'PAGE_SIZE': 1,
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-}
+# try:
+#     config = configparser.ConfigParser()
+#     config.read(os.path.join(ETC_DIR, 'edc_sync.ini'))
+#     CORS_ORIGIN_WHITELIST = tuple(config['corsheaders'].get('cors_origin_whitelist').split(','))
+#     CORS_ORIGIN_ALLOW_ALL = config['corsheaders'].getboolean('cors_origin_allow_all', True)
+# except KeyError:
+#     CORS_ORIGIN_WHITELIST = None
+#     CORS_ORIGIN_ALLOW_ALL = True
+# REST_FRAMEWORK = {
+#     'PAGE_SIZE': 1,
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework.authentication.TokenAuthentication',
+#     ),
+# }

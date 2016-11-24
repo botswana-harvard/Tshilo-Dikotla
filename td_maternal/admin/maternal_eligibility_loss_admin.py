@@ -4,14 +4,14 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import EdcBaseModelAdminMixin
+from tshilo_dikotla.admin_mixins import ModelAdminMixin
 
 from ..forms import MaternalEligibilityLossForm
 from ..models import MaternalEligibilityLoss, MaternalEligibility
 
 
 @admin.register(MaternalEligibilityLoss)
-class MaternalEligibilityLossAdmin(EdcBaseModelAdminMixin, admin.ModelAdmin):
+class MaternalEligibilityLossAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     form = MaternalEligibilityLossForm
 

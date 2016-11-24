@@ -28,8 +28,6 @@ class MaternalLocator(LocatorModelMixin, MaternalCrfModel):
     """ A model completed by the user to capture locator information and
     the details of the infant caretaker. """
 
-    registered_subject = models.OneToOneField(RegisteredSubject, null=True)
-
     appointment = models.ForeignKey(Appointment, null=True)
 
     care_clinic = OtherCharField(
