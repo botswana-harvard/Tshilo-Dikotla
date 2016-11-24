@@ -1,16 +1,14 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.apps import apps
 
 from edc_appointment.model_mixins import CreateAppointmentsMixin
 from edc_base.model.fields import OtherCharField
-from edc_base.model.models import BaseUuidModel
+from edc_base.model.models import BaseUuidModel, HistoricalRecords, UrlMixin
 from edc_base.model.validators import datetime_not_future
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE, YES, POS
 from edc_protocol.validators import datetime_not_before_study_start
-from edc_base.model.models import HistoricalRecords
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 
@@ -22,16 +20,12 @@ from tshilo_dikotla.choices import DX_MATERNAL
 from ..managers import MaternalLabourDelManager, MaternalLabDelDxTManager
 from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION_REASON
 
-from .maternal_consent import MaternalConsent
 from .maternal_crf_model import MaternalCrfModel
-from edc_base.model.models.url_mixin import UrlMixin
 
 
 class MaternalLabourDel(RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
-
-    consent_model = MaternalConsent
 
     registered_subject = models.OneToOneField(RegisteredSubject, null=True)
 
@@ -117,9 +111,9 @@ class MaternalLabourDel(RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin,
         blank=True,
         null=True)
 
-    history = HistoricalRecords()
-
     objects = MaternalLabourDelManager()
+
+    history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
         self.live_infants_to_register = 1
@@ -132,14 +126,8 @@ class MaternalLabourDel(RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin,
         return self.registered_subject.natural_key()
     natural_key.dependencies = ['edc_registration.registeredsubject']
 
-    def get_registration_datetime(self):
-        return self.report_datetime
-
     @property
     def subject_identifier(self):
-        return self.registered_subject.subject_identifier
-
-    def get_subject_identifier(self):
         return self.registered_subject.subject_identifier
 
     @property

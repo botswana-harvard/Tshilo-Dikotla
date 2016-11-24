@@ -1,17 +1,15 @@
 from django.db import models
 from django.apps import apps
 
-from edc_base.model.models import UrlMixin
 from edc_base.model.validators import date_not_future
 from edc_constants.choices import POS_NEG_UNTESTED_REFUSAL, YES_NO_NA, POS_NEG, YES_NO
 from edc_constants.constants import NO, YES, POS, NEG
 from edc_protocol.validators import date_not_before_study_start
-from edc_visit_schedule.model_mixins import EnrollmentModelMixin as EdcVisitScheduleEnrollmentMixin
 
 from .enrollment_helper import EnrollmentHelper
 
 
-class AntenatalEnrollmentMixin(EdcVisitScheduleEnrollmentMixin, UrlMixin, models.Model):
+class AntenatalEnrollmentMixin(models.Model):
 
     """Modelmixin for antenal enrollment"""
 

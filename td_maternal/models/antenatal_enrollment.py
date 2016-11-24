@@ -1,7 +1,7 @@
 from django.db import models
 
 from edc_appointment.model_mixins import CreateAppointmentsMixin
-from edc_base.model.models import BaseUuidModel, HistoricalRecords
+from edc_base.model.models import BaseUuidModel, HistoricalRecords, UrlMixin
 from edc_base.model.validators import date_not_future
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO
@@ -21,7 +21,7 @@ class Manager(models.Manager):
 
 
 class AntenatalEnrollment(AntenatalEnrollmentMixin, EnrollmentModelMixin, OffstudyMixin, CreateAppointmentsMixin,
-                          RequiresConsentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+                          RequiresConsentMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
 
     weeks_base_field = 'ga_lmp_enrollment_wks'
 

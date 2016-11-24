@@ -1,17 +1,13 @@
-from django.db import models
-
+from edc_base.model.models import BaseUuidModel
 from edc_death_report.model_mixins import DeathReportModelMixin
 from edc_death_report.models import InfantDrugRelationshipMixin
-from td_registration.models import RegisteredSubject
-
-from .infant_crf_model import InfantCrfModel
+from edc_registration.model_mixins import SubjectIdentifierModelMixin
 
 
-class InfantDeathReport (DeathReportModelMixin, InfantDrugRelationshipMixin, InfantCrfModel):
+class InfantDeathReport (DeathReportModelMixin, SubjectIdentifierModelMixin,
+                         InfantDrugRelationshipMixin, BaseUuidModel):
 
     """ A model completed by the user after an infant's death. """
-
-    registered_subject = models.OneToOneField(RegisteredSubject)
 
     class Meta:
         app_label = 'td_infant'

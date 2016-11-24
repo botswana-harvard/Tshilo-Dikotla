@@ -12,9 +12,6 @@ from td_registration.models import RegisteredSubject
 
 class Appointment(AppointmentModelMixin, RequiresConsentMixin, BaseUuidModel):
 
-    def natural_key(self):
-        return (self.subject_identifier, self.visit_code)
-
     objects = AppointmentManager()
 
     history = HistoricalRecords()
@@ -22,6 +19,9 @@ class Appointment(AppointmentModelMixin, RequiresConsentMixin, BaseUuidModel):
     @property
     def str_pk(self):
         return str(self.pk)
+
+    def natural_key(self):
+        return (self.subject_identifier, self.visit_code)
 
     @property
     def infant_registered_subject(self):

@@ -1,6 +1,5 @@
 from django.db import models
 
-from edc_appointment.model_mixins import CreateAppointmentsMixin
 from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_consent.model_mixins import RequiresConsentMixin, SpecimenConsentMixin
 from edc_consent.field_mixins import SampleCollectionFieldsMixin, VulnerabilityFieldsMixin
@@ -10,15 +9,11 @@ from edc_base.model.models import HistoricalRecords
 
 from ..managers import SpecimenConsentManager
 
-from .maternal_consent import MaternalConsent
-
 
 class SpecimenConsent(SpecimenConsentMixin, SampleCollectionFieldsMixin, RequiresConsentMixin,
                       VulnerabilityFieldsMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user when a mother gives consent for specimen storage. """
-
-    consent_model = MaternalConsent
 
     registered_subject = models.OneToOneField(RegisteredSubject, null=True)
 
