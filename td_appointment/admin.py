@@ -1,24 +1,13 @@
 from django.contrib import admin
 
-from edc_base.modeladmin_mixins import (
-    ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
-    ModelAdminAuditFieldsMixin)
 from td_appointment.models import Appointment
 from td_appointment.forms import AppointmentForm
 
-
-class MembershipBaseModelAdmin(ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin,
-                               ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin, admin.ModelAdmin):
-
-    list_per_page = 10
-    date_hierarchy = 'modified'
-    empty_value_display = '-'
-
-    def redirect_url(self, request, obj, post_url_continue=None):
-        return request.GET.get('next')
+from tshilo_dikotla.admin_mixins import ModelAdminMixin
 
 
-class AppointmentAdmin(MembershipBaseModelAdmin):
+@admin.register(Appointment)
+class AppointmentAdmin(ModelAdminMixin):
 
     fields = (
         'appt_datetime',
@@ -33,6 +22,3 @@ class AppointmentAdmin(MembershipBaseModelAdmin):
         'appt_status': admin.VERTICAL}
 
     form = AppointmentForm
-
-admin.site.register(Appointment, AppointmentAdmin)
-

@@ -1,13 +1,18 @@
-from django.urls import reverse
+from django.db import models
 
 from edc_appointment.model_mixins import AppointmentModelMixin
 from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_base.model.models import HistoricalRecords
 
-from .appointment_manager import AppointmentManager
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from td_registration.models import RegisteredSubject
+
+
+class AppointmentManager(models.Manager):
+
+    def get_by_natural_key(self, subject_identifer, visit_code):
+        return self.get(subject_identifer=subject_identifer, visit_code=visit_code)
 
 
 class Appointment(AppointmentModelMixin, RequiresConsentMixin, BaseUuidModel):
