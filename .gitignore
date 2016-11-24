@@ -1,3 +1,10 @@
+td_infant/migrations/*
+td_maternal/migrations/*
+td_lab/migrations/*
+td_call_manager/migrations/*
+td_list/migrations/*
+td_registration/migrations/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

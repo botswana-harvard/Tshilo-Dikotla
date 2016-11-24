@@ -88,7 +88,7 @@ INSTALLED_APPS = [
     'tshilo_dikotla.apps.EdcConsentAppConfig',
     'tshilo_dikotla.apps.EdcDeviceAppConfig',
     'tshilo_dikotla.apps.EdcIdentifierAppConfig',
-    'tshilo_dikotla.apps.EdcLabAppConfig',
+    # 'tshilo_dikotla.apps.EdcLabAppConfig',
     'tshilo_dikotla.apps.EdcLabelAppConfig',
     'tshilo_dikotla.apps.EdcMetadataAppConfig',
     'tshilo_dikotla.apps.EdcProtocolAppConfig',

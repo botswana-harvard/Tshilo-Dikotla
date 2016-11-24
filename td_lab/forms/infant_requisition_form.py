@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
-from edc_constants.constants import YES, NO
+from edc_constants.constants import YES
 from edc_lab.forms_mixins import RequisitionFormMixin
 
 from tshilo_dikotla.choices import STUDY_SITES

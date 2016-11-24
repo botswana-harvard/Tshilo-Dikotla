@@ -142,4 +142,3 @@ class EdcLabAppConfig(EdcLabAppConfig):
 
 class EdcCallManagerAppConfig(EdcCallManagerAppConfigParent):
     app_label = 'td_call_manager'
-
