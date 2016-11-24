@@ -26,6 +26,7 @@ class Aliquot(AliquotModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 # 
     aliquot_condition = models.CharField(
         verbose_name="Aliquot Condition",
+        max_length=50,
         null=True,
         blank=True)
 
