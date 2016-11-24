@@ -1301,7 +1301,7 @@ class SolidFoodAssessementForm(forms.ModelForm):
         cleaned_data = self.cleaned_data
         many2many_qs = cleaned_data.get('solid_foods').values_list('short_name', flat=True)
         many2many_list = list(many2many_qs.all())
-        if 'Other' in many2many_list:
+        if OTHER in many2many_list:
             raise forms.ValidationError('You selected Other foods, Please specify')
 
     class Meta:
