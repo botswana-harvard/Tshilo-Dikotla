@@ -7,6 +7,7 @@ from edc_constants.constants import NO, YES, POS, NEG
 from edc_protocol.validators import date_not_before_study_start
 
 from .enrollment_helper import EnrollmentHelper
+from ..managers import AntenatalEnrollmentManager
 
 
 class AntenatalEnrollmentMixin(models.Model):
@@ -124,6 +125,8 @@ class AntenatalEnrollmentMixin(models.Model):
         max_length=350,
         null=True,
         editable=False)
+
+    objects = AntenatalEnrollmentManager()
 
     def save(self, *args, **kwargs):
         enrollment_helper = EnrollmentHelper(instance_antenatal=self)

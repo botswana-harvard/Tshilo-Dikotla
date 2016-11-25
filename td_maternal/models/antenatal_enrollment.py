@@ -32,7 +32,7 @@ class AntenatalEnrollment(AntenatalEnrollmentMixin, EnrollmentModelMixin, Offstu
         max_length=3)
 
     last_period_date = models.DateField(
-        verbose_name="What is the approximate date of the first day of the mother’s last menstrual period",
+        verbose_name="What is the approximate date of the first day of the mother's last menstrual period",
         validators=[
             date_not_before_study_start,
             date_not_future, ],
@@ -59,8 +59,6 @@ class AntenatalEnrollment(AntenatalEnrollmentMixin, EnrollmentModelMixin, Offstu
         null=True,
         blank=True,
         help_text="")
-
-    objects = Manager()
 
     history = HistoricalRecords()
 

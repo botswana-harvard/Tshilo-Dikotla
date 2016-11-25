@@ -9,7 +9,6 @@ from django_crypto_fields.fields import EncryptedCharField
 
 from td_maternal.classes import Randomization
 
-from ..managers import MaternalRandoManager
 from ..maternal_choices import DELIVERY_HEALTH_FACILITY
 
 from .maternal_crf_model import MaternalCrfModel
@@ -89,9 +88,6 @@ class MaternalRando (MaternalCrfModel):
         verbose_name="if other delivery clinic, specify...",
         blank=True,
         null=True, )
-
-    #objects = MaternalRandoManager() >>
-#     history = AuditTrail()
 
     def __str__(self):
         return '{}'.format(self.sid, self.subject_identifier)

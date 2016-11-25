@@ -9,12 +9,6 @@ from edc_protocol.validators import datetime_not_before_study_start
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 
 
-class Manager(models.Manager):
-
-    def get_by_natural_key(self, subject_identifier):
-        return self.get(subject_identifier=subject_identifier)
-
-
 class AntenatalEnrollmentTwo(EnrollmentModelMixin, RequiresConsentMixin, CreateAppointmentsMixin,
                              UrlMixin, BaseUuidModel):
 
@@ -32,8 +26,6 @@ class AntenatalEnrollmentTwo(EnrollmentModelMixin, RequiresConsentMixin, CreateA
         choices=YES_NO,
         help_text='',
         max_length=3)
-
-    objects = Manager()
 
     history = HistoricalRecords()
 

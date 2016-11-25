@@ -1,8 +1,8 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
-# from ..managers import MaternalClinicalMeasurementsManager
 from .maternal_crf_model import MaternalCrfModel
+from ..managers import MaternalClinicalMeasurementsManager
 
 
 class BaseMaternalClinicalMeasurements(MaternalCrfModel):
@@ -27,7 +27,7 @@ class BaseMaternalClinicalMeasurements(MaternalCrfModel):
         validators=[MinValueValidator(35), MaxValueValidator(130), ],
         help_text="in hg e.g. 80, should be between 35 and 130.")
 
-#     objects = MaternalClinicalMeasurementsManager()
+    objects = MaternalClinicalMeasurementsManager()
 
     def natural_key(self):
         return self.registered_subject.natural_key()

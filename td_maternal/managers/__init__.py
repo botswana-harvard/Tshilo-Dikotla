@@ -1,16 +1,6 @@
-from .antenatal_enrollment_manager import AntenatalEnrollmentManager
-from .maternal_arv_history_manager import MaternalLifetimeArvHistoryManager
-from .maternal_arv_manager import MaternalArvManager
-from .maternal_arv_post_mod_manager import MaternalArvPostModManager
-from .maternal_arv_preg_manager import MaternalArvPregManager
-from .maternal_azt_nvp_manager import MaternalAztNvpManager
-from .maternal_clinical_measurements_manager import MaternalClinicalMeasurementsManager
-from .maternal_eligibility_loss_manager import MaternalEligibilityLossManager
-from .maternal_eligibility_manager import MaternalEligibilityManager
-from .maternal_lab_del_dxt_manager import MaternalLabDelDxTManager
-from .maternal_lab_del_manager import MaternalLabourDelManager
-from .maternal_randomization_manager import MaternalRandoManager
-from .maternal_visit_manager import MaternalVisitManager
-from .rapid_test_result_manager import RapidTestResultManager
-from .specimen_consent_manager import SpecimenConsentManager
-from .visit_crf_model_manager import VisitCrfModelManager
+from .managers import (
+    AntenatalEnrollmentManager, MaternalLifetimeArvHistoryManager, MaternalArvManager, MaternalArvPostModManager,
+    MaternalArvPregManager, MaternalAztNvpManager, MaternalClinicalMeasurementsManager, MaternalConsentManager,
+    MaternalEligibilityLossManager, MaternalEligibilityManager, MaternalLabourDelManager,
+    MaternalRandoManager, MaternalVisitManager, RapidTestResultManager, SpecimenConsentManager,
+    VisitCrfModelManager, MaternalLabDelDxTManager)

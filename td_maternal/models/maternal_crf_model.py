@@ -7,7 +7,7 @@ from edc_offstudy.model_mixins import OffstudyMixin
 from edc_visit_tracking.model_mixins import CrfModelMixin
 from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
 
-# from ..managers import VisitCrfModelManager
+from ..managers import VisitCrfModelManager
 
 from .maternal_visit import MaternalVisit
 
@@ -19,11 +19,7 @@ class MaternalCrfModel(CrfModelMixin, ExportTrackingFieldsMixin, OffstudyMixin,
 
     maternal_visit = models.OneToOneField(MaternalVisit)
 
-    def is_off_study_on_previous_visit_or_raise(self):
-        pass
-
-    def is_off_study_or_raise(self):
-        pass
+    objects = VisitCrfModelManager()
 
     def __str__(self):
         return "{}: {}".format(self.__class__._meta.model_name,

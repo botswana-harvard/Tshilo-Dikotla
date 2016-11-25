@@ -8,6 +8,8 @@ class InfantDeathReport (DeathReportModelMixin, SubjectIdentifierModelMixin,
                          InfantDrugRelationshipMixin, BaseUuidModel):
 
     """ A model completed by the user after an infant's death. """
+    def natural_key(self):
+        return (self.subject_identifier, )
 
     class Meta:
         app_label = 'td_infant'

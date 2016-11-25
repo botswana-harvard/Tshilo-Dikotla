@@ -1,12 +1,9 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator
 from django.db import models
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
-from edc_constants.choices import YES_NO, YES_NO_NA
+from edc_constants.choices import YES_NO
 
-from tshilo_dikotla.choices import HOSPITALIZATION_REASON
 from td_list.models import MaternalHospitalization
-from tshilo_dikotla.choices import LAUGH, ENJOYMENT, BLAME, UNHAPPY, ANXIOUS, SAD, PANICK, TOP, CRYING, HARM
 
 from .maternal_crf_model import MaternalCrfModel
 from .diagnoses_mixin import DiagnosesMixin

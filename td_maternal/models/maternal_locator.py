@@ -1,26 +1,14 @@
 from django.db import models
 
-from td_registration.models import RegisteredSubject
-# from edc_base.audit_trail import AuditTrail
+
 from django_crypto_fields.fields import EncryptedCharField
 from edc_base.model.fields import OtherCharField
 from edc_base.model.validators import CellNumber, TelephoneNumber
 from edc_constants.choices import YES_NO
 from edc_locator.model_mixins import LocatorModelMixin
 from td_appointment.models import Appointment
-# from edc_meta_data.managers import CrfMetaDataManager
 
-# from .maternal_visit import MaternalVisit
 from .maternal_crf_model import MaternalCrfModel
-
-# TODO: check why maternal locator is creating metadata from here.
-# class LocalCrfMetaDataManager(CrfMetaDataManager):
-# 
-#     def create_meta_data(self):
-#         if self.visit_instance.appointment.visit_definition.code == '1000M':
-#             super(LocalCrfMetaDataManager, self).create_meta_data()
-#         else:
-#             pass
 
 
 class MaternalLocator(LocatorModelMixin, MaternalCrfModel):

@@ -1,6 +1,5 @@
 from django.db import models
 
-# from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import YES_NO
 from edc_base.model.fields.custom_fields import OtherCharField
 
@@ -29,14 +28,6 @@ class MaternalInterimIdcc(MaternalCrfModel):
         verbose_name="Date of recent CD4",
         blank=True,
         null=True)
-
-#     recent_vl = models.DecimalField(
-#         max_digits=10,
-#         decimal_places=2,
-#         blank=True,
-#         null=True,
-#         verbose_name="Most recent VL available",
-#         help_text="",)
 
     value_vl_size = models.CharField(
         max_length=25,

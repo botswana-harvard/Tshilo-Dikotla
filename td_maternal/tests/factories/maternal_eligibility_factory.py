@@ -2,7 +2,7 @@ import factory
 
 from django.utils import timezone
 
-from edc_constants.constants import YES, NO
+from edc_constants.constants import YES
 
 from td_maternal.models import MaternalEligibility
 
