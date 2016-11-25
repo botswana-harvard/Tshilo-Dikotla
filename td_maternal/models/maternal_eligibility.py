@@ -6,7 +6,6 @@ from django.apps import apps
 
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_future
-from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
 from edc_base.model.models import HistoricalRecords
@@ -19,7 +18,11 @@ from ..managers import MaternalEligibilityManager
 from edc_base.model.models.url_mixin import UrlMixin
 
 
-class MaternalEligibility (ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
+def getuuid():
+    return str(uuid4())
+
+
+class MaternalEligibility (UrlMixin, BaseUuidModel):
     """ A model completed by the user to test and capture the result of the pre-consent eligibility checks.
 
     This model has no PII."""
@@ -28,6 +31,7 @@ class MaternalEligibility (ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
         verbose_name="Eligibility Identifier",
         max_length=36,
         unique=True,
+        default=getuuid,
         editable=False)
 
     report_datetime = models.DateTimeField(
@@ -68,7 +72,6 @@ class MaternalEligibility (ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
     history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
-        self.set_uuid_for_eligibility_if_none()
         self.is_eligible, error_message = self.check_eligibility()
         self.ineligibility = error_message  # error_message not None if is_eligible is False
         super(MaternalEligibility, self).save(*args, **kwargs)
@@ -114,16 +117,6 @@ class MaternalEligibility (ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
         MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
         return MaternalConsent.objects.filter(
             subject_identifier=self.registered_subject.subject_identifier).order_by('version')
-
-    @property
-    def current_consent_version(self):
-        # MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
-        # return site_consents.get_by_datetime(MaternalConsent, timezone.now()).version
-        return 1
-
-    def set_uuid_for_eligibility_if_none(self):
-        if not self.eligibility_id:
-            self.eligibility_id = str(uuid4())
 
     class Meta:
         app_label = 'td_maternal'

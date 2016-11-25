@@ -1,25 +1,26 @@
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 
-from td_appointment.models import Appointment
+from dateutil.relativedelta import relativedelta
+from django.test import TestCase
+from django.utils import timezone
+
 from edc_constants.constants import (
     POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN, FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY)
 from edc_visit_tracking.constants import SCHEDULED
 
+from td_appointment.models import Appointment
+
 from .factories import (
     AntenatalEnrollmentFactory, MaternalEligibilityFactory, MaternalConsentFactory, MaternalVisitFactory)
 
-
 from ..models import MaternalVisit, EnrollmentHelper, MaternalOffStudy
 
-from .base_test_case import BaseTestCase
 
-
-class TestAntenatalEnrollment(BaseTestCase):
+class TestAntenatalEnrollment(TestCase):
     """Test eligibility of a mother for antenatal enrollment."""
 
     def setUp(self):
-        super(TestAntenatalEnrollment, self).setUp()
+        self.study_site = '40'
         self.maternal_eligibility = MaternalEligibilityFactory()
         self.maternal_consent = MaternalConsentFactory(maternal_eligibility=self.maternal_eligibility)
         self.subject_identifier = self.maternal_consent.subject_identifier
@@ -233,7 +234,7 @@ class TestAntenatalEnrollment(BaseTestCase):
         """Test for a mother who tested POS BEFORE 32weeks, with documentation then rapid test not enforced"""
 
         options = {'subject_identifier': self.subject_identifier,
-                   'report_datetime': now(),
+                   'report_datetime': timezone.now(),
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
@@ -422,7 +423,7 @@ class TestAntenatalEnrollment(BaseTestCase):
         self.assertIsNone(antenatal_enrollment.date_at_32wks)
         self.scheduled_visit_on_eligible_or_pending(self.registered_subject.subject_identifier)
 
-    def off_study_visit_on_ineligible(self, subject_identifier):
+    def test_off_study_visit_on_ineligible(self, subject_identifier):
         self.appointment = Appointment.objects.get(
             subject_identifier=subject_identifier, visit_code='1000M')
         MaternalVisitFactory(appointment=self.appointment, reason='failed eligibility', study_status=OFF_STUDY)
@@ -432,7 +433,7 @@ class TestAntenatalEnrollment(BaseTestCase):
             study_status=OFF_STUDY,
             appointment__subject_identifier=subject_identifier).count(), 1)
 
-    def scheduled_visit_on_eligible_or_pending(self, subject_identifier):
+    def test_scheduled_visit_on_eligible_or_pending(self, subject_identifier):
         self.appointment = Appointment.objects.get(
             subject_identifier=subject_identifier, visit_code='1000M')
         MaternalVisitFactory(appointment=self.appointment, reason='scheduled', study_status=ON_STUDY)
@@ -442,4 +443,3 @@ class TestAntenatalEnrollment(BaseTestCase):
             reason=SCHEDULED,
             study_status=ON_STUDY,
             appointment__subject_identifier=subject_identifier).count(), 1)
-

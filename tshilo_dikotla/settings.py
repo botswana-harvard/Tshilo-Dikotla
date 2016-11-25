@@ -14,8 +14,6 @@ import sys
 import os
 import socket
 
-from unipath import Path
-
 from .databases import (
     PRODUCTION_POSTGRES, TEST_HOSTS_POSTGRES, TRAVIS_POSTGRES, PRODUCTION_SECRET_KEY)
 
@@ -98,34 +96,32 @@ INSTALLED_APPS = [
 ]
 
 if 'test' in sys.argv:
-    # TODO: Make this list auto generate from INSTALLED_APPS
-    # Ignore running migrations on unit tests, greately speeds up tests.
-    MIGRATION_MODULES = {"td_lab": None,
-                         "td_infant": None,
-                         "td_maternal": None,
-                         "td_registration": None,
-                         "td_appointment": None,
-                         "edc_registration": None,
-                         "edc_content_type_map": None,
-                         "edc_appointment": None,
-                         "edc_call_manager": None,
-                         "edc_death_report": None,
-                         "edc_identifier": None,
-                         "edc_meta_data": None,
-                         "edc_consent": None,
-                         "edc_rule_groups": None,
-                         "edc_data_manager": None,
-                         "lab_clinic_api": None,
-                         'django_crypto_fields': None,
-                         "lab_clinic_reference": None,
-                         "edc_death_report": None,
-                         "edc_sync": None,
-                         "edc_code_lists": None,
-                         "edc_configuration": None,
-                         "td_list": None,
-                         "edc_visit_schedule": None,
-                         "edc_visit_tracking": None,
-                         "edc_offstudy": None}
+    MIGRATION_MODULES = {
+        "edc_appointment": None,
+        "edc_call_manager": None,
+        "edc_code_lists": None,
+        "edc_configuration": None,
+        "edc_consent": None,
+        "edc_content_type_map": None,
+        "edc_death_report": None,
+        "edc_death_report": None,
+        "edc_export": None,
+        "edc_identifier": None,
+        "edc_meta_data": None,
+        "edc_offstudy": None,
+        "edc_registration": None,
+        "edc_rule_groups": None,
+        "edc_sync": None,
+        "edc_visit_schedule": None,
+        "edc_visit_tracking": None,
+        "td_appointment": None,
+        "td_infant": None,
+        "td_lab": None,
+        "td_list": None,
+        "td_maternal": None,
+        "td_registration": None,
+        "tshilo_dikotla": None,
+        'django_crypto_fields': None}
 
 SECRET_KEY = 'sdfsd32fs#*@(@dfsdf'
 
