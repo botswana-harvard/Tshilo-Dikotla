@@ -103,4 +103,4 @@ class AntenatalEnrollment(AntenatalEnrollmentMixin, EnrollmentModelMixin, Offstu
         verbose_name = 'Antenatal Enrollment'
         verbose_name_plural = 'Antenatal Enrollment'
         consent_model = 'td_maternal.maternalconsent'
-        visit_schedule_name = 'maternal_visit_schedule'
+        visit_schedule_name = 'maternal_visit_schedule.maternal_enrollment_step1'
