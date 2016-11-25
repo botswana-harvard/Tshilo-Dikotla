@@ -11,10 +11,10 @@ from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_identifier.subject.classes import SubjectIdentifier
 
 from ..maternal_choices import RECRUIT_SOURCE, RECRUIT_CLINIC
+from ..managers import MaternalConsentManager
 
 from .maternal_eligibility import MaternalEligibility
 from edc_base.model.models.historical_records import HistoricalRecords
-from edc_consent.managers import ConsentManager
 
 
 class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin, PersonalFieldsMixin,
@@ -47,9 +47,12 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
         blank=True,
         null=True)
 
-    objects = ConsentManager()
+    objects = MaternalConsentManager()
 
     history = HistoricalRecords()
+
+    def natural_key(self):
+        return (self.subject_identifier, self.identity, self.version,)
 
     def __str__(self):
         return '{0} {1} {2} ({3})'.format(self.subject_identifier, self.first_name,
