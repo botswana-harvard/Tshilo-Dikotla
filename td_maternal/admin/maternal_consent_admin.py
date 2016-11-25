@@ -108,7 +108,7 @@ class MaternalConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admi
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "maternal_eligibility":
             kwargs["queryset"] = MaternalEligibility.objects.filter(
-                registered_subject__id__exact=request.GET.get('registered_subject'))
+                registered_subject__id__exact=request.GET.get('pk'))
         else:
                 self.readonly_fields = list(self.readonly_fields)
                 try:

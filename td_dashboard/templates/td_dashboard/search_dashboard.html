@@ -34,12 +34,12 @@
 		                		<li><a role="button" title="Go to maternal dashboard" class="btn btn-sm btn-primary" href="{% url 'subject_dashboard_url' consent.subject_identifier %}">{{ consent.subject_identifier }} (V{{consent.version}}</a></li>
 		                	{% endfor %}
 		                	{% if not maternal_eligibility.have_latest_consent %}
-		                		<a title="re-consent" role="button" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next={% url 'search_url' %}">re-consent (V{{maternal_eligibility.current_consent_version}})</a></li>
+		                		<a title="re-consent" role="button" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?pk={{maternal_eligibility.pk}}&next={% url 'search_url' %}">re-consent (V{{maternal_eligibility.current_consent_version}})</a></li>
 		                	{% endif %}
 		                </ul>
 		               {% elif maternal_eligibility.is_eligible %}
 		               <ul>
-                            <li><A role="button" title="Add Maternal Consent" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=search_url">Add Consent (V{{maternal_eligibility.current_consent_version}})</A></li>
+                            <li><A role="button" title="Add Maternal Consent" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?pk={{maternal_eligibility.pk}}&next=search_url">Add Consent (V{{maternal_eligibility.current_consent_version}})</A></li>
                         </ul>
 	                	{% else %}
 	                		 {% if maternal_eligibility.ineligibility %}
