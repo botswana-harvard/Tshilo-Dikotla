@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
 from td_appointment.models import Appointment
@@ -31,7 +31,7 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=14)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=14)).date()}
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
@@ -42,10 +42,11 @@ class TestAntenatalEnrollment(BaseTestCase):
         will go on a valid regimen but weeks of gestation above 36."""
 
         options = {'subject_identifier': self.subject_identifier,
+                   'report_timezone': timezone.now(),
                    'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=37)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=37)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -61,7 +62,7 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'evidence_hiv_status': YES,
                    'will_get_arvs': NO,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -77,7 +78,7 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'evidence_hiv_status': YES,
                    'will_get_arvs': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -94,7 +95,7 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'will_get_arvs': YES,
                    'is_diabetic': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -111,7 +112,7 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'will_get_arvs': YES,
                    'is_diabetic': NO,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -128,7 +129,7 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'is_diabetic': NO,
                    'will_breastfeed': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -146,7 +147,7 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'is_diabetic': NO,
                    'will_breastfeed': NO,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -164,7 +165,7 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'is_diabetic': NO,
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -182,7 +183,7 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'is_diabetic': NO,
                    'will_remain_onstudy': NO,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -196,13 +197,13 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (datetime.now() + relativedelta(weeks=5)).date(),
+                   'week32_test_date': (timezone.now() + relativedelta(weeks=5)).date(),
                    'week32_result': POS,
                    'evidence_32wk_hiv_status': YES,
                    'will_get_arvs': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'rapid_test_date': None,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -216,13 +217,13 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (datetime.now() - relativedelta(weeks=1)).date(),
+                   'week32_test_date': (timezone.now() - relativedelta(weeks=1)).date(),
                    'week32_result': POS,
                    'evidence_32wk_hiv_status': NO,
                    'will_get_arvs': YES,
                    'rapid_test_done': YES,
                    'rapid_test_result': POS,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -233,17 +234,17 @@ class TestAntenatalEnrollment(BaseTestCase):
         """Test for a mother who tested POS BEFORE 32weeks, with documentation then rapid test not enforced"""
 
         options = {'subject_identifier': self.subject_identifier,
-                   'report_datetime': now(),
+                   'report_timezone': timezone.now(),
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (datetime.now() - relativedelta(weeks=4)).date(),
+                   'week32_test_date': (timezone.now() - relativedelta(weeks=4)).date(),
                    'week32_result': POS,
                    'evidence_32wk_hiv_status': YES,
                    'will_get_arvs': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'rapid_test_date': None,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
@@ -258,13 +259,13 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (datetime.now() - relativedelta(weeks=4)).date(),
+                   'week32_test_date': (timezone.now() - relativedelta(weeks=4)).date(),
                    'week32_result': NEG,
                    'evidence_32wk_hiv_status': YES,
                    'will_get_arvs': NOT_APPLICABLE,
                    'rapid_test_done': YES,
                    'rapid_test_result': NEG,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
@@ -278,14 +279,14 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (datetime.now() + relativedelta(weeks=5)).date(),
+                   'week32_test_date': (timezone.now() + relativedelta(weeks=5)).date(),
                    'week32_result': NEG,
                    'evidence_32wk_hiv_status': YES,
                    'will_get_arvs': NOT_APPLICABLE,
                    'rapid_test_done': NOT_APPLICABLE,
                    'rapid_test_result': None,
                    'rapid_test_date': None,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
@@ -299,14 +300,14 @@ class TestAntenatalEnrollment(BaseTestCase):
 #                    'current_hiv_status': UNKNOWN,
 #                    'evidence_hiv_status': None,
 #                    'week32_test': YES,
-#                    'week32_test_date': (datetime.now() + relativedelta(weeks=5)).date(),
+#                    'week32_test_date': (timezone.now() + relativedelta(weeks=5)).date(),
 #                    'week32_result': NEG,
 #                    'evidence_32wk_hiv_status': YES,
 #                    'will_get_arvs': NOT_APPLICABLE,
 #                    'rapid_test_done': NOT_APPLICABLE,
 #                    'rapid_test_result': None,
 #                    'rapid_test_date': None,
-#                    'last_period_date': (datetime.now() - relativedelta(weeks=34)).date()}
+#                    'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 # 
 #         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
 #         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
@@ -322,14 +323,14 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (datetime.now() + relativedelta(weeks=5)).date(),
+                   'week32_test_date': (timezone.now() + relativedelta(weeks=5)).date(),
                    'week32_result': NEG,
                    'evidence_32wk_hiv_status': YES,
                    'will_get_arvs': NOT_APPLICABLE,
                    'rapid_test_done': NOT_APPLICABLE,
                    'rapid_test_result': None,
                    'rapid_test_date': None,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
@@ -342,12 +343,12 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (datetime.now() - relativedelta(weeks=1)).date(),
+                   'week32_test_date': (timezone.now() - relativedelta(weeks=1)).date(),
                    'week32_result': NEG,
                    'evidence_32wk_hiv_status': NO,
                    'will_get_arvs': NOT_APPLICABLE,
                    'rapid_test_done': YES,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
@@ -362,13 +363,13 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'evidence_hiv_status': None,
                    'week32_test': NO,
                    'rapid_test_done': YES,
-                   'rapid_test_date': datetime.now().date(),
+                   'rapid_test_date': timezone.now().date(),
                    'rapid_test_result': NEG,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=35)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=35)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(antenatal_enrollment.is_eligible)
-        self.scheduled_visit_on_eligible_or_pending(self.registered_subject.subject_identifier)
+        self.scheduled_visit_on_eligible_or_pending(self.subject_identifier)
 
     def test_no_week32test_rapid_test_ineligible(self):
         """Test for a mother who is at 35weeks gestational age,
@@ -379,9 +380,9 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'evidence_hiv_status': None,
                    'week32_test': NO,
                    'rapid_test_done': YES,
-                   'rapid_test_date': datetime.now().date(),
+                   'rapid_test_date': timezone.now().date(),
                    'rapid_test_result': POS,
-                   'last_period_date': (datetime.now() - relativedelta(weeks=35)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=35)).date()}
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -396,12 +397,12 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'evidence_hiv_status': None,
                    'week32_test': NO,
                    'rapid_test_done': YES,
-                   'rapid_test_date': datetime.now().date(),
+                   'rapid_test_date': timezone.now().date(),
                    'rapid_test_result': POS}
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertTrue(antenatal_enrollment.pending_ultrasound)
-        self.scheduled_visit_on_eligible_or_pending(self.registered_subject.subject_identifier)
+        self.scheduled_visit_on_eligible_or_pending(self.subject_identifier)
 
     def test_no_calculations_if_no_lmp(self):
         """Test if no lmp then ga_by_lmp and edd_by_lmp are not calculated."""
@@ -412,7 +413,7 @@ class TestAntenatalEnrollment(BaseTestCase):
                    'evidence_hiv_status': None,
                    'week32_test': NO,
                    'rapid_test_done': YES,
-                   'rapid_test_date': datetime.now().date(),
+                   'rapid_test_date': timezone.now().date(),
                    'rapid_test_result': POS}
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(antenatal_enrollment.pending_ultrasound)
@@ -420,7 +421,7 @@ class TestAntenatalEnrollment(BaseTestCase):
         self.assertIsNone(antenatal_enrollment.ga_lmp_enrollment_wks)
         self.assertIsNone(antenatal_enrollment.edd_by_lmp)
         self.assertIsNone(antenatal_enrollment.date_at_32wks)
-        self.scheduled_visit_on_eligible_or_pending(self.registered_subject.subject_identifier)
+        self.scheduled_visit_on_eligible_or_pending(self.subject_identifier)
 
     def off_study_visit_on_ineligible(self, subject_identifier):
         self.appointment = Appointment.objects.get(
@@ -442,4 +443,3 @@ class TestAntenatalEnrollment(BaseTestCase):
             reason=SCHEDULED,
             study_status=ON_STUDY,
             appointment__subject_identifier=subject_identifier).count(), 1)
-

@@ -9,9 +9,9 @@ from td_maternal.models.maternal_off_study import MaternalOffStudy
 
 @register(AntenatalEnrollment, MaternalOffStudy)
 class MaternalModelCaller(ModelCaller):
-    call_model = (Call, 'registered_subject')
+    call_model = (Call, 'subject_identifier')
     label = 'subjects'
-    locator_model = (MaternalLocator, 'registered_subject__subject_identifier')
+    locator_model = (MaternalLocator, 'subject_identifier')
     consent_model = (MaternalConsent, 'subject_identifier')
     subject_model = RegisteredSubject
     log_entry_model = LogEntry
