@@ -16,9 +16,9 @@ class AntenatalEnrollmentFactory(factory.DjangoModelFactory):
 
     report_datetime = timezone.datetime.now()
 
-    registered_subject = factory.SubFactory(RegisteredSubjectFactory)
+    subject_identifier = None
     knows_lmp = YES,
-    last_period_date = timezone.datetime.date(datetime.today())
+    last_period_date = timezone.now().date()
     is_diabetic = NO
     week32_test = NO
     will_breastfeed = YES
@@ -30,5 +30,3 @@ class AntenatalEnrollmentFactory(factory.DjangoModelFactory):
     rapid_test_result = NEG
     rapid_test_date = timezone.datetime.now().date()
     will_get_arvs = NOT_APPLICABLE
-#     valid_regimen_duration = NOT_APPLICABLE
-#     consent_model = None

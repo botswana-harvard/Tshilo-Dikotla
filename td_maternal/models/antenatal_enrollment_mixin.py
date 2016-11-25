@@ -162,7 +162,7 @@ class AntenatalEnrollmentMixin(models.Model):
         MaternalUltraSoundInitial = apps.get_model('td_maternal', 'MaternalUltraSoundInitial')
         try:
             return MaternalUltraSoundInitial.objects.get(
-                maternal_visit__appointment__subject_identifier=self.registered_subject)
+                maternal_visit__appointment__subject_identifier=self.subject_identifier)
         except MaternalUltraSoundInitial.DoesNotExist:
             return None
 
@@ -171,7 +171,7 @@ class AntenatalEnrollmentMixin(models.Model):
         MaternalLabourDel = apps.get_model('td_maternal', 'MaternalLabourDel')
         try:
             return MaternalLabourDel.objects.get(
-                registered_subject=self.registered_subject)
+                registered_subject__subject_identifier=self.subject_identifier)
         except MaternalLabourDel.DoesNotExist:
             return None
 
