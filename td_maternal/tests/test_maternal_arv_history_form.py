@@ -3,11 +3,9 @@ from datetime import datetime, date
 from django.utils import timezone
 
 from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO, CONTINUOUS, STOPPED, RESTARTED)
-from edc_visit_tracking.constants import SCHEDULED
 
 from td_appointment.models import Appointment
 from td_list.models import PriorArv
-from td_maternal.models import MaternalVisit, RegisteredSubject
 from td_maternal.forms import MaternalLifetimeArvHistoryForm
 
 from .base_test_case import BaseTestCase
@@ -20,24 +18,22 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
     def setUp(self):
         super(TestMaternalLifetimeArvHistoryForm, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility)
-        self.registered_subject = self.maternal_eligibility.registered_subject
+        self.maternal_consent = MaternalConsentFactory(maternal_eligibility=self.maternal_eligibility)
+        self.subject_identifier = self.maternal_consent.subject_identifier
 
-        self.assertEqual(RegisteredSubject.objects.all().count(), 1)
-        options = {'registered_subject': self.registered_subject,
+        options = {'subject_identifier': self.subject_identifier,
                    'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
                    'will_get_arvs': YES,
                    'is_diabetic': NO,
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
 
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
+            subject_identifier=self.subject_identifier, visit_code='1000M')
         self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(
             maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
