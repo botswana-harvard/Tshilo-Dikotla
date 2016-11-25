@@ -35,7 +35,7 @@ class MaternalStatusHelper(object):
                 pass
         # If we have exhausted all visits without a concrete status then use enrollment status.
         antenatal_enrollment = AntenatalEnrollment.objects.get(
-            registered_subject__subject_identifier=self.maternal_visit.appointment.subject_identifier)
+            subject_identifier=self.maternal_visit.appointment.subject_identifier)
         status = self._evaluate_status_from_rapid_tests(
             visit, (antenatal_enrollment, 'enrollment_hiv_status', 'rapid_test_date'))
         if status == UNK:
