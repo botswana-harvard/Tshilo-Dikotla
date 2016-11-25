@@ -122,6 +122,7 @@ def maternal_consent_on_post_save(sender, instance, raw, **kwargs):
 @receiver(post_save, weak=False, dispatch_uid="ineligible_take_off_study")
 def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
     """If not is_eligible, creates the 1000M visit and sets to off study."""
+    print(instance)
     if not raw:
         try:
             if not instance.is_eligible and not instance.pending_ultrasound:
