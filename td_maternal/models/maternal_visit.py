@@ -13,7 +13,6 @@ from edc_visit_tracking.model_mixins import (VisitModelMixin, CaretakerFieldsMix
 from td_appointment.models import Appointment
 from td_maternal.managers import MaternalVisitManager
 
-from .maternal_off_study import MaternalOffStudy
 from .antenatal_enrollment import AntenatalEnrollment
 
 
@@ -85,3 +84,4 @@ class MaternalVisit(OffstudyMixin, CreatesMetadataModelMixin, RequiresConsentMix
         app_label = 'td_maternal'
         verbose_name = 'Maternal Visit'
         consent_model = 'td_maternal.maternalconsent'
+        visit_schedule_name = 'maternal_visit_schedule.maternal_enrollment_step1'
