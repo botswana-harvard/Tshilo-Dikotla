@@ -1,8 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
-from edc_base.model.models import BaseUuidModel, UrlMixin
-from edc_base.model.models import HistoricalRecords
+from edc_base.model.models import BaseUuidModel, UrlMixin, HistoricalRecords
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.constants import (FAILED_ELIGIBILITY)
 from edc_export.model_mixins import ExportTrackingFieldsMixin
@@ -24,10 +23,6 @@ class MaternalVisit(OffstudyMixin, CreatesMetadataModelMixin, RequiresConsentMix
     """ Maternal visit form that links all antenatal/ postnatal follow-up forms """
 
     appointment = models.OneToOneField(Appointment, on_delete=models.PROTECT)
-
-    offstudy_model = MaternalOffStudy
-
-    death_report_model = ('td_maternal', 'MaternalDeathReport')
 
     history = HistoricalRecords()
 
