@@ -7,9 +7,9 @@ from edc_offstudy.model_mixins import OffstudyMixin
 from edc_visit_tracking.model_mixins import CrfModelMixin
 from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
 
-from ..managers import VisitCrfModelManager
-
 from .maternal_visit import MaternalVisit
+
+from td_maternal.managers import VisitCrfModelManager
 
 
 class MaternalCrfModel(CrfModelMixin, ExportTrackingFieldsMixin, OffstudyMixin,
