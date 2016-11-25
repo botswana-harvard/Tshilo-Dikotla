@@ -34,8 +34,6 @@ sync_models = [
     'td_maternal.maternalarvpostmed',
     'td_maternal.maternalarvpostadh',
     'td_maternal.maternalinterimidcc',
-    'td_maternal.maternallifetimearvhistory',
-    'td_maternal.maternalinterimidcc',
     'td_maternal.maternalclinicalmeasurementstwo']
 
 site_sync_models.register(sync_models, SyncModel)
