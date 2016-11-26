@@ -30,5 +30,5 @@ class TestTd(TestCase):
         antenatal_enrollment = mommy.make_recipe(
             'td_maternal.antenatalenrollment',
             subject_identifier=maternal_consent.subject_identifier)
-        self.assertEqual(Appointment.objects.all().count, 4)
-        self.assertEqual(EdcAppointment.objects.all().count, 4)
+        self.assertEqual(EdcAppointment.objects.all().count(), 1)
+        self.assertEqual(Appointment.objects.all().count(), 4)

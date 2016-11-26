@@ -59,30 +59,16 @@ def maternal_consent_on_post_save(sender, instance, raw, **kwargs):
         instance.registration_update_or_create()
 
 
-@receiver(post_save, weak=False, dispatch_uid="ineligible_take_off_study")
+@receiver(post_save, sender=AntenatalEnrollment, weak=False, dispatch_uid="ineligible_take_off_study")
 def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
-    """If not is_eligible, creates the 1000M visit and sets to off study."""
+    """If not is_eligible, sets to off study."""
     if not raw:
         try:
             if not instance.is_eligible and not instance.pending_ultrasound:
-                report_datetime = instance.report_datetime
-                appointment = Appointment.objects.get(
-                    subject_identifier=instance.subject_identifier,
-                    visit_code='1000M')
-                maternal_visit = MaternalVisit.objects.get(appointment=appointment)
-                if maternal_visit.reason != FAILED_ELIGIBILITY:
-                    maternal_visit.reason = FAILED_ELIGIBILITY
-                    maternal_visit.study_status = OFF_STUDY
-                    maternal_visit.save()
-        except MaternalVisit.DoesNotExist:
-            MaternalVisit.objects.create(
-                appointment=appointment,
-                report_datetime=report_datetime,
-                survival_status=ALIVE,
-                study_status=OFF_STUDY,
-                reason=FAILED_ELIGIBILITY)
-        except AttributeError:
-            pass
+                instance.take_off_study()
+        except AttributeError as e:
+            if 'is_eligible' not in str(e) and 'pending_ultrasound' not in str(e):
+                raise AttributeError(str(e))
 
 
 def put_back_on_study_from_failed_eligibility(instance):

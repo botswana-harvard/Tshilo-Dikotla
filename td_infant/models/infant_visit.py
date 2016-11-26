@@ -9,12 +9,17 @@ from edc_visit_tracking.constants import (
     UNSCHEDULED, SCHEDULED, COMPLETED_PROTOCOL_VISIT, MISSED_VISIT)
 from edc_visit_tracking.model_mixins import CaretakerFieldsMixin, VisitModelMixin
 from edc_offstudy.model_mixins import OffstudyMixin
+from edc_visit_tracking.managers import VisitModelManager
 
 from td.models import Appointment
 
-from ..managers import InfantVisitCrfManager
-
 from .infant_birth import InfantBirth
+
+
+class InfantVisitManager(VisitModelManager, models.Manager):
+
+    def get_by_natural_key(self, subject_identifier, visit_code):
+        return self.get(subject_identifier=subject_identifier, visit_code=visit_code)
 
 
 class InfantVisit(
@@ -25,7 +30,7 @@ class InfantVisit(
 
     appointment = models.OneToOneField(Appointment, on_delete=PROTECT)
 
-    objects = InfantVisitCrfManager()
+    objects = InfantVisitManager()
 
     history = HistoricalRecords()
 

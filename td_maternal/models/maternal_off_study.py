@@ -1,13 +1,12 @@
-from django.db import models
-
-from edc_base.model.models import BaseUuidModel
-from edc_export.model_mixins import ExportTrackingFieldsMixin
+from edc_base.model.models import BaseUuidModel, HistoricalRecords
 from edc_offstudy.model_mixins import OffstudyModelMixin
 
 
-class MaternalOffStudy(OffstudyModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class MaternalOffStudy(OffstudyModelMixin, BaseUuidModel):
 
     """ A model completed by the user on the visit when the mother is taken off-study. """
+
+    history = HistoricalRecords()
 
     class Meta:
         app_label = 'td_maternal'

@@ -69,6 +69,7 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
 
 
 class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
+    app_label = 'td'
     default_appt_type = 'clinic'
     facilities = {
         'clinic': Facility(name='clinic', days=[MO, TU, WE, TH, FR], slots=[10, 10, 10, 10, 10])}
@@ -88,18 +89,6 @@ class EdcTimepointAppConfig(EdcTimepointAppConfigParent):
             status_field='appt_status',
             closed_status='DONE'
         ),
-        Timepoint(
-            model='edc_appointment.appointment',
-            datetime_field='appt_datetime',
-            status_field='appt_status',
-            closed_status='DONE'
-        ),
-        Timepoint(
-            model='edc_appointment.historicalappointment',
-            datetime_field='appt_datetime',
-            status_field='appt_status',
-            closed_status='DONE'
-        )
     ]
 
 
