@@ -25,9 +25,9 @@ class Appointment(AppointmentModelMixin, RequiresConsentMixin, BaseUuidModel):
             return False
         return True
 
-    def consented_for_period_or_raise(self, report_datetime=None, subject_identifier=None, exception_cls=None):
-        if not self.infant_registered_subject:
-            super().consented_for_period_or_raise(report_datetime, subject_identifier, exception_cls)
+#     def consented_for_period_or_raise(self, report_datetime=None, subject_identifier=None, exception_cls=None):
+#         if not self.infant_registered_subject:
+#             super().consented_for_period_or_raise(report_datetime, subject_identifier, exception_cls)
 
     @property
     def appt_title(self):
