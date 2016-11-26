@@ -5,7 +5,7 @@ from django.contrib import admin
 from edc_base.modeladmin_mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import ModelAdminMixin
+from td.admin_mixins import ModelAdminMixin
 
 from ..forms import InfantFuImmunizationsForm, VaccinesReceivedForm, VaccinesMissedForm
 from ..models import InfantFuImmunizations, VaccinesReceived, VaccinesMissed

@@ -1,47 +1,11 @@
 from django.apps import apps as django_apps
-from django.db import models
-from edc_base.model.models import BaseUuidModel, HistoricalRecords
-from edc_registration.model_mixins import RegisteredSubjectModelMixin
-from edc_registration.managers import RegisteredSubjectManager
 
-from edc_appointment.model_mixins import AppointmentModelMixin
-from edc_consent.model_mixins import RequiresConsentMixin
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from edc_appointment.models import Appointment as EdcAppointment
+from edc_registration.models import RegisteredSubject
 
 
-class RegisteredSubject(RegisteredSubjectModelMixin, BaseUuidModel):
-
-    subject_type = models.CharField(
-        max_length=25,
-        blank=True,
-        null=True)
-
-    objects = RegisteredSubjectManager()
-
-    history = HistoricalRecords()
-
-    class Meta:
-        app_label = 'td'
-
-
-class AppointmentManager(models.Manager):
-
-    def get_by_natural_key(self, subject_identifer, visit_code):
-        return self.get(subject_identifer=subject_identifer, visit_code=visit_code)
-
-
-class Appointment(AppointmentModelMixin, RequiresConsentMixin, BaseUuidModel):
-
-    objects = AppointmentManager()
-
-    history = HistoricalRecords()
-
-    @property
-    def str_pk(self):
-        return str(self.pk)
-
-    def natural_key(self):
-        return (self.subject_identifier, self.visit_code)
+class Appointment(EdcAppointment):
 
     @property
     def infant_registered_subject(self):

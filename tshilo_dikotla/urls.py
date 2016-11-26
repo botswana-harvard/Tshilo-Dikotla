@@ -1,20 +1,18 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
-# from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import RedirectView
 
 from edc_base.views import LoginView, LogoutView
 from edc_sync.admin import edc_sync_admin
 
-from .admin_site import tshilo_dikotla_admin
-
-from tshilo_dikotla.views import HomeView, StatisticsView
+from td.admin_site import td_admin
+from td.views import HomeView, StatisticsView
 
 APP_NAME = settings.APP_NAME
 
 urlpatterns = [
-    url(r'^admin/', tshilo_dikotla_admin.urls),
+    url(r'^admin/', td_admin.urls),
     url(r'^admin/', admin.site.urls),
     url(r'login', LoginView.as_view(), name='login_url'),
     url(r'logout', LogoutView.as_view(pattern_name='login_url'), name='logout_url'),
@@ -32,4 +30,3 @@ urlpatterns = [
     url(r'^admin/$', RedirectView.as_view(pattern_name='home_url')),
     url(r'', HomeView.as_view(), name='home_url'),
 ]
-# urlpatterns += staticfiles_urlpatterns()

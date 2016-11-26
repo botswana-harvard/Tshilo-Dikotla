@@ -1,10 +1,10 @@
 from edc_call_manager.model_caller import ModelCaller, WEEKLY
 from edc_call_manager.decorators import register
-from td.models import RegisteredSubject
-from td_call_manager.models import Call, Log, LogEntry
+from edc_call_manager.models import Call, Log, LogEntry
 
-from td_maternal.models import MaternalLocator, MaternalConsent, AntenatalEnrollment
-from td_maternal.models.maternal_off_study import MaternalOffStudy
+from td.models import RegisteredSubject
+
+from .models import MaternalLocator, MaternalConsent, AntenatalEnrollment, MaternalOffStudy
 
 
 @register(AntenatalEnrollment, MaternalOffStudy)

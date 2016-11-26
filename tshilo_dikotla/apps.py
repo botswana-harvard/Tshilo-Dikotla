@@ -9,7 +9,6 @@ from django.conf import settings
 from edc_appointment.apps import AppConfig as EdcAppointmentAppConfigParent
 from edc_appointment.facility import Facility
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
-from edc_call_manager.apps import AppConfig as EdcCallManagerAppConfigParent
 from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
 from edc_consent.consent_config import ConsentConfig
 from edc_constants.constants import FAILED_ELIGIBILITY
@@ -19,7 +18,6 @@ from edc_lab.apps import AppConfig as EdcLabAppConfig
 from edc_label.apps import AppConfig as EdcLabelConfigParent
 from edc_metadata.apps import AppConfig as EdcMetadataAppConfigParent
 from edc_protocol.apps import AppConfig as EdcProtocolAppConfigParent
-from edc_registration.apps import AppConfig as EdcRegistrationAppConfigParent
 from edc_sync.apps import AppConfig as EdcSyncAppConfigParent
 from edc_sync.constants import SERVER
 from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
@@ -38,10 +36,6 @@ class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
     device_id = '99'
     server_id_list = [99]
     middleman_id_list = []
-
-
-class EdcRegistrationAppConfig(EdcRegistrationAppConfigParent):
-    app_label = 'td'
 
 
 class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
@@ -75,8 +69,6 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
 
 
 class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
-    app_label = 'td'
-    model_name = 'appointment'
     default_appt_type = 'clinic'
     facilities = {
         'clinic': Facility(name='clinic', days=[MO, TU, WE, TH, FR], slots=[10, 10, 10, 10, 10])}
@@ -92,6 +84,18 @@ class EdcTimepointAppConfig(EdcTimepointAppConfigParent):
         ),
         Timepoint(
             model='td.historicalappointment',
+            datetime_field='appt_datetime',
+            status_field='appt_status',
+            closed_status='DONE'
+        ),
+        Timepoint(
+            model='edc_appointment.appointment',
+            datetime_field='appt_datetime',
+            status_field='appt_status',
+            closed_status='DONE'
+        ),
+        Timepoint(
+            model='edc_appointment.historicalappointment',
             datetime_field='appt_datetime',
             status_field='appt_status',
             closed_status='DONE'
@@ -132,7 +136,3 @@ class EdcMetadataAppConfig(EdcMetadataAppConfigParent):
 class EdcLabAppConfig(EdcLabAppConfig):
     app_label = 'td_lab'
     requisition = 'td_lab.maternalrequisition'
-
-
-class EdcCallManagerAppConfig(EdcCallManagerAppConfigParent):
-    app_label = 'td_call_manager'

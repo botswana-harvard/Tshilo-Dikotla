@@ -60,15 +60,16 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
+    'edc_call_manager.apps.AppConfig',
     'edc_code_lists',
     'edc_death_report.apps.AppConfig',
     'edc_export.apps.AppConfig',
     'edc_locator.apps.AppConfig',
     'edc_offstudy.apps.AppConfig',
+    'edc_registration.apps.AppConfig',
     'edc_rule_groups.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
     'td.apps.AppConfig',
-    'td_call_manager.apps.AppConfig',
     'td_dashboard.apps.AppConfig',
     'td_infant.apps.AppConfig',
     'td_lab.apps.AppConfig',
@@ -76,7 +77,6 @@ INSTALLED_APPS = [
     'td_maternal.apps.AppConfig',
     'tshilo_dikotla.apps.EdcAppointmentAppConfig',
     'tshilo_dikotla.apps.EdcBaseAppConfig',
-    'tshilo_dikotla.apps.EdcCallManagerAppConfig',
     'tshilo_dikotla.apps.EdcConsentAppConfig',
     'tshilo_dikotla.apps.EdcDeviceAppConfig',
     'tshilo_dikotla.apps.EdcIdentifierAppConfig',
@@ -84,40 +84,12 @@ INSTALLED_APPS = [
     'tshilo_dikotla.apps.EdcLabelAppConfig',
     'tshilo_dikotla.apps.EdcMetadataAppConfig',
     'tshilo_dikotla.apps.EdcProtocolAppConfig',
-    'tshilo_dikotla.apps.EdcRegistrationAppConfig',
     'tshilo_dikotla.apps.EdcSyncAppConfig',
     'tshilo_dikotla.apps.EdcTimepointAppConfig',
     'tshilo_dikotla.apps.EdcVisitTrackingAppConfig',
     'tshilo_dikotla.apps.AppConfig',
 ]
 
-if 'test' in sys.argv:
-    MIGRATION_MODULES = {
-        "edc_appointment": None,
-        "edc_call_manager": None,
-        "edc_code_lists": None,
-        "edc_configuration": None,
-        "edc_consent": None,
-        "edc_content_type_map": None,
-        "edc_death_report": None,
-        "edc_death_report": None,
-        "edc_export": None,
-        "edc_identifier": None,
-        "edc_meta_data": None,
-        "edc_offstudy": None,
-        "edc_registration": None,
-        "edc_rule_groups": None,
-        "edc_sync": None,
-        "edc_visit_schedule": None,
-        "edc_visit_tracking": None,
-        "td": None,
-        "td_infant": None,
-        "td_lab": None,
-        "td_list": None,
-        "td_maternal": None,
-        "td": None,
-        "tshilo_dikotla": None,
-        'django_crypto_fields': None}
 
 SECRET_KEY = 'sdfsd32fs#*@(@dfsdf'
 
@@ -168,6 +140,42 @@ DATABASES = {
         'ATOMIC_REQUESTS': True,
     }
 }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+if 'test' in sys.argv and 'mysql' not in DATABASES.get('default').get('ENGINE'):
+    MIGRATION_MODULES = {
+        "edc_appointment": None,
+        "edc_call_manager": None,
+        "edc_code_lists": None,
+        "edc_configuration": None,
+        "edc_consent": None,
+        "edc_content_type_map": None,
+        "edc_death_report": None,
+        "edc_death_report": None,
+        "edc_export": None,
+        "edc_identifier": None,
+        "edc_meta_data": None,
+        "edc_offstudy": None,
+        "edc_registration": None,
+        "edc_rule_groups": None,
+        "edc_sync": None,
+        "edc_visit_schedule": None,
+        "edc_visit_tracking": None,
+        "td": None,
+        "td_infant": None,
+        "td_lab": None,
+        "td_list": None,
+        "td_maternal": None,
+        "td": None,
+        "tshilo_dikotla": None,
+        'django_crypto_fields': None}
 
 FIELD_MAX_LENGTH = 'default'
 

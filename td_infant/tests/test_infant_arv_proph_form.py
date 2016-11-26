@@ -9,7 +9,7 @@ from td_maternal.tests import BaseTestCase
 from td_maternal.tests.factories import (
     MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory, AntenatalEnrollmentFactory,
     AntenatalEnrollmentTwoFactory, MaternalLabourDelFactory, MaternalVisitFactory)
-from tshilo_dikotla.constants import MODIFIED, NO_MODIFICATIONS, DISCONTINUED, NEVER_STARTED
+from td.constants import MODIFIED, NO_MODIFICATIONS, DISCONTINUED, NEVER_STARTED
 
 from ..forms import InfantArvProphForm, InfantArvProphModForm
 

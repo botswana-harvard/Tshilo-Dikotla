@@ -8,9 +8,11 @@ from edc_visit_tracking.constants import SCHEDULED
 
 from td.models import Appointment
 
+from ..enrollment_helper import EnrollmentHelper
+from ..models import MaternalVisit, MaternalOffStudy
+
 from .factories import (
     AntenatalEnrollmentFactory, MaternalEligibilityFactory, MaternalConsentFactory, MaternalVisitFactory)
-from ..models import MaternalVisit, EnrollmentHelper, MaternalOffStudy
 
 
 class TestAntenatalEnrollment(TestCase):

@@ -4,7 +4,7 @@ from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 from edc_base.model.models import HistoricalRecords
 
-from tshilo_dikotla.choices import FEEDING_CHOICES
+from td.choices import FEEDING_CHOICES
 
 from ..choices import INFANT_VACCINATIONS
 from ..managers import InfantVaccinesManager

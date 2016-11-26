@@ -9,7 +9,7 @@ from edc_constants.choices import CONFIRMED_SUSPECTED
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 from edc_base.model.models import HistoricalRecords
 
-from tshilo_dikotla.choices import (
+from td.choices import (
     CNS_ABNORMALITIES, FACIAL_DEFECT, CLEFT_DISORDER, MOUTH_UP_GASTROINT_DISORDER,
     CARDIOVASCULAR_DISORDER, RESPIRATORY_DEFECT, LOWER_GASTROINTESTINAL_ABNORMALITY,
     FEM_GENITAL_ANOMALY, MALE_GENITAL_ANOMALY, RENAL_ANOMALY, MUSCULOSKELETAL_ABNORMALITY,

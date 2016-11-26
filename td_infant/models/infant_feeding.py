@@ -5,7 +5,7 @@ from edc_base.model.validators import date_not_future
 from edc_constants.choices import YES_NO, YES_NO_NA, YES_NO_UNSURE_NA
 from edc_constants.constants import NOT_APPLICABLE
 
-from tshilo_dikotla.choices import COWS_MILK, TIMES_BREASTFED, WATER_USED
+from td.choices import COWS_MILK, TIMES_BREASTFED, WATER_USED
 
 # from td_infant.infant_visit_schedule import site_visit_schedules
 from .infant_crf_model import InfantCrfModel

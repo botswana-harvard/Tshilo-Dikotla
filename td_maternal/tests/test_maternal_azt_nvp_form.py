@@ -1,4 +1,4 @@
-from tshilo_dikotla.choices import AZT_NVP
+from td.choices import AZT_NVP
 from .base_test_case import BaseTestCase
 
 

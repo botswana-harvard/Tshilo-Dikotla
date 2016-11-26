@@ -1,16 +1,9 @@
 from django.contrib import admin
 
-from edc_registration.admin import RegisteredSubjectModelAdminMixin
-
-from tshilo_dikotla.admin_mixins import ModelAdminMixin
+from td.admin_mixins import ModelAdminMixin
 
 from .forms import AppointmentForm
-from .models import Appointment, RegisteredSubject
-
-
-@admin.register(RegisteredSubject)
-class RegisteredSubjectAdmin(RegisteredSubjectModelAdminMixin, admin.ModelAdmin):
-    pass
+from .models import Appointment
 
 
 @admin.register(Appointment)

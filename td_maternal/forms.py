@@ -17,11 +17,11 @@ from edc_offstudy.modelform_mixins import OffStudyFormMixin
 from edc_visit_tracking.choices import VISIT_REASON
 from edc_visit_tracking.form_mixins import VisitFormMixin
 
-from tshilo_dikotla.choices import STUDY_SITES, OFF_STUDY_REASON, VISIT_INFO_SOURCE, MATERNAL_VISIT_STUDY_STATUS
-from tshilo_dikotla.constants import NO_MODIFICATIONS
+from td.choices import STUDY_SITES, OFF_STUDY_REASON, VISIT_INFO_SOURCE, MATERNAL_VISIT_STUDY_STATUS
+from td.constants import NO_MODIFICATIONS
 
+from .enrollment_helper import EnrollmentHelper
 from .maternal_status_helper import MaternalStatusHelper
-from .models import EnrollmentHelper
 from .models import (
     AntenatalEnrollment, AntenatalEnrollmentTwo, MaternalLifetimeArvHistory, MaternalConsent,
     MaternalObstericalHistory, MaternalArvPost, MaternalArvPostMed, MaternalArvPostAdh,
@@ -122,22 +122,8 @@ class AntenatalEnrollmentForm(ModelFormMixin, forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(AntenatalEnrollmentForm, self).clean()
-#         registered_subject = cleaned_data.get('registered_subject')
-#         if not registered_subject:
-#             raise forms.ValidationError('Expected a registered subject. Got None.')
-#         if not self.instance.id:
-#             registered_subject = cleaned_data.get('registered_subject')
-#             try:
-#                 PostnatalEnrollment.objects.get(registered_subject=registered_subject)
-#                 raise forms.ValidationError(
-#                     "Antenatal enrollment is NOT REQUIRED. Postnatal Enrollment already completed")
-#             except PostnatalEnrollment.DoesNotExist:
-#                 pass
-#         self.fill_postnatal_enrollment_if_recently_delivered()
-#         self.raise_if_rapid_test_required()
         self.validate_last_period_date(cleaned_data.get('report_datetime'), cleaned_data.get('last_period_date'))
-        enrollment_helper = EnrollmentHelper(instance_antenatal=self._meta.model(**cleaned_data),
-                                             exception_cls=forms.ValidationError)
+        enrollment_helper = EnrollmentHelper(self._meta.model(**cleaned_data), exception_cls=forms.ValidationError)
         enrollment_helper.raise_validation_error_for_rapidtest()
 
         return cleaned_data
@@ -320,29 +306,6 @@ class MaternalArvPregForm(ModelFormMixin, forms.ModelForm):
                 cleaned_data.get('interrupt') != NOT_APPLICABLE):
             raise forms.ValidationError('You indicated that ARVs were NOT interrupted during '
                                         'pregnancy. You cannot provide a reason. Please correct.')
-
-#     def validate_arv_exposed(self):
-#         cleaned_data = self.cleaned_data
-#         if cleaned_data.get('took_arv') == NO:
-#             registered_subject = cleaned_data.get('maternal_visit').appointment.registered_subject
-#             try:
-#                 antental = AntenatalEnrollment.objects.get(registered_subject=registered_subject)
-#                 if antental.valid_regimen_duration == YES:
-#                     raise forms.ValidationError(
-#                         "At ANT you indicated that the participant has been on regimen "
-#                         "for period of time. But now you indicated that the participant did not "
-#                         "take ARVs. Please Correct.")
-#             except AntenatalEnrollment.DoesNotExist:
-#                 pass
-#             try:
-#                 postnatal = PostnatalEnrollment.objects.get(registered_subject=registered_subject)
-#                 if postnatal.valid_regimen_duration == YES:
-#                     raise forms.ValidationError(
-#                         "At PNT you indicated that the participant has been on regimen "
-#                         "for period of time. But now you indicated that the participant did not "
-#                         "take ARVs. Please Correct.")
-#             except PostnatalEnrollment.DoesNotExist:
-#                 pass
 
     class Meta:
         model = MaternalArvPreg

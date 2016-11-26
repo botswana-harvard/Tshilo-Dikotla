@@ -9,7 +9,7 @@ from td_maternal.models import CrfMetadata
 
 from td.models import Appointment
 
-from tshilo_dikotla.constants import NO_MODIFICATIONS, DISCONTINUED
+from td.constants import NO_MODIFICATIONS, DISCONTINUED
 from td_maternal.tests import BaseTestCase
 from ..models import InfantArvProph
 

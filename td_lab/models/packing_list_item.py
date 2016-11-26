@@ -7,7 +7,7 @@
 # from edc_registration.models import RegisteredSubject
 # from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 # 
-# from tshilo_dikotla.constants import INFANT
+# from td.constants import INFANT
 # 
 # from .aliquot import Aliquot
 # from .infant_requisition import InfantRequisition

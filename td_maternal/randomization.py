@@ -2,7 +2,7 @@ from django.utils import timezone
 
 from edc_constants.constants import POS
 
-from tshilo_dikotla.constants import RANDOMIZED
+from td.constants import RANDOMIZED
 from td_list.models import RandomizationItem
 from td_maternal.models import MaternalConsent
 

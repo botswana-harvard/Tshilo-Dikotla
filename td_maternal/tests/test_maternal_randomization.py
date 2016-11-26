@@ -8,7 +8,7 @@ from edc_constants.constants import UNKNOWN
 from td.models import Appointment
 from td_list.models import RandomizationItem
 from td.models import RegisteredSubject
-from tshilo_dikotla.constants import RANDOMIZED
+from td.constants import RANDOMIZED
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,

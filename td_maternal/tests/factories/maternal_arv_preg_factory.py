@@ -7,7 +7,7 @@ from .registered_subject_factory import RegisteredSubjectFactory
 from edc_constants.choices import YES, NO, POS, NEG, NOT_APPLICABLE
 
 from td_maternal.models import MaternalArvPreg
-from tshilo_dikotla.constants import LIVE, STILL_BIRTH
+from td.constants import LIVE, STILL_BIRTH
 
 from ..factories import MaternalVisitFactory
 

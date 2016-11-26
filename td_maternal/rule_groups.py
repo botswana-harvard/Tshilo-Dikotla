@@ -7,7 +7,7 @@ from edc_rule_groups.predicate import P
 from edc_rule_groups.requisition_rule import RequisitionRule
 from edc_rule_groups.rule_group import RuleGroup
 
-from tshilo_dikotla.constants import ONE
+from td.constants import ONE
 
 from .lab_profiles import cd4_panel, pbmc_vl_panel, pbmc_panel, hiv_elisa_panel
 from .maternal_status_helper import MaternalStatusHelper

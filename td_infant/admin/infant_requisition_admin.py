@@ -4,8 +4,8 @@ from django.contrib import admin
 
 from edc_lab.modeladmin_mixins import RequisitionAdminMixin
 
-from tshilo_dikotla.admin_mixins import ModelAdminMixin
-from tshilo_dikotla.constants import INFANT
+from td.admin_mixins import ModelAdminMixin
+from td.constants import INFANT
 from td_infant.models import InfantVisit
 
 from ..forms import InfantRequisitionForm

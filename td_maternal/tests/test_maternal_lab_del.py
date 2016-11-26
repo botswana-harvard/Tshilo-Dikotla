@@ -7,7 +7,7 @@ from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, POS, YES, NO,
 from edc_visit_tracking.constants import SCHEDULED
 
 from td.models import Appointment
-from tshilo_dikotla.constants import INFANT
+from td.constants import INFANT
 from td_list.models import DeliveryComplications
 
 from ..forms import MaternalLabourDelForm

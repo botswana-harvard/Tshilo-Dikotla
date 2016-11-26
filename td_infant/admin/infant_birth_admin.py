@@ -4,7 +4,7 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import ModelAdminMixin
+from td.admin_mixins import ModelAdminMixin
 from td_maternal.models import MaternalLabourDel
 from td.models import RegisteredSubject
 

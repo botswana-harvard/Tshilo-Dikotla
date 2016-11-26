@@ -5,7 +5,7 @@ from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
-from tshilo_dikotla.choices import ARV_INTERRUPTION_REASON, ARV_DRUG_LIST, REASON_ARV_STOP
+from td.choices import ARV_INTERRUPTION_REASON, ARV_DRUG_LIST, REASON_ARV_STOP
 
 from ..managers import MaternalArvManager
 

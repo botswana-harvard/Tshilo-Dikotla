@@ -15,7 +15,7 @@ from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 from td_list.models import DeliveryComplications
 from td.models import RegisteredSubject
 
-from tshilo_dikotla.choices import DX_MATERNAL
+from td.choices import DX_MATERNAL
 
 from ..managers import MaternalLabourDelManager, MaternalLabDelDxTManager
 from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION_REASON

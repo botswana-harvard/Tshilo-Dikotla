@@ -3,7 +3,7 @@ from django.db import models
 # from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import YES_NO
 
-# from tshilo_dikotla.choices import AZT_NVP
+# from td.choices import AZT_NVP
 
 from .maternal_crf_model import MaternalCrfModel
 

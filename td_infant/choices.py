@@ -1,6 +1,6 @@
 from edc_constants.constants import NOT_APPLICABLE, OTHER
 
-from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT
+from td.constants import MIN_AGE_OF_CONSENT
 
 from .constants import BROUGHT, REALTIME, CLOTH_NAPPY
 

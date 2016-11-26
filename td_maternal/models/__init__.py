@@ -3,7 +3,6 @@ from .antenatal_enrollment_two import AntenatalEnrollmentTwo
 from .base_maternal_clinical_measurements import BaseMaternalClinicalMeasurements
 from .base_ultra_sound_model import BaseUtraSoundModel
 from .diagnoses_mixin import DiagnosesMixin
-from .enrollment_helper import EnrollmentHelper
 from .maternal_arv_history import MaternalLifetimeArvHistory
 from .maternal_arv_post import MaternalArvPost
 from .maternal_arv_post import MaternalArvPostAdh
@@ -39,6 +38,7 @@ from .maternal_ultrasound_fu import MaternalUltraSoundFu
 from .maternal_ultrasound_initial import MaternalUltraSoundInitial
 from .maternal_visit import MaternalVisit
 from .nvp_dispensing import NvpDispensing
+from .potential_call import PotentialCall
 from .rapid_test_result import RapidTestResult
 from .requisition_meta_data import RequisitionMetadata
 from .specimen_consent import SpecimenConsent

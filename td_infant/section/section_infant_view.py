@@ -1,6 +1,6 @@
 # from edc_dashboard.section import BaseSectionView, site_sections
 # 
-# from tshilo_dikotla.constants import INFANT
+# from td.constants import INFANT
 # 
 # from ..search import InfantSearchByWord
 # 

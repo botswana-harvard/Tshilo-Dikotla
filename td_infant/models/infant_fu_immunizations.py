@@ -7,7 +7,7 @@ from edc_base.model.validators import date_not_future
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 from edc_base.model.models import HistoricalRecords
 
-from tshilo_dikotla.choices import REASONS_VACCINES_MISSED
+from td.choices import REASONS_VACCINES_MISSED
 
 from ..choices import IMMUNIZATIONS, INFANT_AGE_VACCINE_GIVEN
 from ..managers import VaccinesMissedManager, VaccinesReceivedManager

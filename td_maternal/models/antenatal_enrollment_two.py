@@ -29,12 +29,6 @@ class AntenatalEnrollmentTwo(EnrollmentModelMixin, RequiresConsentMixin, CreateA
 
     history = HistoricalRecords()
 
-    def __str__(self):
-        return self.subject_identifier
-
-    def natural_key(self):
-        return (self.subject_identifier, )
-
     class Meta(EnrollmentModelMixin.Meta):
         app_label = 'td_maternal'
         verbose_name = 'Antenatal Enrollment Two'

@@ -1,8 +1,8 @@
 from django.db import models
 from django.apps import apps
 
-from tshilo_dikotla.choices import AMNIOTIC_FLUID
-from tshilo_dikotla.validators import validate_bpd, validate_hc, validate_fl, validate_ac
+from td.choices import AMNIOTIC_FLUID
+from td.validators import validate_bpd, validate_hc, validate_fl, validate_ac
 
 from .maternal_crf_model import MaternalCrfModel
 

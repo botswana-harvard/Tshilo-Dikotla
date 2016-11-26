@@ -11,7 +11,7 @@ from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from td.models import RegisteredSubject
 from td_maternal.models import MaternalVisit
 from td_maternal.rule_groups import func_mother_pos
-from tshilo_dikotla.constants import NO_MODIFICATIONS, START, MODIFIED
+from td.constants import NO_MODIFICATIONS, START, MODIFIED
 
 from .lab_profiles import (
     infant_pp1_heu_pbmc_pl_panel, infant_pp1_huu_pbmc_pl_panel, infant_heelstick_panel,

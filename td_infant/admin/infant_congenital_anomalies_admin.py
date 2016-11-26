@@ -5,7 +5,7 @@ from django.contrib import admin
 from edc_base.modeladmin_mixins import TabularInlineMixin
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.constants import INFANT
+from td.constants import INFANT
 
 from ..models import (
     InfantCongenitalAnomalies, InfantCns, InfantFacialDefect,

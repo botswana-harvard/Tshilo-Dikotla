@@ -4,8 +4,8 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import ModelAdminMixin
-from tshilo_dikotla.constants import INFANT
+from td.admin_mixins import ModelAdminMixin
+from td.constants import INFANT
 
 from ..forms import InfantOffStudyForm
 from ..models import InfantOffStudy

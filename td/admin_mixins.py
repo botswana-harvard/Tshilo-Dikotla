@@ -4,8 +4,7 @@ from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
 
 from edc_base.modeladmin_mixins import (
     ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
-    ModelAdminReadOnlyMixin, ModelAdminAuditFieldsMixin,
-    TabularInlineMixin, StackedInlineMixin)
+    ModelAdminReadOnlyMixin, ModelAdminAuditFieldsMixin)
 
 
 class DashboardRedirectUrlMixin(ModelAdminNextUrlRedirectMixin):

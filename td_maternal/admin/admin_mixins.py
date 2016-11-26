@@ -1,4 +1,4 @@
-from tshilo_dikotla.admin_mixins import ModelAdminMixin
+from td.admin_mixins import ModelAdminMixin
 
 from ..models import MaternalVisit
 

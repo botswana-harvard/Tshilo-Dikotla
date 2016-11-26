@@ -11,11 +11,12 @@ from edc_constants.constants import UNK, OTHER
 
 from td_infant.models.infant_birth import InfantBirth
 from td_maternal.maternal_status_helper import MaternalStatusHelper
+from td_maternal.enrollment_helper import EnrollmentHelper
 from td_maternal.models import (
-    EnrollmentHelper, AntenatalEnrollment, MaternalConsent, MaternalLabourDel, MaternalLocator,
+    AntenatalEnrollment, MaternalConsent, MaternalLabourDel, MaternalLocator,
     MaternalRando, MaternalVisit)
 from td.models import RegisteredSubject
-from tshilo_dikotla.constants import MATERNAL, INFANT
+from td.constants import MATERNAL, INFANT
 
 from .mixins import DashboardMixin, MarqueeViewMixin
 
@@ -171,15 +172,15 @@ class MaternalDashboardView(
             self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
         antenatal = self.antenatal_enrollment
         if antenatal:
-            enrollment_helper = EnrollmentHelper(instance_antenatal=antenatal)
-            if enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and self.currently_pregnant:
-                return enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date())
-            elif ((not enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and
+            enrollment_helper = EnrollmentHelper(antenatal)
+            if enrollment_helper.get_ga_lmp_enrollment_wks(timezone.datetime.now().date()) and self.currently_pregnant:
+                return enrollment_helper.get_ga_lmp_enrollment_wks(timezone.datetime.now().date())
+            elif ((not enrollment_helper.get_ga_lmp_enrollment_wks(timezone.datetime.now().date()) and
                    self.currently_pregnant and antenatal.ultrasound)):
                 return antenatal.ultrasound.ga_confirmed
-            elif enrollment_helper.evaluate_ga_lmp(timezone.datetime.now().date()) and not self.currently_pregnant:
+            elif enrollment_helper.get_ga_lmp_enrollment_wks(timezone.datetime.now().date()) and not self.currently_pregnant:
                 delivery = self.maternal_delivery
-                return enrollment_helper.evaluate_ga_lmp(delivery.delivery_datetime.date())
+                return enrollment_helper.get_ga_lmp_enrollment_wks(delivery.delivery_datetime.date())
             else:
                 return UNK
         return UNK

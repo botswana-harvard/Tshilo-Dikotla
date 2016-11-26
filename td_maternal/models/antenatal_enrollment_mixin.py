@@ -1,12 +1,11 @@
 from django.db import models
-from django.apps import apps
 
 from edc_base.model.validators import date_not_future
 from edc_constants.choices import POS_NEG_UNTESTED_REFUSAL, YES_NO_NA, POS_NEG, YES_NO
-from edc_constants.constants import NO, YES, POS, NEG
+from edc_constants.constants import NO
 from edc_protocol.validators import date_not_before_study_start
 
-from .enrollment_helper import EnrollmentHelper
+from ..enrollment_helper import EnrollmentHelper
 from ..managers import AntenatalEnrollmentManager
 
 
@@ -128,55 +127,22 @@ class AntenatalEnrollmentMixin(models.Model):
 
     objects = AntenatalEnrollmentManager()
 
+    def __str__(self):
+        return self.subject_identifier
+
     def save(self, *args, **kwargs):
-        enrollment_helper = EnrollmentHelper(instance_antenatal=self)
-#         if not enrollment_helper.validate_rapid_test():
-#             raise ValidationError('Ensure a rapid test id done for this subject.')
-        self.edd_by_lmp = enrollment_helper.evaluate_edd_by_lmp
-        self.ga_lmp_enrollment_wks = enrollment_helper.evaluate_ga_lmp(self.report_datetime.date())
+        enrollment_helper = EnrollmentHelper(self)
+        self.is_eligible = enrollment_helper.is_eligible
+        self.edd_by_lmp = enrollment_helper.edd_by_lmp
+        self.ga_lmp_enrollment_wks = enrollment_helper.ga_lmp_enrollment_wks
         self.enrollment_hiv_status = enrollment_helper.enrollment_hiv_status
         self.date_at_32wks = enrollment_helper.date_at_32wks
-        if not self.ultrasound:
-            self.pending_ultrasound = enrollment_helper.pending
-        self.is_eligible = self.antenatal_criteria(enrollment_helper)
-        self.unenrolled = self.unenrolled_error_messages()
+        self.pending_ultrasound = enrollment_helper.pending_ultrasound
+        self.unenrolled = enrollment_helper.unenrolled_reasons()
         super(AntenatalEnrollmentMixin, self).save(*args, **kwargs)
 
-    def antenatal_criteria(self, enrollment_helper):
-        """Returns True if basic criteria is met for enrollment."""
-        if self.pending_ultrasound:
-            basic_criteria = False
-        else:
-            lmp_to_use = self.ga_lmp_enrollment_wks if self.ga_lmp_enrollment_wks else self.ultrasound.ga_confirmed
-            basic_criteria = (lmp_to_use >= 16 and lmp_to_use <= 36 and
-                              enrollment_helper.no_chronic_conditions() and self.will_breastfeed == YES and
-                              self.will_remain_onstudy == YES and
-                              (self.ultrasound.pass_antenatal_enrollment if self.ultrasound else True) and
-                              (self.delivery.keep_on_study if self.delivery else True))
-        if basic_criteria and self.enrollment_hiv_status == POS and self.will_get_arvs == YES:
-            return True
-        elif basic_criteria and self.enrollment_hiv_status == NEG:
-            return True
-        else:
-            return False
-
-    @property
-    def ultrasound(self):
-        MaternalUltraSoundInitial = apps.get_model('td_maternal', 'MaternalUltraSoundInitial')
-        try:
-            return MaternalUltraSoundInitial.objects.get(
-                maternal_visit__appointment__subject_identifier=self.subject_identifier)
-        except MaternalUltraSoundInitial.DoesNotExist:
-            return None
-
-    @property
-    def delivery(self):
-        MaternalLabourDel = apps.get_model('td_maternal', 'MaternalLabourDel')
-        try:
-            return MaternalLabourDel.objects.get(
-                registered_subject__subject_identifier=self.subject_identifier)
-        except MaternalLabourDel.DoesNotExist:
-            return None
+    def natural_key(self):
+        return (self.subject_identifier, )
 
     class Meta:
         abstract = True

@@ -12,7 +12,7 @@ from td_infant.models.infant_birth import InfantBirth
 from td_infant.models.infant_visit import InfantVisit
 from td_maternal.models.maternal_consent import MaternalConsent
 from td_maternal.models.maternal_locator import MaternalLocator
-from tshilo_dikotla.constants import INFANT
+from td.constants import INFANT
 
 from .mixins import MarqueeViewMixin, DashboardMixin
 

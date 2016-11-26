@@ -5,7 +5,7 @@ from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRender
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED
 from edc_lab.forms_mixins import RequisitionFormMixin
 
-from tshilo_dikotla.choices import STUDY_SITES
+from td.choices import STUDY_SITES
 
 from ..models import MaternalRequisition
 

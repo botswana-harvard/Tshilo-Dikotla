@@ -1,7 +1,7 @@
 from edc_constants.choices import YES, NO
 from edc_constants.constants import CONTINUOUS, RESTARTED, OTHER, STOPPED, NOT_APPLICABLE, NEG, POS, IND
 
-from tshilo_dikotla.constants import LIVE, STILL_BIRTH
+from td.constants import LIVE, STILL_BIRTH
 
 LIVE_STILL_BIRTH = (
     (LIVE, 'live birth'),

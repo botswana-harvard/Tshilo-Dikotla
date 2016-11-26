@@ -3,7 +3,7 @@ from django.db import models
 from edc_base.model.fields import OtherCharField
 from edc_constants.choices import YES_NO, YES_NO_NA
 
-from tshilo_dikotla.choices import LAUGH, ENJOYMENT, BLAME, UNHAPPY, ANXIOUS, SAD, PANICK, TOP, CRYING, HARM
+from td.choices import LAUGH, ENJOYMENT, BLAME, UNHAPPY, ANXIOUS, SAD, PANICK, TOP, CRYING, HARM
 
 from .maternal_crf_model import MaternalCrfModel
 

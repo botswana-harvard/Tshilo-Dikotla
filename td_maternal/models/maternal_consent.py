@@ -1,20 +1,19 @@
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
-from edc_base.model.models import BaseUuidModel, UrlMixin
+from edc_base.model.models import BaseUuidModel, UrlMixin, HistoricalRecords
 from edc_consent.model_mixins import ConsentModelMixin
 from edc_consent.field_mixins import (
     PersonalFieldsMixin, CitizenFieldsMixin, ReviewFieldsMixin, VulnerabilityFieldsMixin,
     IdentityFieldsMixin)
-from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_identifier.subject.classes import SubjectIdentifier
+from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 
 from ..maternal_choices import RECRUIT_SOURCE, RECRUIT_CLINIC
 from ..managers import MaternalConsentManager
 
 from .maternal_eligibility import MaternalEligibility
-from edc_base.model.models.historical_records import HistoricalRecords
 
 
 class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin, PersonalFieldsMixin,

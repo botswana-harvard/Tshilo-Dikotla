@@ -7,8 +7,8 @@ from edc_death_report.modelform_mixins import DeathReportFormMixin
 from edc_visit_tracking.form_mixins import VisitFormMixin
 from edc_visit_tracking.choices import VISIT_REASON
 
-from tshilo_dikotla.choices import VISIT_INFO_SOURCE, INFANT_VISIT_STUDY_STATUS, INFO_PROVIDER
-from tshilo_dikotla.constants import MODIFIED, DISCONTINUED, NEVER_STARTED
+from td.choices import VISIT_INFO_SOURCE, INFANT_VISIT_STUDY_STATUS, INFO_PROVIDER
+from td.constants import MODIFIED, DISCONTINUED, NEVER_STARTED
 
 from td.models import RegisteredSubject
 from td_maternal.models import MaternalConsent

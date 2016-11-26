@@ -7,7 +7,7 @@ from edc_constants.choices import YES_NO
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 from edc_base.model.models import HistoricalRecords
 
-from tshilo_dikotla.choices import MEDICATIONS
+from td.choices import MEDICATIONS
 
 from ..managers import InfantFuNewMedItemsManager
 

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.admin_mixins import ModelAdminMixin
+from td.admin_mixins import ModelAdminMixin
 
 from ..forms import MaternalInterimIdccForm
 from ..models import MaternalInterimIdcc

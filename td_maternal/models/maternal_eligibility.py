@@ -12,7 +12,7 @@ from edc_base.model.models import HistoricalRecords
 from edc_consent.site_consents import site_consents
 from edc_protocol.validators import datetime_not_before_study_start
 
-from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
+from td.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
 
 from ..managers import MaternalEligibilityManager
 from edc_base.model.models.url_mixin import UrlMixin

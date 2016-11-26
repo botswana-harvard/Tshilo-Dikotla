@@ -3,8 +3,8 @@ from django.core.exceptions import ValidationError
 
 from edc_protocol.validators import date_not_before_study_start
 
-from tshilo_dikotla.choices import GESTATIONS_NUMBER, ZERO_ONE
-from tshilo_dikotla.validators import validate_ga_by_ultrasound, validate_fetal_weight
+from td.choices import GESTATIONS_NUMBER, ZERO_ONE
+from td.validators import validate_ga_by_ultrasound, validate_fetal_weight
 
 from .base_ultra_sound_model import BaseUtraSoundModel
 from .maternal_consent import MaternalConsent

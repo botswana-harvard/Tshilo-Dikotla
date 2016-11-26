@@ -7,7 +7,7 @@ from edc_constants.constants import YES
 from td_infant.models import InfantArvProph, InfantArvProphMod
 from td_infant.choices import ARV_DRUG_LIST, ARV_MODIFICATION_REASON, DOSE_STATUS
 
-from tshilo_dikotla.constants import NO_MODIFICATIONS
+from td.constants import NO_MODIFICATIONS
 
 
 class InfantArvProphFactory(factory.DjangoModelFactory):

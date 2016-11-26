@@ -8,7 +8,7 @@ from edc_identifier.subject.classes import InfantIdentifier
 from edc_visit_tracking.constants import SCHEDULED
 
 from td.models import RegisteredSubject, Appointment
-from tshilo_dikotla.constants import INFANT
+from td.constants import INFANT
 
 from .antenatal_enrollment import AntenatalEnrollment
 from .maternal_consent import MaternalConsent

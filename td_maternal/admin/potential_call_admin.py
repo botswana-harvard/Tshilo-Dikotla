@@ -1,12 +1,13 @@
 from django.contrib import admin
 
+from simple_history.admin import SimpleHistoryAdmin
+
 from edc_base.modeladmin_mixins import (ModelAdminChangelistModelButtonMixin, ModelAdminRedirectMixin,
                                         ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
                                         ModelAdminAuditFieldsMixin)
-from simple_history.admin import SimpleHistoryAdmin
+from edc_call_manager.models import Call
 
-from td_call_manager.models import Call
-from td_maternal.models import PotentialCall
+from ..models import PotentialCall
 
 
 class BaseModelAdmin(ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,

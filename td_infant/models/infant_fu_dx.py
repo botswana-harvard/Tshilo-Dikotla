@@ -5,7 +5,7 @@ from edc_base.model.models import BaseUuidModel
 from edc_base.model.models import HistoricalRecords
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
-from tshilo_dikotla.choices import DX_INFANT
+from td.choices import DX_INFANT
 
 from ..managers import InfantFuDxItemsManager
 
