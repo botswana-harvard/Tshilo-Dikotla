@@ -1,8 +1,6 @@
 from django.conf.urls import url
 
-from td_dashboard.views.maternal_dashboard_view import MaternalDashboardView
-from td_dashboard.views.search_dashboard_view import SearchDasboardView
-from td_dashboard.views.infant_dashboard_view import InfantDashboardView
+from td_dashboard.views import MaternalDashboardView, SearchDasboardView, InfantDashboardView
 
 urlpatterns = [
     url(r'^maternal', SearchDasboardView.as_view(), name='search_url'),

@@ -1,10 +1,10 @@
-from django.db.models import Q
 from dateutil.relativedelta import relativedelta
+
+from django.core.exceptions import ValidationError
 
 from edc_constants.constants import POS, NEG, UNK, IND
 
-from ..models import AntenatalEnrollment, MaternalInterimIdcc
-from django.core.exceptions import ValidationError
+from .models import AntenatalEnrollment, MaternalInterimIdcc
 
 
 class MaternalStatusHelper(object):
@@ -14,7 +14,7 @@ class MaternalStatusHelper(object):
 
     @property
     def hiv_status(self):
-        from ..models import RapidTestResult
+        from .models import RapidTestResult
         if not self.maternal_visit:
             return ''
         for visit in self.previous_visits:

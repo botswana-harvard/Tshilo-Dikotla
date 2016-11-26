@@ -20,7 +20,7 @@ from edc_visit_tracking.form_mixins import VisitFormMixin
 from tshilo_dikotla.choices import STUDY_SITES, OFF_STUDY_REASON, VISIT_INFO_SOURCE, MATERNAL_VISIT_STUDY_STATUS
 from tshilo_dikotla.constants import NO_MODIFICATIONS
 
-from .classes import MaternalStatusHelper, Randomization
+from .maternal_status_helper import MaternalStatusHelper
 from .models import EnrollmentHelper
 from .models import (
     AntenatalEnrollment, AntenatalEnrollmentTwo, MaternalLifetimeArvHistory, MaternalConsent,
@@ -32,6 +32,7 @@ from .models import (
     MaternalOffStudy, MaternalPostPartumDep, MaternalPostPartumFu, MaternalSubstanceUseDuringPreg,
     MaternalSubstanceUsePriorPreg, MaternalUltraSoundFu, NvpDispensing, RapidTestResult, SpecimenConsent
 )
+from .randomization import Randomization
 
 
 class ModelFormMixin(Many2ManyModelFormMixin):
