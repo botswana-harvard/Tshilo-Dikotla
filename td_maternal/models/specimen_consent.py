@@ -4,7 +4,7 @@ from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_consent.model_mixins import RequiresConsentMixin, SpecimenConsentMixin
 from edc_consent.field_mixins import SampleCollectionFieldsMixin, VulnerabilityFieldsMixin
 from edc_export.model_mixins import ExportTrackingFieldsMixin
-from td_registration.models import RegisteredSubject
+from td.models import RegisteredSubject
 from edc_base.model.models import HistoricalRecords
 
 from ..managers import SpecimenConsentManager

@@ -2,5 +2,5 @@ from django.apps import AppConfig as DjangoAppConfig
 
 
 class AppConfig(DjangoAppConfig):
-    name = 'td_dashboard'
-    verbose_name = 'Tshilo-dikotla Dashboard'
+    name = 'td'
+    verbose_name = 'Registration'

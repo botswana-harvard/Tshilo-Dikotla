@@ -10,7 +10,7 @@ from edc_constants.choices import GENDER_UNDETERMINED
 from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffstudyMixin
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
-from td_registration.models import RegisteredSubject
+from td.models import RegisteredSubject
 from edc_base.model.models import HistoricalRecords
 
 from td_maternal.models import MaternalLabourDel
@@ -66,7 +66,7 @@ class InfantBirth(CreateAppointmentsMixin, UpdatesOrCreatesRegistrationModelMixi
 
     def natural_key(self):
         return self.maternal_labour_del.natural_key()
-    natural_key.dependencies = ['td_maternal.maternallabourdel', 'td_registration.registered_subject']
+    natural_key.dependencies = ['td_maternal.maternallabourdel', 'td.registered_subject']
 
     def __str__(self):
         return "{} ({}) {}".format(self.first_name, self.initials, self.gender)

@@ -26,15 +26,11 @@ from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
 from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
-from django_crypto_fields.apps import AppConfig as DjangoCryptoFieldsAppConfigParent
 
 
 class AppConfig(DjangoAppConfig):
     name = 'tshilo_dikotla'
     verbose_name = 'Tshilo Dikotla'
-
-    def ready(self):
-        pass
 
 
 class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
@@ -45,7 +41,7 @@ class EdcDeviceAppConfig(EdcDeviceAppConfigParent):
 
 
 class EdcRegistrationAppConfig(EdcRegistrationAppConfigParent):
-    app_label = 'td_registration'
+    app_label = 'td'
 
 
 class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
@@ -79,10 +75,8 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
 
 
 class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
-    app_label = 'td_appointment'
+    app_label = 'td'
     model_name = 'appointment'
-    allowed_iso_weekdays = '12345'
-    default_appt_type = 'clinic'
     default_appt_type = 'clinic'
     facilities = {
         'clinic': Facility(name='clinic', days=[MO, TU, WE, TH, FR], slots=[10, 10, 10, 10, 10])}
@@ -91,13 +85,13 @@ class EdcAppointmentAppConfig(EdcAppointmentAppConfigParent):
 class EdcTimepointAppConfig(EdcTimepointAppConfigParent):
     timepoints = [
         Timepoint(
-            model='td_appointment.appointment',
+            model='td.appointment',
             datetime_field='appt_datetime',
             status_field='appt_status',
             closed_status='DONE'
         ),
         Timepoint(
-            model='td_appointment.historicalappointment',
+            model='td.historicalappointment',
             datetime_field='appt_datetime',
             status_field='appt_status',
             closed_status='DONE'

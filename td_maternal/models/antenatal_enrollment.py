@@ -14,12 +14,6 @@ from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 from .antenatal_enrollment_mixin import AntenatalEnrollmentMixin
 
 
-class Manager(models.Manager):
-
-    def get_by_natural_key(self, subject_identifier):
-        return self.get(subject_identifier=subject_identifier)
-
-
 class AntenatalEnrollment(AntenatalEnrollmentMixin, EnrollmentModelMixin, OffstudyMixin, CreateAppointmentsMixin,
                           RequiresConsentMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
 

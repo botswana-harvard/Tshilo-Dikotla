@@ -2,10 +2,10 @@ from dateutil.relativedelta import relativedelta
 from datetime import date
 from django.utils import timezone
 
-from td_registration.models import RegisteredSubject
+from td.models import RegisteredSubject
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
 
-from td_appointment.models import Appointment
+from td.models import Appointment
 
 from td_infant.forms import InfantFeedingForm
 

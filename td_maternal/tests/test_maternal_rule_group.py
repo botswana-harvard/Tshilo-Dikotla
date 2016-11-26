@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from edc_constants.constants import (POS, NEG, YES, NO, NOT_APPLICABLE, UNK)
 from edc_metadata.constants import NOT_REQUIRED, REQUIRED, KEYED
-from td_appointment.models import Appointment
+from td.models import Appointment
 
 from td_maternal.tests import BaseTestCase
 from td_maternal.models import CrfMetadata, RequisitionMetadata, MaternalVisit, MaternalInterimIdcc

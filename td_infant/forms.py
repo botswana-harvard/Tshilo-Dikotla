@@ -10,7 +10,7 @@ from edc_visit_tracking.choices import VISIT_REASON
 from tshilo_dikotla.choices import VISIT_INFO_SOURCE, INFANT_VISIT_STUDY_STATUS, INFO_PROVIDER
 from tshilo_dikotla.constants import MODIFIED, DISCONTINUED, NEVER_STARTED
 
-from td_registration.models import RegisteredSubject
+from td.models import RegisteredSubject
 from td_maternal.models import MaternalConsent
 
 from .choices import OFF_STUDY_REASON

@@ -4,8 +4,8 @@ from django.utils import timezone
 
 from edc_constants.constants import YES, NOT_APPLICABLE, POS, NO
 
-from td_appointment.models import Appointment
-from td_registration.models import RegisteredSubject
+from td.models import Appointment
+from td.models import RegisteredSubject
 from td_maternal.forms import MaternalObstericalHistoryForm
 
 from .base_test_case import BaseTestCase

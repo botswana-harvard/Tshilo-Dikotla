@@ -10,7 +10,7 @@ from edc_visit_tracking.constants import (
 from edc_visit_tracking.model_mixins import CaretakerFieldsMixin, VisitModelMixin
 from edc_offstudy.model_mixins import OffstudyMixin
 
-from td_appointment.models import Appointment
+from td.models import Appointment
 
 from ..managers import InfantVisitCrfManager
 
@@ -31,7 +31,7 @@ class InfantVisit(
 
     def natural_key(self):
         return super(InfantVisit, self).natural_key()
-    natural_key.dependencies = ['td_appointment.appointment']
+    natural_key.dependencies = ['td.appointment']
 
     def custom_post_update_crf_meta_data(self):
         """Calls custom methods that manipulate meta data on the post save.

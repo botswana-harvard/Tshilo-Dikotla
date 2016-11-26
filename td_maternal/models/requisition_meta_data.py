@@ -2,7 +2,7 @@ from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_metadata.model_mixins import RequisitionMetadataModelMixin
 from django.urls.base import reverse
 from django.apps.registry import apps
-from td_appointment.models import Appointment
+from td.models import Appointment
 from edc_base.model.models.url_mixin import UrlMixin
 
 

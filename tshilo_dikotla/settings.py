@@ -14,9 +14,6 @@ import sys
 import os
 import socket
 
-from .databases import (
-    PRODUCTION_POSTGRES, TEST_HOSTS_POSTGRES, TRAVIS_POSTGRES, PRODUCTION_SECRET_KEY)
-
 
 # EDC specific settings
 APP_NAME = 'td'
@@ -61,8 +58,8 @@ INSTALLED_APPS = [
     'django_js_reverse',
     'corsheaders',
     'crispy_forms',
-    'django_revision.apps.AppConfig',
     'django_crypto_fields.apps.AppConfig',
+    'django_revision.apps.AppConfig',
     'edc_code_lists',
     'edc_death_report.apps.AppConfig',
     'edc_export.apps.AppConfig',
@@ -70,15 +67,13 @@ INSTALLED_APPS = [
     'edc_offstudy.apps.AppConfig',
     'edc_rule_groups.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
-    'td_appointment.apps.AppConfig',
+    'td.apps.AppConfig',
     'td_call_manager.apps.AppConfig',
     'td_dashboard.apps.AppConfig',
     'td_infant.apps.AppConfig',
     'td_lab.apps.AppConfig',
     'td_list.apps.AppConfig',
     'td_maternal.apps.AppConfig',
-    'td_registration.apps.AppConfig',
-    'tshilo_dikotla.apps.AppConfig',
     'tshilo_dikotla.apps.EdcAppointmentAppConfig',
     'tshilo_dikotla.apps.EdcBaseAppConfig',
     'tshilo_dikotla.apps.EdcCallManagerAppConfig',
@@ -93,6 +88,7 @@ INSTALLED_APPS = [
     'tshilo_dikotla.apps.EdcSyncAppConfig',
     'tshilo_dikotla.apps.EdcTimepointAppConfig',
     'tshilo_dikotla.apps.EdcVisitTrackingAppConfig',
+    'tshilo_dikotla.apps.AppConfig',
 ]
 
 if 'test' in sys.argv:
@@ -114,12 +110,12 @@ if 'test' in sys.argv:
         "edc_sync": None,
         "edc_visit_schedule": None,
         "edc_visit_tracking": None,
-        "td_appointment": None,
+        "td": None,
         "td_infant": None,
         "td_lab": None,
         "td_list": None,
         "td_maternal": None,
-        "td_registration": None,
+        "td": None,
         "tshilo_dikotla": None,
         'django_crypto_fields': None}
 
@@ -157,20 +153,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'tshilo_dikotla.wsgi.application'
 
 
-if socket.gethostname() in DEVELOPER_HOSTS:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if 'test' in sys.argv:
+    cnf = 'test_default.cnf'
+else:
+    cnf = 'default.cnf'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'read_default_file': os.path.join(BASE_DIR, 'etc', cnf),
         },
+        'HOST': '',
+        'PORT': '',
+        'ATOMIC_REQUESTS': True,
     }
-elif socket.gethostname() == LIVE_SERVER:
-    SECRET_KEY = PRODUCTION_SECRET_KEY
-    DATABASES = PRODUCTION_POSTGRES
-elif socket.gethostname() in TEST_HOSTS:
-    DATABASES = TEST_HOSTS_POSTGRES
-elif 'test' in sys.argv:
-    DATABASES = TRAVIS_POSTGRES
+}
 
 FIELD_MAX_LENGTH = 'default'
 

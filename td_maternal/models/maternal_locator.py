@@ -6,7 +6,7 @@ from edc_base.model.fields import OtherCharField
 from edc_base.model.validators import CellNumber, TelephoneNumber
 from edc_constants.choices import YES_NO
 from edc_locator.model_mixins import LocatorModelMixin
-from td_appointment.models import Appointment
+from td.models import Appointment
 
 from .maternal_crf_model import MaternalCrfModel
 

@@ -9,7 +9,7 @@ from td_maternal.models import MaternalVisit
 from td_maternal.forms import MaternalMedicalHistoryForm, antenatal_enrollment_form
 from td_list.models import ChronicConditions, MaternalMedications
 
-from td_appointment.models import Appointment
+from td.models import Appointment
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalEligibilityFactory, MaternalConsentFactory, MaternalLabourDelFactory)

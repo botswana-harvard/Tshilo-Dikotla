@@ -12,4 +12,4 @@ class MaternalOffStudy(OffstudyModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
     class Meta:
         app_label = 'td_maternal'
         verbose_name = "Maternal Off Study"
-        consent_model = 'td_maternal.subjectconsent'
+        consent_model = 'td_maternal.maternalconsent'

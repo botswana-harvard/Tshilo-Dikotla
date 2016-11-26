@@ -2,8 +2,8 @@ from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from edc_constants.constants import POS, YES, NO, NEG, NOT_APPLICABLE, UNK, IND
 from td_maternal.models import RequisitionMetadata
-from td_appointment.models import Appointment
-from td_registration.models import RegisteredSubject
+from td.models import Appointment
+from td.models import RegisteredSubject
 
 from td_maternal.classes import MaternalStatusHelper
 from td_infant.tests.factories import InfantVisitFactory, InfantBirthFactory

@@ -1,5 +1,5 @@
-from edc_metadata.constants import NOT_REQUIRED, REQUIRED
 from edc_constants.constants import POS, NEG, UNK, IND
+from edc_metadata.constants import NOT_REQUIRED, REQUIRED
 from edc_rule_groups.crf_rule import CrfRule
 from edc_rule_groups.decorators import register
 from edc_rule_groups.logic import Logic
@@ -8,10 +8,10 @@ from edc_rule_groups.requisition_rule import RequisitionRule
 from edc_rule_groups.rule_group import RuleGroup
 
 from tshilo_dikotla.constants import ONE
-from .td_maternal_lab_profiles import (cd4_panel, pbmc_vl_panel, pbmc_panel, hiv_elisa_panel)
 
-from td_maternal.classes import MaternalStatusHelper
-from td_maternal.models import MaternalUltraSoundInitial, MaternalPostPartumDep, RapidTestResult, MaternalRando
+from .lab_profiles import cd4_panel, pbmc_vl_panel, pbmc_panel, hiv_elisa_panel
+from .maternal_status_helper import MaternalStatusHelper
+from .models import MaternalUltraSoundInitial, MaternalPostPartumDep, RapidTestResult, MaternalRando
 
 
 def func_mother_pos(visit_instance, *args):
@@ -151,7 +151,7 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_maternal'
-        source_model = 'td_registration.registeredsubject'
+        source_model = 'td.registeredsubject'
 
 
 @register()
@@ -191,7 +191,7 @@ class MaternalRequisitionRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_maternal'
-        source_model = 'td_registration.registeredsubject'
+        source_model = 'td.registeredsubject'
 
 
 @register()

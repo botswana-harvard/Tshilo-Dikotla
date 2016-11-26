@@ -5,9 +5,9 @@ from django.db import IntegrityError
 from edc_constants.constants import POS, YES, NO, NEG, NOT_APPLICABLE
 from edc_constants.constants import UNKNOWN
 
-from td_appointment.models import Appointment
+from td.models import Appointment
 from td_list.models import RandomizationItem
-from td_registration.models import RegisteredSubject
+from td.models import RegisteredSubject
 from tshilo_dikotla.constants import RANDOMIZED
 
 from .base_test_case import BaseTestCase

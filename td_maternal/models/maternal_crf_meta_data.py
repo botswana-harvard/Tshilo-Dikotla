@@ -2,7 +2,7 @@ from edc_base.model.models import BaseUuidModel
 from edc_metadata.model_mixins import CrfMetadataModelMixin
 from django.urls.base import reverse
 from django.apps import apps
-from td_appointment.models import Appointment
+from td.models import Appointment
 
 
 class CrfMetadata(CrfMetadataModelMixin, BaseUuidModel):

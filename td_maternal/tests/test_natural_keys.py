@@ -28,7 +28,7 @@ class TestNaturalKey(BaseTestCase):
 
     def test_natural_key_appointment(self):
         """Confirms all models have a natural_key method (except Audit models)"""
-        td_maternal_models = django_apps.get_app_config('td_appointment').get_models()
+        td_maternal_models = django_apps.get_app_config('td').get_models()
         for model in td_maternal_models:
             if 'Audit' not in model._meta.object_name:
                 self.assertTrue('natural_key' in dir(model), 'natural key not found in {0}'.format(model._meta.object_name))

@@ -3,7 +3,7 @@ from django.urls.base import reverse
 
 from td_maternal.models.maternal_crf_meta_data import CrfMetadata
 from td_maternal.models.requisition_meta_data import RequisitionMetadata
-from td_appointment.models import Appointment
+from td.models import Appointment
 
 
 class DashboardMixin(object):

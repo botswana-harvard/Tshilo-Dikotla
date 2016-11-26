@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from edc_constants.constants import POS, YES, NO, NEG, NOT_APPLICABLE, UNK
 
-from td_appointment.models import Appointment
+from td.models import Appointment
 
 from td_call_manager.models import Call
 

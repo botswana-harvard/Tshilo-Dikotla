@@ -2,7 +2,7 @@ import factory
 
 from django.utils import timezone
 
-from td_appointment.models import Appointment
+from td.models import Appointment
 from .registered_subject_factory import RegisteredSubjectFactory
 
 

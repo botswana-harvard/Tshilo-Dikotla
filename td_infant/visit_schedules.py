@@ -3,7 +3,7 @@ from edc_visit_schedule.visit_schedule import VisitSchedule
 from edc_visit_schedule.visit import Crf, Requisition
 from edc_visit_schedule.schedule import Schedule
 
-from td_infant.td_infant_lab_profiles import (
+from td_infant.lab_profiles import (
     infant_birth_pbmc_pl_panel, infant_glucose_panel, infant_birth_insulin_panel,
     infant_pp1_heu_pbmc_pl_panel, infant_pp1_huu_pbmc_pl_panel, infant_pp1_insulin_panel,
     infant_heelstick_panel, infant_pp18_huu_pbmc_pl_panel, infant_pp18_heu_insulin_panel,

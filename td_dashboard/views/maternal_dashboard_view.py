@@ -15,7 +15,7 @@ from td_maternal.classes.maternal_status_helper import MaternalStatusHelper
 from td_maternal.models import (
     EnrollmentHelper, AntenatalEnrollment, MaternalConsent, MaternalLabourDel, MaternalLocator,
     MaternalRando, MaternalVisit)
-from td_registration.models import RegisteredSubject
+from td.models import RegisteredSubject
 from tshilo_dikotla.constants import MATERNAL, INFANT
 
 from ..classes import MarqueeViewMixin

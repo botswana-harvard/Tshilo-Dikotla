@@ -1,6 +1,6 @@
 from datetime import date, datetime
 
-from td_registration.models import RegisteredSubject
+from td.models import RegisteredSubject
 
 from lis.labeling.classes import ModelLabel
 from lis.labeling.models import ZplTemplate

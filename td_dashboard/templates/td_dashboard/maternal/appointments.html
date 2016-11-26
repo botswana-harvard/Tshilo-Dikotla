@@ -24,7 +24,7 @@
 						        <td>{{appointment.title}}</td>
 								<td>{{appointment.appt_type | capfirst}}</td>
 								<td>{{appointment.appt_datetime|date:"D d M Y"| capfirst}}</td>
-								<td><a href="{% url 'admin:td_appointment_appointment_change' appointment.str_pk %}?next={% url 'subject_dashboard_url' appointment.subject_identifier %}">{{ appointment.appt_status | capfirst }}</a></td>
+								<td><a href="{% url 'admin:td_appointment_change' appointment.str_pk %}?next={% url 'subject_dashboard_url' appointment.subject_identifier %}">{{ appointment.appt_status | capfirst }}</a></td>
 						        <td>
 						        	{% if appointment.maternal_visit %}
 						        		<a href="{% url 'admin:td_maternal_maternalvisit_change' appointment.maternal_visit.pk %}?next={% url 'subject_dashboard_url' appointment.subject_identifier %}">{{ appointment.maternal_visit.report_datetime |date:"Y-m-d D"| capfirst }}</a>

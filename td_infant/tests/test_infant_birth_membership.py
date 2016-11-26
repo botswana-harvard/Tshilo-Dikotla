@@ -3,9 +3,9 @@ from django.utils import timezone
 
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
 
-from td_registration.models import RegisteredSubject
+from td.models import RegisteredSubject
 
-from td_appointment.models import Appointment
+from td.models import Appointment
 
 from td_maternal.tests import BaseTestCase
 from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,

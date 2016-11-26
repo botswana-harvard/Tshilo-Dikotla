@@ -3,7 +3,7 @@ td_maternal/migrations/*
 td_lab/migrations/*
 td_call_manager/migrations/*
 td_list/migrations/*
-td_registration/migrations/*
+td/migrations/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -16,7 +16,7 @@ __pycache__/
 upgrade/
 test-*
 db.sqlite3
-etc/*
+etc/default.cnf
 #tshilo_dikotla/apps/*/migrations/
 getresults_receive/.DS_Store
 # C extensions

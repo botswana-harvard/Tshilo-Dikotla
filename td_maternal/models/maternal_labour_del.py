@@ -13,7 +13,7 @@ from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 
 from td_list.models import DeliveryComplications
-from td_registration.models import RegisteredSubject
+from td.models import RegisteredSubject
 
 from tshilo_dikotla.choices import DX_MATERNAL
 

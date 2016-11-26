@@ -7,7 +7,7 @@ from edc_sync.models import OutgoingTransaction
 
 from model_mommy import mommy
 
-from td_registration.models import RegisteredSubject
+from td.models import RegisteredSubject
 from td_maternal.models import SpecimenConsent
 
 from ..models import MaternalEligibility
@@ -20,6 +20,8 @@ class TestMaternalSerializers(TestCase):
     def test_maternaleligibility_serializer(self):
         """ Creating maternaleligibility should creates outgoingtransaction """
         mommy.make(MaternalEligibility)
+        print (MaternalEligibility.objects.all())
+        print(OutgoingTransaction.objects.all())
         self.assertEqual(OutgoingTransaction.objects.filter(tx_name='td_maternal.maternaleligibility').count(), 1)
 
     def test_maternaleligibility_deserialize(self):
@@ -40,8 +42,7 @@ class TestMaternalSerializers(TestCase):
             identity="111121111",
             confirm_identity="111121111",
             study_site='40',
-            is_literate=YES,
-            _quantity=1
+            is_literate=YES
         )
         self.assertEqual(OutgoingTransaction.objects.filter(tx_name='td_maternal.maternalconsent').count(), 1)
 

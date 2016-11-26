@@ -6,7 +6,6 @@ from django.core.exceptions import FieldError
 from edc_constants.constants import POS, NEG, NOT_APPLICABLE, YES, NO, DWTA, UNKNOWN, NEVER
 
 from .models import MaternalConsent, SpecimenConsent
-from .models import EnrollmentHelper
 
 
 class EnrollmentFormMixin(forms.ModelForms):

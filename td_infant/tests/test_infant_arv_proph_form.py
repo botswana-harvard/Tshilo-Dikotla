@@ -2,19 +2,17 @@ from dateutil.relativedelta import relativedelta
 from datetime import date
 from django.utils import timezone
 
-from edc_constants.constants import SCREENED
-from td_registration.models import RegisteredSubject
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE, UNKNOWN
-from td_appointment.models import Appointment
 
+from td.models import RegisteredSubject, Appointment
+from td_maternal.tests import BaseTestCase
+from td_maternal.tests.factories import (
+    MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory, AntenatalEnrollmentFactory,
+    AntenatalEnrollmentTwoFactory, MaternalLabourDelFactory, MaternalVisitFactory)
 from tshilo_dikotla.constants import MODIFIED, NO_MODIFICATIONS, DISCONTINUED, NEVER_STARTED
 
-from td_maternal.tests import BaseTestCase
-from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,
-                                         MaternalConsentFactory, AntenatalEnrollmentFactory,
-                                         AntenatalVisitMembershipFactory, MaternalLabourDelFactory,
-                                         MaternalVisitFactory)
-from td_infant.forms import InfantArvProphForm, InfantArvProphModForm
+from ..forms import InfantArvProphForm, InfantArvProphModForm
+
 from .factories import InfantBirthFactory, InfantVisitFactory, InfantArvProphFactory, InfantBirthArvFactory
 
 
@@ -48,7 +46,7 @@ class TestInfantArvProph(BaseTestCase):
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_enrollment_two = AntenatalEnrollmentTwoFactory(
             registered_subject=self.options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=self.options.get('registered_subject'), visit_code='1010M')

@@ -6,19 +6,17 @@ from edc_rule_groups.predicate import P
 from edc_rule_groups.requisition_rule import RequisitionRule
 from edc_rule_groups.rule_group import RuleGroup
 from edc_metadata.constants import NOT_REQUIRED, REQUIRED
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
+from td.models import RegisteredSubject
+from td_infant.models import InfantArvProph
+from td_maternal.models import MaternalVisit
+from td_maternal.rule_groups import func_mother_pos
 from tshilo_dikotla.constants import NO_MODIFICATIONS, START, MODIFIED
-from .infant_visit_schedule import infant_birth_schedule
+
 from .td_infant_lab_profiles import (infant_pp1_heu_pbmc_pl_panel,
                                      infant_pp1_huu_pbmc_pl_panel, infant_heelstick_panel,
                                      infant_pp18_heu_insulin_panel, infant_pp18_huu_insulin_panel)
-
-from td_registration.models import RegisteredSubject
-
-from td_maternal.rule_groups import func_mother_pos
-from td_maternal.models import MaternalVisit
-
-from td_infant.models import InfantArvProph
 
 
 def maternal_hiv_status_visit(visit_instance, *args):
@@ -32,8 +30,10 @@ def maternal_hiv_status_visit(visit_instance, *args):
         pass
 
 
-def func_show_infant_arv_proph(visit_instance, *args):
-    previous_visit = infant_birth_schedule.get_previous_visit(visit_instance.appointment.visit_code)
+def func_show_infant_arv_proph(infant_visit, *args):
+    infant_birth_schedule = site_visit_schedules.get_visit_schedule(
+        'infant_visit_schedule').schedule('infant_birth_schedule')
+    previous_visit = infant_birth_schedule.get_previous_visit(infant_visit.appointment.visit_code)
     if not previous_visit:
         return False
     else:
@@ -42,14 +42,14 @@ def func_show_infant_arv_proph(visit_instance, *args):
                 infant_visit__appointment__visit_code=previous_visit.code)
             return infant_arv_proph.arv_status in [NO_MODIFICATIONS, START, MODIFIED]
         except InfantArvProph.DoesNotExist:
-            if visit_instance.appointment.visit_code == '2010':
-                return maternal_hiv_status_visit(visit_instance)
+            if infant_visit.appointment.visit_code == '2010':
+                return maternal_hiv_status_visit(infant_visit)
             return False
 
 
-def func_infant_heu(visit_instance, *args):
+def func_infant_heu(infant_visit, *args):
     """Returns true if mother of the infant is hiv positive."""
-    if maternal_hiv_status_visit(visit_instance):
+    if maternal_hiv_status_visit(infant_visit):
         return True
     return False
 
@@ -66,7 +66,7 @@ class InfantRegisteredSubjectRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_infant'
-        source_model = 'td_registration.registeredsubject'
+        source_model = 'td.registeredsubject'
 
 
 @register()
@@ -166,4 +166,4 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_lab'
-        source_model = 'td_registration.registeredsubject'
+        source_model = 'td.registeredsubject'
