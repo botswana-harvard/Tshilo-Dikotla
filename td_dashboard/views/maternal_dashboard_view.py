@@ -9,7 +9,6 @@ from edc_base.utils import convert_from_camel
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_constants.constants import UNK, OTHER
 
-from td_dashboard.classes.dashboard_mixin import DashboardMixin
 from td_infant.models.infant_birth import InfantBirth
 from td_maternal.maternal_status_helper import MaternalStatusHelper
 from td_maternal.models import (
@@ -18,7 +17,7 @@ from td_maternal.models import (
 from td.models import RegisteredSubject
 from tshilo_dikotla.constants import MATERNAL, INFANT
 
-from ..classes import MarqueeViewMixin
+from .mixins import DashboardMixin, MarqueeViewMixin
 
 
 class MaternalDashboardView(

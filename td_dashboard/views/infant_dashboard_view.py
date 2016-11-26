@@ -1,18 +1,20 @@
-from django.contrib import admin
+from collections import OrderedDict
+from dateutil.relativedelta import relativedelta
+
 from django.conf import settings
+from django.contrib import admin
+from django.utils import timezone
 from django.views.generic import TemplateView
 
 from edc_base.view_mixins import EdcBaseViewMixin
-from ..classes import MarqueeViewMixin
+
+from td_infant.models.infant_birth import InfantBirth
+from td_infant.models.infant_visit import InfantVisit
 from td_maternal.models.maternal_consent import MaternalConsent
 from td_maternal.models.maternal_locator import MaternalLocator
 from tshilo_dikotla.constants import INFANT
-from td_infant.models.infant_visit import InfantVisit
-from _collections import OrderedDict
-from td_infant.models.infant_birth import InfantBirth
-from td_dashboard.classes.dashboard_mixin import DashboardMixin
-from dateutil.relativedelta import relativedelta
-from django.utils import timezone
+
+from .mixins import MarqueeViewMixin, DashboardMixin
 
 
 class InfantDashboardView(

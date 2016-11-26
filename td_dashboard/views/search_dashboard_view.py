@@ -1,9 +1,11 @@
 from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView, FormView
-from ..forms import MaternalEligibilityCrispyForm
-from td_maternal.models.maternal_eligibility import MaternalEligibility
+
 from td_infant.models.infant_birth import InfantBirth
+from td_maternal.models.maternal_eligibility import MaternalEligibility
+
+from ..forms import MaternalEligibilityCrispyForm
 
 from edc_base.view_mixins import EdcBaseViewMixin
 
