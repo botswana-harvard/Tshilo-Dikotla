@@ -1,22 +1,22 @@
 from edc_constants.constants import YES
+from edc_metadata.constants import NOT_REQUIRED, REQUIRED
 from edc_rule_groups.crf_rule import CrfRule
 from edc_rule_groups.decorators import register
 from edc_rule_groups.logic import Logic
 from edc_rule_groups.predicate import P
 from edc_rule_groups.requisition_rule import RequisitionRule
 from edc_rule_groups.rule_group import RuleGroup
-from edc_metadata.constants import NOT_REQUIRED, REQUIRED
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
 from td.models import RegisteredSubject
-from td_infant.models import InfantArvProph
 from td_maternal.models import MaternalVisit
 from td_maternal.rule_groups import func_mother_pos
 from tshilo_dikotla.constants import NO_MODIFICATIONS, START, MODIFIED
 
-from .td_infant_lab_profiles import (infant_pp1_heu_pbmc_pl_panel,
-                                     infant_pp1_huu_pbmc_pl_panel, infant_heelstick_panel,
-                                     infant_pp18_heu_insulin_panel, infant_pp18_huu_insulin_panel)
+from .lab_profiles import (
+    infant_pp1_heu_pbmc_pl_panel, infant_pp1_huu_pbmc_pl_panel, infant_heelstick_panel,
+    infant_pp18_heu_insulin_panel, infant_pp18_huu_insulin_panel)
+from .models import InfantArvProph
 
 
 def maternal_hiv_status_visit(visit_instance, *args):
@@ -134,7 +134,7 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     require_pbmc_pl_huu_pp1 = RequisitionRule(
         logic=Logic(
-            predicate=func_infant_heu, # TODO: Result must be false
+            predicate=func_infant_heu,  # TODO: Result must be false
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_model='infantrequisition',
@@ -158,7 +158,7 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     require_insulin_huu_pp18 = RequisitionRule(
         logic=Logic(
-            predicate=func_infant_heu, # TODO: Result must be false
+            predicate=func_infant_heu,  # TODO: Result must be false
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_model='infantrequisition',
