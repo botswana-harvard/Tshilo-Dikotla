@@ -1,10 +1,11 @@
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
-from edc_constants.constants import SCREENED
+from model_mommy import mommy
+
 from td.models import RegisteredSubject
 from edc_identifier.models import SubjectIdentifier
-from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, POS, YES, NO, NOT_APPLICABLE
-from edc_visit_tracking.constants import SCHEDULED
+from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
+
 
 from td.models import Appointment
 from td.constants import INFANT
@@ -13,18 +14,15 @@ from td_list.models import DeliveryComplications
 from ..forms import MaternalLabourDelForm
 
 from .base_test_case import BaseTestCase
-from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalEnrollmentTwoFactory, MaternalLabourDelFactory,
-                        MaternalVisitFactory)
 
 
 class TestMaternalLabourDel(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalLabourDel, self).setUp()
-        self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility)
+        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
         self.registered_subject = self.maternal_eligibility.registered_subject
         # maternal visit created here.
         options = {'registered_subject': self.registered_subject,
@@ -35,14 +33,16 @@ class TestMaternalLabourDel(BaseTestCase):
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
-                                                                number_of_gestations=1)
-        self.maternal_visits_membership = AntenatalEnrollmentTwoFactory(registered_subject=self.registered_subject)
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
+        self.maternal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalenrollmenttwo', registered_subject=self.registered_subject)
 
         complications = DeliveryComplications.objects.create(
             hostname_created="django", name="None",
@@ -68,8 +68,8 @@ class TestMaternalLabourDel(BaseTestCase):
         }
 
     def test_new_infant_registration(self):
-        MaternalLabourDelFactory(registered_subject=self.registered_subject,
-                                 live_infants_to_register=1)
+        mommy.make_recipe(
+            'td_maternal.maternallabourdel', registered_subject=self.registered_subject, live_infants_to_register=1)
         self.assertEqual(SubjectIdentifier.objects.filter(
             identifier=self.registered_subject.subject_identifier).count(), 1)
         self.assertEqual(RegisteredSubject.objects.filter(
@@ -79,19 +79,21 @@ class TestMaternalLabourDel(BaseTestCase):
 
     def test_on_therapy_for_atleast4weeks(self):
         self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
-        maternal_labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject,
-                                                       live_infants_to_register=1,
-                                                       valid_regiment_duration=YES
-                                                       )
+        maternal_labour_del = mommy.make_recipe(
+            'td_maternal.maternallabourdel',
+            registered_subject=self.registered_subject,
+            live_infants_to_register=1,
+            valid_regiment_duration=YES)
         self.assertTrue(maternal_labour_del.keep_on_study)
         self.assertTrue(maternal_labour_del.antenatal_enrollment.is_eligible)
 
     def test_not_therapy_for_atleast4weeks(self):
         self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
-        maternal_labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject,
-                                                       live_infants_to_register=1,
-                                                       valid_regiment_duration=NO
-                                                       )
+        maternal_labour_del = mommy.make_recipe(
+            'td_maternal.maternallabourdel',
+            registered_subject=self.registered_subject,
+            live_infants_to_register=1,
+            valid_regiment_duration=NO)
         self.assertFalse(maternal_labour_del.keep_on_study)
         self.assertFalse(maternal_labour_del.antenatal_enrollment.is_eligible)
 

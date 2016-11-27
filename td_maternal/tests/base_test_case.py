@@ -3,12 +3,10 @@ from django.test.testcases import TestCase
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from datetime import date
+from model_mommy import mommy
 
 from edc_constants.constants import (YES, NEG, NOT_APPLICABLE, POS, NO)
 from td.models import Appointment
-
-from .factories import (MaternalUltraSoundIniFactory, AntenatalEnrollmentFactory, AntenatalEnrollmentTwoFactory,
-                        MaternalVisitFactory)
 
 
 class BaseTestCase(TestCase):
@@ -17,21 +15,22 @@ class BaseTestCase(TestCase):
         self.study_site = '40'
 
     def create_mother(self, options):
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
-            maternal_visit=self.maternal_visit_1000,
-            number_of_gestations=1)
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalEnrollmentTwoFactory(
-            registered_subject=options.get('registered_subject'))
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalenrollment', registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
     def hiv_pos_mother_options(self, registered_subject):
         options = {'registered_subject': registered_subject,

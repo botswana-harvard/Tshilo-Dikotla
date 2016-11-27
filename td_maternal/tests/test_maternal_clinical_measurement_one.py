@@ -1,6 +1,6 @@
 from .base_test_case import BaseTestCase
+from model_mommy import mommy
 
-from .factories import (MaternalEligibilityFactory, MaternalConsentFactory)
 from td_maternal.forms import MaternalClinicalMeasurementsOneForm
 
 
@@ -8,9 +8,9 @@ class TestMaternalClinicalMeasurementOne(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalClinicalMeasurementOne, self).setUp()
-        self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility)
+        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
         self.registered_subject = self.maternal_eligibility.registered_subject
         self.data = {'systolic_bp': 75,
                      'diastolic_bp': 120, }

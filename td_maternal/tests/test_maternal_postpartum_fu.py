@@ -1,5 +1,6 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
+from model_mommy import mommy
 
 from edc_constants.constants import (YES, POS, NEG, NOT_APPLICABLE, NO)
 from edc_code_lists.models import WcsDxAdult
@@ -10,18 +11,15 @@ from td_maternal.models import RegisteredSubject
 from td_maternal.forms import MaternalPostPartumFuForm
 
 from .base_test_case import BaseTestCase
-from .factories import (MaternalEligibilityFactory, MaternalConsentFactory, MaternalLabourDelFactory,
-                        AntenatalEnrollmentFactory, MaternalVisitFactory, MaternalUltraSoundIniFactory,
-                        AntenatalVisitMembershipFactory, RapidTestResultFactory)
 
 
 class TestMaternalPostPartumFu(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalPostPartumFu, self).setUp()
-        self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility)
+        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
         self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.assertEqual(RegisteredSubject.objects.all().count(), 1)
@@ -34,33 +32,36 @@ class TestMaternalPostPartumFu(BaseTestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
 
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
-        self.maternal_visit = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
-            maternal_visit=self.maternal_visit, number_of_gestations=1,)
+        self.maternal_visit = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit, number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
-            registered_subject=options.get('registered_subject'))
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership', registered_subject=options.get('registered_subject'))
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
-        self.maternal_visit = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
-        MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
-        MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
-        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_2000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
 #         self.create_mother()
         self.diagnoses = MaternalDiagnoses.objects.create(
@@ -215,28 +216,31 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
     def test_mother_negative_who_diagnosis_yes(self):
         """checks whether question 10 for WHO Stage III/IV is N/A if the mother is negative"""
-        self.maternal_eligibility_2 = MaternalEligibilityFactory()
-        self.maternal_consent_2 = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility_2,
-            first_name='TATA', last_name='TATA', identity="111121112", confirm_identity="111121112")
+        self.maternal_eligibility_2 = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent_2 = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility_2, first_name='TATA',
+            last_name='TATA', identity="111121112", confirm_identity="111121112")
 
         self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject_2))
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1020M')
-        maternal_visit_1020M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        RapidTestResultFactory(maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
-        MaternalLabourDelFactory(registered_subject=self.registered_subject_2)
+        maternal_visit_1020M = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe(
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
-        maternal_visit_2010M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        maternal_visit_2010M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
+        mommy.make_recipe(
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
-        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_2000 = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.options['maternal_visit'] = self.maternal_visit_2000.id
         form = MaternalPostPartumFuForm(data=self.options)
@@ -245,9 +249,9 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
     def test_mother_negative_who_listing_none(self):
         """Checks if the field for who diagnosis listing is empty"""
-        self.maternal_eligibility_2 = MaternalEligibilityFactory()
-        self.maternal_consent_2 = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility_2,
+        self.maternal_eligibility_2 = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent_2 = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility_2,
             first_name='TATA', last_name='TATA', identity="111121112", confirm_identity="111121112")
 
         self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
@@ -255,18 +259,23 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1020M')
-        maternal_visit_1020M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        RapidTestResultFactory(maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
-        MaternalLabourDelFactory(registered_subject=self.registered_subject_2)
+        maternal_visit_1020M = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe(
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
-        maternal_visit_2010M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        maternal_visit_2010M = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
+        mommy.make_recipe(
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
-        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_2000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.options['maternal_visit'] = self.maternal_visit_2000.id
         self.options['has_who_dx'] = NOT_APPLICABLE
@@ -277,9 +286,9 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
     def test_mother_negative_who_listing_not_not_applicable(self):
         """checks if who listing is N/A given that the mother is negative"""
-        self.maternal_eligibility_2 = MaternalEligibilityFactory()
-        self.maternal_consent_2 = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility_2,
+        self.maternal_eligibility_2 = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent_2 = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility_2,
             first_name='TATA', last_name='TATA', identity="111121112", confirm_identity="111121112")
 
         self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
@@ -287,18 +296,23 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1020M')
-        maternal_visit_1020M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        RapidTestResultFactory(maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
-        MaternalLabourDelFactory(registered_subject=self.registered_subject_2)
+        maternal_visit_1020M = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe(
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
-        maternal_visit_2010M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        maternal_visit_2010M = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
+        mommy.make_recipe(
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
-        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_2000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.options['maternal_visit'] = self.maternal_visit_2000.id
         self.options['has_who_dx'] = NOT_APPLICABLE
@@ -309,9 +323,9 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
     def test_mother_negative_who_listed_not_applicable_there(self):
         """checks if who listing is only N/A if multiple options are selected given that the mother is negative"""
-        self.maternal_eligibility_2 = MaternalEligibilityFactory()
-        self.maternal_consent_2 = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility_2,
+        self.maternal_eligibility_2 = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent_2 = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility_2,
             first_name='TATA', last_name='TATA', identity="111121112", confirm_identity="111121112")
 
         self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
@@ -319,18 +333,23 @@ class TestMaternalPostPartumFu(BaseTestCase):
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1020M')
-        maternal_visit_1020M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        RapidTestResultFactory(maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
-        MaternalLabourDelFactory(registered_subject=self.registered_subject_2)
+        maternal_visit_1020M = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe(
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
-        maternal_visit_2010M = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        maternal_visit_2010M = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        RapidTestResultFactory(maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
+        mommy.make_recipe(
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
-        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_2000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.options['maternal_visit'] = self.maternal_visit_2000.id
         self.options['has_who_dx'] = NOT_APPLICABLE

@@ -1,5 +1,6 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
+from model_mommy import mommy
 
 from edc_constants.constants import UNKNOWN, YES, NO, NEG, NOT_APPLICABLE
 
@@ -7,17 +8,15 @@ from td_maternal.models import Appointment
 from td_maternal.forms import MaternalSubstanceUsePriorPregForm
 
 from .base_test_case import BaseTestCase
-from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, AntenatalVisitMembershipFactory, MaternalVisitFactory)
 
 
 class TestMaternalSubstanceUsePriorPreg(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalSubstanceUsePriorPreg, self).setUp()
-        self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility)
+        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
         self.registered_subject = self.maternal_eligibility.registered_subject
 
         maternal_options = {
@@ -32,21 +31,20 @@ class TestMaternalSubstanceUsePriorPreg(BaseTestCase):
             'rapid_test_done': YES,
             'rapid_test_result': NEG,
             'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**maternal_options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **maternal_options)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
-                                                                number_of_gestations=1
-                                                                )
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
-            registered_subject=maternal_options.get('registered_subject'))
+        self.maternal_visit_1000 = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership', registered_subject=maternal_options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
-        MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
-        self.antenatal_visit_2 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.antenatal_visit_2 = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.options = {
             'maternal_visit': self.antenatal_visit_2.id,
@@ -56,7 +54,7 @@ class TestMaternalSubstanceUsePriorPreg(BaseTestCase):
             'alcohol_prior_preg_freq': 'daily',
             'marijuana_prior_preg': YES,
             'marijuana_prior_preg_freq': 'daily',
-            'other_illicit_substances_prior_preg': None,}
+            'other_illicit_substances_prior_preg': None}
 
     def test_smoked_prior_to_pregnancy_yes(self):
         self.options['smoking_prior_preg_freq'] = None

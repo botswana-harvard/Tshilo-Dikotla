@@ -35,6 +35,6 @@ git+https://github.com/botswana-harvard/lis@develop#egg=lis
 git+https://github.com/erikvw/django-appconfig-ini@develop#egg=django_appconfig_ini
 git+https://github.com/erikvw/django-crypto-fields@develop#egg=django_crypto_fields
 git+https://github.com/erikvw/django-revision@develop#egg=django_revision
-#pandas
+pandas
 celery
 factory-boy

@@ -11,22 +11,20 @@ from td.models import RegisteredSubject
 from td_maternal.models import SpecimenConsent
 
 from ..models import MaternalEligibility
-from .factories import MaternalEligibilityFactory, MaternalConsentFactory
-from ..models import MaternalConsent
 
 
 class TestMaternalSerializers(TestCase):
 
     def test_maternaleligibility_serializer(self):
         """ Creating maternaleligibility should creates outgoingtransaction """
-        mommy.make(MaternalEligibility)
+        mommy.make_recipe('td_maternal.maternaleligibility')
         print (MaternalEligibility.objects.all())
         print(OutgoingTransaction.objects.all())
         self.assertEqual(OutgoingTransaction.objects.filter(tx_name='td_maternal.maternaleligibility').count(), 1)
 
     def test_maternaleligibility_deserialize(self):
         """ Serialized maternaleligibility record should be able deserialized. """
-        maternal_eligibility = mommy.make(MaternalEligibility)
+        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         outgoing_transaction = OutgoingTransaction.objects.last()
         deserialized_obj = serializers.deserialize(
             "json", self.aes_decrypt(outgoing_transaction.tx),
@@ -35,9 +33,9 @@ class TestMaternalSerializers(TestCase):
 
     def test_maternalconsent_serialize(self):
         """ Creating maternalconsent should creates outgoingtransaction """
-        maternal_eligibility = mommy.make(MaternalEligibility)
+        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         mommy.make(
-            MaternalConsent,
+            'td_maternal.maternalconsent',
             maternal_eligibility=maternal_eligibility,
             identity="111121111",
             confirm_identity="111121111",
@@ -48,8 +46,8 @@ class TestMaternalSerializers(TestCase):
 
     def test_maternalconsent_deserialize(self):
         """ Serialized maternalconsent record should be able deserialized. """
-        maternal_eligibility = mommy.make(MaternalEligibility)
-        maternal_consent = mommy.make(MaternalConsent, maternal_eligibility=maternal_eligibility)
+        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
         outgoing_tx = OutgoingTransaction.objects.get(tx_name='td_maternal.maternalconsent')
         deserialized_obj = serializers.deserialize(
             "json", self.aes_decrypt(outgoing_tx.tx),
@@ -58,8 +56,8 @@ class TestMaternalSerializers(TestCase):
 
     def test_specimen_consent_serialize(self):
         """ Creating specimenconsent should creates outgoingtransaction """
-        maternal_eligibility = mommy.make(MaternalEligibility)
-        maternal_consent = mommy.make(MaternalConsent, maternal_eligibility=maternal_eligibility)
+        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
         registered_subject = RegisteredSubject.objects.get(
             identity=maternal_consent.identity
         )
@@ -72,10 +70,8 @@ class TestMaternalSerializers(TestCase):
 
     def test_speciman_consent_deserialize(self):
         """ Serialized specimenconsent record should be able deserialized. """
-        maternal_eligibility = MaternalEligibilityFactory()
-        maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=maternal_eligibility
-        )
+        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
         registered_subject = RegisteredSubject.objects.get(
             identity=maternal_consent.identity
         )
