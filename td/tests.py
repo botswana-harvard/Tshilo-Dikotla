@@ -5,8 +5,10 @@ from model_mommy import mommy
 from django.test import TestCase
 from django.utils import timezone
 
+from edc_constants.constants import POS, YES, NOT_APPLICABLE, NO
 from edc_registration.models import RegisteredSubject
 
+from td_maternal.enrollment_helper import EnrollmentHelper
 from td_maternal.models import MaternalOffstudy
 
 from .models import Appointment
@@ -40,8 +42,7 @@ class TestTd(TestCase):
 
     def test_appointment_maternal2(self):
         """Assert has appointments for eligible."""
-        maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent')
+        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent')
         antenatal_enrollment = mommy.make_recipe(
             'td_maternal.antenatalenrollment',
             subject_identifier=maternal_consent.subject_identifier,
@@ -53,3 +54,33 @@ class TestTd(TestCase):
             self.fail('MaternalOffstudy.DoesNotExist unexpectedly NOT raised.')
         except MaternalOffstudy.DoesNotExist:
             pass
+
+    def test_gestation_wks_lmp_below_16(self):
+        """Test for a positive mother with evidence of hiv_status,
+        will go on a valid regimen but weeks of gestation below 16."""
+        options = {'current_hiv_status': POS,
+                   'evidence_hiv_status': YES,
+                   'rapid_test_done': NOT_APPLICABLE,
+                   'last_period_date': (timezone.now() - relativedelta(weeks=14)).date()}
+        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent')
+        antenatal_enrollment = mommy.make_recipe(
+            'td_maternal.antenatalenrollment',
+            subject_identifier=maternal_consent.subject_identifier, **options)
+        self.assertFalse(antenatal_enrollment.is_eligible)
+        self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
+        pp.pprint(EnrollmentHelper(antenatal_enrollment).as_dict())
+        # self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
+
+    def test_on_therapy_for_atleast4weeks(self):
+        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent')
+        antenatal_enrollment = mommy.make_recipe(
+            'td_maternal.antenatalenrollment',
+            subject_identifier=maternal_consent.subject_identifier)
+        self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
+        mommy.make_recipe(
+            'td_maternal.maternallabourdel',
+            subject_identifier=maternal_consent.subject_identifier,
+            valid_regiment_duration=YES)
+        enrollment_helper = EnrollmentHelper(antenatal_enrollment)
+        self.assertTrue(enrollment_helper.eligible_after_delivery)
+        self.assertTrue(enrollment_helper.is_eligible)

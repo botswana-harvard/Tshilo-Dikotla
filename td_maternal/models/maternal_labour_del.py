@@ -130,17 +130,6 @@ class MaternalLabourDel(RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin,
     def subject_identifier(self):
         return self.registered_subject.subject_identifier
 
-    @property
-    def antenatal_enrollment(self):
-        AntenatalEnrollment = apps.get_model('td_maternal', 'antenatalenrollment')
-        return AntenatalEnrollment.objects.get(registered_subject=self.registered_subject)
-
-    @property
-    def keep_on_study(self):
-        if self.antenatal_enrollment.enrollment_hiv_status == POS and self.valid_regiment_duration != YES:
-            return False
-        return True
-
     class Meta:
         app_label = 'td_maternal'
         verbose_name = "Delivery"

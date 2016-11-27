@@ -11,6 +11,16 @@ from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG
 
 from .models import MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment
 from dateutil.relativedelta import relativedelta
+from faker.providers import BaseProvider
+
+
+class TdProvider(BaseProvider):
+
+    def twenty_five_weeks_ago(self):
+        return timezone.now() - relativedelta(weeks=25)
+
+    def four_weeks_ago(self):
+        return timezone.now() - relativedelta(weeks=4)
 
 
 class MyEdcBaseProvider(EdcBaseProvider):
@@ -19,6 +29,7 @@ class MyEdcBaseProvider(EdcBaseProvider):
 fake = Faker()
 fake.add_provider(MyEdcBaseProvider)
 fake.add_provider(EdcLabProvider)
+fake.add_provider(TdProvider)
 
 
 maternaleligibility = Recipe(
@@ -55,14 +66,13 @@ antenatalenrollment = Recipe(
     AntenatalEnrollment,
     schedule_name='maternal_enrollment_step1',
     report_datetime=timezone.now,
-    current_hiv_status=NEG,
+    current_hiv_status=YES,
     evidence_32wk_hiv_status=NOT_APPLICABLE,
-    evidence_hiv_status=NO,
+    evidence_hiv_status=YES,
     is_diabetic=NO,
     knows_lmp=YES,
-#     last_period_date=fake.six_months_ago,
-    last_period_date=(timezone.now() - relativedelta(weeks=25)).date(),
-    rapid_test_date=(timezone.now() - relativedelta(weeks=4)).date(),
+    last_period_date=fake.twenty_five_weeks_ago,
+    rapid_test_date=fake.four_weeks_ago,
     rapid_test_done=YES,
     rapid_test_result=NEG,
     week32_test=NO,
@@ -80,3 +90,15 @@ maternalvisit = Recipe(
 #     requisition_identifier=edc_lab_faker.requisition_identifier,
 #     specimen_type='WB',
 #     is_drawn=YES)
+
+maternallabourdel = Recipe(
+    report_datetime=timezone.now,
+    csection_reason=NOT_APPLICABLE,
+    delivery_datetime=timezone.now,
+    delivery_hospital='Lesirane',
+    delivery_time_estimated=NO,
+    labour_hrs='3',
+    live_infants_to_register=1,
+    mode_delivery='spontaneous vaginal',
+    valid_regiment_duration=YES,
+)
