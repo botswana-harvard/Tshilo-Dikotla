@@ -109,12 +109,6 @@ class MaternalRandoManager(models.Manager):
         return self.get(sid=sid, registered_subject=registered_subject)
 
 
-class MaternalVisitManager(models.Manager):
-
-    def get_by_natural_key(self, subject_identifier, visit_code):
-        return self.get(subject_identifier=subject_identifier, visit_code=visit_code)
-
-
 class RapidTestResultManager(models.Manager):
 
     def get_by_natural_key(self, subject_identifier_as_pk):

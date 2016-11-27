@@ -1,6 +1,7 @@
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, date
 from django.utils import timezone
+from model_mommy import mommy
 
 from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO, CONTINUOUS, STOPPED, RESTARTED)
 
@@ -9,16 +10,15 @@ from td_list.models import PriorArv
 from td_maternal.forms import MaternalLifetimeArvHistoryForm
 
 from .base_test_case import BaseTestCase
-from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, MaternalObstericHistoryFactory, MaternalVisitFactory)
 
 
 class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalLifetimeArvHistoryForm, self).setUp()
-        self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(maternal_eligibility=self.maternal_eligibility)
+        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
         self.subject_identifier = self.maternal_consent.subject_identifier
 
         options = {'subject_identifier': self.subject_identifier,
@@ -29,19 +29,20 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.subject_identifier, visit_code='1000M')
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
-            maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
 
         prior_arv = PriorArv.objects.create(
             hostname_created="django", name="Atripla", short_name="Atripla",
-            created="2016-23-20T15:05:12.799", user_modified="", modified="2016-23-20T15:05:12.799", 
-            hostname_modified="django", version="1.0", display_index=1, user_created="django", 
+            created="2016-23-20T15:05:12.799", user_modified="", modified="2016-23-20T15:05:12.799",
+            hostname_modified="django", version="1.0", display_index=1, user_created="django",
             field_name=None, revision=":develop")
 
         self.options = {
@@ -97,12 +98,13 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
         form = MaternalLifetimeArvHistoryForm(data=self.options)
         self.assertIn(
             'You indicated that the mother was still on triple ARV when she got pregnant, '
-            'yet you indicated that ARVs were interrupted and never restarted. Please correct.', 
+            'yet you indicated that ARVs were interrupted and never restarted. Please correct.',
             form.errors.get('__all__'))
 
     def test_haart_start_date_2(self):
         """Start date of ARVs CANNOT be before DOB"""
-        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit_1000, prev_pregnancies=1)
+        mommy.make_recipe(
+            'td_maternal.maternalobsterichistory', maternal_visit=self.maternal_visit_1000, prev_pregnancies=1)
         self.options['prev_sdnvp_labour'] = NOT_APPLICABLE
         self.options['prev_preg_azt'] = NOT_APPLICABLE
         self.options['prev_preg_haart'] = YES
@@ -114,7 +116,8 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
     def test_haart_start_date_none(self):
         """Start date of ARVs CANNOT be None"""
-        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit_1000, prev_pregnancies=1)
+        mommy.make_recipe(
+            'td_maternal.maternalobsterichistory', maternal_visit=self.maternal_visit_1000, prev_pregnancies=1)
         self.options['prev_sdnvp_labour'] = NOT_APPLICABLE
         self.options['prev_preg_azt'] = NOT_APPLICABLE
         self.options['prev_preg_haart'] = YES
@@ -125,7 +128,8 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
         self.assertIn("Please give a valid arv initiation date.", errors)
 
     def test_prev_preg_azt(self):
-        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit_1000, prev_pregnancies=0)
+        mommy.make_recipe(
+            'td_maternal.maternalobsterichistory', maternal_visit=self.maternal_visit_1000, prev_pregnancies=0)
         self.options['prev_preg_azt'] = YES
         form = MaternalLifetimeArvHistoryForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
@@ -135,7 +139,8 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
             'NOT APPLICABLE', errors)
 
     def test_prev_sdnvp_labour(self):
-        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit_1000, prev_pregnancies=0)
+        mommy.make_recipe(
+            'td_maternal.maternalobsterichistory', maternal_visit=self.maternal_visit_1000, prev_pregnancies=0)
         self.options['prev_sdnvp_labour'] = YES
         self.options['prev_preg_azt'] = NOT_APPLICABLE
         form = MaternalLifetimeArvHistoryForm(data=self.options)
@@ -146,7 +151,8 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
             'be NOT APPLICABLE', errors)
 
     def test_prev_preg_haart(self):
-        MaternalObstericHistoryFactory(maternal_visit=self.maternal_visit_1000, prev_pregnancies=0)
+        mommy.make_recipe(
+            'td_maternal.maternalobsterichistory', maternal_visit=self.maternal_visit_1000, prev_pregnancies=0)
         self.options['prev_sdnvp_labour'] = NOT_APPLICABLE
         self.options['prev_preg_azt'] = NOT_APPLICABLE
         self.options['prev_preg_haart'] = YES

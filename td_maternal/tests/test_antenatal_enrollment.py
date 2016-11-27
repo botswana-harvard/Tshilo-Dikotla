@@ -1,6 +1,7 @@
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from django.test import TestCase
+from model_mommy import mommy
 
 from edc_constants.constants import (
     POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN, FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY)
@@ -9,10 +10,7 @@ from edc_visit_tracking.constants import SCHEDULED
 from td.models import Appointment
 
 from ..enrollment_helper import EnrollmentHelper
-from ..models import MaternalVisit, MaternalOffStudy
-
-from .factories import (
-    AntenatalEnrollmentFactory, MaternalEligibilityFactory, MaternalConsentFactory, MaternalVisitFactory)
+from ..models import MaternalVisit, MaternalOffstudy
 
 
 class TestAntenatalEnrollment(TestCase):
@@ -20,8 +18,9 @@ class TestAntenatalEnrollment(TestCase):
 
     def setUp(self):
         self.study_site = '40'
-        self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(maternal_eligibility=self.maternal_eligibility)
+        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
         self.subject_identifier = self.maternal_consent.subject_identifier
 
     def test_gestation_wks_lmp_below_16(self):
@@ -32,7 +31,7 @@ class TestAntenatalEnrollment(TestCase):
                    'evidence_hiv_status': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.now() - relativedelta(weeks=14)).date()}
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
@@ -48,7 +47,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.now() - relativedelta(weeks=37)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
@@ -64,7 +63,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
@@ -80,7 +79,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.assertEqual(Appointment.objects.all().count(), 1)
@@ -97,7 +96,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
@@ -114,7 +113,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.assertEqual(Appointment.objects.all().count(), 1)
@@ -131,7 +130,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.assertEqual(Appointment.objects.all().count(), 1)
@@ -149,7 +148,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
@@ -167,7 +166,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.assertEqual(Appointment.objects.all().count(), 1)
@@ -185,7 +184,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
@@ -205,7 +204,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_date': None,
                    'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.assertEqual(Appointment.objects.all().count(), 1)
@@ -225,7 +224,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_result': POS,
                    'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.assertEqual(Appointment.objects.all().count(), 1)
@@ -246,7 +245,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_date': None,
                    'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         self.assertTrue(enrollment_helper.validate_rapid_test)
@@ -267,7 +266,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_result': NEG,
                    'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, NEG)
         self.assertFalse(enrollment_helper.validate_rapid_test)
@@ -288,31 +287,10 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_date': None,
                    'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, NEG)
         self.assertTrue(enrollment_helper.validate_rapid_test)
-
-#     def test_mother_tested_NEG_after_32weeks_then_rapidtest_notenforced(self):
-#         """Test for a mother who tested NEG AFTER 32weeks, with documentation then rapid test not enforced"""
-#
-#         options = {'subject_identifier': self.subject_identifier,
-#                    'current_hiv_status': UNKNOWN,
-#                    'evidence_hiv_status': None,
-#                    'week32_test': YES,
-#                    'week32_test_date': (timezone.now() + relativedelta(weeks=5)).date(),
-#                    'week32_result': NEG,
-#                    'evidence_32wk_hiv_status': YES,
-#                    'will_get_arvs': NOT_APPLICABLE,
-#                    'rapid_test_done': NOT_APPLICABLE,
-#                    'rapid_test_result': None,
-#                    'rapid_test_date': None,
-#                    'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
-#
-#         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
-#         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
-#         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, NEG)
-#         self.assertTrue(enrollment_helper.validate_rapid_test)
 
     def test_mother_tested_NEG_no_LMP_rapidtest_enforced(self):
         """Test for a mother who tested NEG with documentation but no LMP then rapid test is enforced"""
@@ -332,7 +310,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_date': None,
                    'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
         self.assertTrue(enrollment_helper.validate_rapid_test)
 
@@ -350,7 +328,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': YES,
                    'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
         self.assertFalse(enrollment_helper.validate_rapid_test)
 
@@ -367,7 +345,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_result': NEG,
                    'last_period_date': (timezone.now() - relativedelta(weeks=35)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
         self.scheduled_visit_on_eligible_or_pending(self.subject_identifier)
 
@@ -384,7 +362,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_result': POS,
                    'last_period_date': (timezone.now() - relativedelta(weeks=35)).date()}
 
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
@@ -399,7 +377,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': YES,
                    'rapid_test_date': timezone.now().date(),
                    'rapid_test_result': POS}
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertTrue(antenatal_enrollment.pending_ultrasound)
         self.scheduled_visit_on_eligible_or_pending(self.subject_identifier)
@@ -415,7 +393,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': YES,
                    'rapid_test_date': timezone.now().date(),
                    'rapid_test_result': POS}
-        antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.pending_ultrasound)
         self.assertIsNone(antenatal_enrollment.last_period_date)
         self.assertIsNone(antenatal_enrollment.ga_lmp_enrollment_wks)
@@ -426,7 +404,7 @@ class TestAntenatalEnrollment(TestCase):
     def test_off_study_visit_on_ineligible(self, subject_identifier):
         self.appointment = Appointment.objects.get(
             subject_identifier=subject_identifier, visit_code='1000M')
-        MaternalVisitFactory(appointment=self.appointment, reason='failed eligibility', study_status=OFF_STUDY)
+        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='failed eligibility', study_status=OFF_STUDY)
         self.assertEqual(MaternalVisit.objects.all().count(), 1)
         self.assertEqual(MaternalVisit.objects.filter(
             reason=FAILED_ELIGIBILITY,
@@ -436,9 +414,9 @@ class TestAntenatalEnrollment(TestCase):
     def test_scheduled_visit_on_eligible_or_pending(self, subject_identifier):
         self.appointment = Appointment.objects.get(
             subject_identifier=subject_identifier, visit_code='1000M')
-        MaternalVisitFactory(appointment=self.appointment, reason='scheduled', study_status=ON_STUDY)
+        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled', study_status=ON_STUDY)
         self.assertEqual(MaternalVisit.objects.all().count(), 1)
-        self.assertEqual(MaternalOffStudy.objects.all().count(), 0)
+        self.assertEqual(MaternalOffstudy.objects.all().count(), 0)
         self.assertEqual(MaternalVisit.objects.filter(
             reason=SCHEDULED,
             study_status=ON_STUDY,

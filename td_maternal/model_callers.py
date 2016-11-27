@@ -4,10 +4,10 @@ from edc_call_manager.models import Call, Log, LogEntry
 
 from td.models import RegisteredSubject
 
-from .models import MaternalLocator, MaternalConsent, AntenatalEnrollment, MaternalOffStudy
+from .models import MaternalLocator, MaternalConsent, AntenatalEnrollment, MaternalOffstudy
 
 
-@register(AntenatalEnrollment, MaternalOffStudy)
+@register(AntenatalEnrollment, MaternalOffstudy)
 class MaternalModelCaller(ModelCaller):
     call_model = (Call, 'subject_identifier')
     label = 'subjects'
@@ -17,4 +17,4 @@ class MaternalModelCaller(ModelCaller):
     log_entry_model = LogEntry
     log_model = Log
     interval = WEEKLY
-    # unscheduling_model = MaternalOffStudy
+    # unscheduling_model = MaternalOffstudy

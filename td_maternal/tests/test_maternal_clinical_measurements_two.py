@@ -1,13 +1,12 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
+from model_mommy import mommy
 
 from edc_constants.constants import UNKNOWN, YES, NEG, NOT_APPLICABLE, NO, POS
 from td.models import Appointment
 
 from td_maternal.forms import MaternalClinicalMeasurementsTwoForm
 
-from .factories import (MaternalEligibilityFactory, MaternalConsentFactory, AntenatalEnrollmentFactory,
-                        MaternalUltraSoundIniFactory, AntenatalVisitMembershipFactory, MaternalVisitFactory)
 from .base_test_case import BaseTestCase
 
 
@@ -15,9 +14,9 @@ class TestMaternalClinicalMeasurementsTwo(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalClinicalMeasurementsTwo, self).setUp()
-        self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility)
+        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
         self.registered_subject = self.maternal_eligibility.registered_subject
         self.antenatal_visit_1 = None
 
@@ -57,19 +56,20 @@ class TestMaternalClinicalMeasurementsTwo(BaseTestCase):
         self.assertIn('Diastolic Blood Pressure field cannot be blank. Please correct', form.errors.get('__all__'))
 
     def create_mother(self, status_options):
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**status_options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **status_options)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
-                                                                number_of_gestations=1
-                                                                )
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
-            registered_subject=status_options.get('registered_subject'))
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership', registered_subject=status_options.get('registered_subject'))
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
-        self.maternal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
     def hiv_pos_mother_options(self, registered_subject):
         options = {'registered_subject': registered_subject,

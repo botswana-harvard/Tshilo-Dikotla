@@ -9,7 +9,7 @@ from edc_constants.choices import YES, NO, POS, NEG, NOT_APPLICABLE
 from td_maternal.models import PostnatalEnrollment
 from td.constants import LIVE, STILL_BIRTH
 
-from ..factories import MaternalConsentFactory, MaternalOffStudyFactory
+from ..factories import MaternalConsentFactory, MaternalOffstudyFactory
 
 
 class PostnatalEnrollmentFactory(factory.DjangoModelFactory):
@@ -19,7 +19,7 @@ class PostnatalEnrollmentFactory(factory.DjangoModelFactory):
 
     report_datetime = timezone.datetime.now()
     consent_model = MaternalConsentFactory
-    off_study_model = MaternalOffStudyFactory
+    off_study_model = MaternalOffstudyFactory
     postpartum_days = 1
     vaginal_delivery = YES
     gestation_wks_delivered = timezone.datetime.date(datetime.today())

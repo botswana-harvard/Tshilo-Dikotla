@@ -1,6 +1,7 @@
 from dateutil.relativedelta import relativedelta
 from datetime import timedelta
 from django.utils import timezone
+from model_mommy import mommy
 
 from edc_constants.constants import YES, NOT_APPLICABLE, POS, NO
 
@@ -9,17 +10,15 @@ from td.models import RegisteredSubject
 from td_maternal.forms import MaternalObstericalHistoryForm
 
 from .base_test_case import BaseTestCase
-from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, MaternalVisitFactory)
 
 
 class TestMaternalObstericalHistoryForm(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalObstericalHistoryForm, self).setUp()
-        self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility)
+        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
         self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.assertEqual(RegisteredSubject.objects.all().count(), 1)
@@ -32,13 +31,16 @@ class TestMaternalObstericalHistoryForm(BaseTestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'knows_lmp': NO,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=20)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
-            maternal_visit=self.maternal_visit_1000, number_of_gestations=1,
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
+            maternal_visit=self.maternal_visit_1000,
+            number_of_gestations=1,
             est_edd_ultrasound=timezone.now().date() + timedelta(days=120), ga_confrimation_method=1)
 
         self.options = {

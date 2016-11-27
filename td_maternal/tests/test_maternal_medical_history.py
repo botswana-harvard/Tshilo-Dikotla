@@ -1,27 +1,24 @@
-from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from datetime import date
+from model_mommy import mommy
 
 from edc_code_lists.models import WcsDxAdult
 from edc_constants.constants import YES, NO, NOT_APPLICABLE
 
-from td_maternal.models import MaternalVisit
 from td_maternal.forms import MaternalMedicalHistoryForm, antenatal_enrollment_form
 from td_list.models import ChronicConditions, MaternalMedications
 
-from td.models import Appointment
 
 from .base_test_case import BaseTestCase
-from .factories import (MaternalEligibilityFactory, MaternalConsentFactory, MaternalLabourDelFactory)
 
 
 class TestMaternalMedicalHistory(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalMedicalHistory, self).setUp()
-        self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility)
+        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
         self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.chronic_cond = ChronicConditions.objects.create(
@@ -125,7 +122,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
            and the WHO diagnosis has been indicated as NOT_APPLICABLE """
 
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = YES
         self.options['who_diagnosis'] = NOT_APPLICABLE
@@ -138,7 +135,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The Mother is HIV Negative yet who_diagnosis has been indicated as YES. should be NOT_APPLICABLE"""
 
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = YES
@@ -150,7 +147,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV Negative but has who diagnosis listing"""
 
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NOT_APPLICABLE
         self.options['who_diagnosis'] = NOT_APPLICABLE
@@ -164,7 +161,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV Negative but has who diagnosis listing as well as N/A"""
 
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NOT_APPLICABLE
         self.options['who_diagnosis'] = NOT_APPLICABLE
@@ -178,7 +175,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV Negative but has who diagnosis listing as none"""
 
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NOT_APPLICABLE
         self.options['who_diagnosis'] = NOT_APPLICABLE
@@ -193,7 +190,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
            should be YES"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = YES
         self.options['who_diagnosis'] = NO
@@ -206,7 +203,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
            should be YES"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
@@ -219,7 +216,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
            but the WHO conditions not listed"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = YES
         self.options['who_diagnosis'] = YES
@@ -233,7 +230,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
            but the WHO conditions listed N/A"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = YES
         self.options['who_diagnosis'] = YES
@@ -246,7 +243,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
     def test_positive_mother_no_chronic_who_listed_not_applicable_not_there(self):
         """The mother does not who stage III and IV, who listing shoul be N/A"""
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NO
@@ -259,7 +256,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
     def test_positive_mother_no_chronic_who_listed_not_applicable_there(self):
         """The mother does not who stage III and IV, who listing should be N/A"""
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NO
@@ -273,7 +270,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """the mother is HIV positive but it is indicated that she is not sero positive"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['sero_posetive'] = NO
         form = MaternalMedicalHistoryForm(data=self.options)
@@ -285,7 +282,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """the mother is HIV sero positive but the date of hiv diagnosis has not been supplied"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['sero_posetive'] = YES
         self.options['date_hiv_diagnosis'] = None
@@ -299,7 +296,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
            applicable"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['sero_posetive'] = YES
         self.options['perinataly_infected'] = NOT_APPLICABLE
@@ -312,7 +309,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV Positive so the field for whether anyone knows her status should not be not applicable"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['know_hiv_status'] = NOT_APPLICABLE
         form = MaternalMedicalHistoryForm(data=self.options)
@@ -324,7 +321,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is hiv sero positive, the field for whether the lowest cd4 count is known should not be N/A"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['lowest_cd4_known'] = NOT_APPLICABLE
         form = MaternalMedicalHistoryForm(data=self.options)
@@ -336,7 +333,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV sero-positive and the lowest cd4 count is known but it has not been supplied"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['cd4_count'] = None
         form = MaternalMedicalHistoryForm(data=self.options)
@@ -347,7 +344,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV sero-positive but the date for the cd4 test has not been supplied"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['cd4_date'] = None
         form = MaternalMedicalHistoryForm(data=self.options)
@@ -359,7 +356,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
            is N/A"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['is_date_estimated'] = None
         form = MaternalMedicalHistoryForm(data=self.options)
@@ -372,7 +369,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV sero-positive and the lowest cd4 count is not known but the value has been supplied"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['lowest_cd4_known'] = NO
         form = MaternalMedicalHistoryForm(data=self.options)
@@ -384,19 +381,19 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV sero-positive and the lowest cd4 count is not known but the date has been supplied"""
 
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['lowest_cd4_known'] = NO
         self.options['cd4_count'] = None
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn('The Mothers lowest CD4 count is not known, therefore the date for the CD4 test should be blank',
                       form.errors.get('__all__'))
- 
+
     def test_mother_positive_lowest_cd4_count_not_known_isdate_estimated_not_none(self):
         """The mother is HIV sero-positive and the lowest cd4 count is not known but the field for whether the da"""
- 
+
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['lowest_cd4_known'] = NO
         self.options['cd4_count'] = None
@@ -406,12 +403,12 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.assertIn('The Mothers lowest CD4 count is not known, the field for whether the date is estimated should'
                       ' be None',
                       form.errors.get('__all__'))
- 
+
     def test_mother_negative_seropositive_yes(self):
         """The mother is HIV negative, she cannot be HIV Sero positive"""
- 
+
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
@@ -419,12 +416,12 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.options['sero_posetive'] = YES
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn('The Mother is HIV Negative she cannot be Sero Positive', form.errors.get('__all__'))
- 
+
     def test_mother_negative_seropositive_date_supplied(self):
         """The mother is HIV Negative but the date of HIV diagnosis has been supplied"""
- 
+
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
@@ -433,12 +430,12 @@ class TestMaternalMedicalHistory(BaseTestCase):
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn('The Mother is HIV Negative, the approximate date of diagnosis should not be supplied',
                       form.errors.get('__all__'))
- 
+
     def test_mother_negative_perinatally_infected_yes(self):
         """The mother is HIV Negative but the field for whether she was Perinatally infected is YES"""
- 
+
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
@@ -454,7 +451,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV Negative so the field for whether anyone knows that she is positive should be N/A"""
 
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
@@ -472,7 +469,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV Negative, the field for whether the lowest cd4 count is known should be N/A"""
 
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
@@ -489,7 +486,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV Negative, she can't have a lowest cd4 count"""
 
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
@@ -507,7 +504,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV Negative, she can't have a cd4 count test date"""
 
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
@@ -526,7 +523,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         """The mother is HIV Negative, the field for whether the cd4 count test date is estimated should be N/A"""
 
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE

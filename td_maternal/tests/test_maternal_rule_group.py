@@ -1,27 +1,22 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
+from model_mommy import mommy
 
-from edc_constants.constants import (POS, NEG, YES, NO, NOT_APPLICABLE, UNK)
-from edc_metadata.constants import NOT_REQUIRED, REQUIRED, KEYED
+from edc_constants.constants import (POS, NEG, YES, NO, NOT_APPLICABLE)
+from edc_metadata.constants import REQUIRED
 from td.models import Appointment
 
 from td_maternal.tests import BaseTestCase
-from td_maternal.models import CrfMetadata, RequisitionMetadata, MaternalVisit, MaternalInterimIdcc
-
-from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,
-                                         MaternalConsentFactory, AntenatalEnrollmentFactory,
-                                         AntenatalVisitMembershipFactory, MaternalVisitFactory, RapidTestResultFactory,
-                                         MaternalInterimIdccFactory, MaternalLabourDelFactory, 
-                                         MaternalRandomizationFactory)
+from td_maternal.models import CrfMetadata, RequisitionMetadata, MaternalVisit
 
 
 class TestMaternalRuleGroups(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalRuleGroups, self).setUp()
-        self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility)
+        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
         self.registered_subject = self.maternal_eligibility.registered_subject
 
     def test_maternal_hiv_maternalrando(self):
@@ -34,21 +29,25 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
 
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership',
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.assertEqual(
             CrfMetadata.objects.filter(
@@ -67,12 +66,14 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
 
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
         self.assertEqual(
@@ -92,22 +93,26 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
 
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership', 
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
 
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.assertEqual(
             CrfMetadata.objects.filter(
                 entry_status='REQUIRED',
@@ -125,23 +130,28 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership',
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
 
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        MaternalInterimIdccFactory(
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe(
+            'td_maternal.maternalinterimidcc',
             maternal_visit=self.antenatal_visit_1,
             recent_cd4_date=(timezone.datetime.now() - relativedelta(months=4)).date())
 
@@ -162,23 +172,28 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership',
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
 
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.assertTrue(MaternalVisit.objects.all().count(), 2)
-        MaternalInterimIdccFactory(
+        mommy.make_recipe(
+            'td_maternal.maternalinterimidcc',
             maternal_visit=self.antenatal_visit_1, recent_cd4=15,
             recent_cd4_date=(timezone.datetime.now() - relativedelta(weeks=2)).date())
         self.assertEqual(
@@ -203,35 +218,44 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'rapid_test_result': NEG,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
 
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership',
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
 
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        self.antenatal_visit_2 = MaternalVisitFactory(
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.antenatal_visit_2 = mommy.make_recipe(
+            'td_maternal.maternalvisit',
             appointment=Appointment.objects.get(subject_identifier=options.get('registered_subject'),
                                                 visit_code='1020M'), reason='scheduled')
-        self.maternal_labour_del = MaternalLabourDelFactory(registered_subject=options.get('registered_subject'),
-                                                            live_infants_to_register=1)
-        RapidTestResultFactory(
+        self.maternal_labour_del = mommy.make_recipe(
+            'td_maternal.maternallabourdel',
+            registered_subject=options.get('registered_subject'),
+            live_infants_to_register=1)
+        mommy.make_recipe(
+            'td_maternal.rapidtestresult',
             maternal_visit=self.antenatal_visit_2, rapid_test_done=YES, result=NEG,
             result_date=(timezone.datetime.now() - relativedelta(days=90)).date())
 
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'),
             visit_code='2000M')
-        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_2000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.assertEqual(
             CrfMetadata.objects.filter(
                 subject_identifier=options.get('registered_subject'),
@@ -249,22 +273,26 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership',
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
 
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.assertEqual(
             RequisitionMetadata.objects.filter(
                 entry_status='REQUIRED',
@@ -286,22 +314,26 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'rapid_test_date': timezone.now().date(),
                    'rapid_test_result': NEG,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership',
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
 
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.assertEqual(
             RequisitionMetadata.objects.filter(
@@ -325,22 +357,26 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'rapid_test_result': NEG,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
 
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership',
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
 
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.assertEqual(
             CrfMetadata.objects.filter(
@@ -362,22 +398,26 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'rapid_test_result': NEG,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
 
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership',
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
 
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.assertEqual(
             CrfMetadata.objects.filter(
                 subject_identifier=self.registered_subject.subject_identifier,
@@ -395,28 +435,33 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership',
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
 
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        MaternalRandomizationFactory(maternal_visit=self.antenatal_visit_1)
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe(
+            'td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
 
         """Second participant"""
-        self.maternal_eligibility_2 = MaternalEligibilityFactory()
-        self.maternal_consent_2 = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility_2,
+        self.maternal_eligibility_2 = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent_2 = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility_2,
             first_name='TATAS', last_name='TATAS', identity="111121113", confirm_identity="111121113")
         self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
 
@@ -428,29 +473,32 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1000M')
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
-                                                                number_of_gestations=1
-                                                                )
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership',
             registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1010M')
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        maternal_randomization_2 = MaternalRandomizationFactory(maternal_visit=self.antenatal_visit_1)
+        maternal_randomization_2 = mommy.make_recipe(
+            'td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
         self.assertEqual(maternal_randomization_2.sid, 2)
 
         """Third participant"""
-        self.maternal_eligibility_3 = MaternalEligibilityFactory()
-        self.maternal_consent_3 = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility_3,
+        self.maternal_eligibility_3 = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent_3 = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility_3,
             first_name='TATAR', last_name='TATAR', identity="111121113", confirm_identity="111121113")
         self.registered_subject_3 = self.maternal_consent_3.maternal_eligibility.registered_subject
 
@@ -462,33 +510,38 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_3.subject_identifier, visit_code='1000M')
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
-                                                                number_of_gestations=1
-                                                                )
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership',
             registered_subject=self.registered_subject_3)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_3.subject_identifier, visit_code='1010M')
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        maternal_randomization_3 = MaternalRandomizationFactory(maternal_visit=self.antenatal_visit_1)
+        maternal_randomization_3 = mommy.make_recipe(
+            'td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
         self.assertEqual(maternal_randomization_3.sid, 3)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_3.subject_identifier, visit_code='1020M')
 
-        MaternalLabourDelFactory(registered_subject=self.registered_subject_3)
+        mommy.make_recipe(
+            'td_maternal.maternallabourdel', registered_subject=self.registered_subject_3)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_3.subject_identifier, visit_code='2000M')
-        MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.assertEqual(
             CrfMetadata.objects.filter(
@@ -507,32 +560,39 @@ class TestMaternalRuleGroups(BaseTestCase):
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
 
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership',
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
 
-        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        MaternalRandomizationFactory(maternal_visit=self.antenatal_visit_1)
+        self.antenatal_visit_1 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe(
+            'td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
 
-        MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe(
+            'td_maternal.maternallabourdel', registered_subject=self.registered_subject)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
-        MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.assertEqual(
             CrfMetadata.objects.filter(

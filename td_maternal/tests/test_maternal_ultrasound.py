@@ -1,17 +1,15 @@
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
-# from edc_consent.models import ConsentType
+from model_mommy import mommy
+
 from td.models import RegisteredSubject
 from edc_constants.constants import (FAILED_ELIGIBILITY, OFF_STUDY, POS, YES,
-                                     NO, NOT_APPLICABLE, SCREENED)
-from edc_visit_tracking.constants import SCHEDULED
+                                     NO, NOT_APPLICABLE)
 
 from td.models import Appointment
 from td_maternal.models import MaternalVisit
 
 from .base_test_case import BaseTestCase
-from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, MaternalOffStudyFactory, MaternalVisitFactory)
 
 
 class TestMaternalUltrasound(BaseTestCase):
@@ -19,9 +17,9 @@ class TestMaternalUltrasound(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalUltrasound, self).setUp()
-        self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility)
+        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
         self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.assertEqual(self.maternal_consent.version, '1')
@@ -36,12 +34,12 @@ class TestMaternalUltrasound(BaseTestCase):
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1000M')
-        self.maternal_visit_1000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_1000 = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
     def test_pass_eligibility_on_singleton_pregnancy(self):
         """Test antenatal Enrollment remains as eligible on singleton fetus ultrasound."""
@@ -49,16 +47,16 @@ class TestMaternalUltrasound(BaseTestCase):
         options = {'number_of_gestations': 1,
                    'maternal_visit': self.maternal_visit_1000,
                    'est_edd_ultrasound': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
-        maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
+        maternal_ultrasound = mommy.make_recipe('td_maternal.maternalultrasoundinitial', **options)
         self.assertTrue(maternal_ultrasound.antenatal_enrollment.is_eligible)
 
     def test_fail_eligibility_on_non_singleton_pregnancy(self):
         """Test antenatal Enrollment fails eligible on non-singleton fetus ultrasound."""
         options = {'number_of_gestations': 2,
                    'maternal_visit': self.maternal_visit_1000}
-        maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
+        maternal_ultrasound = mommy.make_recipe('td_maternal.maternalultrasoundinitial', **options)
         self.assertFalse(maternal_ultrasound.antenatal_enrollment.is_eligible)
-        MaternalOffStudyFactory(maternal_visit=self.maternal_visit_1000)
+        mommy.make_recipe('td_maternal.maternaloffstudy', maternal_visit=self.maternal_visit_1000)
 
     # TODO: Fix all off study code
     def test_create_visit_with_offstudy_on_failure(self):
@@ -66,7 +64,7 @@ class TestMaternalUltrasound(BaseTestCase):
         options = {'number_of_gestations': 2,
                    'maternal_visit': self.maternal_visit_1000,
                    'est_edd_ultrasound': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
-        maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
+        maternal_ultrasound = mommy.make_recipe('td_maternal.maternalultrasoundinitial', **options)
         self.assertTrue(maternal_ultrasound.antenatal_enrollment.is_eligible)
         self.assertEqual(MaternalVisit.objects.filter(
             reason=FAILED_ELIGIBILITY,
@@ -80,10 +78,10 @@ class TestMaternalUltrasound(BaseTestCase):
         options = {'number_of_gestations': 1,
                    'maternal_visit': self.maternal_visit_1000,
                    'est_edd_ultrasound': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
-        maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
+        maternal_ultrasound = mommy.make_recipe('td_maternal.maternalultrasoundinitial', **options)
         enrollment = maternal_ultrasound.antenatal_enrollment
-        edd_by_lmp = ((enrollment.last_period_date + relativedelta(years=1) + relativedelta(days=7)) -
-            relativedelta(months=3))
+        edd_by_lmp = (
+            (enrollment.last_period_date + relativedelta(years=1) + relativedelta(days=7)) -relativedelta(months=3))
         lmp = int(abs(40 - ((enrollment.edd_by_lmp - maternal_ultrasound.report_datetime.date()).days / 7)))
         self.assertEqual(maternal_ultrasound.ga_by_lmp, lmp)
 
@@ -98,7 +96,7 @@ class TestMaternalUltrasound(BaseTestCase):
         options = {'number_of_gestations': 1,
                    'maternal_visit': self.maternal_visit_1000,
                    'est_edd_ultrasound': self.antenatal_enrollment.edd_by_lmp + relativedelta(days=17)}
-        maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
+        maternal_ultrasound = mommy.make_recipe('td_maternal.maternalultrasoundinitial', **options)
         ga_confirmed = int(abs(40 - ((maternal_ultrasound.edd_confirmed -
             maternal_ultrasound.report_datetime.date()).days / 7)))
         self.assertEqual(maternal_ultrasound.ga_confirmed, ga_confirmed)
@@ -114,7 +112,7 @@ class TestMaternalUltrasound(BaseTestCase):
         antenatal.knows_lmp = NO,
         antenatal.last_period_date = None
         antenatal.save()
-        maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
+        maternal_ultrasound = mommy.make_recipe('td_maternal.maternalultrasoundinitial', **options)
         self.assertEqual(maternal_ultrasound.edd_confirmed, maternal_ultrasound.est_edd_ultrasound)
 
     def test_no_antenatal_lmp_but_eligible_from_ultrasound_gaconfirmed(self):
@@ -128,7 +126,7 @@ class TestMaternalUltrasound(BaseTestCase):
         antenatal.knows_lmp = NO,
         antenatal.last_period_date = None
         antenatal.save()
-        ultrasound = MaternalUltraSoundIniFactory(**options)
+        ultrasound = mommy.make_recipe('td_maternal.maternalultrasoundinitial', **options)
         antenatal = ultrasound.antenatal_enrollment
         self.assertTrue(antenatal.is_eligible)
 
@@ -144,6 +142,6 @@ class TestMaternalUltrasound(BaseTestCase):
         antenatal.knows_lmp = NO,
         antenatal.last_period_date = None
         antenatal.save()
-        ultrasound = MaternalUltraSoundIniFactory(**options)
+        ultrasound = mommy.make_recipe('td_maternal.maternalultrasoundinitial', **options)
         antenatal = ultrasound.antenatal_enrollment
         self.assertFalse(antenatal.is_eligible)

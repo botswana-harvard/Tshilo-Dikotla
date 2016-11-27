@@ -1,5 +1,6 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
+from model_mommy import mommy
 
 from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO)
 
@@ -9,17 +10,15 @@ from td.models import RegisteredSubject
 from td_maternal.forms import MaternalArvPostForm
 
 from .base_test_case import BaseTestCase
-from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, MaternalVisitFactory, MaternalLabourDelFactory, AntenatalVisitMembershipFactory)
 
 
 class TestMaternalArvPost(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalArvPost, self).setUp()
-        self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=self.maternal_eligibility)
+        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        self.maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
         self.registered_subject = self.maternal_eligibility.registered_subject
 
         self.assertEqual(RegisteredSubject.objects.all().count(), 1)
@@ -31,32 +30,35 @@ class TestMaternalArvPost(BaseTestCase):
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
-        self.maternal_visit = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = MaternalUltraSoundIniFactory(
-            maternal_visit=self.maternal_visit, number_of_gestations=1,)
+        self.maternal_visit = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.maternal_ultrasound = mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit, number_of_gestations=1,)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
-            registered_subject=options.get('registered_subject'))
+        self.antenatal_visits_membership = mommy.make_recipe(
+            'td_maternal.antenatalvisitmembership', registered_subject=options.get('registered_subject'))
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
-        self.maternal_visit = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
 
-        MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
-        MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
-        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
+        self.maternal_visit_2000 = mommy.make_recipe(
+            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.data = {
             'maternal_visit': self.maternal_visit_2000.id,
             'report_datetime': timezone.now(),

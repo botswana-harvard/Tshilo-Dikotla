@@ -8,12 +8,17 @@ from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_metadata.model_mixins import CreatesMetadataModelMixin
 from edc_visit_tracking.choices import VISIT_REASON
 from edc_visit_tracking.model_mixins import (VisitModelMixin, CaretakerFieldsMixin)
+from edc_visit_tracking.managers import VisitModelManager
 
 from td.models import Appointment
 
-from ..managers import MaternalVisitManager
-
 from .antenatal_enrollment import AntenatalEnrollment
+
+
+class MaternalVisitManager(VisitModelManager, models.Manager):
+
+    def get_by_natural_key(self, subject_identifier, visit_code):
+        return self.get(subject_identifier=subject_identifier, visit_code=visit_code)
 
 
 class MaternalVisit(CreatesMetadataModelMixin, RequiresConsentMixin, CaretakerFieldsMixin,
@@ -23,9 +28,9 @@ class MaternalVisit(CreatesMetadataModelMixin, RequiresConsentMixin, CaretakerFi
 
     appointment = models.OneToOneField(Appointment, on_delete=models.PROTECT)
 
-    history = HistoricalRecords()
-
     objects = MaternalVisitManager()
+
+    history = HistoricalRecords()
 
     def natural_key(self):
         return (self.subject_identifier, self.appointment.visit_code)

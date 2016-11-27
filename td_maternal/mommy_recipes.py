@@ -7,9 +7,10 @@ from edc_base.faker import EdcBaseProvider
 from edc_lab.faker import EdcLabProvider
 from edc_visit_tracking.constants import SCHEDULED
 
-from edc_constants.constants import YES, POS
+from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG
 
 from .models import MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment
+from dateutil.relativedelta import relativedelta
 
 
 class MyEdcBaseProvider(EdcBaseProvider):
@@ -41,13 +42,34 @@ maternalconsent = Recipe(
     is_dob_estimated='-',
 )
 
-antenatalenrollment = Recipe(
+antenatalenrollment_ineligible = Recipe(
     AntenatalEnrollment,
     schedule_name='maternal_enrollment_step1',
+    report_datetime=timezone.now,
     current_hiv_status=POS,
     evidence_hiv_status=YES,
     rapid_test_done=None,
     rapid_test_result=None)
+
+antenatalenrollment = Recipe(
+    AntenatalEnrollment,
+    schedule_name='maternal_enrollment_step1',
+    report_datetime=timezone.now,
+    current_hiv_status=NEG,
+    evidence_32wk_hiv_status=NOT_APPLICABLE,
+    evidence_hiv_status=NO,
+    is_diabetic=NO,
+    knows_lmp=YES,
+#     last_period_date=fake.six_months_ago,
+    last_period_date=(timezone.now() - relativedelta(weeks=25)).date(),
+    rapid_test_date=(timezone.now() - relativedelta(weeks=4)).date(),
+    rapid_test_done=YES,
+    rapid_test_result=NEG,
+    week32_test=NO,
+    will_breastfeed=YES,
+    will_get_arvs=NOT_APPLICABLE,
+    will_remain_onstudy=YES,
+)
 
 maternalvisit = Recipe(
     MaternalVisit,
