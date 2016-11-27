@@ -3,7 +3,6 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 from edc_base.model.models import BaseUuidModel
-from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_base.model.models import HistoricalRecords
 from edc_lab.model_mixins import AliquotModelMixin
 from edc_lab.managers import AliquotManager
@@ -13,7 +12,7 @@ from edc_lab.managers import AliquotManager
 # from .receive import Receive
 
 
-class Aliquot(AliquotModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class Aliquot(AliquotModelMixin, BaseUuidModel):
 
 #     receive = models.ForeignKey(
 #         Receive,

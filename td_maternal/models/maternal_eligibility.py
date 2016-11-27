@@ -1,11 +1,9 @@
-from uuid import uuid4
-from django.utils import timezone
-
 from django.db import models
 from django.apps import apps
 
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_future
+from edc_base.utils import get_utcnow, get_uuid
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
 from edc_base.model.models import HistoricalRecords
@@ -18,10 +16,6 @@ from ..managers import MaternalEligibilityManager
 from edc_base.model.models.url_mixin import UrlMixin
 
 
-def getuuid():
-    return str(uuid4())
-
-
 class MaternalEligibility (UrlMixin, BaseUuidModel):
     """ A model completed by the user to test and capture the result of the pre-consent eligibility checks.
 
@@ -31,7 +25,7 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
         verbose_name="Eligibility Identifier",
         max_length=36,
         unique=True,
-        default=getuuid,
+        default=get_uuid,
         editable=False)
 
     report_datetime = models.DateTimeField(
@@ -110,7 +104,7 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
         MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
         return (MaternalConsent.objects.filter(
             subject_identifier=self.registered_subject.subject_identifier).order_by('-version').first().version ==
-            site_consents.get_by_datetime(MaternalConsent, timezone.now()).version)
+            site_consents.get_by_datetime(MaternalConsent, get_utcnow()).version)
 
     @property
     def previous_consents(self):

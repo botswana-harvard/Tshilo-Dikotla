@@ -2,11 +2,11 @@ from dateutil.relativedelta import relativedelta
 from datetime import date
 from django.utils import timezone
 
-from edc_registration.models import RegisteredSubject
+from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
+from edc_registration.models import RegisteredSubject
 
 from td.models import Appointment
-
 from td_maternal.tests import BaseTestCase
 from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,
                                          MaternalConsentFactory, AntenatalEnrollmentFactory,
@@ -87,7 +87,7 @@ class TestInfantImmunizationForm(BaseTestCase):
 
         self.infant_visit = InfantVisitFactory(appointment=self.appointment, reason='scheduled')
         self.options = {
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'infant_visit': self.infant_visit,
             'vaccines_received': YES,
             'vaccines_missed': NO
@@ -108,7 +108,7 @@ class TestInfantImmunizationForm(BaseTestCase):
     def test_vaccines_not_received_table_filled(self):
         """Test an infant who did not receive vaccines but received vaccines table is filled"""
         self.options = {
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'infant_visit': self.infant_visit,
             'vaccines_received': NO,
             'vaccines_missed': NO
@@ -125,7 +125,7 @@ class TestInfantImmunizationForm(BaseTestCase):
     def test_vaccines_missed_no_table_filling(self):
         """Test an infant who missed vaccines and missed vaccine table not filled"""
         self.options = {
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'infant_visit': self.infant_visit,
             'vaccines_received': NO,
             'vaccines_missed': YES
@@ -143,7 +143,7 @@ class TestInfantImmunizationForm(BaseTestCase):
     def test_vaccines_not_missed_table_filled(self):
         """Test an infant who did not miss vaccines and missed vaccine table is filled filled"""
         self.options = {
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'infant_visit': self.infant_visit,
             'vaccines_received': NO,
             'vaccines_missed': NO
@@ -160,7 +160,7 @@ class TestInfantImmunizationForm(BaseTestCase):
     def test_missed_vaccine_fields(self):
         """Test that when a missed vaccine name is given that the reason should be provided"""
         self.options = {
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'infant_visit': self.infant_visit,
             'vaccines_received': NO,
             'vaccines_missed': YES

@@ -1,7 +1,7 @@
 from dateutil.relativedelta import relativedelta
-from django.utils import timezone
 from model_mommy import mommy
 
+from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NOT_APPLICABLE, POS, NO
 from edc_registration.models import RegisteredSubject
 
@@ -29,7 +29,7 @@ class TestMaternalArvPregForm(BaseTestCase):
                    'is_diabetic': NO,
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
         self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
         self.appointment = Appointment.objects.get(
@@ -41,7 +41,7 @@ class TestMaternalArvPregForm(BaseTestCase):
 
         self.options = {
             'maternal_visit': self.maternal_visit_1000,
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'took_arv': YES,
             'is_interrupt': NO,
             'interrupt': 'N/A',
@@ -70,8 +70,8 @@ class TestMaternalArvPregForm(BaseTestCase):
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
             'arv_code': '3TC',
-            'start_date': timezone.now().date() - timezone.timedelta(days=1),
-            'stop_date': timezone.now().date()
+            'start_date': (get_utcnow() - relativedelta(days=1)).date(),
+            'stop_date': get_utcnow().date()
         }
         form = MaternalArvForm(data=inline_data)
         self.assertIn(
@@ -81,8 +81,8 @@ class TestMaternalArvPregForm(BaseTestCase):
     def test_start_stop_date(self):
         """Assert you cannot put a stop date that is before the start date"""
         self.options['arv_code'] = '3TC'
-        self.options['start_date'] = timezone.now().date()
-        self.options['stop_date'] = timezone.now().date() - timezone.timedelta(days=1)
+        self.options['start_date'] = get_utcnow().date()
+        self.options['stop_date'] = (get_utcnow() - relativedelta(days=1)).date()
         form = MaternalArvForm(data=self.options)
         self.assertIn(
             'Your stop date of {} is prior to start date of {}. '
@@ -95,12 +95,12 @@ class TestMaternalArvPregForm(BaseTestCase):
         maternalarvhistory = mommy.make_recipe(
             'td_maternal.maternalArvhistory',
             maternal_visit=self.maternal_visit_1000,
-            haart_start_date=(timezone.datetime.now() - relativedelta(weeks=9)).date())
+            haart_start_date=(get_utcnow() - relativedelta(weeks=9)).date())
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
             'arv_code': 'Zidovudine',
-            'start_date': timezone.now().date() - timezone.timedelta(weeks=10),
-            'stop_date': timezone.now().date()
+            'start_date': (get_utcnow() - relativedelta(weeks=10)).date(),
+            'stop_date': get_utcnow().date()
         }
         form = MaternalArvForm(data=inline_data)
         self.assertIn(

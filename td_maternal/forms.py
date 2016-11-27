@@ -1,10 +1,12 @@
+import pytz
+
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from django import forms
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 from django.conf import settings
 from django.forms.utils import ErrorList
-from django.utils import timezone
 
 from edc_base.modelform_mixins import Many2ManyModelFormMixin
 from edc_constants.constants import (
@@ -33,6 +35,7 @@ from .models import (
     MaternalSubstanceUsePriorPreg, MaternalUltraSoundFu, NvpDispensing, RapidTestResult, SpecimenConsent
 )
 from .randomization import Randomization
+from edc_base.utils import get_utcnow
 
 
 class ModelFormMixin(Many2ManyModelFormMixin):
@@ -454,7 +457,9 @@ class MaternalConsentForm(ConsentFormMixin, forms.ModelForm):
             consent_v1 = MaternalConsent.objects.get(identity=identity, version=1)
             consent_age = relativedelta(consent_v1.consent_datetime.date(), consent_v1.dob).years
         except MaternalConsent.DoesNotExist:
-            consent_age = relativedelta(timezone.now().date(), cleaned_data.get('dob')).years
+            consent_age = relativedelta(
+                get_utcnow().date(),
+                pytz.utc.localize(datetime.combine(cleaned_data.get('dob'), time()))).years
         eligibility_age = cleaned_data.get('maternal_eligibility').age_in_years
         if consent_age != eligibility_age:
             raise forms.ValidationError(

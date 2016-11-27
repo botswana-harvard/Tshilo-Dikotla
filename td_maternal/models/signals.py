@@ -1,7 +1,6 @@
 from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils import timezone
 
 from edc_constants.constants import ALIVE, ON_STUDY
 from edc_identifier.subject.classes import InfantIdentifier
@@ -151,7 +150,6 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
                         registration_datetime=instance.delivery_datetime,
                         subject_type=INFANT,
                         user_created=instance.user_created,
-                        created=timezone.now(),
                         first_name='No Name',
                         initials=None,
                         registration_status='DELIVERED',

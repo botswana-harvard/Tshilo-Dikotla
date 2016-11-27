@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from edc_base.model.models import BaseUuidModel, UrlMixin, HistoricalRecords
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.constants import (FAILED_ELIGIBILITY)
-from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_metadata.model_mixins import CreatesMetadataModelMixin
 from edc_visit_tracking.choices import VISIT_REASON
 from edc_visit_tracking.model_mixins import (VisitModelMixin, CaretakerFieldsMixin)
@@ -22,7 +21,7 @@ class MaternalVisitManager(VisitModelManager, models.Manager):
 
 
 class MaternalVisit(CreatesMetadataModelMixin, RequiresConsentMixin, CaretakerFieldsMixin,
-                    VisitModelMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
+                    VisitModelMixin, UrlMixin, BaseUuidModel):
 
     """ Maternal visit form that links all antenatal/ postnatal follow-up forms """
 

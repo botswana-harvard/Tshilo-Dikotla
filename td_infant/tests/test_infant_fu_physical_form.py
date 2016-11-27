@@ -1,17 +1,18 @@
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-from edc_registration.models import RegisteredSubject
+from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
+from edc_registration.models import RegisteredSubject
 
 from td.models import Appointment
-
 from td_maternal.tests import BaseTestCase
 from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,
                                          MaternalConsentFactory, AntenatalEnrollmentFactory,
                                          AntenatalVisitMembershipFactory, MaternalLabourDelFactory,
                                          MaternalVisitFactory)
 from td_infant.forms import InfantFuPhysicalForm
+
 from .factories import InfantBirthFactory, InfantVisitFactory, InfantBirthArvFactory, InfantFuPhysicalFactory
 
 
@@ -88,7 +89,7 @@ class TestInfantFuPhysicalForm(BaseTestCase):
         self.infant_visit = InfantVisitFactory(appointment=self.appointment, reason='scheduled')
         self.options = {
             'infant_visit': self.infant_visit.id,
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'weight_kg': 3,
             'height': 45.01,
             'head_circumference': 18.01,

@@ -1,15 +1,12 @@
-from datetime import datetime
 from django.core import serializers
 from django.test.testcases import TestCase
-from django.utils import timezone
-
-
-from edc_constants.constants import YES
-from edc_sync.models import OutgoingTransaction
-
 from model_mommy import mommy
 
+from edc_base.utils import get_utcnow
+from edc_constants.constants import YES
 from edc_registration.models import RegisteredSubject
+from edc_sync.models import OutgoingTransaction
+
 from td_maternal.models import SpecimenConsent
 
 
@@ -31,7 +28,7 @@ class TestMaternalSerializers(TestCase):
         specimen_consent = mommy.make(
             SpecimenConsent,
             registered_subject=registered_subject,
-            consent_datetime=timezone.now(),
+            consent_datetime=get_utcnow(),
             may_store_samples=YES,
             is_literate=YES
         )

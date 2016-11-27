@@ -1,25 +1,23 @@
 from django.db import models
-from django.utils import timezone
 
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
-from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_base.model.models import HistoricalRecords
+from edc_base.model.models.url_mixin import UrlMixin
+from edc_base.utils import get_utcnow
 
 from .maternal_eligibility import MaternalEligibility
 
 from ..managers import MaternalEligibilityLossManager
-from edc_base.model.models.url_mixin import UrlMixin
 
 
-class MaternalEligibilityLoss(ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
+class MaternalEligibilityLoss(UrlMixin, BaseUuidModel):
     """ A model triggered and completed by system when a mother is in-eligible. """
 
     maternal_eligibility = models.OneToOneField(MaternalEligibility)
 
     report_datetime = models.DateTimeField(
         verbose_name="Report Date and Time",
-        default=timezone.now,
+        default=get_utcnow,
         help_text='Date and time of report.')
 
     reason_ineligible = models.TextField(

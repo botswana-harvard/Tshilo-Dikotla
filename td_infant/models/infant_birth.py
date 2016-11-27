@@ -7,7 +7,6 @@ from edc_base.model.validators import datetime_not_future
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_base.model.validators.date import date_not_future
 from edc_constants.choices import GENDER_UNDETERMINED
-from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffstudyMixin
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 from edc_registration.models import RegisteredSubject
@@ -19,7 +18,7 @@ from ..managers import InfantBirthModelManager
 from edc_base.model.models.url_mixin import UrlMixin
 
 
-class InfantBirth(CreateAppointmentsMixin, UpdatesOrCreatesRegistrationModelMixin, ExportTrackingFieldsMixin,
+class InfantBirth(CreateAppointmentsMixin, UpdatesOrCreatesRegistrationModelMixin,
                   OffstudyMixin, UrlMixin, BaseUuidModel):
     """ A model completed by the user on the infant's birth. """
 

@@ -1,13 +1,13 @@
 from dateutil.relativedelta import relativedelta
 from datetime import timedelta
-from django.utils import timezone
 from model_mommy import mommy
 
+from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NOT_APPLICABLE, POS, NO
-
-from td.models import Appointment
 from edc_registration.models import RegisteredSubject
+
 from td_maternal.forms import MaternalObstericalHistoryForm
+from td.models import Appointment
 
 from .base_test_case import BaseTestCase
 
@@ -30,7 +30,7 @@ class TestMaternalObstericalHistoryForm(BaseTestCase):
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'knows_lmp': NO,
-                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=20)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=20)).date()}
         self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
@@ -41,10 +41,10 @@ class TestMaternalObstericalHistoryForm(BaseTestCase):
             'td_maternal.maternalultrasoundinitial',
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1,
-            est_edd_ultrasound=timezone.now().date() + timedelta(days=120), ga_confrimation_method=1)
+            est_edd_ultrasound=(get_utcnow() + timedelta(days=120)).date(), ga_confrimation_method=1)
 
         self.options = {
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'maternal_visit': self.maternal_visit_1000.id,
             'prev_pregnancies': 1,
             'pregs_24wks_or_more': 0,
@@ -77,7 +77,7 @@ class TestMaternalObstericalHistoryForm(BaseTestCase):
         self.options['prev_pregnancies'] = 3
         self.options['lost_before_24wks'] = 2
         self.options['lost_after_24wks'] = 2
-        self.maternal_ultrasound.est_edd_ultrasound = timezone.now().date() + timedelta(days=90)
+        self.maternal_ultrasound.est_edd_ultrasound = (get_utcnow() + timedelta(days=90)).date()
         self.maternal_ultrasound.save()
         mob_form = MaternalObstericalHistoryForm(data=self.options)
         self.assertIn(
@@ -91,7 +91,7 @@ class TestMaternalObstericalHistoryForm(BaseTestCase):
         self.options['lost_after_24wks'] = 0
         self.options['children_deliv_before_37wks'] = 1
         self.options['children_deliv_aftr_37wks'] = 3
-        self.maternal_ultrasound.est_edd_ultrasound = timezone.now().date() + timedelta(days=90)
+        self.maternal_ultrasound.est_edd_ultrasound = (get_utcnow() + timedelta(days=90)).date()
         self.maternal_ultrasound.save()
         mob_form = MaternalObstericalHistoryForm(data=self.options)
         self.assertIn(

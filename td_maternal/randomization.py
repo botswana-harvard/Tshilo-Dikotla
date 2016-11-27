@@ -1,5 +1,4 @@
-from django.utils import timezone
-
+from edc_base.utils import get_utcnow
 from edc_constants.constants import POS
 
 from td.constants import RANDOMIZED
@@ -37,10 +36,10 @@ class Randomization(object):
         self.sid = int(next_randomization_item.name)
         self.rx = next_randomization_item.field_name
         self.subject_identifier = subject_identifier
-        self.randomization_datetime = timezone.datetime.now()
+        self.randomization_datetime = get_utcnow()
         self.initials = consent.maternal_eligibility.registered_subject.initials
 
-        dte = timezone.datetime.today()
+        dte = get_utcnow()
         registered_subject = consent.maternal_eligibility.registered_subject
         registered_subject.sid = self.sid
         registered_subject.randomization_datetime = self.randomization_datetime

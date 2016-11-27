@@ -2,7 +2,6 @@ from django.db import models
 
 from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_consent.model_mixins import RequiresConsentMixin
-from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffstudyMixin
 from edc_visit_tracking.model_mixins import CrfModelMixin
 from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
@@ -12,7 +11,7 @@ from .maternal_visit import MaternalVisit
 from td_maternal.managers import VisitCrfModelManager
 
 
-class MaternalCrfModel(CrfModelMixin, ExportTrackingFieldsMixin, OffstudyMixin,
+class MaternalCrfModel(CrfModelMixin, OffstudyMixin,
                        RequiresConsentMixin, UpdatesCrfMetadataModelMixin, UrlMixin, BaseUuidModel):
 
     """ Base model for all scheduled models (adds key to :class:`MaternalVisit`). """

@@ -18,7 +18,6 @@ from edc_lab.apps import AppConfig as EdcLabAppConfig
 from edc_label.apps import AppConfig as EdcLabelConfigParent
 from edc_metadata.apps import AppConfig as EdcMetadataAppConfigParent
 from edc_protocol.apps import AppConfig as EdcProtocolAppConfigParent
-from edc_sync.apps import AppConfig as EdcSyncAppConfigParent
 from edc_sync.constants import SERVER
 from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
 from edc_timepoint.timepoint import Timepoint
@@ -43,8 +42,8 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
     protocol_number = '085'
     protocol_name = 'Tshilo Dikotla'
     protocol_title = ''
-    study_open_datetime = datetime(2016, 4, 1, 0, 0, 0, tzinfo=pytz.timezone('UTC'))
-    study_end_datetime = datetime(2018, 12, 1, 0, 0, 0, tzinfo=pytz.timezone('UTC'))
+    study_open_datetime = datetime(2016, 4, 1, 0, 0, 0, tzinfo=pytz.utc)
+    study_end_datetime = datetime(2018, 12, 1, 0, 0, 0, tzinfo=pytz.utc)
     subject_types = {'maternal': 'maternal', 'infant': 'infant'}
     enrollment_caps = {'td_maternal.antenatalenrollment': ('maternal', -1),
                        'td_infant.infant_birth': ('infant', -1)}
@@ -59,8 +58,8 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
     consent_configs = [
         ConsentConfig(
             'td_maternal.maternalconsent',
-            start=datetime(2016, 5, 1, 0, 0, 0, tzinfo=pytz.timezone('UTC')),
-            end=datetime(2017, 10, 30, 0, 0, 0, tzinfo=pytz.timezone('UTC')),
+            start=datetime(2016, 5, 1, 0, 0, 0, tzinfo=pytz.utc),
+            end=datetime(2017, 10, 30, 0, 0, 0, tzinfo=pytz.utc),
             version='1',
             age_is_adult=18,
             age_max=64,

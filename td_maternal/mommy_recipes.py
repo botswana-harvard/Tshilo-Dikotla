@@ -3,9 +3,8 @@ from faker import Faker
 from faker.providers import BaseProvider
 from model_mommy.recipe import Recipe, seq, foreign_key
 
-from django.utils import timezone
-
 from edc_base.faker import EdcBaseProvider
+from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG, UNKNOWN
 from edc_lab.faker import EdcLabProvider
 from edc_visit_tracking.constants import SCHEDULED
@@ -16,13 +15,13 @@ from .models import MaternalConsent, MaternalVisit, MaternalEligibility, Antenat
 class TdProvider(BaseProvider):
 
     def thirty_four_weeks_ago(self):
-        return timezone.now() - relativedelta(weeks=34)
+        return (get_utcnow() - relativedelta(weeks=34)).date()
 
     def twenty_five_weeks_ago(self):
-        return timezone.now() - relativedelta(weeks=25)
+        return (get_utcnow() - relativedelta(weeks=25)).date()
 
     def four_weeks_ago(self):
-        return timezone.now() - relativedelta(weeks=4)
+        return (get_utcnow() - relativedelta(weeks=4)).date()
 
 
 class MyEdcBaseProvider(EdcBaseProvider):
@@ -36,14 +35,14 @@ fake.add_provider(TdProvider)
 
 maternaleligibility = Recipe(
     MaternalEligibility,
-    age_in_years=25,
+    age_in_years=fake.age_for_consenting_adult,
     has_omang=YES,)
 
 maternalconsent = Recipe(
     MaternalConsent,
     maternal_eligibility=foreign_key(maternaleligibility),
     study_site='40',
-    consent_datetime=timezone.now,
+    consent_datetime=get_utcnow,
     dob=fake.dob_for_consenting_adult,
     first_name=fake.first_name,
     last_name=fake.last_name,
@@ -58,7 +57,7 @@ maternalconsent = Recipe(
 # antenatal enrollment
 common = dict(
     schedule_name='maternal_enrollment_step1',
-    report_datetime=timezone.now,
+    report_datetime=get_utcnow,
     evidence_hiv_status=YES,
     evidence_32wk_hiv_status=NOT_APPLICABLE,
     is_diabetic=NO,
@@ -97,7 +96,7 @@ antenatalenrollment = Recipe(AntenatalEnrollment, **options)
 antenatalenrollment_ineligible = Recipe(
     AntenatalEnrollment,
     schedule_name='maternal_enrollment_step1',
-    report_datetime=timezone.now,
+    report_datetime=get_utcnow,
     is_diabetic=YES)
 
 # options = common
@@ -141,9 +140,9 @@ maternalvisit = Recipe(
 
 maternallabourdel = Recipe(
     MaternalLabourDel,
-    report_datetime=timezone.now,
+    report_datetime=get_utcnow,
     csection_reason=NOT_APPLICABLE,
-    delivery_datetime=timezone.now,
+    delivery_datetime=get_utcnow,
     delivery_hospital='Lesirane',
     delivery_time_estimated=NO,
     labour_hrs='3',

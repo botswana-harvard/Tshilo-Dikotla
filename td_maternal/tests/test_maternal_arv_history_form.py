@@ -1,8 +1,8 @@
 from dateutil.relativedelta import relativedelta
-from datetime import datetime, date
-from django.utils import timezone
+from datetime import date
 from model_mommy import mommy
 
+from edc_base.utils import get_utcnow
 from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO, CONTINUOUS, STOPPED, RESTARTED)
 
 from td.models import Appointment
@@ -28,7 +28,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
                    'is_diabetic': NO,
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
         self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
 
@@ -47,8 +47,8 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
         self.options = {
             'maternal_visit': self.maternal_visit_1000.id,
-            'report_datetime': timezone.now(),
-            'haart_start_date': datetime.today() - relativedelta(months=9),
+            'report_datetime': get_utcnow(),
+            'haart_start_date': (get_utcnow() - relativedelta(months=9)).date(),
             'is_date_estimated': '-',
             'preg_on_haart': YES,
             'haart_changes': 0,
@@ -109,7 +109,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
         self.options['prev_preg_azt'] = NOT_APPLICABLE
         self.options['prev_preg_haart'] = YES
         self.options['haart_start_date'] = date(1987, 10, 10)
-        self.options['report_datetime'] = datetime.today()
+        self.options['report_datetime'] = get_utcnow()
         form = MaternalLifetimeArvHistoryForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn("Date of triple ARVs first started CANNOT be before DOB.", errors)
@@ -122,7 +122,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
         self.options['prev_preg_azt'] = NOT_APPLICABLE
         self.options['prev_preg_haart'] = YES
         self.options['haart_start_date'] = None
-        self.options['report_datetime'] = datetime.today()
+        self.options['report_datetime'] = get_utcnow()
         form = MaternalLifetimeArvHistoryForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn("Please give a valid arv initiation date.", errors)

@@ -1,12 +1,14 @@
 from dateutil.relativedelta import relativedelta
 from datetime import date
-from django.utils import timezone
 from model_mommy import mommy
 
-from td.models import Appointment
-from edc_registration.models import RegisteredSubject
-from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO)
+from django.utils import timezone
 
+from edc_base.utils import get_utcnow
+from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO)
+from edc_registration.models import RegisteredSubject
+
+from td.models import Appointment
 from td_list.models import Contraceptives, MaternalRelatives
 from td_maternal.forms import MaternalContraceptionForm
 
@@ -30,7 +32,7 @@ class TestMaternalContraceptionForm(BaseTestCase):
                    'is_diabetic': NO,
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
         self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
         self.appointment = Appointment.objects.get(
@@ -62,17 +64,17 @@ class TestMaternalContraceptionForm(BaseTestCase):
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         contraceptives = Contraceptives.objects.create(
-            hostname_created="django", name="Condom", short_name="Condom", created=timezone.datetime.now(), 
-            user_modified="", modified=timezone.datetime.now(), hostname_modified="django", version="1.0", 
+            hostname_created="django", name="Condom", short_name="Condom", created=get_utcnow(),
+            user_modified="", modified=timezone.datetime.now(), hostname_modified="django", version="1.0",
             display_index=1, user_created="django", field_name=None, revision=":develop:")
 
         maternal_relatives = MaternalRelatives.objects.create(
-            hostname_created="django", name="Mother", short_name="Mother", created=timezone.datetime.now(), 
-            user_modified="", modified=timezone.datetime.now(), hostname_modified="django", version="1.0", 
+            hostname_created="django", name="Mother", short_name="Mother", created=timezone.datetime.now(),
+            user_modified="", modified=timezone.datetime.now(), hostname_modified="django", version="1.0",
             display_index=1, user_created="django", field_name=None, revision=":develop:")
 
         self.options = {
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'maternal_visit': self.maternal_visit.id,
             'more_children': YES,
             'next_child': 'between 2-5years from now',

@@ -2,8 +2,9 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime
 from django.utils import timezone
 
-from edc_registration.models import RegisteredSubject
+from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
+from edc_registration.models import RegisteredSubject
 
 from td.models import Appointment
 
@@ -78,10 +79,10 @@ class TestInfantBirthExam(BaseTestCase):
         self.infant_visit = InfantVisitFactory(appointment=self.appointment)
 
         self.options = {
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'infant_birth': self.infant_birth.id,
             'infant_visit': self.infant_visit.id,
-            'infant_exam_date': timezone.now().date(),
+            'infant_exam_date': get_utcnow().date(),
             'general_activity': 'NORMAL',
             'abnormal_activity': '',
             'physical_exam_result': 'NORMAL',

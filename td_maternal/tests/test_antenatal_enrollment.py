@@ -1,8 +1,9 @@
-from django.utils import timezone
 from dateutil.relativedelta import relativedelta
+
 from django.test import TestCase
 from model_mommy import mommy
 
+from edc_base.utils import get_utcnow
 from edc_constants.constants import (
     POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN, FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY)
 from edc_visit_tracking.constants import SCHEDULED
@@ -30,7 +31,7 @@ class TestAntenatalEnrollment(TestCase):
                    'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=14)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=14)).date()}
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
@@ -41,11 +42,11 @@ class TestAntenatalEnrollment(TestCase):
         will go on a valid regimen but weeks of gestation above 36."""
 
         options = {'subject_identifier': self.subject_identifier,
-                   'report_timezone': timezone.now(),
+                   'report_timezone': get_utcnow(),
                    'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=37)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=37)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -61,7 +62,7 @@ class TestAntenatalEnrollment(TestCase):
                    'evidence_hiv_status': YES,
                    'will_get_arvs': NO,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -77,7 +78,7 @@ class TestAntenatalEnrollment(TestCase):
                    'evidence_hiv_status': YES,
                    'will_get_arvs': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -94,7 +95,7 @@ class TestAntenatalEnrollment(TestCase):
                    'will_get_arvs': YES,
                    'is_diabetic': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -111,7 +112,7 @@ class TestAntenatalEnrollment(TestCase):
                    'will_get_arvs': YES,
                    'is_diabetic': NO,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -128,7 +129,7 @@ class TestAntenatalEnrollment(TestCase):
                    'is_diabetic': NO,
                    'will_breastfeed': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -146,7 +147,7 @@ class TestAntenatalEnrollment(TestCase):
                    'is_diabetic': NO,
                    'will_breastfeed': NO,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -164,7 +165,7 @@ class TestAntenatalEnrollment(TestCase):
                    'is_diabetic': NO,
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -182,7 +183,7 @@ class TestAntenatalEnrollment(TestCase):
                    'is_diabetic': NO,
                    'will_remain_onstudy': NO,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -196,13 +197,13 @@ class TestAntenatalEnrollment(TestCase):
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (timezone.now() + relativedelta(weeks=5)).date(),
+                   'week32_test_date': (get_utcnow() + relativedelta(weeks=5)).date(),
                    'week32_result': POS,
                    'evidence_32wk_hiv_status': YES,
                    'will_get_arvs': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'rapid_test_date': None,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -216,13 +217,13 @@ class TestAntenatalEnrollment(TestCase):
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (timezone.now() - relativedelta(weeks=1)).date(),
+                   'week32_test_date': (get_utcnow() - relativedelta(weeks=1)).date(),
                    'week32_result': POS,
                    'evidence_32wk_hiv_status': NO,
                    'will_get_arvs': YES,
                    'rapid_test_done': YES,
                    'rapid_test_result': POS,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -233,17 +234,17 @@ class TestAntenatalEnrollment(TestCase):
         """Test for a mother who tested POS BEFORE 32weeks, with documentation then rapid test not enforced"""
 
         options = {'subject_identifier': self.subject_identifier,
-                   'report_datetime': timezone.now(),
+                   'report_datetime': get_utcnow(),
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (timezone.now() - relativedelta(weeks=4)).date(),
+                   'week32_test_date': (get_utcnow() - relativedelta(weeks=4)).date(),
                    'week32_result': POS,
                    'evidence_32wk_hiv_status': YES,
                    'will_get_arvs': YES,
                    'rapid_test_done': NOT_APPLICABLE,
                    'rapid_test_date': None,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
@@ -258,13 +259,13 @@ class TestAntenatalEnrollment(TestCase):
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (timezone.now() - relativedelta(weeks=4)).date(),
+                   'week32_test_date': (get_utcnow() - relativedelta(weeks=4)).date(),
                    'week32_result': NEG,
                    'evidence_32wk_hiv_status': YES,
                    'will_get_arvs': NOT_APPLICABLE,
                    'rapid_test_done': YES,
                    'rapid_test_result': NEG,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
@@ -278,14 +279,14 @@ class TestAntenatalEnrollment(TestCase):
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (timezone.now() + relativedelta(weeks=5)).date(),
+                   'week32_test_date': (get_utcnow() + relativedelta(weeks=5)).date(),
                    'week32_result': NEG,
                    'evidence_32wk_hiv_status': YES,
                    'will_get_arvs': NOT_APPLICABLE,
                    'rapid_test_done': NOT_APPLICABLE,
                    'rapid_test_result': None,
                    'rapid_test_date': None,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
@@ -301,14 +302,14 @@ class TestAntenatalEnrollment(TestCase):
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (timezone.now() + relativedelta(weeks=5)).date(),
+                   'week32_test_date': (get_utcnow() + relativedelta(weeks=5)).date(),
                    'week32_result': NEG,
                    'evidence_32wk_hiv_status': YES,
                    'will_get_arvs': NOT_APPLICABLE,
                    'rapid_test_done': NOT_APPLICABLE,
                    'rapid_test_result': None,
                    'rapid_test_date': None,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
@@ -321,12 +322,12 @@ class TestAntenatalEnrollment(TestCase):
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (timezone.now() - relativedelta(weeks=1)).date(),
+                   'week32_test_date': (get_utcnow() - relativedelta(weeks=1)).date(),
                    'week32_result': NEG,
                    'evidence_32wk_hiv_status': NO,
                    'will_get_arvs': NOT_APPLICABLE,
                    'rapid_test_done': YES,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=34)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
@@ -341,9 +342,9 @@ class TestAntenatalEnrollment(TestCase):
                    'evidence_hiv_status': None,
                    'week32_test': NO,
                    'rapid_test_done': YES,
-                   'rapid_test_date': timezone.now().date(),
+                   'rapid_test_date': get_utcnow().date(),
                    'rapid_test_result': NEG,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=35)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=35)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
@@ -358,9 +359,9 @@ class TestAntenatalEnrollment(TestCase):
                    'evidence_hiv_status': None,
                    'week32_test': NO,
                    'rapid_test_done': YES,
-                   'rapid_test_date': timezone.now().date(),
+                   'rapid_test_date': get_utcnow().date(),
                    'rapid_test_result': POS,
-                   'last_period_date': (timezone.now() - relativedelta(weeks=35)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=35)).date()}
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -375,7 +376,7 @@ class TestAntenatalEnrollment(TestCase):
                    'evidence_hiv_status': None,
                    'week32_test': NO,
                    'rapid_test_done': YES,
-                   'rapid_test_date': timezone.now().date(),
+                   'rapid_test_date': get_utcnow().date(),
                    'rapid_test_result': POS}
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
@@ -391,7 +392,7 @@ class TestAntenatalEnrollment(TestCase):
                    'evidence_hiv_status': None,
                    'week32_test': NO,
                    'rapid_test_done': YES,
-                   'rapid_test_date': timezone.now().date(),
+                   'rapid_test_date': get_utcnow().date(),
                    'rapid_test_result': POS}
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.pending_ultrasound)

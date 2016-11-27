@@ -2,6 +2,7 @@ from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from model_mommy import mommy
 
+from edc_base.utils import get_utcnow
 from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO)
 from edc_registration.models import RegisteredSubject
 
@@ -61,7 +62,7 @@ class TestMaternalArvPost(BaseTestCase):
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.data = {
             'maternal_visit': self.maternal_visit_2000.id,
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'on_arv_since': NO,
             'on_arv_reason': 'N/A',
             'on_arv_reason_other': '',

@@ -1,14 +1,9 @@
-import pytz
-
 from datetime import datetime, time
 from dateutil.relativedelta import relativedelta
 
 from django.apps import apps as django_apps
 from django.utils import timezone
-
 from edc_constants.constants import NO, YES, POS, NEG
-
-tz = pytz.timezone('UTC')
 
 
 class EnrollmentError(Exception):
@@ -43,7 +38,10 @@ class EnrollmentHelper(object):
         self.evidence_hiv_status = obj.evidence_hiv_status
         self.is_diabetic = obj.is_diabetic
         self.knows_lmp = obj.knows_lmp
-        self.lmp = timezone.make_aware(datetime.combine(obj.last_period_date, time()), timezone=tz)
+        if obj.last_period_date:
+            self.lmp = timezone.make_aware(datetime.combine(obj.last_period_date, time()))
+        else:
+            self.lmp = None
         self.rapid_test_date = obj.rapid_test_date
         self.rapid_test_done = obj.rapid_test_done
         self.rapid_test_result = obj.rapid_test_result

@@ -2,7 +2,6 @@ from django.db import models
 
 from django.apps import apps as django_apps
 from edc_base.model.models import BaseUuidModel, UrlMixin
-from edc_export.model_mixins import ExportTrackingFieldsMixin
 # from edc_meta_data.managers import RequisitionMetaDataManager
 from edc_base.model.models import HistoricalRecords
 from edc_visit_tracking.model_mixins import CrfModelMixin # , CrfModelManager
@@ -25,7 +24,7 @@ from td_lab.models.panel import Panel
 #         return self.get(requisition_identifier=requisition_identifier)
 
 
-class MaternalRequisition(CrfModelMixin, RequisitionModelMixin, ExportTrackingFieldsMixin,
+class MaternalRequisition(CrfModelMixin, RequisitionModelMixin,
                           RequiresConsentMixin, UpdatesRequisitionMetadataModelMixin, UrlMixin, BaseUuidModel):
 
     aliquot_model = Aliquot

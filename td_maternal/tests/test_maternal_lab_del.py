@@ -1,20 +1,19 @@
-from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from model_mommy import mommy
 
-from edc_registration.models import RegisteredSubject
-from edc_identifier.models import SubjectIdentifier
+from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
+from edc_identifier.models import SubjectIdentifier
+from edc_registration.models import RegisteredSubject
 
-
-from td.models import Appointment
 from td.constants import INFANT
+from td.models import Appointment
 from td_list.models import DeliveryComplications
+from td_maternal.enrollment_helper import EnrollmentHelper
 
 from ..forms import MaternalLabourDelForm
 
 from .base_test_case import BaseTestCase
-from td_maternal.enrollment_helper import EnrollmentHelper
 
 
 class TestMaternalLabourDel(BaseTestCase):
@@ -33,7 +32,7 @@ class TestMaternalLabourDel(BaseTestCase):
                    'is_diabetic': NO,
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
         self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
@@ -47,16 +46,16 @@ class TestMaternalLabourDel(BaseTestCase):
 
         complications = DeliveryComplications.objects.create(
             hostname_created="django", name="None",
-            short_name="None", created=timezone.datetime.now(),
-            user_modified="", modified=timezone.datetime.now(),
+            short_name="None", created=get_utcnow(),
+            user_modified="", modified=get_utcnow(),
             hostname_modified="django", version="1.0",
             display_index=1, user_created="django", field_name=None,
             revision=":develop:")
 
         self.options = {
             'registered_subject': self.registered_subject.id,
-            'report_datetime': timezone.now(),
-            'delivery_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
+            'delivery_datetime': get_utcnow(),
             'delivery_time_estimated': NO,
             'labour_hrs': '3',
             'delivery_complications': [complications.id],
@@ -65,7 +64,7 @@ class TestMaternalLabourDel(BaseTestCase):
             'csection_reason': NOT_APPLICABLE,
             'live_infants_to_register': 1,
             'valid_regiment_duration': YES,
-            'arv_initiation_date': (timezone.datetime.now() - relativedelta(weeks=6)).date()
+            'arv_initiation_date': (get_utcnow() - relativedelta(weeks=6)).date()
         }
 
     def test_new_infant_registration(self):
@@ -114,7 +113,7 @@ class TestMaternalLabourDel(BaseTestCase):
             'You indicated participant was on valid regimen, please give a valid arv initiation date.', errors)
 
     def test_valid_regimen_duration_hiv_pos_only_invalid_init_date(self):
-        self.options['arv_initiation_date'] = (timezone.now() - relativedelta(weeks=1)).date()
+        self.options['arv_initiation_date'] = (get_utcnow() - relativedelta(weeks=1)).date()
         form = MaternalLabourDelForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(

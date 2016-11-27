@@ -3,16 +3,17 @@ from dateutil.relativedelta import relativedelta
 
 from django.conf import settings
 from django.contrib import admin
-from django.utils import timezone
+from django.utils.timezone import localtime
 from django.views.generic import TemplateView
 
+from edc_base.utils import get_utcnow
 from edc_base.view_mixins import EdcBaseViewMixin
 
+from td.constants import INFANT
 from td_infant.models.infant_birth import InfantBirth
 from td_infant.models.infant_visit import InfantVisit
 from td_maternal.models.maternal_consent import MaternalConsent
 from td_maternal.models.maternal_locator import MaternalLocator
-from td.constants import INFANT
 
 from .mixins import MarqueeViewMixin, DashboardMixin
 
@@ -85,7 +86,7 @@ class InfantDashboardView(
         dob = self.infant_birth.dob if self.infant_birth else ''
         demographics['Name'] = name,
         demographics['Born'] = dob,
-        demographics['Age'] = str(relativedelta(timezone.now().date(), dob).years)
+        demographics['Age'] = str(relativedelta(localtime(get_utcnow()).date(), dob).years)
         demographics.update({'Hiv status': '?'})
         return demographics
 

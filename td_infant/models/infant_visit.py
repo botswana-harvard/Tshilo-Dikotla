@@ -3,7 +3,6 @@ from django.db.models.deletion import PROTECT
 
 from edc_base.model.models import UrlMixin, BaseUuidModel, HistoricalRecords
 from edc_constants.constants import (DEAD, MALE)
-from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_metadata.model_mixins import CreatesMetadataModelMixin
 from edc_visit_tracking.constants import (
     UNSCHEDULED, SCHEDULED, COMPLETED_PROTOCOL_VISIT, MISSED_VISIT)
@@ -24,7 +23,7 @@ class InfantVisitManager(VisitModelManager, models.Manager):
 
 class InfantVisit(
         VisitModelMixin, CreatesMetadataModelMixin, OffstudyMixin,
-        CaretakerFieldsMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
+        CaretakerFieldsMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on the infant visits. """
 

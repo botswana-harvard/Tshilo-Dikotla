@@ -1,13 +1,13 @@
 from dateutil.relativedelta import relativedelta
-from django.utils import timezone
 from model_mommy import mommy
 
-from edc_constants.constants import (YES, POS, NEG, NOT_APPLICABLE, NO)
+from edc_base.utils import get_utcnow
 from edc_code_lists.models import WcsDxAdult
-from td.models import Appointment
+from edc_constants.constants import (YES, POS, NEG, NOT_APPLICABLE, NO)
+from edc_registration.models import RegisteredSubject
 
+from td.models import Appointment
 from td_list.models import MaternalDiagnoses, MaternalHospitalization
-from td_maternal.models import RegisteredSubject
 from td_maternal.forms import MaternalPostPartumFuForm
 
 from .base_test_case import BaseTestCase
@@ -30,7 +30,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
                    'is_diabetic': NO,
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
 
         self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
@@ -66,41 +66,41 @@ class TestMaternalPostPartumFu(BaseTestCase):
 #         self.create_mother()
         self.diagnoses = MaternalDiagnoses.objects.create(
             hostname_created="django", name="Gestational Hypertension",
-            short_name="Gestational Hypertension", created=timezone.datetime.now(),
-            user_modified="", modified=timezone.datetime.now(),
+            short_name="Gestational Hypertension", created=get_utcnow(),
+            user_modified="", modified=get_utcnow(),
             hostname_modified="django", version="1.0",
             display_index=1, user_created="django", field_name=None, revision=None)
 
         self.diagnoses_na = MaternalDiagnoses.objects.create(
             hostname_created="django", name="N/A",
-            short_name="N/A", created=timezone.datetime.now(),
-            user_modified="", modified=timezone.datetime.now(),
+            short_name="N/A", created=get_utcnow(),
+            user_modified="", modified=get_utcnow(),
             hostname_modified="django", version="1.0",
             display_index=1, user_created="django", field_name=None,
             revision=":develop:")
 
         self.who_dx = WcsDxAdult.objects.create(
             hostname_created="cabel", code="CS4003", short_name="Recurrent severe bacterial pneumo",
-            created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(),
+            created=get_utcnow(), user_modified="", modified=get_utcnow(),
             hostname_modified="cabel",
             long_name="Recurrent severe bacterial pneumonia", user_created="abelc",
             list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
 
         self.who_dx_na = WcsDxAdult.objects.create(
             hostname_created="cabel", code="cs9999999", short_name="N/A",
-            created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(),
+            created=get_utcnow(), user_modified="", modified=get_utcnow(),
             hostname_modified="cabel", long_name="N/A",
             user_created="abelc", list_ref="", revision=None)
 
         self.hospitalization_reason = MaternalHospitalization.objects.create(
             name="Pneumonia or other respiratory disease", short_name="Pneumonia or other respiratory disease",
-            display_index=1, version="1.0", created=timezone.datetime.now(), modified=timezone.datetime.now(),
+            display_index=1, version="1.0", created=get_utcnow(), modified=get_utcnow(),
             user_created="", user_modified="", hostname_created="otse.bhp.org.bw",
             hostname_modified="otse.bhp.org.bw", revision=None)
 
         self.hospitalization_reason_na = MaternalHospitalization.objects.create(
             name="Not Applicable", short_name="N/A", display_index=2, version="1.0",
-            created=timezone.datetime.now(), modified=timezone.datetime.now(), user_created="", user_modified="",
+            created=get_utcnow(), modified=get_utcnow(), user_created="", user_modified="",
             hostname_created="otse.bhp.org.bw", hostname_modified="otse.bhp.org.bw", revision=None)
 
         self.options = {
@@ -229,7 +229,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
         maternal_visit_1020M = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=get_utcnow(), result=NEG)
         mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
@@ -237,7 +237,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
         maternal_visit_2010M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=get_utcnow(), result=NEG)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
         self.maternal_visit_2000 = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
@@ -262,7 +262,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
         maternal_visit_1020M = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=get_utcnow(), result=NEG)
         mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
@@ -271,7 +271,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=get_utcnow(), result=NEG)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
         self.maternal_visit_2000 = mommy.make_recipe(
@@ -299,7 +299,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
         maternal_visit_1020M = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=get_utcnow(), result=NEG)
         mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
@@ -308,7 +308,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=get_utcnow(), result=NEG)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
         self.maternal_visit_2000 = mommy.make_recipe(
@@ -336,7 +336,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
         maternal_visit_1020M = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=timezone.now(), result=NEG)
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=get_utcnow(), result=NEG)
         mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
@@ -345,7 +345,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=timezone.now(), result=NEG)
+            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=get_utcnow(), result=NEG)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
         self.maternal_visit_2000 = mommy.make_recipe(

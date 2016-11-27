@@ -2,14 +2,16 @@ from dateutil.relativedelta import relativedelta
 from datetime import date
 from django.utils import timezone
 
+from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE, UNKNOWN
+from edc_registration.models import RegisteredSubject
 
-from edc_registration.models import RegisteredSubject, Appointment
+from td.constants import MODIFIED, NO_MODIFICATIONS, DISCONTINUED, NEVER_STARTED
 from td_maternal.tests import BaseTestCase
 from td_maternal.tests.factories import (
     MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory, AntenatalEnrollmentFactory,
     AntenatalEnrollmentTwoFactory, MaternalLabourDelFactory, MaternalVisitFactory)
-from td.constants import MODIFIED, NO_MODIFICATIONS, DISCONTINUED, NEVER_STARTED
+from td.models import Appointment
 
 from ..forms import InfantArvProphForm, InfantArvProphModForm
 
@@ -84,7 +86,7 @@ class TestInfantArvProph(BaseTestCase):
 
         self.data = {
             'infant_visit': self.infant_visit.id,
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'prophylatic_nvp': YES,
             'arv_status': MODIFIED,
         }

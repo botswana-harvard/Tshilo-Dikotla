@@ -2,9 +2,7 @@ from django.db import models
 
 from edc_base.model.models import BaseUuidModel, UrlMixin
 
-# from edc_meta_data.managers import CrfMetaDataManager
 from edc_base.model.models import HistoricalRecords
-from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
 from edc_offstudy.model_mixins import OffstudyMixin
 from edc_visit_tracking.model_mixins import CrfModelMixin
@@ -14,7 +12,7 @@ from ..managers import InfantVisitCrfManager
 from .infant_visit import InfantVisit
 
 
-class InfantCrfModel(CrfModelMixin, OffstudyMixin, ExportTrackingFieldsMixin,
+class InfantCrfModel(CrfModelMixin, OffstudyMixin,
                      UpdatesCrfMetadataModelMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on the infant's scheduled visit. """

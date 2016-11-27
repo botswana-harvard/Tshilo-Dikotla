@@ -3,7 +3,8 @@ from dateutil.relativedelta import relativedelta
 
 from django.apps import apps
 from django.urls.base import reverse
-from django.utils import timezone
+
+from edc_base.utils import get_utcnow
 
 from td_maternal.models.maternal_crf_meta_data import CrfMetadata
 from td_maternal.models.requisition_meta_data import RequisitionMetadata
@@ -172,4 +173,4 @@ class MarqueeViewMixin:
 
     @property
     def age(self):
-        return relativedelta(timezone.now().date(), self.consent.dob).years
+        return relativedelta(get_utcnow().date(), self.consent.dob).years

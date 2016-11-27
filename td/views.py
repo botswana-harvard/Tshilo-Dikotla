@@ -1,10 +1,23 @@
+import asyncio
+import pandas as pd
+import json
+from datetime import date
+from dateutil.relativedelta import relativedelta
+
 from django.contrib import admin
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
+from django.http.response import HttpResponse
+from django.utils.timezone import localtime
 
+from edc_base.utils import get_utcnow
 from edc_base.view_mixins import EdcBaseViewMixin
+from edc_sync.models import OutgoingTransaction
+
+from td_maternal.models import (MaternalConsent, MaternalLabourDel, MaternalOffstudy, MaternalUltraSoundInitial,
+                                AntenatalEnrollment)
 
 
 class HomeView(EdcBaseViewMixin, TemplateView):
@@ -22,27 +35,6 @@ class HomeView(EdcBaseViewMixin, TemplateView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(HomeView, self).dispatch(*args, **kwargs)
-
-
-import asyncio
-import pandas as pd
-import json
-import pytz
-from datetime import date, datetime
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.http.response import HttpResponse
-from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
-
-from edc_base.view_mixins import EdcBaseViewMixin
-from edc_sync.models import OutgoingTransaction
-
-from td_maternal.models import (MaternalConsent, MaternalLabourDel, MaternalOffstudy, MaternalUltraSoundInitial,
-                                AntenatalEnrollment)
-from dateutil.relativedelta import relativedelta
-
-tz = pytz.timezone(settings.TIME_ZONE)
 
 
 class StatisticsView(EdcBaseViewMixin, TemplateView):
@@ -127,8 +119,7 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
                 'verified_consents': int(consents.query('is_verified == True')['is_verified'].count()),
                 'not_verified_consents': int(consents.query('is_verified == False')['is_verified'].count()),
             })
-            d = date.today()
-            local_date = tz.localize(datetime(d.year, d.month, d.day, 0, 0, 0))
+            local_date = localtime(get_utcnow()).date()
             consented_today = consents[(consents['modified'] >= local_date)]
             response_data.update({
                 'consented_today': int(consented_today['id'].count()),
@@ -227,8 +218,7 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
 
     @property
     def modified_option(self):
-        d = date.today()
-        local_date = tz.localize(datetime(d.year, d.month, d.day, 0, 0, 0))
+        local_date = localtime(get_utcnow()).date()
         return {'modified__gte': local_date}
 
     def verified_response_data(self, response_data):

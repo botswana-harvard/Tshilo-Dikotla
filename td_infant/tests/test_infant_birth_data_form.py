@@ -2,6 +2,7 @@ from django import forms
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
+from edc_base.utils import get_utcnow
 from edc_registration.models import RegisteredSubject
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
 
@@ -10,7 +11,7 @@ from td.models import Appointment
 from td_maternal.tests import BaseTestCase
 from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,
                                          MaternalConsentFactory, AntenatalEnrollmentFactory,
-                                         AntenatalVisitMembershipFactory, MaternalLabourDelFactory,
+                                         AntenatalEnrollmentTwoFactory, MaternalLabourDelFactory,
                                          MaternalVisitFactory)
 from td_infant.forms import InfantBirthDataForm
 from .factories import InfantBirthFactory, InfantVisitFactory
@@ -46,7 +47,7 @@ class TestInfantBirthData(BaseTestCase):
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
 
-        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+        self.antenatal_visits_membership = AntenatalEnrollmentTwoFactory(
             registered_subject=options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
             subject_identifier=options.get('registered_subject'), visit_code='1010M')
@@ -77,7 +78,7 @@ class TestInfantBirthData(BaseTestCase):
             subject_identifier=infant_registered_subject.subject_identifier, visit_code='2000')
         self.infant_visit = InfantVisitFactory(appointment=self.appointment)
         self.options = {
-            'report_datetime': timezone.now(),
+            'report_datetime': get_utcnow(),
             'infant_visit': self.infant_visit,
             'weight_kg': 3.61,
             'infant_length': 89.97,
