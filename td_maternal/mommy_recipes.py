@@ -59,6 +59,9 @@ antenatalenrollment_ineligible = Recipe(
     report_datetime=timezone.now,
     current_hiv_status=POS,
     evidence_hiv_status=YES,
+    is_diabetic=YES,
+    will_breastfeed=NO,
+    will_remain_onstudy=NO,
     rapid_test_done=None,
     rapid_test_result=None)
 
