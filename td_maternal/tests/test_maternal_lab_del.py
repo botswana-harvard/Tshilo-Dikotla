@@ -14,6 +14,7 @@ from td_list.models import DeliveryComplications
 from ..forms import MaternalLabourDelForm
 
 from .base_test_case import BaseTestCase
+from td_maternal.enrollment_helper import EnrollmentHelper
 
 
 class TestMaternalLabourDel(BaseTestCase):
@@ -79,23 +80,24 @@ class TestMaternalLabourDel(BaseTestCase):
 
     def test_on_therapy_for_atleast4weeks(self):
         self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
-        maternal_labour_del = mommy.make_recipe(
+        mommy.make_recipe(
             'td_maternal.maternallabourdel',
             registered_subject=self.registered_subject,
             live_infants_to_register=1,
             valid_regiment_duration=YES)
-        self.assertTrue(maternal_labour_del.keep_on_study)
-        self.assertTrue(maternal_labour_del.antenatal_enrollment.is_eligible)
+        enrollment_helper = EnrollmentHelper(self.antenatal_enrollment)
+        self.assertTrue(enrollment_helper.is_eligible_after_delivery)
+        self.assertTrue(enrollment_helper.is_eligible)
 
     def test_not_therapy_for_atleast4weeks(self):
         self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
-        maternal_labour_del = mommy.make_recipe(
+        mommy.make_recipe(
             'td_maternal.maternallabourdel',
             registered_subject=self.registered_subject,
-            live_infants_to_register=1,
             valid_regiment_duration=NO)
-        self.assertFalse(maternal_labour_del.keep_on_study)
-        self.assertFalse(maternal_labour_del.antenatal_enrollment.is_eligible)
+        enrollment_helper = EnrollmentHelper(self.antenatal_enrollment)
+        self.assertFalse(enrollment_helper.is_eligible_after_delivery)
+        self.assertFalse(enrollment_helper.is_eligible)
 
     def test_valid_regimen_duration_hiv_pos_only_na(self):
         self.options['valid_regiment_duration'] = NOT_APPLICABLE

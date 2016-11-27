@@ -75,7 +75,7 @@ class EnrollmentHelper(object):
                     self.lmp_to_use >= 16 and self.lmp_to_use <= 36 and
                     self.no_chronic_conditions and self.will_breastfeed == YES and
                     self.will_remain_onstudy == YES and self.pass_antenatal_enrollment and
-                    self.keep_on_study)
+                    self.eligible_after_delivery)
             if meets_basic_criteria and self.enrollment_hiv_status == POS and self.will_get_arvs == YES:
                 self._is_eligible = True
             elif meets_basic_criteria and self.enrollment_hiv_status == NEG:
@@ -126,12 +126,14 @@ class EnrollmentHelper(object):
         return test_date_is_on_or_after_32wks
 
     @property
-    def keep_on_study(self):
+    def eligible_after_delivery(self):
+        eligible_after_delivery = None
         try:
-            keep_on_study = self.delivery.keep_on_study
+            if self.enrollment_hiv_status == POS and self.delivery.valid_regiment_duration != YES:
+                eligible_after_delivery = False
         except AttributeError:
-            keep_on_study = True
-        return keep_on_study
+            eligible_after_delivery = None
+        return eligible_after_delivery
 
     @property
     def pass_antenatal_enrollment(self):
@@ -273,7 +275,7 @@ class EnrollmentHelper(object):
                     reasons.append('rapid test not done')
                 if self.ga_lmp_enrollment_wks and (self.ga_lmp_enrollment_wks < 16 or self.ga_lmp_enrollment_wks > 36):
                     reasons.append('gestation not 16 to 36wks')
-                if self.delivery and not self.keep_on_study:
+                if self.delivery and not self.eligible_after_delivery:
                     reasons.append('Hiv+ and not on ART for atleast 4 weeks.')
                 if self.ultrasound and not self.pass_antenatal_enrollment:
                     reasons.append('Pregnancy is not a singleton.')
