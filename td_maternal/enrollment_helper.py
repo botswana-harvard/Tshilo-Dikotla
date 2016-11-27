@@ -43,7 +43,7 @@ class EnrollmentHelper(object):
         self.evidence_hiv_status = obj.evidence_hiv_status
         self.is_diabetic = obj.is_diabetic
         self.knows_lmp = obj.knows_lmp
-        self.lmp = timezone(datetime.combine(obj.last_period_date, time()), timezone=tz)
+        self.lmp = timezone.make_aware(datetime.combine(obj.last_period_date, time()), timezone=tz)
         self.rapid_test_date = obj.rapid_test_date
         self.rapid_test_done = obj.rapid_test_done
         self.rapid_test_result = obj.rapid_test_result

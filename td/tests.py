@@ -12,6 +12,8 @@ from td_maternal.enrollment_helper import EnrollmentHelper
 from td_maternal.models import MaternalOffstudy
 
 from .models import Appointment
+from edc_sync.models import OutgoingTransaction
+from django.core import serializers
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -54,6 +56,28 @@ class TestTd(TestCase):
             self.fail('MaternalOffstudy.DoesNotExist unexpectedly NOT raised.')
         except MaternalOffstudy.DoesNotExist:
             pass
+
+    def test_ineligible(self):
+        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent')
+        antenatal_enrollment = mommy.make_recipe(
+            'td_maternal.antenatalenrollment_ineligible',
+            subject_identifier=maternal_consent.subject_identifier)
+        self.assertFalse(antenatal_enrollment.is_eligible)
+
+    def deserialised_obj(self, model_obj, outgoing_tx):
+        for deserialised_obj in serializers.deserialize(
+                "json", outgoing_tx.aes_decrypt(outgoing_tx.tx), use_natural_foreign_keys=True, use_natural_primary_keys=True):
+            return deserialised_obj
+
+    def test_antenatal_enrollment(self):
+        """ Creating specimenconsent should creates outgoingtransaction """
+        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', subject_identifier=maternal_consent.subject_identifier)
+        outgoing_tx = OutgoingTransaction.objects.filter(tx_name='td_maternal.antenatalenrollment')
+        self.assertTrue(outgoing_tx)
+        deserialised_obj = self.deserialised_obj(antenatal_enrollment, outgoing_tx.first())
+        self.assertEqual(antenatal_enrollment.pk, deserialised_obj.object.pk)
 
     def test_gestation_wks_lmp_below_16(self):
         """Test for a positive mother with evidence of hiv_status,

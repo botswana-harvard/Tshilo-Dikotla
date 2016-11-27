@@ -178,7 +178,7 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
         enrollment_helper = EnrollmentHelper(self)
         self.is_eligible = enrollment_helper.is_eligible
         self.date_at_32wks = enrollment_helper.date_at_32wks
-        self.edd_by_lmp = enrollment_helper.edd_by_lmp or self.edd_by_lmp
+        self.edd_by_lmp = enrollment_helper.edd or self.edd_by_lmp
         self.enrollment_hiv_status = enrollment_helper.enrollment_hiv_status
         self.ga_lmp_enrollment_wks = enrollment_helper.ga_lmp_enrollment_wks or self.ga_lmp_enrollment_wks
         self.pending_ultrasound = enrollment_helper.pending_ultrasound
