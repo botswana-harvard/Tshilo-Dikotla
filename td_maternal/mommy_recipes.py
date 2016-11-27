@@ -60,13 +60,13 @@ common = dict(
     schedule_name='maternal_enrollment_step1',
     report_datetime=timezone.now,
     evidence_hiv_status=YES,
+    evidence_32wk_hiv_status=NOT_APPLICABLE,
     is_diabetic=NO,
     knows_lmp=YES,
-    will_breastfeed=YES,
-    will_remain_onstudy=YES,
     last_period_date=fake.twenty_five_weeks_ago,
     rapid_test_done=NOT_APPLICABLE,
-    evidence_32wk_hiv_status=NOT_APPLICABLE,
+    will_breastfeed=YES,
+    will_remain_onstudy=YES,
 )
 
 ineligible = dict(
@@ -90,11 +90,7 @@ rapid_neg = dict()
 
 options = common
 options.update(eligible)
-antenatalenrollment = Recipe(
-    AntenatalEnrollment,
-    **common,
-    **eligible
-)
+antenatalenrollment = Recipe(AntenatalEnrollment, **options)
 
 # antenatalenrollment for ineligible
 
