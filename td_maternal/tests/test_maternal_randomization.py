@@ -9,7 +9,7 @@ from edc_constants.constants import UNKNOWN
 
 from td.models import Appointment
 from td_list.models import RandomizationItem
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 from td.constants import RANDOMIZED
 
 from .base_test_case import BaseTestCase

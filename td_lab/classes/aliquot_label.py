@@ -1,6 +1,6 @@
 from edc_label.actions import print_labels_action
 
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 
 
 def print_aliquot_label(modeladmin, request, qs):

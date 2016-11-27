@@ -10,7 +10,7 @@ from edc_constants.choices import GENDER_UNDETERMINED
 from edc_export.model_mixins import ExportTrackingFieldsMixin
 from edc_offstudy.model_mixins import OffstudyMixin
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 from edc_base.model.models import HistoricalRecords
 
 from td_maternal.models import MaternalLabourDel

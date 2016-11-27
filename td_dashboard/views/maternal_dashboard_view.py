@@ -15,7 +15,7 @@ from td_maternal.enrollment_helper import EnrollmentHelper
 from td_maternal.models import (
     AntenatalEnrollment, MaternalConsent, MaternalLabourDel, MaternalLocator,
     MaternalRando, MaternalVisit)
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 from td.constants import MATERNAL, INFANT
 
 from .mixins import DashboardMixin, MarqueeViewMixin

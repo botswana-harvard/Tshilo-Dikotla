@@ -8,6 +8,8 @@ from model_mommy import mommy
 from edc_constants.constants import (YES, NEG, NOT_APPLICABLE, POS, NO)
 from td.models import Appointment
 
+from ..mommy_recipes import fake
+
 
 class BaseTestCase(TestCase):
 
@@ -32,15 +34,14 @@ class BaseTestCase(TestCase):
         self.antenatal_visit_1 = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-    def hiv_pos_mother_options(self, registered_subject):
-        options = {'registered_subject': registered_subject,
-                   'current_hiv_status': POS,
+    def hiv_pos_mother_options(self):
+        options = {'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
                    'will_get_arvs': YES,
                    'is_diabetic': NO,
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': fake.twenty_five_weeks_ago}
         return options
 
     def hiv_neg_mother_options(self, registered_subject):

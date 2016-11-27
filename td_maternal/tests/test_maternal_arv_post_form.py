@@ -3,11 +3,11 @@ from django.utils import timezone
 from model_mommy import mommy
 
 from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO)
+from edc_registration.models import RegisteredSubject
 
 from td.models import Appointment
-from td.models import RegisteredSubject
 
-from td_maternal.forms import MaternalArvPostForm
+from ..forms import MaternalArvPostForm
 
 from .base_test_case import BaseTestCase
 

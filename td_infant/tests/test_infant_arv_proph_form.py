@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE, UNKNOWN
 
-from td.models import RegisteredSubject, Appointment
+from edc_registration.models import RegisteredSubject, Appointment
 from td_maternal.tests import BaseTestCase
 from td_maternal.tests.factories import (
     MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory, AntenatalEnrollmentFactory,

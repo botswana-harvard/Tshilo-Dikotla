@@ -4,7 +4,7 @@ from django.utils import timezone
 from model_mommy import mommy
 
 from td.models import Appointment
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO)
 
 from td_list.models import Contraceptives, MaternalRelatives

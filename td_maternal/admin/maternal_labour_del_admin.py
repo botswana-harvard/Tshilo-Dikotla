@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 
 from td.admin_mixins import ModelAdminMixin
 

@@ -2,7 +2,7 @@ from django import forms
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
 
 from td.models import Appointment

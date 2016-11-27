@@ -6,7 +6,7 @@ from model_mommy import mommy
 from edc_constants.constants import YES, NOT_APPLICABLE, POS, NO
 
 from td.models import Appointment
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 from td_maternal.forms import MaternalObstericalHistoryForm
 
 from .base_test_case import BaseTestCase

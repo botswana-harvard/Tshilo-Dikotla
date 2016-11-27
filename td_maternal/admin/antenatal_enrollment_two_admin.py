@@ -1,7 +1,7 @@
 from django.contrib import admin
 from collections import OrderedDict
 
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 from edc_export.actions import export_as_csv_action
 
 from td.admin_mixins import ModelAdminMixin

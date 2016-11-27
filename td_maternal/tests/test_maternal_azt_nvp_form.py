@@ -1,11 +1,8 @@
-from .base_test_case import BaseTestCase
+from django.test import TestCase
 
 
-class TestMaternalAztNvp(BaseTestCase):
-
-    def setUp(self):
-        super(TestMaternalAztNvp, self).setUp()
+class TestMaternalAztNvp(TestCase):
 
     def test_validate_randomization_done(self):
         """Test if the chosen prophylaxis regiment match the randomized regiment"""
-        pass
+        raise

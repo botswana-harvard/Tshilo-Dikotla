@@ -2,7 +2,7 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from model_mommy import mommy
 
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 from edc_constants.constants import (FAILED_ELIGIBILITY, OFF_STUDY, POS, YES,
                                      NO, NOT_APPLICABLE)
 

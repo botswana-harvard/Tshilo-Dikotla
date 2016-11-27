@@ -3,7 +3,7 @@ from django.apps import apps as django_apps
 
 from edc_consent.managers import ConsentManager
 
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 
 
 class AntenatalEnrollmentManager(models.Manager):

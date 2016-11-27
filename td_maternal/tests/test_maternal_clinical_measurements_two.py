@@ -8,6 +8,9 @@ from td.models import Appointment
 from td_maternal.forms import MaternalClinicalMeasurementsTwoForm
 
 from .base_test_case import BaseTestCase
+from edc_visit_tracking.constants import SCHEDULED
+
+from ..mommy_recipes import fake
 
 
 class TestMaternalClinicalMeasurementsTwo(BaseTestCase):
@@ -55,43 +58,46 @@ class TestMaternalClinicalMeasurementsTwo(BaseTestCase):
         form = MaternalClinicalMeasurementsTwoForm(data=self.options)
         self.assertIn('Diastolic Blood Pressure field cannot be blank. Please correct', form.errors.get('__all__'))
 
-    def create_mother(self, status_options):
-        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **status_options)
+    def create_mother(self, antenatal_enrollment_options):
+        self.antenatal_enrollment = mommy.make_recipe(
+            'td_maternal.antenatalenrollment',
+            **antenatal_enrollment_options)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
         self.maternal_visit_1000 = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+            'td_maternal.maternalvisit', appointment=self.appointment, reason=SCHEDULED)
         self.maternal_ultrasound = mommy.make_recipe(
-            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
-        self.antenatal_visits_membership = mommy.make_recipe(
-            'td_maternal.antenatalvisitmembership', registered_subject=status_options.get('registered_subject'))
-
+            'td_maternal.maternalultrasoundinitial',
+            maternal_visit=self.maternal_visit_1000,
+            number_of_gestations=1)
+        self.antenatal_enrollment_two = mommy.make_recipe(
+            'td_maternal.antenatalenrollmenttwo')
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
         self.maternal_visit_1 = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+            'td_maternal.maternalvisit',
+            appointment=self.appointment,
+            reason=SCHEDULED)
 
-    def hiv_pos_mother_options(self, registered_subject):
-        options = {'registered_subject': registered_subject,
-                   'current_hiv_status': POS,
+    def hiv_pos_mother_options(self):
+        options = {'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
                    'will_get_arvs': YES,
                    'is_diabetic': NO,
                    'will_remain_onstudy': YES,
                    'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+                   'last_period_date': fake.twenty_five_weeks_ago}
         return options
 
-    def hiv_neg_mother_options(self, registered_subject):
-        options = {'registered_subject': registered_subject,
-                   'current_hiv_status': UNKNOWN,
+    def hiv_neg_mother_options(self):
+        options = {'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
                    'week32_test': YES,
-                   'week32_test_date': (timezone.datetime.now() - relativedelta(weeks=4)).date(),
+                   'week32_test_date': fake.four_weeks_ago,
                    'week32_result': NEG,
                    'evidence_32wk_hiv_status': YES,
                    'will_get_arvs': NOT_APPLICABLE,
                    'rapid_test_done': YES,
                    'rapid_test_result': NEG,
-                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
+                   'last_period_date': fake.thirty_four_weeks_ago}
         return options

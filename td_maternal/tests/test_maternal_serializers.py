@@ -9,7 +9,7 @@ from edc_sync.models import OutgoingTransaction
 
 from model_mommy import mommy
 
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 from td_maternal.models import SpecimenConsent
 
 

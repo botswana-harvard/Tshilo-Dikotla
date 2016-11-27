@@ -1,8 +1,14 @@
+import pytz
+
+from datetime import datetime, time
 from dateutil.relativedelta import relativedelta
 
 from django.apps import apps as django_apps
+from django.utils import timezone
 
 from edc_constants.constants import NO, YES, POS, NEG
+
+tz = pytz.timezone('UTC')
 
 
 class EnrollmentError(Exception):
@@ -24,7 +30,7 @@ class EnrollmentHelper(object):
     def __init__(self, obj, exception_cls=None):
         self._date_at_32wks = None
         self._delivery = None
-        self._edd_by_lmp = None
+        self._edd = None
         self._enrollment_hiv_status = None
         self._is_eligible = None
         self._ga_lmp_enrollment_wks = None
@@ -37,7 +43,7 @@ class EnrollmentHelper(object):
         self.evidence_hiv_status = obj.evidence_hiv_status
         self.is_diabetic = obj.is_diabetic
         self.knows_lmp = obj.knows_lmp
-        self.last_period_date = obj.last_period_date
+        self.lmp = timezone(datetime.combine(obj.last_period_date, time()), timezone=tz)
         self.rapid_test_date = obj.rapid_test_date
         self.rapid_test_done = obj.rapid_test_done
         self.rapid_test_result = obj.rapid_test_result
@@ -88,7 +94,7 @@ class EnrollmentHelper(object):
     def date_at_32wks(self):
         if not self._date_at_32wks:
             try:
-                self._date_at_32wks = self.edd_by_lmp - relativedelta(weeks=6)
+                self._date_at_32wks = self.edd - relativedelta(weeks=6)
             except TypeError:
                 self._date_at_32wks = None
         return self._date_at_32wks
@@ -97,19 +103,20 @@ class EnrollmentHelper(object):
     def ga_lmp_enrollment_wks(self):
         if not self._ga_lmp_enrollment_wks:
             try:
-                self._ga_lmp_enrollment_wks = int(40 - ((self.edd_by_lmp - self.report_datetime.date()).days / 7))
+                self._ga_lmp_enrollment_wks = int(40 - ((self.edd - self.report_datetime.date()).days / 7))
             except TypeError:
                 self._ga_lmp_enrollment_wks = None
         return self._ga_lmp_enrollment_wks
 
     @property
-    def edd_by_lmp(self):
-        if not self._edd_by_lmp:
+    def edd(self):
+        """Naegele's rule"""
+        if not self._edd:
             try:
-                self._edd_by_lmp = self.last_period_date + relativedelta(days=280)
+                self._edd = self.lmp + relativedelta(days=280)
             except TypeError:
-                self._edd_by_lmp = None
-        return self._edd_by_lmp
+                self._edd = None
+        return self._edd
 
     @property
     def test_date_is_on_or_after_32wks(self):

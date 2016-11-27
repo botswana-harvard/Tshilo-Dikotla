@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from td_list.models import Foods
 
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
 
 from td.models import Appointment

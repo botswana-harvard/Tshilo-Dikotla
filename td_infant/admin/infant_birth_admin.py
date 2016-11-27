@@ -6,7 +6,7 @@ from edc_export.actions import export_as_csv_action
 
 from td.admin_mixins import ModelAdminMixin
 from td_maternal.models import MaternalLabourDel
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 
 from ..forms import InfantBirthForm
 from ..models import InfantBirth

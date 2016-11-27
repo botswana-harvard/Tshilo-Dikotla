@@ -1,20 +1,22 @@
+from dateutil.relativedelta import relativedelta
 from faker import Faker
+from faker.providers import BaseProvider
 from model_mommy.recipe import Recipe, seq, foreign_key
 
 from django.utils import timezone
 
 from edc_base.faker import EdcBaseProvider
+from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG, UNKNOWN
 from edc_lab.faker import EdcLabProvider
 from edc_visit_tracking.constants import SCHEDULED
 
-from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG
-
 from .models import MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment, MaternalLabourDel
-from dateutil.relativedelta import relativedelta
-from faker.providers import BaseProvider
 
 
 class TdProvider(BaseProvider):
+
+    def thirty_four_weeks_ago(self):
+        return timezone.now() - relativedelta(weeks=34)
 
     def twenty_five_weeks_ago(self):
         return timezone.now() - relativedelta(weeks=25)
@@ -53,37 +55,84 @@ maternalconsent = Recipe(
     is_dob_estimated='-',
 )
 
-antenatalenrollment_ineligible = Recipe(
-    AntenatalEnrollment,
+# antenatal enrollment
+common = dict(
     schedule_name='maternal_enrollment_step1',
     report_datetime=timezone.now,
-    current_hiv_status=POS,
-    evidence_hiv_status=YES,
-    is_diabetic=YES,
-    will_breastfeed=NO,
-    will_remain_onstudy=NO,
-    rapid_test_done=None,
-    rapid_test_result=None)
-
-antenatalenrollment = Recipe(
-    AntenatalEnrollment,
-    schedule_name='maternal_enrollment_step1',
-    report_datetime=timezone.now,
-    current_hiv_status=YES,
-    evidence_32wk_hiv_status=NOT_APPLICABLE,
     evidence_hiv_status=YES,
     is_diabetic=NO,
     knows_lmp=YES,
+    will_breastfeed=YES,
+    will_remain_onstudy=YES,
     last_period_date=fake.twenty_five_weeks_ago,
+    rapid_test_done=NOT_APPLICABLE,
+    evidence_32wk_hiv_status=NOT_APPLICABLE,
+)
+
+ineligible = dict(
+    current_hiv_status=POS,
+    rapid_test_done=None,
+    rapid_test_result=None,
+)
+
+eligible = dict(
+    current_hiv_status=YES,
     rapid_test_date=fake.four_weeks_ago,
     rapid_test_done=YES,
     rapid_test_result=NEG,
     week32_test=NO,
-    will_breastfeed=YES,
     will_get_arvs=NOT_APPLICABLE,
-    will_remain_onstudy=YES,
 )
 
+rapid_pos = dict()
+
+rapid_neg = dict()
+
+options = common
+options.update(eligible)
+antenatalenrollment = Recipe(
+    AntenatalEnrollment,
+    **common,
+    **eligible
+)
+
+# antenatalenrollment for ineligible
+
+antenatalenrollment_ineligible = Recipe(
+    AntenatalEnrollment,
+    schedule_name='maternal_enrollment_step1',
+    report_datetime=timezone.now,
+    is_diabetic=YES)
+
+# options = common
+# options.update(ineligible)
+# antenatalenrollment_ineligible = Recipe(
+#     AntenatalEnrollment, **options)
+
+# antenatalenrollment for eligible POS mother, not by rapid
+options = common
+options.update(eligible)
+options.update(
+    current_hiv_status=POS)
+antenatalenrollment_pos = Recipe(
+    AntenatalEnrollment, **options)
+
+# antenatalenrollment for eligible NEG mother by rapid
+options = common
+options.update(eligible)
+options.update(
+    current_hiv_status=UNKNOWN,
+    evidence_hiv_status=None,
+    week32_test=YES,
+    week32_test_date=fake.four_weeks_ago,
+    week32_result=NEG,
+    evidence_32wk_hiv_status=YES,
+    rapid_test_done=YES,
+    rapid_test_result=NEG)
+antenatalenrollment_neg = Recipe(
+    AntenatalEnrollment, **options)
+
+# maternal visit
 maternalvisit = Recipe(
     MaternalVisit,
     reason=SCHEDULED)

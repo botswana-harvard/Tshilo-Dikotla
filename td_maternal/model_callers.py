@@ -2,7 +2,7 @@ from edc_call_manager.model_caller import ModelCaller, WEEKLY
 from edc_call_manager.decorators import register
 from edc_call_manager.models import Call, Log, LogEntry
 
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 
 from .models import MaternalLocator, MaternalConsent, AntenatalEnrollment, MaternalOffstudy
 

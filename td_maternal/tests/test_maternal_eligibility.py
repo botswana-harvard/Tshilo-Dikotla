@@ -1,7 +1,7 @@
 from model_mommy import mommy
 
 from edc_constants.constants import SCREENED
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 
 from td_maternal.models import MaternalEligibility, MaternalEligibilityLoss
 

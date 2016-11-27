@@ -7,8 +7,10 @@ from edc_constants.constants import ALIVE, ON_STUDY
 from edc_identifier.subject.classes import InfantIdentifier
 from edc_visit_tracking.constants import SCHEDULED
 
-from td.models import RegisteredSubject, Appointment
+from edc_registration.models import RegisteredSubject
+
 from td.constants import INFANT
+from td.models import Appointment
 
 from .antenatal_enrollment import AntenatalEnrollment
 from .maternal_consent import MaternalConsent

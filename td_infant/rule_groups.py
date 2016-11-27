@@ -8,7 +8,7 @@ from edc_rule_groups.requisition_rule import RequisitionRule
 from edc_rule_groups.rule_group import RuleGroup
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
-from td.models import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 from td_maternal.models import MaternalVisit
 from td_maternal.rule_groups import func_mother_pos
 from td.constants import NO_MODIFICATIONS, START, MODIFIED
