@@ -9,7 +9,7 @@ from edc_visit_tracking.constants import SCHEDULED
 
 from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG
 
-from .models import MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment
+from .models import MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment, MaternalLabourDel
 from dateutil.relativedelta import relativedelta
 from faker.providers import BaseProvider
 
@@ -72,7 +72,7 @@ antenatalenrollment = Recipe(
     is_diabetic=NO,
     knows_lmp=YES,
     last_period_date=fake.twenty_five_weeks_ago,
-    rapid_test_date=fake.four_weeks_ago,
+    rapid_test_date=fake.four_weeks_ago.isoformat(' '),
     rapid_test_done=YES,
     rapid_test_result=NEG,
     week32_test=NO,
@@ -92,6 +92,7 @@ maternalvisit = Recipe(
 #     is_drawn=YES)
 
 maternallabourdel = Recipe(
+    MaternalLabourDel,
     report_datetime=timezone.now,
     csection_reason=NOT_APPLICABLE,
     delivery_datetime=timezone.now,
@@ -100,5 +101,4 @@ maternallabourdel = Recipe(
     labour_hrs='3',
     live_infants_to_register=1,
     mode_delivery='spontaneous vaginal',
-    valid_regiment_duration=YES,
-)
+    valid_regiment_duration=YES)

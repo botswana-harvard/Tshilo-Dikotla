@@ -80,18 +80,11 @@ class TestMaternalSerializers(TestCase):
 
     def test_antenatal_enrollment(self):
         """ Creating specimenconsent should creates outgoingtransaction """
-        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment')
-        print(antenatal_enrollment)
-        self.assertEqual(OutgoingTransaction.objects.filter(tx_name='td_maternal.specimenconsent').count(), 1)
-# 
-#     def test_antenatal_enrollment_deserialize(self):
-#         """ Serialized specimenconsent record should be able deserialized. """
-#         maternal_eligibility = mommy.make(MaternalEligibility, age_in_years=25, has_omang=YES)
-#         maternal_consent = self.create_maternal_consent(maternal_eligibility)
-#         registered_subject = RegisteredSubject.objects.get(
-#             identity=maternal_consent.identity
-#         )
-#         specimen_consent = self.create_specimen_consent(registered_subject)
-#         outgoing_tx = OutgoingTransaction.objects.get(tx_name='td_maternal.specimenconsent')
-#         deserialised_obj = self.deserialised_obj(specimen_consent, outgoing_tx)
-#         self.assertEqual(specimen_consent.pk, deserialised_obj.object.pk)
+        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', subject_identifier=maternal_consent.subject_identifier)
+        outgoing_tx = OutgoingTransaction.objects.filter(tx_name='td_maternal.antenatalenrollment')
+        self.assertTrue(outgoing_tx)
+        print(antenatal_enrollment.__dict__)
+        deserialised_obj = self.deserialised_obj(antenatal_enrollment, outgoing_tx.first())
+        self.assertEqual(antenatal_enrollment.pk, deserialised_obj.object.pk)
