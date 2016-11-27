@@ -1,12 +1,11 @@
 from django.db import models
 
-from edc_appointment.model_mixins import CreateAppointmentsMixin
+from edc_appointment.model_mixins import CreateAppointmentsOnEligibleMixin
 from edc_base.model.models import BaseUuidModel, HistoricalRecords, UrlMixin
 from edc_base.model.validators import date_not_future
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import POS_NEG_UNTESTED_REFUSAL, YES_NO_NA, POS_NEG, YES_NO
-from edc_constants.constants import NO
-from edc_export.model_mixins import ExportTrackingFieldsMixin
+from edc_constants.constants import NO, FAILED_ELIGIBILITY
 from edc_offstudy.model_mixins import OffstudyMixin
 from edc_protocol.validators import date_not_before_study_start
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
@@ -15,25 +14,11 @@ from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 from ..enrollment_helper import EnrollmentHelper
 from ..managers import AntenatalEnrollmentManager
 
-from .maternal_off_study import MaternalOffStudy
+from .maternal_offstudy import MaternalOffstudy
 
 
-class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointmentsMixin,
-                          RequiresConsentMixin, ExportTrackingFieldsMixin, UrlMixin, BaseUuidModel):
-
-    enrollment_hiv_status = models.CharField(
-        max_length=15,
-        null=True,
-        editable=False,
-        help_text='Auto-filled by enrollment helper')
-
-    date_at_32wks = models.DateField(
-        null=True,
-        editable=False,
-        help_text='Auto-filled by enrollment helper')
-
-    pending_ultrasound = models.BooleanField(
-        editable=False)
+class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointmentsOnEligibleMixin,
+                          RequiresConsentMixin, UrlMixin, BaseUuidModel):
 
     is_diabetic = models.CharField(
         verbose_name='Are you diabetic?',
@@ -127,12 +112,6 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
         null=True,
         blank=True)
 
-    unenrolled = models.TextField(
-        verbose_name="Reason not enrolled",
-        max_length=350,
-        null=True,
-        editable=False)
-
     knows_lmp = models.CharField(
         verbose_name="Does the mother know the approximate date of the first day her last menstrual period?",
         choices=YES_NO,
@@ -168,6 +147,26 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
         blank=True,
         help_text="")
 
+    enrollment_hiv_status = models.CharField(
+        max_length=15,
+        null=True,
+        editable=False,
+        help_text='Auto-filled by enrollment helper')
+
+    date_at_32wks = models.DateField(
+        null=True,
+        editable=False,
+        help_text='Auto-filled by enrollment helper')
+
+    pending_ultrasound = models.BooleanField(
+        editable=False)
+
+    unenrolled = models.TextField(
+        verbose_name="Reason not enrolled",
+        max_length=350,
+        null=True,
+        editable=False)
+
     history = HistoricalRecords()
 
     objects = AntenatalEnrollmentManager()
@@ -178,21 +177,22 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
     def save(self, *args, **kwargs):
         enrollment_helper = EnrollmentHelper(self)
         self.is_eligible = enrollment_helper.is_eligible
-        self.edd_by_lmp = enrollment_helper.edd_by_lmp
-        self.ga_lmp_enrollment_wks = enrollment_helper.ga_lmp_enrollment_wks
-        self.enrollment_hiv_status = enrollment_helper.enrollment_hiv_status
         self.date_at_32wks = enrollment_helper.date_at_32wks
+        self.edd_by_lmp = enrollment_helper.edd_by_lmp or self.edd_by_lmp
+        self.enrollment_hiv_status = enrollment_helper.enrollment_hiv_status
+        self.ga_lmp_enrollment_wks = enrollment_helper.ga_lmp_enrollment_wks or self.ga_lmp_enrollment_wks
         self.pending_ultrasound = enrollment_helper.pending_ultrasound
-        self.unenrolled = enrollment_helper.unenrolled_reasons()
+        self.unenrolled = enrollment_helper.unenrolled_reasons
         super(AntenatalEnrollment, self).save(*args, **kwargs)
 
     def natural_key(self):
         return (self.subject_identifier, )
 
     def take_off_study(self):
-        MaternalOffStudy.objects.create(
+        MaternalOffstudy.objects.create(
             subject_identifier=self.subject_identifier,
-            offstudy_datetime=self.report_datetime)
+            offstudy_datetime=self.report_datetime,
+            reason=FAILED_ELIGIBILITY)
 
     class Meta(EnrollmentModelMixin.Meta):
         app_label = 'td_maternal'

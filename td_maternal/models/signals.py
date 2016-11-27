@@ -3,7 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 
-from edc_constants.constants import FAILED_ELIGIBILITY, ALIVE, OFF_STUDY, ON_STUDY
+from edc_constants.constants import ALIVE, ON_STUDY
 from edc_identifier.subject.classes import InfantIdentifier
 from edc_visit_tracking.constants import SCHEDULED
 
@@ -15,7 +15,7 @@ from .maternal_consent import MaternalConsent
 from .maternal_eligibility import MaternalEligibility
 from .maternal_eligibility_loss import MaternalEligibilityLoss
 from .maternal_labour_del import MaternalLabourDel
-from .maternal_off_study import MaternalOffStudy
+from .maternal_offstudy import MaternalOffstudy
 from .maternal_ultrasound_initial import MaternalUltraSoundInitial
 from .maternal_visit import MaternalVisit
 
@@ -101,12 +101,12 @@ def eligible_put_back_on_study(sender, instance, raw, created, using, **kwargs):
     if not raw:
         try:
             if isinstance(instance, AntenatalEnrollment) and (instance.pending_ultrasound or instance.is_eligible):
-                MaternalOffStudy.objects.get(
+                MaternalOffstudy.objects.get(
                     maternal_visit__appointment__subject_identifier=instance.registered_subject)
         except AttributeError as e:
             if 'is_eligible' not in str(e) and 'registered_subject' not in str(e):
                 raise
-        except MaternalOffStudy.DoesNotExist:
+        except MaternalOffstudy.DoesNotExist:
             put_back_on_study_from_failed_eligibility(instance)
 
 

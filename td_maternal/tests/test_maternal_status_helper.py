@@ -5,7 +5,7 @@ from td_maternal.models import RequisitionMetadata
 from td.models import Appointment
 from td.models import RegisteredSubject
 
-from td_maternal.classes import MaternalStatusHelper
+from td_maternal.maternal_status_helper import MaternalStatusHelper
 from td_infant.tests.factories import InfantVisitFactory, InfantBirthFactory
 
 from .base_test_case import BaseTestCase

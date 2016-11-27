@@ -1,13 +1,13 @@
 from django.db import models
 
-from edc_appointment.model_mixins import CreateAppointmentsMixin
+from edc_appointment.model_mixins import CreateAppointmentsOnEligibleMixin
 from edc_base.model.models import BaseUuidModel, HistoricalRecords, UrlMixin
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 
 
-class AntenatalEnrollmentTwo(EnrollmentModelMixin, RequiresConsentMixin, CreateAppointmentsMixin,
+class AntenatalEnrollmentTwo(EnrollmentModelMixin, RequiresConsentMixin, CreateAppointmentsOnEligibleMixin,
                              UrlMixin, BaseUuidModel):
 
     """An enrollment model for schedule maternal_enrollment_step2."""

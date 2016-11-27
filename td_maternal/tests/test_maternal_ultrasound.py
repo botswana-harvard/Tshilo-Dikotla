@@ -11,7 +11,7 @@ from td_maternal.models import MaternalVisit
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
-                        AntenatalEnrollmentFactory, MaternalOffStudyFactory, MaternalVisitFactory)
+                        AntenatalEnrollmentFactory, MaternalOffstudyFactory, MaternalVisitFactory)
 
 
 class TestMaternalUltrasound(BaseTestCase):
@@ -58,7 +58,7 @@ class TestMaternalUltrasound(BaseTestCase):
                    'maternal_visit': self.maternal_visit_1000}
         maternal_ultrasound = MaternalUltraSoundIniFactory(**options)
         self.assertFalse(maternal_ultrasound.antenatal_enrollment.is_eligible)
-        MaternalOffStudyFactory(maternal_visit=self.maternal_visit_1000)
+        MaternalOffstudyFactory(maternal_visit=self.maternal_visit_1000)
 
     # TODO: Fix all off study code
     def test_create_visit_with_offstudy_on_failure(self):

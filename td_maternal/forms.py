@@ -29,7 +29,7 @@ from .models import (
     MaternalClinicalMeasurementsTwo, MaternalContraception, MaternalDeathReport, MaternalDemographics,
     MaternalDiagnoses, MaternalEligibility, MaternalEligibilityLoss, MaternalInterimIdcc, MaternalHivInterimHx,
     MaternalLabourDel, MaternalVisit, MaternalLocator, MaternalMedicalHistory, MaternalUltraSoundInitial,
-    MaternalOffStudy, MaternalPostPartumDep, MaternalPostPartumFu, MaternalSubstanceUseDuringPreg,
+    MaternalOffstudy, MaternalPostPartumDep, MaternalPostPartumFu, MaternalSubstanceUseDuringPreg,
     MaternalSubstanceUsePriorPreg, MaternalUltraSoundFu, NvpDispensing, RapidTestResult, SpecimenConsent
 )
 from .randomization import Randomization
@@ -86,7 +86,7 @@ class MaternalVisitForm (VisitFormMixin, forms.ModelForm):
         fields = '__all__'
 
 
-class MaternalOffStudyForm (OffStudyFormMixin, ModelFormMixin, forms.ModelForm):
+class MaternalOffstudyForm (OffStudyFormMixin, ModelFormMixin, forms.ModelForm):
 
     reason = forms.ChoiceField(
         label='Please code the primary reason participant taken off-study',
@@ -95,12 +95,12 @@ class MaternalOffStudyForm (OffStudyFormMixin, ModelFormMixin, forms.ModelForm):
         widget=AdminRadioSelect(renderer=AdminRadioFieldRenderer))
 
     def clean(self):
-        cleaned_data = super(MaternalOffStudyForm, self).clean()
+        cleaned_data = super(MaternalOffstudyForm, self).clean()
         self.validate_offstudy_date()
         return cleaned_data
 
     class Meta:
-        model = MaternalOffStudy
+        model = MaternalOffstudy
         fields = '__all__'
 
 

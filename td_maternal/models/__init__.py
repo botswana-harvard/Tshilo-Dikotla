@@ -28,7 +28,7 @@ from .maternal_labour_del import MaternalLabourDel
 from .maternal_locator import MaternalLocator
 from .maternal_medical_history import MaternalMedicalHistory
 from .maternal_obsterical_history import MaternalObstericalHistory
-from .maternal_off_study import MaternalOffStudy
+from .maternal_offstudy import MaternalOffstudy
 from .maternal_postpartum_dep import MaternalPostPartumDep
 from .maternal_postpartum_fu import MaternalPostPartumFu
 from .maternal_randomization import MaternalRando

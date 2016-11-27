@@ -38,7 +38,7 @@ from django.views.generic import TemplateView
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_sync.models import OutgoingTransaction
 
-from td_maternal.models import (MaternalConsent, MaternalLabourDel, MaternalOffStudy, MaternalUltraSoundInitial,
+from td_maternal.models import (MaternalConsent, MaternalLabourDel, MaternalOffstudy, MaternalUltraSoundInitial,
                                 AntenatalEnrollment)
 from dateutil.relativedelta import relativedelta
 
@@ -180,7 +180,7 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
     def offstudy_stats(self, future):
         response_data = {}
         columns = ['id', 'modified']
-        qs = MaternalOffStudy.objects.values_list(*columns).all()
+        qs = MaternalOffstudy.objects.values_list(*columns).all()
         deliveries = pd.DataFrame(list(qs), columns=columns)
         if not deliveries.empty:
             response_data.update({

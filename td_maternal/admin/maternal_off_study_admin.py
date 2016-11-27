@@ -1,14 +1,14 @@
 from django.contrib import admin
 
-from ..models import MaternalOffStudy
-from ..forms import MaternalOffStudyForm
+from ..models import MaternalOffstudy
+from ..forms import MaternalOffstudyForm
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-@admin.register(MaternalOffStudy)
-class MaternalOffStudyAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
+@admin.register(MaternalOffstudy)
+class MaternalOffstudyAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
-    form = MaternalOffStudyForm
+    form = MaternalOffstudyForm
 
     fields = (
         'maternal_visit',

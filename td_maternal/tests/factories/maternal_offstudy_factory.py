@@ -2,15 +2,15 @@ import factory
 
 from django.utils import timezone
 
-from td_maternal.models import MaternalOffStudy
+from td_maternal.models import MaternalOffstudy
 
 from .maternal_visit_factory import MaternalVisitFactory
 
 
-class MaternalOffStudyFactory(factory.DjangoModelFactory):
+class MaternalOffstudyFactory(factory.DjangoModelFactory):
 
     class Meta:
-        model = MaternalOffStudy
+        model = MaternalOffstudy
 
     offstudy_date = timezone.now().date()
 
