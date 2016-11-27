@@ -1,6 +1,8 @@
-from django.utils import timezone
+from datetime import datetime
 from django.core import serializers
 from django.test.testcases import TestCase
+from django.utils import timezone
+
 
 from edc_constants.constants import YES
 from edc_sync.models import OutgoingTransaction
@@ -11,7 +13,6 @@ from td.models import RegisteredSubject
 from td_maternal.models import SpecimenConsent
 
 from ..models import MaternalEligibility
-from .factories import MaternalEligibilityFactory, MaternalConsentFactory
 from ..models import MaternalConsent
 
 
@@ -20,73 +21,100 @@ class TestMaternalSerializers(TestCase):
     def test_maternaleligibility_serializer(self):
         """ Creating maternaleligibility should creates outgoingtransaction """
         mommy.make(MaternalEligibility)
-        print (MaternalEligibility.objects.all())
-        print(OutgoingTransaction.objects.all())
         self.assertEqual(OutgoingTransaction.objects.filter(tx_name='td_maternal.maternaleligibility').count(), 1)
 
     def test_maternaleligibility_deserialize(self):
         """ Serialized maternaleligibility record should be able deserialized. """
-        maternal_eligibility = mommy.make(MaternalEligibility)
-        outgoing_transaction = OutgoingTransaction.objects.last()
-        deserialized_obj = serializers.deserialize(
-            "json", self.aes_decrypt(outgoing_transaction.tx),
-            use_natural_foreign_keys=True, use_natural_primary_keys=True)
-        self.assertEqual(maternal_eligibility.pk, deserialized_obj.pk)
+        maternal_eligibility = mommy.make(MaternalEligibility, age_in_years=25, has_omang=YES)
+        outgoing_transaction = OutgoingTransaction.objects.get(tx_name='td_maternal.maternaleligibility')
+        deserialised_obj = self.deserialised_obj(maternal_eligibility, outgoing_transaction)
+        self.assertEqual(maternal_eligibility.pk, deserialised_obj.object.pk)
 
-    def test_maternalconsent_serialize(self):
-        """ Creating maternalconsent should creates outgoingtransaction """
-        maternal_eligibility = mommy.make(MaternalEligibility)
-        mommy.make(
+    def create_maternal_consent(self, maternal_eligibility):
+        maternal_consent = mommy.make(
             MaternalConsent,
             maternal_eligibility=maternal_eligibility,
             identity="111121111",
             confirm_identity="111121111",
             study_site='40',
+            is_literate=YES,
+            first_name="test",
+            last_name="test",
+            dob=datetime(1991, 11, 27).date(),
+            initials='TT',
+            gender='F'
+        )
+        return maternal_consent
+
+    def create_specimen_consent(self, registered_subject):
+        specimen_consent = mommy.make(
+            SpecimenConsent,
+            registered_subject=registered_subject,
+            consent_datetime=timezone.now(),
+            may_store_samples=YES,
             is_literate=YES
         )
+        return specimen_consent
+
+    def deserialised_obj(self, model_obj, outgoing_tx):
+        for deserialised_obj in serializers.deserialize(
+                "json", outgoing_tx.aes_decrypt(outgoing_tx.tx), use_natural_foreign_keys=True, use_natural_primary_keys=True):
+            return deserialised_obj
+
+    def test_maternalconsent_serialize(self):
+        """ Creating maternalconsent should creates outgoingtransaction """
+        maternal_eligibility = mommy.make(MaternalEligibility, age_in_years=25, has_omang=YES)
+        self.create_maternal_consent(maternal_eligibility)
         self.assertEqual(OutgoingTransaction.objects.filter(tx_name='td_maternal.maternalconsent').count(), 1)
 
     def test_maternalconsent_deserialize(self):
         """ Serialized maternalconsent record should be able deserialized. """
         maternal_eligibility = mommy.make(MaternalEligibility)
-        maternal_consent = mommy.make(MaternalConsent, maternal_eligibility=maternal_eligibility)
+        maternal_consent = self.create_maternal_consent(maternal_eligibility)
         outgoing_tx = OutgoingTransaction.objects.get(tx_name='td_maternal.maternalconsent')
-        deserialized_obj = serializers.deserialize(
-            "json", self.aes_decrypt(outgoing_tx.tx),
-            use_natural_foreign_keys=True, use_natural_primary_keys=True)
-        self.assertEqual(maternal_consent.pk, deserialized_obj.pk)
+        deserialised_obj = self.deserialised_obj(maternal_consent, outgoing_tx)
+        self.assertEqual(maternal_consent.pk, deserialised_obj.object.pk)
 
     def test_specimen_consent_serialize(self):
         """ Creating specimenconsent should creates outgoingtransaction """
-        maternal_eligibility = mommy.make(MaternalEligibility)
-        maternal_consent = mommy.make(MaternalConsent, maternal_eligibility=maternal_eligibility)
+        maternal_eligibility = mommy.make(MaternalEligibility, age_in_years=25, has_omang=YES)
+        maternal_consent = self.create_maternal_consent(maternal_eligibility)
         registered_subject = RegisteredSubject.objects.get(
             identity=maternal_consent.identity
         )
-        SpecimenConsent.objects.create(
-            registered_subject=registered_subject,
-            consent_datetime=timezone.now(),
-            may_store_samples=YES,
-        )
-        self.assertEqual(OutgoingTransaction.objects.filter(tx_name='td_maternal.maternalconsent').count(), 1)
+        self.create_specimen_consent(registered_subject)
+        self.assertEqual(OutgoingTransaction.objects.filter(tx_name='td_maternal.specimenconsent').count(), 1)
 
     def test_speciman_consent_deserialize(self):
         """ Serialized specimenconsent record should be able deserialized. """
-        maternal_eligibility = MaternalEligibilityFactory()
-        maternal_consent = MaternalConsentFactory(
-            maternal_eligibility=maternal_eligibility
-        )
+        maternal_eligibility = mommy.make(MaternalEligibility, age_in_years=25, has_omang=YES)
+        maternal_consent = self.create_maternal_consent(maternal_eligibility)
         registered_subject = RegisteredSubject.objects.get(
             identity=maternal_consent.identity
         )
-        specimen_consent = SpecimenConsent.objects.create(
-            registered_subject=registered_subject,
-            consent_datetime=timezone.now(),
-            may_store_samples=YES,
-            is_literate=YES
-        )
+        specimen_consent = self.create_specimen_consent(registered_subject)
         outgoing_tx = OutgoingTransaction.objects.get(tx_name='td_maternal.specimenconsent')
-        deserialized_obj = serializers.deserialize(
-            "json", self.aes_decrypt(outgoing_tx.tx),
-            use_natural_foreign_keys=True, use_natural_primary_keys=True)
-        self.assertEqual(specimen_consent.pk, deserialized_obj.pk)
+        deserialised_obj = self.deserialised_obj(specimen_consent, outgoing_tx)
+        self.assertEqual(specimen_consent.pk, deserialised_obj.object.pk)
+
+#     def create_antenatal_enrollment(self, registered_subject):
+#         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment')
+#         print(antenatal_enrollment)
+# 
+#     def test_antenatal_enrollment(self):
+#         """ Creating specimenconsent should creates outgoingtransaction """
+#         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment')
+#         print(antenatal_enrollment)
+#         #self.assertEqual(OutgoingTransaction.objects.filter(tx_name='td_maternal.specimenconsent').count(), 1)
+# 
+#     def test_antenatal_enrollment_deserialize(self):
+#         """ Serialized specimenconsent record should be able deserialized. """
+#         maternal_eligibility = mommy.make(MaternalEligibility, age_in_years=25, has_omang=YES)
+#         maternal_consent = self.create_maternal_consent(maternal_eligibility)
+#         registered_subject = RegisteredSubject.objects.get(
+#             identity=maternal_consent.identity
+#         )
+#         specimen_consent = self.create_specimen_consent(registered_subject)
+#         outgoing_tx = OutgoingTransaction.objects.get(tx_name='td_maternal.specimenconsent')
+#         deserialised_obj = self.deserialised_obj(specimen_consent, outgoing_tx)
+#         self.assertEqual(specimen_consent.pk, deserialised_obj.object.pk)

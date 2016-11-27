@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'edc_registration.apps.AppConfig',
     'edc_rule_groups.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
+    'edc_sync.apps.AppConfig',
     'td.apps.AppConfig',
     'td_dashboard.apps.AppConfig',
     'td_infant.apps.AppConfig',
@@ -84,7 +85,6 @@ INSTALLED_APPS = [
     'tshilo_dikotla.apps.EdcLabelAppConfig',
     'tshilo_dikotla.apps.EdcMetadataAppConfig',
     'tshilo_dikotla.apps.EdcProtocolAppConfig',
-    'tshilo_dikotla.apps.EdcSyncAppConfig',
     'tshilo_dikotla.apps.EdcTimepointAppConfig',
     'tshilo_dikotla.apps.EdcVisitTrackingAppConfig',
     'tshilo_dikotla.apps.AppConfig',
@@ -203,7 +203,7 @@ LANGUAGES = (
 STATIC_URL = '/static/'
 
 DEFAULT_STUDY_SITE = '40'
-ALLOW_MODEL_SERIALIZATION = False
+ALLOW_MODEL_SERIALIZATION = True
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators

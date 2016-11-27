@@ -110,10 +110,6 @@ class EdcLabelAppConfig(EdcLabelConfigParent):
     default_label_identifier_name = ''
 
 
-class EdcSyncAppConfig(EdcSyncAppConfigParent):
-    edc_sync_files_using = True
-
-
 class EdcVisitTrackingAppConfig(EdcVisitTrackingAppConfigParent):
     visit_models = {'td_maternal': ('maternal_visit', 'td_maternal.maternalvisit'),
                     'td_infant': ('infant_visit', 'td_infant.infantvisit')}

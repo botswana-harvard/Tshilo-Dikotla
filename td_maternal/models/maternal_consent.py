@@ -51,7 +51,7 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
     history = HistoricalRecords()
 
     def natural_key(self):
-        return (self.subject_identifier, self.identity, self.version,)
+        return (self.subject_identifier, self.first_name, self.dob, self.initials, self.version,)
 
     def __str__(self):
         return '{0} {1} {2} ({3})'.format(self.subject_identifier, self.first_name,
@@ -76,4 +76,4 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
     class Meta:
         app_label = 'td_maternal'
         verbose_name = 'Maternal Consent'
-        unique_together = ('first_name', 'dob', 'initials', 'version')
+        unique_together = ('subject_identifier', 'first_name', 'dob', 'initials', 'version')
