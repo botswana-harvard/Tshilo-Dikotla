@@ -32,21 +32,21 @@ class Edd:
         except AttributeError:
             self.edd = None
 
-    def get_edd(self, diff):
+    def get_edd(self, delta):
         edd = None
-        diff = relativedelta(days=abs(self.lmp.edd - self.ultrasound.date))
         if relativedelta(weeks=16) <= self.lmp.ga <= relativedelta(weeks=21) + relativedelta(days=6):
-            if 0 <= diff.days <= 10:
+            if 0 <= delta.days <= 10:
                 edd = self.lmp.edd
             elif 10 < self.diff.days:
                 edd = self.ultrasound.edd
-        elif relativedelta(weeks=21) + relativedelta(days=6) < self.lmp.ga <= relativedelta(weeks=27) + relativedelta(days=6):
-            if 0 <= diff.days <= 14:
+        elif (relativedelta(weeks=21) + relativedelta(days=6) < self.lmp.ga <=
+              relativedelta(weeks=27) + relativedelta(days=6)):
+            if 0 <= delta.days <= 14:
                 edd = self.lmp.edd
             elif 14 < self.diff.days:
                 edd = self.ultrasound.edd
         elif relativedelta(weeks=27) + relativedelta(days=6) < self.lmp.ga:
-            if 0 <= diff.days <= 21:
+            if 0 <= delta.days <= 21:
                 edd = self.lmp.edd
             elif 21 < self.diff.days:
                 edd = self.ultrasound.edd
