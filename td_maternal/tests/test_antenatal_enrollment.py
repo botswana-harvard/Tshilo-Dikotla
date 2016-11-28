@@ -18,7 +18,6 @@ class TestAntenatalEnrollment(TestCase):
     """Test eligibility of a mother for antenatal enrollment."""
 
     def setUp(self):
-        self.study_site = '40'
         self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         self.maternal_consent = mommy.make_recipe(
             'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
@@ -35,14 +34,13 @@ class TestAntenatalEnrollment(TestCase):
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
     def test_gestation_wks_lmp_above_36(self):
         """Test for a positive mother with evidence of hiv_status,
         will go on a valid regimen but weeks of gestation above 36."""
 
         options = {'subject_identifier': self.subject_identifier,
-                   'report_timezone': get_utcnow(),
+                   'report_datetime': get_utcnow(),
                    'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
                    'rapid_test_done': NOT_APPLICABLE,
@@ -51,7 +49,6 @@ class TestAntenatalEnrollment(TestCase):
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
     def test_gestation_wks_lmp_between_16_and_36_notvalid_arv(self):
         """Test for a positive mother with evidence of hiv_status,
@@ -67,7 +64,6 @@ class TestAntenatalEnrollment(TestCase):
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
     def test_gestation_wks_lmp_between_16_and_36_valid_arv(self):
         """Test for a positive mother with evidence of hiv_status,
@@ -100,7 +96,6 @@ class TestAntenatalEnrollment(TestCase):
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
     def test_is_not_diabetic(self):
         """Test for a positive mother with valid documentation,
@@ -152,7 +147,6 @@ class TestAntenatalEnrollment(TestCase):
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
     def test_will_remain_onstudy(self):
         """Test for a posetive mother who has documenation of hiv_status,
@@ -188,7 +182,6 @@ class TestAntenatalEnrollment(TestCase):
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
     def test_mother_tested_POS_at_32weeks_with_evidence(self):
         """Test for a mother who tested POS at or after 32weeks and has documentation of hiv_status"""
@@ -365,7 +358,6 @@ class TestAntenatalEnrollment(TestCase):
 
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
     def test_lmp_not_provided_status(self):
         """Test enrollment status is PENDING if lmp is not provided."""
