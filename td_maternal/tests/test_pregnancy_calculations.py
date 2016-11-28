@@ -18,7 +18,7 @@ class TestPregnancyCalculations(unittest.TestCase):
         self.assertEqual(dt + relativedelta(days=280), Lmp(lmp=dt).edd)
 
     def test_ultrasound_days_boundaries(self):
-        """Assert Ultrasound raises errors for invalid weeks and days."""
+        """Assert Ultrasound raises errors for invalid days."""
         dt = get_utcnow()
         try:
             Ultrasound(ultrasound_date=dt, ga_weeks=1, ga_days=7)
@@ -33,6 +33,7 @@ class TestPregnancyCalculations(unittest.TestCase):
             pass
 
     def test_ultrasound_weeks_boundaries(self):
+        """Assert Ultrasound raises errors for invalid weeks."""
         dt = get_utcnow()
         try:
             Ultrasound(ultrasound_date=dt, ga_weeks=-1)
@@ -51,7 +52,7 @@ class TestPregnancyCalculations(unittest.TestCase):
             pass
 
     def test_ultrasound_weeks_floor(self):
-        """Assert ga weeks os rounded down to nearest int."""
+        """Assert ga weeks is rounded down to nearest int."""
         dt = get_utcnow()
         for week in range(1, 40):
             for day in range(0, 7):
@@ -84,6 +85,7 @@ class TestPregnancyCalculations(unittest.TestCase):
         self.assertIsNone(edd.edd)
 
     def test_ultrasound_none(self):
+        """Assert Ultrasound can handle nulls."""
         ultrasound = Ultrasound()
         self.assertIsNone(ultrasound.ga)
         self.assertIsNone(ultrasound.edd)
@@ -91,12 +93,8 @@ class TestPregnancyCalculations(unittest.TestCase):
         self.assertIsNone(ultrasound.ga)
         self.assertIsNone(ultrasound.edd)
 
-    def test_ultrasound_none2(self):
-        ultrasound = Ultrasound(None, 25, 3)
-        self.assertIsNone(ultrasound.ga)
-        self.assertIsNone(ultrasound.edd)
-
     def test_edd_with_ultrasound_none(self):
+        """Assert Edd chooses Lmp.edd if Utrasound is null."""
         dt = get_utcnow()
         lmp = Lmp(lmp=dt - (relativedelta(weeks=25) + relativedelta(days=3)))
         ultrasound = Ultrasound(None, 25, 3)
@@ -104,6 +102,7 @@ class TestPregnancyCalculations(unittest.TestCase):
         self.assertEqual(edd.edd, lmp.edd)
 
     def test_edd_with_lmp_none(self):
+        """Assert Edd chooses Ultrasound.edd if Lmp is null."""
         ultrasound_dt = get_utcnow()
         lmp = Lmp()
         ultrasound = Ultrasound(ultrasound_dt, ga_weeks=25)
@@ -111,6 +110,7 @@ class TestPregnancyCalculations(unittest.TestCase):
         self.assertEqual(edd.edd, ultrasound.edd)
 
     def test_ga_with_lmp_none(self):
+        """Assert Ga chooses Ultrasound.ga if Lmp is null."""
         ultrasound_dt = get_utcnow()
         lmp = Lmp()
         ultrasound = Ultrasound(ultrasound_dt, ga_weeks=25)
@@ -122,4 +122,3 @@ class TestPregnancyCalculations(unittest.TestCase):
         for week in range(1, 40):
             for day in range(0, 7):
                 lmp = Lmp(dt - (relativedelta(weeks=week) + relativedelta(days=day)))
-                
