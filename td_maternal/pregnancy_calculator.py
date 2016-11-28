@@ -12,13 +12,13 @@ class Ultrasound:
 
     def __init__(self, dt, ga_weeks, ga_days=0):
         ga_days = ga_days or 0
-        if not 0 <= ga_days <= 7:
-            raise TypeError('Invalid Ultrasound GA days, expected 0 <= ga_days <= 7. Got {}'.format(ga_days))
+        if not 0 <= ga_days <= 6:
+            raise TypeError('Invalid Ultrasound GA days, expected 0 <= ga_days <= 6. Got {}'.format(ga_days))
         self.date = dt
         if not 0 < ga_weeks < 40:
             raise TypeError('Invalid Ultrasound GA weeks, expected 0 < ga_weeks < 40. Got {}'.format(ga_weeks))
         self.ga = relativedelta(weeks=ga_weeks) + relativedelta(days=ga_days)
-        self.edd = self.date + (relativedelta(weeks=40) - self.ga).weeks
+        self.edd = self.date + (relativedelta(weeks=40) - self.ga)
 
 
 class Edd:
