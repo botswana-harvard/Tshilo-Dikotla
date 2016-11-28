@@ -11,7 +11,8 @@ from edc_visit_tracking.constants import SCHEDULED
 
 from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment,
                      MaternalLabourDel, SpecimenConsent, MaternalRando, MaternalLocator, MaternalUltraSoundInitial,
-                     MaternalInterimIdcc, RapidTestResult)
+                     MaternalInterimIdcc, RapidTestResult, MaternalObstericalHistory, MaternalMedicalHistory,
+                     MaternalDemographics)
 
 
 class TdProvider(BaseProvider):
@@ -193,8 +194,7 @@ maternalultrasoundinitial = Recipe(
     est_edd_ultrasound=get_utcnow,
     ga_by_ultrasound_wks=20,
     ga_by_ultrasound_days=4,
-    est_fetal_weight=3.95,
-    amniotic_fluid_volume=NORMAL)
+    est_fetal_weight=3.95)
 
 maternalinterimidcc = Recipe(
     MaternalInterimIdcc,
@@ -207,3 +207,32 @@ rapidtest = Recipe(
     rapid_test_done=YES,
     result_date=get_utcnow,
     result=POS)
+
+maternalobstericalhistory = Recipe(
+    MaternalObstericalHistory,
+    report_datetime=get_utcnow,
+    prev_pregnancies=1,
+    pregs_24wks_or_more=1,
+    lost_before_24wks=0,
+    lost_after_24wks=0,
+    live_children=0,
+    children_died_b4_5yrs=0,
+    children_deliv_before_37wks=0,
+    children_deliv_aftr_37wks=1)
+
+maternalmedicalhistory = Recipe(
+    MaternalMedicalHistory,
+    report_datetime=get_utcnow,
+    chronic_since=YES,
+    who_diagnosis=YES,
+    sero_posetive=NO,
+    perinataly_infected=NO,
+    know_hiv_status="1 person",
+    lowest_cd4_known=NO)
+
+maternaldemographics = Recipe(
+    MaternalDemographics,
+    ethnicity=" Black African",
+    house_electrified=NO,
+    house_fridge=NO,
+    cooking_method=NO)
