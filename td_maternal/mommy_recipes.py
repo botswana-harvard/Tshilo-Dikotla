@@ -7,10 +7,10 @@ from edc_base.faker import EdcBaseProvider
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG, UNKNOWN
 from edc_lab.faker import EdcLabProvider
-from edc_visit_tracking.constants import SCHEDULED
+from edc_visit_tracking.constants import SCHEDULED, NORMAL
 
 from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment, MaternalLabourDel,
-                     SpecimenConsent, MaternalRando)
+                     SpecimenConsent, MaternalRando, MaternalLocator, MaternalUltraSoundInitial)
 
 
 class TdProvider(BaseProvider):
@@ -164,3 +164,32 @@ maternalrandomization = Recipe(
     rx='NVP',
     randomization_datetime=get_utcnow,
     initials='IN')
+
+maternallocator = Recipe(
+    MaternalLocator,
+    home_visit_permission=YES,
+    physical_address="Block 8",
+    may_follow_up=YES,
+    subject_cell="71222222",
+    subject_cell_alt="73111111",
+    may_contact_someone=YES,
+    contact_name="test",
+    contact_rel="COUSIN",
+    contact_physical_address="Block 8",
+    contact_cell="73111119",
+    has_caretaker=YES,
+    caretaker_name="test",
+    caretaker_cell="73111119",
+    caretaker_tel="3902487")
+
+maternalultrasoundinitial = Recipe(
+    MaternalUltraSoundInitial,
+    number_of_gestations=1,
+    bpd=50.0,
+    hc=150.0,
+    ac=160.0,
+    fl=35.0,
+    est_edd_ultrasound=get_utcnow,
+    ga_by_ultrasound_wks=20,
+    ga_by_ultrasound_days=4,
+    est_fetal_weight=3.95)
