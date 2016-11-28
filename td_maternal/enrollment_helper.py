@@ -3,85 +3,15 @@ from dateutil.relativedelta import relativedelta
 
 from django.apps import apps as django_apps
 from django.utils import timezone
-from edc_constants.constants import NO, YES, POS, NEG
+
+from edc_constants.constants import NO, YES, POS, NEG, NOT_APPLICABLE
+from edc_pregnancy_utils import Edd, Ga, Lmp
+
+from td.hiv_status import EnrollmentStatus
 
 
 class EnrollmentError(Exception):
     pass
-
-
-class EnrollmentStatusError(Exception):
-    pass
-
-
-class Week32Error(Exception):
-    pass
-
-
-class EnrollmentStatus:
-    def __init__(self, obj, exception_cls=None):
-        self.exception_cls = exception_cls or EnrollmentStatusError
-        self.current = Current(obj)
-        self.week32 = Week32(obj)
-        self.rapid = Rapid(obj)
-        try:
-            if self.week32.date > self.rapid.date:
-                raise self.exception_cls('Rapid test date cannot precede test date on or after 32 weeks')
-        except TypeError:
-            pass
-        if self.current.result == POS or self.week32.result == POS or self.rapid.result == POS:
-            self.result = POS
-        elif self.rapid.result == NEG or self.week32.result == NEG:
-            self.result = NEG
-        if self.current.result != POS and self.week32.result != POS:
-            if not self.rapid.result:
-                raise self.exception_cls(
-                    'A rapid test result is required. Got current.result == {}, week32.result == {}'.format(
-                        self.current.result, self.week32.result))
-
-
-class Current:
-    """Current HIV result/status, but only if POS, returns POS or None"""
-    def __init__(self, obj):
-        self.result = None
-        if obj.evidence_hiv_status == YES and obj.current_hiv_status == POS:
-            self.result = POS
-
-
-class Week32:
-    """HIV result by test at week 32, returns POS, NEG or None.
-
-    within_3m is not inclusive."""
-    def __init__(self, obj):
-        self.result = None
-        self.tested = obj.week32_test
-        try:
-            self.date = obj.week32_test_date.date()
-        except AttributeError:
-            self.date = obj.week32_test_date
-        if obj.week32_test == YES:
-            try:
-                self.within_3m = self.date > (obj.report_datetime - relativedelta(months=3)).date()
-            except TypeError:
-                raise Week32Error()
-            if obj.week32_result == POS and obj.evidence_32wk_hiv_status == YES:
-                self.result = POS
-            elif obj.week32_result == NEG and obj.evidence_32wk_hiv_status == YES and self.within_3m:
-                self.result = NEG
-
-
-class Rapid:
-    """HIV result by rapid test if cannot determine POS status by other means."""
-    def __init__(self, obj):
-        self.result = None
-        self.date = None
-        self.tested = obj.rapid_test_done
-        if self.tested == YES:
-            self.result = obj.rapid_test_result
-            try:
-                self.date = obj.rapid_test_date.date()
-            except AttributeError:
-                self.date = obj.rapid_test_date
 
 
 class EnrollmentHelper(object):
@@ -115,7 +45,7 @@ class EnrollmentHelper(object):
 
     knows_lmp
 
-    will_get_arvs (if NO, not eligible)
+    will_get_arvs (if NO, not eligible, if POS->YES, if NEG->N/A)
     is_diabetic (if NO, not eligible)
     will_breastfeed  (if NO, not eligible)
     will_remain_onstudy  (if NO, not eligible)
@@ -134,28 +64,45 @@ class EnrollmentHelper(object):
         self.exception_cls = exception_cls or EnrollmentError
         self.current_hiv_status = obj.current_hiv_status
         self.evidence_hiv_status = obj.evidence_hiv_status
-        self.is_diabetic = obj.is_diabetic
         self.knows_lmp = obj.knows_lmp
         if obj.last_period_date:
-            self.lmp = timezone.make_aware(datetime.combine(obj.last_period_date, time()))
+            self.lmp = Lmp(timezone.make_aware(datetime.combine(obj.last_period_date, time())))
         else:
             self.lmp = None
 
         self.report_datetime = obj.report_datetime
         self.subject_identifier = obj.subject_identifier
 
+        # hiv status
         enrollment_status = EnrollmentStatus(obj)
         self.enrollment_hiv_status = enrollment_status.result
-
         # what was this for?
         try:
             self.test_date_on_or_after_32wks = enrollment_status.week32.date >= self.date_at_32wks
         except TypeError:
             self.test_date_on_or_after_32wks = None
 
+        # simple criteria that makes ineligible regardless of other values
         self.will_breastfeed = obj.will_breastfeed
-        self.will_get_arvs = obj.will_get_arvs
         self.will_remain_onstudy = obj.will_remain_onstudy
+        self.is_diabetic = obj.is_diabetic
+        self.will_get_arvs = obj.will_get_arvs
+        if self.will_get_arvs == NO:
+            self._is_eligible = False
+        if self.will_breastfeed == NO:
+            self._is_eligible = False
+        if self.will_remain_onstudy == NO:
+            self._is_eligible = False
+        if self.is_diabetic == NO:
+            self._is_eligible = False
+
+        # expected paired values
+        if self.enrollment_hiv_status == POS and self.will_get_arvs != YES:
+            raise EnrollmentError('will_get_arvs must be YES for HIV status = POS')
+        if self.enrollment_hiv_status == NEG and self.will_get_arvs != NOT_APPLICABLE:
+            raise EnrollmentError('will_get_arvs must be N/A for HIV status = NEG')
+
+        # run
         self.is_eligible
 
     def as_dict(self):
@@ -173,17 +120,16 @@ class EnrollmentHelper(object):
             MaternalLabourDel
             MaternalUltraSoundInitial
         """
-        if not self._is_eligible:
+        if self._is_eligible is None:
             self._is_eligible = False
             if self.pending_ultrasound or not self.ultrasound:
                 meets_basic_criteria = False
             else:
                 meets_basic_criteria = (
                     self.lmp_to_use >= 16 and self.lmp_to_use <= 36 and
-                    self.no_chronic_conditions and self.will_breastfeed == YES and
-                    self.will_remain_onstudy == YES and self.pass_antenatal_enrollment and
+                    self.pass_antenatal_enrollment and
                     self.eligible_after_delivery)
-            if meets_basic_criteria and self.enrollment_hiv_status == POS and self.will_get_arvs == YES:
+            if meets_basic_criteria and self.enrollment_hiv_status == POS:
                 self._is_eligible = True
             elif meets_basic_criteria and self.enrollment_hiv_status == NEG:
                 self._is_eligible = True
