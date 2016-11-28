@@ -7,81 +7,67 @@ from edc_constants.constants import YES
 from edc_registration.models import RegisteredSubject
 from edc_sync.models import OutgoingTransaction
 
-from td_maternal.models import SpecimenConsent
+
+from model_mommy import mommy
+
+from td.models import Appointment
 
 
 class TestMaternalSerializers(TestCase):
 
-    def test_maternaleligibility_serializer(self):
-        """ Creating maternaleligibility should creates outgoingtransaction """
-        mommy.make_recipe('td_maternal.maternaleligibility')
-        self.assertEqual(OutgoingTransaction.objects.filter(tx_name='td_maternal.maternaleligibility').count(), 1)
-
-    def test_maternaleligibility_deserialize(self):
-        """ Serialized maternaleligibility record should be able deserialized. """
-        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        outgoing_transaction = OutgoingTransaction.objects.get(tx_name='td_maternal.maternaleligibility')
-        deserialised_obj = self.deserialised_obj(maternal_eligibility, outgoing_transaction)
-        self.assertEqual(maternal_eligibility.pk, deserialised_obj.object.pk)
-
-    def create_specimen_consent(self, registered_subject):
-        specimen_consent = mommy.make(
-            SpecimenConsent,
-            registered_subject=registered_subject,
-            consent_datetime=get_utcnow(),
-            may_store_samples=YES,
-            is_literate=YES
-        )
-        return specimen_consent
-
-    def deserialised_obj(self, model_obj, outgoing_tx):
-        for deserialised_obj in serializers.deserialize(
-                "json", outgoing_tx.aes_decrypt(outgoing_tx.tx), use_natural_foreign_keys=True, use_natural_primary_keys=True):
-            return deserialised_obj
-
-    def test_maternalconsent_serialize(self):
-        """ Creating maternalconsent should creates outgoingtransaction """
-        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
-        self.assertEqual(OutgoingTransaction.objects.filter(tx_name='td_maternal.maternalconsent').count(), 1)
-
-    def test_maternalconsent_deserialize(self):
-        """ Serialized maternalconsent record should be able deserialized. """
-        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
-        outgoing_tx = OutgoingTransaction.objects.get(tx_name='td_maternal.maternalconsent')
-        deserialised_obj = self.deserialised_obj(maternal_consent, outgoing_tx)
-        self.assertEqual(maternal_consent.pk, deserialised_obj.object.pk)
-
-    def test_specimen_consent_serialize(self):
-        """ Creating specimenconsent should creates outgoingtransaction """
-        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
-        registered_subject = RegisteredSubject.objects.get(
-            identity=maternal_consent.identity
-        )
-        self.create_specimen_consent(registered_subject)
-        self.assertEqual(OutgoingTransaction.objects.filter(tx_name='td_maternal.specimenconsent').count(), 1)
-
-    def test_speciman_consent_deserialize(self):
-        """ Serialized specimenconsent record should be able deserialized. """
-        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
-        registered_subject = RegisteredSubject.objects.get(
-            identity=maternal_consent.identity
-        )
-        specimen_consent = self.create_specimen_consent(registered_subject)
-        outgoing_tx = OutgoingTransaction.objects.get(tx_name='td_maternal.specimenconsent')
-        deserialised_obj = self.deserialised_obj(specimen_consent, outgoing_tx)
-        self.assertEqual(specimen_consent.pk, deserialised_obj.object.pk)
-
-    def test_antenatal_enrollment(self):
+    def test_enrollments_deserialization(self):
         """ Creating specimenconsent should creates outgoingtransaction """
         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         maternal_consent = mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', subject_identifier=maternal_consent.subject_identifier)
-        outgoing_tx = OutgoingTransaction.objects.filter(tx_name='td_maternal.antenatalenrollment')
-        self.assertTrue(outgoing_tx)
-        print(antenatal_enrollment.__dict__)
-        deserialised_obj = self.deserialised_obj(antenatal_enrollment, outgoing_tx.first())
-        self.assertEqual(antenatal_enrollment.pk, deserialised_obj.object.pk)
+        antenatal_enrollment_two = mommy.make_recipe('td_maternal.antenatalenrollment', subject_identifier=maternal_consent.subject_identifier)
+        maternallabourdel = mommy.make('td_maternal.maternallabourdel', registered_subject=maternal_consent.registered_subject)
+        specimen_consent = mommy.make('td_maternal.specimenconsent', registered_subject=maternal_consent.registered_subject)
+        outgoing_transactions = OutgoingTransaction.objects.all()
+        self.assertGreater(outgoing_transactions.count(), 0)
+        for outgoing_transaction in outgoing_transactions:
+            json_tx = outgoing_transaction.aes_decrypt(outgoing_transaction.tx)
+            pp.pprint(json_tx)
+            for deserialised_obj in serializers.deserialize(
+                    "json", outgoing_transaction.aes_decrypt(outgoing_transaction.tx),
+                    use_natural_foreign_keys=True,
+                    use_natural_primary_keys=True):
+                if json_tx.get('model') == 'td_maternal.maternalconsent':
+                    self.assertEqual(maternal_consent.pk, deserialised_obj.object.pk)
+                elif json_tx.get('model') == 'td_maternal.maternaleligibility':
+                    self.assertEqual(maternal_eligibility.pk, deserialised_obj.object.pk)
+                elif json_tx.get('model') == 'td_maternal.antenatalenrollment':
+                    self.assertEqual(antenatal_enrollment.pk, deserialised_obj.object.pk)
+                elif json_tx.get('model') == 'td_maternal.antenatalenrollmenttwo':
+                    self.assertEqual(antenatal_enrollment_two.pk, deserialised_obj.object.pk)
+                elif json_tx.get('model') == 'td_maternal.maternallabourdel':
+                    self.assertEqual(maternallabourdel.pk, deserialised_obj.object.pk)
+                elif json_tx.get('model') == 'td_maternal.specimenconsent':
+                    self.assertEqual(specimen_consent.pk, deserialised_obj.object.pk)
+                else:
+                    print(json_tx.get('model'))
+
+    def test_antenatal_enrollment_visit_crfs(self):
+        """ Creating specimenconsent should creates outgoingtransaction """
+        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
+        mommy.make_recipe('td_maternal.antenatalenrollment', subject_identifier=maternal_consent.subject_identifier)
+        mommy.make_recipe('td_maternal.antenatalenrollment', subject_identifier=maternal_consent.subject_identifier)
+        mommy.make('td_maternal.maternallabourdel', registered_subject=maternal_consent.registered_subject)
+        mommy.make('td_maternal.specimenconsent', registered_subject=maternal_consent.registered_subject)
+        appointment = Appointment.objects.get(
+            visit_code='1000', subject_identifier=maternal_consent.registered_subject.subject_identifier)
+        maternalvisit = mommy.make_recipe('td_maternal.maternalvisit', appointment=appointment)
+        outgoing_transactions = OutgoingTransaction.objects.all()
+        self.assertGreater(outgoing_transactions.count(), 0)
+        for outgoing_transaction in outgoing_transactions:
+            json_tx = outgoing_transaction.aes_decrypt(outgoing_transaction.tx)
+            pp.pprint(json_tx)
+            for deserialised_obj in serializers.deserialize(
+                    "json", outgoing_transaction.aes_decrypt(outgoing_transaction.tx),
+                    use_natural_foreign_keys=True,
+                    use_natural_primary_keys=True):
+                if json_tx.get('model') == 'td_maternal.maternalvisit':
+                    self.assertEqual(maternalvisit.pk, deserialised_obj.object.pk)
+                elif json_tx.get('model') == 'td.appointment':
+                    self.assertEqual(appointment.pk, deserialised_obj.object.pk)

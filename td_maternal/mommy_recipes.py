@@ -9,7 +9,8 @@ from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG, UNKNOWN
 from edc_lab.faker import EdcLabProvider
 from edc_visit_tracking.constants import SCHEDULED
 
-from .models import MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment, MaternalLabourDel
+from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment, MaternalLabourDel,
+                     SpecimenConsent)
 
 
 class TdProvider(BaseProvider):
@@ -149,3 +150,9 @@ maternallabourdel = Recipe(
     live_infants_to_register=1,
     mode_delivery='spontaneous vaginal',
     valid_regiment_duration=YES)
+
+specimenconsent = Recipe(
+    SpecimenConsent,
+    consent_datetime=get_utcnow(),
+    may_store_samples=YES,
+    is_literate=YES)
