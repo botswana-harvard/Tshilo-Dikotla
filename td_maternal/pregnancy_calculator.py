@@ -24,7 +24,6 @@ class Ultrasound:
 class Edd:
 
     def __init__(self, lmp, ultrasound):
-        self.final = None
         self.ultrasound = ultrasound
         self.lmp = lmp
         try:
