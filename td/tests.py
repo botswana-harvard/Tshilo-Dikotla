@@ -75,7 +75,6 @@ class TestTd(TestCase):
         self.assertGreater(outgoing_transactions.count(), 0)
         for outgoing_transaction in outgoing_transactions:
             json_tx = outgoing_transaction.aes_decrypt(outgoing_transaction.tx)
-            pp.pprint(json_tx)
             for deserialised_obj in serializers.deserialize(
                     "json", outgoing_transaction.aes_decrypt(outgoing_transaction.tx),
                     use_natural_foreign_keys=True,
