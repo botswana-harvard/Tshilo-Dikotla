@@ -10,7 +10,7 @@ from edc_lab.faker import EdcLabProvider
 from edc_visit_tracking.constants import SCHEDULED, NORMAL
 
 from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment, MaternalLabourDel,
-                     SpecimenConsent, MaternalRando, MaternalLocator, MaternalUltraSoundInitial)
+                     SpecimenConsent, MaternalRando, MaternalLocator, MaternalUltraSoundInitial, MaternalInterimIdcc)
 
 
 class TdProvider(BaseProvider):
@@ -193,3 +193,9 @@ maternalultrasoundinitial = Recipe(
     ga_by_ultrasound_wks=20,
     ga_by_ultrasound_days=4,
     est_fetal_weight=3.95)
+
+maternalinterimidcc = Recipe(
+    MaternalInterimIdcc,
+    info_since_lastvisit=YES,
+    recent_cd4=40,
+    recent_cd4_date=get_utcnow)
