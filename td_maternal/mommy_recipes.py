@@ -10,7 +10,7 @@ from edc_lab.faker import EdcLabProvider
 from edc_visit_tracking.constants import SCHEDULED
 
 from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment, MaternalLabourDel,
-                     SpecimenConsent)
+                     SpecimenConsent, MaternalRando)
 
 
 class TdProvider(BaseProvider):
@@ -156,3 +156,11 @@ specimenconsent = Recipe(
     consent_datetime=get_utcnow(),
     may_store_samples=YES,
     is_literate=YES)
+
+maternalrandomization = Recipe(
+    MaternalRando,
+    site='Gaborone',
+    sid=1,
+    rx='NVP',
+    randomization_datetime=get_utcnow,
+    initials='IN')
