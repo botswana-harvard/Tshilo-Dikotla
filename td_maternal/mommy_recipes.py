@@ -192,7 +192,8 @@ maternalultrasoundinitial = Recipe(
     est_edd_ultrasound=get_utcnow,
     ga_by_ultrasound_wks=20,
     ga_by_ultrasound_days=4,
-    est_fetal_weight=3.95)
+    est_fetal_weight=3.95,
+    amniotic_fluid_volume=NORMAL)
 
 maternalinterimidcc = Recipe(
     MaternalInterimIdcc,
