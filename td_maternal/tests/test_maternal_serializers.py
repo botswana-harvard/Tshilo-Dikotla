@@ -8,8 +8,6 @@ from edc_registration.models import RegisteredSubject
 from edc_sync.models import OutgoingTransaction
 
 
-from model_mommy import mommy
-
 from td.models import Appointment
 
 
@@ -19,6 +17,7 @@ class TestMaternalSerializers(TestCase):
         """ Creating specimenconsent should creates outgoingtransaction """
         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         maternal_consent = mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
+        print(maternal_consent.__dict__)
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', subject_identifier=maternal_consent.subject_identifier)
         antenatal_enrollment_two = mommy.make_recipe('td_maternal.antenatalenrollment', subject_identifier=maternal_consent.subject_identifier)
         maternallabourdel = mommy.make('td_maternal.maternallabourdel', registered_subject=maternal_consent.registered_subject)
@@ -57,6 +56,7 @@ class TestMaternalSerializers(TestCase):
         appointment = Appointment.objects.get(
             visit_code='1000', subject_identifier=maternal_consent.registered_subject.subject_identifier)
         maternalvisit = mommy.make_recipe('td_maternal.maternalvisit', appointment=appointment)
+
         outgoing_transactions = OutgoingTransaction.objects.all()
         self.assertGreater(outgoing_transactions.count(), 0)
         for outgoing_transaction in outgoing_transactions:
@@ -67,5 +67,13 @@ class TestMaternalSerializers(TestCase):
                     use_natural_primary_keys=True):
                 if json_tx.get('model') == 'td_maternal.maternalvisit':
                     self.assertEqual(maternalvisit.pk, deserialised_obj.object.pk)
+                elif json_tx.get('model') == 'td.appointment':
+                    self.assertEqual(appointment.pk, deserialised_obj.object.pk)
+                elif json_tx.get('model') == 'td.appointment':
+                    self.assertEqual(appointment.pk, deserialised_obj.object.pk)
+                elif json_tx.get('model') == 'td.appointment':
+                    self.assertEqual(appointment.pk, deserialised_obj.object.pk)
+                elif json_tx.get('model') == 'td.appointment':
+                    self.assertEqual(appointment.pk, deserialised_obj.object.pk)
                 elif json_tx.get('model') == 'td.appointment':
                     self.assertEqual(appointment.pk, deserialised_obj.object.pk)

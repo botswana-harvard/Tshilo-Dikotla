@@ -12,7 +12,7 @@ from edc_visit_tracking.constants import SCHEDULED
 from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment,
                      MaternalLabourDel, SpecimenConsent, MaternalRando, MaternalLocator, MaternalUltraSoundInitial,
                      MaternalInterimIdcc, RapidTestResult, MaternalObstericalHistory, MaternalMedicalHistory,
-                     MaternalDemographics, MaternalClinicalMeasurementsOne)
+                     MaternalDemographics)
 
 
 class TdProvider(BaseProvider):
@@ -194,8 +194,7 @@ maternalultrasoundinitial = Recipe(
     est_edd_ultrasound=get_utcnow,
     ga_by_ultrasound_wks=20,
     ga_by_ultrasound_days=4,
-    est_fetal_weight=3.95,
-    amniotic_fluid_volume=NORMAL)
+    est_fetal_weight=3.95)
 
 maternalinterimidcc = Recipe(
     MaternalInterimIdcc,
@@ -237,7 +236,3 @@ maternaldemographics = Recipe(
     house_electrified=NO,
     house_fridge=NO,
     cooking_method=NO)
-
-maternalclinicalmeasurementsone = Recipe(
-    MaternalClinicalMeasurementsOne,
-)
