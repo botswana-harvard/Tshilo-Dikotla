@@ -73,9 +73,7 @@ class TestAntenatalEnrollment(TestCase):
                    'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
                    'will_get_arvs': YES,
-                   'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
-
+                   'rapid_test_done': NOT_APPLICABLE}
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)

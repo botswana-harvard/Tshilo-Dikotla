@@ -57,7 +57,7 @@ maternalconsent = Recipe(
 )
 
 # antenatal enrollment
-common = dict(
+antenatal_enrollment_common = dict(
     schedule_name='maternal_enrollment_step1',
     report_datetime=get_utcnow,
     evidence_hiv_status=YES,
@@ -70,13 +70,13 @@ common = dict(
     will_remain_onstudy=YES,
 )
 
-ineligible = dict(
+antenatal_enrollment_ineligible = dict(
     current_hiv_status=POS,
     rapid_test_done=None,
     rapid_test_result=None,
 )
 
-eligible = dict(
+antenatal_enrollment_eligible = dict(
     current_hiv_status=YES,
     rapid_test_date=fake.four_weeks_ago,
     rapid_test_done=YES,
@@ -89,8 +89,8 @@ rapid_pos = dict()
 
 rapid_neg = dict()
 
-options = common
-options.update(eligible)
+options = antenatal_enrollment_common
+options.update(antenatal_enrollment_eligible)
 antenatalenrollment = Recipe(AntenatalEnrollment, **options)
 
 # antenatalenrollment for ineligible
@@ -107,16 +107,16 @@ antenatalenrollment_ineligible = Recipe(
 #     AntenatalEnrollment, **options)
 
 # antenatalenrollment for eligible POS mother, not by rapid
-options = common
-options.update(eligible)
+options = antenatal_enrollment_common
+options.update(antenatal_enrollment_eligible)
 options.update(
     current_hiv_status=POS)
 antenatalenrollment_pos = Recipe(
     AntenatalEnrollment, **options)
 
 # antenatalenrollment for eligible NEG mother by rapid
-options = common
-options.update(eligible)
+options = antenatal_enrollment_common
+options.update(antenatal_enrollment_eligible)
 options.update(
     current_hiv_status=UNKNOWN,
     evidence_hiv_status=None,

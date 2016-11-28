@@ -7,7 +7,6 @@ from td.choices import GESTATIONS_NUMBER, ZERO_ONE
 from td.validators import validate_ga_by_ultrasound, validate_fetal_weight
 
 from .base_ultra_sound_model import BaseUtraSoundModel
-from .maternal_consent import MaternalConsent
 
 
 class MaternalUltraSoundInitial(BaseUtraSoundModel):
