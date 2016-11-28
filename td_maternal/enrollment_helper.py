@@ -10,6 +10,80 @@ class EnrollmentError(Exception):
     pass
 
 
+class EnrollmentStatusError(Exception):
+    pass
+
+
+class Week32Error(Exception):
+    pass
+
+
+class EnrollmentStatus:
+    def __init__(self, obj, exception_cls=None):
+        self.exception_cls = exception_cls or EnrollmentStatusError
+        self.current = Current(obj)
+        self.week32 = Week32(obj)
+        self.rapid = Rapid(obj)
+        try:
+            if self.week32.date > self.rapid.date:
+                raise self.exception_cls('Rapid test date cannot precede test date on or after 32 weeks')
+        except TypeError:
+            pass
+        if self.current.result == POS or self.week32.result == POS or self.rapid.result == POS:
+            self.result = POS
+        elif self.rapid.result == NEG or self.week32.result == NEG:
+            self.result = NEG
+        if self.current.result != POS and self.week32.result != POS:
+            if not self.rapid.result:
+                raise self.exception_cls(
+                    'A rapid test result is required. Got current.result == {}, week32.result == {}'.format(
+                        self.current.result, self.week32.result))
+
+
+class Current:
+    """Current HIV result/status, but only if POS, returns POS or None"""
+    def __init__(self, obj):
+        self.result = None
+        if obj.evidence_hiv_status == YES and obj.current_hiv_status == POS:
+            self.result = POS
+
+
+class Week32:
+    """HIV result by test at week 32, returns POS, NEG or None.
+
+    within_3m is not inclusive."""
+    def __init__(self, obj):
+        self.result = None
+        self.tested = obj.week32_test
+        try:
+            self.date = obj.week32_test_date.date()
+        except AttributeError:
+            self.date = obj.week32_test_date
+        if obj.week32_test == YES:
+            try:
+                self.within_3m = self.date > (obj.report_datetime - relativedelta(months=3)).date()
+            except TypeError:
+                raise Week32Error()
+            if obj.week32_result == POS and obj.evidence_32wk_hiv_status == YES:
+                self.result = POS
+            elif obj.week32_result == NEG and obj.evidence_32wk_hiv_status == YES and self.within_3m:
+                self.result = NEG
+
+
+class Rapid:
+    """HIV result by rapid test if cannot determine POS status by other means."""
+    def __init__(self, obj):
+        self.result = None
+        self.date = None
+        self.tested = obj.rapid_test_done
+        if self.tested == YES:
+            self.result = obj.rapid_test_result
+            try:
+                self.date = obj.rapid_test_date.date()
+            except AttributeError:
+                self.date = obj.rapid_test_date
+
+
 class EnrollmentHelper(object):
 
     """Class that determines maternal eligibility based on the protocol specific criteria.
@@ -20,6 +94,31 @@ class EnrollmentHelper(object):
       which can be saved to the model instance.
 
     Note: it's assumed the form validates values to avoid raising an EnrollmentError here.
+
+    subject_identifier
+    report_datetime
+
+    last_period_date (if know, 16-36 weeks)
+
+    current_hiv_status
+    evidence_hiv_status
+
+    evidence_32wk_hiv_status
+    week32_result
+    week32_test
+    week32_test_date
+
+    # required if current_hiv_status == NEG
+    rapid_test_date
+    rapid_test_done
+    rapid_test_result
+
+    knows_lmp
+
+    will_get_arvs (if NO, not eligible)
+    is_diabetic (if NO, not eligible)
+    will_breastfeed  (if NO, not eligible)
+    will_remain_onstudy  (if NO, not eligible)
     """
 
     def __init__(self, obj, exception_cls=None):
@@ -34,7 +133,6 @@ class EnrollmentHelper(object):
         self._unenrolled_reasons = None
         self.exception_cls = exception_cls or EnrollmentError
         self.current_hiv_status = obj.current_hiv_status
-        self.evidence_32wk_hiv_status = obj.evidence_32wk_hiv_status
         self.evidence_hiv_status = obj.evidence_hiv_status
         self.is_diabetic = obj.is_diabetic
         self.knows_lmp = obj.knows_lmp
@@ -42,14 +140,19 @@ class EnrollmentHelper(object):
             self.lmp = timezone.make_aware(datetime.combine(obj.last_period_date, time()))
         else:
             self.lmp = None
-        self.rapid_test_date = obj.rapid_test_date
-        self.rapid_test_done = obj.rapid_test_done
-        self.rapid_test_result = obj.rapid_test_result
+
         self.report_datetime = obj.report_datetime
         self.subject_identifier = obj.subject_identifier
-        self.week32_result = obj.week32_result
-        self.week32_test = obj.week32_test
-        self.week32_test_date = obj.week32_test_date
+
+        enrollment_status = EnrollmentStatus(obj)
+        self.enrollment_hiv_status = enrollment_status.result
+
+        # what was this for?
+        try:
+            self.test_date_on_or_after_32wks = enrollment_status.week32.date >= self.date_at_32wks
+        except TypeError:
+            self.test_date_on_or_after_32wks = None
+
         self.will_breastfeed = obj.will_breastfeed
         self.will_get_arvs = obj.will_get_arvs
         self.will_remain_onstudy = obj.will_remain_onstudy
@@ -117,20 +220,6 @@ class EnrollmentHelper(object):
         return self._edd
 
     @property
-    def test_date_is_on_or_after_32wks(self):
-        """Returns True if the test date is on or after 32 weeks gestational age."""
-        try:
-            if self.week32_test_date > self.rapid_test_date:
-                raise self.exception_cls('Rapid test date cannot precede test date on or after 32 weeks')
-        except TypeError:
-            pass
-        try:
-            test_date_is_on_or_after_32wks = self.week32_test_date >= self.date_at_32wks
-        except TypeError:
-            test_date_is_on_or_after_32wks = None
-        return test_date_is_on_or_after_32wks
-
-    @property
     def eligible_after_delivery(self):
         eligible_after_delivery = None
         try:
@@ -155,75 +244,6 @@ class EnrollmentHelper(object):
         except AttributeError:
             ga_confirmed = None
         return self.ga_lmp_enrollment_wks if self.ga_lmp_enrollment_wks else ga_confirmed
-
-    @property
-    def enrollment_hiv_status(self):
-        """Returns the maternal HIV status at enrollment based on valid combinations
-        expected from the form otherwise raises a EnrollmentError. Can only return POS or NEG.
-
-        Note: the EnrollmentError should never be excepted!!"""
-        if not self._enrollment_hiv_status:
-            pos = self.known_hiv_pos_with_evidence or self.tested_pos_at32wks or self.tested_pos_rapidtest
-            neg = (self.tested_neg_at32wks or self.tested_neg_rapidtest or
-                   self.tested_neg_previously_result_within_3_months)
-            if neg and not pos:
-                self._enrollment_hiv_status = NEG
-            elif pos and not neg:
-                self._enrollment_hiv_status = POS
-            else:
-                # Case neg and pos OR not neg and not pos
-                raise self.exception_cls(
-                    'Unable to determine maternal hiv status at enrollment. '
-                    'Got current_hiv_status={}, evidence_hiv_status={}, '
-                    'rapid_test_done={}, rapid_test_result={}'.format(
-                        self.current_hiv_status,
-                        self.evidence_hiv_status,
-                        self.rapid_test_done,
-                        self.rapid_test_result))
-        return self._enrollment_hiv_status
-
-    @property
-    def known_hiv_pos_with_evidence(self):
-        """"""
-        if self.current_hiv_status == POS and self.evidence_hiv_status == YES:
-            return True
-        return False
-
-    @property
-    def tested_pos_at32wks(self):
-        return self.week32_test == YES and self.week32_result == POS and self.evidence_32wk_hiv_status == YES
-
-    @property
-    def tested_pos_rapidtest(self):
-        return self.rapid_test_done == YES and self.rapid_test_result == POS
-
-    @property
-    def tested_neg_at32wks(self):
-        return (self.week32_test == YES and self.test_date_is_on_or_after_32wks and
-                self.week32_result == NEG and self.evidence_32wk_hiv_status == YES)
-
-    @property
-    def tested_neg_rapidtest(self):
-        return self.rapid_test_done == YES and self.rapid_test_result == NEG
-
-    @property
-    def tested_neg_previously_result_within_3_months(self):
-        """Returns true if the 32 week test date is within 3months else false"""
-        return (self.week32_test == YES and self.week32_result == NEG and
-                self.week32_test_date > (self.report_datetime.date() - relativedelta(months=3)))
-
-    @property
-    def rapid_test_exempt(self):
-        """Returns True to indicate that a rapid test is not required, False to indicate a rapid test is required."""
-        return self.known_hiv_pos_with_evidence or self.tested_pos_at32wks or self.tested_neg_at32wks
-
-    @property
-    def raise_validation_error_for_rapidtest(self):
-        if (not self.rapid_test_exempt and self.rapid_test_done != YES and
-                self.rapid_test_result not in [POS, NEG] and
-                not self.tested_neg_previously_result_within_3_months):
-            raise self.exception_cls(
-                'A rapid test with a valid result of either POS or NEG is required. Ensure this is the case.')
 
     @property
     def delivery(self):
@@ -253,7 +273,7 @@ class EnrollmentHelper(object):
         """Return True is subject does not have a ultrasound (instance) and lmp is not known."""
         if not self._pending_ultrasound:
             try:
-                self._pending_ultrasound = (not self.ultrasound) and (NO in self.knows_lmp)
+                self._pending_ultrasound = (not self.ultrasound) and (self.knows_lmp == NO)
             except AttributeError:
                 self._pending_ultrasound = None
         return self._pending_ultrasound

@@ -1,3 +1,4 @@
+import json
 import pprint
 
 from dateutil.relativedelta import relativedelta
@@ -5,7 +6,7 @@ from django.core import serializers
 from django.test import TestCase
 
 from edc_base.utils import get_utcnow
-from edc_constants.constants import POS, YES, NOT_APPLICABLE, NO
+from edc_constants.constants import POS, YES, NOT_APPLICABLE
 from edc_registration.models import RegisteredSubject
 from edc_sync.models import OutgoingTransaction
 from model_mommy import mommy
@@ -69,8 +70,10 @@ class TestTd(TestCase):
     def test_antenatal_enrollment_deserialization(self):
         """ Creating specimenconsent should creates outgoingtransaction """
         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
-        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', subject_identifier=maternal_consent.subject_identifier)
+        maternal_consent = mommy.make_recipe(
+            'td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
+        antenatal_enrollment = mommy.make_recipe(
+            'td_maternal.antenatalenrollment', subject_identifier=maternal_consent.subject_identifier)
         outgoing_transactions = OutgoingTransaction.objects.all()
         self.assertGreater(outgoing_transactions.count(), 0)
         for outgoing_transaction in outgoing_transactions:
@@ -79,14 +82,19 @@ class TestTd(TestCase):
                     "json", outgoing_transaction.aes_decrypt(outgoing_transaction.tx),
                     use_natural_foreign_keys=True,
                     use_natural_primary_keys=True):
-                if json_tx.get('model') == 'td_maternal.maternalconsent':
+                json_tx = json.loads(json_tx)
+                pp.pprint(json_tx)
+                try:
+                    json_tx['td_maternal.maternalconsent']
                     self.assertEqual(maternal_consent.pk, deserialised_obj.object.pk)
-                elif json_tx.get('model') == 'td_maternal.maternaleligibility':
+                except KeyError:
+                    pass
+                if json_tx.get('model') == 'td_maternal.maternaleligibility':
                     self.assertEqual(maternal_eligibility.pk, deserialised_obj.object.pk)
                 elif json_tx.get('model') == 'td_maternal.antenatalenrollment':
                     self.assertEqual(antenatal_enrollment.pk, deserialised_obj.object.pk)
                 else:
-                    print(json_tx.get('model'))
+                    pass
 
     def test_gestation_wks_lmp_below_16(self):
         """Test for a positive mother with evidence of hiv_status,
@@ -102,7 +110,6 @@ class TestTd(TestCase):
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
         pp.pprint(EnrollmentHelper(antenatal_enrollment).as_dict())
-        # self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
 
     def test_on_therapy_for_atleast4weeks(self):
         maternal_consent = mommy.make_recipe('td_maternal.maternalconsent')
