@@ -21,6 +21,7 @@ git+https://github.com/botswana-harvard/edc-locator@develop#egg=edc_locator
 git+https://github.com/botswana-harvard/edc-meta-data@develop#egg=edc_meta_data
 git+https://github.com/botswana-harvard/edc-notification@develop#egg=edc_notification
 git+https://github.com/botswana-harvard/edc-offstudy@develop#egg=edc_offstudy
+git+https://github.com/botswana-harvard/edc-pregnancy-utils@develop#egg=edc_pregnancy_utils
 git+https://github.com/botswana-harvard/edc-protocol@develop#egg=edc_protocol
 git+https://github.com/botswana-harvard/edc-registration@develop#egg=edc_registration
 git+https://github.com/botswana-harvard/edc-rest@develop#egg=edc_rest
