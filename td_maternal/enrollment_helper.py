@@ -71,6 +71,7 @@ class EnrollmentHelper(object):
         self.will_get_arvs = obj.will_get_arvs
         self.report_datetime = obj.report_datetime
         self.subject_identifier = obj.subject_identifier
+        self.last_period_date = obj.last_period_date
         MaternalLabourDel = django_apps.get_model('td_maternal', 'MaternalLabourDel')
         MaternalUltraSoundInitial = django_apps.get_model('td_maternal', 'MaternalUltraSoundInitial')
 
