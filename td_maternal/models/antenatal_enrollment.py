@@ -15,6 +15,7 @@ from ..enrollment_helper import EnrollmentHelper
 from ..managers import AntenatalEnrollmentManager
 
 from .maternal_offstudy import MaternalOffstudy
+from dateutil.relativedelta import relativedelta
 
 
 class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointmentsOnEligibleMixin,
@@ -177,14 +178,15 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
     def save(self, *args, **kwargs):
         enrollment_helper = EnrollmentHelper(self)
         self.is_eligible = enrollment_helper.is_eligible
-        if enrollment_helper.date_at_32wks:
-            self.date_at_32wks = enrollment_helper.date_at_32wks.date()
-        if enrollment_helper.edd:
-            self.edd_by_lmp = enrollment_helper.edd.date()
-        self.enrollment_hiv_status = enrollment_helper.enrollment_hiv_status
-        self.ga_lmp_enrollment_wks = enrollment_helper.ga_lmp_enrollment_wks or self.ga_lmp_enrollment_wks
-        self.pending_ultrasound = enrollment_helper.pending_ultrasound
-        self.unenrolled = enrollment_helper.unenrolled_reasons
+        try:
+            self.date_at_32wks = enrollment_helper.edd.edd.date - relativedelta(weeks=6)
+        except TypeError:
+            self.date_at_32wks = None
+        self.edd_by_lmp = enrollment_helper.edd.edd.date()  # or enrollment_helper.lmp.edd.date??
+        self.enrollment_hiv_status = enrollment_helper.enrollment_status.result
+        self.ga_lmp_enrollment_wks = enrollment_helper.ga.ga.weeks
+        self.pending_ultrasound = enrollment_helper.ga_pending
+        self.unenrolled = enrollment_helper.messages.as_string()
         super(AntenatalEnrollment, self).save(*args, **kwargs)
 
     def natural_key(self):

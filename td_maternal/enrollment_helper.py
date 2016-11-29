@@ -1,22 +1,29 @@
 import pytz
 
+from collections import OrderedDict
 from datetime import time, datetime
-from dateutil.relativedelta import relativedelta
 
 from django.apps import apps as django_apps
 
-from edc_constants.constants import NO, YES, POS, NEG, NOT_APPLICABLE
+from edc_constants.constants import NO, YES
 from edc_pregnancy_utils import Edd, Ga, Lmp, Ultrasound
 
-from td.hiv_status import EnrollmentStatus
+from td.hiv_result import (
+    Enrollment as EnrollmentResult, Recent, Rapid, Current, EnrollmentNoResultError,
+    EnrollmentRapidTestRequiredError)
 
 
 class EnrollmentError(Exception):
     pass
 
 
-class NotEligibleError(Exception):
-    pass
+class Messages:
+
+    def __init__(self):
+        self.messages = OrderedDict()
+
+    def as_string(self):
+        return ', '.join(self.messages.values())
 
 
 class EnrollmentHelper(object):
@@ -57,67 +64,43 @@ class EnrollmentHelper(object):
     """
 
     def __init__(self, obj, exception_cls=None):
-        self.messages = {}
-        self._date_at_32wks = None
-        self._pending_ultrasound = None
-        self._unenrolled_reasons = None
+        self.enrollment_result = None
         self.exception_cls = exception_cls or EnrollmentError
-        self.current_hiv_status = obj.current_hiv_status
-        self.evidence_hiv_status = obj.evidence_hiv_status
-        self.knows_lmp = obj.knows_lmp
-        self.will_breastfeed = obj.will_breastfeed
-        self.will_remain_onstudy = obj.will_remain_onstudy
-        self.is_diabetic = obj.is_diabetic
-        self.will_get_arvs = obj.will_get_arvs
-        self.report_datetime = obj.report_datetime
+        self.ga_pending = False
+        self.messages = Messages()
+        self.on_art_4wks_in_pregnancy = None
         self.subject_identifier = obj.subject_identifier
-        self.last_period_date = obj.last_period_date
         MaternalLabourDel = django_apps.get_model('td_maternal', 'MaternalLabourDel')
-        MaternalUltraSoundInitial = django_apps.get_model('td_maternal', 'MaternalUltraSoundInitial')
 
-        # hiv status
-        self.enrollment_status = EnrollmentStatus(obj)
-        self.enrollment_hiv_status = self.enrollment_status.result
-        if self.enrollment_status.result not in [POS, NEG]:
-            self.messages.update(lmp='Unable to determine HIV status')
-            if not self.enrollment_status.rapid.result:
-                self.messages.update(lmp='Rapid test not done')
+        # enrollment HIV result
+        try:
+            self.enrollment_result = self.get_enrollment_result(obj)
+        except EnrollmentNoResultError as e:
+            self.messages.update(enrollment_result=str(e))
+        except EnrollmentRapidTestRequiredError as e:
+            self.messages.update(enrollment_result=str(e))
 
         # check if values are paired correctly. (these problems should be captured on the modelform)
-        if self.enrollment_status.result == POS and self.will_get_arvs in [NOT_APPLICABLE, NO]:
-            self.messages.update(
-                will_get_arvs='will_get_arvs must be YES for HIV status = POS. Got {}'.format(self.will_get_arvs))
-        if self.enrollment_status.result == NEG and self.will_get_arvs != NOT_APPLICABLE:
-            self.messages.update(
-                will_get_arvs='will_get_arvs must be N/A for HIV status = NEG. Got {}'.format(self.will_get_arvs))
-        if self.knows_lmp and not self.last_period_date:
-            self.messages.update(
-                last_period_date='last_period_date may not be None if knows_lmp == YES')
+#         if self.enrollment_result.result == POS and obj.will_get_arvs in [NOT_APPLICABLE, NO]:
+#             self.messages.update(
+#                 will_get_arvs='will_get_arvs must be YES for HIV status = POS. Got {}'.format(obj.will_get_arvs))
+#         if self.enrollment_result.result == NEG and obj.will_get_arvs != NOT_APPLICABLE:
+#             self.messages.update(
+#                 will_get_arvs='will_get_arvs must be N/A for HIV status = NEG. Got {}'.format(obj.will_get_arvs))
+#         if obj.knows_lmp and not obj.last_period_date:
+#             self.messages.update(
+#                 last_period_date='last_period_date may not be None if knows_lmp == YES')
 
         # check if delivered, and if so, was mother on art for 4 weeks during pregnancy
         try:
-            obj = MaternalLabourDel.objects.get(
-                registered_subject__subject_identifier=self.subject_identifier)
-            self.on_art_4wks_in_pregnancy = obj.valid_regiment_duration
+            delivery_obj = MaternalLabourDel.objects.get(
+                registered_subject__subject_identifier=obj.subject_identifier)
+            self.on_art_4wks_in_pregnancy = delivery_obj.valid_regiment_duration
             if self.on_art_4wks_in_pregnancy == NO:
                 self.messages.update(
                     on_art_4wks_in_pregnancy='Mother was not on ART for at least 4 weeks during pregnancy')
         except MaternalLabourDel.DoesNotExist:
             self.on_art_4wks_in_pregnancy = None
-
-        # ultrasound
-        try:
-            obj = MaternalUltraSoundInitial.objects.get(
-                maternal_visit__appointment__subject_identifier=self.subject_identifier)
-            self.ultrasound = Ultrasound(
-                ultrasound_date=obj.report_datetime,
-                ga_weeks=obj.ga_by_ultrasound_wks,
-                ga_days=obj.ga_by_ultrasound_days)
-            self.ultrasound.gestations = int(obj.number_of_gestations)
-            if self.ultrasound.gestations != 1:
-                self.messages.update(will_get_arvs='Pregnancy is not a singleton.')
-        except MaternalUltraSoundInitial.DoesNotExist:
-            self.ultrasound = Ultrasound()
 
         # lmp, ga and edd. Only ga for eligibility
         if obj.last_period_date:
@@ -128,31 +111,21 @@ class EnrollmentHelper(object):
             self.lmp = Lmp()
         self.ga = Ga(lmp=self.lmp, ultrasound=self.ultrasound)
         self.edd = Edd(lmp=self.lmp, ultrasound=self.ultrasound)
-        self.edd_confirmation_method = self.edd.edd_confirmation_method
         try:
-            if not 16 < self.lmp.ga <= 36:
-                self.messages.update(lmp='gestation not 16 to 36wks')
+            if not 16 < self.ga.ga.weeks <= 36:
+                self.messages.update(ga='gestation not 16 to 36wks')
         except TypeError:
-            self.messages.update(lmp='Unable to determine GA')
-
-        # how does this work into eligibility?
-        try:
-            self.test_date_on_or_after_32wks = self.enrollment_status.week32.date >= self.date_at_32wks
-        except TypeError:
-            self.test_date_on_or_after_32wks = None
-
-        # what is a pending ultrasound and how does the affect eligibility?
-
-        # where does date_at_32wks work in?
+            # if GA not known, allow enrollment to continue, but set this flag for future reference.
+            self.ga_pending = True
 
         # simple criteria that makes ineligible regardless of other values
-        if self.will_get_arvs == NO:
+        if obj.will_get_arvs == NO:
             self.messages.update(will_get_arvs='Will not get ARVs on this pregnancy.')
-        if self.will_breastfeed == NO:
+        if obj.will_breastfeed == NO:
             self.messages.update(will_breastfeed='Will not breastfeed')
-        if self.will_remain_onstudy == NO:
+        if obj.will_remain_onstudy == NO:
             self.messages.update(will_remain_onstudy='Will not remain on-study')
-        if self.is_diabetic == YES:
+        if obj.is_diabetic == YES:
             self.messages.update(is_diabetic='Is diabetic')
 
         # that's it
@@ -165,23 +138,39 @@ class EnrollmentHelper(object):
                 d.update({attr: getattr(self, attr)})
         return d
 
-    @property
-    def date_at_32wks(self):
-        """???????"""
-        if not self._date_at_32wks:
-            try:
-                self._date_at_32wks = self.edd - relativedelta(weeks=6)
-            except TypeError:
-                self._date_at_32wks = None
-        return self._date_at_32wks
+    def get_enrollment_result(self, obj):
+        """Returns a populated EnrollmentResult instance where enrollment_result.result
+        is the final result."""
+        current = Current(
+            result=obj.current_hiv_status,
+            evidence=obj.evidence_hiv_status)
+        recent = Recent(
+            reference_datetime=obj.report_datetime,
+            evidence=obj.obj.evidence_32wk_hiv_status,
+            tested=obj.week32_test,
+            result=obj.week32_result,
+            result_date=obj.week32_test_date)
+        rapid = Rapid(
+            tested=obj.rapid_test_done,
+            result=obj.rapid_test_result,
+            result_date=obj.rapid_test_result)
+        return EnrollmentResult(current=current, recent=recent, rapid=rapid)
 
     @property
-    def pending_ultrasound(self):
-        """???????"""
-        """Return True is subject does not have a ultrasound (instance) and lmp is not known."""
-        if not self._pending_ultrasound:
+    def ultrasound(self):
+        """Returns an Ultrasound instance."""
+        if not self._ultrasound:
+            MaternalUltraSoundInitial = django_apps.get_model('td_maternal', 'MaternalUltraSoundInitial')
             try:
-                self._pending_ultrasound = (not self.ultrasound) and (self.knows_lmp == NO)
-            except AttributeError:
-                self._pending_ultrasound = None
-        return self._pending_ultrasound
+                obj = MaternalUltraSoundInitial.objects.get(
+                    maternal_visit__appointment__subject_identifier=self.subject_identifier)
+                self._ultrasound = Ultrasound(
+                    ultrasound_date=obj.report_datetime,
+                    ga_weeks=obj.ga_by_ultrasound_wks,
+                    ga_days=obj.ga_by_ultrasound_days)
+                self._ultrasound.gestations = int(obj.number_of_gestations)
+                if self._ultrasound.gestations != 1:
+                    self.messages.update(will_get_arvs='Pregnancy is not a singleton.')
+            except MaternalUltraSoundInitial.DoesNotExist:
+                self._ultrasound = Ultrasound()
+        return self._ultrasound
