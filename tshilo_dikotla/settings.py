@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
     'edc_call_manager.apps.AppConfig',
-    'edc_code_lists',
+    'edc_code_lists.apps.AppConfig',
     'edc_death_report.apps.AppConfig',
     'edc_export.apps.AppConfig',
     'edc_locator.apps.AppConfig',
@@ -126,6 +126,10 @@ WSGI_APPLICATION = 'tshilo_dikotla.wsgi.application'
 
 
 if 'test' in sys.argv:
+    DEBUG = False
+    PASSWORD_HASHERS = (
+        'django.contrib.auth.hashers.MD5PasswordHasher',
+    )
     cnf = 'test_default.cnf'
 else:
     cnf = 'default.cnf'
@@ -151,6 +155,8 @@ DATABASES = {
 
 if 'test' in sys.argv and 'mysql' not in DATABASES.get('default').get('ENGINE'):
     MIGRATION_MODULES = {
+        "django_crypto_fields": None,
+        "edc_call_manager": None,
         "edc_appointment": None,
         "edc_call_manager": None,
         "edc_code_lists": None,
@@ -159,6 +165,7 @@ if 'test' in sys.argv and 'mysql' not in DATABASES.get('default').get('ENGINE'):
         "edc_export": None,
         "edc_identifier": None,
         "edc_metadata": None,
+        "edc_rule_groups": None,
         "edc_registration": None,
         "edc_sync": None,
         "td": None,

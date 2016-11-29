@@ -61,7 +61,6 @@ maternalconsent = Recipe(
 antenatal_enrollment_common = dict(
     schedule_name='maternal_enrollment_step1',
     report_datetime=get_utcnow,
-    evidence_hiv_status=YES,
     evidence_32wk_hiv_status=NOT_APPLICABLE,
     is_diabetic=NO,
     knows_lmp=YES,
@@ -79,11 +78,8 @@ antenatal_enrollment_ineligible = dict(
 
 antenatal_enrollment_eligible = dict(
     current_hiv_status=YES,
-    rapid_test_date=fake.four_weeks_ago,
-    rapid_test_done=YES,
-    rapid_test_result=NEG,
-    week32_test=NO,
-    will_get_arvs=NOT_APPLICABLE,
+    evidence_hiv_status=YES,
+    will_get_arvs=YES,
 )
 
 rapid_pos = dict()
@@ -186,6 +182,7 @@ maternallocator = Recipe(
 
 maternalultrasoundinitial = Recipe(
     MaternalUltraSoundInitial,
+    report_datetime=get_utcnow,
     number_of_gestations=1,
     bpd=50.0,
     hc=150.0,

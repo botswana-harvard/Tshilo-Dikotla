@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 
-from edc_constants.constants import YES, POS, NEG, NO
+from edc_constants.constants import YES, POS, NEG
 
 
 class EnrollmentResultError(Exception):

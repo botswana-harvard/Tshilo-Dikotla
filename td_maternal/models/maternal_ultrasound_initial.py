@@ -65,51 +65,45 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
         # What if values in AntenatalEnrollment change?
         # They cannot. Antenatal Enrollment cannot be updated once UltraSound form has gone in without DMC intervention.
         # This is because it can potentially affect enrollment eligibility.
-        self.ga_by_lmp = self.evaluate_ga_by_lmp()
-        self.edd_confirmed, self.ga_confrimation_method = self.evaluate_edd_confirmed()
-        self.ga_confirmed = self.evaluate_ga_confirmed()
+#         self.ga_by_lmp = self.evaluate_ga_by_lmp()
+#         self.edd_confirmed, self.ga_confrimation_method = self.evaluate_edd_confirmed()
+#         self.ga_confirmed = self.evaluate_ga_confirmed()
         super(MaternalUltraSoundInitial, self).save(*args, **kwargs)
 
-    @property
-    def pass_antenatal_enrollment(self):
-        return True if int(self.number_of_gestations) == 1 else False
-
-    def evaluate_ga_by_lmp(self):
-        return (int(abs(40 - ((self.antenatal_enrollment.edd_by_lmp - self.report_datetime.date()).days / 7))) if
-                self.antenatal_enrollment.edd_by_lmp else None)
-
-    def evaluate_edd_confirmed(self, error_clss=None):
-        ga_by_lmp = self.evaluate_ga_by_lmp()
-        edd_by_lmp = self.antenatal_enrollment.edd_by_lmp
-        if not edd_by_lmp:
-            return (self.est_edd_ultrasound, 1)
-        error_clss = error_clss or ValidationError
-        if ga_by_lmp > 16 and ga_by_lmp < 22:
-            if abs((edd_by_lmp - self.est_edd_ultrasound).days) > 10:
-                return (self.est_edd_ultrasound, 1)
-            else:
-                return (edd_by_lmp, 0)
-#             raise error_clss('Unable to correctly determine edd_confirmed. ga_by_lmp=\'{}\', edd_by_lmp=\'{}\''
-#                              ' est_edd_ultrasound=\'{}\''.format(ga_by_lmp, edd_by_lmp, self.est_edd_ultrasound))
-        elif ga_by_lmp > 22 and ga_by_lmp < 28:
-            if abs((edd_by_lmp - self.est_edd_ultrasound).days) > 14:
-                return (self.est_edd_ultrasound, 1)
-            else:
-                return (edd_by_lmp, 0)
-#             raise error_clss('Unable to correctly determine edd_confirmed. ga_by_lmp=\'{}\', edd_by_lmp=\'{}\''
-#                              ' est_edd_ultrasound=\'{}\''.format(ga_by_lmp, edd_by_lmp, self.est_edd_ultrasound))
-        elif ga_by_lmp > 28:
-            if abs((edd_by_lmp - self.est_edd_ultrasound).days) > 21:
-                return (self.est_edd_ultrasound, 1)
-            else:
-                return (edd_by_lmp, 0)
-#             raise error_clss('Unable to correctly determine edd_confirmed. ga_by_lmp=\'{}\', edd_by_lmp=\'{}\''
-#                              ' est_edd_ultrasound=\'{}\''.format(ga_by_lmp, edd_by_lmp, self.est_edd_ultrasound))
-        else:
-            return (edd_by_lmp, 0)
-
-    def evaluate_ga_confirmed(self):
-        return int(abs(40 - ((self.edd_confirmed - self.report_datetime.date()).days / 7)))
+#     @property
+#     def pass_antenatal_enrollment(self):
+#         return True if int(self.number_of_gestations) == 1 else False
+# 
+#     def evaluate_ga_by_lmp(self):
+#         return (int(abs(40 - ((self.antenatal_enrollment.edd_by_lmp - self.report_datetime.date()).days / 7))) if
+#                 self.antenatal_enrollment.edd_by_lmp else None)
+# 
+#     def evaluate_edd_confirmed(self, error_clss=None):
+#         ga_by_lmp = self.evaluate_ga_by_lmp()
+#         edd_by_lmp = self.antenatal_enrollment.edd_by_lmp
+#         if not edd_by_lmp:
+#             return (self.est_edd_ultrasound, 1)
+#         error_clss = error_clss or ValidationError
+#         if ga_by_lmp > 16 and ga_by_lmp < 22:
+#             if abs((edd_by_lmp - self.est_edd_ultrasound).days) > 10:
+#                 return (self.est_edd_ultrasound, 1)
+#             else:
+#                 return (edd_by_lmp, 0)
+#         elif ga_by_lmp > 22 and ga_by_lmp < 28:
+#             if abs((edd_by_lmp - self.est_edd_ultrasound).days) > 14:
+#                 return (self.est_edd_ultrasound, 1)
+#             else:
+#                 return (edd_by_lmp, 0)
+#         elif ga_by_lmp > 28:
+#             if abs((edd_by_lmp - self.est_edd_ultrasound).days) > 21:
+#                 return (self.est_edd_ultrasound, 1)
+#             else:
+#                 return (edd_by_lmp, 0)
+#         else:
+#             return (edd_by_lmp, 0)
+# 
+#     def evaluate_ga_confirmed(self):
+#         return int(abs(40 - ((self.edd_confirmed - self.report_datetime.date()).days / 7)))
 
     class Meta(BaseUtraSoundModel.Meta):
         app_label = 'td_maternal'

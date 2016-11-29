@@ -1,5 +1,4 @@
 from django.db import models
-from django.apps import apps
 
 from td.choices import AMNIOTIC_FLUID
 from td.validators import validate_bpd, validate_hc, validate_fl, validate_ac
@@ -45,10 +44,10 @@ class BaseUtraSoundModel(MaternalCrfModel):
         choices=AMNIOTIC_FLUID,
         help_text='')
 
-    @property
-    def antenatal_enrollment(self):
-        AntenatalEnrollment = apps.get_model('td_maternal', 'antenatalenrollment')
-        return AntenatalEnrollment.objects.get(registered_subject__subject_identifier=self.maternal_visit.appointment.subject_identifier)
+#     @property
+#     def antenatal_enrollment(self):
+#         AntenatalEnrollment = apps.get_model('td_maternal', 'antenatalenrollment')
+#         return AntenatalEnrollment.objects.get(registered_subject__subject_identifier=self.maternal_visit.appointment.subject_identifier)
 
     class Meta(MaternalCrfModel.Meta):
         abstract = True

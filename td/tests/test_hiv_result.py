@@ -3,7 +3,6 @@ from django.test import TestCase
 from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NEG, NO
 
-from td_maternal.models import AntenatalEnrollment
 from dateutil.relativedelta import relativedelta
 
 from ..hiv_result import Recent, Current, Rapid
@@ -11,8 +10,6 @@ from ..hiv_result import Recent, Current, Rapid
 
 class Obj:
     def __init__(self, **kwargs):
-        for attr in [field.name for field in AntenatalEnrollment._meta.get_fields()]:
-            setattr(self, attr, None)
         for k, v in kwargs.items():
             setattr(self, k, v)
         self.report_datetime = get_utcnow()

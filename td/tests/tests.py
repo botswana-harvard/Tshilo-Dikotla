@@ -60,13 +60,6 @@ class TestTd(TestCase):
         except MaternalOffstudy.DoesNotExist:
             pass
 
-    def test_ineligible(self):
-        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent')
-        antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment_ineligible',
-            subject_identifier=maternal_consent.subject_identifier)
-        self.assertFalse(antenatal_enrollment.is_eligible)
-
     def test_antenatal_enrollment_deserialization(self):
         """ Creating specimenconsent should creates outgoingtransaction """
         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
@@ -95,32 +88,3 @@ class TestTd(TestCase):
                     self.assertEqual(antenatal_enrollment.pk, deserialised_obj.object.pk)
                 else:
                     pass
-
-    def test_gestation_wks_lmp_below_16(self):
-        """Test for a positive mother with evidence of hiv_status,
-        will go on a valid regimen but weeks of gestation below 16."""
-        options = {'current_hiv_status': POS,
-                   'evidence_hiv_status': YES,
-                   'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (get_utcnow() - relativedelta(weeks=14)).date()}
-        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent')
-        antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment',
-            subject_identifier=maternal_consent.subject_identifier, **options)
-        self.assertFalse(antenatal_enrollment.is_eligible)
-        self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        pp.pprint(EnrollmentHelper(antenatal_enrollment).as_dict())
-
-    def test_on_therapy_for_atleast4weeks(self):
-        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent')
-        antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment',
-            subject_identifier=maternal_consent.subject_identifier)
-        self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
-        mommy.make_recipe(
-            'td_maternal.maternallabourdel',
-            subject_identifier=maternal_consent.subject_identifier,
-            valid_regiment_duration=YES)
-        enrollment_helper = EnrollmentHelper(antenatal_enrollment)
-        self.assertTrue(enrollment_helper.eligible_after_delivery)
-        self.assertTrue(enrollment_helper.is_eligible)

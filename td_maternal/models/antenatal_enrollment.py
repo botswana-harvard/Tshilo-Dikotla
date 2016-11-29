@@ -179,18 +179,30 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
         enrollment_helper = EnrollmentHelper(self)
         self.is_eligible = enrollment_helper.is_eligible
         try:
-            self.date_at_32wks = enrollment_helper.edd.edd.date - relativedelta(weeks=6)
+            self.date_at_32wks = enrollment_helper.edd.edd - relativedelta(weeks=6)
         except TypeError:
             self.date_at_32wks = None
-        self.edd_by_lmp = enrollment_helper.edd.edd.date()  # or enrollment_helper.lmp.edd.date??
-        self.enrollment_hiv_status = enrollment_helper.enrollment_status.result
-        self.ga_lmp_enrollment_wks = enrollment_helper.ga.ga.weeks
+        self.edd_by_lmp = enrollment_helper.edd.edd  # or enrollment_helper.lmp.edd.date??
+        self.enrollment_hiv_status = enrollment_helper.enrollment_result.result
+        self.ga_lmp_enrollment_wks = enrollment_helper.ga.weeks
         self.pending_ultrasound = enrollment_helper.ga_pending
         self.unenrolled = enrollment_helper.messages.as_string()
         super(AntenatalEnrollment, self).save(*args, **kwargs)
 
     def natural_key(self):
         return (self.subject_identifier, )
+
+    @property
+    def ga_pending(self):
+        return self.pending_ultrasound
+
+    @property
+    def ga_weeks(self):
+        return self.ga_lmp_enrollment_wks
+
+    @property
+    def error_messages(self):
+        return self.unenrolled
 
     def take_off_study(self):
         MaternalOffstudy.objects.create(
