@@ -24,31 +24,22 @@ class TestAntenatalEnrollment(TestCase):
         self.subject_identifier = self.maternal_consent.subject_identifier
 
     def test_gestation_wks_lmp_below_16(self):
-        """Test for a positive mother with evidence of hiv_status,
-        will go on a valid regimen but weeks of gestation below 16."""
+        """Test ineligible when weeks of gestation below 16."""
         options = {'subject_identifier': self.subject_identifier,
-                   'current_hiv_status': POS,
-                   'evidence_hiv_status': YES,
-                   'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (get_utcnow() - relativedelta(weeks=14)).date()}
-        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
+                   'last_period_date': (get_utcnow() - relativedelta(weeks=10)).date()}
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment_pos', **options)
+        self.assertEqual(antenatal_enrollment.ga_lmp_enrollment_wks, 10)
         self.assertFalse(antenatal_enrollment.is_eligible)
-        self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
 
     def test_gestation_wks_lmp_above_36(self):
         """Test for a positive mother with evidence of hiv_status,
         will go on a valid regimen but weeks of gestation above 36."""
 
         options = {'subject_identifier': self.subject_identifier,
-                   'report_datetime': get_utcnow(),
-                   'current_hiv_status': POS,
-                   'evidence_hiv_status': YES,
-                   'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (get_utcnow() - relativedelta(weeks=37)).date()}
 
-        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment_pos', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
-        self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
 
     def test_gestation_wks_lmp_between_16_and_36_notvalid_arv(self):
         """Test for a positive mother with evidence of hiv_status,
@@ -61,7 +52,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_done': NOT_APPLICABLE,
                    'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
 
-        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
+        antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment_pos', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
 
