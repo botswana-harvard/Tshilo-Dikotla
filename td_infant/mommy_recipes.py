@@ -7,7 +7,7 @@ from model_mommy.recipe import Recipe
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NOT_APPLICABLE, NO
 
-from td.constants import MODIFIED
+from td.constants import MODIFIED, NORMAL
 
 from .models import (InfantBirth, InfantBirthData, InfantBirthExam, InfantFeeding, InfantBirthArv, InfantFu,
                      InfantFuPhysical, InfantArvProph)
@@ -45,8 +45,8 @@ infantbirthexam = Recipe(
     InfantBirthExam,
     report_datetime=get_utcnow(),
     infant_exam_date=get_utcnow().date(),
-    general_activity='NORMAL',
-    physical_exam_result='NORMAL',
+    general_activity=NORMAL,
+    physical_exam_result=NORMAL,
     heent_exam=YES,
     resp_exam=YES,
     cardiac_exam=YES,
@@ -103,8 +103,8 @@ infantfollowup = Recipe(
     weight_kg=3,
     height=45.01,
     head_circumference=18.01,
-    general_activity="NORMAL",
-    physical_exam_result="NORMAL",
+    general_activity=NORMAL,
+    physical_exam_result=NORMAL,
     heent_exam=YES,
     was_hospitalized=YES,
     resp_exam=YES,

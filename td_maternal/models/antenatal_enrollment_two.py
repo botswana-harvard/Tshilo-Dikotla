@@ -31,4 +31,4 @@ class AntenatalEnrollmentTwo(EnrollmentModelMixin, RequiresConsentMixin, CreateA
         verbose_name = 'Antenatal Enrollment Two'
         verbose_name_plural = 'Antenatal Enrollment Two'
         consent_model = 'td_maternal.maternalconsent'
-        visit_schedule_name = 'maternal_visit_schedule'
+        visit_schedule_name = 'maternal_visit_schedule.maternal_enrollment_step2'
