@@ -39,6 +39,7 @@ fake.add_provider(TdProvider)
 
 maternaleligibility = Recipe(
     MaternalEligibility,
+    report_datetime=get_utcnow,
     age_in_years=fake.age_for_consenting_adult,
     has_omang=YES,)
 

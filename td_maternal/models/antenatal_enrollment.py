@@ -179,10 +179,10 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
         enrollment_helper = EnrollmentHelper(self)
         self.is_eligible = enrollment_helper.is_eligible
         try:
-            self.date_at_32wks = enrollment_helper.edd.edd - relativedelta(weeks=6)
+            self.date_at_32wks = (enrollment_helper.edd.edd - relativedelta(weeks=6)).date()
         except TypeError:
             self.date_at_32wks = None
-        self.edd_by_lmp = enrollment_helper.lmp.edd  # or enrollment_helper.lmp.edd.date??
+        self.edd_by_lmp = enrollment_helper.lmp.edd.date()  # or enrollment_helper.lmp.edd.date??
         self.enrollment_hiv_status = enrollment_helper.enrollment_result.result
         self.ga_lmp_enrollment_wks = enrollment_helper.ga.weeks
         self.pending_ultrasound = enrollment_helper.ga_pending
