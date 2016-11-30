@@ -12,7 +12,8 @@ from edc_visit_tracking.constants import SCHEDULED
 from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment,
                      MaternalLabourDel, SpecimenConsent, MaternalRando, MaternalLocator, MaternalUltraSoundInitial,
                      MaternalInterimIdcc, RapidTestResult, MaternalObstericalHistory, MaternalMedicalHistory,
-                     MaternalDemographics)
+                     MaternalDemographics, MaternalAztNvp, MaternalDiagnoses, MaternalSubstanceUseDuringPreg,
+                     MaternalClinicalMeasurementsTwo)
 
 
 class TdProvider(BaseProvider):
@@ -233,3 +234,29 @@ maternaldemographics = Recipe(
     house_electrified=NO,
     house_fridge=NO,
     cooking_method=NO)
+
+maternalaztnvp = Recipe(
+    MaternalAztNvp,
+    azt_nvp_delivery=YES,
+    date_given=get_utcnow,
+    instructions_given=NO)
+
+maternaldiagnoses = Recipe(
+    MaternalDiagnoses,
+    diagnoses=NO,
+    has_who_dx=NO,)
+
+substanceusepriortopregnancy = Recipe(
+    MaternalSubstanceUseDuringPreg,
+    smoked_prior_to_preg=YES,
+    smoking_prior_preg_freq='daily',
+    alcohol_prior_pregnancy=YES,
+    alcohol_prior_preg_freq='daily',
+    marijuana_prior_preg=YES,
+    marijuana_prior_preg_freq='daily',)
+
+maternalclinicalmeasurementstwo = Recipe(
+    MaternalClinicalMeasurementsTwo,
+    weight_kg=76,
+    systolic_bp=120,
+    diastolic_bp=100,)
