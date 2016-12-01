@@ -8,12 +8,6 @@ from django_crypto_fields.fields import IdentityField, FirstnameField, LastnameF
 from edc_base.model.models.url_mixin import UrlMixin
 
 
-class PotentialCallManager(models.Manager):
-
-    def get_by_natural_key(self, subject_identifier):
-        return self.get(subject_identifier=subject_identifier)
-
-
 class PotentialCall(UrlMixin, BaseUuidModel):
 
     approximate_date = models.DateField(

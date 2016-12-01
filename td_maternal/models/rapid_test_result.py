@@ -1,6 +1,6 @@
 from django.db import models
 
-from edc_constants.choices import YES_NO, POS_NEG
+from edc_constants.choices import YES_NO
 
 from ..maternal_choices import POS_NEG_IND
 from .maternal_crf_model import MaternalCrfModel
@@ -29,17 +29,11 @@ class RapidTestResult(MaternalCrfModel):
         blank=True,
         null=True)
 
-    # objects = RapidTestResultManager
-
     def get_result_datetime(self):
         return self.report_datetime
 
     def get_test_code(self):
         return 'HIV'
-
-#     def natural_key(self):
-#         return self.registered_subject.natural_key()
-#     natural_key.dependencies = ['edc_registration.registeredsubject']
 
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'

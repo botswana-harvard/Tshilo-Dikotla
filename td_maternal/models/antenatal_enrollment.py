@@ -11,7 +11,7 @@ from edc_protocol.validators import date_not_before_study_start
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 
 from ..enrollment_helper import EnrollmentHelper
-from ..managers import AntenatalEnrollmentManager
+from ..managers import EnrollmentManager
 
 from .maternal_offstudy import MaternalOffstudy
 from dateutil.relativedelta import relativedelta
@@ -167,9 +167,9 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
         null=True,
         editable=False)
 
-    history = HistoricalRecords()
+    objects = EnrollmentManager()
 
-    objects = AntenatalEnrollmentManager()
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.subject_identifier

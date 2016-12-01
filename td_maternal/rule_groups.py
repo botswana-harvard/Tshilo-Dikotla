@@ -111,7 +111,7 @@ def func_show_nvp_dispensing_form(visit_instance, *args):
 
 
 @register()
-class MaternalRegisteredSubjectRuleGroup(RuleGroup):
+class MaternalVisitRuleGroup(RuleGroup):
 
     require_ultrasound = CrfRule(
         logic=Logic(
@@ -151,7 +151,7 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_maternal'
-        source_model = 'edc_registration.registeredsubject'
+        source_model = 'td_maternal.maternalvisit'
 
 
 @register()

@@ -4,21 +4,12 @@ from django.apps import apps as django_apps
 from edc_consent.managers import ConsentManager
 
 from edc_registration.models import RegisteredSubject
-from edc_visit_tracking.managers import CrfModelManager
 
 
-class AntenatalEnrollmentManager(models.Manager):
+class EnrollmentManager(models.Manager):
 
     def get_by_natural_key(self, subject_identifier_as_pk):
-        registered_subject = RegisteredSubject.objects.get_by_natural_key(subject_identifier_as_pk)
-        return self.get(registered_subject=registered_subject)
-
-
-class MaternalLifetimeArvHistoryManager(models.Manager):
-
-    def get_by_natural_key(self, report_datetime, subject_identifier_as_pk):
-        registered_subject = RegisteredSubject.objects.get_by_natural_key(subject_identifier_as_pk)
-        return self.get(report_datetime=report_datetime, registered_subject=registered_subject)
+        return self.get(subject_identifier=subject_identifier_as_pk)
 
 
 class MaternalArvManager(models.Manager):
@@ -96,40 +87,13 @@ class MaternalLabDelDxTManager(models.Manager):
         return self.get(lab_del_dx=lab_del_dx, maternal_lab_del_dx=maternal_lab_del_dx)
 
 
-class MaternalLabourDelManager(models.Manager):
-
-    def get_by_natural_key(self, subject_identifier_as_pk):
-        registered_subject = RegisteredSubject.objects.get_by_natural_key(subject_identifier_as_pk)
-        return self.get(registered_subject=registered_subject)
-
-
 class MaternalRandoManager(models.Manager):
 
     def get_by_natural_key(self, sid, subject_identifier_as_pk):
-        registered_subject = RegisteredSubject.objects.get_by_natural_key(subject_identifier_as_pk)
-        return self.get(sid=sid, registered_subject=registered_subject)
+        return self.get(sid=sid, subject_identifier=subject_identifier_as_pk)
 
 
-class RapidTestResultManager(models.Manager):
+class PotentialCallManager(models.Manager):
 
-    def get_by_natural_key(self, subject_identifier_as_pk):
-        registered_subject = RegisteredSubject.objects.get_by_natural_key(subject_identifier_as_pk)
-        return self.get(registered_subject=registered_subject)
-
-
-class SpecimenConsentManager(models.Manager):
-
-    def get_by_natural_key(self, subject_identifier_as_pk):
-        registered_subject = RegisteredSubject.objects.get_by_natural_key(subject_identifier_as_pk)
-        return self.get(registered_subject=registered_subject)
-
-
-class VisitCrfModelManager(CrfModelManager):
-
-    def get_by_natural_key(self, report_datetime, visit_instance, visit_code, subject_identifier_as_pk):
-        MaternalVisit = django_apps.get_model('td_maternal', 'MaternalVisit')
-        maternal_visit = MaternalVisit.objects.get_by_natural_key(report_datetime,
-                                                                  visit_instance,
-                                                                  visit_code,
-                                                                  subject_identifier_as_pk)
-        return self.get(maternal_visit=maternal_visit)
+    def get_by_natural_key(self, subject_identifier):
+        return self.get(subject_identifier=subject_identifier)
