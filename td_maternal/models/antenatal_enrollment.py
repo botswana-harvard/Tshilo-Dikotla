@@ -197,7 +197,7 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
         return self.pending_ultrasound
 
     @property
-    def ga_weeks(self):
+    def ga_by_lmp(self):
         return self.ga_lmp_enrollment_wks
 
     @property

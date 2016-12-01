@@ -51,9 +51,9 @@ class MaternalRando (MaternalCrfModel):
     rx = EncryptedCharField(
         verbose_name="Treatment Assignment")
 
-    subject_identifier = models.CharField(
-        verbose_name="Subject Identifier",
-        max_length=16)
+#     subject_identifier = models.CharField(
+#         verbose_name="Subject Identifier",
+#         max_length=16)
 
     randomization_datetime = models.DateTimeField(
         verbose_name='Randomization Datetime')
@@ -93,18 +93,13 @@ class MaternalRando (MaternalCrfModel):
 
     def save(self, *args, **kwargs):
         if not self.id:
-            randomization_helper = Randomization(self, ValidationError)
-            (self.site, self.sid, self.rx, self.subject_identifier,
-             self.randomization_datetime, self.initials) = randomization_helper.randomize()
+            randomization = Randomization(self, ValidationError)
+            self.initials = randomization.initials
+            self.randomization_datetime = randomization.randomization_datetime
+            self.rx = randomization.rx
+            self.sid = randomization.sid
+            self.site = randomization.study_site
         super(MaternalRando, self).save(*args, **kwargs)
-
-    def natural_key(self):
-        return (self.sid, self.registered_subject.natural_key())
-
-    @property
-    def antenatal_enrollment(self):
-        AntenatalEnrollment = apps.get_model('td_maternal', 'antenatalenrollment')
-        return AntenatalEnrollment.objects.get(registered_subject__subject_identifier=self.maternal_visit.appointment.subject_identifier)
 
     class Meta(MaternalCrfModel.Meta):
         app_label = "td_maternal"

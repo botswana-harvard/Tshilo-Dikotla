@@ -1,5 +1,4 @@
 from django.db import models
-from django.apps import apps
 
 from edc_appointment.model_mixins import CreateAppointmentsMixin
 from edc_base.model.fields import OtherCharField
@@ -7,15 +6,13 @@ from edc_base.model.models import BaseUuidModel, HistoricalRecords, UrlMixin
 from edc_base.model.validators import datetime_not_future
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO, YES_NO_NA
-from edc_constants.constants import NOT_APPLICABLE, YES, POS
+from edc_constants.constants import NOT_APPLICABLE
 from edc_protocol.validators import datetime_not_before_study_start
+from edc_registration.model_mixins import SubjectIdentifierFromRegisteredSubjectModelMixin
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
-
-from td_list.models import DeliveryComplications
-from edc_registration.models import RegisteredSubject
-
 from td.choices import DX_MATERNAL
+from td_list.models import DeliveryComplications
 
 from ..managers import MaternalLabourDelManager, MaternalLabDelDxTManager
 from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION_REASON
@@ -23,11 +20,10 @@ from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION
 from .maternal_crf_model import MaternalCrfModel
 
 
-class MaternalLabourDel(RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin, BaseUuidModel):
+class MaternalLabourDel(SubjectIdentifierFromRegisteredSubjectModelMixin, CreateAppointmentsMixin,
+                        UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
-
-    registered_subject = models.OneToOneField(RegisteredSubject, null=True)
 
     report_datetime = models.DateTimeField(
         verbose_name="Report date",
@@ -120,15 +116,10 @@ class MaternalLabourDel(RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin,
         super(MaternalLabourDel, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "{0}".format(self.registered_subject.subject_identifier)
+        return "{0}".format(self.subject_identifier)
 
     def natural_key(self):
-        return self.registered_subject.natural_key()
-    natural_key.dependencies = ['edc_registration.registeredsubject']
-
-    @property
-    def subject_identifier(self):
-        return self.registered_subject.subject_identifier
+        return (self.subject_identifier, )
 
     class Meta:
         app_label = 'td_maternal'

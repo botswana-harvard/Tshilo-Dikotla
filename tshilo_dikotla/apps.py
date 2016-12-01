@@ -108,10 +108,6 @@ class EdcIdentifierAppConfig(EdcIdentifierAppConfigParent):
 
 
 class EdcMetadataAppConfig(EdcMetadataAppConfigParent):
-    app_label = 'td_maternal'
-    crf_model_name = 'crfmetadata'
-    requisition_model_name = 'requisitionmetadata'
-
     reason_field = {'td_maternal.maternalvisit': 'reason', 'td_infant.infantvisit': 'reason'}
     create_on_reasons = [SCHEDULED, UNSCHEDULED]
     delete_on_reasons = [LOST_VISIT, FAILED_ELIGIBILITY]

@@ -491,9 +491,9 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.antenatal_visit_1 = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        maternal_randomization_2 = mommy.make_recipe(
+        maternal_rando_2 = mommy.make_recipe(
             'td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
-        self.assertEqual(maternal_randomization_2.sid, 2)
+        self.assertEqual(maternal_rando_2.sid, 2)
 
         """Third participant"""
         self.maternal_eligibility_3 = mommy.make_recipe('td_maternal.maternaleligibility')
@@ -528,9 +528,9 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.antenatal_visit_1 = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        maternal_randomization_3 = mommy.make_recipe(
+        maternal_rando_3 = mommy.make_recipe(
             'td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
-        self.assertEqual(maternal_randomization_3.sid, 3)
+        self.assertEqual(maternal_rando_3.sid, 3)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_3.subject_identifier, visit_code='1020M')

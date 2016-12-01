@@ -37,8 +37,8 @@ class TestMaternalRandomization(BaseTestCase):
 
     def test_pick_correct_next_randomization_item(self):
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        maternal_randomization = mommy.make_recipe('td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
-        self.assertEqual(maternal_randomization.sid, 1)
+        maternal_rando = mommy.make_recipe('td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
+        self.assertEqual(maternal_rando.sid, 1)
         self.maternal_eligibility_2 = mommy.make_recipe('td_maternal.maternaleligibility')
         self.maternal_consent_2 = mommy.make_recipe(
             'td_maternal.maternalconsent', 
@@ -64,18 +64,18 @@ class TestMaternalRandomization(BaseTestCase):
         self.antenatal_visit_1 = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        maternal_randomization_2 = mommy.make_recipe('td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
-        self.assertEqual(maternal_randomization_2.sid, 2)
+        maternal_rando_2 = mommy.make_recipe('td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
+        self.assertEqual(maternal_rando_2.sid, 2)
 
     def test_all_randomization_listitems_created(self):
         self.assertEqual(RandomizationItem.objects.all().count(), 300)
 
     def test_registered_subject_correctly_update(self):
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        maternal_randomization = mommy.make_recipe('td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
-        registered_subject = RegisteredSubject.objects.get(subject_identifier=maternal_randomization.subject_identifier)
-        self.assertEqual(registered_subject.sid, str(maternal_randomization.sid))
-        self.assertEqual(registered_subject.randomization_datetime, maternal_randomization.randomization_datetime)
+        maternal_rando = mommy.make_recipe('td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
+        registered_subject = RegisteredSubject.objects.get(subject_identifier=maternal_rando.subject_identifier)
+        self.assertEqual(registered_subject.sid, str(maternal_rando.sid))
+        self.assertEqual(registered_subject.randomization_datetime, maternal_rando.randomization_datetime)
         self.assertEqual(registered_subject.registration_status, RANDOMIZED)
 
     def create_mother(self, status_options):

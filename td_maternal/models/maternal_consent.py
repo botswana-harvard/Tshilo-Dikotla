@@ -21,7 +21,7 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
 
     """ A model completed by the user on the mother's consent. """
 
-    maternal_eligibility = models.ForeignKey(MaternalEligibility)
+    # maternal_eligibility = models.ForeignKey(MaternalEligibility)
 
     recruit_source = models.CharField(
         max_length=75,

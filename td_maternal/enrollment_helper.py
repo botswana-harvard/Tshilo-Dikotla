@@ -151,7 +151,7 @@ class EnrollmentHelper(object):
             MaternalLabourDel = django_apps.get_model('td_maternal', 'MaternalLabourDel')
             try:
                 self.delivery = MaternalLabourDel.objects.get(
-                    registered_subject__subject_identifier=self.subject_identifier)
+                    subject_identifier=self.subject_identifier)
             except MaternalLabourDel.DoesNotExist:
                 self._delivery = None
         return self._delivery

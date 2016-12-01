@@ -1,3 +1,5 @@
+from dateutil.relativedelta import relativedelta
+
 from edc_constants.constants import POS, NEG, UNK, IND
 from edc_metadata.constants import NOT_REQUIRED, REQUIRED
 from edc_rule_groups.crf_rule import CrfRule
@@ -10,40 +12,56 @@ from edc_rule_groups.rule_group import RuleGroup
 from td.constants import ONE
 
 from .lab_profiles import cd4_panel, pbmc_vl_panel, pbmc_panel, hiv_elisa_panel
-from .maternal_status_helper import MaternalStatusHelper
-from .models import MaternalUltraSoundInitial, MaternalPostPartumDep, RapidTestResult, MaternalRando
+from .maternal_hiv_status import MaternalHivStatus
+from .models import (
+    MaternalUltraSoundInitial, MaternalPostPartumDep, RapidTestResult, MaternalRando, MaternalInterimIdcc)
 
 
 def func_mother_pos(visit_instance, *args):
     """Returns true if mother is hiv positive."""
-    maternal_status_helper = MaternalStatusHelper(visit_instance)
-    if maternal_status_helper.hiv_status == POS:
+    maternal_hiv_status = MaternalHivStatus(
+        subject_identifier=visit_instance.subject_identifier,
+        reference_datetime=visit_instance.report_datetime)
+    if maternal_hiv_status.result == POS:
         return True
     return False
 
 
 def func_mother_neg(visit_instance, *args):
     """Returns true if mother is hiv neg."""
-    maternal_status_helper = MaternalStatusHelper(visit_instance)
-    if maternal_status_helper.hiv_status == NEG:
+    maternal_hiv_status = MaternalHivStatus(
+        subject_identifier=visit_instance.subject_identifier,
+        reference_datetime=visit_instance.report_datetime)
+    if maternal_hiv_status.result == NEG:
         return True
     return False
 
 
 def show_elisa_requisition_hiv_status_ind(visit_instance, *args):
     """return True if Mother's Rapid Test Result is Inditerminate"""
-    maternal_status_helper = MaternalStatusHelper(visit_instance)
-    if maternal_status_helper.hiv_status == IND:
+    maternal_hiv_status = MaternalHivStatus(
+        subject_identifier=visit_instance.subject_identifier,
+        reference_datetime=visit_instance.report_datetime)
+    if maternal_hiv_status.result == IND:
         return True
     return False
 
 
 def func_require_cd4(visit_instance, *args):
     """Return true if mother is HIV+ and does not have a CD4 in the last 3 months."""
-    maternal_status_helper = MaternalStatusHelper(visit_instance)
-    if maternal_status_helper.hiv_status == POS:
-        return maternal_status_helper.eligible_for_cd4
-    return False
+    require_cd4 = False
+    maternal_hiv_status = MaternalHivStatus(
+        subject_identifier=visit_instance.subject_identifier,
+        reference_datetime=visit_instance.report_datetime)
+    if not maternal_hiv_status.result == POS:
+        try:
+            obj = MaternalInterimIdcc.objects.get(maternal_visit=visit_instance)
+            if obj.recent_cd4_date:
+                if (visit_instance.report_datetime - relativedelta(months=3)).date() > obj.recent_cd4_date:
+                    require_cd4 = True
+        except MaternalInterimIdcc.DoesNotExist:
+            pass
+    return require_cd4
 
 
 def show_postpartum_depression(visit_instance, *args):
@@ -57,14 +75,14 @@ def show_postpartum_depression(visit_instance, *args):
 
 
 def show_ultrasound_form(visit_instance, *args):
-    """Return true if ultrasound form has to be filled."""
-    if (visit_instance.appointment.visit_code == '1000M'):
-        return True
-    elif (visit_instance.appointment.visit_code == '1010M' and not
-          MaternalUltraSoundInitial.objects.filter(
-            maternal_visit__appointment__visit_code='1000M').exists()):
-        return True
-    return False
+    """Return True if ultrasound form has to be filled."""
+    show_ultrasound_form = False
+    try:
+        MaternalUltraSoundInitial.objects.get(maternal_visit__subject_identifier=visit_instance.subject_identifier)
+    except MaternalUltraSoundInitial.DoesNotExist:
+        if visit_instance.appointment.visit_code in ['1000M', '1010M']:
+            show_ultrasound_form = True
+    return show_ultrasound_form
 
 
 def show_rapid_test_form(visit_instance, *args):
@@ -73,10 +91,11 @@ def show_rapid_test_form(visit_instance, *args):
        (EDD confirmed) (Date of Last HIV Rapid Test) > 56 OR Unknown
     """
     subject_identifier = visit_instance.appointment.subject_identifier
-    maternal_status_helper = MaternalStatusHelper(visit_instance)
-
+    maternal_hiv_status = MaternalHivStatus(
+        subject_identifier=visit_instance.subject_identifier,
+        reference_datetime=visit_instance.report_datetime)
     if visit_instance.appointment.visit_code == '2000M':
-        if maternal_status_helper.hiv_status == NEG:
+        if maternal_hiv_status.result == NEG:
             # Get the last date the Rapid Test was processed.
             prev_rapid_test = (RapidTestResult.objects.filter(
                 maternal_visit__appointment__subject_identifier=subject_identifier).
@@ -94,24 +113,25 @@ def show_rapid_test_form(visit_instance, *args):
             else:
                 return True
     else:
-        if maternal_status_helper.hiv_status == UNK:
+        if maternal_hiv_status.result == UNK:
             return True
         return False
 
 
 def func_show_nvp_dispensing_form(visit_instance, *args):
-    subject_identfier = visit_instance.appointment.subject_identifier
+    func_show_nvp_dispensing_form = False
     if func_mother_pos(visit_instance):
         try:
             randomization = MaternalRando.objects.get(
-                subject_identifier=subject_identfier)
-            return randomization.rx.strip('\n') == 'NVP'
+                subject_identifier=visit_instance.appointment.subject_identifier)
+            func_show_nvp_dispensing_form = randomization.rx.strip('\n') == 'NVP'
         except MaternalRando.DoesNotExist:
-            return False
+            pass
+    return func_show_nvp_dispensing_form
 
 
 @register()
-class MaternalRegisteredSubjectRuleGroup(RuleGroup):
+class MaternalRuleGroup(RuleGroup):
 
     require_ultrasound = CrfRule(
         logic=Logic(
@@ -151,7 +171,7 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_maternal'
-        source_model = 'edc_registration.registeredsubject'
+        source_model = 'td_maternal.maternalvisit'
 
 
 @register()
