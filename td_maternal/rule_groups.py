@@ -151,7 +151,7 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_maternal'
-        source_model = 'td.registeredsubject'
+        source_model = 'edc_registration.registeredsubject'
 
 
 @register()
@@ -191,7 +191,7 @@ class MaternalRequisitionRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_maternal'
-        source_model = 'td.registeredsubject'
+        source_model = 'edc_registration.registeredsubject'
 
 
 @register()
