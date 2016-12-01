@@ -13,10 +13,10 @@ class MaternalSubstanceUseDuringPregAdmin(BaseMaternalModelAdmin, admin.ModelAdm
 
     list_display = (
         'smoked_during_pregnancy',
-        'smoking_during_preg_freq', 
+        'smoking_during_preg_freq',
         'alcohol_during_pregnancy',
         'alcohol_during_preg_freq',
-        'marijuana_during_preg', 
+        'marijuana_during_preg',
         'marijuana_during_preg_freq',
     )
 

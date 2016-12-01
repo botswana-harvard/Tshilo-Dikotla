@@ -17,20 +17,20 @@ class BaseTestCase(TestCase):
         self.study_site = '40'
 
     def create_mother(self, options):
+        print(options)
         self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
-            subject_identifier=options.get('registered_subject'), visit_code='1000M')
-
+            subject_identifier=options.get('subject_identifier'), visit_code='1000M')
         self.maternal_visit_1000 = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.maternal_ultrasound = mommy.make_recipe(
             'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
 
-        self.antenatal_visits_membership = mommy.make_recipe(
-            'td_maternal.antenatalenrollment', registered_subject=options.get('registered_subject'))
+        self.antenatal_enrollment_two = mommy.make_recipe(
+            'td_maternal.antenatalenrollment_two', subject_identifier=options.get('subject_identifier'))
         self.appointment = Appointment.objects.get(
-            subject_identifier=options.get('registered_subject'), visit_code='1010M')
+            subject_identifier=options.get('subject_identifier'), visit_code='1010M')
         self.antenatal_visit_1 = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
@@ -44,8 +44,8 @@ class BaseTestCase(TestCase):
                    'last_period_date': fake.twenty_five_weeks_ago}
         return options
 
-    def hiv_neg_mother_options(self, registered_subject):
-        options = {'registered_subject': registered_subject,
+    def hiv_neg_mother_options(self, subject_identifier):
+        options = {'subject_identifier': subject_identifier,
                    'current_hiv_status': NEG,
                    'evidence_hiv_status': YES,
                    'week32_test': YES,

@@ -21,7 +21,7 @@ from .maternal_crf_model import MaternalCrfModel
 
 
 class MaternalLabourDel(SubjectIdentifierFromRegisteredSubjectModelMixin, CreateAppointmentsMixin,
-                        UrlMixin, BaseUuidModel):
+                        RequiresConsentMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
 
@@ -177,6 +177,8 @@ class MaternalLabDelMed(MaternalCrfModel):
         blank=True,
         null=True)
 
+    history = HistoricalRecords()
+
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Delivery: Medical"
@@ -236,6 +238,8 @@ class MaternalHivInterimHx(MaternalCrfModel):
         blank=True,
         null=True)
 
+    history = HistoricalRecords()
+
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Maternal Hiv Interim Hx"
@@ -266,6 +270,8 @@ class MaternalLabDelDx(MaternalCrfModel):
         max_length=3,
         choices=YES_NO,
         help_text="If yes, Select all that apply in the table, only report grade 3 or 4 diagnoses")
+
+    history = HistoricalRecords()
 
     class Meta:
         app_label = 'td_maternal'
@@ -299,6 +305,8 @@ class MaternalLabDelDxT (CrfInlineModelMixin, BaseUuidModel):
         choices=YES_NO)
 
     objects = MaternalLabDelDxTManager()
+
+    history = HistoricalRecords()
 
     def natural_key(self):
         return (self.lab_del_dx, ) + self.maternal_lab_del_dx.natural_key()

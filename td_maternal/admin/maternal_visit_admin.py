@@ -1,15 +1,11 @@
 from django.contrib import admin
-from copy import copy
 
-from django.core.urlresolvers import reverse
 from edc_visit_tracking.modeladmin_mixins import VisitModelAdminMixin
 
-from td.admin_mixins import ModelAdminMixin
 from td_lab.models import MaternalRequisition
 
 from ..forms import MaternalVisitForm
 from ..models import MaternalVisit
-from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 from td.models import Appointment
 from td_maternal.admin.base_maternal_model_admin import BaseMaternalModelAdmin
 

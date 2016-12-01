@@ -22,6 +22,6 @@ class NvpDispensingAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'maternal_delivery' and request.GET.get('subject_identifier'):
             kwargs["queryset"] = MaternalLabourDel.objects.filter(
-                registered_subject__subject_identifier=request.GET.get('subject_identifier'))
+                subject_identifier=request.GET.get('subject_identifier'))
 
         return super(NvpDispensingAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)

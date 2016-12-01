@@ -72,6 +72,19 @@ antenatal_enrollment_common = dict(
     will_remain_onstudy=YES,
 )
 
+# antenatal enrollment two
+antenatal_enrollment_common_two = dict(
+    schedule_name='maternal_enrollment_step1',
+    report_datetime=get_utcnow,
+    evidence_32wk_hiv_status=NOT_APPLICABLE,
+    is_diabetic=NO,
+    knows_lmp=YES,
+    last_period_date=fake.twenty_five_weeks_ago,
+    rapid_test_done=NOT_APPLICABLE,
+    will_breastfeed=YES,
+    will_remain_onstudy=YES,
+)
+
 antenatal_enrollment_ineligible = dict(
     current_hiv_status=POS,
     rapid_test_done=None,

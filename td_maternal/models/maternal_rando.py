@@ -1,5 +1,4 @@
 from django.db import models
-from django.apps import apps
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 
@@ -50,10 +49,6 @@ class MaternalRando (MaternalCrfModel):
 
     rx = EncryptedCharField(
         verbose_name="Treatment Assignment")
-
-#     subject_identifier = models.CharField(
-#         verbose_name="Subject Identifier",
-#         max_length=16)
 
     randomization_datetime = models.DateTimeField(
         verbose_name='Randomization Datetime')

@@ -37,9 +37,9 @@ class RapidTestResult(MaternalCrfModel):
     def get_test_code(self):
         return 'HIV'
 
-    def natural_key(self):
-        return self.registered_subject.natural_key()
-    natural_key.dependencies = ['edc_registration.registeredsubject']
+#     def natural_key(self):
+#         return self.registered_subject.natural_key()
+#     natural_key.dependencies = ['edc_registration.registeredsubject']
 
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'

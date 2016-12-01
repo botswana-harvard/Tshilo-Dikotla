@@ -30,6 +30,10 @@ class MaternalVisit(VisitModelMixin, CreatesMetadataModelMixin, RequiresConsentM
             self.antenatal_enrollment.registered_subject.first_name,
             self.visit_code)
 
+    def save(self, *args, **kwargs):
+        self.subject_identifier = self.appointment.subject_identifier
+        super(MaternalVisit, self).save(*args, **kwargs)
+
     class Meta(VisitModelMixin.Meta):
         app_label = 'td_maternal'
         verbose_name = 'Maternal Visit'

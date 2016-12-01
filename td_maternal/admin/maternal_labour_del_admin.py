@@ -1,7 +1,5 @@
 from django.contrib import admin
 
-from edc_registration.models import RegisteredSubject
-
 from td.admin_mixins import ModelAdminMixin
 
 from ..forms import MaternalLabourDelForm, MaternalHivInterimHxForm
@@ -17,7 +15,7 @@ class MaternalLabourDelAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, ad
     dashboard_type = 'maternal'
     form = MaternalLabourDelForm
 
-    list_display = ('registered_subject',
+    list_display = ('subject_identifier',
                     'delivery_datetime',
                     'labour_hrs',
                     'delivery_hospital',
@@ -26,7 +24,7 @@ class MaternalLabourDelAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, ad
     list_filter = ('delivery_hospital',
                    'valid_regiment_duration')
 
-    search_fields = ('registered_subject__subject_identifier', )
+    search_fields = ('subject_identifier', )
     readonly_fields = ('live_infants_to_register',)
 
     radio_fields = {'delivery_time_estimated': admin.VERTICAL,
@@ -36,19 +34,6 @@ class MaternalLabourDelAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, ad
                     'csection_reason': admin.VERTICAL,
                     'csection_reason': admin.VERTICAL, }
     filter_horizontal = ('delivery_complications',)
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "registered_subject":
-            if request.GET.get('subject_identifier'):
-                kwargs["queryset"] = RegisteredSubject.objects.filter(
-                    subject_identifier=request.GET.get('subject_identifier', 0))
-            else:
-                self.readonly_fields = list(self.readonly_fields)
-                # try:
-                #    self.readonly_fields.index('registered_subject')
-                # except ValueError:
-                #    self.readonly_fields.append('registered_subject')
-        return super(MaternalLabourDelAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(MaternalHivInterimHx)
