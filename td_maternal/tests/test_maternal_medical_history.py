@@ -5,11 +5,12 @@ from model_mommy import mommy
 from edc_code_lists.models import WcsDxAdult
 from edc_constants.constants import YES, NO, NOT_APPLICABLE
 
-from td_maternal.forms import MaternalMedicalHistoryForm, antenatal_enrollment_form
+from ..forms import MaternalMedicalHistoryForm
 from td_list.models import ChronicConditions, MaternalMedications
 
 
 from .base_test_case import BaseTestCase
+from edc_registration.models import RegisteredSubject
 
 
 class TestMaternalMedicalHistory(BaseTestCase):
@@ -19,31 +20,35 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         self.maternal_consent = mommy.make_recipe(
             'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
-        self.registered_subject = self.maternal_eligibility.registered_subject
+        self.subject_identifier = self.maternal_consent.subject_identifier
+        self.registered_subject = RegisteredSubject.objects.get(subject_identifier=self.subject_identifier)
+        print("*****************************")
+        print(self.registered_subject)
+        print("*****************************")
 
         self.chronic_cond = ChronicConditions.objects.create(
-            hostname_created="silverapple", name="Asthma", short_name="Asthma",
+            hostname_created="django", name="Asthma", short_name="Asthma",
             created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(), hostname_modified="",
             version=1.0, display_index=3, user_created="django", field_name=None, revision=":develop")
 
         self.chronic_cond_na = ChronicConditions.objects.create(
-            hostname_created="silverapple", name="Not Applicable", short_name="N/A",
+            hostname_created="django", name="Not Applicable", short_name="N/A",
             created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(), hostname_modified="",
             version=1.0, display_index=3, user_created="django", field_name=None, revision=":develop")
 
         self.mother_medications = MaternalMedications.objects.create(
-            hostname_created="silverapple", name="Prenatal Vitamins", short_name="Prenatal Vitamins",
-            created=timezone.datetime.now(), user_modified="", modified="", hostname_modified="silverapple",
+            hostname_created="django", name="Prenatal Vitamins", short_name="Prenatal Vitamins",
+            created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(), hostname_modified="django",
             version="1.0", display_index=5, user_created="django", field_name=None, revision=":develop")
 
         self.mother_medications_na = MaternalMedications.objects.create(
-            hostname_created="silverapple", name="Not Applicable", short_name="N/A",
-            created=timezone.datetime.now(), user_modified="", modified="", hostname_modified="silverapple",
+            hostname_created="django", name="Not Applicable", short_name="N/A",
+            created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(), hostname_modified="django",
             version="1.0", display_index=5, user_created="django", field_name=None, revision=":develop")
 
         self.who_dx = WcsDxAdult.objects.create(
             hostname_created="cabel", code="CS4003", short_name="Recurrent severe bacterial pneumo",
-            created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(),
+            created=timezone.datetime.now(), user_modified=timezone.datetime.now(), modified=timezone.datetime.now(),
             hostname_modified="cabel", long_name="Recurrent severe bacterial pneumonia",
             user_created="abelc", list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
 
@@ -120,9 +125,6 @@ class TestMaternalMedicalHistory(BaseTestCase):
     def test_negative_mother_chronic_since_yes_who_diagnosis_not_applicable(self):
         """The mother is HIV Negative but indicated that mother had chronic conditions prior to current pregnancy,
            and the WHO diagnosis has been indicated as NOT_APPLICABLE """
-
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
         self.options['chronic_since'] = YES
         self.options['who_diagnosis'] = NOT_APPLICABLE

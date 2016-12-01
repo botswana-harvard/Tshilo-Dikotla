@@ -30,25 +30,6 @@ class MaternalArvPostMedAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
         "modification_code": admin.VERTICAL,
     }
 
-    actions = [
-        export_as_csv_action(
-            description="CSV Export of Maternal ARV Post with list",
-            fields=[],
-            delimiter=',',
-            exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
-            extra_fields=OrderedDict(
-                {'subject_identifier':
-                 'maternal_arv_post__maternal_visit__appointment__registered_subject__subject_identifier',
-                 'gender': 'maternal_arv_post__maternal_visit__appointment__registered_subject__gender',
-                 'dob': 'maternal_arv_post__maternal_visit__appointment__registered_subject__dob',
-                 'on_arv_since': 'maternal_arv_post__on_arv_since',
-                 'on_arv_reason': 'maternal_arv_post__on_arv_reason',
-                 'on_arv_reason_other': 'maternal_arv_post__on_arv_reason_other',
-                 'arv_status': 'maternal_arv_post__arv_status',
-                 }),
-        )]
-
 
 @admin.register(MaternalArvPost)
 class MaternalArvPostAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):

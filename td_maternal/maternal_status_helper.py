@@ -55,7 +55,7 @@ class MaternalStatusHelper(object):
             return ''
         else:
             return AntenatalEnrollment.objects.get(
-                registered_subject__subject_identifier=self.maternal_visit.appointment.subject_identifier).enrollment_hiv_status
+                subject_identifier=self.maternal_visit.appointment.subject_identifier).enrollment_hiv_status
 
     @property
     def eligible_for_cd4(self):

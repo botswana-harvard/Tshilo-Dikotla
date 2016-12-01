@@ -68,8 +68,7 @@ class PotentialCall(UrlMixin, BaseUuidModel):
     def subject_consent(self):
         from .maternal_consent import MaternalConsent
         try:
-            subject_consent = MaternalConsent.objects.get(
-                maternal_eligibility__registered_subject__subject_identifier=self.subject_identifier)
+            subject_consent = MaternalConsent.objects.get(subject_identifier=self.subject_identifier)
         except MaternalConsent.DoesNotExist:
             return None
         return subject_consent

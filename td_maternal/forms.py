@@ -139,11 +139,11 @@ class AntenatalEnrollmentForm(ModelFormMixin, forms.ModelForm):
 
     def clean_rapid_test_date(self):
         rapid_test_date = self.cleaned_data['rapid_test_date']
-        registered_subject = self.cleaned_data['registered_subject']
+        subject_identifier = self.cleaned_data['subject_identifier']
         if rapid_test_date:
             try:
                 initial = AntenatalEnrollment.objects.get(
-                    registered_subject=registered_subject)
+                    subject_identifier=subject_identifier)
                 if initial:
                     if rapid_test_date != initial.rapid_test_date:
                         raise forms.ValidationError('The rapid test result cannot be changed')
@@ -719,9 +719,9 @@ class MaternalLabourDelForm(ModelFormMixin, forms.ModelForm):
 
     def validate_valid_regimen_hiv_pos_only(self):
         cleaned_data = self.cleaned_data
-        registered_subject = cleaned_data.get('registered_subject')
+        subject_identifier = cleaned_data.get('subject_identifier')
         latest_visit = MaternalVisit.objects.filter(
-            subject_identifier=registered_subject.subject_identifier).order_by('-created').first()
+            subject_identifier=subject_identifier).order_by('-created').first()
         maternal_status_helper = MaternalStatusHelper(latest_visit)
         if maternal_status_helper.hiv_status == POS:
             if cleaned_data.get('valid_regiment_duration') not in YES:

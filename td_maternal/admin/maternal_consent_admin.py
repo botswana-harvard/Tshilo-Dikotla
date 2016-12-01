@@ -1,8 +1,6 @@
 from django.contrib import admin
-from collections import OrderedDict
 
 from edc_consent.actions import flag_as_verified_against_paper, unflag_as_verified_against_paper
-from edc_export.actions import export_as_csv_action
 
 from td.admin_mixins import ModelAdminMixin
 
@@ -77,23 +75,6 @@ class MaternalConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admi
                    'is_verified',
                    'is_literate',
                    'identity_type')
-
-    actions = [
-        flag_as_verified_against_paper,
-        unflag_as_verified_against_paper,
-        export_as_csv_action(
-            description="CSV Export of Maternal Consent",
-            fields=[],
-            delimiter=',',
-            exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified', 'last_name', 'identity', 'confirm_identity', 'first_name', 'legal_marriage',
-                     'marriage_certificate', 'marriage_certificate_no'],
-            extra_fields=OrderedDict(
-                {'subject_identifier': 'subject_identifier',
-                 'gender': 'gender',
-                 'dob': 'dob',
-                 'registered': 'consent_datetime'}),
-        )]
 
     def redirect_url(self, request, obj, post_url_continue=None):
         args = request.GET.dict()

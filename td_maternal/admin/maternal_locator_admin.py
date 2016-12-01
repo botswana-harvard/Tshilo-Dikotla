@@ -12,7 +12,7 @@ class MaternalLocatorAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = MaternalLocatorForm
 
     fields = ('maternal_visit',
-              'registered_subject',
+              'subject_identifier',
               'date_signed',
               'mail_address',
               'care_clinic',

@@ -3,7 +3,6 @@ from django.db import models
 from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_consent.model_mixins import RequiresConsentMixin, SpecimenConsentMixin
 from edc_consent.field_mixins import SampleCollectionFieldsMixin, VulnerabilityFieldsMixin
-from edc_registration.models import RegisteredSubject
 from edc_base.model.models import HistoricalRecords
 
 from ..managers import SpecimenConsentManager
@@ -14,24 +13,28 @@ class SpecimenConsent(SpecimenConsentMixin, SampleCollectionFieldsMixin, Require
 
     """ A model completed by the user when a mother gives consent for specimen storage. """
 
-    registered_subject = models.OneToOneField(RegisteredSubject, null=True)
+    subject_identifier = models.CharField(
+        verbose_name="Subject Identifier",
+        max_length=50,
+        unique=True,
+        editable=False)
 
     objects = SpecimenConsentManager()
 
     history = HistoricalRecords()
 
     def __str__(self):
-        return "{0}".format(self.registered_subject.subject_identifier)
+        return "{0}".format(self.subject_identifier)
 
-    def natural_key(self):
-        return self.registered_subject.natural_key()
+#     def natural_key(self):
+#         return self.registered_subject.natural_key()
 
     def prepare_appointments(self, using):
         """Overrides so that the signal does not attempt to prepare appointments."""
         pass
 
     def get_subject_identifier(self):
-        return self.registered_subject.subject_identifier
+        return self.subject_identifier
 
     def get_report_datetime(self):
         return self.consent_datetime

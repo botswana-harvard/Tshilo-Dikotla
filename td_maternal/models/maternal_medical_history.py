@@ -8,14 +8,11 @@ from td_list.models import ChronicConditions, MaternalMedications
 from td_maternal.maternal_choices import KNOW_HIV_STATUS, LOWEST_CD4_KNOWN, IS_DATE_ESTIMATED
 
 from .maternal_crf_model import MaternalCrfModel
-from .maternal_consent import MaternalConsent
 
 
 class MaternalMedicalHistory(MaternalCrfModel):
 
     """ A model completed by the user on Medical History for all mothers. """
-
-    consent_model = MaternalConsent
 
     chronic_since = models.CharField(
         max_length=25,

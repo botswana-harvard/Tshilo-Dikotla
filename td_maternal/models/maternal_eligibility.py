@@ -103,14 +103,14 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
     def have_latest_consent(self):
         MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
         return (MaternalConsent.objects.filter(
-            subject_identifier=self.registered_subject.subject_identifier).order_by('-version').first().version ==
+            subject_identifier=self.subject_identifier).order_by('-version').first().version ==
             site_consents.get_by_datetime(MaternalConsent, get_utcnow()).version)
 
     @property
     def previous_consents(self):
         MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
         return MaternalConsent.objects.filter(
-            subject_identifier=self.registered_subject.subject_identifier).order_by('version')
+            subject_identifier=self.subject_identifier).order_by('version')
 
     class Meta:
         app_label = 'td_maternal'

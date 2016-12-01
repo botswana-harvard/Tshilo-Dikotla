@@ -98,13 +98,13 @@ class MaternalRando (MaternalCrfModel):
              self.randomization_datetime, self.initials) = randomization_helper.randomize()
         super(MaternalRando, self).save(*args, **kwargs)
 
-    def natural_key(self):
-        return (self.sid, self.registered_subject.natural_key())
+#     def natural_key(self):
+#         return (self.sid, self.registered_subject.natural_key())
 
     @property
     def antenatal_enrollment(self):
         AntenatalEnrollment = apps.get_model('td_maternal', 'antenatalenrollment')
-        return AntenatalEnrollment.objects.get(registered_subject__subject_identifier=self.maternal_visit.appointment.subject_identifier)
+        return AntenatalEnrollment.objects.get(subject_identifier=self.maternal_visit.appointment.subject_identifier)
 
     class Meta(MaternalCrfModel.Meta):
         app_label = "td_maternal"

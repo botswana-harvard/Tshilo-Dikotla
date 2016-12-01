@@ -19,7 +19,7 @@ class SpecimenConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admi
     dashboard_type = 'maternal'
     form = SpecimenConsentForm
 
-    fields = ('registered_subject',
+    fields = ('subject_identifier',
               'consent_datetime',
               'language',
               'may_store_samples',
@@ -36,7 +36,6 @@ class SpecimenConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admi
                     'offered_copy': admin.VERTICAL, }
 
     list_display = ('subject_identifier',
-                    'registered_subject',
                     'is_verified',
                     'is_verified_datetime',
                     'consent_datetime',
@@ -47,31 +46,4 @@ class SpecimenConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admi
     list_filter = ('language',
                    'is_verified',
                    'is_literate')
-    actions = [
-        flag_as_verified_against_paper,
-        unflag_as_verified_against_paper,
-        export_as_csv_action(
-            description="CSV Export of Specimen Consent",
-            fields=[],
-            delimiter=',',
-            exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
-            extra_fields=OrderedDict(
-                {'subject_identifier': 'registered_subject__subject_identifier',
-                 'gender': 'registered_subject__gender',
-                 'dob': 'registered_subject__dob',
-                 'registered': 'registered_subject__registration_datetime'}),
-        )]
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "registered_subject":
-            if request.GET.get('subject_identifier'):
-                kwargs["queryset"] = RegisteredSubject.objects.filter(
-                    subject_identifier=request.GET.get('subject_identifier', 0))
-            else:
-                self.readonly_fields = list(self.readonly_fields)
-                try:
-                    self.readonly_fields.index('registered_subject')
-                except ValueError:
-                    self.readonly_fields.append('registered_subject')
-        return super(SpecimenConsentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+    actions = []

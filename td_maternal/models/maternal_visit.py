@@ -36,7 +36,6 @@ class MaternalVisit(CreatesMetadataModelMixin, RequiresConsentMixin, CaretakerFi
 
     def __str__(self):
         return '{} {} {}'.format(self.appointment.subject_identifier,
-                                 self.antenatal_enrollment.registered_subject.first_name,
                                  self.appointment.visit_code)
 
     def save(self, *args, **kwargs):
