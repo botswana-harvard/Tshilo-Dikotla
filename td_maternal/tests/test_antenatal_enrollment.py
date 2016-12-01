@@ -5,13 +5,10 @@ from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
 from edc_constants.constants import (
-    POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN, FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY)
-from edc_visit_tracking.constants import SCHEDULED
+    POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN)
 
-from td.models import Appointment
 from td.hiv_result import EnrollmentResultError
 
-from ..enrollment_helper import EnrollmentHelper, EnrollmentResult
 from ..models import MaternalVisit, MaternalOffstudy
 
 

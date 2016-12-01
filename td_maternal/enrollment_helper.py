@@ -62,7 +62,7 @@ class EnrollmentHelper(object):
         if obj.last_period_date:
             self.lmp = Lmp(
                 lmp=pytz.utc.localize(datetime.combine(obj.last_period_date, time())),
-                reference_date=self.ultrasound.report_date or obj.report_datetime)
+                reference_date=self.ultrasound.ultrasound_date or obj.report_datetime)
         else:
             self.lmp = Lmp()
         self.ga = Ga(lmp=self.lmp, ultrasound=self.ultrasound)
@@ -134,8 +134,9 @@ class EnrollmentHelper(object):
                     maternal_visit__appointment__subject_identifier=self.subject_identifier)
                 self._ultrasound = Ultrasound(
                     ultrasound_date=obj.report_datetime,
-                    ga_weeks=obj.ga_by_ultrasound_wks,
-                    ga_days=obj.ga_by_ultrasound_days)
+                    ga_confirmation_weeks=obj.ga_by_ultrasound_wks,
+                    ga_confirmation_days=obj.ga_by_ultrasound_days,
+                    ultrasound_edd=obj.est_edd_ultrasound)
                 self._ultrasound.gestations = int(obj.number_of_gestations)
                 if self._ultrasound.gestations != 1:
                     self.messages.update(will_get_arvs='Pregnancy is not a singleton.')

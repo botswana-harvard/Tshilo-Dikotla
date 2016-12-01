@@ -10,10 +10,10 @@ from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NEG, NO
 
 from td.hiv_result import EnrollmentResultError
+from td.models import Appointment
 
 from ..enrollment_helper import EnrollmentHelper
 from ..models import AntenatalEnrollment
-from td.models import Appointment
 
 
 class Obj:
@@ -109,34 +109,35 @@ class TestGa(unittest.TestCase):
     def test_ga_by_lmp_out_of_range(self):
         """Asserts GA 15, not 16-36, ga_pending will be False."""
         obj = Obj(
-            last_period_date=get_utcnow() - relativedelta(weeks=25),
+            last_period_date=get_utcnow() - relativedelta(weeks=15),
             **self.opts)
         enrollment_helper = EnrollmentHelper(obj)
         self.assertEqual(enrollment_helper.ga.weeks, 15)
         self.assertFalse(enrollment_helper.ga_pending)
+        self.assertFalse(enrollment_helper.is_eligible)
 
     def test_ga_by_lmp_in_range_16(self):
         """Asserts GA 16, in 16-36."""
         obj = Obj(
-            last_period_date=get_utcnow() - relativedelta(weeks=24),
+            last_period_date=get_utcnow() - relativedelta(weeks=16),
             **self.opts)
         enrollment_helper = EnrollmentHelper(obj)
         self.assertEqual(enrollment_helper.ga.weeks, 16)
         self.assertFalse(enrollment_helper.ga_pending)
 
     def test_ga_by_lmp_in_range_17(self):
-        """Asserts GA 16, in 16-36."""
+        """Asserts GA 17, in 16-36."""
         obj = Obj(
-            last_period_date=get_utcnow() - relativedelta(weeks=23),
+            last_period_date=get_utcnow() - relativedelta(weeks=17),
             **self.opts)
         enrollment_helper = EnrollmentHelper(obj)
         self.assertEqual(enrollment_helper.ga.weeks, 17)
         self.assertFalse(enrollment_helper.ga_pending)
 
     def test_ga_by_lmp_in_range_36(self):
-        """Asserts GA 16, in 16-36."""
+        """Asserts GA 66, in 16-36."""
         obj = Obj(
-            last_period_date=get_utcnow() - relativedelta(weeks=4),
+            last_period_date=get_utcnow() - relativedelta(weeks=36),
             **self.opts)
         enrollment_helper = EnrollmentHelper(obj)
         self.assertEqual(enrollment_helper.ga.weeks, 36)
@@ -148,8 +149,9 @@ class TestGa(unittest.TestCase):
             last_period_date=get_utcnow() - relativedelta(weeks=40),
             **self.opts)
         enrollment_helper = EnrollmentHelper(obj)
-        self.assertEqual(enrollment_helper.ga.weeks, None)
-        self.assertTrue(enrollment_helper.ga_pending)
+        self.assertEqual(enrollment_helper.ga.weeks, 40)
+        self.assertFalse(enrollment_helper.ga_pending)
+        self.assertFalse(enrollment_helper.is_eligible)
 
     def test_ga_none(self):
         """Asserts GA none if lmp not know."""
