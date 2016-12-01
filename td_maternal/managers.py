@@ -4,6 +4,7 @@ from django.apps import apps as django_apps
 from edc_consent.managers import ConsentManager
 
 from edc_registration.models import RegisteredSubject
+from edc_visit_tracking.managers import CrfModelManager
 
 
 class AntenatalEnrollmentManager(models.Manager):
@@ -123,7 +124,7 @@ class SpecimenConsentManager(models.Manager):
         return self.get(registered_subject=registered_subject)
 
 
-class VisitCrfModelManager(models.Manager):
+class VisitCrfModelManager(CrfModelManager):
 
     def get_by_natural_key(self, report_datetime, visit_instance, visit_code, subject_identifier_as_pk):
         MaternalVisit = django_apps.get_model('td_maternal', 'MaternalVisit')
