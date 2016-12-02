@@ -37,6 +37,5 @@ from .maternal_ultrasound_fu import MaternalUltraSoundFu
 from .maternal_ultrasound_initial import MaternalUltraSoundInitial
 from .maternal_visit import MaternalVisit
 from .nvp_dispensing import NvpDispensing
-from .potential_call import PotentialCall
 from .rapid_test_result import RapidTestResult
 from .specimen_consent import SpecimenConsent
