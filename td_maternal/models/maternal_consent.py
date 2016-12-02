@@ -1,5 +1,6 @@
 from django.apps import apps as django_apps
 from django.db import models
+from django.core.exceptions import ValidationError
 
 from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel, UrlMixin, HistoricalRecords
@@ -14,7 +15,6 @@ from ..maternal_choices import RECRUIT_SOURCE, RECRUIT_CLINIC
 from ..managers import MaternalConsentManager
 
 from .maternal_eligibility import MaternalEligibility
-from django.core.exceptions import ValidationError
 
 
 class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin, PersonalFieldsMixin,
