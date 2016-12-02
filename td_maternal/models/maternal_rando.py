@@ -96,17 +96,6 @@ class MaternalRando (MaternalCrfModel):
             self.site = randomization.study_site
         super(MaternalRando, self).save(*args, **kwargs)
 
-<<<<<<< HEAD:td_maternal/models/maternal_randomization.py
-    def natural_key(self):
-        return (self.sid, ) + self.registered_subject.natural_key()
-
-    @property
-    def antenatal_enrollment(self):
-        AntenatalEnrollment = apps.get_model('td_maternal', 'antenatalenrollment')
-        return AntenatalEnrollment.objects.get(subject_identifier=self.maternal_visit.appointment.subject_identifier)
-
-=======
->>>>>>> 731ed385345ce31ded9932770f0c860d0bcde079:td_maternal/models/maternal_rando.py
     class Meta(MaternalCrfModel.Meta):
         app_label = "td_maternal"
         verbose_name = "Maternal Randomization"

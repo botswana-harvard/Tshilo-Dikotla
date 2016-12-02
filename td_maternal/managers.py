@@ -91,9 +91,3 @@ class MaternalRandoManager(models.Manager):
 
     def get_by_natural_key(self, sid, subject_identifier_as_pk):
         return self.get(sid=sid, subject_identifier=subject_identifier_as_pk)
-
-
-class PotentialCallManager(models.Manager):
-
-    def get_by_natural_key(self, subject_identifier):
-        return self.get(subject_identifier=subject_identifier)
