@@ -14,7 +14,7 @@ from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 from td.choices import DX_MATERNAL
 from td_list.models import DeliveryComplications
 
-from ..managers import MaternalLabourDelManager, MaternalLabDelDxTManager
+from ..managers import EnrollmentManager, MaternalLabDelDxTManager
 from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION_REASON
 
 from .maternal_crf_model import MaternalCrfModel
@@ -107,7 +107,7 @@ class MaternalLabourDel(SubjectIdentifierFromRegisteredSubjectModelMixin, Create
         blank=True,
         null=True)
 
-    objects = MaternalLabourDelManager()
+    objects = EnrollmentManager()
 
     history = HistoricalRecords()
 

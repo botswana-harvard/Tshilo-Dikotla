@@ -5,7 +5,7 @@ from edc_consent.model_mixins import RequiresConsentMixin, SpecimenConsentMixin
 from edc_consent.field_mixins import SampleCollectionFieldsMixin, VulnerabilityFieldsMixin
 from edc_base.model.models import HistoricalRecords
 
-from ..managers import SpecimenConsentManager
+from ..managers import EnrollmentManager
 
 
 class SpecimenConsent(SpecimenConsentMixin, SampleCollectionFieldsMixin, RequiresConsentMixin,
@@ -19,15 +19,15 @@ class SpecimenConsent(SpecimenConsentMixin, SampleCollectionFieldsMixin, Require
         unique=True,
         editable=False)
 
-    objects = SpecimenConsentManager()
+    objects = EnrollmentManager()
 
     history = HistoricalRecords()
 
     def __str__(self):
         return "{0}".format(self.subject_identifier)
 
-#     def natural_key(self):
-#         return self.registered_subject.natural_key()
+    def natural_key(self):
+        return (self.subject_identifier, )
 
     def prepare_appointments(self, using):
         """Overrides so that the signal does not attempt to prepare appointments."""
@@ -38,11 +38,6 @@ class SpecimenConsent(SpecimenConsentMixin, SampleCollectionFieldsMixin, Require
 
     def get_report_datetime(self):
         return self.consent_datetime
-
-    @property
-    def subject_identifier(self):
-        return self.get_subject_identifier()
-#     subject_identifier.allow_tags = True
 
     @property
     def report_datetime(self):
