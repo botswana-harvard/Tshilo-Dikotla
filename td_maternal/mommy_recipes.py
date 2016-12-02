@@ -9,7 +9,7 @@ from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG, UNKNOWN
 from edc_lab.faker import EdcLabProvider
 from edc_visit_tracking.constants import SCHEDULED
 
-from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment,
+from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment, AntenatalEnrollmentTwo,
                      MaternalLabourDel, SpecimenConsent, MaternalRando, MaternalLocator, MaternalUltraSoundInitial,
                      MaternalInterimIdcc, RapidTestResult, MaternalObstericalHistory, MaternalMedicalHistory,
                      MaternalDemographics, MaternalAztNvp, MaternalDiagnoses, MaternalSubstanceUseDuringPreg,
@@ -74,16 +74,12 @@ antenatal_enrollment_common = dict(
 )
 
 # antenatal enrollment two
-antenatal_enrollment_common_two = dict(
-    schedule_name='maternal_enrollment_step1',
+antenatal_enrollment_common_two = Recipe(
+    AntenatalEnrollmentTwo,
+    schedule_name='maternal_enrollment_step2',
+    is_eligible=True,
     report_datetime=get_utcnow,
-    evidence_32wk_hiv_status=NOT_APPLICABLE,
-    is_diabetic=NO,
-    knows_lmp=YES,
-    last_period_date=fake.twenty_five_weeks_ago,
-    rapid_test_done=NOT_APPLICABLE,
-    will_breastfeed=YES,
-    will_remain_onstudy=YES,
+    antenatal_visits=YES,
 )
 
 antenatal_enrollment_ineligible = dict(
