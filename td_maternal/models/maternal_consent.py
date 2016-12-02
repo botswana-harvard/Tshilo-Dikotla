@@ -14,6 +14,7 @@ from ..maternal_choices import RECRUIT_SOURCE, RECRUIT_CLINIC
 from ..managers import MaternalConsentManager
 
 from .maternal_eligibility import MaternalEligibility
+from django.core.exceptions import ValidationError
 
 
 class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin, PersonalFieldsMixin,
@@ -58,19 +59,24 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
                                           self.last_name, self.initials)
 
     def save(self, *args, **kwargs):
-        previous_consent = self.__class__.objects.filter(
-            subject_identifier=self.subject_identifier)
-        if not self.id and previous_consent.exists():
-            self.subject_identifier = previous_consent.first().subject_identifier
-        elif not self.id:
-            self.subject_identifier = SubjectIdentifier(
-                site_code=self.study_site).get_identifier()
+        try:
+            MaternalEligibility.objects.get(reference_pk=self.maternal_eligibility_reference)
+        except MaternalEligibility.DoesNotExist:
+            ValidationError('Unable to determine eligibility criteria. Was Maternal Eligibility completed?')
+        if not self.id:
+            try:
+                RegisteredSubject = django_apps.get_app_config('edc_registration').model
+                registered_subject = RegisteredSubject.objects.get(identity=self.identity)
+                self.subject_identifier = registered_subject.subject_identifier
+            except RegisteredSubject.DoesNotExist:
+                self.subject_identifier = SubjectIdentifier(site_code=self.study_site).get_identifier()
         super(MaternalConsent, self).save(*args, **kwargs)
 
     def get_registration_datetime(self):
         return self.consent_datetime
 
     def registration_update_or_create(self):
+        """Updates or Creates RegisteredSubject on the post-save signal."""
         super(MaternalConsent, self).registration_update_or_create()
         RegisteredSubject = django_apps.get_app_config('edc_registration').model
         maternal_eligibility = MaternalEligibility.objects.get(reference_pk=self.maternal_eligibility_reference)
