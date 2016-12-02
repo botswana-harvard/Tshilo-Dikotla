@@ -1,14 +1,14 @@
 from model_mommy import mommy
 
+from django.test import TestCase
+
 from edc_constants.constants import SCREENED
 from edc_registration.models import RegisteredSubject
 
 from td_maternal.models import MaternalEligibility, MaternalEligibilityLoss
 
-from .base_test_case import BaseTestCase
 
-
-class TestMaternalEligibility(BaseTestCase):
+class TestMaternalEligibility(TestCase):
     """Test eligibility of a mother."""
 
     def test_eligibility_for_correct_age(self):
@@ -41,27 +41,28 @@ class TestMaternalEligibility(BaseTestCase):
         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility', **options)
         self.assertFalse(maternal_eligibility.is_eligible)
 
-    def test_updates_registered_subject_on_add(self):
-        options = {'age_in_years': 26}
-        self.assertEqual(RegisteredSubject.objects.all().count(), 0)
-        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility', **options)
-        self.assertEqual(RegisteredSubject.objects.all().count(), 1)
-        maternal_eligibility = MaternalEligibility.objects.get(pk=maternal_eligibility.pk)
-        self.assertTrue(maternal_eligibility.is_eligible)
-        registered_subject = RegisteredSubject.objects.get(pk=maternal_eligibility.registered_subject.pk)
-        self.assertEquals(registered_subject.screening_datetime, maternal_eligibility.report_datetime)
-        self.assertEquals(registered_subject.registration_status, SCREENED)
-
-    def test_updates_registered_subject_on_edit(self):
-        options = {'age_in_years': 26}
-        self.assertEqual(RegisteredSubject.objects.all().count(), 0)
-        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility', **options)
-        self.assertTrue(maternal_eligibility.is_eligible)
-        maternal_eligibility.age_in_years = 27
-        maternal_eligibility.save()
-        registered_subject = RegisteredSubject.objects.get(screening_identifier=maternal_eligibility.eligibility_id)
-        self.assertEquals(registered_subject.screening_age_in_years, 27)
-        self.assertEquals(registered_subject.registration_status, SCREENED)
+#     def test_updates_registered_subject_on_add(self):
+#         options = {'age_in_years': 26}
+#         self.assertEqual(RegisteredSubject.objects.all().count(), 0)
+#         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility', **options)
+#         self.assertEqual(RegisteredSubject.objects.all().count(), 1)
+#         maternal_eligibility = MaternalEligibility.objects.get(pk=maternal_eligibility.pk)
+#         self.assertTrue(maternal_eligibility.is_eligible)
+#         registered_subject = RegisteredSubject.objects.get(pk=maternal_eligibility.registered_subject.pk)
+#         self.assertEquals(registered_subject.screening_datetime, maternal_eligibility.report_datetime)
+#         self.assertEquals(registered_subject.registration_status, SCREENED)
+# 
+#     def test_updates_registered_subject_on_edit(self):
+#         options = {'age_in_years': 26}
+#         self.assertEqual(RegisteredSubject.objects.all().count(), 0)
+#         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility', **options)
+#         self.assertTrue(maternal_eligibility.is_eligible)
+#         mommy.make_recipe()
+#         maternal_eligibility.age_in_years = 27
+#         maternal_eligibility.save()
+#         registered_subject = RegisteredSubject.objects.get(screening_identifier=maternal_eligibility.eligibility_id)
+#         self.assertEquals(registered_subject.screening_age_in_years, 27)
+#         self.assertEquals(registered_subject.registration_status, SCREENED)
 
     def test_creates_lossform_on_fail(self):
         """Test loss record is created on fail."""

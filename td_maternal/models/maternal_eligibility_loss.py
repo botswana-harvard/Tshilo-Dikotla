@@ -5,15 +5,13 @@ from edc_base.model.models import HistoricalRecords
 from edc_base.model.models.url_mixin import UrlMixin
 from edc_base.utils import get_utcnow
 
-from .maternal_eligibility import MaternalEligibility
-
 from ..managers import MaternalEligibilityLossManager
 
 
 class MaternalEligibilityLoss(UrlMixin, BaseUuidModel):
     """ A model triggered and completed by system when a mother is in-eligible. """
 
-    maternal_eligibility = models.OneToOneField(MaternalEligibility)
+    maternal_eligibility_reference = models.UUIDField()
 
     report_datetime = models.DateTimeField(
         verbose_name="Report Date and Time",

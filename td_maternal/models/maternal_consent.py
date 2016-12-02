@@ -1,3 +1,4 @@
+from django.apps import apps as django_apps
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
@@ -21,7 +22,7 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
 
     """ A model completed by the user on the mother's consent. """
 
-    # maternal_eligibility = models.ForeignKey(MaternalEligibility)
+    maternal_eligibility_reference = models.UUIDField()
 
     recruit_source = models.CharField(
         max_length=75,
@@ -69,8 +70,15 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
     def get_registration_datetime(self):
         return self.consent_datetime
 
-    def get_subject_identifier(self):
-        return self.subject_identifier
+    def registration_update_or_create(self):
+        super(MaternalConsent, self).registration_update_or_create()
+        RegisteredSubject = django_apps.get_app_config('edc_registration').model
+        maternal_eligibility = MaternalEligibility.objects.get(reference_pk=self.maternal_eligibility_reference)
+        registered_subject = RegisteredSubject.objects.get(subject_identifier=self.subject_identifier)
+        registered_subject.screening_identifier = maternal_eligibility.reference_pk
+        registered_subject.screening_datetime = maternal_eligibility.report_datetime
+        registered_subject.screening_age_in_years = maternal_eligibility.age_in_years
+        registered_subject.save()
 
     class Meta:
         app_label = 'td_maternal'
