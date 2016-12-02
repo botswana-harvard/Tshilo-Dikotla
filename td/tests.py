@@ -1,126 +1,248 @@
-import json
-import pprint
-
-from dateutil.relativedelta import relativedelta
-from django.core import serializers
 from django.test import TestCase
 
 from edc_base.utils import get_utcnow
-from edc_constants.constants import POS, YES, NOT_APPLICABLE
-from edc_registration.models import RegisteredSubject
-from edc_sync.models import OutgoingTransaction
-from model_mommy import mommy
+from edc_constants.constants import POS, YES, NEG, NO, UNK
 
-from td_maternal.enrollment_helper import EnrollmentHelper
-from td_maternal.models import MaternalOffstudy
+from dateutil.relativedelta import relativedelta
 
-from .models import Appointment
-from django.test.utils import override_settings
-
-pp = pprint.PrettyPrinter(indent=4)
+from .hiv_result import Recent, Current, Rapid, PostEnrollment, Test
 
 
-@override_settings(USE_L10N=False)
-class TestTd(TestCase):
+class Obj:
+    def __init__(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+        self.report_datetime = get_utcnow()
 
-    def test_registered_subject_created_by_consent(self):
-        maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent')
-        try:
-            RegisteredSubject.objects.get(subject_identifier=maternal_consent.subject_identifier)
-        except RegisteredSubject.DoesNotExist:
-            self.fail('RegisteredSubject.DoesNotExist unexpectedly raised.')
 
-    def test_appointment_maternal(self):
-        """Assert no appointments for not eligible."""
-        maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent')
-        antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment_ineligible',
-            subject_identifier=maternal_consent.subject_identifier)
-        self.assertFalse(antenatal_enrollment.is_eligible)
-        self.assertEqual(Appointment.objects.all().count(), 0)
-        try:
-            MaternalOffstudy.objects.get(subject_identifier=maternal_consent.subject_identifier)
-        except MaternalOffstudy.DoesNotExist:
-            self.fail('MaternalOffstudy.DoesNotExist unexpectedly raised.')
+class TestRapid(TestCase):
 
-    def test_appointment_maternal2(self):
-        """Assert has appointments for eligible."""
-        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent')
-        antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment',
-            subject_identifier=maternal_consent.subject_identifier,
-            last_period_date=(get_utcnow() - relativedelta(days=280)).date())
-        self.assertTrue(antenatal_enrollment.is_eligible)
-        self.assertEqual(Appointment.objects.all().count(), 1)
-        try:
-            MaternalOffstudy.objects.get(subject_identifier=maternal_consent.subject_identifier)
-            self.fail('MaternalOffstudy.DoesNotExist unexpectedly NOT raised.')
-        except MaternalOffstudy.DoesNotExist:
-            pass
+    def test_rapid_pos(self):
+        dt = get_utcnow()
+        rapid = Rapid(tested=YES, result=POS, result_date=dt)
+        self.assertEqual(rapid.result, POS)
+        self.assertEqual(rapid.result_date, dt.date())
 
-    def test_ineligible(self):
-        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent')
-        antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment_ineligible',
-            subject_identifier=maternal_consent.subject_identifier)
-        self.assertFalse(antenatal_enrollment.is_eligible)
+    def test_rapid_pos_no_evidence_is_none(self):
+        rapid = Rapid(tested=NO, result=POS, result_date=get_utcnow())
+        self.assertEqual(rapid.result, None)
+        self.assertEqual(rapid.result_date, None)
 
-    def test_antenatal_enrollment_deserialization(self):
-        """ Creating specimenconsent should creates outgoingtransaction """
-        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=maternal_eligibility)
-        antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment', subject_identifier=maternal_consent.subject_identifier)
-        outgoing_transactions = OutgoingTransaction.objects.all()
-        self.assertGreater(outgoing_transactions.count(), 0)
-        for outgoing_transaction in outgoing_transactions:
-            json_tx = outgoing_transaction.aes_decrypt(outgoing_transaction.tx)
-            for deserialised_obj in serializers.deserialize(
-                    "json", outgoing_transaction.aes_decrypt(outgoing_transaction.tx),
-                    use_natural_foreign_keys=True,
-                    use_natural_primary_keys=True):
-                json_tx = json.loads(json_tx)
-                pp.pprint(json_tx)
-                try:
-                    json_tx['td_maternal.maternalconsent']
-                    self.assertEqual(maternal_consent.pk, deserialised_obj.object.pk)
-                except KeyError:
-                    pass
-                if json_tx.get('model') == 'td_maternal.maternaleligibility':
-                    self.assertEqual(maternal_eligibility.pk, deserialised_obj.object.pk)
-                elif json_tx.get('model') == 'td_maternal.antenatalenrollment':
-                    self.assertEqual(antenatal_enrollment.pk, deserialised_obj.object.pk)
-                else:
-                    pass
+    def test_rapid_neg(self):
+        dt = get_utcnow()
+        rapid = Rapid(tested=YES, result=NEG, result_date=dt)
+        self.assertEqual(rapid.result, NEG)
+        self.assertEqual(rapid.result_date, dt.date())
 
-    def test_gestation_wks_lmp_below_16(self):
-        """Test for a positive mother with evidence of hiv_status,
-        will go on a valid regimen but weeks of gestation below 16."""
-        options = {'current_hiv_status': POS,
-                   'evidence_hiv_status': YES,
-                   'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (get_utcnow() - relativedelta(weeks=14)).date()}
-        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent')
-        antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment',
-            subject_identifier=maternal_consent.subject_identifier, **options)
-        self.assertFalse(antenatal_enrollment.is_eligible)
-        self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        pp.pprint(EnrollmentHelper(antenatal_enrollment).as_dict())
+    def test_rapid_neg_no_evidence_is_none(self):
+        rapid = Rapid(tested=NO, result=POS, result_date=get_utcnow())
+        self.assertEqual(rapid.result, None)
+        self.assertEqual(rapid.result_date, None)
 
-    def test_on_therapy_for_atleast4weeks(self):
-        maternal_consent = mommy.make_recipe('td_maternal.maternalconsent')
-        antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment',
-            subject_identifier=maternal_consent.subject_identifier)
-        self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
-        mommy.make_recipe(
-            'td_maternal.maternallabourdel',
-            subject_identifier=maternal_consent.subject_identifier,
-            valid_regiment_duration=YES)
-        enrollment_helper = EnrollmentHelper(antenatal_enrollment)
-        self.assertTrue(enrollment_helper.eligible_after_delivery)
-        self.assertTrue(enrollment_helper.is_eligible)
+    def test_rapid_none(self):
+        rapid = Rapid()
+        self.assertEqual(rapid.result, None)
+        self.assertEqual(rapid.result_date, None)
+
+    def test_rapid_missing_date(self):
+        rapid = Rapid(tested=YES, result=POS)
+        self.assertEqual(rapid.result, None)
+        self.assertEqual(rapid.result_date, None)
+
+
+class TestCurrent(TestCase):
+
+    def test_pos_with_evidence(self):
+        """Assert POS from recent class with evidence is POS."""
+        current = Current(result=POS, evidence=YES)
+        self.assertEqual(current.result, POS)
+
+    def test_none_without_evidence(self):
+        """Assert POS from recent class with evidence is POS, else None."""
+        current = Current(result=POS, evidence=YES)
+        self.assertEqual(current.result, POS)
+        current = Current(result=POS, evidence=NO)
+        self.assertEqual(current.result, None)
+
+    def test_none_if_neg(self):
+        """Assert NEG from recent class with/without evidence is None."""
+        current = Current(result=NEG, evidence=NO)
+        self.assertEqual(current.result, None)
+        current = Current(result=NEG, evidence=YES)
+        self.assertEqual(current.result, None)
+
+
+class TestRecent(TestCase):
+
+    def test_result_pos(self):
+        """Assert POS from recent class with evidence is POS."""
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=get_utcnow().date(),
+            result=POS,
+            evidence=YES)
+        self.assertEqual(recent.result, POS)
+
+    def test_result_pos_without_evidence_is_none(self):
+        """Assert POS from recent class with evidence is POS."""
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=get_utcnow().date(),
+            result=POS,
+            evidence=NO)
+        self.assertEqual(recent.result, None)
+
+    def test_result_none_if_not_tested(self):
+        """Assert None if no test."""
+        recent = Recent(tested=NO)
+        self.assertEqual(recent.result, None)
+
+    def test_result_none_if_not_tested2(self):
+        """Assert None if no test."""
+        recent = Recent()
+        self.assertEqual(recent.result, None)
+
+    def test_result_neg_with_evidence(self):
+        """Assert NEG from recent class with evidence is NEG."""
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=get_utcnow().date(),
+            result=NEG,
+            evidence=YES)
+        self.assertEqual(recent.result, NEG)
+
+    def test_result_neg_without_evidence(self):
+        """Assert NEG from recent class without evidence is still NEG."""
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=get_utcnow().date(),
+            result=NEG,
+            evidence=NO)
+        self.assertEqual(recent.result, None)
+
+    def test_result_neg_4months(self):
+        """Assert NEG from recent class 4 months old is None."""
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=(get_utcnow() - relativedelta(months=4)).date(),
+            result=NEG,
+            evidence=NO)
+        self.assertEqual(recent.result, None)
+
+    def test_testeddate_not_within3m(self):
+        """Assert .within3m False if testdate 4m ago."""
+        date_4m_ago = (get_utcnow() - relativedelta(months=4)).date()
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=date_4m_ago,
+            result=POS,
+            evidence=YES)
+        self.assertEqual(recent.within_3m, False)
+
+    def test_testeddate_within3m_less_day(self):
+        """Assert .within3m True if testdate 3m ago less one day."""
+        date_3m_ago_less_day = (get_utcnow() - relativedelta(months=3) - relativedelta(days=1)).date()
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=date_3m_ago_less_day,
+            result=POS,
+            evidence=YES)
+        self.assertEqual(recent.within_3m, False)
+
+    def test_testeddate_within3m_exact(self):
+        """Assert .within3m False if testdate 3m ago (not inclusive)."""
+        date_3m_ago = (get_utcnow() - relativedelta(months=3)).date()
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=date_3m_ago,
+            result=POS,
+            evidence=YES)
+        self.assertEqual(recent.within_3m, False)
+
+    def test_testeddate_within3m_plus_day(self):
+        """Assert .within3m False if testdate 3m ago + day."""
+        date_3m_ago_plus_day = (get_utcnow() - relativedelta(months=3) + relativedelta(days=1)).date()
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=date_3m_ago_plus_day,
+            result=POS,
+            evidence=YES)
+        self.assertEqual(recent.within_3m, True)
+
+    def test_testeddate_within3m_less_month(self):
+        """Assert .within3m False if testdate 3m ago + day."""
+        date_2m_ago = (get_utcnow() - relativedelta(months=2)).date()
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=date_2m_ago,
+            result=POS,
+            evidence=YES)
+        self.assertEqual(recent.within_3m, True)
+
+
+class TestPostEnrollment(TestCase):
+
+    def test_enrolled_neg_still_neg(self):
+        dt = get_utcnow()
+        rapid_results = (
+            Test(tested=YES, result=NEG, result_date=dt - relativedelta(months=4)),
+            Test(tested=YES, result=NEG, result_date=dt - relativedelta(months=3)),
+            Test(tested=YES, result=NEG, result_date=dt - relativedelta(months=2)),
+        )
+        post_enrollment = PostEnrollment(reference_datetime=dt, enrollment_result=NEG, rapid_results=rapid_results)
+        self.assertEquals(post_enrollment.result, NEG)
+        self.assertEquals(post_enrollment.result_date, (dt - relativedelta(months=2)).date())
+
+    def test_enrolled_neg_now_pos(self):
+        dt = get_utcnow()
+        rapid_results = (
+            Test(tested=YES, result=POS, result_date=dt - relativedelta(months=4)),
+            Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=3)),
+            Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=2)),
+        )
+        post_enrollment = PostEnrollment(reference_datetime=dt, enrollment_result=NEG, rapid_results=rapid_results)
+        self.assertEquals(post_enrollment.result, POS)
+        self.assertEquals(post_enrollment.result_date, (dt - relativedelta(months=4)).date())
+
+    def test_enrolled_neg_now_pos2(self):
+        dt = get_utcnow()
+        rapid_results = (
+            Test(tested=YES, result=NEG, result_date=dt - relativedelta(months=4)),
+            Test(tested=YES, result=POS, result_date=dt - relativedelta(months=3)),
+            Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=2)),
+        )
+        post_enrollment = PostEnrollment(reference_datetime=dt, enrollment_result=NEG, rapid_results=rapid_results)
+        self.assertEquals(post_enrollment.result, POS)
+        self.assertEquals(post_enrollment.result_date, (dt - relativedelta(months=3)).date())
+
+    def test_enrolled_neg_now_pos3(self):
+        dt = get_utcnow()
+        rapid_results = (
+            Test(tested=YES, result=NEG, result_date=dt - relativedelta(months=4)),
+            Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=3)),
+            Test(tested=YES, result=POS, result_date=dt - relativedelta(months=2)),
+        )
+        post_enrollment = PostEnrollment(reference_datetime=dt, enrollment_result=NEG, rapid_results=rapid_results)
+        self.assertEquals(post_enrollment.result, POS)
+        self.assertEquals(post_enrollment.result_date, (dt - relativedelta(months=2)).date())
+
+    def test_enrolled_pos_always_pos(self):
+        dt = get_utcnow()
+        rapid_results = (
+            Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=4)),
+            Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=3)),
+            Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=2)),
+        )
+        post_enrollment = PostEnrollment(reference_datetime=dt, enrollment_result=POS, rapid_results=rapid_results)
+        self.assertEquals(post_enrollment.result, POS)
+        self.assertEquals(post_enrollment.result_date, None)

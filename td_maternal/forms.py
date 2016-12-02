@@ -1,6 +1,6 @@
 import pytz
 
-from datetime import datetime
+from datetime import datetime, time
 from dateutil.relativedelta import relativedelta
 
 from django import forms
@@ -9,6 +9,7 @@ from django.conf import settings
 from django.forms.utils import ErrorList
 
 from edc_base.modelform_mixins import Many2ManyModelFormMixin
+from edc_base.utils import get_utcnow
 from edc_constants.constants import (
     YES, NO, STOPPED, CONTINUOUS, RESTARTED, NOT_APPLICABLE, FEMALE, OMANG, OTHER, POS, NEG, IND, ON_STUDY)
 from edc_consent.forms import BaseSpecimenConsentForm
@@ -16,6 +17,7 @@ from edc_consent.form_mixins import ConsentFormMixin
 from edc_death_report.modelform_mixins import DeathReportFormMixin
 from edc_locator.forms import LocatorFormMixin
 from edc_offstudy.modelform_mixins import OffStudyFormMixin
+from edc_pregnancy_utils import Lmp, Edd, Ultrasound
 from edc_visit_tracking.choices import VISIT_REASON
 from edc_visit_tracking.form_mixins import VisitFormMixin
 
@@ -23,7 +25,7 @@ from td.choices import STUDY_SITES, OFF_STUDY_REASON, VISIT_INFO_SOURCE, MATERNA
 from td.constants import NO_MODIFICATIONS
 
 from .enrollment_helper import EnrollmentHelper
-from .maternal_status_helper import MaternalStatusHelper
+from .maternal_hiv_status import MaternalHivStatus
 from .models import (
     AntenatalEnrollment, AntenatalEnrollmentTwo, MaternalLifetimeArvHistory, MaternalConsent,
     MaternalObstericalHistory, MaternalArvPost, MaternalArvPostMed, MaternalArvPostAdh,
@@ -34,12 +36,16 @@ from .models import (
     MaternalOffstudy, MaternalPostPartumDep, MaternalPostPartumFu, MaternalSubstanceUseDuringPreg,
     MaternalSubstanceUsePriorPreg, MaternalUltraSoundFu, NvpDispensing, RapidTestResult, SpecimenConsent
 )
-from .randomization import Randomization
-from edc_base.utils import get_utcnow
 
 
 class ModelFormMixin(Many2ManyModelFormMixin):
-    pass
+
+    @property
+    def maternal_hiv_status(self):
+        visit = self.cleaned_data.get('maternal_visit')
+        return MaternalHivStatus(
+            subject_identifier=visit.subject_identifier,
+            reference_datetime=visit.report_datetime)
 
 
 class MaternalVisitForm (VisitFormMixin, forms.ModelForm):
@@ -97,11 +103,6 @@ class MaternalOffstudyForm (OffStudyFormMixin, ModelFormMixin, forms.ModelForm):
         help_text="",
         widget=AdminRadioSelect(renderer=AdminRadioFieldRenderer))
 
-    def clean(self):
-        cleaned_data = super(MaternalOffstudyForm, self).clean()
-        self.validate_offstudy_date()
-        return cleaned_data
-
     class Meta:
         model = MaternalOffstudy
         fields = '__all__'
@@ -128,7 +129,6 @@ class AntenatalEnrollmentForm(ModelFormMixin, forms.ModelForm):
         self.validate_last_period_date(cleaned_data.get('report_datetime'), cleaned_data.get('last_period_date'))
         enrollment_helper = EnrollmentHelper(self._meta.model(**cleaned_data), exception_cls=forms.ValidationError)
         enrollment_helper.raise_validation_error_for_rapidtest()
-
         return cleaned_data
 
     def validate_last_period_date(self, report_datetime, last_period_date):
@@ -136,20 +136,6 @@ class AntenatalEnrollmentForm(ModelFormMixin, forms.ModelForm):
                 raise forms.ValidationError('LMP cannot be within 4weeks of report datetime. '
                                             'Got LMP as {} and report datetime as {}'.format(
                                                 last_period_date, report_datetime))
-
-    def clean_rapid_test_date(self):
-        rapid_test_date = self.cleaned_data['rapid_test_date']
-        subject_identifier = self.cleaned_data['subject_identifier']
-        if rapid_test_date:
-            try:
-                initial = AntenatalEnrollment.objects.get(
-                    subject_identifier=subject_identifier)
-                if initial:
-                    if rapid_test_date != initial.rapid_test_date:
-                        raise forms.ValidationError('The rapid test result cannot be changed')
-            except AntenatalEnrollment.DoesNotExist:
-                pass
-        return rapid_test_date
 
     class Meta:
         model = AntenatalEnrollment
@@ -276,8 +262,9 @@ class MaternalArvPostMedForm(ModelFormMixin, forms.ModelForm):
         if (cleaned_data.get('maternal_arv_post').arv_status == NOT_APPLICABLE or
                 cleaned_data.get('maternal_arv_post').arv_status == NO_MODIFICATIONS):
             if cleaned_data.get('arv_code'):
-                raise forms.ValidationError("You cannot indicate arv modifaction as you indicated {} above."
-                                            .format(cleaned_data.get('maternal_arv_post').arv_status))
+                raise forms.ValidationError(
+                    "You cannot indicate arv modifaction as you indicated {} above.".format(
+                        cleaned_data.get('maternal_arv_post').arv_status))
         return cleaned_data
 
     class Meta:
@@ -379,12 +366,12 @@ class MaternalAztNvpForm(ModelFormMixin, forms.ModelForm):
         fields = '__all__'
 
     def validate_randomization(self, cleaned_data):
-        maternal_randomization = MaternalRando.objects.get(
+        maternal_rando = MaternalRando.objects.get(
             subject_identifier=cleaned_data.get('maternal_visit').appointment.subject_identifier)
-        if maternal_randomization.rx != cleaned_data.get('azt_nvp_delivery'):
+        if maternal_rando.rx != cleaned_data.get('azt_nvp_delivery'):
             raise forms.ValidationError('The chosen prophylaxis regiment does not match the randomized regiment. '
                                         ' Got {}, while randomization was {}'.format(cleaned_data.get('azt_nvp'),
-                                                                                     maternal_randomization.rx))
+                                                                                     maternal_rando.rx))
 
 
 class MaternalClinicalMeasurementsOneForm(ModelFormMixin, forms.ModelForm):
@@ -638,9 +625,6 @@ class MaternalDiagnosesForm(ModelFormMixin, forms.ModelForm):
 
 class MaternalEligibilityForm(ModelFormMixin, forms.ModelForm):
 
-    def clean(self):
-        return super(MaternalEligibilityForm, self).clean()
-
     class Meta:
         model = MaternalEligibility
         fields = '__all__'
@@ -717,13 +701,19 @@ class MaternalLabourDelForm(ModelFormMixin, forms.ModelForm):
         self.validate_valid_regimen_hiv_pos_only()
         return cleaned_data
 
+    @property
+    def maternal_hiv_status(self):
+        cleaned_data = self.cleaned_data
+        subject_identifier = cleaned_data['subject_identifier']
+        visit = MaternalVisit.objects.filter(
+            subject_identifier=subject_identifier).order_by('-created').first()
+        return MaternalHivStatus(
+            subject_identifier=visit.subject_identifier,
+            reference_datetime=visit.report_datetime)
+
     def validate_valid_regimen_hiv_pos_only(self):
         cleaned_data = self.cleaned_data
-        subject_identifier = cleaned_data.get('subject_identifier')
-        latest_visit = MaternalVisit.objects.filter(
-            subject_identifier=subject_identifier).order_by('-created').first()
-        maternal_status_helper = MaternalStatusHelper(latest_visit)
-        if maternal_status_helper.hiv_status == POS:
+        if self.maternal_hiv_status.result == POS:
             if cleaned_data.get('valid_regiment_duration') not in YES:
                 raise forms.ValidationError(
                     'Participant is HIV+ valid regimen duration should be YES. Please correct.')
@@ -739,11 +729,11 @@ class MaternalLabourDelForm(ModelFormMixin, forms.ModelForm):
             if cleaned_data.get('valid_regiment_duration') not in [NOT_APPLICABLE]:
                 raise forms.ValidationError(
                     'Participant\'s HIV status is {}, valid regimen duration should be Not Applicable.'.format(
-                        maternal_status_helper.hiv_status))
+                        self.maternal_hiv_status.result))
             if cleaned_data.get('arv_initiation_date'):
                 raise forms.ValidationError(
                     'Participant\'s HIV status is {}, arv initiation date should not filled.'.format(
-                        maternal_status_helper.hiv_status))
+                        self.maternal_hiv_status.result))
 
     class Meta:
         model = MaternalLabourDel
@@ -826,7 +816,6 @@ class MaternalMedicalHistoryForm(ModelFormMixin, forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalMedicalHistoryForm, self).clean()
-
         self.validate_chronic_since_who_diagnosis_neg()
         self.validate_chronic_since_who_diagnosis_pos()
         self.validate_who_diagnosis_who_chronic_list()
@@ -841,224 +830,164 @@ class MaternalMedicalHistoryForm(ModelFormMixin, forms.ModelForm):
 
     def validate_chronic_since_who_diagnosis_neg(self):
         cleaned_data = self.cleaned_data
-        try:
-            status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
-            subject_status = status_helper.hiv_status
-
-            if cleaned_data.get('chronic_since') == YES and subject_status == NEG:
-                if (cleaned_data.get('who_diagnosis') == NO or cleaned_data.get('who_diagnosis') == YES or
-                   cleaned_data.get('who_diagnosis') == NOT_APPLICABLE):
-                    raise forms.ValidationError(
-                        "The mother is HIV negative. Chronic_since should be NO and Who Diagnosis should"
-                        " be Not Applicable")
-
-            if cleaned_data.get('chronic_since') == NO and subject_status == NEG:
-                if cleaned_data.get('who_diagnosis') != NOT_APPLICABLE:
-                    raise forms.ValidationError(
-                        "The mother is HIV negative.Who Diagnosis should be Not Applicable")
-
-        except AntenatalEnrollment.DoesNotExist:
-            pass
+        if cleaned_data.get('chronic_since') == YES and self.maternal_hiv_status.result == NEG:
+            if (cleaned_data.get('who_diagnosis') == NO or cleaned_data.get('who_diagnosis') == YES or
+               cleaned_data.get('who_diagnosis') == NOT_APPLICABLE):
+                raise forms.ValidationError(
+                    "The mother is HIV negative. Chronic_since should be NO and Who Diagnosis should"
+                    " be Not Applicable")
+        if cleaned_data.get('chronic_since') == NO and self.maternal_hiv_status.result == NEG:
+            if cleaned_data.get('who_diagnosis') != NOT_APPLICABLE:
+                raise forms.ValidationError(
+                    "The mother is HIV negative.Who Diagnosis should be Not Applicable")
 
     def validate_chronic_since_who_diagnosis_pos(self):
         cleaned_data = self.cleaned_data
-        try:
-            status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
-            subject_status = status_helper.hiv_status
-
-            if cleaned_data.get('chronic_since') == YES and subject_status == POS:
-                if cleaned_data.get('who_diagnosis') != YES:
-                    raise forms.ValidationError(
-                        "The mother is HIV positive, because Chronic_since is YES and Who Diagnosis should"
-                        " also be YES")
-
-            if cleaned_data.get('chronic_since') == NO and subject_status == POS:
-                if cleaned_data.get('who_diagnosis') != NO:
-                    raise forms.ValidationError(
-                        "The mother is HIV positive, because Chronic_since is NO and Who Diagnosis should also be NO")
-
-        except AntenatalEnrollment.DoesNotExist:
-            pass
+        if cleaned_data.get('chronic_since') == YES and self.maternal_hiv_status.result == POS:
+            if cleaned_data.get('who_diagnosis') != YES:
+                raise forms.ValidationError(
+                    "The mother is HIV positive, because Chronic_since is YES and Who Diagnosis should"
+                    " also be YES")
+        if cleaned_data.get('chronic_since') == NO and self.maternal_hiv_status.result == POS:
+            if cleaned_data.get('who_diagnosis') != NO:
+                raise forms.ValidationError(
+                    "The mother is HIV positive, because Chronic_since is NO and Who Diagnosis should also be NO")
 
     def validate_who_diagnosis_who_chronic_list(self):
         cleaned_data = self.cleaned_data
-        try:
-            if not cleaned_data.get('who'):
+        if not cleaned_data.get('who'):
+            raise forms.ValidationError(
+                "Question5: Mother has prior chronic illness, they should be listed")
+        if cleaned_data.get('who_diagnosis') == NOT_APPLICABLE:
+            if self.validate_not_applicable_not_there('who') and self.maternal_hiv_status.result == NEG:
                 raise forms.ValidationError(
-                    "Question5: Mother has prior chronic illness, they should be listed")
-            status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
-            subject_status = status_helper.hiv_status
-
-            if cleaned_data.get('who_diagnosis') == NOT_APPLICABLE:
-                if self.validate_not_applicable_not_there('who') and subject_status == NEG:
-                    raise forms.ValidationError(
-                        "Question5: Participant is HIV Negative, do not give a listing, rather give N/A")
-                if self.validate_not_applicable_and_other_options('who'):
-                    raise forms.ValidationError(
-                        "Question5: Participant is HIV Negative, do not give a listing, only give N/A")
-            if cleaned_data.get('who_diagnosis') == YES:
-                if self.validate_not_applicable_in_there('who') and subject_status == POS:
-                    raise forms.ValidationError(
-                        'Question5: Participant indicated that they had WHO stage III and IV, '
-                        'list of diagnosis cannot be N/A')
-
-            if cleaned_data.get('who_diagnosis') == NO:
-                if self.validate_not_applicable_not_there('who') and subject_status == POS:
-                    raise forms.ValidationError(
-                        'Question5: The mother does not have prior who stage III and IV illnesses. Should provide N/A')
-                if self.validate_not_applicable_and_other_options('who'):
-                    raise forms.ValidationError(
-                        'Question5: The mother does not have prior who stage III and IV illnesses. '
-                        'Should only provide N/A')
-
-        except AntenatalEnrollment.DoesNotExist:
-                pass
+                    "Question5: Participant is HIV Negative, do not give a listing, rather give N/A")
+            if self.validate_not_applicable_and_other_options('who'):
+                raise forms.ValidationError(
+                    "Question5: Participant is HIV Negative, do not give a listing, only give N/A")
+        if cleaned_data.get('who_diagnosis') == YES:
+            if self.validate_not_applicable_in_there('who') and self.maternal_hiv_status.result == POS:
+                raise forms.ValidationError(
+                    'Question5: Participant indicated that they had WHO stage III and IV, '
+                    'list of diagnosis cannot be N/A')
+        if cleaned_data.get('who_diagnosis') == NO:
+            if self.validate_not_applicable_not_there('who') and self.maternal_hiv_status.result == POS:
+                raise forms.ValidationError(
+                    'Question5: The mother does not have prior who stage III and IV illnesses. Should provide N/A')
+            if self.validate_not_applicable_and_other_options('who'):
+                raise forms.ValidationError(
+                    'Question5: The mother does not have prior who stage III and IV illnesses. '
+                    'Should only provide N/A')
 
     def validate_mother_father_chronic_illness_multiple_selection(self):
-
         if self.validate_many_to_many_not_blank('mother_chronic'):
             raise forms.ValidationError(
                 'Question6: The field for the chronic illnesses of the mother should not be left blank')
-
         if self.validate_not_applicable_and_other_options('mother_chronic'):
             raise forms.ValidationError('Question6: You cannot select options that have N/A in them')
-
         if self.validate_many_to_many_not_blank('father_chronic'):
             raise forms.ValidationError(
                 'Question8: The field for the chronic illnesses of the father should not be left blank')
-
         if self.validate_not_applicable_and_other_options('father_chronic'):
             raise forms.ValidationError('Question8: You cannot select options that have N/A in them')
 
     def validate_mother_medications_multiple_selections(self):
-
         if self.validate_many_to_many_not_blank('mother_medications'):
             raise forms.ValidationError('Question10: The field for the mothers medications should not be left blank')
-
         if self.validate_not_applicable_and_other_options('mother_medications'):
             raise forms.ValidationError('Question10: You cannot select options that have N/A in them')
 
     def validate_positive_mother_seropositive_yes(self):
         cleaned_data = self.cleaned_data
-        try:
-            status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
-            subject_status = status_helper.hiv_status
-
-            if subject_status == POS:
-                if cleaned_data.get('sero_posetive') == YES:
-                    if not cleaned_data.get('date_hiv_diagnosis'):
-                        raise forms.ValidationError(
-                            "The Mother is Sero-Positive, the approximate date of diagnosis should be supplied")
-
-                    if cleaned_data.get('perinataly_infected') == NOT_APPLICABLE:
-                        raise forms.ValidationError(
-                            "The field for whether the mother is perinataly_infected should not be N/A")
-
-                    if cleaned_data.get('know_hiv_status') == NOT_APPLICABLE:
-                        raise forms.ValidationError(
-                            "The field for whether anyone knows the HIV status of the mother should not be N/A")
-
-                    if cleaned_data.get('lowest_cd4_known') == NOT_APPLICABLE:
-                        raise forms.ValidationError(
-                            "The Mother is HIV Positive, the field for whether the lowest CD4 count is known should"
-                            " not be N/A")
-
-        except AntenatalEnrollment.DoesNotExist:
-                pass
+        if self.maternal_hiv_status.result == POS:
+            if cleaned_data.get('sero_posetive') == YES:
+                if not cleaned_data.get('date_hiv_diagnosis'):
+                    raise forms.ValidationError(
+                        "The Mother is Sero-Positive, the approximate date of diagnosis should be supplied")
+                if cleaned_data.get('perinataly_infected') == NOT_APPLICABLE:
+                    raise forms.ValidationError(
+                        "The field for whether the mother is perinataly_infected should not be N/A")
+                if cleaned_data.get('know_hiv_status') == NOT_APPLICABLE:
+                    raise forms.ValidationError(
+                        "The field for whether anyone knows the HIV status of the mother should not be N/A")
+                if cleaned_data.get('lowest_cd4_known') == NOT_APPLICABLE:
+                    raise forms.ValidationError(
+                        "The Mother is HIV Positive, the field for whether the lowest CD4 count is known should"
+                        " not be N/A")
 
     def validate_positive_mother_seropositive_yes_cd4_known_yes(self):
         cleaned_data = self.cleaned_data
-        try:
-            status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
-            subject_status = status_helper.hiv_status
-            if subject_status == POS:
-                if cleaned_data.get('sero_posetive') == YES:
-                    if cleaned_data.get('lowest_cd4_known') == YES and not cleaned_data.get('cd4_count'):
-                        raise forms.ValidationError(
-                            "The Mothers lowest CD4 count is known, therefore the lowest CD4 count field should be"
-                            " supplied")
-                    if cleaned_data.get('lowest_cd4_known') == YES and not cleaned_data.get('cd4_date'):
-                        raise forms.ValidationError(
-                            "The Mothers lowest CD4 count is known, therefore the date for the CD4 test should be"
-                            " supplied")
-                    if (cleaned_data.get('lowest_cd4_known') == YES and
-                       cleaned_data.get('is_date_estimated') is None):
-                        raise forms.ValidationError(
-                            "The Mothers lowest CD4 count is known, therefore the field for whether the date is"
-                            " estimated should not be None")
-        except AntenatalEnrollment.DoesNotExist:
-                pass
+        if self.maternal_hiv_status.result == POS:
+            if cleaned_data.get('sero_posetive') == YES:
+                if cleaned_data.get('lowest_cd4_known') == YES and not cleaned_data.get('cd4_count'):
+                    raise forms.ValidationError(
+                        "The Mothers lowest CD4 count is known, therefore the lowest CD4 count field should be"
+                        " supplied")
+                if cleaned_data.get('lowest_cd4_known') == YES and not cleaned_data.get('cd4_date'):
+                    raise forms.ValidationError(
+                        "The Mothers lowest CD4 count is known, therefore the date for the CD4 test should be"
+                        " supplied")
+                if (cleaned_data.get('lowest_cd4_known') == YES and
+                   cleaned_data.get('is_date_estimated') is None):
+                    raise forms.ValidationError(
+                        "The Mothers lowest CD4 count is known, therefore the field for whether the date is"
+                        " estimated should not be None")
 
     def validate_positive_mother_seropositive_yes_cd4_known_no(self):
         cleaned_data = self.cleaned_data
-        try:
-            status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
-            subject_status = status_helper.hiv_status
-            if subject_status == POS:
-                if cleaned_data.get('sero_posetive') == YES:
-                    if cleaned_data.get('lowest_cd4_known') == NO and cleaned_data.get('cd4_count'):
-                        raise forms.ValidationError(
-                            "The Mothers lowest CD4 count is not known, therefore the lowest CD4 count field should"
-                            " not be supplied")
-                    if cleaned_data.get('lowest_cd4_known') == NO and cleaned_data.get('cd4_date'):
-                        raise forms.ValidationError(
-                            "The Mothers lowest CD4 count is not known, therefore the date for the CD4 test should"
-                            " be blank")
-                    if (cleaned_data.get('lowest_cd4_known') == NO and
-                            cleaned_data.get('is_date_estimated') is not None):
-                        raise forms.ValidationError(
-                            "The Mothers lowest CD4 count is not known, the field for whether the date is estimated"
-                            " should be None")
-                if cleaned_data.get('sero_posetive') == NO:
-                    raise forms.ValidationError("The mother is HIV Positive, The field for whether she is sero"
-                                                " positive should not be NO")
-        except AntenatalEnrollment.DoesNotExist:
-                pass
+        if self.maternal_hiv_status.result == POS:
+            if cleaned_data.get('sero_posetive') == YES:
+                if cleaned_data.get('lowest_cd4_known') == NO and cleaned_data.get('cd4_count'):
+                    raise forms.ValidationError(
+                        "The Mothers lowest CD4 count is not known, therefore the lowest CD4 count field should"
+                        " not be supplied")
+                if cleaned_data.get('lowest_cd4_known') == NO and cleaned_data.get('cd4_date'):
+                    raise forms.ValidationError(
+                        "The Mothers lowest CD4 count is not known, therefore the date for the CD4 test should"
+                        " be blank")
+                if (cleaned_data.get('lowest_cd4_known') == NO and
+                        cleaned_data.get('is_date_estimated') is not None):
+                    raise forms.ValidationError(
+                        "The Mothers lowest CD4 count is not known, the field for whether the date is estimated"
+                        " should be None")
+            if cleaned_data.get('sero_posetive') == NO:
+                raise forms.ValidationError("The mother is HIV Positive, The field for whether she is sero"
+                                            " positive should not be NO")
 
     def validate_negative_mother_seropositive_no(self):
         cleaned_data = self.cleaned_data
-        try:
-            status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
-            subject_status = status_helper.hiv_status
-            if subject_status == NEG:
-                if cleaned_data.get('sero_posetive') == YES:
-                    raise forms.ValidationError(
-                        "The Mother is HIV Negative she cannot be Sero Positive")
-                if cleaned_data.get('date_hiv_diagnosis'):
-                    raise forms.ValidationError(
-                        "The Mother is HIV Negative, the approximate date of diagnosis should not be supplied")
-                if cleaned_data.get('perinataly_infected') != NOT_APPLICABLE:
-                    raise forms.ValidationError(
-                        "The Mother is HIV Negative, the field for whether she was Perinataly Infected should be N/A")
-                if cleaned_data.get('know_hiv_status') != NOT_APPLICABLE:
-                    raise forms.ValidationError(
-                        "The Mother is HIV Negative, the field for whether anyone knows the if the mother is HIV"
-                        " Positive should be N/A")
-        except AntenatalEnrollment.DoesNotExist:
-                pass
+        if self.maternal_hiv_status.result == NEG:
+            if cleaned_data.get('sero_posetive') == YES:
+                raise forms.ValidationError(
+                    "The Mother is HIV Negative she cannot be Sero Positive")
+            if cleaned_data.get('date_hiv_diagnosis'):
+                raise forms.ValidationError(
+                    "The Mother is HIV Negative, the approximate date of diagnosis should not be supplied")
+            if cleaned_data.get('perinataly_infected') != NOT_APPLICABLE:
+                raise forms.ValidationError(
+                    "The Mother is HIV Negative, the field for whether she was Perinataly Infected should be N/A")
+            if cleaned_data.get('know_hiv_status') != NOT_APPLICABLE:
+                raise forms.ValidationError(
+                    "The Mother is HIV Negative, the field for whether anyone knows the if the mother is HIV"
+                    " Positive should be N/A")
 
     def validate_negative_mother_seropositive_no_cd4_not(self):
         cleaned_data = self.cleaned_data
-        try:
-            status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
-            subject_status = status_helper.hiv_status
-            if subject_status == NEG:
-                if cleaned_data.get('lowest_cd4_known') != NOT_APPLICABLE:
-                    raise forms.ValidationError(
-                        "The Mother is HIV Negative, the field for whether the lowest CD4 count is known should be"
-                        " N/A")
-                if cleaned_data.get('cd4_count'):
-                    raise forms.ValidationError(
-                        "The Mother is HIV Negative, The lowest CD4 count field should be blank")
-                if cleaned_data.get('cd4_date'):
-                    raise forms.ValidationError(
-                        "The Mother is HIV Negative, The date for the CD4 Test field should be blank")
-                if cleaned_data.get('is_date_estimated'):
-                    raise forms.ValidationError(
-                        "The Mother is HIV Negative, the field for whether the date for the CD4 test is estimate"
-                        " should be left blank")
-        except AntenatalEnrollment.DoesNotExist:
-                pass
+        if self.maternal_hiv_status.result == NEG:
+            if cleaned_data.get('lowest_cd4_known') != NOT_APPLICABLE:
+                raise forms.ValidationError(
+                    "The Mother is HIV Negative, the field for whether the lowest CD4 count is known should be"
+                    " N/A")
+            if cleaned_data.get('cd4_count'):
+                raise forms.ValidationError(
+                    "The Mother is HIV Negative, The lowest CD4 count field should be blank")
+            if cleaned_data.get('cd4_date'):
+                raise forms.ValidationError(
+                    "The Mother is HIV Negative, The date for the CD4 Test field should be blank")
+            if cleaned_data.get('is_date_estimated'):
+                raise forms.ValidationError(
+                    "The Mother is HIV Negative, the field for whether the date for the CD4 test is estimate"
+                    " should be left blank")
 
     class Meta:
         model = MaternalMedicalHistory
@@ -1086,11 +1015,12 @@ class MaternalObstericalHistoryForm(ModelFormMixin, forms.ModelForm):
                     cleaned_data.get('lost_before_24wks') != 0 or
                     cleaned_data.get('lost_after_24wks') != 0
                 ):
-                    raise forms.ValidationError('You indicated previous pregancies were {}. '
-                                                'Number of pregnancies at or after 24 weeks, '
-                                                'number of living children, '
-                                                'number of children lost after 24 weeks should all be zero.'
-                                                .format(cleaned_data.get('prev_pregnancies')))
+                    raise forms.ValidationError(
+                        'You indicated previous pregancies were {}. '
+                        'Number of pregnancies at or after 24 weeks, '
+                        'number of living children, '
+                        'number of children lost after 24 weeks should all be zero.'.format(
+                            cleaned_data.get('prev_pregnancies')))
 
             if cleaned_data.get('prev_pregnancies') > 1 and ultrasound[0].ga_confirmed < 24:
                 sum_pregnancies = (
@@ -1098,21 +1028,24 @@ class MaternalObstericalHistoryForm(ModelFormMixin, forms.ModelForm):
                     cleaned_data.get('lost_before_24wks') +
                     cleaned_data.get('lost_after_24wks'))
                 if sum_pregnancies != (cleaned_data.get('prev_pregnancies') - 1):
-                    raise forms.ValidationError('The sum of Q3, Q4 and Q5 must all add up to Q2 - 1. Please correct.')
+                    raise forms.ValidationError(
+                        'The sum of Q3, Q4 and Q5 must all add up to Q2 - 1. Please correct.')
 
     def validate_24wks_or_more_pregnancy(self):
         cleaned_data = self.cleaned_data
-        ultrasound = self.check_mother_gestational_age()
-        if not ultrasound:
-            raise forms.ValidationError('Please complete the Ultrasound form first.')
-        else:
-            if cleaned_data.get('prev_pregnancies') > 0 and ultrasound[0].ga_confirmed >= 24:
+        try:
+            maternal_ultrasound_initial = MaternalUltraSoundInitial.objects.get(
+                maternal_visit=cleaned_data.get('maternal_visit'))
+            if cleaned_data.get('prev_pregnancies') > 0 and maternal_ultrasound_initial.ga_confirmed >= 24:
                 sum_pregnancies = (
                     cleaned_data.get('pregs_24wks_or_more') +
                     cleaned_data.get('lost_before_24wks') +
                     cleaned_data.get('lost_after_24wks'))
                 if sum_pregnancies != cleaned_data.get('prev_pregnancies'):
-                    raise forms.ValidationError('The sum of Q3, Q4 and Q5 must be equal to Q2. Please correct.')
+                    raise forms.ValidationError(
+                        'The sum of Q3, Q4 and Q5 must be equal to Q2. Please correct.')
+        except MaternalUltraSoundInitial.DoesNotExist:
+            raise forms.ValidationError('Please complete the Ultrasound form first.')
 
     def validate_live_children(self):
         cleaned_data = self.cleaned_data
@@ -1122,21 +1055,12 @@ class MaternalObstericalHistoryForm(ModelFormMixin, forms.ModelForm):
         if sum_deliv_37_wks != ((cleaned_data.get('prev_pregnancies') - 1) - sum_lost_24_wks):
             raise forms.ValidationError('The sum of Q8 and Q9 must be equal to (Q2 -1) - (Q4 + Q5). Please correct.')
 
-    def check_mother_gestational_age(self):
-        cleaned_data = self.cleaned_data
-        maternal_visit = cleaned_data.get('maternal_visit')
-        return MaternalUltraSoundInitial.objects.filter(maternal_visit=maternal_visit)
-
     class Meta:
         model = MaternalObstericalHistory
         fields = '__all__'
 
 
 class MaternalPostPartumDepForm(ModelFormMixin, forms.ModelForm):
-
-    def clean(self):
-        cleaned_data = super(MaternalPostPartumDepForm, self).clean()
-        return cleaned_data
 
     class Meta:
         model = MaternalPostPartumDep
@@ -1151,7 +1075,7 @@ class MaternalPostPartumFuForm(ModelFormMixin, forms.ModelForm):
         self.validate_hospitalized_yes()
         self.validate_hospitalized_no()
         self.validate_who_dignoses_neg()
-        self.validate_who_dignoses_pos()
+        self.validate_who_diagnoses_pos()
         return cleaned_data
 
     def validate_has_diagnoses(self):
@@ -1201,16 +1125,13 @@ class MaternalPostPartumFuForm(ModelFormMixin, forms.ModelForm):
 
     def validate_who_dignoses_neg(self):
         cleaned_data = self.cleaned_data
-        status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
-        subject_status = status_helper.hiv_status
-
-        if subject_status == NEG:
+        if self.maternal_hiv_status.result == NEG:
             if cleaned_data.get('has_who_dx') != NOT_APPLICABLE:
                 raise forms.ValidationError('The mother is Negative, question 10 for WHO Stage III/IV should be N/A')
             if self.validate_many_to_many_not_blank('who'):
                 raise forms.ValidationError(
                     'Question11: Participant is HIV {}, WHO Diagnosis field should be N/A'.format(
-                        status_helper.hiv_status))
+                        self.maternal_hiv_status.result))
             if self.validate_not_applicable_not_there('who'):
                 raise forms.ValidationError(
                     'The mother is Negative, question 11 for WHO Stage III/IV listing should be N/A')
@@ -1218,12 +1139,9 @@ class MaternalPostPartumFuForm(ModelFormMixin, forms.ModelForm):
                 raise forms.ValidationError(
                     'The mother is Negative, question 11 for WHO Stage III/IV listing should only be N/A')
 
-    def validate_who_dignoses_pos(self):
+    def validate_who_diagnoses_pos(self):
         cleaned_data = self.cleaned_data
-        status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
-        subject_status = status_helper.hiv_status
-
-        if subject_status == POS:
+        if self.maternal_hiv_status.result == POS:
             if cleaned_data.get('has_who_dx') == NOT_APPLICABLE:
                 raise forms.ValidationError(
                     'The mother is positive, question 10 for WHO Stage III/IV should not be N/A')
@@ -1246,12 +1164,14 @@ class MaternalPostPartumFuForm(ModelFormMixin, forms.ModelForm):
         fields = '__all__'
 
 
-class MaternalRandomizationForm(ModelFormMixin, forms.ModelForm):
+class MaternalRandoForm(ModelFormMixin, forms.ModelForm):
 
     def clean(self):
-        cleaned_data = super(MaternalRandomizationForm, self).clean()
-        randomization_helper = Randomization(MaternalRando(**cleaned_data), exception_cls=forms.ValidationError)
-        randomization_helper.verify_hiv_status()
+        cleaned_data = super(MaternalRandoForm, self).clean()
+        antenatal_enrollment = AntenatalEnrollment.objects.get(
+            subject_identifier=cleaned_data.get('maternal_visit').subject_identifier)
+        if antenatal_enrollment.enrollment_hiv_status != POS:
+            raise forms.ValidationError('Mother must be HIV(+) to randomize.')
         return cleaned_data
 
     class Meta:
@@ -1355,10 +1275,6 @@ class MaternalSubstanceUsePriorPregForm(ModelFormMixin, forms.ModelForm):
 
 class MaternalUltraSoundFuForm(ModelFormMixin, forms.ModelForm):
 
-    def clean(self):
-        cleaned_data = super(MaternalUltraSoundFuForm, self).clean()
-        return cleaned_data
-
     class Meta:
         model = MaternalUltraSoundFu
         fields = '__all__'
@@ -1368,8 +1284,18 @@ class MaternalUltraSoundInitialForm(ModelFormMixin, forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalUltraSoundInitialForm, self).clean()
-#         cleaned_data.pop('malformations')
-        MaternalUltraSoundInitial(**cleaned_data).evaluate_edd_confirmed(error_clss=forms.ValidationError)
+        antenatal_enrollment = AntenatalEnrollment.objects.get()
+        lmp = Lmp(
+            lmp=antenatal_enrollment.ga_by_lmp,
+            reference_date=cleaned_data.get('report_datetime'))
+        ultrasound = Ultrasound(
+            ultrasound_date=cleaned_data.get('report_datetime'),
+            ga_confirmed_weeks=cleaned_data.get('ga_by_ultrasound_wks'),
+            ga_confirmed_days=cleaned_data.get('ga_by_ultrasound_days'),
+            ultrasound_edd=cleaned_data.get('est_edd_ultrasound'))
+        edd = Edd(lmp=lmp, ultrasound=ultrasound)
+        if not edd.edd:
+            raise forms.ValidationError('Cannot determine EDD.')
         return cleaned_data
 
     class Meta:
@@ -1417,7 +1343,7 @@ class NvpDispensingForm(ModelFormMixin, forms.ModelForm):
 class RapidTestResultForm(ModelFormMixin, forms.ModelForm):
 
     def clean(self):
-        cleaned_data = super(ModelFormMixin, forms.ModelForm, self).clean()
+        cleaned_data = super(RapidTestResultForm, forms.ModelForm, self).clean()
         if cleaned_data.get('rapid_test_done') == YES:
             if not cleaned_data.get('result_date'):
                 raise forms.ValidationError(
@@ -1443,12 +1369,6 @@ class RapidTestResultForm(ModelFormMixin, forms.ModelForm):
 
 
 class SpecimenConsentForm(BaseSpecimenConsentForm):
-
-    STUDY_CONSENT = MaternalConsent
-
-    def clean(self):
-        cleaned_data = super(SpecimenConsentForm, self).clean()
-        return cleaned_data
 
     class Meta:
         model = SpecimenConsent

@@ -8,15 +8,15 @@ from django.utils import timezone
 from edc_base.utils import convert_from_camel
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_constants.constants import UNK, OTHER
+from edc_registration.models import RegisteredSubject
 
+from td.constants import MATERNAL, INFANT
 from td_infant.models.infant_birth import InfantBirth
-from td_maternal.maternal_status_helper import MaternalStatusHelper
 from td_maternal.enrollment_helper import EnrollmentHelper
+from td_maternal.maternal_hiv_status import MaternalHivStatus
 from td_maternal.models import (
     AntenatalEnrollment, MaternalConsent, MaternalLabourDel, MaternalLocator,
     MaternalRando, MaternalVisit)
-from edc_registration.models import RegisteredSubject
-from td.constants import MATERNAL, INFANT
 
 from .mixins import DashboardMixin, MarqueeViewMixin
 
@@ -82,10 +82,12 @@ class MaternalDashboardView(
 
     @property
     def demographics_data(self):
-        self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
+        maternal_hiv_status = MaternalHivStatus(
+            subject_identifier=self.latest_visit.subject_identifier,
+            reference_datetime=self.latest_visit.report_datetime)
         demographics_data = {}
         if self.antenatal_enrollment:
-            if self.antenatal_enrollment.pending_ultrasound:
+            if self.antenatal_enrollment.ga_pending and self.antenatal_enrollment.is_eligible:
                 demographics_data.update({'antenatal_enrollment_status': 'pending ultrasound'})
             elif self.antenatal_enrollment.is_eligible:
                 demographics_data.update({'antenatal_enrollment_status': 'passed'})
@@ -93,8 +95,8 @@ class MaternalDashboardView(
                 demographics_data.update({'antenatal_enrollment_status': 'failed'})
             else:
                 demographics_data.update({'antenatal_enrollment_status': 'Not filled'})
-        demographics_data.update({'enrollment_hiv_status': self.maternal_status_helper.enrollment_hiv_status})
-        demographics_data.update({'current_hiv_status': self.maternal_status_helper.hiv_status})
+        demographics_data.update({'enrollment_hiv_status': maternal_hiv_status.enrollment_hiv_status})
+        demographics_data.update({'current_hiv_status': maternal_hiv_status.result})
         demographics_data.update({'gestational_age': self.gestational_age})
         demographics_data.update({'delivery_site': self.delivery_site})
         demographics_data.update({'randomized': self.randomized})
@@ -104,7 +106,7 @@ class MaternalDashboardView(
     def latest_visit(self):
         return MaternalVisit.objects.filter(
             appointment__subject_identifier=self.subject_identifier).order_by(
-                '-created').first()
+                '-report_datetime').first()
 
     @property
     def consent(self):
@@ -120,9 +122,7 @@ class MaternalDashboardView(
         return True if show == 'forms' else False
 
     @property
-    def maternal_randomization(self):
-        if not self.maternal_status_helper:
-            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
+    def maternal_rando(self):
         try:
             maternal_rando = MaternalRando.objects.get(
                 maternal_visit__appointment__subject_identifier=self.subject_identifier)
@@ -132,8 +132,6 @@ class MaternalDashboardView(
 
     @property
     def maternal_delivery(self):
-        if not self.maternal_status_helper:
-            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
         try:
             delivery = MaternalLabourDel.objects.get(
                 registered_subject__subject_identifier=self.subject_identifier)
@@ -157,19 +155,15 @@ class MaternalDashboardView(
 
     @property
     def planned_delivery_site(self):
-        if not self.maternal_status_helper:
-            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
-        if self.maternal_randomization and self.maternal_randomization.delivery_clinic != OTHER:
-            return self.maternal_randomization.delivery_clinic
-        elif self.maternal_randomization and self.maternal_randomization.delivery_clinic == OTHER:
-            return self.maternal_randomization.delivery_clinic_other
+        if self.maternal_rando and self.maternal_rando.delivery_clinic != OTHER:
+            return self.maternal_rando.delivery_clinic
+        elif self.maternal_rando and self.maternal_rando.delivery_clinic == OTHER:
+            return self.maternal_rando.delivery_clinic_other
         else:
             return UNK
 
     @property
     def gestational_age(self):
-        if not self.maternal_status_helper:
-            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
         antenatal = self.antenatal_enrollment
         if antenatal:
             enrollment_helper = EnrollmentHelper(antenatal)
@@ -187,8 +181,6 @@ class MaternalDashboardView(
 
     @property
     def antenatal_enrollment(self):
-        if not self.maternal_status_helper:
-            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
         try:
             antenatal_enrollment = AntenatalEnrollment.objects.get(
                 registered_subject__subject_identifier=self.subject_identifier)

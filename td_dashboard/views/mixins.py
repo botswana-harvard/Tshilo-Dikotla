@@ -5,26 +5,21 @@ from django.apps import apps
 from django.urls.base import reverse
 
 from edc_base.utils import get_utcnow
+from edc_metadata.models import CrfMetadata, RequisitionMetadata
 
-from td_maternal.models.maternal_crf_meta_data import CrfMetadata
-from td_maternal.models.requisition_meta_data import RequisitionMetadata
 from td.models import Appointment
 
 
-class DashboardMixin(object):
+class DashboardMixin:
 
     def __init__(self):
         self._appointments = []
-        self.selected_appointment = None
-        self._selected_appointment = None
-        self.context = {}
         self._crfs = []
         self._requisitions = []
+        self._selected_appointment = None
+        self.context = {}
         self.dashboard = None
-
-    @property
-    def demographics_data(self):
-        return {}
+        self.selected_appointment = None
 
     @property
     def appointments(self):
@@ -137,15 +132,10 @@ class DashboardMixin(object):
 class MarqueeViewMixin:
 
     def __init__(self):
-        self.context = {}
-        self.markey_next_row = 4
         self.consent_model = None
-        self.enrollments_models = []
         self.dashboard = None
-
-    def get_context_data(self, **kwargs):
-        self.context = super(MarqueeViewMixin, self).get_context_data(**kwargs)
-        return self.context
+        self.enrollments_models = []
+        self.markey_next_row = 4
 
     @property
     def demographics(self):
@@ -162,10 +152,6 @@ class MarqueeViewMixin:
             demographics['Planned delivery site'] = self.demographics_data.get('delivery_site'),
             demographics['Randomized'] = (self.demographics_data.get('randomized'),)
         return demographics
-
-    @property
-    def demographics_data(self):
-        return {}
 
     @property
     def consent(self):

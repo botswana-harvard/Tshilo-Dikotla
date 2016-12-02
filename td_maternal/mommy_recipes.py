@@ -45,7 +45,7 @@ maternaleligibility = Recipe(
 
 maternalconsent = Recipe(
     MaternalConsent,
-    maternal_eligibility=foreign_key(maternaleligibility),
+    # maternal_eligibility=foreign_key(maternaleligibility),
     study_site='40',
     consent_datetime=get_utcnow,
     dob=fake.dob_for_consenting_adult,
@@ -170,7 +170,7 @@ specimenconsent = Recipe(
     may_store_samples=YES,
     is_literate=YES)
 
-maternalrandomization = Recipe(
+maternalrando = Recipe(
     MaternalRando,
     site='Gaborone',
     sid=1,

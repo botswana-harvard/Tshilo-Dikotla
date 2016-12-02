@@ -3,11 +3,12 @@ from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NO, NEG, NOT_APPLICABLE, UNK, IND
+from edc_metadata.models import RequisitionMetadata
 from edc_registration.models import RegisteredSubject
 
 from td.models import Appointment
-from td_maternal.maternal_status_helper import MaternalStatusHelper
-from td_maternal.models import RequisitionMetadata
+
+from ..maternal_hiv_status import MaternalHivStatus
 
 from .base_test_case import BaseTestCase
 
@@ -40,8 +41,10 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2020M')
         maternal_visit_2020M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        status_helper = MaternalStatusHelper(maternal_visit_2020M)
-        self.assertEqual(status_helper.hiv_status, POS)
+        maternal_hiv_status = MaternalHivStatus(
+            subject_identifier=maternal_visit_2020M.subject_identifier,
+            reference_datetime=maternal_visit_2020M.report_datetime)
+        self.assertEqual(maternal_hiv_status.result, POS)
         self.assertEqual(RequisitionMetadata.objects.filter(entry_status='REQUIRED',
                                                             model='td_lab.maternalrequisition',
                                                             panel_name='PBMC VL',
@@ -106,8 +109,10 @@ class TestMaternalStatusHelper(BaseTestCase):
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
         maternal_visit_2010M = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        status_helper = MaternalStatusHelper(maternal_visit_2010M)
-        self.assertEqual(status_helper.hiv_status, NEG)
+        maternal_hiv_status = MaternalHivStatus(
+            subject_identifier=maternal_visit_2010M.subject_identifier,
+            reference_datetime=maternal_visit_2010M.report_datetime)
+        self.assertEqual(maternal_hiv_status.result, NEG)
         mommy.make_recipe('td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result=IND)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2020M')
@@ -116,8 +121,10 @@ class TestMaternalStatusHelper(BaseTestCase):
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2060M')
         maternal_visit_2060M = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        status_helper = MaternalStatusHelper(maternal_visit_2060M)
-        self.assertEqual(status_helper.hiv_status, IND)
+        maternal_hiv_status = MaternalHivStatus(
+            subject_identifier=maternal_visit_2060M.subject_identifier,
+            reference_datetime=maternal_visit_2060M.report_datetime)
+        self.assertEqual(maternal_hiv_status.result, IND)
 
     def test_neg_status_from_enrollment(self):
         """test that we can figure out a negative status with just the enrollment status."""
@@ -135,8 +142,10 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2020M')
         maternal_visit_2020M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        status_helper = MaternalStatusHelper(maternal_visit_2020M)
-        self.assertEqual(status_helper.hiv_status, NEG)
+        maternal_hiv_status = MaternalHivStatus(
+            subject_identifier=maternal_visit_2020M.subject_identifier,
+            reference_datetime=maternal_visit_2020M.report_datetime)
+        self.assertEqual(maternal_hiv_status.result, NEG)
 
     def test_neg_status_from_rapid_test(self):
         """test that we can figure out a negative status taking in to consideration rapid tests."""
@@ -151,15 +160,19 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
         maternal_visit_2010M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        status_helper = MaternalStatusHelper(maternal_visit_2010M)
-        self.assertEqual(status_helper.hiv_status, NEG)
+        maternal_hiv_status = MaternalHivStatus(
+            subject_identifier=maternal_visit_2010M.subject_identifier,
+            reference_datetime=maternal_visit_2010M.report_datetime)
+        self.assertEqual(maternal_hiv_status.result, NEG)
         mommy.make_recipe('td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result=NEG)
         # Visit within 3months of rapid test.
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2020M')
         maternal_visit_2020M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        status_helper = MaternalStatusHelper(maternal_visit_2020M)
-        self.assertEqual(status_helper.hiv_status, NEG)
+        maternal_hiv_status = MaternalHivStatus(
+            subject_identifier=maternal_visit_2020M.subject_identifier,
+            reference_datetime=maternal_visit_2020M.report_datetime)
+        self.assertEqual(maternal_hiv_status.result, NEG)
 
     def test_unkown_status(self):
         """test that a negative result that is more than 3months old will lead to UNK status."""
@@ -174,8 +187,10 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
         maternal_visit_2010M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        status_helper = MaternalStatusHelper(maternal_visit_2010M)
-        self.assertEqual(status_helper.hiv_status, NEG)
+        maternal_hiv_status = MaternalHivStatus(
+            subject_identifier=maternal_visit_2010M.subject_identifier,
+            reference_datetime=maternal_visit_2010M.report_datetime)
+        self.assertEqual(maternal_hiv_status.result, NEG)
         mommy.make_recipe(
             'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M,
             result_date=(get_utcnow() - relativedelta(months=4)).date(),
@@ -184,25 +199,10 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2020M')
         maternal_visit_2020M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        status_helper = MaternalStatusHelper(maternal_visit_2020M)
-        self.assertEqual(status_helper.hiv_status, UNK)
-
-    def test_return_previous_visit_ordering(self):
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
-        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
-        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
-        maternal_visit_2010M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        status_helper = MaternalStatusHelper(maternal_visit_2010M)
-        self.assertEqual(len(status_helper.previous_visits), 5)
-        self.assertEqual(status_helper.previous_visits[0].appointment.visit_code, '1000M')
-        self.assertEqual(status_helper.previous_visits[4].appointment.visit_code, '2010M')
+        maternal_hiv_status = MaternalHivStatus(
+            subject_identifier=maternal_visit_2020M.subject_identifier,
+            reference_datetime=maternal_visit_2020M.report_datetime)
+        self.assertEqual(maternal_hiv_status.result, UNK)
 
     def test_valid_hiv_neg_week32_test_date(self):
         """Test that NEG status is valid for week32_test_date"""
@@ -232,8 +232,10 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
         maternal_visit_1020M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        status_helper = MaternalStatusHelper(maternal_visit_1020M)
-        self.assertEqual(status_helper.hiv_status, NEG)
+        maternal_hiv_status = MaternalHivStatus(
+            subject_identifier=maternal_visit_1020M.subject_identifier,
+            reference_datetime=maternal_visit_1020M.report_datetime)
+        self.assertEqual(maternal_hiv_status.result, NEG)
 
     def create_mother(self, status_options):
         self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **status_options)

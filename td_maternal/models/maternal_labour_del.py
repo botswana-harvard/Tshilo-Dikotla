@@ -8,12 +8,11 @@ from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
 from edc_protocol.validators import datetime_not_before_study_start
+from edc_registration.model_mixins import SubjectIdentifierFromRegisteredSubjectModelMixin
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
-
-from td_list.models import DeliveryComplications
-
 from td.choices import DX_MATERNAL
+from td_list.models import DeliveryComplications
 
 from ..managers import MaternalLabourDelManager, MaternalLabDelDxTManager
 from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION_REASON
@@ -21,15 +20,10 @@ from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION
 from .maternal_crf_model import MaternalCrfModel
 
 
-class MaternalLabourDel(RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin, BaseUuidModel):
+class MaternalLabourDel(SubjectIdentifierFromRegisteredSubjectModelMixin, CreateAppointmentsMixin,
+                        RequiresConsentMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
-
-    subject_identifier = models.CharField(
-        verbose_name="Subject Identifier",
-        max_length=50,
-        unique=True,
-        editable=False)
 
     report_datetime = models.DateTimeField(
         verbose_name="Report date",
@@ -124,13 +118,8 @@ class MaternalLabourDel(RequiresConsentMixin, CreateAppointmentsMixin, UrlMixin,
     def __str__(self):
         return "{0}".format(self.subject_identifier)
 
-#     def natural_key(self):
-#         return self.registered_subject.natural_key()
-#     natural_key.dependencies = ['edc_registration.registeredsubject']
-
-    @property
-    def subject_identifier(self):
-        return self.subject_identifier
+    def natural_key(self):
+        return (self.subject_identifier, )
 
     class Meta:
         app_label = 'td_maternal'
@@ -187,6 +176,8 @@ class MaternalLabDelMed(MaternalCrfModel):
         max_length=250,
         blank=True,
         null=True)
+
+    history = HistoricalRecords()
 
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
@@ -247,6 +238,8 @@ class MaternalHivInterimHx(MaternalCrfModel):
         blank=True,
         null=True)
 
+    history = HistoricalRecords()
+
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Maternal Hiv Interim Hx"
@@ -277,6 +270,8 @@ class MaternalLabDelDx(MaternalCrfModel):
         max_length=3,
         choices=YES_NO,
         help_text="If yes, Select all that apply in the table, only report grade 3 or 4 diagnoses")
+
+    history = HistoricalRecords()
 
     class Meta:
         app_label = 'td_maternal'
@@ -310,6 +305,8 @@ class MaternalLabDelDxT (CrfInlineModelMixin, BaseUuidModel):
         choices=YES_NO)
 
     objects = MaternalLabDelDxTManager()
+
+    history = HistoricalRecords()
 
     def natural_key(self):
         return (self.lab_del_dx, ) + self.maternal_lab_del_dx.natural_key()

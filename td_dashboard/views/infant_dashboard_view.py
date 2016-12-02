@@ -10,10 +10,8 @@ from edc_base.utils import get_utcnow
 from edc_base.view_mixins import EdcBaseViewMixin
 
 from td.constants import INFANT
-from td_infant.models.infant_birth import InfantBirth
-from td_infant.models.infant_visit import InfantVisit
-from td_maternal.models.maternal_consent import MaternalConsent
-from td_maternal.models.maternal_locator import MaternalLocator
+from td_infant.models import InfantBirth, InfantVisit
+from td_maternal.models import MaternalConsent, MaternalLocator
 
 from .mixins import MarqueeViewMixin, DashboardMixin
 
@@ -24,7 +22,6 @@ class InfantDashboardView(
     def __init__(self, **kwargs):
         super(InfantDashboardView, self).__init__(**kwargs)
         self.request = None
-        self.context = {}
         self.show = None
         self._crfs = []
         self._requisitions = []
@@ -38,27 +35,21 @@ class InfantDashboardView(
         ]
 
     def get_context_data(self, **kwargs):
-        self.context = super().get_context_data(**kwargs)
-        self.context.update(
-            title=settings.PROJECT_TITLE,
-            project_name=settings.PROJECT_TITLE,
-            site_header=admin.site.site_header,
-        )
+        self.context = super(InfantDashboardView, self).get_context_data(**kwargs)
         self.context.update({
-            'demographics': self.demographics,
-            'markey_next_row': self.markey_next_row,
-            'requisitions': self.requisitions,
-            'crfs': self.crfs,
-            'enrollments': self.enrollments,
             'appointments': self.appointments,
+            'consent': self.consent,
+            'consents': [],
+            'crfs': self.crfs,
+            'dashboard_type': INFANT,
             'dashboard_url': self.dashboard_url,
+            'dashboard_url': self.dashboard_url,
+            'demographics': self.demographics,
+            'enrollments': self.enrollments,
+            'locator': self.locator,
+            'requisitions': self.requisitions,
             'selected_appointment': self.selected_appointment,
             'subject_identifier': self.subject_identifier,
-            'dashboard_url': self.dashboard_url,
-            'consents': [],
-            'consent': self.consent,
-            'dashboard_type': INFANT,
-            'locator': self.locator,
         })
         return self.context
 

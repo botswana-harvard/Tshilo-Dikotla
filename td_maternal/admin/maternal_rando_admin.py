@@ -1,14 +1,15 @@
 from django.contrib import admin
 
+from ..forms import MaternalRandoForm
 from ..models import MaternalRando
-from ..forms import MaternalRandomizationForm
+
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
 @admin.register(MaternalRando)
 class MartenalRandoAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
-    form = MaternalRandomizationForm
+    form = MaternalRandoForm
 
     fields = ('maternal_visit', 'dispensed', 'comment', 'subject_identifier', 'initials', 'rx',
               'site', 'randomization_datetime', 'delivery_clinic', 'delivery_clinic_other')

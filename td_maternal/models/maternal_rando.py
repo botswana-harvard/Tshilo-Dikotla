@@ -1,5 +1,4 @@
 from django.db import models
-from django.apps import apps
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 
@@ -51,10 +50,6 @@ class MaternalRando (MaternalCrfModel):
     rx = EncryptedCharField(
         verbose_name="Treatment Assignment")
 
-    subject_identifier = models.CharField(
-        verbose_name="Subject Identifier",
-        max_length=16)
-
     randomization_datetime = models.DateTimeField(
         verbose_name='Randomization Datetime')
 
@@ -93,11 +88,15 @@ class MaternalRando (MaternalCrfModel):
 
     def save(self, *args, **kwargs):
         if not self.id:
-            randomization_helper = Randomization(self, ValidationError)
-            (self.site, self.sid, self.rx, self.subject_identifier,
-             self.randomization_datetime, self.initials) = randomization_helper.randomize()
+            randomization = Randomization(self, ValidationError)
+            self.initials = randomization.initials
+            self.randomization_datetime = randomization.randomization_datetime
+            self.rx = randomization.rx
+            self.sid = randomization.sid
+            self.site = randomization.study_site
         super(MaternalRando, self).save(*args, **kwargs)
 
+<<<<<<< HEAD:td_maternal/models/maternal_randomization.py
     def natural_key(self):
         return (self.sid, ) + self.registered_subject.natural_key()
 
@@ -106,6 +105,8 @@ class MaternalRando (MaternalCrfModel):
         AntenatalEnrollment = apps.get_model('td_maternal', 'antenatalenrollment')
         return AntenatalEnrollment.objects.get(subject_identifier=self.maternal_visit.appointment.subject_identifier)
 
+=======
+>>>>>>> 731ed385345ce31ded9932770f0c860d0bcde079:td_maternal/models/maternal_rando.py
     class Meta(MaternalCrfModel.Meta):
         app_label = "td_maternal"
         verbose_name = "Maternal Randomization"
