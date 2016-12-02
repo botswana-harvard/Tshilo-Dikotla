@@ -45,7 +45,8 @@ maternaleligibility = Recipe(
 
 maternalconsent = Recipe(
     MaternalConsent,
-    # maternal_eligibility=foreign_key(maternaleligibility),
+    maternal_eligibility_reference=None,
+    subject_identifier=None,
     study_site='40',
     consent_datetime=get_utcnow,
     dob=fake.dob_for_consenting_adult,
