@@ -11,7 +11,7 @@ class MaternalHivStatus(PostEnrollment):
         self.subject_identifier = subject_identifier
         antenatal_enrollment = AntenatalEnrollment.objects.get(subject_identifier=subject_identifier)
         rapid_test_results = []
-        for obj in RapidTestResult.objects.filter(subject_identifier=subject_identifier):
+        for obj in RapidTestResult.objects.filter(maternal_visit__subject_identifier=subject_identifier):
             rapid_test_results.append(Test(result=obj.result, result_date=obj.result_date))
         super(MaternalHivStatus, self).__init__(
             reference_datetime=reference_datetime,
