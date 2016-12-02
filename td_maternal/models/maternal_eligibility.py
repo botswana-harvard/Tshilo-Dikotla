@@ -21,7 +21,7 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
     This model has no PII."""
 
     reference_pk = models.UUIDField(
-        verbose_name="Eligibility Identifier",
+        verbose_name="Anonymous Reference",
         unique=True,
         default=uuid4,
         editable=False)
