@@ -30,7 +30,6 @@ class TestConsent(TestCase):
             MaternalConsent.objects.get(subject_identifier=rs.subject_identifier)
         except MaternalConsent.DoesNotExist:
             self.fail('MaternalConsent.DoesNotExist unexpectedly raised')
-        print(rs.subject_identifier)
 
     def test_consent_finds_maternal_eligibility(self):
         """Assert consent updates reference from MaternalEligibility."""
