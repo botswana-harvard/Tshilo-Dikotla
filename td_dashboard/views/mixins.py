@@ -127,36 +127,3 @@ class DashboardMixin:
                 admin_model_add_url = reverse('admin:{}_{}_add'.format(app_label, model_name))
                 self._subject_membership_models.append([admin_model_url_label, admin_model_add_url])
         return self._subject_membership_models
-
-
-class MarqueeViewMixin:
-
-    def __init__(self):
-        self.consent_model = None
-        self.dashboard = None
-        self.enrollments_models = []
-        self.markey_next_row = 4
-
-    @property
-    def demographics(self):
-        demographics = OrderedDict()
-        if self.consent:
-            demographics['Name'] = '{}({})'.format(self.consent.first_name, self.consent.initials),
-            demographics['Born'] = self.consent.dob,
-            demographics['Age'] = self.age,
-            demographics['Consented'] = self.consent.consent_datetime,
-            demographics['Antenatal enrollment status'] = self.demographics_data.get('antenatal_enrollment_status'),
-            demographics['Enrollment HIV status'] = self.demographics_data.get('enrollment_hiv_status'),
-            demographics['Current HIV status'] = self.demographics_data.get('current_hiv_status'),
-            demographics['Pregnant, GA'] = self.demographics_data.get('gestational_age'),
-            demographics['Planned delivery site'] = self.demographics_data.get('delivery_site'),
-            demographics['Randomized'] = (self.demographics_data.get('randomized'),)
-        return demographics
-
-    @property
-    def consent(self):
-        return self.consent_model
-
-    @property
-    def age(self):
-        return relativedelta(get_utcnow().date(), self.consent.dob).years

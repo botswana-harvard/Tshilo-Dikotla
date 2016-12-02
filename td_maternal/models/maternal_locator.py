@@ -53,7 +53,9 @@ class MaternalLocator(LocatorModelMixin, MaternalCrfModel):
         blank=True,
         null=True)
 
-#     entry_meta_data_manager = LocalCrfMetaDataManager(MaternalVisit)
+    def save(self, *args, **kwargs):
+        self.subject_identifier = self.appointment.subject_identifier
+        super(MaternalLocator, self).save(*args, **kwargs)
 
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'

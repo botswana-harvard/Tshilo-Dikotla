@@ -131,11 +131,7 @@ def func_show_nvp_dispensing_form(visit_instance, *args):
 
 
 @register()
-<<<<<<< HEAD
 class MaternalVisitRuleGroup(RuleGroup):
-=======
-class MaternalRuleGroup(RuleGroup):
->>>>>>> 731ed385345ce31ded9932770f0c860d0bcde079
 
     require_ultrasound = CrfRule(
         logic=Logic(

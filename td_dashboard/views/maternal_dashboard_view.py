@@ -18,16 +18,14 @@ from td_maternal.models import (
     AntenatalEnrollment, MaternalConsent, MaternalLabourDel, MaternalLocator,
     MaternalRando, MaternalVisit)
 
-from .mixins import DashboardMixin, MarqueeViewMixin
+from .mixins import DashboardMixin
 
 
-class MaternalDashboardView(
-        MarqueeViewMixin, DashboardMixin, EdcBaseViewMixin, TemplateView):
+class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
 
     def __init__(self, **kwargs):
         super(MaternalDashboardView, self).__init__(**kwargs)
         self.request = None
-        self.context = {}
         self.show = None
         self.maternal_status_helper = None
         self._crfs = []
@@ -81,10 +79,26 @@ class MaternalDashboardView(
         return maternal_locator
 
     @property
-    def demographics_data(self):
+    def demographics(self):
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=self.latest_visit.subject_identifier,
             reference_datetime=self.latest_visit.report_datetime)
+        demographics = OrderedDict()
+        if self.consent:
+            demographics['Name'] = '{}({})'.format(self.consent.first_name, self.consent.initials),
+            demographics['Born'] = self.consent.dob,
+            demographics['Age'] = self.age,
+            demographics['Consented'] = self.consent.consent_datetime,
+            demographics['Antenatal enrollment status'] = maternal_hiv_status.enrollment_hiv_status,
+            demographics['Enrollment HIV status'] = maternal_hiv_status.enrollment_hiv_status,
+            demographics['Current HIV status'] = maternal_hiv_status.result,
+            demographics['Pregnant, GA'] = self.gestational_age,
+            demographics['Planned delivery site'] = self.delivery_site,
+            demographics['Randomized'] = (self.randomized,)
+        return demographics
+
+    @property
+    def demographics_data(self):
         demographics_data = {}
         if self.antenatal_enrollment:
             if self.antenatal_enrollment.ga_pending and self.antenatal_enrollment.is_eligible:
@@ -95,11 +109,6 @@ class MaternalDashboardView(
                 demographics_data.update({'antenatal_enrollment_status': 'failed'})
             else:
                 demographics_data.update({'antenatal_enrollment_status': 'Not filled'})
-        demographics_data.update({'enrollment_hiv_status': maternal_hiv_status.enrollment_hiv_status})
-        demographics_data.update({'current_hiv_status': maternal_hiv_status.result})
-        demographics_data.update({'gestational_age': self.gestational_age})
-        demographics_data.update({'delivery_site': self.delivery_site})
-        demographics_data.update({'randomized': self.randomized})
         return demographics_data
 
     @property
