@@ -723,8 +723,9 @@ class MaternalLabourDelForm(ModelFormMixin, forms.ModelForm):
             if (cleaned_data.get('valid_regiment_duration') == YES and
                 (cleaned_data.get('delivery_datetime').date() - relativedelta(weeks=4) <
                     cleaned_data.get('arv_initiation_date'))):
-                raise forms.ValidationError('You indicated that the mother was on REGIMEN for a valid duration, but'
-                                            ' delivery date is within 4weeks of art initiation date. Please correct.')
+                raise forms.ValidationError(
+                    'You indicated that the mother was on REGIMEN for a valid duration, but'
+                    ' delivery date is within 4weeks of art initiation date. Please correct.')
         else:
             if cleaned_data.get('valid_regiment_duration') not in [NOT_APPLICABLE]:
                 raise forms.ValidationError(
