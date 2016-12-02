@@ -1,9 +1,6 @@
 from edc_constants.constants import NOT_APPLICABLE, OTHER
 
-from td.constants import MIN_AGE_OF_CONSENT
-
 from .constants import BROUGHT, REALTIME, CLOTH_NAPPY
-
 
 NAPPY_TYPE = (
     (CLOTH_NAPPY, 'Cloth nappy'),
@@ -26,8 +23,8 @@ STOOL_STORED = (
 )
 
 OFF_STUDY_REASON = [
-    ('not_18'.format(MIN_AGE_OF_CONSENT),
-     ' Mother of infant found to be less than {} years of age'.format(MIN_AGE_OF_CONSENT)),
+    ('not_18'.format(18),
+     ' Mother of infant found to be less than {} years of age'.format(18)),
     ('not_citizen', ' Mother found not be a citizen of Botswana'),
     ('moved', ' Subject will be moving out of study area or unable to stay in study area'),
     ('lost_no_contact', ' Lost to follow-up, unable to locate'),

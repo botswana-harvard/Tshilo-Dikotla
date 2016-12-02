@@ -61,8 +61,9 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
             start=datetime(2016, 5, 1, 0, 0, 0, tzinfo=pytz.utc),
             end=datetime(2017, 10, 30, 0, 0, 0, tzinfo=pytz.utc),
             version='1',
+            age_min=18,
             age_is_adult=18,
-            age_max=64,
+            age_max=50,
             gender=['F']),
     ]
 

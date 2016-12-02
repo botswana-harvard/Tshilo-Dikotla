@@ -14,44 +14,16 @@ from td.models import Appointment
 from .antenatal_enrollment import AntenatalEnrollment
 from .maternal_consent import MaternalConsent
 from .maternal_eligibility import MaternalEligibility
-from .maternal_eligibility_loss import MaternalEligibilityLoss
 from .maternal_labour_del import MaternalLabourDel
 from .maternal_offstudy import MaternalOffstudy
 from .maternal_ultrasound_initial import MaternalUltraSoundInitial
 from .maternal_visit import MaternalVisit
 
 
-@receiver(post_save, weak=False, dispatch_uid="maternal_eligibility_on_post_save")
+@receiver(post_save, weak=False, sender=MaternalEligibility, dispatch_uid="maternal_eligibility_on_post_save")
 def maternal_eligibility_on_post_save(sender, instance, raw, created, using, **kwargs):
-    """Creates/Updates RegisteredSubject and creates or deletes MaternalEligibilityLoss
-
-    If participant is consented, does nothing
-
-    * If registered subject does not exist, it will be created and some attrs
-      updated from the MaternalEligibility;
-    * If registered subject already exists will update some attrs from the MaternalEligibility;
-    * If registered subject and consent already exist, does nothing.
-
-    Note: This is the ONLY place RegisteredSubject is created for mothers in this project."""
-    if not raw:
-        if isinstance(instance, MaternalEligibility) and not kwargs.get('update_fields'):
-            if not instance.is_eligible:
-                try:
-                    maternal_eligibility_loss = MaternalEligibilityLoss.objects.get(
-                        maternal_eligibility_id=instance.id)
-                    maternal_eligibility_loss.report_datetime = instance.report_datetime
-                    maternal_eligibility_loss.reason_ineligible = instance.ineligibility
-                    maternal_eligibility_loss.user_modified = instance.user_modified
-                    maternal_eligibility_loss.save()
-                except MaternalEligibilityLoss.DoesNotExist:
-                    MaternalEligibilityLoss.objects.create(
-                        maternal_eligibility_id=instance.id,
-                        report_datetime=instance.report_datetime,
-                        reason_ineligible=instance.ineligibility,
-                        user_created=instance.user_created,
-                        user_modified=instance.user_modified)
-            else:
-                MaternalEligibilityLoss.objects.filter(maternal_eligibility_id=instance.id).delete()
+    if not raw and not kwargs.get('update_fields'):
+        instance.create_update_or_delete_eligibility_loss()
 
 
 @receiver(post_save, sender=MaternalConsent, dispatch_uid="maternalconsent_on_post_save")

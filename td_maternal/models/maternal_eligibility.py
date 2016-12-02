@@ -1,19 +1,18 @@
+from uuid import uuid4
+
 from django.db import models
 from django.apps import apps
 
-from edc_base.model.models import BaseUuidModel
+from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_base.model.validators import datetime_not_future
-from edc_base.utils import get_utcnow, get_uuid
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
 from edc_base.model.models import HistoricalRecords
 from edc_consent.site_consents import site_consents
 from edc_protocol.validators import datetime_not_before_study_start
 
-from td.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
-
 from ..managers import MaternalEligibilityManager
-from edc_base.model.models.url_mixin import UrlMixin
+from td_maternal.models.maternal_eligibility_loss import MaternalEligibilityLoss
 
 
 class MaternalEligibility (UrlMixin, BaseUuidModel):
@@ -21,11 +20,10 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
 
     This model has no PII."""
 
-    eligibility_id = models.CharField(
-        verbose_name="Eligibility Identifier",
-        max_length=36,
+    reference_pk = models.UUIDField(
+        verbose_name="Anonymous Reference",
         unique=True,
-        default=get_uuid,
+        default=uuid4,
         editable=False)
 
     report_datetime = models.DateTimeField(
@@ -66,18 +64,19 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
     history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
-        self.is_eligible, error_message = self.check_eligibility()
-        self.ineligibility = error_message  # error_message not None if is_eligible is False
+        self.is_eligible, self.ineligibility = self.get_is_eligible()
         super(MaternalEligibility, self).save(*args, **kwargs)
 
-    def check_eligibility(self):
+    def get_is_eligible(self):
         """Returns a tuple (True, None) if mother is eligible otherwise (False, error_messsage) where
         error message is the reason for eligibility test failed."""
         error_message = []
-        if self.age_in_years < MIN_AGE_OF_CONSENT:
-            error_message.append('Mother is under {}'.format(MIN_AGE_OF_CONSENT))
-        if self.age_in_years > MAX_AGE_OF_CONSENT:
-            error_message.append('Mother is too old (>{})'.format(MAX_AGE_OF_CONSENT))
+        consent_config = site_consents.get_consent_config(
+            'td_maternal.maternalconsent', report_datetime=self.report_datetime)
+        if self.age_in_years < consent_config.age_min:
+            error_message.append('Mother is under {}'.format(consent_config.age_min))
+        if self.age_in_years > consent_config.age_max:
+            error_message.append('Mother is too old (>{})'.format(consent_config.age_max))
         if self.has_omang == NO:
             error_message.append('Not a citizen')
         is_eligible = False if error_message else True
@@ -89,6 +88,25 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
     def natural_key(self):
         return self.eligibility_id
 
+    def create_update_or_delete_eligibility_loss(self):
+        if self.is_eligible:
+            MaternalEligibilityLoss.objects.filter(maternal_eligibility_reference=self.reference_pk).delete()
+        else:
+            try:
+                maternal_eligibility_loss = MaternalEligibilityLoss.objects.get(
+                    maternal_eligibility_reference=self.reference_pk)
+                maternal_eligibility_loss.report_datetime = self.report_datetime
+                maternal_eligibility_loss.reason_ineligible = self.ineligibility
+                maternal_eligibility_loss.user_modified = self.user_modified
+                maternal_eligibility_loss.save()
+            except MaternalEligibilityLoss.DoesNotExist:
+                MaternalEligibilityLoss.objects.create(
+                    maternal_eligibility_reference=self.reference_pk,
+                    report_datetime=self.report_datetime,
+                    reason_ineligible=self.ineligibility,
+                    user_created=self.user_created,
+                    user_modified=self.user_modified)
+
     @property
     def maternal_eligibility_loss(self):
         MaternalEligibilityLoss = apps.get_model('td_maternal', 'MaternalEligibilityLoss')
@@ -98,19 +116,6 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
         except MaternalEligibilityLoss.DoesNotExist:
             maternal_eligibility_loss = None
         return maternal_eligibility_loss
-
-    @property
-    def have_latest_consent(self):
-        MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
-        return (MaternalConsent.objects.filter(
-            subject_identifier=self.subject_identifier).order_by('-version').first().version ==
-            site_consents.get_by_datetime(MaternalConsent, get_utcnow()).version)
-
-    @property
-    def previous_consents(self):
-        MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
-        return MaternalConsent.objects.filter(
-            subject_identifier=self.subject_identifier).order_by('version')
 
     class Meta:
         app_label = 'td_maternal'
