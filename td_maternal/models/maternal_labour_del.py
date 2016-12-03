@@ -104,7 +104,6 @@ class MaternalLabourDel(EnrollmentModelMixin, CreateAppointmentsMixin, RequiresC
 
     def save(self, *args, **kwargs):
         self.live_infants_to_register = 1
-        print(self.subject_identifier, self.subject_identifier)
         super(MaternalLabourDel, self).save(*args, **kwargs)
 
     def __str__(self):

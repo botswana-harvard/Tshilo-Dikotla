@@ -5,7 +5,6 @@ from edc_base.model.models import BaseUuidModel, HistoricalRecords, UrlMixin
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
-from ..managers import EnrollmentManager
 
 from ..managers import EnrollmentManager
 

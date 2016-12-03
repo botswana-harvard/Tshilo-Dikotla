@@ -101,3 +101,27 @@ class TestMaternalSerializers(TestCase):
                     self.assertEqual(maternalarvinthispreg.pk, deserialised_obj.object.pk)
                 elif json_tx.get('model') == 'td_maternal.maternalclinicalmeasurementsone':
                     self.assertEqual(maternalclinicalmeasurementsone.pk, deserialised_obj.object.pk)
+
+    def test_antenatal_enrollmenttwo_crfs_deserialising(self):
+        mommy.make('td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit, number_of_gestations=1)
+        antenatalenrollmenttwo = mommy.make_recipe(
+            'td_maternal.antenatalenrollmenttwo', subject_identifier=self.maternal_consent.subject_identifier)
+        appointment = Appointment.objects.get(
+            subject_identifier=self.maternal_consent.subject_identifier, visit_code='1010M')
+        mommy.make_recipe('td_maternal.maternalvisit', appointment=appointment, reason='scheduled')
+
+        maternallabourdel = mommy.make_recipe(
+            'td_maternal.maternallabourdel', subject_identifier=self.maternal_consent.subject_identifier)
+
+        outgoing_transactions = OutgoingTransaction.objects.all()
+        self.assertGreater(outgoing_transactions.count(), 0)
+        for outgoing_transaction in outgoing_transactions:
+            json_tx = json.loads(outgoing_transaction.aes_decrypt(outgoing_transaction.tx))[0]
+            for deserialised_obj in serializers.deserialize(
+                    "json", outgoing_transaction.aes_decrypt(outgoing_transaction.tx),
+                    use_natural_foreign_keys=True,
+                    use_natural_primary_keys=True):
+                if json_tx.get('model') == 'td_maternal.antenatalenrollmenttwo':
+                    self.assertEqual(antenatalenrollmenttwo.pk, deserialised_obj.object.pk)
+                elif json_tx.get('model') == 'td_maternal.maternalLabourdel':
+                    self.assertEqual(maternallabourdel.pk, deserialised_obj.object.pk)
