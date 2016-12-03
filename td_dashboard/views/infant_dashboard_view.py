@@ -13,11 +13,10 @@ from td.constants import INFANT
 from td_infant.models import InfantBirth, InfantVisit
 from td_maternal.models import MaternalConsent, MaternalLocator
 
-from .mixins import MarqueeViewMixin, DashboardMixin
+from .mixins import DashboardMixin
 
 
-class InfantDashboardView(
-        MarqueeViewMixin, EdcBaseViewMixin, DashboardMixin, TemplateView):
+class InfantDashboardView(EdcBaseViewMixin, DashboardMixin, TemplateView):
 
     def __init__(self, **kwargs):
         super(InfantDashboardView, self).__init__(**kwargs)
@@ -30,9 +29,7 @@ class InfantDashboardView(
         self.dashboard = 'td_infant'
         self.template_name = 'td_dashboard/infant/subject_dashboard.html'
         self._selected_appointment = None
-        self.enrollments_models = [
-            'td_infant.infantbirth'
-        ]
+        self.enrollments_models = ['td_infant.infantbirth']
 
     def get_context_data(self, **kwargs):
         self.context = super(InfantDashboardView, self).get_context_data(**kwargs)

@@ -108,7 +108,7 @@ class DashboardMixin:
 
     def enrollments(self):
         """ """
-        self._subject_membership_models = []
+        enrollments = []
         for model_lower in self.enrollments_models:
             app_label, model_name = model_lower.split('.')
             model = apps.get_app_config(self.dashboard).get_model(model_name)
@@ -117,9 +117,9 @@ class DashboardMixin:
                 obj = model.objects.get(registered_subject__subject_identifier=self.subject_identifier)
                 admin_model_url_label = "{}({})".format(model._meta.verbose_name, 'complete')
                 admin_model_change_url = obj.get_absolute_url()
-                self._subject_membership_models.append([admin_model_url_label, admin_model_change_url])
+                enrollments.append([admin_model_url_label, admin_model_change_url])
             except model.DoesNotExist:
                 admin_model_url_label = "{}({})".format(model._meta.verbose_name, 'new')
                 admin_model_add_url = reverse('admin:{}_{}_add'.format(app_label, model_name))
-                self._subject_membership_models.append([admin_model_url_label, admin_model_add_url])
-        return self._subject_membership_models
+                self.enrollments.append([admin_model_url_label, admin_model_add_url])
+        return enrollments

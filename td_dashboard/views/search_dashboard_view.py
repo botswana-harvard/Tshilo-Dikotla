@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.conf import settings
 from django.views.generic import TemplateView, FormView
 
-from td_infant.models.infant_birth import InfantBirth
 from td_maternal.models.maternal_eligibility import MaternalEligibility
 
 from ..forms import MaternalEligibilityCrispyForm
@@ -24,13 +23,7 @@ class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
             subject_identifier = form.cleaned_data['subject_identifier']
             try:
                 self.maternal_eligibility = MaternalEligibility.objects.get(
-                    registered_subject__subject_identifier=subject_identifier)
-                subject_identifier_infant = subject_identifier + '-10'
-                try:
-                    self.infant = InfantBirth.objects.get(
-                        registered_subject__subject_identifier=subject_identifier_infant)
-                except InfantBirth.DoesNotExist:
-                    pass
+                    maternal_consent__subject_identifier=subject_identifier)
             except MaternalEligibility.DoesNotExist:
                 form.add_error('subject_identifier',
                                'Maternal eligibility not found. Please search again or add a new maternal eligibility.')

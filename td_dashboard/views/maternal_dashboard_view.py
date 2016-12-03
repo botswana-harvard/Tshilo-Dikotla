@@ -47,7 +47,6 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
         )
         self.context.update({
             'demographics': self.demographics,
-            'markey_next_row': self.markey_next_row,
             'requisitions': self.requisitions,
             'crfs': self.crfs,
             'selected_appointment': self.selected_appointment,
@@ -72,8 +71,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
     @property
     def locator(self):
         try:
-            maternal_locator = MaternalLocator.objects.get(
-                registered_subject__subject_identifier=self.subject_identifier)
+            maternal_locator = MaternalLocator.objects.get(subject_identifier=self.subject_identifier)
         except MaternalLocator.DoesNotExist:
             maternal_locator = None
         return maternal_locator
@@ -98,24 +96,22 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
         return demographics
 
     @property
-    def demographics_data(self):
-        demographics_data = {}
+    def antenatal_enrollment_status(self):
         if self.antenatal_enrollment:
             if self.antenatal_enrollment.ga_pending and self.antenatal_enrollment.is_eligible:
-                demographics_data.update({'antenatal_enrollment_status': 'pending ultrasound'})
+                antenatal_enrollment_status = 'Pending ultrasound'
             elif self.antenatal_enrollment.is_eligible:
-                demographics_data.update({'antenatal_enrollment_status': 'passed'})
+                antenatal_enrollment_status = 'Passed'
             elif not self.antenatal_enrollment.is_eligible:
-                demographics_data.update({'antenatal_enrollment_status': 'failed'})
+                antenatal_enrollment_status = 'Failed'
             else:
-                demographics_data.update({'antenatal_enrollment_status': 'Not filled'})
-        return demographics_data
+                antenatal_enrollment_status = 'Not filled'
+        return antenatal_enrollment_status
 
     @property
     def latest_visit(self):
         return MaternalVisit.objects.filter(
-            appointment__subject_identifier=self.subject_identifier).order_by(
-                '-report_datetime').first()
+            subject_identifier=self.subject_identifier).order_by('-report_datetime').first()
 
     @property
     def consent(self):
@@ -134,7 +130,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
     def maternal_rando(self):
         try:
             maternal_rando = MaternalRando.objects.get(
-                maternal_visit__appointment__subject_identifier=self.subject_identifier)
+                maternal_visit__subject_identifier=self.subject_identifier)
         except MaternalRando.DoesNotExist:
             maternal_rando = None
         return maternal_rando
@@ -191,8 +187,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
     @property
     def antenatal_enrollment(self):
         try:
-            antenatal_enrollment = AntenatalEnrollment.objects.get(
-                registered_subject__subject_identifier=self.subject_identifier)
+            antenatal_enrollment = AntenatalEnrollment.objects.get(subject_identifier=self.subject_identifier)
         except AntenatalEnrollment.DoesNotExist:
             antenatal_enrollment = None
         return antenatal_enrollment
@@ -200,8 +195,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
     @property
     def randomized(self):
         try:
-            randomization = MaternalRando.objects.get(
-                maternal_visit__appointment__subject_identifier=self.subject_identifier)
+            randomization = MaternalRando.objects.get(maternal_visit__subject_identifier=self.subject_identifier)
             return randomization.rx
         except MaternalRando.DoesNotExist:
             return None
