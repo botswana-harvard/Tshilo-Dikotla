@@ -1,10 +1,6 @@
-from collections import OrderedDict
-from dateutil.relativedelta import relativedelta
-
 from django.apps import apps
 from django.urls.base import reverse
 
-from edc_base.utils import get_utcnow
 from edc_metadata.models import CrfMetadata, RequisitionMetadata
 
 from td.models import Appointment
