@@ -118,7 +118,6 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
                 RegisteredSubject.objects.using(using).create(
                     subject_identifier=infant_identifier.get_identifier(),
                     registration_datetime=instance.delivery_datetime,
-                    subject_type=INFANT,
                     user_created=instance.user_created,
                     first_name='No Name',
                     initials=None,
