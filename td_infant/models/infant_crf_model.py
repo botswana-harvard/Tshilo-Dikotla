@@ -6,8 +6,7 @@ from edc_base.model.models import HistoricalRecords
 from edc_metadata.model_mixins import UpdatesCrfMetadataModelMixin
 from edc_offstudy.model_mixins import OffstudyMixin
 from edc_visit_tracking.model_mixins import CrfModelMixin
-
-from ..managers import InfantVisitCrfManager
+from edc_visit_tracking.managers import VisitModelManager
 
 from .infant_visit import InfantVisit
 
@@ -19,7 +18,7 @@ class InfantCrfModel(CrfModelMixin, OffstudyMixin,
 
     infant_visit = models.OneToOneField(InfantVisit)
 
-    objects = InfantVisitCrfManager()
+    objects = VisitModelManager()
 
     history = HistoricalRecords()
 

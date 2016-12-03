@@ -3,19 +3,19 @@ from django.apps import apps as django_apps
 
 from edc_appointment.model_mixins import CreateAppointmentsMixin
 from edc_base.model.models import BaseUuidModel
+from edc_base.model.models import HistoricalRecords
+from edc_base.model.models.url_mixin import UrlMixin
 from edc_base.model.validators import datetime_not_future
-from edc_protocol.validators import datetime_not_before_study_start
 from edc_base.model.validators.date import date_not_future
 from edc_constants.choices import GENDER_UNDETERMINED
 from edc_offstudy.model_mixins import OffstudyMixin
+from edc_protocol.validators import datetime_not_before_study_start
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 from edc_registration.models import RegisteredSubject
-from edc_base.model.models import HistoricalRecords
 
 from td_maternal.models import MaternalLabourDel
 
 from ..managers import InfantBirthModelManager
-from edc_base.model.models.url_mixin import UrlMixin
 
 
 class InfantBirth(CreateAppointmentsMixin, UpdatesOrCreatesRegistrationModelMixin,
@@ -59,24 +59,12 @@ class InfantBirth(CreateAppointmentsMixin, UpdatesOrCreatesRegistrationModelMixi
 
     history = HistoricalRecords()
 
-#     @property
-#     def subject_identifier(self):
-#         return self.registered_subject.subject_identifier
-
     def natural_key(self):
         return self.maternal_labour_del.natural_key()
     natural_key.dependencies = ['td_maternal.maternallabourdel', 'td.registered_subject']
 
     def __str__(self):
         return "{} ({}) {}".format(self.first_name, self.initials, self.gender)
-
-#     def prepare_appointments(self, using):
-#         """Creates infant appointments relative to the date-of-delivery"""
-#         relative_identifier = self.registered_subject.relative_identifier
-#         maternal_labour_del = MaternalLabourDel.objects.get(
-#             registered_subject__subject_identifier=relative_identifier)
-#         self.create_all(
-#             base_appt_datetime=maternal_labour_del.delivery_datetime, using=using)
 
     @property
     def visit(self):
