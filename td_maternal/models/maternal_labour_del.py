@@ -7,8 +7,7 @@ from edc_base.model.validators import datetime_not_future
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
-from edc_protocol.validators import datetime_not_before_study_start
-from edc_registration.model_mixins import SubjectIdentifierFromRegisteredSubjectModelMixin
+from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from td.choices import DX_MATERNAL
@@ -20,17 +19,9 @@ from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION
 from .maternal_crf_model import MaternalCrfModel
 
 
-class MaternalLabourDel(SubjectIdentifierFromRegisteredSubjectModelMixin, CreateAppointmentsMixin,
-                        RequiresConsentMixin, UrlMixin, BaseUuidModel):
+class MaternalLabourDel(EnrollmentModelMixin, CreateAppointmentsMixin, RequiresConsentMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
-
-    report_datetime = models.DateTimeField(
-        verbose_name="Report date",
-        validators=[
-            datetime_not_before_study_start,
-            datetime_not_future, ],
-        help_text='')
 
     delivery_datetime = models.DateTimeField(
         verbose_name="Date and time of delivery :",
@@ -113,6 +104,7 @@ class MaternalLabourDel(SubjectIdentifierFromRegisteredSubjectModelMixin, Create
 
     def save(self, *args, **kwargs):
         self.live_infants_to_register = 1
+        print(self.subject_identifier, self.subject_identifier)
         super(MaternalLabourDel, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -121,12 +113,12 @@ class MaternalLabourDel(SubjectIdentifierFromRegisteredSubjectModelMixin, Create
     def natural_key(self):
         return (self.subject_identifier, )
 
-    class Meta:
+    class Meta(EnrollmentModelMixin.Meta):
         app_label = 'td_maternal'
         verbose_name = "Delivery"
         verbose_name_plural = "Deliveries"
         consent_model = 'td_maternal.maternalconsent'
-        visit_schedule_name = 'maternal_visit_schedule'
+        visit_schedule_name = 'maternal_visit_schedule.follow_up'
 
 
 class MaternalLabDelMed(MaternalCrfModel):
