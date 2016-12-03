@@ -6,6 +6,8 @@ from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 
+from ..managers import EnrollmentManager
+
 
 class AntenatalEnrollmentTwo(EnrollmentModelMixin, RequiresConsentMixin, CreateAppointmentsOnEligibleMixin,
                              UrlMixin, BaseUuidModel):
@@ -17,6 +19,8 @@ class AntenatalEnrollmentTwo(EnrollmentModelMixin, RequiresConsentMixin, CreateA
         choices=YES_NO,
         help_text='',
         max_length=3)
+
+    objects = EnrollmentManager()
 
     history = HistoricalRecords()
 
