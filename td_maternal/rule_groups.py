@@ -122,9 +122,9 @@ def func_show_nvp_dispensing_form(visit_instance, *args):
     func_show_nvp_dispensing_form = False
     if func_mother_pos(visit_instance):
         try:
-            randomization = MaternalRando.objects.get(
-                subject_identifier=visit_instance.appointment.subject_identifier)
-            func_show_nvp_dispensing_form = randomization.rx.strip('\n') == 'NVP'
+            maternal_rando = MaternalRando.objects.get(
+                maternal_visit__subject_identifier=visit_instance.subject_identifier)
+            func_show_nvp_dispensing_form = maternal_rando.rx.strip('\n') == 'NVP'
         except MaternalRando.DoesNotExist:
             pass
     return func_show_nvp_dispensing_form

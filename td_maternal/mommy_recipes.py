@@ -1,7 +1,7 @@
 from dateutil.relativedelta import relativedelta
 from faker import Faker
 from faker.providers import BaseProvider
-from model_mommy.recipe import Recipe, seq, foreign_key
+from model_mommy.recipe import Recipe, seq
 
 from edc_base.faker import EdcBaseProvider
 from edc_base.utils import get_utcnow
@@ -75,7 +75,7 @@ antenatal_enrollment_common = dict(
 )
 
 # antenatal enrollment two
-antenatal_enrollment_common_two = Recipe(
+antenatalenrollmenttwo = Recipe(
     AntenatalEnrollmentTwo,
     schedule_name='maternal_enrollment_step2',
     is_eligible=True,
@@ -85,42 +85,31 @@ antenatal_enrollment_common_two = Recipe(
 
 antenatal_enrollment_ineligible = dict(
     current_hiv_status=POS,
+    evidence_hiv_status=NO,
     rapid_test_done=None,
     rapid_test_result=None,
 )
 
 antenatal_enrollment_eligible = dict(
-    current_hiv_status=YES,
+    current_hiv_status=POS,
     evidence_hiv_status=YES,
     will_get_arvs=YES,
 )
-
-rapid_pos = dict()
-
-rapid_neg = dict()
 
 options = antenatal_enrollment_common
 options.update(antenatal_enrollment_eligible)
 antenatalenrollment = Recipe(AntenatalEnrollment, **options)
 
 # antenatalenrollment for ineligible
-
 antenatalenrollment_ineligible = Recipe(
     AntenatalEnrollment,
     schedule_name='maternal_enrollment_step1',
     report_datetime=get_utcnow,
     is_diabetic=YES)
 
-# options = common
-# options.update(ineligible)
-# antenatalenrollment_ineligible = Recipe(
-#     AntenatalEnrollment, **options)
-
 # antenatalenrollment for eligible POS mother, not by rapid
 options = antenatal_enrollment_common
 options.update(antenatal_enrollment_eligible)
-options.update(
-    current_hiv_status=POS)
 antenatalenrollment_pos = Recipe(
     AntenatalEnrollment, **options)
 

@@ -181,9 +181,15 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
             self.date_at_32wks = (enrollment_helper.edd.edd - relativedelta(weeks=6)).date()
         except TypeError:
             self.date_at_32wks = None
-        self.edd_by_lmp = enrollment_helper.lmp.edd.date()
+        try:
+            self.edd_by_lmp = enrollment_helper.lmp.edd.date()
+        except AttributeError:
+            self.edd_by_lmp = None
         self.enrollment_hiv_status = enrollment_helper.enrollment_result.result
-        self.ga_lmp_enrollment_wks = enrollment_helper.lmp.ga.weeks
+        try:
+            self.ga_lmp_enrollment_wks = enrollment_helper.lmp.ga.weeks
+        except AttributeError:
+            pass
         self.pending_ultrasound = enrollment_helper.ga_pending
         self.unenrolled = enrollment_helper.messages.as_string()
         super(AntenatalEnrollment, self).save(*args, **kwargs)

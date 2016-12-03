@@ -9,16 +9,15 @@ from edc_constants.constants import (
 
 from td.hiv_result import EnrollmentResultError
 
-from ..models import MaternalVisit, MaternalOffstudy
-
 
 class TestAntenatalEnrollment(TestCase):
     """Test eligibility of a mother for antenatal enrollment."""
 
     def setUp(self):
-        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
+        maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         self.maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
+            'td_maternal.maternalconsent',
+            maternal_eligibility_reference=maternal_eligibility.reference_pk)
         self.subject_identifier = self.maternal_consent.subject_identifier
 
     def test_gestation_wks_lmp_below_16(self):
@@ -31,8 +30,9 @@ class TestAntenatalEnrollment(TestCase):
 
     def test_gestation_wks_lmp_above_36(self):
         """Test ineligible when weeks of gestation below 36"""
-        options = {'subject_identifier': self.subject_identifier,
-                   'last_period_date': (get_utcnow() - relativedelta(weeks=37)).date()}
+        options = dict(
+            subject_identifier=self.subject_identifier,
+            last_period_date=(get_utcnow() - relativedelta(weeks=37)).date())
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment_pos', **options)
         self.assertFalse(antenatal_enrollment.is_eligible)
 
