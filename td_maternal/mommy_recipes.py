@@ -13,7 +13,8 @@ from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, Antena
                      MaternalLabourDel, SpecimenConsent, MaternalRando, MaternalLocator, MaternalUltraSoundInitial,
                      MaternalInterimIdcc, RapidTestResult, MaternalObstericalHistory, MaternalMedicalHistory,
                      MaternalDemographics, MaternalAztNvp, MaternalDiagnoses, MaternalSubstanceUseDuringPreg,
-                     MaternalClinicalMeasurementsTwo)
+                     MaternalClinicalMeasurementsTwo, MaternalLifetimeArvHistory, MaternalArvPreg,
+                     MaternalClinicalMeasurementsOne)
 
 
 class TdProvider(BaseProvider):
@@ -246,6 +247,14 @@ maternaldemographics = Recipe(
     house_fridge=NO,
     cooking_method=NO)
 
+maternalarvlifetimehistory = Recipe(
+    MaternalLifetimeArvHistory,
+)
+
+maternalarvinthispreg = Recipe(
+    MaternalArvPreg,
+)
+
 maternalaztnvp = Recipe(
     MaternalAztNvp,
     azt_nvp_delivery=YES,
@@ -268,6 +277,12 @@ substanceusepriortopregnancy = Recipe(
 
 maternalclinicalmeasurementstwo = Recipe(
     MaternalClinicalMeasurementsTwo,
+    weight_kg=76,
+    systolic_bp=120,
+    diastolic_bp=100,)
+
+maternalclinicalmeasurementsone = Recipe(
+    MaternalClinicalMeasurementsOne,
     weight_kg=76,
     systolic_bp=120,
     diastolic_bp=100,)
