@@ -59,7 +59,7 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
         ConsentConfig(
             'td_maternal.maternalconsent',
             start=datetime(2016, 5, 1, 0, 0, 0, tzinfo=pytz.utc),
-            end=datetime(2017, 10, 30, 0, 0, 0, tzinfo=pytz.utc),
+            end=datetime(2022, 12, 1, 0, 0, 0, tzinfo=pytz.utc),
             version='1',
             age_min=18,
             age_is_adult=18,
