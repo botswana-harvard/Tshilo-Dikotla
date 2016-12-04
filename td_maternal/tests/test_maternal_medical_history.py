@@ -10,21 +10,12 @@ from td_list.models import ChronicConditions, MaternalMedications
 
 
 from .base_test_case import BaseTestCase
-from edc_registration.models import RegisteredSubject
 
 
 class TestMaternalMedicalHistory(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalMedicalHistory, self).setUp()
-        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        self.maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
-        self.subject_identifier = self.maternal_consent.subject_identifier
-        self.registered_subject = RegisteredSubject.objects.get(subject_identifier=self.subject_identifier)
-        print("*****************************")
-        print(self.registered_subject)
-        print("*****************************")
 
         self.chronic_cond = ChronicConditions.objects.create(
             hostname_created="django", name="Asthma", short_name="Asthma",
@@ -125,9 +116,10 @@ class TestMaternalMedicalHistory(BaseTestCase):
     def test_negative_mother_chronic_since_yes_who_diagnosis_not_applicable(self):
         """The mother is HIV Negative but indicated that mother had chronic conditions prior to current pregnancy,
            and the WHO diagnosis has been indicated as NOT_APPLICABLE """
-        self.options['maternal_visit'] = self.maternal_visit_1000.id
-        self.options['chronic_since'] = YES
-        self.options['who_diagnosis'] = NOT_APPLICABLE
+        self.options.update(
+            maternal_visit=self.maternal_visit_1000_neg.id,
+            chronic_since=YES,
+            who_diagnosis=NOT_APPLICABLE)
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn(
             'The mother is HIV negative. Chronic_since should be NO and Who Diagnosis should be Not Applicable',
