@@ -3,12 +3,10 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from edc_constants.constants import ALIVE, ON_STUDY
-from edc_identifier.subject.classes import InfantIdentifier
+from edc_identifier.maternal_identifier import MaternalIdentifier, MaternalIdentifierError
+from edc_registration.models import RegisteredSubject
 from edc_visit_tracking.constants import SCHEDULED
 
-from edc_registration.models import RegisteredSubject
-
-from td.constants import INFANT
 from td.models import Appointment
 
 from .antenatal_enrollment import AntenatalEnrollment
@@ -16,7 +14,6 @@ from .maternal_consent import MaternalConsent
 from .maternal_eligibility import MaternalEligibility
 from .maternal_labour_del import MaternalLabourDel
 from .maternal_offstudy import MaternalOffstudy
-from .maternal_ultrasound_initial import MaternalUltraSoundInitial
 from .maternal_visit import MaternalVisit
 
 
@@ -98,29 +95,20 @@ def eligible_put_back_on_study(sender, instance, raw, created, using, **kwargs):
 def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, using, **kwargs):
     """Creates an identifier for the registered infant.
 
-    RegisteredSubject.objects.create( is called by InfantIdentifier
-
     Only one infant per mother is allowed."""
     if not raw and created:
         if instance.live_infants_to_register == 1:
-            maternal_consent = MaternalConsent.objects.get(
-                subject_identifier=instance.subject_identifier)
-            maternal_ultrasound = MaternalUltraSoundInitial.objects.get(
-                maternal_visit__subject_identifier=instance.subject_identifier)
-            with transaction.atomic():
-                infant_identifier = InfantIdentifier(
-                    maternal_identifier=instance.subject_identifier,
-                    study_site=maternal_consent.study_site,
-                    birth_order=0,
-                    live_infants=int(maternal_ultrasound.number_of_gestations),
-                    live_infants_to_register=instance.live_infants_to_register,
-                    user=instance.user_created)
+            maternal_identifier = MaternalIdentifier(identifier=instance.subject_identifier)
+            try:
+                maternal_identifier.deliver(1, model=sender._meta.label_lower)
                 RegisteredSubject.objects.using(using).create(
-                    subject_identifier=infant_identifier.get_identifier(),
+                    subject_identifier=maternal_identifier.infants[0].identifier,
                     registration_datetime=instance.delivery_datetime,
                     user_created=instance.user_created,
                     first_name='No Name',
                     initials=None,
                     registration_status='DELIVERED',
-                    relative_identifier=maternal_consent.subject_identifier,
-                    study_site=maternal_consent.study_site)
+                    relative_identifier=instance.subject_identifier,
+                    study_site=maternal_identifier.identifier_model.study_site)
+            except MaternalIdentifierError:
+                pass

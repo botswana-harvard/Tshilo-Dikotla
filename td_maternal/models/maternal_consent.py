@@ -8,18 +8,19 @@ from edc_consent.model_mixins import ConsentModelMixin
 from edc_consent.field_mixins import (
     PersonalFieldsMixin, CitizenFieldsMixin, ReviewFieldsMixin, VulnerabilityFieldsMixin,
     IdentityFieldsMixin)
-from edc_identifier.subject.classes import SubjectIdentifier
+from edc_identifier.maternal_identifier import MaternalIdentifier
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 
 from ..maternal_choices import RECRUIT_SOURCE, RECRUIT_CLINIC
 from ..managers import MaternalConsentManager
 
 from .maternal_eligibility import MaternalEligibility
+from edc_protocol.mixins import SubjectTypeCapMixin
 
 
 class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin, PersonalFieldsMixin,
                       UpdatesOrCreatesRegistrationModelMixin, CitizenFieldsMixin, VulnerabilityFieldsMixin,
-                      UrlMixin, BaseUuidModel):
+                      SubjectTypeCapMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on the mother's consent. """
 
@@ -69,7 +70,11 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
                 registered_subject = RegisteredSubject.objects.get(identity=self.identity)
                 self.subject_identifier = registered_subject.subject_identifier
             except RegisteredSubject.DoesNotExist:
-                self.subject_identifier = SubjectIdentifier(site_code=self.study_site).get_identifier()
+                maternal_identifier = MaternalIdentifier(
+                    subject_type_name='maternal',
+                    model=self._meta.label_lower,
+                    study_site=self.study_site)
+                self.subject_identifier = maternal_identifier.identifier
         super(MaternalConsent, self).save(*args, **kwargs)
 
     def get_registration_datetime(self):

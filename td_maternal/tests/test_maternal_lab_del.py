@@ -1,10 +1,12 @@
 from dateutil.relativedelta import relativedelta
 from model_mommy import mommy
 
+from django.apps import apps as django_apps
+from django.test import TestCase
+
 from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
 from edc_identifier.models import SubjectIdentifier
-from edc_registration.models import RegisteredSubject
 
 from td.constants import INFANT
 from td.models import Appointment
@@ -13,36 +15,30 @@ from td_maternal.enrollment_helper import EnrollmentHelper
 
 from ..forms import MaternalLabourDelForm
 
-from .base_test_case import BaseTestCase
 
-
-class TestMaternalLabourDel(BaseTestCase):
+class TestMaternalLabourDel(TestCase):
 
     def setUp(self):
-        super(TestMaternalLabourDel, self).setUp()
+        RegisteredSubject = django_apps.get_app_config('edc_registration').model
         self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         self.maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
-        self.registered_subject = self.maternal_eligibility.registered_subject
-        # maternal visit created here.
-        options = {'registered_subject': self.registered_subject,
-                   'current_hiv_status': POS,
-                   'evidence_hiv_status': YES,
-                   'will_get_arvs': YES,
-                   'is_diabetic': NO,
-                   'will_remain_onstudy': YES,
-                   'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
+            'td_maternal.maternalconsent',
+            maternal_eligibility_reference=self.maternal_eligibility.reference_pk)
+        self.subject_identifier = self.maternal_consent.subject_identifier
+        self.registered_subject = RegisteredSubject.objects.get(
+            subject_identifier=self.subject_identifier)
+        self.antenatal_enrollment = mommy.make_recipe(
+            'td_maternal.antenatalenrollment',
+            subject_identifier=self.subject_identifier)
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
-
+            subject_identifier=self.subject_identifier, visit_code='1000M')
         self.maternal_visit_1000 = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.maternal_ultrasound = mommy.make_recipe(
             'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
-        self.maternal_visits_membership = mommy.make_recipe(
-            'td_maternal.antenatalenrollmenttwo', registered_subject=self.registered_subject)
+        self.antenatal_enrollment_two = mommy.make_recipe(
+            'td_maternal.antenatalenrollmenttwo',
+            subject_identifier=self.subject_identifier)
 
         complications = DeliveryComplications.objects.create(
             hostname_created="django", name="None",
@@ -68,10 +64,11 @@ class TestMaternalLabourDel(BaseTestCase):
         }
 
     def test_new_infant_registration(self):
+        RegisteredSubject = django_apps.get_app_config('edc_registration').model
         mommy.make_recipe(
-            'td_maternal.maternallabourdel', registered_subject=self.registered_subject, live_infants_to_register=1)
-        self.assertEqual(SubjectIdentifier.objects.filter(
-            identifier=self.registered_subject.subject_identifier).count(), 1)
+            'td_maternal.maternallabourdel',
+            subject_identifier=self.subject_identifier,
+            live_infants_to_register=1)
         self.assertEqual(RegisteredSubject.objects.filter(
             subject_type=INFANT,
             registration_status='DELIVERED',

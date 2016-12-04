@@ -23,6 +23,8 @@ from edc_timepoint.apps import AppConfig as EdcTimepointAppConfigParent
 from edc_timepoint.timepoint import Timepoint
 from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
+from edc_protocol.cap import Cap
+from edc_protocol.subject_type import SubjectType
 
 
 class AppConfig(DjangoAppConfig):
@@ -45,8 +47,11 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
     study_open_datetime = datetime(2016, 4, 1, 0, 0, 0, tzinfo=pytz.utc)
     study_end_datetime = datetime(2018, 12, 1, 0, 0, 0, tzinfo=pytz.utc)
     subject_types = {'maternal': 'maternal', 'infant': 'infant'}
-    enrollment_caps = {'td_maternal.antenatalenrollment': ('maternal', -1),
-                       'td_infant.infant_birth': ('infant', -1)}
+    subject_types = [
+        SubjectType('maternal', 'Mothers', Cap(model_name='td_maternal.maternalconsent', max_subjects=9999)),
+        SubjectType('maternal', 'Mothers', Cap(model_name='td_maternal.antenatalenrollment', max_subjects=9999)),
+        SubjectType('infant', 'Infants', Cap(model_name='td_infant.infantbirth', max_subjects=9999))
+    ]
 
 
 class EdcBaseAppConfig(EdcBaseAppConfigParent):
