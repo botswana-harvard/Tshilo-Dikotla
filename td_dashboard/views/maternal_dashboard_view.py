@@ -36,7 +36,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
         self.template_name = 'td_dashboard/maternal/subject_dashboard.html'
         self.enrollments_models = [
             'td_maternal.specimenconsent', 'td_maternal.antenatalenrollment',
-            'td_maternal.antenatalvisitmembership', 'td_maternal.maternallabdel']
+            'td_maternal.antenatalenrollmenttwo', 'td_maternal.maternallabdel']
 
     def get_context_data(self, **kwargs):
         self.context = super().get_context_data(**kwargs)
