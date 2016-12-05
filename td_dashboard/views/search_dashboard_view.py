@@ -6,6 +6,8 @@ from td_maternal.models.maternal_eligibility import MaternalEligibility
 from ..forms import MaternalEligibilityCrispyForm
 
 from edc_base.view_mixins import EdcBaseViewMixin
+from td_maternal.models.maternal_consent import MaternalConsent
+from django.core.exceptions import MultipleObjectsReturned
 
 
 class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
@@ -19,29 +21,35 @@ class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
 
     def form_valid(self, form):
         if form.is_valid():
-            subject_identifier = form.cleaned_data['subject_identifier']
+            results = None
             try:
-                self.maternal_eligibility = MaternalEligibility.objects.get(
-                    maternal_consent__subject_identifier=subject_identifier)
+                results = [MaternalEligibility.objects.get(
+                    maternal_consent__subject_identifier=form.cleaned_data['subject_identifier'])]
             except MaternalEligibility.DoesNotExist:
-                form.add_error('subject_identifier',
-                               'Maternal eligibility not found. Please search again or add a new maternal eligibility.')
-            context = self.get_context_data(form=form)
+                results = None
+                form.add_error(
+                    'subject_identifier',
+                    'Maternal eligibility not found for {}.'.format(form.cleaned_data['subject_identifier']))
+            context = self.get_context_data(
+                form=form,
+                results=results)
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super(SearchDasboardView, self).get_context_data(**kwargs)
+        results = MaternalEligibility.objects.all().order_by('-created')[:20]
+        for obj in results:
+            try:
+                maternal_consent = MaternalConsent.objects.get(maternal_eligibility_reference=obj.reference_pk)
+                obj.subject_identifier = maternal_consent.subject_identifier
+            except MaternalConsent.DoesNotExist:
+                obj.subject_identifier = None
+            except MultipleObjectsReturned:
+                maternal_consent = MaternalConsent.objects.filter(maternal_eligibility_reference=obj.reference_pk)[0]
+                obj.subject_identifier = maternal_consent.subject_identifier
         context.update(
             site_header=admin.site.site_header,
-            maternal_eligibilities=self.maternal_eligibilities
-        )
+            results=results)
         context.update({
             'infant': self.infant})
         return context
-
-    @property
-    def maternal_eligibilities(self):
-        if self.maternal_eligibility is None:
-            return MaternalEligibility.objects.all().order_by('-created')[:20]
-        else:
-            return [self.maternal_eligibility]

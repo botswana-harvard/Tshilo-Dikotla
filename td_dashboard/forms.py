@@ -20,5 +20,6 @@ class MaternalEligibilityCrispyForm(forms.Form):
         self.helper.form_id = 'maternaleligibility-crispy-form-search'
         self.helper.form_method = 'post'
         self.helper.html5_required = True
+        self.helper.form_show_labels = False
         self.helper.layout = Layout(
             FieldWithButtons('subject_identifier', StrictButton('Search', type='submit')))

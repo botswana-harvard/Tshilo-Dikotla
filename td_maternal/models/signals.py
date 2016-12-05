@@ -3,15 +3,12 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from edc_constants.constants import ALIVE, ON_STUDY
-from edc_identifier.maternal_identifier import MaternalIdentifier, MaternalIdentifierError
 from edc_visit_tracking.constants import SCHEDULED
 
 from td.models import Appointment
 
 from .antenatal_enrollment import AntenatalEnrollment
-from .maternal_consent import MaternalConsent
 from .maternal_eligibility import MaternalEligibility
-from .maternal_lab_del import MaternalLabDel
 from .maternal_offstudy import MaternalOffstudy
 from .maternal_visit import MaternalVisit
 
@@ -20,12 +17,6 @@ from .maternal_visit import MaternalVisit
 def maternal_eligibility_on_post_save(sender, instance, raw, created, using, **kwargs):
     if not raw and not kwargs.get('update_fields'):
         instance.create_update_or_delete_eligibility_loss()
-
-
-@receiver(post_save, sender=MaternalConsent, dispatch_uid="maternalconsent_on_post_save")
-def maternal_consent_on_post_save(sender, instance, raw, **kwargs):
-    if not raw:
-        instance.registration_update_or_create()
 
 
 @receiver(post_save, sender=AntenatalEnrollment, weak=False, dispatch_uid="ineligible_take_off_study")
@@ -77,20 +68,3 @@ def eligible_put_back_on_study(sender, instance, raw, created, using, **kwargs):
                 raise
         except MaternalOffstudy.DoesNotExist:
             put_back_on_study_from_failed_eligibility(instance)
-
-
-@receiver(post_save, weak=False, sender=MaternalLabDel, dispatch_uid='create_infant_identifier_on_labour_delivery')
-def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, using, **kwargs):
-    """Creates an identifier for the registered infant.
-
-    Only one infant per mother is allowed."""
-    if not raw and created:
-        if instance.live_infants_to_register == 1:
-            maternal_identifier = MaternalIdentifier(identifier=instance.subject_identifier)
-            try:
-                maternal_identifier.deliver(
-                    1, model=sender._meta.label_lower,
-                    create_registration=True,
-                    registration_datetime=instance.delivery_datetime)
-            except MaternalIdentifierError:
-                pass

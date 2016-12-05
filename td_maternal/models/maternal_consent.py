@@ -1,21 +1,21 @@
 from django.apps import apps as django_apps
-from django.db import models
 from django.core.exceptions import ValidationError
+from django.db import models
 
 from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel, UrlMixin, HistoricalRecords
-from edc_consent.model_mixins import ConsentModelMixin
 from edc_consent.field_mixins import (
     PersonalFieldsMixin, CitizenFieldsMixin, ReviewFieldsMixin, VulnerabilityFieldsMixin,
     IdentityFieldsMixin)
+from edc_consent.model_mixins import ConsentModelMixin
 from edc_identifier.maternal_identifier import MaternalIdentifier
+from edc_protocol.mixins import SubjectTypeCapMixin
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 
-from ..maternal_choices import RECRUIT_SOURCE, RECRUIT_CLINIC
 from ..managers import MaternalConsentManager
+from ..maternal_choices import RECRUIT_SOURCE, RECRUIT_CLINIC
 
 from .maternal_eligibility import MaternalEligibility
-from edc_protocol.mixins import SubjectTypeCapMixin
 
 
 class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin, PersonalFieldsMixin,
@@ -61,8 +61,7 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
 
     def save(self, *args, **kwargs):
         try:
-            maternaleligibility = MaternalEligibility.objects.get(reference_pk=self.maternal_eligibility_reference)
-            maternaleligibility.is_consented = True # NOT CORRECT
+            MaternalEligibility.objects.get(reference_pk=self.maternal_eligibility_reference)
         except MaternalEligibility.DoesNotExist:
             ValidationError('Unable to determine eligibility criteria. Was Maternal Eligibility completed?')
         if not self.id:

@@ -2,13 +2,12 @@ from django.apps import apps as django_apps
 
 from edc_registration.models import RegisteredSubject
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
-from edc_consent.model_mixins import RequiresConsentMixin
 from edc_appointment.managers import AppointmentManager
 from edc_base.model.models import HistoricalRecords, BaseUuidModel
 from edc_appointment.model_mixins import AppointmentModelMixin
 
 
-class Appointment(AppointmentModelMixin, RequiresConsentMixin, BaseUuidModel):
+class Appointment(AppointmentModelMixin, BaseUuidModel):
 
     history = HistoricalRecords()
 
@@ -24,10 +23,6 @@ class Appointment(AppointmentModelMixin, RequiresConsentMixin, BaseUuidModel):
         except RegisteredSubject.DoesNotExist:
             return False
         return True
-
-#     def consented_for_period_or_raise(self, report_datetime=None, subject_identifier=None, exception_cls=None):
-#         if not self.infant_registered_subject:
-#             super().consented_for_period_or_raise(report_datetime, subject_identifier, exception_cls)
 
     @property
     def appt_title(self):
@@ -54,4 +49,3 @@ class Appointment(AppointmentModelMixin, RequiresConsentMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'td'
-        consent_model = 'td_maternal.maternalconsent'

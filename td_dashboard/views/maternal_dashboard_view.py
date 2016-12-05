@@ -36,26 +36,24 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
         self.template_name = 'td_dashboard/maternal/subject_dashboard.html'
         self.enrollments_models = [
             'td_maternal.specimenconsent', 'td_maternal.antenatalenrollment',
-            'td_maternal.antenatalvisitmembership', 'td_maternal.maternallabdel']
+            'td_maternal.antenatalenrollmenttwo', 'td_maternal.maternallabdel']
 
     def get_context_data(self, **kwargs):
-        self.context = super().get_context_data(**kwargs)
-        self.context.update(
-            site_header=admin.site.site_header,
-        )
+        self.context = super(MaternalDashboardView, self).get_context_data(**kwargs)
         self.context.update({
-            'demographics': self.demographics,
-            'requisitions': self.requisitions,
-            'crfs': self.crfs,
-            'selected_appointment': self.selected_appointment,
             'appointments': self.appointments,
-            'subject_identifier': self.subject_identifier,
             'consents': [],
+            'crfs': self.crfs,
             'dashboard_type': MATERNAL,
-            'locator': self.locator,
             'dashboard_url': self.dashboard_url,
-            'enrollments': self.enrollments(),
-            'infants': self.get_registered_infant_identifier
+            'demographics': self.demographics,
+            'enrollments': self.enrollments,
+            'infants': self.get_registered_infant_identifier,
+            'locator': self.locator,
+            'requisitions': self.requisitions,
+            'selected_appointment': self.selected_appointment,
+            'site_header': admin.site.site_header,
+            'subject_identifier': self.subject_identifier,
         })
         return self.context
 
@@ -86,7 +84,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
             enrollment_hiv_status = maternal_hiv_status.enrollment_hiv_status if self.latest_visit else None
             result = maternal_hiv_status.result if self.latest_visit else None
         if self.consent:
-            demographics['Name'] = '{}({})'.format(self.consent.first_name, self.consent.initials),
+            demographics['Name'] = '{} ({})'.format(self.consent.first_name, self.consent.initials),
             demographics['Born'] = self.consent.dob,
             demographics['Age'] = None,
             demographics['Consented'] = self.consent.consent_datetime,

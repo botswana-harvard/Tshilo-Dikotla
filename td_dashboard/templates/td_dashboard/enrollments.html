@@ -1,25 +1,14 @@
     <div class="panel-group">
     	<div class="panel panel-info">
-          <div class="panel-heading clearfix">Enrollments</div>
+          <div class="panel-heading clearfix">Enrollment</div>
       <div class="panel-body"> 
-		<!--  <blockquote class="blockquote" style="font-family: "Times New Roman", Times, serif;"> -->
-	  		<ul class="list-inline text-primary">
-	  			<li class="list-inline-item medium">
 	  				 {% for label, url in enrollments %}
-					 	{% if "complete" in label %}
-					 		<span class="glyphicon glyphicon-ok small" style="color:green"></span>
-					 	{% else %}
-					 		<span class="glyphicon glyphicon-asterisk small" style="color:red"></span>
-					 	{% endif %}
 					 	{% if dashboard_type == 'maternal' %}
-	  						<small><a href="{{url}}?next={% url 'subject_dashboard_url' subject_identifier %}&subject_identifier={{subject_identifier}}">{{label}}</a></small>
+	  						<a role="button" class="btn btn-sm {% if "complete" in label %}btn-success{% else %}btn-default{% endif %}" href="{{url}}?next={% url 'subject_dashboard_url' subject_identifier %}&subject_identifier={{ subject_identifier }}">{{ label }}</a>
 	  					{% else %}
-	  						<a href="{{url}}?next={% url 'infant_subject_dashboard_url' subject_identifier %}&subject_identifier={{subject_identifier}}">{{label}}</a>
+	  						<a role="button" class="btn btn-sm {% if "complete" in label %}btn-success{% else %}btn-default{% endif %}" href="{{url}}?next={% url 'infant_subject_dashboard_url' subject_identifier %}&subject_identifier={{ subject_identifier }}">{{ label }}</a>
 	  					{% endif %}
 		 			{% endfor %}
-	  			</li>
-			</ul>
-		<!--  </blockquote>-->
       </div>
     </div>
   </div>

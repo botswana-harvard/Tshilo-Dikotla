@@ -18,40 +18,33 @@
    <div class="container">
       <div class="col-md-12">
         <div class="panel-group">
-          <div class="panel panel-default">
+          <div class="panel panel-info">
+              <div class="panel-heading"><a title="add maternal eligibility" href="{% url 'admin:td_maternal_maternaleligibility_add' %}?next={% url 'search_url' %}" class="btn btn-sm btn-default" role="button">Add Maternal Eligibility</a>
+                <span class="pull-right">{% crispy form %}</span></div>
             <div class="panel-body">
-              <span class="pull-left"><a title="add new maternal eligibility" href="{% url 'admin:td_maternal_maternaleligibility_add' %}?next={% url 'search_url' %}" class="btn btn-sm btn-primary" role="button">Add Maternal Eligibility</a></span>
-              <span class="pull-right">{% crispy form %}</span>
-              {% if maternal_eligibilities %}
+              {% if results %}
                 <table class="table table-condensed table-striped table-responsive">
+                  <thead><th>#</th><th>Dashboard</th><th></th><th>Maternal Eligibility</th><th>Status</th><th>Age</th><th>Omang</th><th>Report</th><th>User</th></thead>
                   <tbody>
-                    {% for maternal_eligibility in maternal_eligibilities %}
+                    {% for obj in results %}
                     <tr>
-                      <td>
-                      {% if maternal_eligibility.is_consented %}
-                		<ul>
-		                	{% for consent in maternal_eligibility.previous_consents %}
-		                		<li><a role="button" title="Go to maternal dashboard" class="btn btn-sm btn-primary" href="{% url 'subject_dashboard_url' consent.subject_identifier %}">{{ consent.subject_identifier }} (V{{consent.version}}</a></li>
-		                	{% endfor %}
-		                	{% if not maternal_eligibility.have_latest_consent %}
-		                		<a title="re-consent" role="button" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?reference_pk={{maternal_eligibility.reference_pk}}&next={% url 'search_url' %}">re-consent (V{{maternal_eligibility.current_consent_version}})</a></li>
-		                	{% endif %}
-		                </ul>
-		               {% elif maternal_eligibility.is_eligible %}
-		               <ul>
-                            <li><A role="button" title="Add Maternal Consent" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?reference_pk={{maternal_eligibility.reference_pk}}&next=search_url">Add Consent (V{{maternal_eligibility.current_consent_version}})</A></li>
-                        </ul>
-	                	{% else %}
-	                		 {% if maternal_eligibility.ineligibility %}
-	                    		Ineligibility {{ maternal_eligibility.ineligibility }}
-	                    	 {% endif %}
-                		{% endif %}
-                      </td>
-                      <td><A href="{% url 'admin:td_maternal_maternaleligibility_change' maternal_eligibility.pk %}?&next=search_url">Edit Eligibility</A></td>
-                      <td>Ineligibility:{{ maternal_eligibility.maternal_eligibility_loss.reason_ineligible|default:"-----" }}</td>
-                      <td>{{maternal_eligibility.age_in_years}}y</td>
-                      <td>Enrolled {{ maternal_eligibility.report_datetime|date:"Y-m-d" }}</td>
-                      <td>{{maternal_eligibility.user_created}}</td>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{% if obj.subject_identifier %}<a role="button" title="Go to dashboard" class="btn btn-sm btn-success" href="{% url 'subject_dashboard_url' obj.subject_identifier %}">{{ obj.subject_identifier }}</a>{% endif %}</td>
+                        {% if obj.is_consented %}
+                          {% if not obj.have_latest_consent %}
+  		                		  <td><a role="button"  title="re-consent" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?reference_pk={{obj.reference_pk}}&next={% url 'search_url' %}">re-consent (V{{ obj.current_consent_version }})</a></td>
+                          {% endif %}
+                        {% elif obj.is_eligible %}
+                          <td><a role="button" title="Add Maternal Consent" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?obj={{obj.reference_pk}}&next=search_url">Add Consent</a></td>
+                  		  {% else %}
+                          <td>Not eligible</td>
+                        {% endif %}
+                      <td><a role="button" class="btn btn-sm btn-default" href="{% url 'admin:td_maternal_maternaleligibility_change' obj.pk %}?&next=search_url">Edit {{ obj.reference_pk|make_list|slice:"-8:"|join:"" }}</A></td>
+                      <td>{% if obj.obj.reason_ineligible %}{{ obj.obj.reason_ineligible|default:"" }}{% endif %}</td>
+                      <td>{{obj.age_in_years}}y</td>
+                      <td>{% if obj.has_omang == 'Yes' %}Citizen{% else %}Non-citizen{% endif %}</td>
+                      <td>{{ obj.report_datetime|date:"Y-m-d" }}</td>
+                      <td>{{obj.user_created}}</td>
                     </tr>
                     {% endfor %}
                   </tbody>

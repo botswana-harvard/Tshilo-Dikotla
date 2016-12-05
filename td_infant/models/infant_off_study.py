@@ -19,3 +19,4 @@ class InfantOffStudy(OffstudyModelMixin, UrlMixin, BaseUuidModel):
         app_label = 'td_infant'
         verbose_name = "Infant Off-Study"
         verbose_name_plural = "Infant Off-Study"
+        # consent_model = 'td_maternal.maternal_consent'

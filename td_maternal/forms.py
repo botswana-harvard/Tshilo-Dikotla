@@ -1,6 +1,3 @@
-import pytz
-
-from datetime import datetime, time
 from dateutil.relativedelta import relativedelta
 
 from django import forms
@@ -9,7 +6,6 @@ from django.conf import settings
 from django.forms.utils import ErrorList
 
 from edc_base.modelform_mixins import Many2ManyModelFormMixin
-from edc_base.utils import get_utcnow
 from edc_constants.constants import (
     YES, NO, STOPPED, CONTINUOUS, RESTARTED, NOT_APPLICABLE, FEMALE, OMANG, OTHER, POS, NEG, IND, ON_STUDY)
 from edc_consent.forms import BaseSpecimenConsentForm
@@ -415,6 +411,13 @@ class MaternalClinicalMeasurementsTwoForm(ModelFormMixin, forms.ModelForm):
 
 class MaternalConsentForm(ConsentFormMixin, forms.ModelForm):
 
+    maternal_eligibility_reference = forms.CharField(
+        label='Reference',
+        required=True,
+        help_text='This field is read only.',
+        widget=forms.TextInput(attrs={'size': 36, 'readonly': True})
+    )
+
     study_site = forms.ChoiceField(
         label='Study site',
         choices=STUDY_SITES,
@@ -427,12 +430,6 @@ class MaternalConsentForm(ConsentFormMixin, forms.ModelForm):
         cleaned_data = super(MaternalConsentForm, self).clean()
         if cleaned_data.get('identity_type') == OMANG and cleaned_data.get('identity')[4] != '2':
             raise forms.ValidationError('Identity provided indicates participant is Male. Please correct.')
-        #eligibility = cleaned_data.get('maternal_eligibility')
-        #if cleaned_data.get('citizen') != eligibility.has_omang:
-        #    raise forms.ValidationError(
-        #        "In eligibility you said has_omang is {}. Yet you wrote citizen is {}. "
-        #        "Please correct.".format(eligibility.has_omang, cleaned_data.get('citizen')))
-        print(cleaned_data, "cleaned, cleaned_data, cleaned_data")
         self.validate_eligibility_age()
         self.validate_recruit_source()
         self.validate_recruitment_clinic()
