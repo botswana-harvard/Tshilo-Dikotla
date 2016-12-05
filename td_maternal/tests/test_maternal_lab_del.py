@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
-from edc_identifier.models import SubjectIdentifier
+from edc_identifier.models import IdentifierModel
 
 from td.constants import INFANT
 from td.models import Appointment
@@ -16,7 +16,7 @@ from td_maternal.enrollment_helper import EnrollmentHelper
 from ..forms import MaternalLabourDelForm
 
 
-class TestMaternalLabourDel(TestCase):
+class TestMaternalLabDel(TestCase):
 
     def setUp(self):
         RegisteredSubject = django_apps.get_app_config('edc_registration').model
@@ -63,6 +63,15 @@ class TestMaternalLabourDel(TestCase):
             'arv_initiation_date': (get_utcnow() - relativedelta(weeks=6)).date()
         }
 
+    def test_new_infant_identifiers(self):
+        mommy.make_recipe(
+            'td_maternal.maternallabourdel',
+            subject_identifier=self.subject_identifier,
+            live_infants_to_register=1)
+        self.assertEqual(IdentifierModel.objects.filter(linked_identifier=self.subject_identifier).count(), 1)
+        self.assertTrue(
+            IdentifierModel.objects.get(linked_identifier=self.subject_identifier).identifier.endswith('10'))
+
     def test_new_infant_registration(self):
         RegisteredSubject = django_apps.get_app_config('edc_registration').model
         mommy.make_recipe(
@@ -78,7 +87,7 @@ class TestMaternalLabourDel(TestCase):
         self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
         mommy.make_recipe(
             'td_maternal.maternallabourdel',
-            registered_subject=self.registered_subject,
+            subject_identifier=self.subject_identifier,
             live_infants_to_register=1,
             valid_regiment_duration=YES)
         enrollment_helper = EnrollmentHelper(self.antenatal_enrollment)
@@ -89,7 +98,7 @@ class TestMaternalLabourDel(TestCase):
         self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
         mommy.make_recipe(
             'td_maternal.maternallabourdel',
-            registered_subject=self.registered_subject,
+            subject_identifier=self.subject_identifier,
             valid_regiment_duration=NO)
         enrollment_helper = EnrollmentHelper(self.antenatal_enrollment)
         self.assertFalse(enrollment_helper.is_eligible_after_delivery)

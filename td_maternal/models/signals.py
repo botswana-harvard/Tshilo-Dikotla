@@ -4,7 +4,6 @@ from django.dispatch import receiver
 
 from edc_constants.constants import ALIVE, ON_STUDY
 from edc_identifier.maternal_identifier import MaternalIdentifier, MaternalIdentifierError
-from edc_registration.models import RegisteredSubject
 from edc_visit_tracking.constants import SCHEDULED
 
 from td.models import Appointment
@@ -100,15 +99,10 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
         if instance.live_infants_to_register == 1:
             maternal_identifier = MaternalIdentifier(identifier=instance.subject_identifier)
             try:
-                maternal_identifier.deliver(1, model=sender._meta.label_lower)
-                RegisteredSubject.objects.using(using).create(
-                    subject_identifier=maternal_identifier.infants[0].identifier,
+                maternal_identifier.deliver(
+                    1, model=sender._meta.label_lower,
+                    create_registration=True,
                     registration_datetime=instance.delivery_datetime,
-                    user_created=instance.user_created,
-                    first_name='No Name',
-                    initials=None,
-                    registration_status='DELIVERED',
-                    relative_identifier=instance.subject_identifier,
-                    study_site=maternal_identifier.identifier_model.study_site)
+                    user_created=instance.user_created)
             except MaternalIdentifierError:
                 pass

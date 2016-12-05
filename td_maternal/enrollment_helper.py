@@ -134,8 +134,8 @@ class EnrollmentHelper(object):
                     maternal_visit__appointment__subject_identifier=self.subject_identifier)
                 self._ultrasound = Ultrasound(
                     ultrasound_date=obj.report_datetime,
-                    ga_confirmation_weeks=obj.ga_by_ultrasound_wks,
-                    ga_confirmation_days=obj.ga_by_ultrasound_days,
+                    ga_confirmed_weeks=obj.ga_by_ultrasound_wks,
+                    ga_confirmed_days=obj.ga_by_ultrasound_days,
                     ultrasound_edd=obj.est_edd_ultrasound)
                 self._ultrasound.gestations = int(obj.number_of_gestations)
                 if self._ultrasound.gestations != 1:
