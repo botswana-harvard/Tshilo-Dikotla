@@ -427,11 +427,12 @@ class MaternalConsentForm(ConsentFormMixin, forms.ModelForm):
         cleaned_data = super(MaternalConsentForm, self).clean()
         if cleaned_data.get('identity_type') == OMANG and cleaned_data.get('identity')[4] != '2':
             raise forms.ValidationError('Identity provided indicates participant is Male. Please correct.')
-        eligibility = cleaned_data.get('maternal_eligibility')
-        if cleaned_data.get('citizen') != eligibility.has_omang:
-            raise forms.ValidationError(
-                "In eligibility you said has_omang is {}. Yet you wrote citizen is {}. "
-                "Please correct.".format(eligibility.has_omang, cleaned_data.get('citizen')))
+        #eligibility = cleaned_data.get('maternal_eligibility')
+        #if cleaned_data.get('citizen') != eligibility.has_omang:
+        #    raise forms.ValidationError(
+        #        "In eligibility you said has_omang is {}. Yet you wrote citizen is {}. "
+        #        "Please correct.".format(eligibility.has_omang, cleaned_data.get('citizen')))
+        print(cleaned_data, "cleaned, cleaned_data, cleaned_data")
         self.validate_eligibility_age()
         self.validate_recruit_source()
         self.validate_recruitment_clinic()
@@ -443,15 +444,17 @@ class MaternalConsentForm(ConsentFormMixin, forms.ModelForm):
             identity = cleaned_data.get('identity')
             consent_v1 = MaternalConsent.objects.get(identity=identity, version=1)
             consent_age = relativedelta(consent_v1.consent_datetime.date(), consent_v1.dob).years
+            print(consent_age, "consent_age, consent_age, consent_age")
         except MaternalConsent.DoesNotExist:
-            consent_age = relativedelta(
-                get_utcnow().date(),
-                pytz.utc.localize(datetime.combine(cleaned_data.get('dob'), time()))).years
-        eligibility_age = cleaned_data.get('maternal_eligibility').age_in_years
-        if consent_age != eligibility_age:
-            raise forms.ValidationError(
-                'In Maternal Eligibility you indicated the participant is {}, '
-                'but age derived from the DOB is {}.'.format(eligibility_age, consent_age))
+            pass
+#             consent_age = relativedelta(
+#                 get_utcnow().date(),
+#                 pytz.utc.localize(datetime.combine(cleaned_data.get('dob'), time()))).years
+#         eligibility_age = cleaned_data.get('maternal_eligibility').age_in_years
+#         if consent_age != eligibility_age:
+#             raise forms.ValidationError(
+#                 'In Maternal Eligibility you indicated the participant is {}, '
+#                 'but age derived from the DOB is {}.'.format(eligibility_age, consent_age))
 
     def validate_recruit_source(self):
         cleaned_data = self.cleaned_data

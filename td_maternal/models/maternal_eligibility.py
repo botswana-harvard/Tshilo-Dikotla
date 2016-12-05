@@ -88,6 +88,11 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
     def natural_key(self):
         return self.eligibility_id
 
+    @property
+    def previous_consents(self):
+        MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
+        return MaternalConsent.objects.filter().order_by('version') #maternal_eligibility_reference=self.reference_pk
+
     def create_update_or_delete_eligibility_loss(self):
         if self.is_eligible:
             MaternalEligibilityLoss.objects.filter(maternal_eligibility_reference=self.reference_pk).delete()
@@ -112,7 +117,7 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
         MaternalEligibilityLoss = apps.get_model('td_maternal', 'MaternalEligibilityLoss')
         try:
             maternal_eligibility_loss = MaternalEligibilityLoss.objects.get(
-                maternal_eligibility_id=self.id)
+                maternal_eligibility_reference=self.reference_pk)
         except MaternalEligibilityLoss.DoesNotExist:
             maternal_eligibility_loss = None
         return maternal_eligibility_loss
