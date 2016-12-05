@@ -118,13 +118,15 @@ options = antenatal_enrollment_common
 options.update(antenatal_enrollment_eligible)
 options.update(
     current_hiv_status=UNKNOWN,
+    will_get_arvs=NOT_APPLICABLE,
     evidence_hiv_status=None,
     week32_test=YES,
     week32_test_date=fake.four_weeks_ago,
     week32_result=NEG,
     evidence_32wk_hiv_status=YES,
     rapid_test_done=YES,
-    rapid_test_result=NEG)
+    rapid_test_result=NEG,
+    )
 antenatalenrollment_neg = Recipe(
     AntenatalEnrollment, **options)
 

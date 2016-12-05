@@ -16,7 +16,6 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalLifetimeArvHistoryForm, self).setUp()
-        self.eligible_hiv_pos_mother(self.options)
 
         prior_arv = PriorArv.objects.create(
             hostname_created="django", name="Atripla", short_name="Atripla",
@@ -25,7 +24,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
             field_name=None, revision=":develop")
 
         self.options = {
-            'maternal_visit': self.maternal_visit_1000.id,
+            'maternal_visit': self.maternal_visit_1000_pos.id,
             'report_datetime': get_utcnow(),
             'haart_start_date': (get_utcnow() - relativedelta(months=9)).date(),
             'is_date_estimated': '-',

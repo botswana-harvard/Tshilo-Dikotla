@@ -29,12 +29,12 @@ class BaseTestCase(TestCase):
         self.maternal_visit_1000_pos = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment_1000_pos, reason='scheduled')
         self.maternal_ultrasound_pos = mommy.make_recipe(
-            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
-        self.antenatal_enrollment_two_pos = mommy.make_recipe('td_maternal.antenatal_enrollment_common_two', **self.options)
+            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000_pos, number_of_gestations=1)
+        self.antenatal_enrollment_two_pos = mommy.make_recipe('td_maternal.antenatalenrollmenttwo', **self.options)
         self.appointment_1010M_pos = Appointment.objects.get(
             subject_identifier=self.options.get('subject_identifier'), visit_code='1010M')
         self.antenatal_visit_1_pos = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment_1000_pos, reason='scheduled')
+            'td_maternal.maternalvisit', appointment=self.appointment_1010M_pos, reason='scheduled')
 
         # Create a negative mother
 
@@ -47,12 +47,11 @@ class BaseTestCase(TestCase):
             subject_identifier=self.options.get('subject_identifier'), visit_code='1000M')
         self.maternal_visit_1000_neg = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment_1000_neg, reason='scheduled')
-
         self.maternal_ultrasound_neg = mommy.make_recipe(
             'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000_neg, number_of_gestations=1)
 
         self.antenatal_enrollment_two_neg = mommy.make_recipe(
-            'td_maternal.antenatal_enrollment_common_two', subject_identifier=self.options.get('subject_identifier'))
+            'td_maternal.antenatalenrollmenttwo', subject_identifier=self.options.get('subject_identifier'))
         self.appointment_1010_neg = Appointment.objects.get(
             subject_identifier=self.options.get('subject_identifier'), visit_code='1010M')
         self.antenatal_visit_1_neg = mommy.make_recipe(
