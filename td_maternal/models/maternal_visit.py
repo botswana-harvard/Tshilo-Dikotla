@@ -25,9 +25,8 @@ class MaternalVisit(VisitModelMixin, CreatesMetadataModelMixin, RequiresConsentM
     natural_key.dependencies = ['td.appointment']
 
     def __str__(self):
-        return '{} {} {}'.format(
+        return '{} {}'.format(
             self.subject_identifier,
-            self.antenatal_enrollment.registered_subject.first_name,
             self.visit_code)
 
     def save(self, *args, **kwargs):
