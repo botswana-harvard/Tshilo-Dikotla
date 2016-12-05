@@ -3,9 +3,8 @@ from datetime import date
 from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
-from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO, CONTINUOUS, STOPPED, RESTARTED)
+from edc_constants.constants import (YES, NOT_APPLICABLE, NO, CONTINUOUS, STOPPED, RESTARTED)
 
-from td.models import Appointment
 from td_list.models import PriorArv
 from td_maternal.forms import MaternalLifetimeArvHistoryForm
 

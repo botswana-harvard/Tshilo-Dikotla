@@ -41,7 +41,8 @@ class TestMaternalArvPregForm(BaseTestCase):
 
     def test_took_arv(self):
         """Assert arv taken but none listed"""
-        maternal_arv_preg = mommy.make_recipe('td_maternal.maternalarvpreg', maternal_visit=self.maternal_visit_1000_pos)
+        maternal_arv_preg = mommy.make_recipe(
+            'td_maternal.maternalarvpreg', maternal_visit=self.maternal_visit_1000_pos)
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
             'arv_code': '3TC',
