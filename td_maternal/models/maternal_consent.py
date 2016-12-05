@@ -61,7 +61,8 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
 
     def save(self, *args, **kwargs):
         try:
-            MaternalEligibility.objects.get(reference_pk=self.maternal_eligibility_reference)
+            maternaleligibility = MaternalEligibility.objects.get(reference_pk=self.maternal_eligibility_reference)
+            maternaleligibility.is_consented = True # NOT CORRECT
         except MaternalEligibility.DoesNotExist:
             ValidationError('Unable to determine eligibility criteria. Was Maternal Eligibility completed?')
         if not self.id:

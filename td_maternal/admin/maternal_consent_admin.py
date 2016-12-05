@@ -15,7 +15,7 @@ class MaternalConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admi
 
     form = MaternalConsentForm
 
-    fields = ('maternal_eligibility',
+    fields = ('maternal_eligibility_reference',
               'first_name',
               'last_name',
               'initials',
@@ -85,6 +85,11 @@ class MaternalConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admi
             url_name = request.GET.get(self.querystring_name)
             return reverse(url_name)
         return redirect_url
+
+#     def save_related(request, form, formsets, change):
+#         #obj.user = request.user
+#         print(request.GET, "request, request, request")
+#         #obj.save()
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "maternal_eligibility":
