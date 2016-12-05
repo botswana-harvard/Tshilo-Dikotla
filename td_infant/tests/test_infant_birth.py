@@ -10,7 +10,7 @@ from td.models import Appointment
 from td_maternal.tests import BaseTestCase
 from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,
                                          MaternalConsentFactory, AntenatalEnrollmentFactory,
-                                         AntenatalVisitMembershipFactory, MaternalLabourDelFactory,
+                                         AntenatalVisitMembershipFactory, MaternalLabDelFactory,
                                          MaternalVisitFactory)
 
 from .factories import InfantBirthFactory
@@ -44,7 +44,7 @@ class TestInfantBirthMembership(BaseTestCase):
             maternal_visit=self.maternal_visit_1000,
             number_of_gestations=1)
         self.maternal_visits_membership = AntenatalVisitMembershipFactory(registered_subject=self.registered_subject)
-        self.maternal_labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject,
+        self.maternal_labour_del = MaternalLabDelFactory(registered_subject=self.registered_subject,
                                                             live_infants_to_register=1)
         self.infant_registered_subject = RegisteredSubject.objects.get(
             relative_identifier=self.registered_subject.subject_identifier,

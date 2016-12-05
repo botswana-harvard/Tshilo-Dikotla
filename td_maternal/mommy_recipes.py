@@ -10,7 +10,7 @@ from edc_lab.faker import EdcLabProvider
 from edc_visit_tracking.constants import SCHEDULED
 
 from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment, AntenatalEnrollmentTwo,
-                     MaternalLabourDel, SpecimenConsent, MaternalRando, MaternalLocator, MaternalUltraSoundInitial,
+                     MaternalLabDel, SpecimenConsent, MaternalRando, MaternalLocator, MaternalUltraSoundInitial,
                      MaternalInterimIdcc, RapidTestResult, MaternalObstericalHistory, MaternalMedicalHistory,
                      MaternalDemographics, MaternalAztNvp, MaternalDiagnoses, MaternalSubstanceUseDuringPreg,
                      MaternalClinicalMeasurementsTwo, MaternalLifetimeArvHistory, MaternalArvPreg,
@@ -141,9 +141,10 @@ maternalvisit = Recipe(
 #     specimen_type='WB',
 #     is_drawn=YES)
 
-maternallabourdel = Recipe(
-    MaternalLabourDel,
+maternallabdel = Recipe(
+    MaternalLabDel,
     report_datetime=get_utcnow,
+    live_infants=1,
     csection_reason=NOT_APPLICABLE,
     delivery_datetime=get_utcnow,
     delivery_hospital='Lesirane',

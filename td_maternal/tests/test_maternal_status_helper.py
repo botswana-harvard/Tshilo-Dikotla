@@ -79,7 +79,7 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        labour_del = mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
+        labour_del = mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         infant_registered_subject = RegisteredSubject.objects.get(
             relative_identifier=labour_del.registered_subject.subject_identifier)
         mommy.make_recipe('td_infant.infantbirth', maternal_labour_del=labour_del, registered_subject=infant_registered_subject)
@@ -98,7 +98,7 @@ class TestMaternalStatusHelper(BaseTestCase):
     def test_ind_status_from_rapid_test(self):
         """test that we can figure out a posetive status taking in to consideration rapid tests."""
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
@@ -129,7 +129,7 @@ class TestMaternalStatusHelper(BaseTestCase):
     def test_neg_status_from_enrollment(self):
         """test that we can figure out a negative status with just the enrollment status."""
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
@@ -150,7 +150,7 @@ class TestMaternalStatusHelper(BaseTestCase):
     def test_neg_status_from_rapid_test(self):
         """test that we can figure out a negative status taking in to consideration rapid tests."""
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
@@ -179,7 +179,7 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
-        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
@@ -228,7 +228,7 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
         maternal_visit_1020M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')

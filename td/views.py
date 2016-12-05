@@ -16,7 +16,7 @@ from edc_base.utils import get_utcnow
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_sync.models import OutgoingTransaction
 
-from td_maternal.models import (MaternalConsent, MaternalLabourDel, MaternalOffstudy, MaternalUltraSoundInitial,
+from td_maternal.models import (MaternalConsent, MaternalLabDel, MaternalOffstudy, MaternalUltraSoundInitial,
                                 AntenatalEnrollment)
 
 
@@ -130,7 +130,7 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
     def delivery_stats(self, future):
         response_data = {}
         columns = ['id', 'valid_regiment_duration', 'modified']
-        qs = MaternalLabourDel.objects.values_list(*columns).all()
+        qs = MaternalLabDel.objects.values_list(*columns).all()
         deliveries = pd.DataFrame(list(qs), columns=columns)
         if not deliveries.empty:
             response_data.update({
@@ -146,7 +146,7 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
     def pregnancy_status(self, future):
         response_data = {}
         delivery_columns = ['registered_subject__subject_identifier', ]
-        deliveries = MaternalLabourDel.objects.values_list(*delivery_columns, flat=True).all()
+        deliveries = MaternalLabDel.objects.values_list(*delivery_columns, flat=True).all()
         consent_columns = ['subject_identifier']
         consent_qs = MaternalConsent.objects.values_list(*consent_columns, flat=True).all()
         pregnant_list = []

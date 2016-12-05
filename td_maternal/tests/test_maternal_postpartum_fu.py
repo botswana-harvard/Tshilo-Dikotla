@@ -53,7 +53,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
@@ -230,7 +230,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         mommy.make_recipe(
             'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=get_utcnow(), result=NEG)
-        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject_2)
+        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
@@ -263,7 +263,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         mommy.make_recipe(
             'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=get_utcnow(), result=NEG)
-        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject_2)
+        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
@@ -300,7 +300,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         mommy.make_recipe(
             'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=get_utcnow(), result=NEG)
-        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject_2)
+        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
@@ -337,7 +337,7 @@ class TestMaternalPostPartumFu(BaseTestCase):
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         mommy.make_recipe(
             'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=get_utcnow(), result=NEG)
-        mommy.make_recipe('td_maternal.maternallabourdel', registered_subject=self.registered_subject_2)
+        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject_2)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')

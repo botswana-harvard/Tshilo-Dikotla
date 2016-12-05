@@ -11,7 +11,7 @@ from td.models import Appointment
 from .antenatal_enrollment import AntenatalEnrollment
 from .maternal_consent import MaternalConsent
 from .maternal_eligibility import MaternalEligibility
-from .maternal_labour_del import MaternalLabourDel
+from .maternal_lab_del import MaternalLabDel
 from .maternal_offstudy import MaternalOffstudy
 from .maternal_visit import MaternalVisit
 
@@ -79,7 +79,7 @@ def eligible_put_back_on_study(sender, instance, raw, created, using, **kwargs):
             put_back_on_study_from_failed_eligibility(instance)
 
 
-@receiver(post_save, weak=False, sender=MaternalLabourDel, dispatch_uid='create_infant_identifier_on_labour_delivery')
+@receiver(post_save, weak=False, sender=MaternalLabDel, dispatch_uid='create_infant_identifier_on_labour_delivery')
 def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, using, **kwargs):
     """Creates an identifier for the registered infant.
 

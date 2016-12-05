@@ -21,7 +21,7 @@ class TestMaternalArvPost(BaseTestCase):
         self.appointment = Appointment.objects.get(
             subject_identifier=self.options.get('subject_identifier'), visit_code='1020M')
 
-        mommy.make_recipe('td_maternal.maternallabourdel', subject_identifier=self.options.get('subject_identifier'))
+        mommy.make_recipe('td_maternal.maternallabdel', subject_identifier=self.options.get('subject_identifier'))
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.options.get('subject_identifier'), visit_code='2000M')

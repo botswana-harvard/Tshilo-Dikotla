@@ -23,7 +23,7 @@ class TestPotentialCalls(BaseTestCase):
         self.create_mother(self.hiv_neg_mother_options(self.subject_identifier))
         self.assertTrue(Call.objects.filter(subject_identifier=self.registered_subject.subject_identifier).exists())
         # self.assertTrue(Call.objects.filter(subject_identifier=self.registered_subject.subject_identifier).exists())
-        # MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        # MaternalLabDelFactory(registered_subject=self.registered_subject)
         # self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier).exists())
         # self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier).exists())
         # self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier).exists())

@@ -32,7 +32,7 @@ from .models import (
     MaternalArvPreg, MaternalArv, MaternalAztNvp, MaternalRando, MaternalClinicalMeasurementsOne,
     MaternalClinicalMeasurementsTwo, MaternalContraception, MaternalDeathReport, MaternalDemographics,
     MaternalDiagnoses, MaternalEligibility, MaternalEligibilityLoss, MaternalInterimIdcc, MaternalHivInterimHx,
-    MaternalLabourDel, MaternalVisit, MaternalLocator, MaternalMedicalHistory, MaternalUltraSoundInitial,
+    MaternalLabDel, MaternalVisit, MaternalLocator, MaternalMedicalHistory, MaternalUltraSoundInitial,
     MaternalOffstudy, MaternalPostPartumDep, MaternalPostPartumFu, MaternalSubstanceUseDuringPreg,
     MaternalSubstanceUsePriorPreg, MaternalUltraSoundFu, NvpDispensing, RapidTestResult, SpecimenConsent
 )
@@ -694,10 +694,10 @@ class MaternalInterimIdccForm(ModelFormMixin, forms.ModelForm):
         fields = '__all__'
 
 
-class MaternalLabourDelForm(ModelFormMixin, forms.ModelForm):
+class MaternalLabDelForm(ModelFormMixin, forms.ModelForm):
 
     def clean(self):
-        cleaned_data = super(MaternalLabourDelForm, self).clean()
+        cleaned_data = super(MaternalLabDelForm, self).clean()
         self.validate_valid_regimen_hiv_pos_only()
         return cleaned_data
 
@@ -737,7 +737,7 @@ class MaternalLabourDelForm(ModelFormMixin, forms.ModelForm):
                         self.maternal_hiv_status.result))
 
     class Meta:
-        model = MaternalLabourDel
+        model = MaternalLabDel
         fields = '__all__'
 
 

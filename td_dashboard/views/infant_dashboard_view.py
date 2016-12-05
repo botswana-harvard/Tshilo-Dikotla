@@ -1,8 +1,6 @@
 from collections import OrderedDict
 from dateutil.relativedelta import relativedelta
 
-from django.conf import settings
-from django.contrib import admin
 from django.utils.timezone import localtime
 from django.views.generic import TemplateView
 

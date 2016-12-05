@@ -381,7 +381,7 @@ class InfantBirthForm(forms.ModelForm):
         # DOB should match delivery date
 #         maternal_identifier = cleaned_data.get('registered_subject').relative_identifier
 #         try:
-#             maternal_lab_del = MaternalLabourDel.objects.get(
+#             maternal_lab_del = MaternalLabDel.objects.get(
 #                 maternal_visit__appointment__registered_subject__subject_identifier=maternal_identifier)
 #             if not cleaned_data.get('dob', None) == maternal_lab_del.delivery_datetime.date():
 #                 raise forms.ValidationError('Infant dob must match maternal delivery date of {}. You wrote {}'
@@ -392,7 +392,7 @@ class InfantBirthForm(forms.ModelForm):
 #                     raise forms.ValidationError(
 #                         "Infant birth record cannot be saved. An infant has already been "
 #                         "registered for this mother.")
-#         except MaternalLabourDel.DoesNotExist:
+#         except MaternalLabDel.DoesNotExist:
 #             raise forms.ValidationError('Cannot find maternal labour and delivery form for this infant!'
 #                                         ' This is not expected.')
 #         except InfantBirth.DoesNotExist:

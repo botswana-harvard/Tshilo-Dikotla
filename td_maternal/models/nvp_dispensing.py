@@ -2,14 +2,14 @@ from django.db import models
 
 from edc_constants.choices import YES_NO
 
-from .maternal_labour_del import MaternalLabourDel
+from .maternal_lab_del import MaternalLabDel
 from .maternal_crf_model import MaternalCrfModel
 
 
 class NvpDispensing(MaternalCrfModel):
 
     maternal_delivery = models.ForeignKey(
-        MaternalLabourDel,
+        MaternalLabDel,
         verbose_name='Delivery Record')
 
     nvp_admin_date = models.DateField(

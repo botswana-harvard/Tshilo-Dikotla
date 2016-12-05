@@ -243,7 +243,7 @@ class TestMaternalRuleGroups(BaseTestCase):
             appointment=Appointment.objects.get(subject_identifier=options.get('registered_subject'),
                                                 visit_code='1020M'), reason='scheduled')
         self.maternal_labour_del = mommy.make_recipe(
-            'td_maternal.maternallabourdel',
+            'td_maternal.maternallabdel',
             registered_subject=options.get('registered_subject'),
             live_infants_to_register=1)
         mommy.make_recipe(
@@ -536,7 +536,7 @@ class TestMaternalRuleGroups(BaseTestCase):
             subject_identifier=self.registered_subject_3.subject_identifier, visit_code='1020M')
 
         mommy.make_recipe(
-            'td_maternal.maternallabourdel', registered_subject=self.registered_subject_3)
+            'td_maternal.maternallabdel', registered_subject=self.registered_subject_3)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject_3.subject_identifier, visit_code='2000M')
@@ -587,7 +587,7 @@ class TestMaternalRuleGroups(BaseTestCase):
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
 
         mommy.make_recipe(
-            'td_maternal.maternallabourdel', registered_subject=self.registered_subject)
+            'td_maternal.maternallabdel', registered_subject=self.registered_subject)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')

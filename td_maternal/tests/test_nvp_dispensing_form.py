@@ -46,7 +46,7 @@ class TestNvpDispensingForm(BaseTestCase):
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
 
-        self.maternal_delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        self.maternal_delivery = MaternalLabDelFactory(registered_subject=self.registered_subject)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')

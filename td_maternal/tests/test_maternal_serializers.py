@@ -110,8 +110,8 @@ class TestMaternalSerializers(TestCase):
             subject_identifier=self.maternal_consent.subject_identifier, visit_code='1010M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=appointment, reason='scheduled')
 
-        maternallabourdel = mommy.make_recipe(
-            'td_maternal.maternallabourdel', subject_identifier=self.maternal_consent.subject_identifier)
+        maternallabdel = mommy.make_recipe(
+            'td_maternal.maternallabdel', subject_identifier=self.maternal_consent.subject_identifier)
 
         outgoing_transactions = OutgoingTransaction.objects.all()
         self.assertGreater(outgoing_transactions.count(), 0)
@@ -124,4 +124,4 @@ class TestMaternalSerializers(TestCase):
                 if json_tx.get('model') == 'td_maternal.antenatalenrollmenttwo':
                     self.assertEqual(antenatalenrollmenttwo.pk, deserialised_obj.object.pk)
                 elif json_tx.get('model') == 'td_maternal.maternalLabourdel':
-                    self.assertEqual(maternallabourdel.pk, deserialised_obj.object.pk)
+                    self.assertEqual(maternallabdel.pk, deserialised_obj.object.pk)

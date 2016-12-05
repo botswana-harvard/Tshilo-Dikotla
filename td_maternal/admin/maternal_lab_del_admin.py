@@ -2,18 +2,18 @@ from django.contrib import admin
 
 from td.admin_mixins import ModelAdminMixin
 
-from ..forms import MaternalLabourDelForm, MaternalHivInterimHxForm
-from ..models import MaternalLabourDel, MaternalHivInterimHx
+from ..forms import MaternalLabDelForm, MaternalHivInterimHxForm
+from ..models import MaternalLabDel, MaternalHivInterimHx
 
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 
 
-@admin.register(MaternalLabourDel)
-class MaternalLabourDelAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
+@admin.register(MaternalLabDel)
+class MaternalLabDelAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     dashboard_type = 'maternal'
-    form = MaternalLabourDelForm
+    form = MaternalLabDelForm
 
     list_display = ('subject_identifier',
                     'delivery_datetime',

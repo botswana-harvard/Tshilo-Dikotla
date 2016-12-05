@@ -6,7 +6,7 @@ from edc_visit_schedule.schedule import Schedule
 
 
 from .lab_profiles import (pbmc_vl_panel, pbmc_panel, fasting_glucose_panel,
-                                       glucose_1h_panel, glucose_2h_panel, hiv_elisa_panel, cd4_panel)
+                           glucose_1h_panel, glucose_2h_panel, hiv_elisa_panel, cd4_panel)
 
 visit_schedule = VisitSchedule(
     name='maternal_visit_schedule',
@@ -147,7 +147,7 @@ antenatal_enrollment2.add_visit(
 # follow up visit
 follow_up = Schedule(
     name='follow_up',
-    enrollment_model='td_maternal.maternallabourdel')
+    enrollment_model='td_maternal.maternallabdel')
 
 follow_up.add_visit(
     code='2000M',

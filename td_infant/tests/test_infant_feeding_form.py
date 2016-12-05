@@ -11,7 +11,7 @@ from td_infant.forms import InfantFeedingForm
 
 from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,
                                          MaternalConsentFactory, AntenatalEnrollmentFactory,
-                                         AntenatalVisitMembershipFactory, MaternalLabourDelFactory,
+                                         AntenatalVisitMembershipFactory, MaternalLabDelFactory,
                                          MaternalVisitFactory)
 
 from .factories import (InfantBirthFactory, InfantVisitFactory, InfantBirthArvFactory)
@@ -60,7 +60,7 @@ class TestInfantFeedingForm(BaseTestCase):
             subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
         MaternalVisitFactory(appointment=self.appointment, reason='scheduled')
 
-        self.maternal_labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject)
+        self.maternal_labour_del = MaternalLabDelFactory(registered_subject=self.registered_subject)
 
         self.appointment = Appointment.objects.get(
             subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')

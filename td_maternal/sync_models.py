@@ -19,7 +19,7 @@ sync_models = [
     'td_maternal.maternaleligibilityloss',
     'td_maternal.maternalhivinterimhx',
     'td_maternal.maternalinterimidcc',
-    'td_maternal.maternallabourdel',
+    'td_maternal.maternallabdel',
     'td_maternal.maternallifetimearvhistory',
     'td_maternal.maternallocator',
     'td_maternal.maternalmedicalhistory',

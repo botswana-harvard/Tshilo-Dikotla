@@ -13,20 +13,17 @@ from td.models import Appointment
 from td_list.models import DeliveryComplications
 from td_maternal.enrollment_helper import EnrollmentHelper
 
-from ..forms import MaternalLabourDelForm
+from ..forms import MaternalLabDelForm
 
 
 class TestMaternalLabDel(TestCase):
 
     def setUp(self):
-        RegisteredSubject = django_apps.get_app_config('edc_registration').model
         self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         self.maternal_consent = mommy.make_recipe(
             'td_maternal.maternalconsent',
             maternal_eligibility_reference=self.maternal_eligibility.reference_pk)
         self.subject_identifier = self.maternal_consent.subject_identifier
-        self.registered_subject = RegisteredSubject.objects.get(
-            subject_identifier=self.subject_identifier)
         self.antenatal_enrollment = mommy.make_recipe(
             'td_maternal.antenatalenrollment',
             subject_identifier=self.subject_identifier)
@@ -49,7 +46,6 @@ class TestMaternalLabDel(TestCase):
             revision=":develop:")
 
         self.options = {
-            'registered_subject': self.registered_subject.id,
             'report_datetime': get_utcnow(),
             'delivery_datetime': get_utcnow(),
             'delivery_time_estimated': NO,
@@ -65,7 +61,7 @@ class TestMaternalLabDel(TestCase):
 
     def test_new_infant_identifiers(self):
         mommy.make_recipe(
-            'td_maternal.maternallabourdel',
+            'td_maternal.maternallabdel',
             subject_identifier=self.subject_identifier,
             live_infants_to_register=1)
         self.assertEqual(IdentifierModel.objects.filter(linked_identifier=self.subject_identifier).count(), 1)
@@ -75,7 +71,7 @@ class TestMaternalLabDel(TestCase):
     def test_new_infant_registration(self):
         RegisteredSubject = django_apps.get_app_config('edc_registration').model
         mommy.make_recipe(
-            'td_maternal.maternallabourdel',
+            'td_maternal.maternallabdel',
             subject_identifier=self.subject_identifier,
             live_infants_to_register=1)
         self.assertEqual(RegisteredSubject.objects.filter(
@@ -86,7 +82,7 @@ class TestMaternalLabDel(TestCase):
     def test_on_therapy_for_atleast4weeks(self):
         self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
         mommy.make_recipe(
-            'td_maternal.maternallabourdel',
+            'td_maternal.maternallabdel',
             subject_identifier=self.subject_identifier,
             live_infants_to_register=1,
             valid_regiment_duration=YES)
@@ -97,7 +93,7 @@ class TestMaternalLabDel(TestCase):
     def test_not_therapy_for_atleast4weeks(self):
         self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
         mommy.make_recipe(
-            'td_maternal.maternallabourdel',
+            'td_maternal.maternallabdel',
             subject_identifier=self.subject_identifier,
             valid_regiment_duration=NO)
         enrollment_helper = EnrollmentHelper(self.antenatal_enrollment)
@@ -106,21 +102,21 @@ class TestMaternalLabDel(TestCase):
 
     def test_valid_regimen_duration_hiv_pos_only_na(self):
         self.options['valid_regiment_duration'] = NOT_APPLICABLE
-        form = MaternalLabourDelForm(data=self.options)
+        form = MaternalLabDelForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
             'Participant is HIV+ valid regimen duration should be YES. Please correct.', errors)
 
     def test_valid_regimen_duration_hiv_pos_only_no_init_date(self):
         self.options['arv_initiation_date'] = None
-        form = MaternalLabourDelForm(data=self.options)
+        form = MaternalLabDelForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
             'You indicated participant was on valid regimen, please give a valid arv initiation date.', errors)
 
     def test_valid_regimen_duration_hiv_pos_only_invalid_init_date(self):
         self.options['arv_initiation_date'] = (get_utcnow() - relativedelta(weeks=1)).date()
-        form = MaternalLabourDelForm(data=self.options)
+        form = MaternalLabDelForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
             'You indicated that the mother was on REGIMEN for a valid duration, but '

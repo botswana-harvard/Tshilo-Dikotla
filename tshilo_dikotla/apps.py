@@ -50,6 +50,7 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
     subject_types = [
         SubjectType('maternal', 'Mothers', Cap(model_name='td_maternal.maternalconsent', max_subjects=9999)),
         SubjectType('maternal', 'Mothers', Cap(model_name='td_maternal.antenatalenrollment', max_subjects=9999)),
+        SubjectType('maternal', 'Mothers', Cap(model_name='td_maternal.maternallabdel', max_subjects=9999)),
         SubjectType('infant', 'Infants', Cap(model_name='td_infant.infantbirth', max_subjects=9999))
     ]
 

@@ -17,8 +17,7 @@ from .maternal_diagnoses_admin import MaternalDiagnosesAdmin
 from .maternal_eligibility_admin import MaternalEligibilityAdmin
 from .maternal_eligibility_loss_admin import MaternalEligibilityLossAdmin
 from .maternal_interim_idcc_admin import MaternalInterimIdccAdmin
-from .maternal_labour_del_admin import MaternalHivInterimHxAdmin
-from .maternal_labour_del_admin import MaternalLabourDelAdmin
+from .maternal_lab_del_admin import MaternalHivInterimHxAdmin, MaternalLabDelAdmin
 from .maternal_locator_admin import MaternalLocatorAdmin
 from .maternal_medical_history_admin import MaternalMedicalHistoryAdmin
 from .maternal_obsterical_history_admin import MaternalObstericalHistoryAdmin

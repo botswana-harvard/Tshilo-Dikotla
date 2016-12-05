@@ -15,7 +15,7 @@ from td_infant.models.infant_birth import InfantBirth
 from td_maternal.enrollment_helper import EnrollmentHelper
 from td_maternal.maternal_hiv_status import MaternalHivStatus
 from td_maternal.models import (
-    AntenatalEnrollment, MaternalConsent, MaternalLabourDel, MaternalLocator,
+    AntenatalEnrollment, MaternalConsent, MaternalLabDel, MaternalLocator,
     MaternalRando, MaternalVisit)
 
 from .mixins import DashboardMixin
@@ -36,7 +36,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
         self.template_name = 'td_dashboard/maternal/subject_dashboard.html'
         self.enrollments_models = [
             'td_maternal.specimenconsent', 'td_maternal.antenatalenrollment',
-            'td_maternal.antenatalvisitmembership', 'td_maternal.maternallabourdel']
+            'td_maternal.antenatalvisitmembership', 'td_maternal.maternallabdel']
 
     def get_context_data(self, **kwargs):
         self.context = super().get_context_data(**kwargs)
@@ -138,9 +138,9 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
     @property
     def maternal_delivery(self):
         try:
-            delivery = MaternalLabourDel.objects.get(
+            delivery = MaternalLabDel.objects.get(
                 registered_subject__subject_identifier=self.subject_identifier)
-        except MaternalLabourDel.DoesNotExist:
+        except MaternalLabDel.DoesNotExist:
             delivery = None
         return delivery
 

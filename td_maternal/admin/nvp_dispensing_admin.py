@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from ..forms import NvpDispensingForm
-from ..models import NvpDispensing, MaternalLabourDel
+from ..models import NvpDispensing, MaternalLabDel
 
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
@@ -21,7 +21,7 @@ class NvpDispensingAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'maternal_delivery' and request.GET.get('subject_identifier'):
-            kwargs["queryset"] = MaternalLabourDel.objects.filter(
+            kwargs["queryset"] = MaternalLabDel.objects.filter(
                 subject_identifier=request.GET.get('subject_identifier'))
 
         return super(NvpDispensingAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)

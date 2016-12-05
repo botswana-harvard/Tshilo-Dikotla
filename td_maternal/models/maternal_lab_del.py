@@ -3,10 +3,10 @@ from django.db import models
 from edc_appointment.model_mixins import CreateAppointmentsMixin
 from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel, HistoricalRecords, UrlMixin
-from edc_base.model.validators import datetime_not_future
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
+from edc_pregnancy_utils.model_mixins import LabourAndDeliveryMixin
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
@@ -19,20 +19,10 @@ from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION
 from .maternal_crf_model import MaternalCrfModel
 
 
-class MaternalLabourDel(EnrollmentModelMixin, CreateAppointmentsMixin, RequiresConsentMixin, UrlMixin, BaseUuidModel):
+class MaternalLabDel(EnrollmentModelMixin, LabourAndDeliveryMixin, CreateAppointmentsMixin,
+                     RequiresConsentMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
-
-    delivery_datetime = models.DateTimeField(
-        verbose_name="Date and time of delivery :",
-        help_text="If TIME unknown, estimate",
-        validators=[
-            datetime_not_future, ])
-
-    delivery_time_estimated = models.CharField(
-        verbose_name="Is the delivery TIME estimated?",
-        max_length=3,
-        choices=YES_NO)
 
     delivery_hospital = models.CharField(
         verbose_name="Place of delivery? ",
@@ -69,9 +59,6 @@ class MaternalLabourDel(EnrollmentModelMixin, CreateAppointmentsMixin, RequiresC
 
     delivery_complications_other = OtherCharField()
 
-    live_infants_to_register = models.IntegerField(
-        verbose_name="How many babies are you registering to the study? ")
-
     valid_regiment_duration = models.CharField(
         verbose_name="(Interviewer) If HIV+ve, has the participant been on the ART "
                      "regimen for at least 4 weeks in pregnancy?",
@@ -104,7 +91,7 @@ class MaternalLabourDel(EnrollmentModelMixin, CreateAppointmentsMixin, RequiresC
 
     def save(self, *args, **kwargs):
         self.live_infants_to_register = 1
-        super(MaternalLabourDel, self).save(*args, **kwargs)
+        super(MaternalLabDel, self).save(*args, **kwargs)
 
     def __str__(self):
         return "{0}".format(self.subject_identifier)
@@ -112,12 +99,21 @@ class MaternalLabourDel(EnrollmentModelMixin, CreateAppointmentsMixin, RequiresC
     def natural_key(self):
         return (self.subject_identifier, )
 
+    @property
+    def subject_type(self):
+        return'maternal'
+
+    @property
+    def study_site(self):
+        return self.subject_identifier[4:6]
+
     class Meta(EnrollmentModelMixin.Meta):
         app_label = 'td_maternal'
         verbose_name = "Delivery"
         verbose_name_plural = "Deliveries"
         consent_model = 'td_maternal.maternalconsent'
         visit_schedule_name = 'maternal_visit_schedule.follow_up'
+        birth_model = 'td_infant.infantbirth'
 
 
 class MaternalLabDelMed(MaternalCrfModel):

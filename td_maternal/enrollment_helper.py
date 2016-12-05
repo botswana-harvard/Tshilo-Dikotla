@@ -146,12 +146,12 @@ class EnrollmentHelper(object):
 
     @property
     def delivery(self):
-        """Returns a MaternalLabourDel instance or None."""
+        """Returns a MaternalLabDel instance or None."""
         if not self._delivery:
-            MaternalLabourDel = django_apps.get_model('td_maternal', 'MaternalLabourDel')
+            MaternalLabDel = django_apps.get_model('td_maternal', 'MaternalLabDel')
             try:
-                self.delivery = MaternalLabourDel.objects.get(
+                self.delivery = MaternalLabDel.objects.get(
                     subject_identifier=self.subject_identifier)
-            except MaternalLabourDel.DoesNotExist:
+            except MaternalLabDel.DoesNotExist:
                 self._delivery = None
         return self._delivery
