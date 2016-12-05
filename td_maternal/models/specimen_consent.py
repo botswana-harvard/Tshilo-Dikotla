@@ -17,7 +17,7 @@ class SpecimenConsent(SpecimenConsentMixin, SampleCollectionFieldsMixin, Require
         verbose_name="Subject Identifier",
         max_length=50,
         unique=True,
-        editable=False)
+        editable=True)
 
     objects = EnrollmentManager()
 
