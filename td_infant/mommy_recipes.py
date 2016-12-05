@@ -1,3 +1,4 @@
+from datetime import date
 from dateutil.relativedelta import relativedelta
 
 from faker.providers import BaseProvider
@@ -26,10 +27,11 @@ class TdProvider(BaseProvider):
 
 infantbirth = Recipe(
     InfantBirth,
+    schedule_name='infant_birth',
     report_datetime=get_utcnow,
     first_name='BABY',
     initials='BB',
-    dob=get_utcnow,
+    dob=date.today,
     gender='F',)
 
 infantbirthdata = Recipe(

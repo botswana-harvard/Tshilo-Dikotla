@@ -144,6 +144,7 @@ maternallabdel = Recipe(
     MaternalLabDel,
     report_datetime=get_utcnow,
     live_infants=1,
+    birth_orders=None,
     csection_reason=NOT_APPLICABLE,
     delivery_datetime=get_utcnow,
     delivery_hospital='Lesirane',

@@ -8,15 +8,14 @@ from edc_base.model.models.url_mixin import UrlMixin
 from edc_base.model.validators import datetime_not_future
 from edc_offstudy.model_mixins import OffstudyMixin
 from edc_protocol.validators import datetime_not_before_study_start
-from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 
 
 from ..managers import InfantBirthModelManager
 from edc_pregnancy_utils.model_mixins import BirthMixin
+from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 
 
-class InfantBirth(BirthMixin, CreateAppointmentsMixin, UpdatesOrCreatesRegistrationModelMixin,
-                  OffstudyMixin, UrlMixin, BaseUuidModel):
+class InfantBirth(BirthMixin, EnrollmentModelMixin, CreateAppointmentsMixin, OffstudyMixin, UrlMixin, BaseUuidModel):
     """ A model completed by the user on the infant's birth. """
 
     report_datetime = models.DateTimeField(
@@ -31,15 +30,10 @@ class InfantBirth(BirthMixin, CreateAppointmentsMixin, UpdatesOrCreatesRegistrat
     history = HistoricalRecords()
 
     def natural_key(self):
-        return self.maternal_labour_del.natural_key()
-    natural_key.dependencies = ['td_maternal.maternallabdel', 'td.registered_subject']
+        return (self.subject_identifier, )
 
     def __str__(self):
         return "{} ({}) {}".format(self.first_name, self.initials, self.gender)
-
-    @property
-    def visit(self):
-        return getattr(self, 'infant_visit')
 
     @property
     def registration_instance(self):
@@ -57,5 +51,10 @@ class InfantBirth(BirthMixin, CreateAppointmentsMixin, UpdatesOrCreatesRegistrat
     class Meta:
         app_label = 'td_infant'
         verbose_name = "Infant Birth"
-        visit_schedule_name = 'infant_visit_schedule'
+        visit_schedule_name = 'infant_visit_schedule.infant_birth'
         delivery_model = 'td_maternal.maternallabdel'
+        unique_together = (
+            ('subject_identifier', 'visit_schedule_name', 'schedule_name'),
+            ('delivery_reference', 'birth_order', 'birth_order_denominator'),
+            ('delivery_reference', 'birth_order', 'birth_order_denominator', 'first_name')
+        )

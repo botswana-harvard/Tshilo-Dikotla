@@ -22,4 +22,3 @@ from .solid_food_assessment import SolidFoodAssessment
 from .infant_fu_new_med import (InfantFuNewMed, InfantFuNewMedItems)
 from .infant_arv_proph import (InfantArvProph, InfantArvProphMod)
 from .infant_disenrollment import InfantDisenrollment
-from .signals import *

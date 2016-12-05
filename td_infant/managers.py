@@ -139,8 +139,8 @@ class InfantArvProphModManager(models.Manager):
 
 class InfantBirthModelManager(models.Manager):
 
-    def get_by_natural_key(self, maternal_labour_del):
-        return self.get(maternal_labour_del=maternal_labour_del)
+    def get_by_natural_key(self, subject_identifier):
+        return self.get(subject_identifier=subject_identifier)
 
 
 class InfantFuDxItemsManager(models.Manager):

@@ -87,7 +87,7 @@ infant_visit_schedule = VisitSchedule(
 )
 
 infant_birth_schedule = Schedule(
-    name='infant_enrollment',
+    name='infant_birth',
     enrollment_model='td_infant.infantbirth',
     disenrollment_model='td_infant.infantdisenrollment',)
 
