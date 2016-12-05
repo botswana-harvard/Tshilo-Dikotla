@@ -1374,6 +1374,8 @@ class RapidTestResultForm(ModelFormMixin, forms.ModelForm):
 
 class SpecimenConsentForm(BaseSpecimenConsentForm):
 
+    STUDY_CONSENT = MaternalConsent
+
     class Meta:
         model = SpecimenConsent
         fields = '__all__'
