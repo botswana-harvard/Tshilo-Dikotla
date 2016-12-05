@@ -1,12 +1,10 @@
-from dateutil.relativedelta import relativedelta
-from django.utils import timezone
 from model_mommy import mommy
 
-from td.models import Appointment
-from edc_registration.models import RegisteredSubject
-from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO)
+from edc_base.utils import get_utcnow
 from edc_code_lists.models import WcsDxAdult
+from edc_constants.constants import (YES, NO)
 
+from td.models import Appointment
 from td_list.models import MaternalDiagnoses
 from td_maternal.forms import MaternalDiagnosesForm
 
@@ -17,84 +15,55 @@ class TestMaternalDiagnosesForm(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalDiagnosesForm, self).setUp()
-        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        self.maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
-        self.registered_subject = self.maternal_eligibility.registered_subject
-
-        self.assertEqual(RegisteredSubject.objects.all().count(), 1)
-        options = {'registered_subject': self.registered_subject,
-                   'current_hiv_status': POS,
-                   'evidence_hiv_status': YES,
-                   'will_get_arvs': YES,
-                   'is_diabetic': NO,
-                   'will_remain_onstudy': YES,
-                   'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
-        self.assertTrue(self.antenatal_enrollment.is_eligible)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
-        self.maternal_visit = mommy.make_recipe(
-            'td_maternal.maternalVvsit', appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = mommy.make_recipe(
-            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit, number_of_gestations=1,)
-
-        self.antenatal_visits_membership = mommy.make_recipe(
-            'td_maternal.antenatalvisitmembership', registered_subject=options.get('registered_subject'))
 
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
-        self.maternal_visit = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
+            subject_identifier=self.options.get('subject_identifier'), visit_code='1020M')
         mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
-        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
+        mommy.make_recipe('td_maternal.maternallabourdel',
+                          subject_identifier=self.options.get('subject_identifier'))
 
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
+            subject_identifier=self.options.get('subject_identifier'), visit_code='2000M')
         mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
-        self.maternal_visit_2000 = mommy.make_recipe(
+            subject_identifier=self.options.get('subject_identifier'), visit_code='2010M')
+        self.maternal_visit_2010 = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
         self.diagnoses = MaternalDiagnoses.objects.create(
             hostname_created="django", name="Gestational Hypertension",
-            short_name="Gestational Hypertension", created=timezone.datetime.now(),
-            user_modified="", modified=timezone.datetime.now(),
+            short_name="Gestational Hypertension", created=get_utcnow(),
+            user_modified="", modified=get_utcnow(),
             hostname_modified="django", version="1.0",
             display_index=1, user_created="django", field_name=None,
             revision=":develop:")
 
         self.diagnoses_na = MaternalDiagnoses.objects.create(
             hostname_created="django", name="Not Applicable",
-            short_name="N/A", created=timezone.datetime.now(),
-            user_modified="", modified=timezone.datetime.now(),
+            short_name="N/A", created=get_utcnow(),
+            user_modified="", modified=get_utcnow(),
             hostname_modified="django", version="1.0",
             display_index=1, user_created="django", field_name=None,
             revision=":develop:")
 
         self.who_dx = WcsDxAdult.objects.create(
             hostname_created="cabel", code="CS4003", short_name="Recurrent severe bacterial pneumo",
-            created=timezone.datetime.now(), user_modified="", modified=timezone.datetime.now(), hostname_modified="cabel",
+            created=get_utcnow(), user_modified="", modified=get_utcnow(), hostname_modified="cabel",
             long_name="Recurrent severe bacterial pneumonia", user_created="abelc",
             list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
 
         self.who_dx_na = WcsDxAdult.objects.create(
             hostname_created="cabel", code="CS4002", short_name="N/A",
-            created=timezone.datetime.now(), user_modified="",
-            modified=timezone.datetime.now(), hostname_modified="cabel",
+            created=get_utcnow(), user_modified="",
+            modified=get_utcnow(), hostname_modified="cabel",
             long_name="Not Applicable", user_created="abelc",
             list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
 
         self.options = {
-            'maternal_visit': self.maternal_visit_2000,
+            'maternal_visit': self.maternal_visit_2010,
             'new_diagnoses': YES,
             'diagnoses': [self.diagnoses.id],
             'has_who_dx': YES,

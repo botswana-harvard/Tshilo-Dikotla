@@ -5,7 +5,7 @@ from model_mommy.recipe import Recipe, seq
 
 from edc_base.faker import EdcBaseProvider
 from edc_base.utils import get_utcnow
-from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG, UNKNOWN
+from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG, UNKNOWN, CONTINUOUS
 from edc_lab.faker import EdcLabProvider
 from edc_visit_tracking.constants import SCHEDULED
 
@@ -125,8 +125,7 @@ options.update(
     week32_result=NEG,
     evidence_32wk_hiv_status=YES,
     rapid_test_done=YES,
-    rapid_test_result=NEG,
-    )
+    rapid_test_result=NEG)
 antenatalenrollment_neg = Recipe(
     AntenatalEnrollment, **options)
 
@@ -280,3 +279,17 @@ maternalclinicalmeasurementsone = Recipe(
     weight_kg=76,
     systolic_bp=120,
     diastolic_bp=100,)
+
+maternalarvpreg = Recipe(
+    MaternalArvPreg,
+    took_arv=YES,
+    is_interrupt=NO,
+    interrupt=NOT_APPLICABLE,)
+
+maternalarvhistory = Recipe(
+    MaternalLifetimeArvHistory,
+    haart_start_date=fake.twenty_five_weeks_ago,
+    is_date_estimated='-',
+    preg_on_haart=YES,
+    haart_changes=0,
+    prior_preg=CONTINUOUS,)

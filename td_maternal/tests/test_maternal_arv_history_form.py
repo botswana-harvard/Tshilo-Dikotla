@@ -86,7 +86,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
     def test_haart_start_date_2(self):
         """Start date of ARVs CANNOT be before DOB"""
         mommy.make_recipe(
-            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000, prev_pregnancies=1)
+            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000_pos, prev_pregnancies=1)
         self.options.update(
             prev_sdnvp_labour=NOT_APPLICABLE,
             prev_preg_azt=NOT_APPLICABLE,
@@ -100,7 +100,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
     def test_haart_start_date_none(self):
         """Start date of ARVs CANNOT be None"""
         mommy.make_recipe(
-            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000, prev_pregnancies=1)
+            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000_pos, prev_pregnancies=1)
         self.options.update(
             prev_sdnvp_labour=NOT_APPLICABLE,
             prev_preg_azt=NOT_APPLICABLE,
@@ -113,7 +113,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
     def test_prev_preg_azt(self):
         mommy.make_recipe(
-            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000, prev_pregnancies=0)
+            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000_pos, prev_pregnancies=0)
         self.options.update(prev_preg_azt=YES)
         form = MaternalLifetimeArvHistoryForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
@@ -124,7 +124,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
     def test_prev_sdnvp_labour(self):
         mommy.make_recipe(
-            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000, prev_pregnancies=0)
+            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000_pos, prev_pregnancies=0)
         self.options.update(
             prev_sdnvp_labour=YES,
             prev_preg_azt=NOT_APPLICABLE)
@@ -137,7 +137,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
     def test_prev_preg_haart(self):
         mommy.make_recipe(
-            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000, prev_pregnancies=0)
+            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000_pos, prev_pregnancies=0)
         self.options.update(
             prev_sdnvp_labour=NOT_APPLICABLE,
             prev_preg_azt=NOT_APPLICABLE,

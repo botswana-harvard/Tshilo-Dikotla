@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.conf import settings
 from django.views.generic import TemplateView, FormView
 
 from td_maternal.models.maternal_eligibility import MaternalEligibility
@@ -33,8 +32,6 @@ class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
     def get_context_data(self, **kwargs):
         context = super(SearchDasboardView, self).get_context_data(**kwargs)
         context.update(
-            title=settings.PROJECT_TITLE,
-            project_name=settings.PROJECT_TITLE,
             site_header=admin.site.site_header,
             maternal_eligibilities=self.maternal_eligibilities
         )
