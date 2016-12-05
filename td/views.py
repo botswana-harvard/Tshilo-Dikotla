@@ -26,8 +26,6 @@ class HomeView(EdcBaseViewMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(
-            title=settings.PROJECT_TITLE,
-            project_name=settings.PROJECT_TITLE,
             site_header=admin.site.site_header,
         )
         return context
