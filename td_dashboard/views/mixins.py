@@ -13,9 +13,7 @@ class DashboardMixin:
         self._crfs = []
         self._requisitions = []
         self._selected_appointment = None
-        self.context = {}
         self.dashboard = None
-        self.selected_appointment = None
 
     @property
     def appointments(self):
@@ -114,7 +112,7 @@ class DashboardMixin:
             model = apps.get_app_config(self.dashboard).get_model(model_name)
             obj = None
             try:
-                obj = model.objects.get(registered_subject__subject_identifier=self.subject_identifier)
+                obj = model.objects.get(subject_identifier=self.subject_identifier)
                 admin_model_url_label = "{}({})".format(model._meta.verbose_name, 'complete')
                 admin_model_change_url = obj.get_absolute_url()
                 enrollments.append([admin_model_url_label, admin_model_change_url])
