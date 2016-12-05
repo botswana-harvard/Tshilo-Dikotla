@@ -89,9 +89,13 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
         return self.eligibility_id
 
     @property
+    def is_consented(self):
+        return True if self.previous_consents else False
+
+    @property
     def previous_consents(self):
         MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
-        return MaternalConsent.objects.filter().order_by('version') #maternal_eligibility_reference=self.reference_pk
+        return MaternalConsent.objects.filter(maternal_eligibility_reference=self.reference_pk).order_by('version')
 
     def create_update_or_delete_eligibility_loss(self):
         if self.is_eligible:

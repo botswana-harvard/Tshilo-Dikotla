@@ -21,6 +21,6 @@ class MaternalEligibilityAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, 
 
     readonly_fields = ('reference_pk',)
 
-    list_display = ('report_datetime', 'age_in_years', 'is_eligible', 'is_consented')
+    list_display = ('report_datetime', 'age_in_years', 'is_eligible')
 
-    list_filter = ('report_datetime', 'is_eligible', 'is_consented')
+    list_filter = ('report_datetime', 'is_eligible')
