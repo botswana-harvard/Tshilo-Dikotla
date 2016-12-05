@@ -79,17 +79,6 @@ def eligible_put_back_on_study(sender, instance, raw, created, using, **kwargs):
             put_back_on_study_from_failed_eligibility(instance)
 
 
-# @receiver(post_save, weak=False, dispatch_uid="maternal_ultrasound_delivery_initial_on_post_save")
-# def maternal_ultrasound_delivery_initial_on_post_save(sender, instance, raw, created, using, **kwargs):
-#     """Update antenatal enrollment to indicate if eligibility is passed on not based on ultra sound form results."""
-#     if not raw:
-#         if isinstance(instance, MaternalUltraSoundInitial) or isinstance(instance, MaternalLabourDel):
-#             # re-save antenatal enrollment record to recalculate eligibility
-#             antenatal_enrollment = instance.antenatal_enrollment
-#             antenatal_enrollment.pending_ultrasound = False
-#             antenatal_enrollment.save()
-
-
 @receiver(post_save, weak=False, sender=MaternalLabourDel, dispatch_uid='create_infant_identifier_on_labour_delivery')
 def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, using, **kwargs):
     """Creates an identifier for the registered infant.
@@ -102,7 +91,6 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
                 maternal_identifier.deliver(
                     1, model=sender._meta.label_lower,
                     create_registration=True,
-                    registration_datetime=instance.delivery_datetime,
-                    user_created=instance.user_created)
+                    registration_datetime=instance.delivery_datetime)
             except MaternalIdentifierError:
                 pass
