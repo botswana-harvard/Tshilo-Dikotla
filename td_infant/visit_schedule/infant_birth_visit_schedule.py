@@ -49,7 +49,10 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             'DNA PCR', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
         RequisitionPanelTuple(
             40, 'td_lab', 'infantrequisition',
-            'PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL)
+            'PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            50, 'td_lab', 'infantrequisition',
+            'Infant Serum (Store Only)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
     )
 
     infant_dnapcr_requisitions = (
