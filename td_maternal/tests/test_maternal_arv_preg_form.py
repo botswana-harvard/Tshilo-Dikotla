@@ -2,10 +2,7 @@ from dateutil.relativedelta import relativedelta
 from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
-from edc_constants.constants import YES, NOT_APPLICABLE, POS, NO
-from edc_registration.models import RegisteredSubject
-
-from td.models import Appointment
+from edc_constants.constants import YES, NO
 
 from ..forms import MaternalArvPregForm, MaternalArvForm
 
@@ -16,31 +13,9 @@ class TestMaternalArvPregForm(BaseTestCase):
 
     def setUp(self):
         super(TestMaternalArvPregForm, self).setUp()
-        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        self.maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
-        self.registered_subject = self.maternal_eligibility.registered_subject
-
-        self.assertEqual(RegisteredSubject.objects.all().count(), 1)
-        options = {'registered_subject': self.registered_subject,
-                   'current_hiv_status': POS,
-                   'evidence_hiv_status': YES,
-                   'will_get_arvs': YES,
-                   'is_diabetic': NO,
-                   'will_remain_onstudy': YES,
-                   'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
-        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
-        self.assertTrue(self.antenatal_enrollment.is_eligible)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
-        self.maternal_visit_1000 = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = mommy.make_recipe(
-            'td_maternal.maternalultrasoundinitail', maternal_visit=self.maternal_visit_1000, number_of_gestations=1,)
 
         self.options = {
-            'maternal_visit': self.maternal_visit_1000,
+            'maternal_visit': self.maternal_visit_1000_pos,
             'report_datetime': get_utcnow(),
             'took_arv': YES,
             'is_interrupt': NO,
@@ -50,7 +25,7 @@ class TestMaternalArvPregForm(BaseTestCase):
 
     def test_medication_interrupted(self):
         """Assert that ARV indicated as interrupted, then reason expected"""
-        self.options['is_interrupt'] = YES
+        self.options.update(is_interrupt=YES)
         form = MaternalArvPregForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('You indicated that ARVs were interrupted during pregnancy. '
@@ -58,7 +33,7 @@ class TestMaternalArvPregForm(BaseTestCase):
 
     def test_no_interruption_reason_given(self):
         """Assert that ARV indicated as not interrupted, then reason not expected"""
-        self.options['interrupt'] = 'FORGOT'
+        self.options.update(interrupt='FORGOT')
         form = MaternalArvPregForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('You indicated that ARVs were NOT interrupted during pregnancy. '
@@ -66,7 +41,8 @@ class TestMaternalArvPregForm(BaseTestCase):
 
     def test_took_arv(self):
         """Assert arv taken but none listed"""
-        maternal_arv_preg = mommy.make_recipe('td_maternal.maternalarvpreg', maternal_visit=self.maternal_visit_1000)
+        maternal_arv_preg = mommy.make_recipe(
+            'td_maternal.maternalarvpreg', maternal_visit=self.maternal_visit_1000_pos)
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
             'arv_code': '3TC',
@@ -80,9 +56,10 @@ class TestMaternalArvPregForm(BaseTestCase):
 
     def test_start_stop_date(self):
         """Assert you cannot put a stop date that is before the start date"""
-        self.options['arv_code'] = '3TC'
-        self.options['start_date'] = get_utcnow().date()
-        self.options['stop_date'] = (get_utcnow() - relativedelta(days=1)).date()
+        self.options.update(
+            arv_code='3TC',
+            start_date=get_utcnow().date(),
+            stop_date=(get_utcnow() - relativedelta(days=1)).date())
         form = MaternalArvForm(data=self.options)
         self.assertIn(
             'Your stop date of {} is prior to start date of {}. '
@@ -91,10 +68,11 @@ class TestMaternalArvPregForm(BaseTestCase):
 
     def test_validate_historical_and_present_arv_start_dates(self):
         """"""
-        maternal_arv_preg = mommy.make_recipe('td_maternal.maternalarvpreg', maternal_visit=self.maternal_visit_1000, took_arv=YES)
+        maternal_arv_preg = mommy.make_recipe(
+            'td_maternal.maternalarvpreg', maternal_visit=self.maternal_visit_1000_pos, took_arv=YES)
         maternalarvhistory = mommy.make_recipe(
-            'td_maternal.maternalArvhistory',
-            maternal_visit=self.maternal_visit_1000,
+            'td_maternal.maternalarvhistory',
+            maternal_visit=self.maternal_visit_1000_pos,
             haart_start_date=(get_utcnow() - relativedelta(weeks=9)).date())
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
