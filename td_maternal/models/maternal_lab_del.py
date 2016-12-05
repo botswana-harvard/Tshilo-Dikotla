@@ -6,7 +6,7 @@ from edc_base.model.models import BaseUuidModel, HistoricalRecords, UrlMixin
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
-from edc_pregnancy_utils.model_mixins import LabourAndDeliveryMixin
+from edc_pregnancy_utils.model_mixins import LabourAndDeliveryModelMixin
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
@@ -19,7 +19,7 @@ from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION
 from .maternal_crf_model import MaternalCrfModel
 
 
-class MaternalLabDel(EnrollmentModelMixin, LabourAndDeliveryMixin, CreateAppointmentsMixin,
+class MaternalLabDel(EnrollmentModelMixin, LabourAndDeliveryModelMixin, CreateAppointmentsMixin,
                      RequiresConsentMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """

@@ -11,11 +11,11 @@ from edc_protocol.validators import datetime_not_before_study_start
 
 
 from ..managers import InfantBirthModelManager
-from edc_pregnancy_utils.model_mixins import BirthMixin
+from edc_pregnancy_utils.model_mixins import BirthModelMixin
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 
 
-class InfantBirth(BirthMixin, EnrollmentModelMixin, CreateAppointmentsMixin, OffstudyMixin, UrlMixin, BaseUuidModel):
+class InfantBirth(BirthModelMixin, EnrollmentModelMixin, CreateAppointmentsMixin, OffstudyMixin, UrlMixin, BaseUuidModel):
     """ A model completed by the user on the infant's birth. """
 
     report_datetime = models.DateTimeField(
