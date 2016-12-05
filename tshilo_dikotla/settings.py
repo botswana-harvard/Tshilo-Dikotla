@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'tz_detect',
     'simple_history',
     'rest_framework',
     'rest_framework.authtoken',
@@ -93,7 +94,7 @@ INSTALLED_APPS = [
 
 SECRET_KEY = 'sdfsd32fs#*@(@dfsdf'
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -102,7 +103,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
-]
+    'tz_detect.middleware.TimezoneMiddleware',
+)
 
 ROOT_URLCONF = 'tshilo_dikotla.urls'
 

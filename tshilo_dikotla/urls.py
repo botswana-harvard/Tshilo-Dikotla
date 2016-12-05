@@ -28,5 +28,6 @@ urlpatterns = [
     url(r'^edc_label/', include('edc_label.urls', namespace='edc-label')),
     url(r'^edc/', include('edc_base.urls', 'edc-base')),
     url(r'^admin/$', RedirectView.as_view(pattern_name='home_url')),
+    url(r'^tz_detect/', include('tz_detect.urls')),
     url(r'', HomeView.as_view(), name='home_url'),
 ]
