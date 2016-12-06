@@ -14,6 +14,7 @@ from django.core.exceptions import MultipleObjectsReturned
 class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
     form_class = MaternalEligibilityCrispyForm
     template_name = 'td_dashboard/search_dashboard.html'
+    paginate_by = 10
 
     def __init__(self, **kwargs):
         self.maternal_eligibility = None
