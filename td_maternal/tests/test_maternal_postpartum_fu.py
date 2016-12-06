@@ -13,7 +13,7 @@ from td_maternal.forms import MaternalPostPartumFuForm
 from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
 
 
-class TestMaternalPostPartumFu(AntenatalVisitsMotherMixin, DeliverMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalPostPartumFu(DeliverMotherMixin, AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalPostPartumFu, self).setUp()
@@ -58,8 +58,8 @@ class TestMaternalPostPartumFu(AntenatalVisitsMotherMixin, DeliverMotherMixin, P
             hostname_created="otse.bhp.org.bw", hostname_modified="otse.bhp.org.bw", revision=None)
 
         self.add_maternal_visits('1000M', '1010M', '1020M', '2000M')
-
         maternal_visit = self.get_maternal_visit('2000M')
+
         self.options = {
             'maternal_visit': maternal_visit.id,
             'new_diagnoses': YES,

@@ -1,25 +1,22 @@
 from dateutil.relativedelta import relativedelta
-from django.utils import timezone
+from django.test import TestCase
 from model_mommy import mommy
-
-from edc_constants.constants import UNKNOWN, YES, NEG, NOT_APPLICABLE, NO, POS
-from td.models import Appointment
 
 from td_maternal.forms import MaternalClinicalMeasurementsTwoForm
 
-from .base_test_case import BaseTestCase
-from edc_visit_tracking.constants import SCHEDULED
-
-from ..mommy_recipes import fake
+from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
-class TestMaternalClinicalMeasurementsTwo(BaseTestCase):
+class TestMaternalClinicalMeasurementsTwo(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalClinicalMeasurementsTwo, self).setUp()
 
+        self.add_maternal_visit('1000M', '1010M')
+        maternal_visit = self.get_maternal_visit('1010M')
+
         self.options = {
-            'maternal_visit': self.antenatal_visit_1_pos,
+            'maternal_visit': maternal_visit.id,
             'weight_kg': 76,
             'systolic_bp': 120,
             'diastolic_bp': 100}

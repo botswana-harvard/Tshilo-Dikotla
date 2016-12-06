@@ -1,15 +1,20 @@
-from .base_test_case import BaseTestCase
+from django.test import TestCase
 from model_mommy import mommy
 
 from td_maternal.forms import MaternalClinicalMeasurementsOneForm
 
+from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
-class TestMaternalClinicalMeasurementOne(BaseTestCase):
+
+class TestMaternalClinicalMeasurementOne(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalClinicalMeasurementOne, self).setUp()
+        self.add_maternal_visit('1000M')
+        maternal_visit = self.get_maternal_visit('1000M')
+
         self.data = {
-            'maternal_visit': self.maternal_visit_1000_pos,
+            'maternal_visit': maternal_visit.id,
             'systolic_bp': 75,
             'diastolic_bp': 120, }
 

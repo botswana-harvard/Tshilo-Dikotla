@@ -1,5 +1,6 @@
-from dateutil.relativedelta import relativedelta
 from datetime import date
+from dateutil.relativedelta import relativedelta
+from django.test import TestCase
 from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
@@ -8,13 +9,16 @@ from edc_constants.constants import (YES, NOT_APPLICABLE, NO, CONTINUOUS, STOPPE
 from td_list.models import PriorArv
 from td_maternal.forms import MaternalLifetimeArvHistoryForm
 
-from .base_test_case import BaseTestCase
+from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
-class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
+class TestMaternalLifetimeArvHistoryForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalLifetimeArvHistoryForm, self).setUp()
+
+        self.add_maternal_visit('1000M')
+        self.maternal_visit = self.get_maternal_visit('1000M')
 
         prior_arv = PriorArv.objects.create(
             hostname_created="django", name="Atripla", short_name="Atripla",
@@ -23,7 +27,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
             field_name=None, revision=":develop")
 
         self.options = {
-            'maternal_visit': self.maternal_visit_1000_pos.id,
+            'maternal_visit': self.maternal_visit.id,
             'report_datetime': get_utcnow(),
             'haart_start_date': (get_utcnow() - relativedelta(months=9)).date(),
             'is_date_estimated': '-',
@@ -85,7 +89,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
     def test_haart_start_date_2(self):
         """Start date of ARVs CANNOT be before DOB"""
         mommy.make_recipe(
-            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000_pos, prev_pregnancies=1)
+            'td_maternal.maternalobstericalhistory', maternal_visit=self.get_maternal_visit('1000M'), prev_pregnancies=1)
         self.options.update(
             prev_sdnvp_labour=NOT_APPLICABLE,
             prev_preg_azt=NOT_APPLICABLE,
@@ -99,7 +103,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
     def test_haart_start_date_none(self):
         """Start date of ARVs CANNOT be None"""
         mommy.make_recipe(
-            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000_pos, prev_pregnancies=1)
+            'td_maternal.maternalobstericalhistory', maternal_visit=self.get_maternal_visit('1000M'), prev_pregnancies=1)
         self.options.update(
             prev_sdnvp_labour=NOT_APPLICABLE,
             prev_preg_azt=NOT_APPLICABLE,
@@ -112,7 +116,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
     def test_prev_preg_azt(self):
         mommy.make_recipe(
-            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000_pos, prev_pregnancies=0)
+            'td_maternal.maternalobstericalhistory', maternal_visit=self.get_maternal_visit('1000M'), prev_pregnancies=0)
         self.options.update(prev_preg_azt=YES)
         form = MaternalLifetimeArvHistoryForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
@@ -123,7 +127,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
     def test_prev_sdnvp_labour(self):
         mommy.make_recipe(
-            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000_pos, prev_pregnancies=0)
+            'td_maternal.maternalobstericalhistory', maternal_visit=self.get_maternal_visit('1000M'), prev_pregnancies=0)
         self.options.update(
             prev_sdnvp_labour=YES,
             prev_preg_azt=NOT_APPLICABLE)
@@ -136,7 +140,7 @@ class TestMaternalLifetimeArvHistoryForm(BaseTestCase):
 
     def test_prev_preg_haart(self):
         mommy.make_recipe(
-            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit_1000_pos, prev_pregnancies=0)
+            'td_maternal.maternalobstericalhistory', maternal_visit=self.get_maternal_visit('1000M'), prev_pregnancies=0)
         self.options.update(
             prev_sdnvp_labour=NOT_APPLICABLE,
             prev_preg_azt=NOT_APPLICABLE,
