@@ -5,7 +5,7 @@ from edc_base.model.models import BaseUuidModel, HistoricalRecords, UrlMixin
 from edc_base.model.validators import date_not_future
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import POS_NEG_UNTESTED_REFUSAL, YES_NO_NA, POS_NEG, YES_NO
-from edc_constants.constants import NO, FAILED_ELIGIBILITY
+from edc_constants.constants import NO
 from edc_offstudy.model_mixins import OffstudyMixin
 from edc_protocol.validators import date_not_before_study_start
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
@@ -13,7 +13,6 @@ from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 from ..enrollment_helper import EnrollmentHelper
 from ..managers import EnrollmentManager
 
-from .maternal_offstudy import MaternalOffstudy
 from dateutil.relativedelta import relativedelta
 
 
@@ -159,7 +158,30 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
         help_text='Auto-filled by enrollment helper')
 
     pending_ultrasound = models.BooleanField(
-        editable=False)
+        editable=False,
+        help_text='Auto-filled by enrollment helper')
+
+    enrollment_ga = models.IntegerField(
+        null=True,
+        editable=False,
+        help_text='Auto-filled by enrollment helper')
+
+    enrollment_ga_method = models.CharField(
+        max_length=15,
+        null=True,
+        editable=False,
+        help_text='Auto-filled by enrollment helper')
+
+    edd = models.DateField(
+        null=True,
+        editable=False,
+        help_text='Auto-filled by enrollment helper')
+
+    edd_method = models.CharField(
+        max_length=15,
+        null=True,
+        editable=False,
+        help_text='Auto-filled by enrollment helper')
 
     unenrolled = models.TextField(
         verbose_name="Reason not enrolled",
@@ -189,13 +211,21 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
         try:
             self.ga_lmp_enrollment_wks = enrollment_helper.lmp.ga.weeks
         except AttributeError:
-            pass
+            self.ga_lmp_enrollment_wks = None
         self.pending_ultrasound = enrollment_helper.ga_pending
+        self.enrollment_ga = enrollment_helper.ga.weeks
+        self.enrollment_ga_method = enrollment_helper.ga.method
+        self.edd = enrollment_helper.edd.edd
+        self.edd_method = enrollment_helper.edd.method
         self.unenrolled = enrollment_helper.messages.as_string()
         super(AntenatalEnrollment, self).save(*args, **kwargs)
 
     def natural_key(self):
         return (self.subject_identifier, )
+
+    @property
+    def reasons_not_eligible(self):
+        return self.unenrolled
 
     @property
     def ga_pending(self):
@@ -208,12 +238,6 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
     @property
     def error_messages(self):
         return self.unenrolled
-
-    def take_off_study(self):
-        MaternalOffstudy.objects.create(
-            subject_identifier=self.subject_identifier,
-            offstudy_datetime=self.report_datetime,
-            reason=FAILED_ELIGIBILITY)
 
     class Meta(EnrollmentModelMixin.Meta):
         app_label = 'td_maternal'

@@ -65,8 +65,13 @@ class EnrollmentHelper(object):
                 reference_date=self.ultrasound.ultrasound_date or obj.report_datetime)
         else:
             self.lmp = Lmp()
-        self.ga = Ga(lmp=self.lmp, ultrasound=self.ultrasound)
-        self.edd = Edd(lmp=self.lmp, ultrasound=self.ultrasound)
+        if self.ultrasound.gestations > 1:
+            self.messages.update(gestations='Pregnancy is not a singleton.')
+            self.ga = Ga(lmp=None, ultrasound=None)
+            self.edd = Edd(lmp=None, ultrasound=None)
+        else:
+            self.ga = Ga(lmp=self.lmp, ultrasound=self.ultrasound)
+            self.edd = Edd(lmp=self.lmp, ultrasound=self.ultrasound)
         try:
             if not 16 < self.ga.weeks <= 36:
                 self.messages.update(ga='gestation not 16 to 36wks')
@@ -92,9 +97,12 @@ class EnrollmentHelper(object):
         if self.enrollment_result.result == NEG and obj.will_get_arvs != NOT_APPLICABLE:
             self.messages.update(
                 will_get_arvs='will_get_arvs must be N/A for HIV status = NEG. Got {}'.format(obj.will_get_arvs))
-        if obj.knows_lmp and not obj.last_period_date:
+        if obj.knows_lmp == YES and not obj.last_period_date:
             self.messages.update(
                 last_period_date='last_period_date may not be None if knows_lmp == YES')
+        if obj.knows_lmp == NO and obj.last_period_date:
+            self.messages.update(
+                last_period_date='last_period_date should be None if knows_lmp == NO')
 
         # that's it
         self.is_eligible = False if self.messages else True
@@ -139,10 +147,9 @@ class EnrollmentHelper(object):
                     ga_confirmed_days=obj.ga_by_ultrasound_days,
                     ultrasound_edd=obj.est_edd_ultrasound)
                 self._ultrasound.gestations = int(obj.number_of_gestations)
-                if self._ultrasound.gestations != 1:
-                    self.messages.update(will_get_arvs='Pregnancy is not a singleton.')
             except MaternalUltraSoundInitial.DoesNotExist:
                 self._ultrasound = Ultrasound()
+                self._ultrasound.gestations = 0
         return self._ultrasound
 
     @property

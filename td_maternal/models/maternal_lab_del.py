@@ -14,7 +14,7 @@ from td.choices import DX_MATERNAL
 from td_list.models import DeliveryComplications
 
 from ..managers import EnrollmentManager, MaternalLabDelDxTManager
-from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION_REASON
+from ..choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION_REASON
 
 from .maternal_crf_model import MaternalCrfModel
 
