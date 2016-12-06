@@ -1,11 +1,16 @@
+from faker import Faker
 from django.test import TestCase
 
+from edc_base.faker import EdcBaseProvider
 from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NEG, NO, UNK
 
 from dateutil.relativedelta import relativedelta
 
-from .hiv_result import Recent, Current, Rapid, PostEnrollment, Test
+from .hiv_result import Recent, Current, Rapid, Enrollment, PostEnrollment, Test
+
+fake = Faker()
+fake.add_provider(EdcBaseProvider)
 
 
 class Obj:
@@ -54,21 +59,24 @@ class TestCurrent(TestCase):
 
     def test_pos_with_evidence(self):
         """Assert POS from recent class with evidence is POS."""
-        current = Current(result=POS, evidence=YES)
+        dt = get_utcnow().date()
+        current = Current(result=POS, result_date=dt, evidence=YES)
         self.assertEqual(current.result, POS)
 
     def test_none_without_evidence(self):
         """Assert POS from recent class with evidence is POS, else None."""
-        current = Current(result=POS, evidence=YES)
+        dt = get_utcnow().date()
+        current = Current(result=POS, result_date=dt, evidence=YES)
         self.assertEqual(current.result, POS)
-        current = Current(result=POS, evidence=NO)
+        current = Current(result=POS, result_date=dt, evidence=NO)
         self.assertEqual(current.result, None)
 
     def test_none_if_neg(self):
         """Assert NEG from recent class with/without evidence is None."""
-        current = Current(result=NEG, evidence=NO)
+        dt = get_utcnow().date()
+        current = Current(result=NEG, result_date=dt, evidence=NO)
         self.assertEqual(current.result, None)
-        current = Current(result=NEG, evidence=YES)
+        current = Current(result=NEG, result_date=dt, evidence=YES)
         self.assertEqual(current.result, None)
 
 
@@ -190,7 +198,65 @@ class TestRecent(TestCase):
         self.assertEqual(recent.within_3m, True)
 
 
+class TestEnrollment(TestCase):
+
+    def test_neg(self):
+        dt = get_utcnow()
+        current = Current(result=None, result_date=None, evidence=None)
+        self.assertEqual(current.result, None)
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=dt - relativedelta(weeks=4),
+            result=NEG,
+            evidence=YES)
+        self.assertEqual(recent.result, NEG)
+        rapid = Rapid(tested=YES, result=NEG, result_date=dt)
+        self.assertEqual(rapid.result, NEG)
+        enrollment = Enrollment(current=current, recent=recent, rapid=rapid)
+        self.assertEqual(enrollment.result, NEG)
+
+    def test_pos(self):
+        current = Current(result=None, result_date=None, evidence=None)
+        self.assertEqual(current.result, None)
+        enrollment = Enrollment(current=current, recent=None, rapid=None)
+        self.assertEqual(enrollment.result, None)
+
+
 class TestPostEnrollment(TestCase):
+
+    def test_enrolled_neg_still_neg_no_rapid_2m(self):
+        dt = get_utcnow()
+        result_date = (dt - relativedelta(months=2)).date()
+        rapid_results = ()
+        post_enrollment = PostEnrollment(
+            reference_datetime=dt,
+            enrollment_result=Test(result=NEG, result_date=result_date, tested=YES),
+            rapid_results=rapid_results)
+        self.assertEquals(post_enrollment.result, NEG)
+        self.assertEquals(post_enrollment.result_date, result_date)
+
+    def test_enrolled_neg_still_neg_no_rapid_3m(self):
+        dt = get_utcnow()
+        result_date = (dt - relativedelta(months=3)).date()
+        rapid_results = ()
+        post_enrollment = PostEnrollment(
+            reference_datetime=dt,
+            enrollment_result=Test(result=NEG, result_date=result_date, tested=YES),
+            rapid_results=rapid_results)
+        self.assertEquals(post_enrollment.result, None)
+        self.assertEquals(post_enrollment.result_date, None)
+
+    def test_enrolled_neg_still_neg_no_rapid_4m(self):
+        dt = get_utcnow()
+        result_date = (dt - relativedelta(months=4)).date()
+        rapid_results = ()
+        post_enrollment = PostEnrollment(
+            reference_datetime=dt,
+            enrollment_result=Test(result=NEG, result_date=result_date, tested=YES),
+            rapid_results=rapid_results)
+        self.assertEquals(post_enrollment.result, None)
+        self.assertEquals(post_enrollment.result_date, None)
 
     def test_enrolled_neg_still_neg(self):
         dt = get_utcnow()
@@ -199,7 +265,10 @@ class TestPostEnrollment(TestCase):
             Test(tested=YES, result=NEG, result_date=dt - relativedelta(months=3)),
             Test(tested=YES, result=NEG, result_date=dt - relativedelta(months=2)),
         )
-        post_enrollment = PostEnrollment(reference_datetime=dt, enrollment_result=NEG, rapid_results=rapid_results)
+        post_enrollment = PostEnrollment(
+            reference_datetime=dt,
+            enrollment_result=Test(result=NEG, result_date=(dt - relativedelta(months=4)).date(), tested=YES),
+            rapid_results=rapid_results)
         self.assertEquals(post_enrollment.result, NEG)
         self.assertEquals(post_enrollment.result_date, (dt - relativedelta(months=2)).date())
 
@@ -210,7 +279,10 @@ class TestPostEnrollment(TestCase):
             Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=3)),
             Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=2)),
         )
-        post_enrollment = PostEnrollment(reference_datetime=dt, enrollment_result=NEG, rapid_results=rapid_results)
+        post_enrollment = PostEnrollment(
+            reference_datetime=dt,
+            enrollment_result=Test(tested=YES, result=NEG, result_date=dt - relativedelta(months=4)),
+            rapid_results=rapid_results)
         self.assertEquals(post_enrollment.result, POS)
         self.assertEquals(post_enrollment.result_date, (dt - relativedelta(months=4)).date())
 
@@ -221,7 +293,10 @@ class TestPostEnrollment(TestCase):
             Test(tested=YES, result=POS, result_date=dt - relativedelta(months=3)),
             Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=2)),
         )
-        post_enrollment = PostEnrollment(reference_datetime=dt, enrollment_result=NEG, rapid_results=rapid_results)
+        post_enrollment = PostEnrollment(
+            reference_datetime=dt,
+            enrollment_result=Test(tested=YES, result=NEG, result_date=dt - relativedelta(months=4)),
+            rapid_results=rapid_results)
         self.assertEquals(post_enrollment.result, POS)
         self.assertEquals(post_enrollment.result_date, (dt - relativedelta(months=3)).date())
 
@@ -232,17 +307,24 @@ class TestPostEnrollment(TestCase):
             Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=3)),
             Test(tested=YES, result=POS, result_date=dt - relativedelta(months=2)),
         )
-        post_enrollment = PostEnrollment(reference_datetime=dt, enrollment_result=NEG, rapid_results=rapid_results)
+        post_enrollment = PostEnrollment(
+            reference_datetime=dt,
+            enrollment_result=Test(tested=YES, result=NEG, result_date=dt - relativedelta(months=4)),
+            rapid_results=rapid_results)
         self.assertEquals(post_enrollment.result, POS)
         self.assertEquals(post_enrollment.result_date, (dt - relativedelta(months=2)).date())
 
     def test_enrolled_pos_always_pos(self):
         dt = get_utcnow()
+        result_date = (dt - relativedelta(months=4)).date()
         rapid_results = (
             Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=4)),
             Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=3)),
             Test(tested=YES, result=UNK, result_date=dt - relativedelta(months=2)),
         )
-        post_enrollment = PostEnrollment(reference_datetime=dt, enrollment_result=POS, rapid_results=rapid_results)
+        post_enrollment = PostEnrollment(
+            reference_datetime=dt,
+            enrollment_result=Test(tested=YES, result=POS, result_date=result_date),
+            rapid_results=rapid_results)
         self.assertEquals(post_enrollment.result, POS)
-        self.assertEquals(post_enrollment.result_date, None)
+        self.assertEquals(post_enrollment.result_date, result_date)

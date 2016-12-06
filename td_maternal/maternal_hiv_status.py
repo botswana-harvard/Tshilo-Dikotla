@@ -1,5 +1,7 @@
-from td.hiv_result import PostEnrollment, Test
+
+from td.hiv_result import PostEnrollment, Recent, Test
 from td_maternal.models import AntenatalEnrollment, RapidTestResult
+from edc_constants.constants import YES
 
 
 class MaternalHivStatus(PostEnrollment):
@@ -16,5 +18,10 @@ class MaternalHivStatus(PostEnrollment):
         super(MaternalHivStatus, self).__init__(
             reference_datetime=reference_datetime,
             exception_cls=exception_cls,
-            enrollment_result=antenatal_enrollment.enrollment_hiv_status,
-            rapid_results=rapid_test_results)
+            rapid_results=rapid_test_results,
+            enrollment_result=Recent(
+                reference_datetime=reference_datetime,
+                tested=YES,
+                evidence=YES,
+                result=antenatal_enrollment.enrollment_hiv_status,
+                result_date=antenatal_enrollment.report_datetime.date()))

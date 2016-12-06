@@ -1,3 +1,4 @@
+from datetime import date
 from dateutil.relativedelta import relativedelta
 from faker import Faker
 from faker.providers import BaseProvider
@@ -125,6 +126,7 @@ options.update(
     week32_result=NEG,
     evidence_32wk_hiv_status=YES,
     rapid_test_done=YES,
+    rapid_test_date=date.today,
     rapid_test_result=NEG)
 antenatalenrollment_neg = Recipe(
     AntenatalEnrollment, **options)
@@ -209,7 +211,7 @@ maternalinterimidcc = Recipe(
 rapidtest = Recipe(
     RapidTestResult,
     rapid_test_done=YES,
-    result_date=get_utcnow,
+    result_date=date.today,
     result=POS)
 
 maternalobstericalhistory = Recipe(
@@ -229,7 +231,7 @@ maternalmedicalhistory = Recipe(
     report_datetime=get_utcnow,
     chronic_since=YES,
     who_diagnosis=YES,
-    sero_posetive=NO,
+    sero_positive=NO,
     perinataly_infected=NO,
     know_hiv_status="1 person",
     lowest_cd4_known=NO)
