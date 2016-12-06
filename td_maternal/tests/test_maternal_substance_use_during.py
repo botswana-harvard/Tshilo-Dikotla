@@ -1,15 +1,10 @@
-from dateutil.relativedelta import relativedelta
-
 from django.test import TestCase
-from django.utils import timezone
 
-from model_mommy import mommy
+from edc_constants.constants import YES, NO
 
-from edc_constants.constants import UNKNOWN, YES, NO, NEG, NOT_APPLICABLE
+from ..forms import MaternalSubstanceUseDuringPregForm
 
-from td.models import Appointment
-from td_maternal.forms import MaternalSubstanceUseDuringPregForm
-from td_maternal.tests.mixins import AntenatalVisitsMotherMixin, AddVisitInfantMixin, PosMotherMixin, NegMotherMixin
+from .mixins import AntenatalVisitsMotherMixin, AddVisitInfantMixin, NegMotherMixin
 
 
 class TestMaternalSubstanceUseDuringPreg(AntenatalVisitsMotherMixin, AddVisitInfantMixin, NegMotherMixin, TestCase):
