@@ -912,7 +912,7 @@ class MaternalMedicalHistoryForm(ModelFormMixin, forms.ModelForm):
     def validate_positive_mother_seropositive_yes(self):
         cleaned_data = self.cleaned_data
         if self.maternal_hiv_status.result == POS:
-            if cleaned_data.get('sero_posetive') == YES:
+            if cleaned_data.get('sero_positive') == YES:
                 if not cleaned_data.get('date_hiv_diagnosis'):
                     raise forms.ValidationError(
                         "The Mother is Sero-Positive, the approximate date of diagnosis should be supplied")
@@ -930,7 +930,7 @@ class MaternalMedicalHistoryForm(ModelFormMixin, forms.ModelForm):
     def validate_positive_mother_seropositive_yes_cd4_known_yes(self):
         cleaned_data = self.cleaned_data
         if self.maternal_hiv_status.result == POS:
-            if cleaned_data.get('sero_posetive') == YES:
+            if cleaned_data.get('sero_positive') == YES:
                 if cleaned_data.get('lowest_cd4_known') == YES and not cleaned_data.get('cd4_count'):
                     raise forms.ValidationError(
                         "The Mothers lowest CD4 count is known, therefore the lowest CD4 count field should be"
@@ -948,7 +948,7 @@ class MaternalMedicalHistoryForm(ModelFormMixin, forms.ModelForm):
     def validate_positive_mother_seropositive_yes_cd4_known_no(self):
         cleaned_data = self.cleaned_data
         if self.maternal_hiv_status.result == POS:
-            if cleaned_data.get('sero_posetive') == YES:
+            if cleaned_data.get('sero_positive') == YES:
                 if cleaned_data.get('lowest_cd4_known') == NO and cleaned_data.get('cd4_count'):
                     raise forms.ValidationError(
                         "The Mothers lowest CD4 count is not known, therefore the lowest CD4 count field should"
@@ -962,14 +962,14 @@ class MaternalMedicalHistoryForm(ModelFormMixin, forms.ModelForm):
                     raise forms.ValidationError(
                         "The Mothers lowest CD4 count is not known, the field for whether the date is estimated"
                         " should be None")
-            if cleaned_data.get('sero_posetive') == NO:
+            if cleaned_data.get('sero_positive') == NO:
                 raise forms.ValidationError("The mother is HIV Positive, The field for whether she is sero"
                                             " positive should not be NO")
 
     def validate_negative_mother_seropositive_no(self):
         cleaned_data = self.cleaned_data
         if self.maternal_hiv_status.result == NEG:
-            if cleaned_data.get('sero_posetive') == YES:
+            if cleaned_data.get('sero_positive') == YES:
                 raise forms.ValidationError(
                     "The Mother is HIV Negative she cannot be Sero Positive")
             if cleaned_data.get('date_hiv_diagnosis'):
@@ -1017,47 +1017,48 @@ class MaternalObstericalHistoryForm(ModelFormMixin, forms.ModelForm):
 
     def validate_less_than_24_weeks_pregnant(self):
         cleaned_data = self.cleaned_data
-        ultrasound = self.check_mother_gestational_age()
-        if not ultrasound:
+        maternal_visit = cleaned_data.get('maternal_visit')
+        try:
+            ultrasound = MaternalUltraSoundInitial.objects.get(maternal_visit=maternal_visit)
+        except MaternalUltraSoundInitial.DoesNotExist:
             raise forms.ValidationError('Please complete the Ultrasound form first.')
-        else:
-            if cleaned_data.get('prev_pregnancies') == 1 and ultrasound[0].ga_confirmed < 24:
-                if (
-                    cleaned_data.get('pregs_24wks_or_more') != 0 or
-                    cleaned_data.get('lost_before_24wks') != 0 or
-                    cleaned_data.get('lost_after_24wks') != 0
-                ):
-                    raise forms.ValidationError(
-                        'You indicated previous pregancies were {}. '
-                        'Number of pregnancies at or after 24 weeks, '
-                        'number of living children, '
-                        'number of children lost after 24 weeks should all be zero.'.format(
-                            cleaned_data.get('prev_pregnancies')))
+        if cleaned_data.get('prev_pregnancies') == 1 and ultrasound.ga_confirmed < 24:
+            if (
+                cleaned_data.get('pregs_24wks_or_more') != 0 or
+                cleaned_data.get('lost_before_24wks') != 0 or
+                cleaned_data.get('lost_after_24wks') != 0
+            ):
+                raise forms.ValidationError(
+                    'You indicated previous pregancies were {}. '
+                    'Number of pregnancies at or after 24 weeks, '
+                    'number of living children, '
+                    'number of children lost after 24 weeks should all be zero.'.format(
+                        cleaned_data.get('prev_pregnancies')))
 
-            if cleaned_data.get('prev_pregnancies') > 1 and ultrasound[0].ga_confirmed < 24:
-                sum_pregnancies = (
-                    cleaned_data.get('pregs_24wks_or_more') +
-                    cleaned_data.get('lost_before_24wks') +
-                    cleaned_data.get('lost_after_24wks'))
-                if sum_pregnancies != (cleaned_data.get('prev_pregnancies') - 1):
-                    raise forms.ValidationError(
-                        'The sum of Q3, Q4 and Q5 must all add up to Q2 - 1. Please correct.')
+        if cleaned_data.get('prev_pregnancies') > 1 and ultrasound.ga_confirmed < 24:
+            sum_pregnancies = (
+                cleaned_data.get('pregs_24wks_or_more') +
+                cleaned_data.get('lost_before_24wks') +
+                cleaned_data.get('lost_after_24wks'))
+            if sum_pregnancies != (cleaned_data.get('prev_pregnancies') - 1):
+                raise forms.ValidationError(
+                    'The sum of Q3, Q4 and Q5 must all add up to Q2 - 1. Please correct.')
 
     def validate_24wks_or_more_pregnancy(self):
         cleaned_data = self.cleaned_data
+        maternal_visit = cleaned_data.get('maternal_visit')
         try:
-            maternal_ultrasound_initial = MaternalUltraSoundInitial.objects.get(
-                maternal_visit=cleaned_data.get('maternal_visit'))
-            if cleaned_data.get('prev_pregnancies') > 0 and maternal_ultrasound_initial.ga_confirmed >= 24:
-                sum_pregnancies = (
-                    cleaned_data.get('pregs_24wks_or_more') +
-                    cleaned_data.get('lost_before_24wks') +
-                    cleaned_data.get('lost_after_24wks'))
-                if sum_pregnancies != cleaned_data.get('prev_pregnancies'):
-                    raise forms.ValidationError(
-                        'The sum of Q3, Q4 and Q5 must be equal to Q2. Please correct.')
+            ultrasound = MaternalUltraSoundInitial.objects.get(maternal_visit=maternal_visit)
         except MaternalUltraSoundInitial.DoesNotExist:
             raise forms.ValidationError('Please complete the Ultrasound form first.')
+        if cleaned_data.get('prev_pregnancies') > 0 and ultrasound.ga_confirmed >= 24:
+            sum_pregnancies = (
+                cleaned_data.get('pregs_24wks_or_more') +
+                cleaned_data.get('lost_before_24wks') +
+                cleaned_data.get('lost_after_24wks'))
+            if sum_pregnancies != cleaned_data.get('prev_pregnancies'):
+                raise forms.ValidationError(
+                    'The sum of Q3, Q4 and Q5 must be equal to Q2. Please correct.')
 
     def validate_live_children(self):
         cleaned_data = self.cleaned_data
