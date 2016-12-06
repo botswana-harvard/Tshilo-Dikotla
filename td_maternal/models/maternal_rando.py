@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 
+from edc_base.model.models import HistoricalRecords
 from edc_constants.constants import NO
 from edc_constants.choices import YES_NO
 from django_crypto_fields.fields import EncryptedCharField
@@ -82,6 +83,8 @@ class MaternalRando (MaternalCrfModel):
         verbose_name="if other delivery clinic, specify...",
         blank=True,
         null=True, )
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return '{}'.format(self.sid, self.subject_identifier)
