@@ -125,6 +125,7 @@ options.update(
     week32_result=NEG,
     evidence_32wk_hiv_status=YES,
     rapid_test_done=YES,
+    rapid_test_date=get_utcnow.date(),
     rapid_test_result=NEG)
 antenatalenrollment_neg = Recipe(
     AntenatalEnrollment, **options)
