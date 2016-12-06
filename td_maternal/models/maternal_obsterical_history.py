@@ -12,6 +12,7 @@ class MaternalObstericalHistory(MaternalCrfModel):
         verbose_name="Including this pregnancy, how many previous pregnancies for this participant?",
         validators=[MinValueValidator(0), MaxValueValidator(20), ],
         help_text="")
+
     pregs_24wks_or_more = models.IntegerField(
         verbose_name="Number of pregnancies at least 24 weeks.?",
         validators=[MinValueValidator(0), MaxValueValidator(20), ],
