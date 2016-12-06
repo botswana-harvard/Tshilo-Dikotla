@@ -32,7 +32,7 @@ def maternal_hiv_status_visit(visit_instance, *args):
 
 def func_show_infant_arv_proph(infant_visit, *args):
     infant_birth_schedule = site_visit_schedules.get_visit_schedule(
-        'infant_visit_schedule').schedule('infant_birth_schedule')
+        'infant_visit_schedule').schedules.get('infant_birth')
     previous_visit = infant_birth_schedule.get_previous_visit(infant_visit.appointment.visit_code)
     if not previous_visit:
         return False
@@ -66,7 +66,7 @@ class InfantRegisteredSubjectRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_infant'
-        source_model = 'td.registeredsubject'
+        source_model = 'edc_registration.registeredsubject'
 
 
 @register()
@@ -166,4 +166,4 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_lab'
-        source_model = 'td.registeredsubject'
+        source_model = 'edc_registration.registeredsubject'

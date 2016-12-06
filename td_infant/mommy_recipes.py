@@ -7,11 +7,12 @@ from model_mommy.recipe import Recipe
 
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NOT_APPLICABLE, NO
+from edc_visit_tracking.constants import SCHEDULED
 
 from td.constants import MODIFIED, NORMAL
 
 from .models import (InfantBirth, InfantBirthData, InfantBirthExam, InfantFeeding, InfantBirthArv, InfantFu,
-                     InfantFuPhysical, InfantArvProph)
+                     InfantFuPhysical, InfantArvProph, InfantVisit)
 
 
 class TdProvider(BaseProvider):
@@ -25,12 +26,14 @@ class TdProvider(BaseProvider):
     def four_weeks_ago(self):
         return (get_utcnow() - relativedelta(weeks=4)).date()
 
+infantvisit = Recipe(
+    InfantVisit,
+    reason=SCHEDULED)
+
 infantbirth = Recipe(
     InfantBirth,
     schedule_name='infant_birth',
     report_datetime=get_utcnow,
-    first_name='BABY',
-    initials='BB',
     dob=date.today,
     gender='F',)
 
