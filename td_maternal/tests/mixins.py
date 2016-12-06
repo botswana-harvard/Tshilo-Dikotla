@@ -1,7 +1,7 @@
 from model_mommy import mommy
 
+from django.apps import apps as django_apps
 from td.models import Appointment
-from edc_visit_tracking.constants import SCHEDULED
 
 
 import os
@@ -9,7 +9,6 @@ import os
 from unipath import Path
 
 from td_list.models import RandomizationItem
-from td_maternal.models.maternal_visit import MaternalVisit
 
 
 class TestMixinError(Exception):
@@ -27,32 +26,62 @@ def load_test_randomization():
         RandomizationItem.objects.get_or_create(name=seq, field_name=drug_assignment)
 
 
-class AddVisitMotherMixin:
+class AddVisitMixin:
 
-    def add_maternal_visit(self, code, reason=None):
-        """Adds (or gets) and returns a maternal_visit for give code."""
+    def add_visit(self, model_label, code, reason=None):
+        """Adds (or gets) and returns a visit for give model and code."""
         reason = reason or 'scheduled'
+        model = django_apps.get_model(*model_label.split('.'))
         appointment = Appointment.objects.get(
             subject_identifier=self.subject_identifier, visit_code=code)
         try:
-            maternal_visit = self.get_maternal_visit(code)
-        except MaternalVisit.DoesNotExist:
-            maternal_visit = mommy.make_recipe(
-                'td_maternal.maternalvisit',
+            visit = self.get_visit(model_label, code)
+        except model.DoesNotExist:
+            visit = mommy.make_recipe(
+                model_label,
                 appointment=appointment, reason=reason)
-        return maternal_visit
+        return visit
 
-    def add_maternal_visits(self, *codes):
+    def add_visits(self, model_label, *codes):
         """Adds a sequence of visits for the codes provided.
 
-        If a maternal visit already exists, it will just pass."""
+        If a infant visit already exists, it will just pass."""
         for code in codes:
-            self.add_maternal_visit(code)
+            self.add_visit(model_label, code)
+
+    def get_visit(self, model_label, code):
+        """Returns a visit instance if it exists."""
+        model = django_apps.get_model(*model_label.split('.'))
+        return model.objects.get(
+            appointment__subject_identifier=self.subject_identifier, visit_code=code)
+
+
+class AddVisitInfantMixin(AddVisitMixin):
+
+    infant_model_label = 'td_infant.infantvisit'
+
+    def add_infant_visit(self, code, reason=None):
+        return self.add_visit(self.infant_model_label, code, reason)
+
+    def add_infant_visits(self, *codes):
+        self.add_visits(self.infant_model_label, *codes)
+
+    def get_infant_visit(self, code):
+        return self.get_visit(self.infant_model_label, code)
+
+
+class AddVisitMotherMixin(AddVisitMixin):
+
+    maternal_model_label = 'td_maternal.maternalvisit'
+
+    def add_maternal_visit(self, code, reason=None):
+        return self.add_visit(self.maternal_model_label, code, reason)
+
+    def add_maternal_visits(self, *codes):
+        self.add_visits(self.maternal_model_label, *codes)
 
     def get_maternal_visit(self, code):
-        """Returns a maternal visit if it exists."""
-        return MaternalVisit.objects.get(
-            appointment__subject_identifier=self.subject_identifier, visit_code=code)
+        return self.get_visit(self.maternal_model_label, code)
 
 
 class MotherMixin():
