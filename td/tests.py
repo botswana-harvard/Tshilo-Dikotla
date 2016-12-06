@@ -1,11 +1,16 @@
+from faker import Faker
 from django.test import TestCase
 
+from edc_base.faker import EdcBaseProvider
 from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NEG, NO, UNK
 
 from dateutil.relativedelta import relativedelta
 
-from .hiv_result import Recent, Current, Rapid, PostEnrollment, Test
+from .hiv_result import Recent, Current, Rapid, Enrollment, PostEnrollment, Test
+
+fake = Faker()
+fake.add_provider(EdcBaseProvider)
 
 
 class Obj:
@@ -188,6 +193,35 @@ class TestRecent(TestCase):
             result=POS,
             evidence=YES)
         self.assertEqual(recent.within_3m, True)
+
+
+class TestEnrollment(TestCase):
+
+#     current_hiv_status=UNKNOWN,
+#     will_get_arvs=NOT_APPLICABLE,
+#     evidence_hiv_status=None,
+#     week32_test=YES,
+#     week32_test_date=fake.four_weeks_ago,
+#     week32_result=NEG,
+#     evidence_32wk_hiv_status=YES,
+#     rapid_test_done=YES,
+#     rapid_test_result=NEG)
+
+    def test_neg(self):
+        dt = get_utcnow()
+        current = Current(result=None, evidence=None)
+        self.assertEqual(current.result, None)
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=dt - relativedelta(weeks=4),
+            result=NEG,
+            evidence=YES)
+        self.assertEqual(recent.result, NEG)
+        rapid = Rapid(tested=YES, result=NEG, result_date=dt)
+        self.assertEqual(rapid.result, NEG)
+        enrollment = Enrollment(current=current, recent=recent, rapid=rapid)
+        self.assertEqual(enrollment.result, NEG)
 
 
 class TestPostEnrollment(TestCase):

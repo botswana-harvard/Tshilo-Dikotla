@@ -68,7 +68,7 @@ class MaternalMedicalHistory(MaternalCrfModel):
         blank=True,
         null=True)
 
-    sero_posetive = models.CharField(
+    sero_positive = models.CharField(
         max_length=25,
         verbose_name=("Is the mother HIV sero-positive?"),
         choices=YES_NO,)

@@ -56,7 +56,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
             'mother_chronic': [self.chronic_cond.id],
             'father_chronic': [self.chronic_cond.id],
             'mother_medications': [self.mother_medications.id],
-            'sero_posetive': YES,
+            'sero_positive': YES,
             'date_hiv_diagnosis': date.today(),
             'perinataly_infected': YES,
             'know_hiv_status': "Nobody",
@@ -266,7 +266,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
         mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
-        self.options['sero_posetive'] = NO
+        self.options['sero_positive'] = NO
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn(
             'The mother is HIV Positive, The field for whether she is sero positive should not be NO',
@@ -278,7 +278,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
         mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
-        self.options['sero_posetive'] = YES
+        self.options['sero_positive'] = YES
         self.options['date_hiv_diagnosis'] = None
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn(
@@ -292,7 +292,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
         mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         self.options['maternal_visit'] = self.maternal_visit_1000.id
-        self.options['sero_posetive'] = YES
+        self.options['sero_positive'] = YES
         self.options['perinataly_infected'] = NOT_APPLICABLE
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn(
@@ -407,7 +407,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
         self.options['who'] = [self.who_dx_na.id]
-        self.options['sero_posetive'] = YES
+        self.options['sero_positive'] = YES
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn('The Mother is HIV Negative she cannot be Sero Positive', form.errors.get('__all__'))
 
@@ -420,7 +420,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
         self.options['who'] = [self.who_dx_na.id]
-        self.options['sero_posetive'] = NO
+        self.options['sero_positive'] = NO
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn('The Mother is HIV Negative, the approximate date of diagnosis should not be supplied',
                       form.errors.get('__all__'))
@@ -434,7 +434,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
         self.options['who'] = [self.who_dx_na.id]
-        self.options['sero_posetive'] = NO
+        self.options['sero_positive'] = NO
         self.options['date_hiv_diagnosis'] = None,
         self.options['perinataly_infected'] = YES
         form = MaternalMedicalHistoryForm(data=self.options)
@@ -450,7 +450,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
         self.options['who'] = [self.who_dx_na.id]
-        self.options['sero_posetive'] = NO
+        self.options['sero_positive'] = NO
         self.options['date_hiv_diagnosis'] = None,
         self.options['perinataly_infected'] = NOT_APPLICABLE
         form = MaternalMedicalHistoryForm(data=self.options)
@@ -468,7 +468,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
         self.options['who'] = [self.who_dx_na.id]
-        self.options['sero_posetive'] = NO
+        self.options['sero_positive'] = NO
         self.options['date_hiv_diagnosis'] = None
         self.options['perinataly_infected'] = NOT_APPLICABLE
         self.options['know_hiv_status'] = NOT_APPLICABLE
@@ -485,7 +485,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
         self.options['who'] = [self.who_dx_na.id]
-        self.options['sero_posetive'] = NO
+        self.options['sero_positive'] = NO
         self.options['date_hiv_diagnosis'] = None
         self.options['perinataly_infected'] = NOT_APPLICABLE
         self.options['know_hiv_status'] = NOT_APPLICABLE
@@ -503,7 +503,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
         self.options['who'] = [self.who_dx_na.id]
-        self.options['sero_posetive'] = NO
+        self.options['sero_positive'] = NO
         self.options['date_hiv_diagnosis'] = None
         self.options['perinataly_infected'] = NOT_APPLICABLE
         self.options['know_hiv_status'] = NOT_APPLICABLE
@@ -522,7 +522,7 @@ class TestMaternalMedicalHistory(BaseTestCase):
         self.options['chronic_since'] = NO
         self.options['who_diagnosis'] = NOT_APPLICABLE
         self.options['who'] = [self.who_dx_na.id]
-        self.options['sero_posetive'] = NO
+        self.options['sero_positive'] = NO
         self.options['date_hiv_diagnosis'] = None
         self.options['perinataly_infected'] = NOT_APPLICABLE
         self.options['know_hiv_status'] = NOT_APPLICABLE
