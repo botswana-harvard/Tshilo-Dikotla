@@ -1,69 +1,23 @@
 from dateutil.relativedelta import relativedelta
+from django.test import TestCase
 from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
 from edc_code_lists.models import WcsDxAdult
-from edc_constants.constants import (YES, POS, NEG, NOT_APPLICABLE, NO)
-from edc_registration.models import RegisteredSubject
+from edc_constants.constants import (YES, NEG, NOT_APPLICABLE, NO)
 
 from td.models import Appointment
 from td_list.models import MaternalDiagnoses, MaternalHospitalization
 from td_maternal.forms import MaternalPostPartumFuForm
 
-from .base_test_case import BaseTestCase
+from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
 
 
-class TestMaternalPostPartumFu(BaseTestCase):
+class TestMaternalPostPartumFu(AntenatalVisitsMotherMixin, DeliverMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalPostPartumFu, self).setUp()
-        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        self.maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
-        self.registered_subject = self.maternal_eligibility.registered_subject
 
-        self.assertEqual(RegisteredSubject.objects.all().count(), 1)
-        options = {'registered_subject': self.registered_subject,
-                   'current_hiv_status': POS,
-                   'evidence_hiv_status': YES,
-                   'will_get_arvs': YES,
-                   'is_diabetic': NO,
-                   'will_remain_onstudy': YES,
-                   'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (get_utcnow() - relativedelta(weeks=25)).date()}
-
-        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
-        self.assertTrue(self.antenatal_enrollment.is_eligible)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
-        self.maternal_visit = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = mommy.make_recipe(
-            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit, number_of_gestations=1)
-
-        self.antenatal_visits_membership = mommy.make_recipe(
-            'td_maternal.antenatalvisitmembership', registered_subject=options.get('registered_subject'))
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
-        self.maternal_visit = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
-        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
-        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
-        self.maternal_visit_2000 = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-#         self.create_mother()
         self.diagnoses = MaternalDiagnoses.objects.create(
             hostname_created="django", name="Gestational Hypertension",
             short_name="Gestational Hypertension", created=get_utcnow(),
@@ -103,8 +57,11 @@ class TestMaternalPostPartumFu(BaseTestCase):
             created=get_utcnow(), modified=get_utcnow(), user_created="", user_modified="",
             hostname_created="otse.bhp.org.bw", hostname_modified="otse.bhp.org.bw", revision=None)
 
+        self.add_maternal_visits('1000M', '1010M', '1020M', '2000M')
+
+        maternal_visit = self.get_maternal_visit('2000M')
         self.options = {
-            'maternal_visit': self.maternal_visit_2000.id,
+            'maternal_visit': maternal_visit.id,
             'new_diagnoses': YES,
             'diagnoses': [self.diagnoses.id],
             'hospitalized': YES,
