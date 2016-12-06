@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.core.paginator import Paginator, EmptyPage
 from django.views.generic import TemplateView, FormView
 
 from td_maternal.models.maternal_eligibility import MaternalEligibility
@@ -37,7 +38,7 @@ class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
 
     def get_context_data(self, **kwargs):
         context = super(SearchDasboardView, self).get_context_data(**kwargs)
-        results = MaternalEligibility.objects.all().order_by('-created')[:20]
+        results = MaternalEligibility.objects.all().order_by('-created')
         for obj in results:
             try:
                 maternal_consent = MaternalConsent.objects.get(maternal_eligibility_reference=obj.reference_pk)
@@ -47,6 +48,11 @@ class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
             except MultipleObjectsReturned:
                 maternal_consent = MaternalConsent.objects.filter(maternal_eligibility_reference=obj.reference_pk)[0]
                 obj.subject_identifier = maternal_consent.subject_identifier
+        results_paginator = Paginator(results, self.paginate_by)
+        try:
+            results = results_paginator.page(self.kwargs.get('page', 1))
+        except EmptyPage:
+            results = results_paginator.page(results_paginator.num_pages)
         context.update(
             site_header=admin.site.site_header,
             results=results)
