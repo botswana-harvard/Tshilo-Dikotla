@@ -11,7 +11,8 @@ from .maternal_visit import MaternalVisit
 
 
 class MaternalCrfModel(CrfModelMixin, OffstudyMixin,
-                       RequiresConsentMixin, PreviousVisitModelMixin, UpdatesCrfMetadataModelMixin, UrlMixin, BaseUuidModel):
+                       RequiresConsentMixin, PreviousVisitModelMixin,
+                       UpdatesCrfMetadataModelMixin, UrlMixin, BaseUuidModel):
 
     """ Base model for all scheduled models (adds key to :class:`MaternalVisit`). """
 

@@ -1,83 +1,96 @@
 from dateutil.relativedelta import relativedelta
 from model_mommy import mommy
 
+from django.test import TestCase
+
 from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NO, NEG, NOT_APPLICABLE, UNK, IND
 from edc_metadata.models import RequisitionMetadata
 from edc_registration.models import RegisteredSubject
+from edc_visit_tracking.constants import SCHEDULED
 
 from td.models import Appointment
 
 from ..maternal_hiv_status import MaternalHivStatus
 
-from .base_test_case import BaseTestCase
+from .mixins import PosMotherMixin, NegMotherMixin
 
 
-class TestMaternalStatusHelper(BaseTestCase):
+class TestMaternalHivStatusPos(PosMotherMixin, TestCase):
+    """Tests where the mother is POS."""
 
     def setUp(self):
-        super(TestMaternalStatusHelper, self).setUp()
-        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        self.maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
-        self.registered_subject = self.maternal_consent.registered_subject
+        super(TestMaternalHivStatusPos, self).setUp()
+        self.maternalrando = mommy.make_recipe(
+            'td_maternal.maternalrando',
+            maternal_visit=self.antenatal_visit_1)
 
     def test_pos_status_from_enrollment(self):
-        """test that we can figure out a posetive status with just the enrollment status."""
-        self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        mommy.make_recipe('td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
-        mommy.make_recipe('td_maternal.maternalLabourdel', registered_subject=self.registered_subject)
-
+        """Asserts can determine POS with just the enrollment status."""
+        mommy.make_recipe('td_maternal.maternallabdel', subject_identifier=self.subject_identifier)
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
-        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
+            subject_identifier=self.subject_identifier, visit_code='1020M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
+            subject_identifier=self.subject_identifier, visit_code='2000M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2020M')
+            subject_identifier=self.subject_identifier, visit_code='2010M')
+        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.appointment = Appointment.objects.get(
+            subject_identifier=self.subject_identifier, visit_code='2020M')
         maternal_visit_2020M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=maternal_visit_2020M.subject_identifier,
             reference_datetime=maternal_visit_2020M.report_datetime)
         self.assertEqual(maternal_hiv_status.result, POS)
-        self.assertEqual(RequisitionMetadata.objects.filter(entry_status='REQUIRED',
-                                                            model='td_lab.maternalrequisition',
-                                                            panel_name='PBMC VL',
-                                                            visit_code='2020M').count(), 1)
+        self.assertEqual(
+            RequisitionMetadata.objects.filter(
+                entry_status='REQUIRED',
+                model='td_lab.maternalrequisition',
+                panel_name='PBMC VL',
+                visit_code='2020M').count(), 1)
 
     def test_dnapcr_for_heu_infant(self):
-        """test that for an HEU infant, then the DNA PCR requisition is made available."""
-        self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        mommy.make_recipe('td_maternal.maternalrandomization', maternal_visit=self.antenatal_visit_1)
+        """Asserts that DNA PCR requisition is made available for an HEU infant."""
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
-        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+            subject_identifier=self.subject_identifier,
+            visit_code='1020M')
+        mommy.make_recipe('td_maternal.maternalvisit',
+                          appointment=self.appointment, reason='scheduled')
+        maternal_lab_del = mommy.make_recipe(
+            'td_maternal.maternallabdel',
+            subject_identifier=self.subject_identifier,
+            live_infants=1)
+        infant_birth = mommy.make_recipe(
+            'td_infant.infantbirth',
+            delivery_reference=maternal_lab_del.reference,
+            birth_order=1,
+            birth_order_denominator=1)
+        self.appointment = Appointment.objects.get(
+            subject_identifier=infant_birth.subject_identifier,
+            visit_code='2000')
+        mommy.make_recipe(
+            'td_infant.infantvisit',
+            appointment=self.appointment,
+            reason='scheduled')
+        self.appointment = Appointment.objects.get(
+            subject_identifier=infant_birth.subject_identifier, visit_code='2010')
+        mommy.make_recipe('td_infant.infantvisit', appointment=self.appointment)
+        self.assertEqual(
+            RequisitionMetadata.objects.filter(
+                entry_status='REQUIRED',
+                model='td_lab.infantrequisition',
+                panel_name='DNA PCR',
+                visit_code='2010').count(), 1)
 
-        labour_del = mommy.make_recipe('td_maternal.maternalLabourdel', registered_subject=self.registered_subject)
-        infant_registered_subject = RegisteredSubject.objects.get(
-            relative_identifier=labour_del.registered_subject.subject_identifier)
-        mommy.make_recipe('td_infant.infantbirth', maternal_labour_del=labour_del, registered_subject=infant_registered_subject)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.infant_registered_subject.subject_identifier, visit_code='2000')
-        mommy.make_recipe('td_infant.infantvisit', appointment=self.appointment)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.infant_registered_subject.subject_identifier, visit_code='2010')
-        mommy.make_recipe('td_infant.infantvisit', appointment=self.appointment)
-        self.assertEqual(RequisitionMetadata.objects.filter(entry_status='REQUIRED',
-                                                            model='td_lab.infantrequisition',
-                                                            panel_name='DNA PCR',
-                                                            visit_code='2010').count(), 1)
+
+class TestMaternalHivStatusNeg(NegMotherMixin):
 
     def test_dnapcr_for_non_heu_infant(self):
         """test that for a NON HEU infant, then the DNA PCR requisition is NOT made available."""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
+            subject_identifier=self.subject_identifier, visit_code='1020M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         labour_del = mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         infant_registered_subject = RegisteredSubject.objects.get(
@@ -97,16 +110,15 @@ class TestMaternalStatusHelper(BaseTestCase):
 
     def test_ind_status_from_rapid_test(self):
         """test that we can figure out a posetive status taking in to consideration rapid tests."""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
         mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
+            subject_identifier=self.subject_identifier, visit_code='1020M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
+            subject_identifier=self.subject_identifier, visit_code='2000M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
+            subject_identifier=self.subject_identifier, visit_code='2010M')
         maternal_visit_2010M = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         maternal_hiv_status = MaternalHivStatus(
@@ -115,10 +127,10 @@ class TestMaternalStatusHelper(BaseTestCase):
         self.assertEqual(maternal_hiv_status.result, NEG)
         mommy.make_recipe('td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result=IND)
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2020M')
+            subject_identifier=self.subject_identifier, visit_code='2020M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2060M')
+            subject_identifier=self.subject_identifier, visit_code='2060M')
         maternal_visit_2060M = mommy.make_recipe(
             'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         maternal_hiv_status = MaternalHivStatus(
@@ -128,19 +140,18 @@ class TestMaternalStatusHelper(BaseTestCase):
 
     def test_neg_status_from_enrollment(self):
         """test that we can figure out a negative status with just the enrollment status."""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
         mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
+            subject_identifier=self.subject_identifier, visit_code='1020M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
+            subject_identifier=self.subject_identifier, visit_code='2000M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
+            subject_identifier=self.subject_identifier, visit_code='2010M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2020M')
+            subject_identifier=self.subject_identifier, visit_code='2020M')
         maternal_visit_2020M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=maternal_visit_2020M.subject_identifier,
@@ -149,16 +160,15 @@ class TestMaternalStatusHelper(BaseTestCase):
 
     def test_neg_status_from_rapid_test(self):
         """test that we can figure out a negative status taking in to consideration rapid tests."""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
         mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
+            subject_identifier=self.subject_identifier, visit_code='1020M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
+            subject_identifier=self.subject_identifier, visit_code='2000M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
+            subject_identifier=self.subject_identifier, visit_code='2010M')
         maternal_visit_2010M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=maternal_visit_2010M.subject_identifier,
@@ -167,7 +177,7 @@ class TestMaternalStatusHelper(BaseTestCase):
         mommy.make_recipe('td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result=NEG)
         # Visit within 3months of rapid test.
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2020M')
+            subject_identifier=self.subject_identifier, visit_code='2020M')
         maternal_visit_2020M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=maternal_visit_2020M.subject_identifier,
@@ -176,16 +186,15 @@ class TestMaternalStatusHelper(BaseTestCase):
 
     def test_unkown_status(self):
         """test that a negative result that is more than 3months old will lead to UNK status."""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
+            subject_identifier=self.subject_identifier, visit_code='1020M')
         mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2000M')
+            subject_identifier=self.subject_identifier, visit_code='2000M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2010M')
+            subject_identifier=self.subject_identifier, visit_code='2010M')
         maternal_visit_2010M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=maternal_visit_2010M.subject_identifier,
@@ -197,12 +206,15 @@ class TestMaternalStatusHelper(BaseTestCase):
             result=NEG)
         # Visit within 3months of rapid test.
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='2020M')
+            subject_identifier=self.subject_identifier, visit_code='2020M')
         maternal_visit_2020M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=maternal_visit_2020M.subject_identifier,
             reference_datetime=maternal_visit_2020M.report_datetime)
         self.assertEqual(maternal_hiv_status.result, UNK)
+
+
+class TestMaternalHivStatusWithForm(TestCase):
 
     def test_valid_hiv_neg_week32_test_date(self):
         """Test that NEG status is valid for week32_test_date"""
@@ -220,17 +232,17 @@ class TestMaternalStatusHelper(BaseTestCase):
                    'last_period_date': (get_utcnow() - relativedelta(weeks=34)).date()}
         self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
+            subject_identifier=self.subject_identifier, visit_code='1000M')
         self.maternal_visit_1000 = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.maternal_ultrasound = mommy.make_recipe('td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1,)
         self.antenatal_visits_membership = mommy.make_recipe('td_maternal.antenatalenrollmenttwo', registered_subject=options.get('registered_subject'))
 
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
+            subject_identifier=self.subject_identifier, visit_code='1010M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject)
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
+            subject_identifier=self.subject_identifier, visit_code='1020M')
         maternal_visit_1020M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=maternal_visit_1020M.subject_identifier,
@@ -240,12 +252,12 @@ class TestMaternalStatusHelper(BaseTestCase):
     def create_mother(self, status_options):
         self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **status_options)
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
+            subject_identifier=self.subject_identifier, visit_code='1000M')
         self.maternal_visit_1000 = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.maternal_ultrasound = mommy.make_recipe('td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
         self.antenatal_visits_membership = mommy.make_recipe('td_maternal.antenatalenrollmenttwo', registered_subject=status_options.get('registered_subject'))
         self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
+            subject_identifier=self.subject_identifier, visit_code='1010M')
         self.antenatal_visit_1 = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
 
     def hiv_pos_mother_options(self, registered_subject):
