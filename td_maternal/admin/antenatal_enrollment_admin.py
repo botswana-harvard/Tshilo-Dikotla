@@ -34,7 +34,7 @@ class AntenatalEnrollmentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, 
               'rapid_test_date',
               'rapid_test_result',
               'enrollment_hiv_status')
-    readonly_fields = ('subject_identifier', 'edd_by_lmp', 'ga_lmp_enrollment_wks', 'enrollment_hiv_status')
+    readonly_fields = ('edd_by_lmp', 'ga_lmp_enrollment_wks', 'enrollment_hiv_status')
     radio_fields = {'is_diabetic': admin.VERTICAL,
                     'will_breastfeed': admin.VERTICAL,
                     'will_remain_onstudy': admin.VERTICAL,

@@ -114,11 +114,11 @@ class DashboardMixin:
             obj = None
             try:
                 obj = model.objects.get(subject_identifier=self.subject_identifier)
-                admin_model_url_label = "{} ({})".format(model._meta.verbose_name, 'Complete')
+                admin_model_url_label = model._meta.verbose_name
                 admin_model_change_url = obj.get_absolute_url()
                 enrollments.append([admin_model_url_label, admin_model_change_url])
             except model.DoesNotExist:
-                admin_model_url_label = "{} ({})".format(model._meta.verbose_name, 'New')
+                admin_model_url_label = "Add {}".format(model._meta.verbose_name)
                 admin_model_add_url = reverse('admin:{}_{}_add'.format(app_label, model_name))
                 enrollments.append([admin_model_url_label, admin_model_add_url])
         return enrollments

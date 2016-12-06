@@ -120,6 +120,12 @@ class MaternalLocatorForm(LocatorFormMixin, forms.ModelForm):
 
 class AntenatalEnrollmentForm(ModelFormMixin, forms.ModelForm):
 
+    subject_identifier = forms.CharField(
+        label='Subject Identifier',
+        required=True,
+        help_text='This field is read only.',
+        widget=forms.TextInput(attrs={'size': 15, 'readonly': True}))
+
     def clean(self):
         cleaned_data = super(AntenatalEnrollmentForm, self).clean()
         self.validate_last_period_date(cleaned_data.get('report_datetime'), cleaned_data.get('last_period_date'))
@@ -139,6 +145,12 @@ class AntenatalEnrollmentForm(ModelFormMixin, forms.ModelForm):
 
 
 class AntenatalEnrollmentTwoForm(ModelFormMixin, forms.ModelForm):
+
+    subject_identifier = forms.CharField(
+        label='Subject Identifier',
+        required=True,
+        help_text='This field is read only.',
+        widget=forms.TextInput(attrs={'size': 15, 'readonly': True}))
 
     class Meta:
         model = AntenatalEnrollmentTwo
@@ -415,8 +427,7 @@ class MaternalConsentForm(ConsentFormMixin, forms.ModelForm):
         label='Reference',
         required=True,
         help_text='This field is read only.',
-        widget=forms.TextInput(attrs={'size': 36, 'readonly': True})
-    )
+        widget=forms.TextInput(attrs={'size': 36, 'readonly': True}))
 
     study_site = forms.ChoiceField(
         label='Study site',
@@ -1372,6 +1383,11 @@ class RapidTestResultForm(ModelFormMixin, forms.ModelForm):
 class SpecimenConsentForm(BaseSpecimenConsentForm):
 
     STUDY_CONSENT = MaternalConsent
+    subject_identifier = forms.CharField(
+        label='Subject Identifier',
+        required=True,
+        help_text='This field is read only.',
+        widget=forms.TextInput(attrs={'size': 15, 'readonly': True}))
 
     class Meta:
         model = SpecimenConsent
