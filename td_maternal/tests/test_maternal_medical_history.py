@@ -162,7 +162,6 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
     def test_negative_mother_who_listed_none(self):
         """The mother is HIV Negative but has who diagnosis listing as none"""
         self.options.update(
-            maternal_visit=self.maternal_visit_1000.id,
             chronic_since=NOT_APPLICABLE,
             who_diagnosis=NOT_APPLICABLE,
             who=None)
