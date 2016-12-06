@@ -1,17 +1,14 @@
-from django.utils import timezone
-from datetime import date
-from model_mommy import mommy
-
 from edc_base.utils import get_utcnow
 from edc_code_lists.models import WcsDxAdult
 from edc_constants.constants import YES, NO, NOT_APPLICABLE, NEG
 
-from ..forms import MaternalMedicalHistoryForm
 from td_list.models import ChronicConditions, MaternalMedications
+
+from ..forms import MaternalMedicalHistoryForm
+from ..maternal_hiv_status import MaternalHivStatus
 
 from .mixins import PosMotherMixin
 from .base_test_case import BaseTestCase
-from td_maternal.maternal_hiv_status import MaternalHivStatus
 
 
 class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):

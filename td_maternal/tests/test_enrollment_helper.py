@@ -168,11 +168,12 @@ class TestGa(unittest.TestCase):
 class TestEdd(TestCase):
 
     def setUp(self):
-        mommy.make_recipe(
+        maternal_eligibility = mommy.make_recipe(
             'td_maternal.maternaleligibility',
             report_datetime=pytz.utc.localize(datetime(2016, 10, 8, 9, 15)))
         maternal_consent = mommy.make_recipe(
             'td_maternal.maternalconsent',
+            maternal_eligibility_reference=maternal_eligibility.reference_pk,
             consent_datetime=pytz.utc.localize(datetime(2016, 10, 8, 9, 16)))
         self.subject_identifier = maternal_consent.subject_identifier
         self.opts = dict(

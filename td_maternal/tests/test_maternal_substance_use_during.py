@@ -1,53 +1,25 @@
 from dateutil.relativedelta import relativedelta
+
+from django.test import TestCase
 from django.utils import timezone
+
 from model_mommy import mommy
 
 from edc_constants.constants import UNKNOWN, YES, NO, NEG, NOT_APPLICABLE
 
 from td.models import Appointment
 from td_maternal.forms import MaternalSubstanceUseDuringPregForm
+from td_maternal.tests.mixins import AntenatalVisitsMotherMixin, AddVisitInfantMixin, PosMotherMixin, NegMotherMixin
 
-from .base_test_case import BaseTestCase
 
-
-class TestMaternalSubstanceUseDuringPreg(BaseTestCase):
+class TestMaternalSubstanceUseDuringPreg(AntenatalVisitsMotherMixin, AddVisitInfantMixin, NegMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalSubstanceUseDuringPreg, self).setUp()
-        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        self.maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility)
-        self.registered_subject = self.maternal_eligibility.registered_subject
-
-        maternal_options = {
-            'registered_subject': self.registered_subject,
-            'current_hiv_status': UNKNOWN,
-            'evidence_hiv_status': None,
-            'week32_test': YES,
-            'week32_test_date': (timezone.datetime.now() - relativedelta(weeks=4)).date(),
-            'week32_result': NEG,
-            'evidence_32wk_hiv_status': YES,
-            'will_get_arvs': NOT_APPLICABLE,
-            'rapid_test_done': YES,
-            'rapid_test_result': NEG,
-            'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
-        self.antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **maternal_options)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1000M')
-        self.maternal_visit_1000 = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = mommy.make_recipe(
-            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
-        self.antenatal_visits_membership = mommy.make_recipe(
-            'td_maternal.antenatalvisitmembership', registered_subject=maternal_options.get('registered_subject'))
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1010M')
-        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject.subject_identifier, visit_code='1020M')
-        self.antenatal_visit_2 = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
+        self.add_maternal_visits('1000M', '1010M', '1020M')
+        maternal_visit = self.get_maternal_visit('1020M')
         self.options = {
-            'maternal_visit': self.antenatal_visit_2.id,
+            'maternal_visit': maternal_visit.pk,
             'smoked_during_pregnancy': YES,
             'smoking_during_preg_freq': 'daily',
             'alcohol_during_pregnancy': YES,
