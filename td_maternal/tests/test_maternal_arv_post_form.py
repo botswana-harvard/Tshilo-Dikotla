@@ -1,37 +1,25 @@
 from dateutil.relativedelta import relativedelta
-from django.utils import timezone
+from django.test import TestCase
 from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
-from edc_constants.constants import (YES, NOT_APPLICABLE, POS, NO)
-from edc_registration.models import RegisteredSubject
-
-from td.models import Appointment
+from edc_constants.constants import YES, NO
 
 from ..forms import MaternalArvPostForm
 
-from .base_test_case import BaseTestCase
+from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
 
 
-class TestMaternalArvPost(BaseTestCase):
+class TestMaternalArvPost(AntenatalVisitsMotherMixin, DeliverMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalArvPost, self).setUp()
 
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.options.get('subject_identifier'), visit_code='1020M')
+        self.add_maternal_visits('1000M', '1010M', '1020M', '2000M')
+        maternal_visit = self.get_maternal_visit('2000M')
 
-        mommy.make_recipe('td_maternal.maternallabdel', subject_identifier=self.options.get('subject_identifier'))
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.options.get('subject_identifier'), visit_code='2000M')
-        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.options.get('subject_identifier'), visit_code='2010M')
-        self.maternal_visit_2000 = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
         self.data = {
-            'maternal_visit': self.maternal_visit_2000.id,
+            'maternal_visit': maternal_visit.id,
             'report_datetime': get_utcnow(),
             'on_arv_since': NO,
             'on_arv_reason': 'N/A',
