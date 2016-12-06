@@ -211,7 +211,7 @@ maternalinterimidcc = Recipe(
 rapidtest = Recipe(
     RapidTestResult,
     rapid_test_done=YES,
-    result_date=get_utcnow,
+    result_date=date.today,
     result=POS)
 
 maternalobstericalhistory = Recipe(

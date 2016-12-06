@@ -59,21 +59,24 @@ class TestCurrent(TestCase):
 
     def test_pos_with_evidence(self):
         """Assert POS from recent class with evidence is POS."""
-        current = Current(result=POS, evidence=YES)
+        dt = get_utcnow().date()
+        current = Current(result=POS, result_date=dt, evidence=YES)
         self.assertEqual(current.result, POS)
 
     def test_none_without_evidence(self):
         """Assert POS from recent class with evidence is POS, else None."""
-        current = Current(result=POS, evidence=YES)
+        dt = get_utcnow().date()
+        current = Current(result=POS, result_date=dt, evidence=YES)
         self.assertEqual(current.result, POS)
-        current = Current(result=POS, evidence=NO)
+        current = Current(result=POS, result_date=dt, evidence=NO)
         self.assertEqual(current.result, None)
 
     def test_none_if_neg(self):
         """Assert NEG from recent class with/without evidence is None."""
-        current = Current(result=NEG, evidence=NO)
+        dt = get_utcnow().date()
+        current = Current(result=NEG, result_date=dt, evidence=NO)
         self.assertEqual(current.result, None)
-        current = Current(result=NEG, evidence=YES)
+        current = Current(result=NEG, result_date=dt, evidence=YES)
         self.assertEqual(current.result, None)
 
 
@@ -199,7 +202,7 @@ class TestEnrollment(TestCase):
 
     def test_neg(self):
         dt = get_utcnow()
-        current = Current(result=None, evidence=None)
+        current = Current(result=None, result_date=None, evidence=None)
         self.assertEqual(current.result, None)
         recent = Recent(
             reference_datetime=get_utcnow(),
@@ -214,10 +217,10 @@ class TestEnrollment(TestCase):
         self.assertEqual(enrollment.result, NEG)
 
     def test_pos(self):
-        current = Current(result=None, evidence=None)
+        current = Current(result=None, result_date=None, evidence=None)
         self.assertEqual(current.result, None)
         enrollment = Enrollment(current=current, recent=None, rapid=None)
-        self.assertEqual(enrollment.result, NEG)
+        self.assertEqual(enrollment.result, None)
 
 
 class TestPostEnrollment(TestCase):

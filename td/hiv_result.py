@@ -31,34 +31,38 @@ class Enrollment:
         self.result = None
         self.result_date = None
         self.exception_cls = exception_cls or EnrollmentResultError
-        self.current = current
-        self.recent = recent
-        self.rapid = rapid
-        try:
-            if self.recent.result_date > self.rapid.result_date:
-                raise self.exception_cls('Rapid test result_date cannot precede test result_date on or after 32 weeks')
-        except TypeError:
+        self.current = current or Current()
+        self.recent = recent or Recent()
+        self.rapid = rapid or Rapid()
+        if not self.current.result and not self.recent.result and not self.rapid.result:
             pass
-        if self.current.result == POS or self.recent.result == POS or self.rapid.result == POS:
-            self.result = POS
-            results = [obj for obj in [self.current, self.recent, self.rapid] if obj.result == POS]
-            results.sort(key=lambda x: x.result_date)
-            self.result_date = results[0].result_date
-        elif self.rapid.result == NEG or self.recent.result == NEG:
-            self.result = NEG
-            results = [obj for obj in [self.current, self.recent, self.rapid] if obj.result == NEG]
-            results.sort(key=lambda x: x.result_date, reverse=True)
-            self.result_date = results[0].result_date
-        if self.current.result != POS and self.recent.result != POS:
-            if not self.rapid.result:
-                raise self.exception_cls(
-                    'A rapid test result is required. Got current.result == {}, recent.result == {}'.format(
-                        self.current.result, self.recent.result))
-        if self.result not in [POS, NEG]:
-            if self.rapid.result:
-                raise EnrollmentNoResultError('Unable to determine a POS or NEG result. Got {}.'.format(self.result))
-            else:
-                raise EnrollmentRapidTestRequiredError('Rapid test is required.')
+        else:
+            try:
+                if self.recent.result_date > self.rapid.result_date:
+                    raise self.exception_cls(
+                        'Rapid test result_date cannot precede test result_date on or after 32 weeks')
+            except TypeError:
+                pass
+            if self.current.result == POS or self.recent.result == POS or self.rapid.result == POS:
+                self.result = POS
+                results = [obj for obj in [self.current, self.recent, self.rapid] if obj.result == POS]
+                results.sort(key=lambda test: test.result_date)
+                self.result_date = results[0].result_date
+            elif self.rapid.result == NEG or self.recent.result == NEG:
+                self.result = NEG
+                results = [obj for obj in [self.current, self.recent, self.rapid] if obj.result == NEG]
+                results.sort(key=lambda test: test.result_date)
+                self.result_date = results[-1:][0].result_date
+            if self.current.result != POS and self.recent.result != POS:
+                if not self.rapid.result:
+                    raise self.exception_cls(
+                        'A rapid test result is required. Got current.result == {}, recent.result == {}'.format(
+                            self.current.result, self.recent.result))
+            if self.result not in [POS, NEG]:
+                if self.rapid.result:
+                    raise EnrollmentNoResultError('Unable to determine a POS or NEG result. Got {}.'.format(self.result))
+                else:
+                    raise EnrollmentRapidTestRequiredError('Rapid test is required.')
 
 
 class Test:
@@ -76,10 +80,12 @@ class Test:
 
 class Current:
     """Current HIV result/status, but only if POS, returns POS or None"""
-    def __init__(self, result=None, evidence=None):
+    def __init__(self, result=None, result_date=None, evidence=None):
         self.result = None
+        self.result_date = None
         if evidence == YES and result == POS:
             self.result = POS
+            self.result_date = result_date
 
 
 class Recent(Test):
@@ -110,11 +116,17 @@ class Rapid(Test):
 
 class PostEnrollment:
     """Determines hiv status anytime post-enrollment, returns POS, NEG or None."""
-    def __init__(self, reference_datetime, enrollment_result, rapid_results, exception_cls=None):
+    def __init__(self, reference_datetime, enrollment_result, rapid_results=None, exception_cls=None):
+        rapid_results = [] if not rapid_results else list(rapid_results)
         self.result = None
         self.result_date = None
         self.reference_datetime = reference_datetime
-        self.enrollment_result = enrollment_result
+        self.enrollment_result = enrollment_result or Recent()
+        self.enrollment_result = Recent(
+            reference_datetime=reference_datetime,
+            result=self.enrollment_result.result,
+            result_date=self.enrollment_result.result_date,
+            tested=YES, evidence=YES)
         self.exception_cls = exception_cls or PostEnrollmentResultError
         if self.enrollment_result.result == POS:
             # POS at enrollment ... we're done.
@@ -130,17 +142,20 @@ class PostEnrollment:
             pos_rapid_results.sort(key=lambda test: test.result_date)
             if pos_rapid_results:
                 # select first POS
-                self.result, self.result_date = pos_rapid_results[0].result, pos_rapid_results[0].result_date
+                self.result = pos_rapid_results[0].result
+                self.result_date = pos_rapid_results[0].result_date
             else:
                 # select tests within last three months
-                opts = dict(tested=YES, evidence=YES)
                 recent_results = []
-                for test in rapid_results + (self.enrollment_result, ):
+                if self.enrollment_result.result == NEG:
+                    recent_results.append(self.enrollment_result)
+                for test in rapid_results:
                     recent = Recent(
                         reference_datetime=reference_datetime,
                         result=test.result,
-                        result_date=test.result_date, **opts)
-                    if recent.result:
+                        result_date=test.result_date,
+                        tested=YES, evidence=YES)
+                    if recent.result == NEG:
                         recent_results.append(recent)
                 # sort NEG results reversed by date
                 recent_results.sort(key=lambda test: test.result_date, reverse=True)

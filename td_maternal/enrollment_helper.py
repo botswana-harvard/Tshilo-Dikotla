@@ -111,6 +111,7 @@ class EnrollmentHelper(object):
         is the final result."""
         current = Current(
             result=obj.current_hiv_status,
+            result_date=obj.report_datetime.date(),
             evidence=obj.evidence_hiv_status)
         recent = Recent(
             reference_datetime=obj.report_datetime,
@@ -121,7 +122,7 @@ class EnrollmentHelper(object):
         rapid = Rapid(
             tested=obj.rapid_test_done,
             result=obj.rapid_test_result,
-            result_date=obj.rapid_test_result)
+            result_date=obj.rapid_test_date)
         return EnrollmentResult(current=current, recent=recent, rapid=rapid)
 
     @property
