@@ -15,6 +15,7 @@ from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, Antena
                      MaternalDemographics, MaternalAztNvp, MaternalDiagnoses, MaternalSubstanceUseDuringPreg,
                      MaternalClinicalMeasurementsTwo, MaternalLifetimeArvHistory, MaternalArvPreg,
                      MaternalClinicalMeasurementsOne)
+from datetime import date
 
 
 class TdProvider(BaseProvider):
@@ -125,7 +126,7 @@ options.update(
     week32_result=NEG,
     evidence_32wk_hiv_status=YES,
     rapid_test_done=YES,
-    rapid_test_date=get_utcnow,
+    rapid_test_date=date.today(),
     rapid_test_result=NEG)
 antenatalenrollment_neg = Recipe(
     AntenatalEnrollment, **options)
