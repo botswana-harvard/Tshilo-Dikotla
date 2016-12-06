@@ -29,6 +29,7 @@ class Enrollment:
     Raises an exception if a rapid test is required."""
     def __init__(self, current=None, recent=None, rapid=None, exception_cls=None):
         self.result = None
+        self.result_date = None
         self.exception_cls = exception_cls or EnrollmentResultError
         self.current = current
         self.recent = recent
@@ -40,8 +41,14 @@ class Enrollment:
             pass
         if self.current.result == POS or self.recent.result == POS or self.rapid.result == POS:
             self.result = POS
+            results = [obj for obj in [self.current, self.recent, self.rapid] if obj.result == POS]
+            results.sort(key=lambda x: x.result_date)
+            self.result_date = results[0].result_date
         elif self.rapid.result == NEG or self.recent.result == NEG:
             self.result = NEG
+            results = [obj for obj in [self.current, self.recent, self.rapid] if obj.result == NEG]
+            results.sort(key=lambda x: x.result_date, reverse=True)
+            self.result_date = results[0].result_date
         if self.current.result != POS and self.recent.result != POS:
             if not self.rapid.result:
                 raise self.exception_cls(
@@ -109,13 +116,16 @@ class PostEnrollment:
         self.reference_datetime = reference_datetime
         self.enrollment_result = enrollment_result
         self.exception_cls = exception_cls or PostEnrollmentResultError
-        if self.enrollment_result == POS:
+        if self.enrollment_result.result == POS:
             # POS at enrollment ... we're done.
-            self.result = self.enrollment_result
-            self.result_date = None
+            self.result = self.enrollment_result.result
+            self.result_date = self.enrollment_result.result_date
         else:
             # filter for POS results
-            pos_rapid_results = [test for test in rapid_results if test.result == POS]
+            try:
+                pos_rapid_results = [test for test in rapid_results if test.result == POS]
+            except TypeError:
+                pos_rapid_results = []
             # order POS results to select first
             pos_rapid_results.sort(key=lambda test: test.result_date)
             if pos_rapid_results:
@@ -125,15 +135,16 @@ class PostEnrollment:
                 # select tests within last three months
                 opts = dict(tested=YES, evidence=YES)
                 recent_results = []
-                for test in rapid_results:
+                for test in rapid_results + (self.enrollment_result, ):
                     recent = Recent(
                         reference_datetime=reference_datetime,
                         result=test.result,
                         result_date=test.result_date, **opts)
                     if recent.result:
                         recent_results.append(recent)
-                # sort reversed by date
+                # sort NEG results reversed by date
                 recent_results.sort(key=lambda test: test.result_date, reverse=True)
                 if recent_results:
                     # select most recent result (not POS)
-                    self.result, self.result_date = recent_results[0].result, recent_results[0].result_date
+                    self.result = recent_results[0].result
+                    self.result_date = None if not self.result else recent_results[0].result_date

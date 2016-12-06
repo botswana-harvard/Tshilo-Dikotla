@@ -4,13 +4,14 @@ from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
 from edc_code_lists.models import WcsDxAdult
-from edc_constants.constants import YES, NO, NOT_APPLICABLE
+from edc_constants.constants import YES, NO, NOT_APPLICABLE, NEG
 
 from ..forms import MaternalMedicalHistoryForm
 from td_list.models import ChronicConditions, MaternalMedications
 
 from .mixins import PosMotherMixin
 from .base_test_case import BaseTestCase
+from td_maternal.maternal_hiv_status import MaternalHivStatus
 
 
 class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
@@ -58,7 +59,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
             'mother_chronic': [self.chronic_cond.id],
             'father_chronic': [self.chronic_cond.id],
             'mother_medications': [self.mother_medications.id],
-            'sero_posetive': YES,
+            'sero_positive': YES,
             'date_hiv_diagnosis': get_utcnow().date(),
             'perinataly_infected': YES,
             'know_hiv_status': "Nobody",
@@ -236,7 +237,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
 
     def test_mother_HIV_Sero_Positive_no(self):
         """the mother is HIV positive but it is indicated that she is not sero positive"""
-        self.options.update(sero_posetive=NO)
+        self.options.update(sero_positive=NO)
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn(
             'The mother is HIV Positive, The field for whether she is sero positive should not be NO',
@@ -245,7 +246,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
     def test_mother_HIV_Sero_Positive_diagnosis_date_blank(self):
         """the mother is HIV sero positive but the date of hiv diagnosis has not been supplied"""
         self.options.update(
-            sero_posetive=YES,
+            sero_positive=YES,
             date_hiv_diagnosis=None)
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn(
@@ -255,7 +256,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
     def test_mother_Sero_Positive_perinatally_infected_not_applicable(self):
         """the mother is HIV sero positive but the the field for whether she is perinatally infected is not
            applicable"""
-        self.options.update(sero_posetive=YES, perinataly_infected=NOT_APPLICABLE)
+        self.options.update(sero_positive=YES, perinataly_infected=NOT_APPLICABLE)
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn(
             'The field for whether the mother is perinataly_infected should not be N/A',
@@ -335,7 +336,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
-            sero_posetive=YES)
+            sero_positive=YES)
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn('The Mother is HIV Negative she cannot be Sero Positive', form.errors.get('__all__'))
 
@@ -346,7 +347,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
-            sero_posetive=NO)
+            sero_positive=NO)
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn('The Mother is HIV Negative, the approximate date of diagnosis should not be supplied',
                       form.errors.get('__all__'))
@@ -358,7 +359,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
-            sero_posetive=NO,
+            sero_positive=NO,
             date_hiv_diagnosis=None,
             perinataly_infected=YES)
         form = MaternalMedicalHistoryForm(data=self.options)
@@ -372,7 +373,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
-            sero_posetive=NO,
+            sero_positive=NO,
             date_hiv_diagnosis=None,
             perinataly_infected=NOT_APPLICABLE)
         form = MaternalMedicalHistoryForm(data=self.options)
@@ -388,7 +389,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
-            sero_posetive=NO,
+            sero_positive=NO,
             date_hiv_diagnosis=None,
             perinataly_infected=NOT_APPLICABLE,
             know_hiv_status=NOT_APPLICABLE)
@@ -403,7 +404,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
-            sero_posetive=NO,
+            sero_positive=NO,
             date_hiv_diagnosis=None,
             perinataly_infected=NOT_APPLICABLE,
             know_hiv_status=NOT_APPLICABLE,
@@ -419,7 +420,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
-            sero_posetive=NO,
+            sero_positive=NO,
             date_hiv_diagnosis=None,
             perinataly_infected=NOT_APPLICABLE,
             cd4_date=get_utcnow().date(),
@@ -432,12 +433,16 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
 
     def test_mother_negative_cd4_test_date_estimated(self):
         """The mother is HIV Negative, the field for whether the cd4 count test date is estimated should be N/A"""
+        self.assertEqual(
+            MaternalHivStatus(
+                subject_identifier=self.maternal_consent_neg.subject_identifier,
+                reference_datetime=self.maternal_visit_1000_neg.report_datetime).result, NEG)
         self.options.update(
             maternal_visit=self.maternal_visit_1000_neg.id,
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
-            sero_posetive=NO,
+            sero_positive=NO,
             date_hiv_diagnosis=None,
             perinataly_infected=NOT_APPLICABLE,
             know_hiv_status=NOT_APPLICABLE,

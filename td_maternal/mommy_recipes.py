@@ -1,3 +1,4 @@
+from datetime import date
 from dateutil.relativedelta import relativedelta
 from faker import Faker
 from faker.providers import BaseProvider
@@ -125,7 +126,7 @@ options.update(
     week32_result=NEG,
     evidence_32wk_hiv_status=YES,
     rapid_test_done=YES,
-    rapid_test_date=get_utcnow,
+    rapid_test_date=date.today,
     rapid_test_result=NEG)
 antenatalenrollment_neg = Recipe(
     AntenatalEnrollment, **options)
