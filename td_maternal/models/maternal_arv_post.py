@@ -56,8 +56,6 @@ class MaternalArvPost (MaternalCrfModel):
         choices=ARV_STATUS_WITH_NEVER,
         default=NOT_APPLICABLE,)
 
-    objects = models.Manager()
-
     history = HistoricalRecords()
 
     def __str__(self):
@@ -132,8 +130,6 @@ class MaternalArvPostAdh(MaternalCrfModel):
         verbose_name="Comment",
         blank=True,
         null=True)
-
-    objects = models.Manager()
 
     history = HistoricalRecords()
 
