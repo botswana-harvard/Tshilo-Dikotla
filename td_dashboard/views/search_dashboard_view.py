@@ -42,12 +42,12 @@ class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
         results = MaternalEligibility.objects.all().order_by('-created')
         for obj in results:
             try:
-                maternal_consent = MaternalConsent.objects.get(maternal_eligibility_reference=obj.reference_pk)
+                maternal_consent = MaternalConsent.objects.get(maternal_eligibility_reference=obj.reference)
                 obj.subject_identifier = maternal_consent.subject_identifier
             except MaternalConsent.DoesNotExist:
                 obj.subject_identifier = None
             except MultipleObjectsReturned:
-                maternal_consent = MaternalConsent.objects.filter(maternal_eligibility_reference=obj.reference_pk)[0]
+                maternal_consent = MaternalConsent.objects.filter(maternal_eligibility_reference=obj.reference)[0]
                 obj.subject_identifier = maternal_consent.subject_identifier
         results_paginator = Paginator(results, self.paginate_by)
         try:
