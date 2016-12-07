@@ -207,9 +207,10 @@ class TestAntenatalEnrollment(TestCase):
                    'week32_test': NO,
                    'rapid_test_done': YES,
                    'rapid_test_date': get_utcnow().date(),
-                   'rapid_test_result': POS}
+                   'rapid_test_result': POS,
+                   'last_period_date': None}
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
-        self.assertFalse(antenatal_enrollment.is_eligible)
+        self.assertTrue(antenatal_enrollment.is_eligible)
         self.assertTrue(antenatal_enrollment.pending_ultrasound)
 
     def test_no_calculations_if_no_lmp(self):
