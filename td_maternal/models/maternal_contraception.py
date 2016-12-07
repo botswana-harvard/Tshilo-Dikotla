@@ -6,7 +6,7 @@ from edc_constants.choices import YES_NO_DWTA
 
 from td_list.models import Contraceptives, MaternalRelatives
 
-from ..maternal_choices import (
+from ..choices import (
     YES_NO_DNT_DWTA, NEXT_CHILD_PLAN, YES_NO_NO_PARTNER_DWTA, INFLUENTIAL_IN_DECISION_MAKING,
     PAP_SMEAR, NORMAL_ABNORMAL_DWTA, PAP_SMEAR_ESTIMATE)
 

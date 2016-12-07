@@ -17,7 +17,7 @@ class TestAntenatalEnrollment(TestCase):
         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         self.maternal_consent = mommy.make_recipe(
             'td_maternal.maternalconsent',
-            maternal_eligibility_reference=maternal_eligibility.reference_pk)
+            maternal_eligibility_reference=maternal_eligibility.reference)
         self.subject_identifier = self.maternal_consent.subject_identifier
 
     def test_gestation_wks_lmp_below_16(self):

@@ -1,11 +1,11 @@
 from django.db import models
 
-from edc_constants.choices import YES_NO
 from edc_base.model.fields.custom_fields import OtherCharField
+from edc_constants.choices import YES_NO
+
+from ..choices import SIZE_CHECK
 
 from .maternal_crf_model import MaternalCrfModel
-
-from td_maternal.maternal_choices import SIZE_CHECK
 
 
 class MaternalInterimIdcc(MaternalCrfModel):

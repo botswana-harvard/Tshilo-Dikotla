@@ -21,7 +21,7 @@ class TestMaternalSerializers(TestCase):
         self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         self.maternal_consent = mommy.make_recipe(
             'td_maternal.maternalconsent',
-            maternal_eligibility_reference=self.maternal_eligibility.reference_pk)
+            maternal_eligibility_reference=self.maternal_eligibility.reference)
         self.antenatal_enrollment = mommy.make_recipe(
             'td_maternal.antenatalenrollment',
             subject_identifier=self.maternal_consent.subject_identifier,

@@ -12,14 +12,14 @@ class MaternalEligibilityAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, 
 
     form = MaternalEligibilityForm
 
-    fields = ('reference_pk',
+    fields = ('reference',
               'report_datetime',
               'age_in_years',
               'has_omang')
 
     radio_fields = {'has_omang': admin.VERTICAL}
 
-    readonly_fields = ('reference_pk',)
+    readonly_fields = ('reference',)
 
     list_display = ('report_datetime', 'age_in_years', 'is_eligible')
 

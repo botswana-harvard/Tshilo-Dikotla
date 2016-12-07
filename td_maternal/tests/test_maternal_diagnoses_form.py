@@ -1,5 +1,4 @@
 from django.test import TestCase
-from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
 from edc_code_lists.models import WcsDxAdult
@@ -8,7 +7,7 @@ from edc_constants.constants import (YES, NO)
 from td_list.models import MaternalDiagnoses
 from td_maternal.forms import MaternalDiagnosesForm
 
-from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin, NegMotherMixin
+from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
 class TestMaternalDiagnosesForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):

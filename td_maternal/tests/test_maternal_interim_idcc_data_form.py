@@ -1,9 +1,9 @@
 from datetime import date
 from django.test import TestCase
-from model_mommy import mommy
 
 from edc_constants.constants import YES, NO
-from td_maternal.forms import MaternalInterimIdccForm
+
+from ..forms import MaternalInterimIdccForm
 
 from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 

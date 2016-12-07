@@ -7,7 +7,7 @@ from edc_constants.choices import YES_NO, YES_NO_NA
 
 from td_list.models import PriorArv
 
-from ..maternal_choices import PRIOR_PREG_HAART_STATUS
+from ..choices import PRIOR_PREG_HAART_STATUS
 
 from .maternal_crf_model import MaternalCrfModel
 

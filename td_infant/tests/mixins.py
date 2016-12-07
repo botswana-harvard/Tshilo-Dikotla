@@ -9,7 +9,7 @@ class MaternalMixin:
         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         maternal_consent = mommy.make_recipe(
             'td_maternal.maternalconsent',
-            maternal_eligibility_reference=maternal_eligibility.reference_pk)
+            maternal_eligibility_reference=maternal_eligibility.reference)
         subject_identifier = maternal_consent.subject_identifier
         mommy.make_recipe(
             'td_maternal.antenatalenrollment',
