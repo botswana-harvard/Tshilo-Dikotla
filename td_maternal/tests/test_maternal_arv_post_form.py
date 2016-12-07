@@ -1,6 +1,4 @@
-from dateutil.relativedelta import relativedelta
 from django.test import TestCase
-from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO

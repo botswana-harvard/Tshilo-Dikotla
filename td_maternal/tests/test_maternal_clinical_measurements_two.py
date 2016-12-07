@@ -1,6 +1,4 @@
-from dateutil.relativedelta import relativedelta
 from django.test import TestCase
-from model_mommy import mommy
 
 from td_maternal.forms import MaternalClinicalMeasurementsTwoForm
 
