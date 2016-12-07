@@ -67,6 +67,9 @@ class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
                 form.add_error(
                     'subject_identifier',
                     'Maternal eligibility not found for {}.'.format(subject_identifier))
+            except MultipleObjectsReturned:
+                qs = MaternalEligibility.objects.filter(
+                    subject_identifier__icontains=subject_identifier).order_by('subject_identifier', '-created')
             context = self.get_context_data()
             context.update(
                 form=form,
@@ -75,7 +78,7 @@ class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
 
     def get_context_data(self, **kwargs):
         context = super(SearchDasboardView, self).get_context_data(**kwargs)
-        qs = MaternalEligibility.objects.all().order_by('-created')
+        qs = MaternalEligibility.objects.all().order_by('subject_identifier', '-created')
         results = QuerysetWrapper(qs).object_list
         context.update(
             site_header=admin.site.site_header,

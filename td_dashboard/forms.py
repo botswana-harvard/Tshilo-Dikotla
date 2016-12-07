@@ -10,7 +10,8 @@ class MaternalEligibilityCrispyForm(forms.Form):
 
     subject_identifier = forms.CharField(
         label='Subject Identifier',
-        max_length=36)
+        max_length=36,
+        required=False)
 
     def __init__(self, *args, **kwargs):
         super(MaternalEligibilityCrispyForm, self).__init__(*args, **kwargs)
