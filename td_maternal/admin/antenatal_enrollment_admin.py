@@ -1,13 +1,15 @@
 from django.contrib import admin
 
-from td.admin_mixins import ModelAdminMixin
-
-from ..forms import AntenatalEnrollmentForm
-from ..models import AntenatalEnrollment
 from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 
+from td.admin_mixins import ModelAdminMixin
 
-@admin.register(AntenatalEnrollment)
+from ..admin_site import td_maternal_admin
+from ..forms import AntenatalEnrollmentForm
+from ..models import AntenatalEnrollment
+
+
+@admin.register(AntenatalEnrollment, site=td_maternal_admin)
 class AntenatalEnrollmentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     dashboard_type = 'maternal'

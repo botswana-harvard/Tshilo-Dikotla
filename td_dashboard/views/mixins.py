@@ -119,6 +119,6 @@ class DashboardMixin:
                 enrollments.append([admin_model_url_label, admin_model_change_url])
             except model.DoesNotExist:
                 admin_model_url_label = "Add {}".format(model._meta.verbose_name)
-                admin_model_add_url = reverse('admin:{}_{}_add'.format(app_label, model_name))
+                admin_model_add_url = reverse('td_maternal_admin:{}_{}_add'.format(app_label, model_name))
                 enrollments.append([admin_model_url_label, admin_model_add_url])
         return enrollments

@@ -10,14 +10,22 @@ from td.models import Appointment
 from .antenatal_enrollment import AntenatalEnrollment
 from .maternal_eligibility import MaternalEligibility
 from .maternal_offstudy import MaternalOffstudy
-from .maternal_visit import MaternalVisit
-from td_maternal.models.maternal_ultrasound_initial import MaternalUltraSoundInitial
+from .maternal_ultrasound_initial import MaternalUltraSoundInitial
+from .maternal_consent import MaternalConsent
 
 
 @receiver(post_save, weak=False, sender=MaternalEligibility, dispatch_uid="maternal_eligibility_on_post_save")
 def maternal_eligibility_on_post_save(sender, instance, raw, created, using, **kwargs):
-    if not raw and not kwargs.get('update_fields'):
+    if not raw:
         instance.create_update_or_delete_eligibility_loss()
+
+
+@receiver(post_save, weak=False, sender=MaternalConsent, dispatch_uid="maternal_consent_on_post_save")
+def maternal_consent_on_post_save(sender, instance, raw, created, using, **kwargs):
+    if not raw:
+        maternal_eligibility = MaternalEligibility.objects.get(reference=instance.maternal_eligibility_reference)
+        maternal_eligibility.subject_identifier = instance.subject_identifier
+        maternal_eligibility.save()
 
 
 @receiver(post_save, sender=AntenatalEnrollment, weak=False, dispatch_uid="ineligible_take_off_study")

@@ -2,15 +2,17 @@ from django.contrib import admin
 
 from edc_visit_tracking.modeladmin_mixins import VisitModelAdminMixin
 
+from td.models import Appointment
 from td_lab.models import MaternalRequisition
 
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalVisitForm
 from ..models import MaternalVisit
-from td.models import Appointment
-from td_maternal.admin.base_maternal_model_admin import BaseMaternalModelAdmin
+
+from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-@admin.register(MaternalVisit)
+@admin.register(MaternalVisit, site=td_maternal_admin)
 class MaternalVisitAdmin(VisitModelAdminMixin, BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalVisitForm

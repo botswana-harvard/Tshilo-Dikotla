@@ -1,13 +1,15 @@
 from django.contrib import admin
 
-from td.admin_mixins import ModelAdminMixin
-
-from ..forms import MaternalConsentForm
-from ..models import MaternalConsent, MaternalEligibility
 from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 
+from td.admin_mixins import ModelAdminMixin
 
-@admin.register(MaternalConsent)
+from ..admin_site import td_maternal_admin
+from ..forms import MaternalConsentForm
+from ..models import MaternalConsent
+
+
+@admin.register(MaternalConsent, site=td_maternal_admin)
 class MaternalConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     form = MaternalConsentForm
@@ -75,6 +77,3 @@ class MaternalConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admi
 
     def redirect_url(self, request, obj, post_url_continue=None):
         return request.GET.get(self.querystring_name)
-
-    def get_changeform_initial_data(self, request):
-        return {'maternal_eligibility_reference': request.GET.get("reference")}

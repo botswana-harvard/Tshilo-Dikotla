@@ -1,19 +1,15 @@
-from collections import OrderedDict
-
 from django.contrib import admin
 
-from edc_export.actions import export_as_csv_action
-from edc_consent.actions import flag_as_verified_against_paper, unflag_as_verified_against_paper
-from edc_registration.models import RegisteredSubject
+from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 
 from td.admin_mixins import ModelAdminMixin
 
+from ..admin_site import td_maternal_admin
 from ..forms import SpecimenConsentForm
 from ..models import SpecimenConsent
-from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 
 
-@admin.register(SpecimenConsent)
+@admin.register(SpecimenConsent, site=td_maternal_admin)
 class SpecimenConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     dashboard_type = 'maternal'

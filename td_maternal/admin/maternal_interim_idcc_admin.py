@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalInterimIdccForm
 from ..models import MaternalInterimIdcc
+
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-@admin.register(MaternalInterimIdcc)
+@admin.register(MaternalInterimIdcc, site=td_maternal_admin)
 class MaternalInterimIdccAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalInterimIdccForm

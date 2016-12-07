@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from edc_base.modeladmin_mixins import TabularInlineMixin
 
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalArvPregForm, MaternalArvForm
 from ..models import MaternalArvPreg, MaternalArv
 
@@ -14,12 +15,12 @@ class MaternalArvInlineAdmin(TabularInlineMixin, admin.TabularInline):
     extra = 1
 
 
-@admin.register(MaternalArv)
+@admin.register(MaternalArv, site=td_maternal_admin)
 class MaternalArvAdmin(admin.ModelAdmin):
     form = MaternalArvForm
 
 
-@admin.register(MaternalArvPreg)
+@admin.register(MaternalArvPreg, site=td_maternal_admin)
 class MaternalArvPregAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     form = MaternalArvPregForm
     inlines = [MaternalArvInlineAdmin, ]

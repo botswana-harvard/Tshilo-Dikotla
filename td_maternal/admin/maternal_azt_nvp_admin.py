@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalAztNvpForm
 from ..models import MaternalAztNvp
+
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-@admin.register(MaternalAztNvp)
+@admin.register(MaternalAztNvp, site=td_maternal_admin)
 class MaternalAztNvpAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalAztNvpForm

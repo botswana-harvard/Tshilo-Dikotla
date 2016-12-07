@@ -1,12 +1,13 @@
 from django.contrib import admin
 
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalLocatorForm
 from ..models import MaternalLocator
 
 from .admin_mixins import CrfModelAdminMixin
 
 
-@admin.register(MaternalLocator)
+@admin.register(MaternalLocator, site=td_maternal_admin)
 class MaternalLocatorAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
     form = MaternalLocatorForm

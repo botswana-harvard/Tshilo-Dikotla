@@ -19,33 +19,39 @@
       <div class="col-md-12">
         <div class="panel-group">
           <div class="panel panel-info">
-              <div class="panel-heading"><a title="add maternal eligibility" href="{% url 'admin:td_maternal_maternaleligibility_add' %}?next={% url 'search_url' %}" class="btn btn-sm btn-default" role="button">Add Maternal Eligibility</a>
+              <div class="panel-heading"><a title="add maternal eligibility" href="{% url 'td_maternal_admin:td_maternal_maternaleligibility_add' %}?next={% url 'search_url' %}" class="btn btn-sm btn-default" role="button">Add Maternal Eligibility</a>
                 <span class="pull-right">{% crispy form %}</span></div>
                 <div class="panel-body">
                   {% if results %}
                     <table class="table table-condensed table-striped table-responsive">
-                      <thead><th>#</th><th>Dashboard</th><th></th><th>Maternal Eligibility</th><th>Status</th><th>Age</th><th>Omang</th><th>Report</th><th>User</th></thead>
                       <tbody>
                         {% for obj in results %}
                           <tr>
                             <td>{{ forloop.counter }}</td>
+                            <td>{{ obj.subject_label }}</td>
                             <td>
-                              {% if obj.subject_identifier %}
-                                <a role="button" title="Go to dashboard" class="btn btn-sm btn-success" href="{% url 'subject_dashboard_url' obj.subject_identifier %}">{{ obj.subject_identifier }}</a>
-                              {% else %}
-                                {% if obj.is_eligible %}
-                                  <a role="button" title="Add Maternal Consent" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?reference={{obj.reference}}&next=&next={% url 'search_url' %}">Add Consent</a>
+                                {% if obj.subject_identifier %}
+                                  <a role="button" title="Go to dashboard" class="btn btn-sm btn-success" href="{% url 'subject_dashboard_url' obj.subject_identifier %}">Dashboard</a>
                                 {% else %}
-                                  Not eligible
+                                  <a role="button" title="" class="btn btn-sm btn-success" disabled >Dashboard</a>
                                 {% endif %}
-                              {% endif %}
+                                {% if obj.is_eligible and not obj.maternal_consent_pks %}
+                                  <a role="button" title="Add Maternal Consent" class="btn btn-sm btn-default" href="{% url 'td_maternal_admin:td_maternal_maternalconsent_add' %}?maternal_eligibility_reference={{obj.reference}}&next=&next={% url 'search_url' %}">Add Consent</a>
+                                {% elif obj.maternal_consent_pks %}
+                                  {% for maternal_consent_pk in obj.maternal_consent_pks %}
+                                    <a role="button" title="Edit Maternal Consent" class="btn btn-sm btn-success" href="{% url 'td_maternal_admin:td_maternal_maternalconsent_change' maternal_consent_pk %}?next=&next={% url 'search_url' %}">Edit Consent</a>
+                                  {% endfor %}
+                                {% else %}
+                                  <a role="button" title="" class="btn btn-sm btn-default" disabled >Add Consent</a>
+                                {% endif %}
+                              <a role="button" class="btn btn-sm btn-success" href="{% url 'td_maternal_admin:td_maternal_maternaleligibility_change' obj.pk %}?&next=&next={% url 'search_url' %}">Edit Eligibility</a>
                             </td>
-                            <td><a role="button" class="btn btn-sm btn-default" href="{% url 'admin:td_maternal_maternaleligibility_change' obj.pk %}?&next=&next={% url 'search_url' %}">Edit {{ obj.reference|make_list|slice:"-8:"|join:"" }}</a></td>
-                            <td>{{ obj.reason_ineligible|default:"" }}</td>
-                            <td>{{ obj.age_in_years }}y</td>
-                            <td>{% if obj.has_omang == 'Yes' %}Citizen{% else %}Non-citizen{% endif %}</td>
                             <td>{{ obj.report_datetime|date:"Y-m-d" }}</td>
-                            <td>{{ obj.user_created }}</td>
+                            <td>Ref: {{ obj.reference|make_list|slice:"-8:"|join:"" }}</td>
+                            <td>{{ obj.reasons_not_eligible|default:"eligible" }}{% if obj.ga_pending %} (US){% endif %}</td>
+                            <td>{{ obj.age_in_years }}y</td>
+                            <td>{{ obj.user_created }}/{{ obj.user_modified }}</td>
+                            <td>{{ obj.modified|date:"Y-m-d H:i" }}</td>
                           </tr>
                         {% endfor %}
                       </tbody>

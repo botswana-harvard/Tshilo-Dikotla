@@ -1,9 +1,10 @@
 from collections import OrderedDict
 
 from django.contrib import admin
-from django.conf import settings
-from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views.generic import TemplateView
 
 from edc_base.utils import convert_from_camel
 from edc_base.view_mixins import EdcBaseViewMixin
@@ -37,6 +38,10 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
         self.enrollments_models = [
             'td_maternal.specimenconsent', 'td_maternal.antenatalenrollment',
             'td_maternal.antenatalenrollmenttwo', 'td_maternal.maternallabdel']
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(MaternalDashboardView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         self.context = super(MaternalDashboardView, self).get_context_data(**kwargs)

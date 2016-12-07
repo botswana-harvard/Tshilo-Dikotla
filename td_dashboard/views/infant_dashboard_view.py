@@ -1,6 +1,8 @@
 from collections import OrderedDict
 from dateutil.relativedelta import relativedelta
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.utils.timezone import localtime
 from django.views.generic import TemplateView
 
@@ -28,6 +30,10 @@ class InfantDashboardView(EdcBaseViewMixin, DashboardMixin, TemplateView):
         self.template_name = 'td_dashboard/infant/subject_dashboard.html'
         self._selected_appointment = None
         self.enrollments_models = ['td_infant.infantbirth']
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(InfantDashboardView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         self.context = super(InfantDashboardView, self).get_context_data(**kwargs)
