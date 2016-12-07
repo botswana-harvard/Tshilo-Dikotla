@@ -7,7 +7,7 @@ from edc_constants.constants import NO
 from edc_constants.choices import YES_NO
 from django_crypto_fields.fields import EncryptedCharField
 
-from ..maternal_choices import DELIVERY_HEALTH_FACILITY
+from ..choices import DELIVERY_HEALTH_FACILITY
 from ..randomization import Randomization
 
 from .maternal_crf_model import MaternalCrfModel

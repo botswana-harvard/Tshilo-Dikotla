@@ -1,32 +1,22 @@
 from datetime import date
-from model_mommy import mommy
+from django.test import TestCase
 
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO
 
-from td.models import Appointment
 from td_list.models import Contraceptives, MaternalRelatives
 from td_maternal.forms import MaternalContraceptionForm
 
-from .base_test_case import BaseTestCase
+from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
 
 
-class TestMaternalContraceptionForm(BaseTestCase):
+class TestMaternalContraceptionForm(AntenatalVisitsMotherMixin, DeliverMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalContraceptionForm, self).setUp()
 
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.options.get('subject_identifier'), visit_code='1020M')
-
-        mommy.make_recipe('td_maternal.maternallabourdel', subject_identifier=self.options.get('subject_identifier'),)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.options.get('subject_identifier'), visit_code='2000M')
-        mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.options.get('subject_identifier'), visit_code='2010M')
-        self.maternal_visit_2010 = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.add_maternal_visits('1000M', '1010M', '1020M', '2000M', '2010M')
+        maternal_visit = self.get_maternal_visit('2010M')
 
         contraceptives = Contraceptives.objects.create(
             hostname_created="django", name="Condom", short_name="Condom", created=get_utcnow(),
@@ -39,8 +29,7 @@ class TestMaternalContraceptionForm(BaseTestCase):
             display_index=1, user_created="django", field_name=None, revision=":develop:")
 
         self.options = {
-            'report_datetime': get_utcnow(),
-            'maternal_visit': self.maternal_visit_2010.id,
+            'maternal_visit': maternal_visit.id,
             'more_children': YES,
             'next_child': 'between 2-5years from now',
             'contraceptive_measure': YES,

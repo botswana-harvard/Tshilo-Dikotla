@@ -3,6 +3,11 @@ from edc_constants.constants import CONTINUOUS, RESTARTED, OTHER, STOPPED, NOT_A
 
 from td.constants import LIVE, STILL_BIRTH
 
+CONFIRMATION_METHOD = (
+    (0, 'LMP'),
+    (1, 'Ultrasound'),
+)
+
 LIVE_STILL_BIRTH = (
     (LIVE, 'live birth'),
     (STILL_BIRTH, 'still birth')

@@ -26,6 +26,9 @@ class TdProvider(BaseProvider):
     def twenty_five_weeks_ago(self):
         return (get_utcnow() - relativedelta(weeks=25)).date()
 
+    def in_twenty_weeks(self):
+        return (get_utcnow() + relativedelta(weeks=20)).date()
+
     def four_weeks_ago(self):
         return (get_utcnow() - relativedelta(weeks=4)).date()
 
@@ -197,9 +200,9 @@ maternalultrasoundinitial = Recipe(
     hc=150.0,
     ac=160.0,
     fl=35.0,
-    est_edd_ultrasound=get_utcnow,
+    est_edd_ultrasound=fake.in_twenty_weeks,
     ga_by_ultrasound_wks=20,
-    ga_by_ultrasound_days=4,
+    ga_by_ultrasound_days=0,
     est_fetal_weight=3.95)
 
 maternalinterimidcc = Recipe(

@@ -1,19 +1,23 @@
 from datetime import date
-from model_mommy import mommy
+from django.test import TestCase
 
 from edc_constants.constants import YES, NO
-from td_maternal.forms import MaternalInterimIdccForm
 
-from .base_test_case import BaseTestCase
+from ..forms import MaternalInterimIdccForm
+
+from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
-class TestMaternalInterimIdccDataForm(BaseTestCase):
+class TestMaternalInterimIdccDataForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalInterimIdccDataForm, self).setUp()
 
+        self.add_maternal_visits('1000M', '1010M')
+        maternal_visit = self.get_maternal_visit('1010M')
+
         self.options = {
-            'maternal_visit': self.antenatal_visit_1_pos,
+            'maternal_visit': maternal_visit.id,
             'info_since_lastvisit': YES,
             'recent_cd4': 2.80,
             'recent_cd4_date': date.today(),

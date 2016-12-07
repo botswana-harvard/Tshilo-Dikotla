@@ -1,4 +1,5 @@
 from dateutil.relativedelta import relativedelta
+from django.test import TestCase
 from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
@@ -6,16 +7,19 @@ from edc_constants.constants import YES, NO
 
 from ..forms import MaternalArvPregForm, MaternalArvForm
 
-from .base_test_case import BaseTestCase
+from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
-class TestMaternalArvPregForm(BaseTestCase):
+class TestMaternalArvPregForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalArvPregForm, self).setUp()
 
+        self.add_maternal_visit('1000M')
+        maternal_visit = self.get_maternal_visit('1000M')
+
         self.options = {
-            'maternal_visit': self.maternal_visit_1000_pos,
+            'maternal_visit': maternal_visit.id,
             'report_datetime': get_utcnow(),
             'took_arv': YES,
             'is_interrupt': NO,
@@ -42,7 +46,7 @@ class TestMaternalArvPregForm(BaseTestCase):
     def test_took_arv(self):
         """Assert arv taken but none listed"""
         maternal_arv_preg = mommy.make_recipe(
-            'td_maternal.maternalarvpreg', maternal_visit=self.maternal_visit_1000_pos)
+            'td_maternal.maternalarvpreg', maternal_visit=self.get_maternal_visit('1000M'))
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
             'arv_code': '3TC',
@@ -69,10 +73,10 @@ class TestMaternalArvPregForm(BaseTestCase):
     def test_validate_historical_and_present_arv_start_dates(self):
         """"""
         maternal_arv_preg = mommy.make_recipe(
-            'td_maternal.maternalarvpreg', maternal_visit=self.maternal_visit_1000_pos, took_arv=YES)
+            'td_maternal.maternalarvpreg', maternal_visit=self.get_maternal_visit('1000M'), took_arv=YES)
         maternalarvhistory = mommy.make_recipe(
             'td_maternal.maternalarvhistory',
-            maternal_visit=self.maternal_visit_1000_pos,
+            maternal_visit=self.get_maternal_visit('1000M'),
             haart_start_date=(get_utcnow() - relativedelta(weeks=9)).date())
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,

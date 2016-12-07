@@ -1,37 +1,22 @@
-from model_mommy import mommy
+from django.test import TestCase
 
 from edc_base.utils import get_utcnow
 from edc_code_lists.models import WcsDxAdult
 from edc_constants.constants import (YES, NO)
 
-from td.models import Appointment
 from td_list.models import MaternalDiagnoses
 from td_maternal.forms import MaternalDiagnosesForm
 
-from .base_test_case import BaseTestCase
+from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
-class TestMaternalDiagnosesForm(BaseTestCase):
+class TestMaternalDiagnosesForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalDiagnosesForm, self).setUp()
 
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.options.get('subject_identifier'), visit_code='1020M')
-        mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        mommy.make_recipe('td_maternal.maternallabourdel',
-                          subject_identifier=self.options.get('subject_identifier'))
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.options.get('subject_identifier'), visit_code='2000M')
-        mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.options.get('subject_identifier'), visit_code='2010M')
-        self.maternal_visit_2010 = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
+        self.add_maternal_visits('1000M', '1010M', '1020M')
+        maternal_visit = self.get_maternal_visit('1020M')
 
         self.diagnoses = MaternalDiagnoses.objects.create(
             hostname_created="django", name="Gestational Hypertension",
@@ -63,7 +48,7 @@ class TestMaternalDiagnosesForm(BaseTestCase):
             list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
 
         self.options = {
-            'maternal_visit': self.maternal_visit_2010,
+            'maternal_visit': maternal_visit,
             'new_diagnoses': YES,
             'diagnoses': [self.diagnoses.id],
             'has_who_dx': YES,

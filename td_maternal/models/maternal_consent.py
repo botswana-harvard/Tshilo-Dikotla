@@ -13,7 +13,7 @@ from edc_protocol.mixins import SubjectTypeCapMixin
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 
 from ..managers import MaternalConsentManager
-from ..maternal_choices import RECRUIT_SOURCE, RECRUIT_CLINIC
+from ..choices import RECRUIT_SOURCE, RECRUIT_CLINIC
 
 from .maternal_eligibility import MaternalEligibility
 

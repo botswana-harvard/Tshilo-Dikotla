@@ -5,7 +5,8 @@ from edc_code_lists.models import WcsDxAdult
 from edc_constants.choices import YES_NO, YES_NO_NA
 
 from td_list.models import ChronicConditions, MaternalMedications
-from td_maternal.maternal_choices import KNOW_HIV_STATUS, LOWEST_CD4_KNOWN, IS_DATE_ESTIMATED
+
+from ..choices import KNOW_HIV_STATUS, LOWEST_CD4_KNOWN, IS_DATE_ESTIMATED
 
 from .maternal_crf_model import MaternalCrfModel
 

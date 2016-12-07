@@ -2,7 +2,7 @@ from django.db import models
 
 from edc_constants.choices import YES_NO
 
-from ..maternal_choices import POS_NEG_IND
+from ..choices import POS_NEG_IND
 from .maternal_crf_model import MaternalCrfModel
 
 

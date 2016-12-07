@@ -2,7 +2,7 @@ from django.db import models
 
 from edc_constants.choices import YES_NO
 
-from td_maternal.maternal_choices import SMOKING_DRINKING_FREQUENCY
+from ..choices import SMOKING_DRINKING_FREQUENCY
 
 from .maternal_crf_model import MaternalCrfModel
 

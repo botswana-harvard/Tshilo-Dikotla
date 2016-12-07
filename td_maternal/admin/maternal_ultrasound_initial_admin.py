@@ -35,7 +35,7 @@ class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     radio_fields = {'number_of_gestations': admin.VERTICAL,
                     'amniotic_fluid_volume': admin.VERTICAL,}
 
-    list_display = ('report_datetime', 'number_of_gestations', 'ga_confrimation_method', 'edd_confirmed',
+    list_display = ('report_datetime', 'number_of_gestations', 'ga_method', 'edd_confirmed',
                     'ga_confirmed', 'ga_by_lmp')
 
-    list_filter = ('report_datetime', 'number_of_gestations', 'ga_confrimation_method')
+    list_filter = ('report_datetime', 'number_of_gestations', 'ga_method')

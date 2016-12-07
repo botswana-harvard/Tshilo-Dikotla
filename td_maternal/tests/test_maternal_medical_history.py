@@ -1,3 +1,4 @@
+from django.test import TestCase
 from edc_base.utils import get_utcnow
 from edc_code_lists.models import WcsDxAdult
 from edc_constants.constants import YES, NO, NOT_APPLICABLE, NEG
@@ -7,14 +8,13 @@ from td_list.models import ChronicConditions, MaternalMedications
 from ..forms import MaternalMedicalHistoryForm
 from ..maternal_hiv_status import MaternalHivStatus
 
-from .mixins import PosMotherMixin
-from .base_test_case import BaseTestCase
+from .mixins import NegMotherMixin, PosMotherMixin, AntenatalVisitsMotherMixin
 
 
-class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
+class ChronicAndMedicationsMixin:
 
     def setUp(self):
-        super(TestMaternalMedicalHistory, self).setUp()
+        super(ChronicAndMedicationsMixin, self).setUp()
 
         self.chronic_cond = ChronicConditions.objects.create(
             hostname_created="django", name="Asthma", short_name="Asthma",
@@ -49,7 +49,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
             user_created="abelc", list_ref="", revision=None)
 
         self.options = {
-            'maternal_visit': self.maternal_visit_1000_pos.id,
+            'maternal_visit': self.get_maternal_visit('1000M').id,
             'chronic_since': YES,
             'who_diagnosis': YES,
             'who': [self.who_dx.id],
@@ -64,6 +64,12 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
             'cd4_count': 4,
             'cd4_date': get_utcnow().date(),
             'is_date_estimated': NO}
+
+
+class TestMaternalMedicalHistoryPosMother(ChronicAndMedicationsMixin, AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+
+    def setUp(self):
+        super(TestMaternalMedicalHistoryPosMother, self).setUp()
 
     def test_mother_chronic_multiple_selection_not_applicable_there(self):
         """check that N/A is not selected with other options"""
@@ -111,63 +117,6 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
         form = MaternalMedicalHistoryForm(data=self.options)
         self.assertIn(
             'Question10: The field for the mothers medications should not be left blank',
-            form.errors.get('__all__'))
-
-    def test_negative_mother_chronic_since_yes_who_diagnosis_not_applicable(self):
-        """The mother is HIV Negative but indicated that mother had chronic conditions prior to current pregnancy,
-           and the WHO diagnosis has been indicated as NOT_APPLICABLE """
-        self.options.update(
-            maternal_visit=self.maternal_visit_1000_neg.id,
-            chronic_since=YES,
-            who_diagnosis=NOT_APPLICABLE)
-        form = MaternalMedicalHistoryForm(data=self.options)
-        self.assertIn(
-            'The mother is HIV negative. Chronic_since should be NO and Who Diagnosis should be Not Applicable',
-            form.errors.get('__all__'))
-
-    def test_negative_mother_chronic_since_no_who_diagnosis_yes(self):
-        """The Mother is HIV Negative yet who_diagnosis has been indicated as YES. should be NOT_APPLICABLE"""
-        self.options.update(
-            maternal_visit=self.maternal_visit_1000_neg.id,
-            chronic_since=NO,
-            who_diagnosis=YES)
-        form = MaternalMedicalHistoryForm(data=self.options)
-        self.assertIn('The mother is HIV negative.Who Diagnosis should be Not Applicable',
-                      form.errors.get('__all__'))
-
-    def test_negative_mother_who_listed_not_applicable_not_there(self):
-        """The mother is HIV Negative but has who diagnosis listing"""
-        self.options.update(
-            maternal_visit=self.maternal_visit_1000_neg.id,
-            chronic_since=NOT_APPLICABLE,
-            who_diagnosis=NOT_APPLICABLE,
-            who=[self.who_dx.id])
-        form = MaternalMedicalHistoryForm(data=self.options)
-        self.assertIn(
-            'Question5: Participant is HIV Negative, do not give a listing, rather give N/A',
-            form.errors.get('__all__'))
-
-    def test_negative_mother_who_listed_not_applicable_there(self):
-        """The mother is HIV Negative but has who diagnosis listing as well as N/A"""
-        self.options.update(
-            maternal_visit=self.maternal_visit_1000_neg.id,
-            chronic_since=NOT_APPLICABLE,
-            who_diagnosis=NOT_APPLICABLE,
-            who=[self.who_dx.id, self.who_dx_na.id])
-        form = MaternalMedicalHistoryForm(data=self.options)
-        self.assertIn(
-            'Question5: Participant is HIV Negative, do not give a listing, only give N/A',
-            form.errors.get('__all__'))
-
-    def test_negative_mother_who_listed_none(self):
-        """The mother is HIV Negative but has who diagnosis listing as none"""
-        self.options.update(
-            chronic_since=NOT_APPLICABLE,
-            who_diagnosis=NOT_APPLICABLE,
-            who=None)
-        form = MaternalMedicalHistoryForm(data=self.options)
-        self.assertIn(
-            'Question5: Mother has prior chronic illness, they should be listed',
             form.errors.get('__all__'))
 
     def test_mother_positive_chronic_since_yes_who_diagnosis_no(self):
@@ -325,10 +274,70 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
                       ' be None',
                       form.errors.get('__all__'))
 
+
+class TestMaternalMedicalHistoryNegMother(ChronicAndMedicationsMixin, AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):
+
+    def test_negative_mother_chronic_since_yes_who_diagnosis_not_applicable(self):
+        """The mother is HIV Negative but indicated that mother had chronic conditions prior to current pregnancy,
+           and the WHO diagnosis has been indicated as NOT_APPLICABLE """
+        self.options.update(
+            maternal_visit=self.get_maternal_visit('1000M').id,
+            chronic_since=YES,
+            who_diagnosis=NOT_APPLICABLE)
+        form = MaternalMedicalHistoryForm(data=self.options)
+        self.assertIn(
+            'The mother is HIV negative. Chronic_since should be NO and Who Diagnosis should be Not Applicable',
+            form.errors.get('__all__'))
+
+    def test_negative_mother_chronic_since_no_who_diagnosis_yes(self):
+        """The Mother is HIV Negative yet who_diagnosis has been indicated as YES. should be NOT_APPLICABLE"""
+        self.options.update(
+            maternal_visit=self.get_maternal_visit('1000M').id,
+            chronic_since=NO,
+            who_diagnosis=YES)
+        form = MaternalMedicalHistoryForm(data=self.options)
+        self.assertIn('The mother is HIV negative.Who Diagnosis should be Not Applicable',
+                      form.errors.get('__all__'))
+
+    def test_negative_mother_who_listed_not_applicable_not_there(self):
+        """The mother is HIV Negative but has who diagnosis listing"""
+        self.options.update(
+            maternal_visit=self.get_maternal_visit('1000M').id,
+            chronic_since=NOT_APPLICABLE,
+            who_diagnosis=NOT_APPLICABLE,
+            who=[self.who_dx.id])
+        form = MaternalMedicalHistoryForm(data=self.options)
+        self.assertIn(
+            'Question5: Participant is HIV Negative, do not give a listing, rather give N/A',
+            form.errors.get('__all__'))
+
+    def test_negative_mother_who_listed_not_applicable_there(self):
+        """The mother is HIV Negative but has who diagnosis listing as well as N/A"""
+        self.options.update(
+            maternal_visit=self.get_maternal_visit('1000M').id,
+            chronic_since=NOT_APPLICABLE,
+            who_diagnosis=NOT_APPLICABLE,
+            who=[self.who_dx.id, self.who_dx_na.id])
+        form = MaternalMedicalHistoryForm(data=self.options)
+        self.assertIn(
+            'Question5: Participant is HIV Negative, do not give a listing, only give N/A',
+            form.errors.get('__all__'))
+
+    def test_negative_mother_who_listed_none(self):
+        """The mother is HIV Negative but has who diagnosis listing as none"""
+        self.options.update(
+            chronic_since=NOT_APPLICABLE,
+            who_diagnosis=NOT_APPLICABLE,
+            who=None)
+        form = MaternalMedicalHistoryForm(data=self.options)
+        self.assertIn(
+            'Question5: Mother has prior chronic illness, they should be listed',
+            form.errors.get('__all__'))
+
     def test_mother_negative_seropositive_yes(self):
         """The mother is HIV negative, she cannot be HIV Sero positive"""
         self.options.update(
-            maternal_visit=self.maternal_visit_1000_neg.id,
+            maternal_visit=self.get_maternal_visit('1000M').id,
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
@@ -339,7 +348,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
     def test_mother_negative_seropositive_date_supplied(self):
         """The mother is HIV Negative but the date of HIV diagnosis has been supplied"""
         self.options.update(
-            maternal_visit=self.maternal_visit_1000_neg.id,
+            maternal_visit=self.get_maternal_visit('1000M').id,
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
@@ -351,7 +360,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
     def test_mother_negative_perinatally_infected_yes(self):
         """The mother is HIV Negative but the field for whether she was Perinatally infected is YES"""
         self.options.update(
-            maternal_visit=self.maternal_visit_1000_neg.id,
+            maternal_visit=self.get_maternal_visit('1000M').id,
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
@@ -365,7 +374,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
     def test_mother_negative_know_hiv_status_nobody(self):
         """The mother is HIV Negative so the field for whether anyone knows that she is positive should be N/A"""
         self.options.update(
-            maternal_visit=self.maternal_visit_1000_neg.id,
+            maternal_visit=self.get_maternal_visit('1000M').id,
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
@@ -381,7 +390,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
     def test_mother_negative_lowest_cd4_yes(self):
         """The mother is HIV Negative, the field for whether the lowest cd4 count is known should be N/A"""
         self.options.update(
-            maternal_visit=self.maternal_visit_1000_neg.id,
+            maternal_visit=self.get_maternal_visit('1000M').id,
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
@@ -396,7 +405,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
     def test_mother_negative_lowest_cd4_cout_value(self):
         """The mother is HIV Negative, she can't have a lowest cd4 count"""
         self.options.update(
-            maternal_visit=self.maternal_visit_1000_neg.id,
+            maternal_visit=self.get_maternal_visit('1000M').id,
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
@@ -412,7 +421,7 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
     def test_mother_negative_cd4_test_date(self):
         """The mother is HIV Negative, she can't have a cd4 count test date"""
         self.options.update(
-            maternal_visit=self.maternal_visit_1000_neg.id,
+            maternal_visit=self.get_maternal_visit('1000M').id,
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],
@@ -431,10 +440,10 @@ class TestMaternalMedicalHistory(BaseTestCase, PosMotherMixin):
         """The mother is HIV Negative, the field for whether the cd4 count test date is estimated should be N/A"""
         self.assertEqual(
             MaternalHivStatus(
-                subject_identifier=self.maternal_consent_neg.subject_identifier,
-                reference_datetime=self.maternal_visit_1000_neg.report_datetime).result, NEG)
+                subject_identifier=self.subject_identifier,
+                reference_datetime=self.get_maternal_visit('1000M').report_datetime).result, NEG)
         self.options.update(
-            maternal_visit=self.maternal_visit_1000_neg.id,
+            maternal_visit=self.get_maternal_visit('1000M').id,
             chronic_since=NO,
             who_diagnosis=NOT_APPLICABLE,
             who=[self.who_dx_na.id],

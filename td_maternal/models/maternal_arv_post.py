@@ -7,7 +7,7 @@ from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
-from ..maternal_choices import REASON_FOR_HAART, ARV_DRUG_LIST, DOSE_STATUS, ARV_MODIFICATION_REASON
+from ..choices import REASON_FOR_HAART, ARV_DRUG_LIST, DOSE_STATUS, ARV_MODIFICATION_REASON
 
 from .maternal_crf_model import MaternalCrfModel
 
