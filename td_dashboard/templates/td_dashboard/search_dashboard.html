@@ -40,11 +40,6 @@
                                 {% endif %}
                               {% endif %}
                             </td>
-                            <td>
-                              {% if obj.is_consented and not obj.have_latest_consent %}
-                                <a role="button"  title="re-consent" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?reference_pk={{obj.reference_pk}}&next={% url 'search_url' %}">re-consent (V{{ obj.current_consent_version }})</a>
-                              {% endif %}
-                            </td>
                             <td><a role="button" class="btn btn-sm btn-default" href="{% url 'admin:td_maternal_maternaleligibility_change' obj.pk %}?&next=&next={% url 'search_url' %}">Edit {{ obj.reference_pk|make_list|slice:"-8:"|join:"" }}</a></td>
                             <td>{{ obj.reason_ineligible|default:"" }}</td>
                             <td>{{ obj.age_in_years }}y</td>
