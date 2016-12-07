@@ -20,7 +20,7 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
 
     This model has no PII."""
 
-    reference_pk = models.UUIDField(
+    reference = models.UUIDField(
         verbose_name="Anonymous Reference",
         unique=True,
         default=uuid4,
@@ -93,22 +93,22 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
     @property
     def previous_consents(self):
         MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
-        return MaternalConsent.objects.filter(maternal_eligibility_reference=self.reference_pk).order_by('version')
+        return MaternalConsent.objects.filter(maternal_eligibility_reference=self.reference).order_by('version')
 
     def create_update_or_delete_eligibility_loss(self):
         if self.is_eligible:
-            MaternalEligibilityLoss.objects.filter(maternal_eligibility_reference=self.reference_pk).delete()
+            MaternalEligibilityLoss.objects.filter(maternal_eligibility_reference=self.reference).delete()
         else:
             try:
                 maternal_eligibility_loss = MaternalEligibilityLoss.objects.get(
-                    maternal_eligibility_reference=self.reference_pk)
+                    maternal_eligibility_reference=self.reference)
                 maternal_eligibility_loss.report_datetime = self.report_datetime
                 maternal_eligibility_loss.reason_ineligible = self.ineligibility
                 maternal_eligibility_loss.user_modified = self.user_modified
                 maternal_eligibility_loss.save()
             except MaternalEligibilityLoss.DoesNotExist:
                 MaternalEligibilityLoss.objects.create(
-                    maternal_eligibility_reference=self.reference_pk,
+                    maternal_eligibility_reference=self.reference,
                     report_datetime=self.report_datetime,
                     reason_ineligible=self.ineligibility,
                     user_created=self.user_created,
@@ -119,7 +119,7 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
         MaternalEligibilityLoss = apps.get_model('td_maternal', 'MaternalEligibilityLoss')
         try:
             maternal_eligibility_loss = MaternalEligibilityLoss.objects.get(
-                maternal_eligibility_reference=self.reference_pk)
+                maternal_eligibility_reference=self.reference)
         except MaternalEligibilityLoss.DoesNotExist:
             maternal_eligibility_loss = None
         return maternal_eligibility_loss

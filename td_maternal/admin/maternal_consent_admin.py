@@ -77,4 +77,4 @@ class MaternalConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admi
         return request.GET.get(self.querystring_name)
 
     def get_changeform_initial_data(self, request):
-        return {'maternal_eligibility_reference': request.GET.get("reference_pk")}
+        return {'maternal_eligibility_reference': request.GET.get("reference")}

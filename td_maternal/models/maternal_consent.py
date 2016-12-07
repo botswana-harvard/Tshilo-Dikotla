@@ -61,7 +61,7 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
 
     def save(self, *args, **kwargs):
         try:
-            MaternalEligibility.objects.get(reference_pk=self.maternal_eligibility_reference)
+            MaternalEligibility.objects.get(reference=self.maternal_eligibility_reference)
         except MaternalEligibility.DoesNotExist:
             ValidationError('Unable to determine eligibility criteria. Was Maternal Eligibility completed?')
         if not self.id:
@@ -84,9 +84,9 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
         """Updates or Creates RegisteredSubject on the post-save signal."""
         super(MaternalConsent, self).registration_update_or_create()
         RegisteredSubject = django_apps.get_app_config('edc_registration').model
-        maternal_eligibility = MaternalEligibility.objects.get(reference_pk=self.maternal_eligibility_reference)
+        maternal_eligibility = MaternalEligibility.objects.get(reference=self.maternal_eligibility_reference)
         registered_subject = RegisteredSubject.objects.get(subject_identifier=self.subject_identifier)
-        registered_subject.screening_identifier = maternal_eligibility.reference_pk
+        registered_subject.screening_identifier = maternal_eligibility.reference
         registered_subject.screening_datetime = maternal_eligibility.report_datetime
         registered_subject.screening_age_in_years = maternal_eligibility.age_in_years
         registered_subject.save()
