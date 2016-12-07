@@ -14,6 +14,8 @@ class AntenatalEnrollmentTwo(EnrollmentModelMixin, RequiresConsentMixin, CreateA
 
     """An enrollment model for schedule maternal_enrollment_step2."""
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     antenatal_visits = models.CharField(
         verbose_name='Are you ready to start the antenatal enrollment visits?',
         choices=YES_NO,
