@@ -23,7 +23,8 @@
                 <span class="pull-right">{% crispy form %}</span></div>
                 <div class="panel-body">
                   {% if results %}
-                    <table class="table table-condensed table-striped table-responsive">
+                    <div class="table-responsive">
+                    <table class="table table-condensed table-hover">
                       <tbody>
                         {% for obj in results %}
                           <tr>
@@ -54,6 +55,7 @@
                         {% endfor %}
                       </tbody>
                     </table>
+                    </div>
                   {% endif %}
                 </div>
               </div>
