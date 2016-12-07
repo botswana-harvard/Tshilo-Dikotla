@@ -180,22 +180,6 @@ class TestAntenatalEnrollment(TestCase):
         with self.assertRaises(EnrollmentResultError):
             mommy.make_recipe('td_maternal.antenatalenrollment', **options)
 
-    def test_mother_tested_NEG_after_32weeks_then_rapidtest_enforced_nodoc(self):
-        """Test for a mother who tested NEG AFTER 32weeks, without documentation then rapid test is enforced"""
-
-        options = {'subject_identifier': self.subject_identifier,
-                   'current_hiv_status': UNKNOWN,
-                   'evidence_hiv_status': None,
-                   'week32_test': YES,
-                   'week32_test_date': (get_utcnow() - relativedelta(weeks=1)).date(),
-                   'week32_result': NEG,
-                   'evidence_32wk_hiv_status': NO,
-                   'will_get_arvs': NOT_APPLICABLE,
-                   'rapid_test_done': YES,
-                   'last_period_date': (get_utcnow() - relativedelta(weeks=34)).date()}
-        with self.assertRaises(EnrollmentResultError):
-            mommy.make_recipe('td_maternal.antenatalenrollment', **options)
-
     def test_mother_untested_at_32weeks_undergoes_rapid(self):
         """Test for a mother who is at 35weeks of gestational age,
         did not test at 32weeks, has no evidence of NEG hiv_status but undergoes rapid testing """
@@ -213,21 +197,6 @@ class TestAntenatalEnrollment(TestCase):
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
         self.assertTrue(antenatal_enrollment.is_eligible)
 
-#     def test_no_week32test_rapid_test_ineligible(self):
-#         """Test for a mother who is at 35weeks gestational age,
-#         did not test at week 32 and does a rapid test which is POS"""
-# 
-#         options = {'subject_identifier': self.subject_identifier,
-#                    'current_hiv_status': UNKNOWN,
-#                    'evidence_hiv_status': None,
-#                    'week32_test': NO,
-#                    'rapid_test_done': YES,
-#                    'rapid_test_date': get_utcnow().date(),
-#                    'rapid_test_result': POS,
-#                    'last_period_date': (get_utcnow() - relativedelta(weeks=35)).date()}
-#         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
-#         self.assertFalse(antenatal_enrollment.is_eligible)
-
     def test_lmp_not_provided_status(self):
         """Test enrollment status is PENDING if lmp is not provided."""
         options = {'subject_identifier': self.subject_identifier,
@@ -238,11 +207,11 @@ class TestAntenatalEnrollment(TestCase):
                    'week32_test': NO,
                    'rapid_test_done': YES,
                    'rapid_test_date': get_utcnow().date(),
-                   'rapid_test_result': POS}
+                   'rapid_test_result': POS,
+                   'last_period_date': None}
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment', **options)
-        self.assertFalse(antenatal_enrollment.is_eligible)
+        self.assertTrue(antenatal_enrollment.is_eligible)
         self.assertTrue(antenatal_enrollment.pending_ultrasound)
-#         self.test_scheduled_visit_on_eligible_or_pending(self.subject_identifier)
 
     def test_no_calculations_if_no_lmp(self):
         """Test if no lmp then ga_by_lmp and edd_by_lmp are not calculated."""
@@ -261,25 +230,3 @@ class TestAntenatalEnrollment(TestCase):
         self.assertIsNone(antenatal_enrollment.ga_lmp_enrollment_wks)
         self.assertIsNone(antenatal_enrollment.edd_by_lmp)
         self.assertIsNone(antenatal_enrollment.date_at_32wks)
-#         self.test_scheduled_visit_on_eligible_or_pending(self.subject_identifier)
-
-#     def test_off_study_visit_on_ineligible(self, subject_identifier):
-#         self.appointment = Appointment.objects.get(
-#             subject_identifier=subject_identifier, visit_code='1000M')
-#         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='failed eligibility', study_status=OFF_STUDY)
-#         self.assertEqual(MaternalVisit.objects.all().count(), 1)
-#         self.assertEqual(MaternalVisit.objects.filter(
-#             reason=FAILED_ELIGIBILITY,
-#             study_status=OFF_STUDY,
-#             appointment__subject_identifier=subject_identifier).count(), 1)
-# 
-#     def test_scheduled_visit_on_eligible_or_pending(self, subject_identifier):
-#         self.appointment = Appointment.objects.get(
-#             subject_identifier=subject_identifier, visit_code='1000M')
-#         mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled', study_status=ON_STUDY)
-#         self.assertEqual(MaternalVisit.objects.all().count(), 1)
-#         self.assertEqual(MaternalOffstudy.objects.all().count(), 0)
-#         self.assertEqual(MaternalVisit.objects.filter(
-#             reason=SCHEDULED,
-#             study_status=ON_STUDY,
-#             appointment__subject_identifier=subject_identifier).count(), 1)
