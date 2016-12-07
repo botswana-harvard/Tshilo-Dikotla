@@ -12,7 +12,7 @@ from edc_visit_tracking.constants import SCHEDULED
 from td.constants import MODIFIED, NORMAL
 
 from .models import (InfantBirth, InfantBirthData, InfantBirthExam, InfantFeeding, InfantBirthArv, InfantFu,
-                     InfantFuPhysical, InfantArvProph, InfantVisit)
+                     InfantFuPhysical, InfantArvProph, InfantVisit, InfantFuImmunizations)
 
 
 class TdProvider(BaseProvider):
@@ -123,3 +123,8 @@ infantfollowup = Recipe(
     report_datetime=get_utcnow(),
     prophylatic_nvp=YES,
     arv_status=MODIFIED,)
+
+infantimmunizations = Recipe(
+    InfantFuImmunizations,
+    vaccines_received=YES,
+    vaccines_missed=YES,)
