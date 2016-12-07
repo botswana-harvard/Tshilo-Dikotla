@@ -29,23 +29,21 @@
                           <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ obj.subject_label }}</td>
-                            <td>
-                                {% if obj.subject_identifier %}
-                                  <a role="button" title="Go to dashboard" class="btn btn-sm btn-success" href="{% url 'subject_dashboard_url' obj.subject_identifier %}">Dashboard</a>
-                                {% else %}
-                                  <a role="button" title="" class="btn btn-sm btn-success" disabled >Dashboard</a>
-                                {% endif %}
-                                {% if obj.is_eligible and not obj.maternal_consent_pks %}
-                                  <a role="button" title="Add Maternal Consent" class="btn btn-sm btn-default" href="{% url 'td_maternal_admin:td_maternal_maternalconsent_add' %}?maternal_eligibility_reference={{obj.reference}}&next=&next={% url 'search_url' %}">Add Consent</a>
-                                {% elif obj.maternal_consent_pks %}
-                                  {% for maternal_consent_pk in obj.maternal_consent_pks %}
-                                    <a role="button" title="Edit Maternal Consent" class="btn btn-sm btn-success" href="{% url 'td_maternal_admin:td_maternal_maternalconsent_change' maternal_consent_pk %}?next=&next={% url 'search_url' %}">Edit Consent</a>
-                                  {% endfor %}
-                                {% else %}
-                                  <a role="button" title="" class="btn btn-sm btn-default" disabled >Add Consent</a>
-                                {% endif %}
-                              <a role="button" class="btn btn-sm btn-success" href="{% url 'td_maternal_admin:td_maternal_maternaleligibility_change' obj.pk %}?&next=&next={% url 'search_url' %}">Edit Eligibility</a>
-                            </td>
+                            {% if obj.subject_identifier %}
+                              <td><a role="button" title="Go to dashboard" class="btn btn-sm btn-success" href="{% url 'subject_dashboard_url' obj.subject_identifier %}">Dashboard</a></td>
+                            {% else %}
+                              <td><a role="button" title="" class="btn btn-sm btn-success" disabled >Dashboard</a></td>
+                            {% endif %}
+                            {% if obj.is_eligible and not obj.maternal_consent_pks %}
+                              <td><a role="button" title="Add Maternal Consent" class="btn btn-sm btn-default" href="{% url 'td_maternal_admin:td_maternal_maternalconsent_add' %}?maternal_eligibility_reference={{obj.reference}}&next=&next={% url 'search_url' %}">Add Consent</a></td>
+                            {% elif obj.maternal_consent_pks %}
+                              {% for maternal_consent_pk in obj.maternal_consent_pks %}
+                                <td><a role="button" title="Edit Maternal Consent" class="btn btn-sm btn-success" href="{% url 'td_maternal_admin:td_maternal_maternalconsent_change' maternal_consent_pk %}?next=&next={% url 'search_url' %}">Edit Consent</a></td>
+                              {% endfor %}
+                            {% else %}
+                              <td><a role="button" title="" class="btn btn-sm btn-default" disabled >Add Consent</a></td>
+                            {% endif %}
+                            <td><a role="button" class="btn btn-sm btn-success" href="{% url 'td_maternal_admin:td_maternal_maternaleligibility_change' obj.pk %}?&next=&next={% url 'search_url' %}">Edit Eligibility</a></td>
                             <td>{{ obj.report_datetime|date:"Y-m-d" }}</td>
                             <td>Ref: {{ obj.reference|make_list|slice:"-8:"|join:"" }}</td>
                             <td>{{ obj.reasons_not_eligible|default:"eligible" }}{% if obj.ga_pending %} (US){% endif %}</td>
