@@ -34,7 +34,7 @@
                                 <a role="button" title="Go to dashboard" class="btn btn-sm btn-success" href="{% url 'subject_dashboard_url' obj.subject_identifier %}">{{ obj.subject_identifier }}</a>
                               {% else %}
                                 {% if obj.is_eligible %}
-                                  <a role="button" title="Add Maternal Consent" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?obj={{obj.reference_pk}}&next=&next={% url 'search_url' %}">Add Consent</a>
+                                  <a role="button" title="Add Maternal Consent" class="btn btn-sm btn-primary" href="{% url 'admin:td_maternal_maternalconsent_add' %}?reference_pk={{obj.reference_pk}}&next=&next={% url 'search_url' %}">Add Consent</a>
                                 {% else %}
                                   Not eligible
                                 {% endif %}

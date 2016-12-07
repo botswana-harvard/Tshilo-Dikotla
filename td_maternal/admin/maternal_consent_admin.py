@@ -1,13 +1,10 @@
 from django.contrib import admin
 
-from edc_consent.actions import flag_as_verified_against_paper, unflag_as_verified_against_paper
-
 from td.admin_mixins import ModelAdminMixin
 
 from ..forms import MaternalConsentForm
 from ..models import MaternalConsent, MaternalEligibility
 from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
-from django.urls.base import reverse
 
 
 @admin.register(MaternalConsent)
@@ -77,22 +74,7 @@ class MaternalConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admi
                    'identity_type')
 
     def redirect_url(self, request, obj, post_url_continue=None):
-        args = request.GET.dict()
-        args.pop(self.querystring_name)
-        redirect_url = super(ModelAdminNextUrlRedirectMixin, self).redirect_url(
-            request, obj, post_url_continue)
-        if request.GET.get(self.querystring_name):
-            url_name = request.GET.get(self.querystring_name)
-            return reverse(url_name)
-        return redirect_url
+        return request.GET.get(self.querystring_name)
 
-#     def save_related(request, form, formsets, change):
-#         #obj.user = request.user
-#         print(request.GET, "request, request, request")
-#         #obj.save()
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "maternal_eligibility":
-            kwargs["queryset"] = MaternalEligibility.objects.filter(
-                pk__exact=request.GET.get('pk'))
-        return super(MaternalConsentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+    def get_changeform_initial_data(self, request):
+        return {'maternal_eligibility_reference': request.GET.get("reference_pk")}
