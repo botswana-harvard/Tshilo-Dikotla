@@ -96,7 +96,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
             demographics['Antenatal enrollment status'] = enrollment_hiv_status,
             demographics['Enrollment HIV status'] = enrollment_hiv_status,
             demographics['Current HIV status'] = result,
-            demographics['Pregnant, GA'] = self.gestational_age,
+            demographics['Pregnant, GA'] = None, #self.gestational_age,
             demographics['Planned delivery site'] = self.delivery_site,
             demographics['Randomized'] = (self.randomized,)
         return demographics
@@ -172,22 +172,22 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
         else:
             return UNK
 
-    @property
-    def gestational_age(self):
-        antenatal = self.antenatal_enrollment
-        if antenatal:
-            enrollment_helper = EnrollmentHelper(antenatal)
-            if enrollment_helper.get_ga_lmp_enrollment_wks(timezone.datetime.now().date()) and self.currently_pregnant:
-                return enrollment_helper.get_ga_lmp_enrollment_wks(timezone.datetime.now().date())
-            elif ((not enrollment_helper.get_ga_lmp_enrollment_wks(timezone.datetime.now().date()) and
-                   self.currently_pregnant and antenatal.ultrasound)):
-                return antenatal.ultrasound.ga_confirmed
-            elif enrollment_helper.get_ga_lmp_enrollment_wks(timezone.datetime.now().date()) and not self.currently_pregnant:
-                delivery = self.maternal_delivery
-                return enrollment_helper.get_ga_lmp_enrollment_wks(delivery.delivery_datetime.date())
-            else:
-                return UNK
-        return UNK
+#     @property
+#     def gestational_age(self):
+#         antenatal = self.antenatal_enrollment
+#         if antenatal:
+#             enrollment_helper = EnrollmentHelper(antenatal)
+#             if enrollment_helper.get_ga_lmp_enrollment_wks(timezone.datetime.now().date()) and self.currently_pregnant:
+#                 return enrollment_helper.get_ga_lmp_enrollment_wks(timezone.datetime.now().date())
+#             elif ((not enrollment_helper.get_ga_lmp_enrollment_wks(timezone.datetime.now().date()) and
+#                    self.currently_pregnant and antenatal.ultrasound)):
+#                 return antenatal.ultrasound.ga_confirmed
+#             elif enrollment_helper.get_ga_lmp_enrollment_wks(timezone.datetime.now().date()) and not self.currently_pregnant:
+#                 delivery = self.maternal_delivery
+#                 return enrollment_helper.get_ga_lmp_enrollment_wks(delivery.delivery_datetime.date())
+#             else:
+#                 return UNK
+#         return UNK
 
     @property
     def antenatal_enrollment(self):
