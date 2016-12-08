@@ -3,11 +3,11 @@ from django.apps import apps as django_apps
 from edc_registration.models import RegisteredSubject
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_appointment.managers import AppointmentManager
-from edc_base.model.models import HistoricalRecords, BaseUuidModel
+from edc_base.model.models import HistoricalRecords, BaseUuidModel, UrlMixin
 from edc_appointment.model_mixins import AppointmentModelMixin
 
 
-class Appointment(AppointmentModelMixin, BaseUuidModel):
+class Appointment(AppointmentModelMixin, UrlMixin, BaseUuidModel):
 
     history = HistoricalRecords()
 
