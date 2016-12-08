@@ -1,22 +1,20 @@
 from dateutil.relativedelta import relativedelta
 from django.test import TestCase
-from model_mommy import mommy
-
 from edc_base.utils import get_utcnow
 from edc_code_lists.models import WcsDxAdult
 from edc_constants.constants import (YES, NEG, NOT_APPLICABLE, NO)
+from model_mommy import mommy
 
-from td.models import Appointment
 from td_list.models import MaternalDiagnoses, MaternalHospitalization
 from td_maternal.forms import MaternalPostPartumFuForm
 
-from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
+from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin, NegMotherMixin
 
 
-class TestMaternalPostPartumFu(DeliverMotherMixin, AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+class DiagnosesMixinWcsDxAdultMixin:
 
     def setUp(self):
-        super(TestMaternalPostPartumFu, self).setUp()
+        super(DiagnosesMixinWcsDxAdultMixin, self).setUp()
 
         self.diagnoses = MaternalDiagnoses.objects.create(
             hostname_created="django", name="Gestational Hypertension",
@@ -57,8 +55,8 @@ class TestMaternalPostPartumFu(DeliverMotherMixin, AntenatalVisitsMotherMixin, P
             created=get_utcnow(), modified=get_utcnow(), user_created="", user_modified="",
             hostname_created="otse.bhp.org.bw", hostname_modified="otse.bhp.org.bw", revision=None)
 
-        self.add_maternal_visits('1000M', '1010M', '1020M', '2000M')
-        maternal_visit = self.get_maternal_visit('2000M')
+        self.add_maternal_visits('1000M', '1010M', '1020M', '2000M', '2010M')
+        maternal_visit = self.get_maternal_visit('2010M')
 
         self.options = {
             'maternal_visit': maternal_visit.id,
@@ -70,9 +68,12 @@ class TestMaternalPostPartumFu(DeliverMotherMixin, AntenatalVisitsMotherMixin, P
             'has_who_dx': YES,
             'who': [self.who_dx.id]}
 
+
+class TestMaternalPostPartumFuPosMotherMixin(DiagnosesMixinWcsDxAdultMixin, DeliverMotherMixin, AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+
     def test_diagnosis_list_none(self):
         """check if the diagnosis list is empty"""
-        self.options['diagnoses'] = None
+        self.options.update(diagnoses=None)
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
@@ -80,7 +81,7 @@ class TestMaternalPostPartumFu(DeliverMotherMixin, AntenatalVisitsMotherMixin, P
 
     def test_new_diagnoses_no_diagnosis_list_no_not_applicable(self):
         """checks if the diagnosis list is given when the patient has no new diagnoses"""
-        self.options['new_diagnoses'] = NO
+        self.options.update(new_diagnoses=NO)
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
@@ -88,8 +89,9 @@ class TestMaternalPostPartumFu(DeliverMotherMixin, AntenatalVisitsMotherMixin, P
 
     def test_new_diagnoses_no_diagnosis_list_listed_has_not_applicable(self):
         """Checks if multiple options are selected with N/A as one of them"""
-        self.options['new_diagnoses'] = NO
-        self.options['diagnoses'] = [self.diagnoses.id, self.diagnoses_na.id]
+        self.options.update(
+            new_diagnoses=NO,
+            diagnoses=[self.diagnoses.id, self.diagnoses_na.id])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
@@ -97,7 +99,7 @@ class TestMaternalPostPartumFu(DeliverMotherMixin, AntenatalVisitsMotherMixin, P
 
     def test_new_diagnoses_yes_diagnosis_list_has_not_applicable(self):
         """Checks if diagnoses listing is N/A even though mother has new diagnoses"""
-        self.options['diagnoses'] = [self.diagnoses_na.id]
+        self.options.update(diagnoses=[self.diagnoses_na.id])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
@@ -105,7 +107,7 @@ class TestMaternalPostPartumFu(DeliverMotherMixin, AntenatalVisitsMotherMixin, P
 
     def test_hospitalized_yes_hospitalization_reason_none(self):
         """check if the hospitalization reason is none"""
-        self.options['hospitalization_reason'] = None
+        self.options.update(hospitalization_reason=None)
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
@@ -113,7 +115,7 @@ class TestMaternalPostPartumFu(DeliverMotherMixin, AntenatalVisitsMotherMixin, P
 
     def test_hospitalized_yes_hospitalization_reason_not_applicable(self):
         """check if hospitalization reason is N/A even though the mother was hospitalized"""
-        self.options['hospitalization_reason'] = [self.hospitalization_reason_na.id]
+        self.options.update(hospitalization_reason=[self.hospitalization_reason_na.id])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
@@ -121,7 +123,7 @@ class TestMaternalPostPartumFu(DeliverMotherMixin, AntenatalVisitsMotherMixin, P
 
     def test_hospitalization_yes_no_hospitalization_days(self):
         """Check that the number of hospitalization days has been given provided that the mother was hospitalized"""
-        self.options['hospitalization_days'] = None
+        self.options.update(hospitalization_days=None)
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
@@ -129,32 +131,35 @@ class TestMaternalPostPartumFu(DeliverMotherMixin, AntenatalVisitsMotherMixin, P
 
     def test_hospitalized_no(self):
         """Check if the field for hospitalization reason is none"""
-        self.options['hospitalized'] = NO
-        self.options['hospitalization_reason'] = None
+        self.options.update(
+            hospitalized=NO,
+            hospitalization_reason=None)
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Question7: Participant was not hospitalized, reason should be N/A', errors)
 
     def test_hospitalized_no_hospitalization_reason_listed(self):
         """Check if the field for hospitalization reason is none"""
-        self.options['hospitalized'] = NO
+        self.options.update(hospitalized=NO)
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Question7: Participant was not hospitalized, reason should be N/A', errors)
 
     def test_hospitalized_no_hospitalization_reason_listed_with_not_applicable(self):
         """Check if the field for hospitalization reason is listed and has N/A as one of the options"""
-        self.options['hospitalized'] = NO
-        self.options['hospitalization_reason'] = [self.hospitalization_reason.id, self.hospitalization_reason_na.id]
+        self.options.update(
+            hospitalized=NO,
+            hospitalization_reason=[self.hospitalization_reason.id, self.hospitalization_reason_na.id])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Question7: Participant was not hospitalized, reason should only be N/A', errors)
 
     def test_hospitalized_no_hospitalization_other_given(self):
         """Check if the field for hospitalization reason is listed and has N/A as one of the options"""
-        self.options['hospitalized'] = NO
-        self.options['hospitalization_reason'] = [self.hospitalization_reason_na.id]
-        self.options['hospitalization_other'] = "Asthma"
+        self.options.update(
+            hospitalized=NO,
+            hospitalization_reason=[self.hospitalization_reason_na.id],
+            hospitalization_other="Asthma")
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
@@ -162,193 +167,92 @@ class TestMaternalPostPartumFu(DeliverMotherMixin, AntenatalVisitsMotherMixin, P
 
     def test_hospitalized_no_hospitalization_date_given(self):
         """Check if the field for hospitalization reason is listed and has N/A as one of the options"""
-        self.options['hospitalized'] = NO
-        self.options['hospitalization_reason'] = [self.hospitalization_reason_na.id]
-        self.options['hospitalization_other'] = None
-        self.options['hospitalization_days'] = 5
+        self.options.update(
+            hospitalized=NO,
+            hospitalization_reason=[self.hospitalization_reason_na.id],
+            hospitalization_other=None,
+            hospitalization_days=5)
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
             'Question9: Patient was not hospitalized, please do not give hospitalization days', errors)
 
-    def test_mother_negative_who_diagnosis_yes(self):
-        """checks whether question 10 for WHO Stage III/IV is N/A if the mother is negative"""
-        self.maternal_eligibility_2 = mommy.make_recipe('td_maternal.maternaleligibility')
-        self.maternal_consent_2 = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility_2, first_name='TATA',
-            last_name='TATA', identity="111121112", confirm_identity="111121112")
-
-        self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject_2))
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1020M')
-        maternal_visit_1020M = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=get_utcnow(), result=NEG)
-        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject_2)
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
-        maternal_visit_2010M = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=get_utcnow(), result=NEG)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
-        self.maternal_visit_2000 = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        self.options['maternal_visit'] = self.maternal_visit_2000.id
-        form = MaternalPostPartumFuForm(data=self.options)
-        errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('The mother is Negative, question 10 for WHO Stage III/IV should be N/A', errors)
-
-    def test_mother_negative_who_listing_none(self):
-        """Checks if the field for who diagnosis listing is empty"""
-        self.maternal_eligibility_2 = mommy.make_recipe('td_maternal.maternaleligibility')
-        self.maternal_consent_2 = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility_2,
-            first_name='TATA', last_name='TATA', identity="111121112", confirm_identity="111121112")
-
-        self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject_2))
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1020M')
-        maternal_visit_1020M = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=get_utcnow(), result=NEG)
-        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject_2)
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
-        maternal_visit_2010M = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=get_utcnow(), result=NEG)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
-        self.maternal_visit_2000 = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        self.options['maternal_visit'] = self.maternal_visit_2000.id
-        self.options['has_who_dx'] = NOT_APPLICABLE
-        self.options['who'] = None
-        form = MaternalPostPartumFuForm(data=self.options)
-        errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('Question11: Participant is HIV NEG, WHO Diagnosis field should be N/A', errors)
-
-    def test_mother_negative_who_listing_not_not_applicable(self):
-        """checks if who listing is N/A given that the mother is negative"""
-        self.maternal_eligibility_2 = mommy.make_recipe('td_maternal.maternaleligibility')
-        self.maternal_consent_2 = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility_2,
-            first_name='TATA', last_name='TATA', identity="111121112", confirm_identity="111121112")
-
-        self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject_2))
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1020M')
-        maternal_visit_1020M = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=get_utcnow(), result=NEG)
-        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject_2)
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
-        maternal_visit_2010M = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=get_utcnow(), result=NEG)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
-        self.maternal_visit_2000 = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        self.options['maternal_visit'] = self.maternal_visit_2000.id
-        self.options['has_who_dx'] = NOT_APPLICABLE
-        self.options['who'] = [self.who_dx.id]
-        form = MaternalPostPartumFuForm(data=self.options)
-        errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('The mother is Negative, question 11 for WHO Stage III/IV listing should be N/A', errors)
-
-    def test_mother_negative_who_listed_not_applicable_there(self):
-        """checks if who listing is only N/A if multiple options are selected given that the mother is negative"""
-        self.maternal_eligibility_2 = mommy.make_recipe('td_maternal.maternaleligibility')
-        self.maternal_consent_2 = mommy.make_recipe(
-            'td_maternal.maternalconsent', maternal_eligibility=self.maternal_eligibility_2,
-            first_name='TATA', last_name='TATA', identity="111121112", confirm_identity="111121112")
-
-        self.registered_subject_2 = self.maternal_consent_2.maternal_eligibility.registered_subject
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject_2))
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='1020M')
-        maternal_visit_1020M = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_1020M, result_date=get_utcnow(), result=NEG)
-        mommy.make_recipe('td_maternal.maternallabdel', registered_subject=self.registered_subject_2)
-
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2000M')
-        maternal_visit_2010M = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        mommy.make_recipe(
-            'td_maternal.rapidtestresult', maternal_visit=maternal_visit_2010M, result_date=get_utcnow(), result=NEG)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.registered_subject_2.subject_identifier, visit_code='2010M')
-        self.maternal_visit_2000 = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-
-        self.options['maternal_visit'] = self.maternal_visit_2000.id
-        self.options['has_who_dx'] = NOT_APPLICABLE
-        self.options['who'] = [self.who_dx.id, self.who_dx_na.id]
-        form = MaternalPostPartumFuForm(data=self.options)
-        errors = ''.join(form.errors.get('__all__'))
-        self.assertIn(
-            'The mother is Negative, question 11 for WHO Stage III/IV listing should only be N/A', errors)
-
     def test_mother_positive_who_diagnosis_not_applicable(self):
         """checks if question 10 for WHO Stage III/IV is not N/A given that the mother is positive"""
-        self.options['has_who_dx'] = NOT_APPLICABLE
+        self.options.update(has_who_dx=NOT_APPLICABLE)
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('The mother is positive, question 10 for WHO Stage III/IV should not be N/A', errors)
 
     def test_mother_positive_who_listing_none(self):
         """Checks if who listing is none"""
-        self.options['who'] = None
+        self.options.update(who=None)
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Question11: WHO Diagnosis field should not be left empty', errors)
 
     def test_mother_positive_who_diagnoses_yes_who_listing_not_applicable(self):
         """checks if who listing is not N/A provided question 10 is yes"""
-        self.options['who'] = [self.who_dx_na.id]
+        self.options.update(who=[self.who_dx_na.id])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Question 10 is indicated as YES, who listing cannot be N/A', errors)
 
     def test_mother_positive_who_diagnoses_no_who_listed_not_applicable_not_there(self):
         """checks if who listing is N/A given that question 10 is No"""
-        self.options['has_who_dx'] = NO
-        self.options['who'] = [self.who_dx.id]
+        self.options.update(
+            has_who_dx=NO,
+            who=[self.who_dx.id])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Question 10 is indicated as NO, who listing should be N/A', errors)
 
     def test_mother_positive_who_diagnoses_no_who_listed_not_applicable_there(self):
         """checks if who listing is only N/A"""
-        self.options['has_who_dx'] = NO
-        self.options['who'] = [self.who_dx.id, self.who_dx_na.id]
+        self.options.update(
+            has_who_dx=NO,
+            who=[self.who_dx.id, self.who_dx_na.id])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Question 10 is indicated as NO, who listing should only be N/A', errors)
+
+
+class TestMaternalPostPartumFuNegMother(DiagnosesMixinWcsDxAdultMixin, DeliverMotherMixin, AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):
+
+    def test_mother_negative_who_diagnosis_yes(self):
+        """checks whether question 10 for WHO Stage III/IV is N/A if the mother is negative"""
+        self.options.update(maternal_visit=self.get_maternal_visit('2010M').id)
+        form = MaternalPostPartumFuForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn('The mother is Negative, question 10 for WHO Stage III/IV should be N/A', errors)
+
+    def test_mother_negative_who_listing_none(self):
+        """Checks if the field for who diagnosis listing is empty"""
+        self.options.update(
+            maternal_visit=self.get_maternal_visit('2010M').id,
+            has_who_dx=NOT_APPLICABLE,
+            who=None)
+        form = MaternalPostPartumFuForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn('Question11: Participant is HIV NEG, WHO Diagnosis field should be N/A', errors)
+
+    def test_mother_negative_who_listing_not_not_applicable(self):
+        """checks if who listing is N/A given that the mother is negative"""
+        self.options.update(
+            maternal_visit=self.get_maternal_visit('2010M').id,
+            has_who_dx=NOT_APPLICABLE,
+            who=[self.who_dx.id])
+        form = MaternalPostPartumFuForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn('The mother is Negative, question 11 for WHO Stage III/IV listing should be N/A', errors)
+
+    def test_mother_negative_who_listed_not_applicable_there(self):
+        """checks if who listing is only N/A if multiple options are selected given that the mother is negative"""
+        self.options.update(
+            maternal_visit=self.get_maternal_visit('2010M').id,
+            has_who_dx=NOT_APPLICABLE,
+            who=[self.who_dx.id, self.who_dx_na.id])
+        form = MaternalPostPartumFuForm(data=self.options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn(
+            'The mother is Negative, question 11 for WHO Stage III/IV listing should only be N/A', errors)
