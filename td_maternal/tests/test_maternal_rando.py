@@ -43,7 +43,7 @@ class TestMaternalRandomization(AntenatalVisitsMotherMixin, PosMotherMixin, Test
         maternal_eligibility_2 = mommy.make_recipe('td_maternal.maternaleligibility')
         maternal_consent_2 = mommy.make_recipe(
             'td_maternal.maternalconsent',
-            maternal_eligibility_reference=maternal_eligibility_2.reference_pk)
+            maternal_eligibility_reference=maternal_eligibility_2.reference)
         mommy.make_recipe('td_maternal.antenatalenrollment_pos', subject_identifier=maternal_consent_2.subject_identifier)
         appointment = Appointment.objects.get(
             subject_identifier=maternal_consent_2.subject_identifier, visit_code='1000M')
