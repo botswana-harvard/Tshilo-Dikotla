@@ -5,10 +5,8 @@ from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 from td.admin_mixins import ModelAdminMixin
 
 from ..admin_site import td_maternal_admin
-from ..forms import MaternalLabDelForm, MaternalHivInterimHxForm
-from ..models import MaternalLabDel, MaternalHivInterimHx
-
-from .base_maternal_model_admin import BaseMaternalModelAdmin
+from ..forms import MaternalLabDelForm
+from ..models import MaternalLabDel
 
 
 @admin.register(MaternalLabDel, site=td_maternal_admin)
@@ -36,13 +34,3 @@ class MaternalLabDelAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin
                     'csection_reason': admin.VERTICAL,
                     'csection_reason': admin.VERTICAL, }
     filter_horizontal = ('delivery_complications',)
-
-
-@admin.register(MaternalHivInterimHx)
-class MaternalHivInterimHxAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
-
-    form = MaternalHivInterimHxForm
-
-    radio_fields = {'has_cd4': admin.VERTICAL,
-                    'has_vl': admin.VERTICAL,
-                    'vl_detectable': admin.VERTICAL}

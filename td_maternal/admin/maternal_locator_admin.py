@@ -4,16 +4,16 @@ from ..admin_site import td_maternal_admin
 from ..forms import MaternalLocatorForm
 from ..models import MaternalLocator
 
-from .admin_mixins import CrfModelAdminMixin
+from td.admin_mixins import ModelAdminMixin
+from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 
 
 @admin.register(MaternalLocator, site=td_maternal_admin)
-class MaternalLocatorAdmin(CrfModelAdminMixin, admin.ModelAdmin):
+class MaternalLocatorAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     form = MaternalLocatorForm
 
-    fields = ('maternal_visit',
-              'subject_identifier',
+    fields = ('subject_identifier',
               'date_signed',
               'mail_address',
               'care_clinic',
@@ -38,8 +38,7 @@ class MaternalLocatorAdmin(CrfModelAdminMixin, admin.ModelAdmin):
               'caretaker_cell',
               'caretaker_tel')
 
-    list_display = ('maternal_visit',
-                    'care_clinic',
+    list_display = ('care_clinic',
                     'caretaker_name',
                     'caretaker_cell',
                     'caretaker_tel')

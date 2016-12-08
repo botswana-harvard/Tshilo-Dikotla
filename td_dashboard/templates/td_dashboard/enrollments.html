@@ -1,6 +1,6 @@
     <div class="panel-group">
     	<div class="panel panel-info">
-      <div class="panel-body"> 
+      <div class="panel-body">
 		{% for obj in enrollment_objects %}
 			<a role="button" class="btn btn-sm {% if obj.id %}btn-success{% else %}btn-default{% endif %}" href="{% if obj.get_absolute_url %}{{ obj.get_absolute_url }}{% else %}{% url obj.admin_url_name %}{% endif %}?next={% url dashboard_url_name subject_identifier %}&subject_identifier={{ subject_identifier }}">{{ obj.verbose_name }}</a>
 		{% endfor %}

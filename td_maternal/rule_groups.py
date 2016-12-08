@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 
-from edc_constants.constants import POS, NEG, UNK, IND
+from edc_constants.constants import POS, NEG, UNK
 from edc_metadata.constants import NOT_REQUIRED, REQUIRED
 from edc_rule_groups.crf_rule import CrfRule
 from edc_rule_groups.decorators import register
@@ -10,9 +10,10 @@ from edc_rule_groups.requisition_rule import RequisitionRule
 from edc_rule_groups.rule_group import RuleGroup
 
 from td.constants import ONE
+from td.hiv_result import ElisaRequiredError
 
 from .lab_profiles import cd4_panel, pbmc_vl_panel, pbmc_panel, hiv_elisa_panel
-from .maternal_hiv_status import MaternalHivStatus, ElisaRequiredError
+from .maternal_hiv_status import MaternalHivStatus
 from .models import (
     MaternalUltraSoundInitial, MaternalPostPartumDep, RapidTestResult, MaternalRando, MaternalInterimIdcc)
 

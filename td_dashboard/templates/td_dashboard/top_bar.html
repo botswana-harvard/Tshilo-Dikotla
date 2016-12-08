@@ -1,11 +1,14 @@
 {% load tshilo_dikotla_extras %}
     <div class="panel-group">
     	<div class="panel panel-info">
-          <div class="panel-heading clearfix">{{ subject_identifier }}
+          <div class="panel-heading clearfix"><i class="fa fa-tachometer" aria-hidden="true"></i> {{ subject_identifier }}
           <span class="pull-right">
+            {% if maternal_locator %}
+              <a role="button" class="btn btn-sm {% if maternal_locator.id %}btn-success{% else %}btn-default{% endif %}" href="{% if maternal_locator.get_absolute_url %}{{ maternal_locator.get_absolute_url }}{% else %}{% url maternal_locator.admin_url_name %}{% endif %}?next={% url dashboard_url_name subject_identifier %}&subject_identifier={{ subject_identifier }}">{{ maternal_locator.verbose_name }}</a>      
+            {% endif %}
             {% for obj in enrollment_objects %}
               <a role="button" class="btn btn-sm {% if obj.id %}btn-success{% else %}btn-default{% endif %}" href="{% if obj.get_absolute_url %}{{ obj.get_absolute_url }}{% else %}{% url obj.admin_url_name %}{% endif %}?next={% url dashboard_url_name subject_identifier %}&subject_identifier={{ subject_identifier }}">{{ obj.verbose_name }}</a>
             {% endfor %}
-            <a href="{% url 'search_url' %}" role="button" class="btn btn-sm btn-primary">Close</a></span></div>
+            <a href="{% url 'search_url' %}" role="button" class="btn btn-sm btn-primary"><i class="fa fa-reply" aria-hidden="true"></i> Close</a></span></div>
     </div>
   </div>

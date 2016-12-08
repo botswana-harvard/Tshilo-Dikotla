@@ -21,8 +21,9 @@ from .maternal_diagnoses import MaternalDiagnoses
 from .maternal_disenrollment import MaternalDisenrollment
 from .maternal_eligibility import MaternalEligibility
 from .maternal_eligibility_loss import MaternalEligibilityLoss
-from .maternal_interim_idcc_data import MaternalInterimIdcc
-from .maternal_lab_del import MaternalLabDel, MaternalHivInterimHx
+from .maternal_interim_idcc import MaternalInterimIdcc
+from .maternal_lab_del import MaternalLabDel
+from .maternal_hiv_interim_hx import MaternalHivInterimHx
 from .maternal_locator import MaternalLocator
 from .maternal_medical_history import MaternalMedicalHistory
 from .maternal_obsterical_history import MaternalObstericalHistory
