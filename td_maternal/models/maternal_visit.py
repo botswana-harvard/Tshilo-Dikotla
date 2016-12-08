@@ -14,6 +14,8 @@ class MaternalVisit(VisitModelMixin, CreatesMetadataModelMixin, RequiresConsentM
 
     """ Maternal visit form that links all antenatal/ postnatal follow-up forms """
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     appointment = models.OneToOneField(Appointment, on_delete=models.PROTECT)
 
     objects = VisitModelManager()

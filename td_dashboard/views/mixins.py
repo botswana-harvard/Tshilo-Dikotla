@@ -1,4 +1,3 @@
-from django.apps import apps
 from django.urls.base import reverse
 
 from edc_metadata.models import CrfMetadata, RequisitionMetadata
@@ -6,86 +5,94 @@ from edc_metadata.models import CrfMetadata, RequisitionMetadata
 from td.models import Appointment
 
 
-class DashboardMixin:
+class DashboardSubjectMixin:
 
-    def __init__(self):
-        self._appointments = []
-        self._crfs = []
-        self._requisitions = []
-        self._selected_appointment = None
-        self.dashboard = None
+    dashboard_url_name = None
 
-    @property
-    def appointments(self):
-        if not self._appointments:
-            try:
-                self._appointments = [Appointment.objects.get(pk=self.kwargs.get('appointment_pk'))]
-            except Appointment.DoesNotExist:
-                self._appointments = Appointment.objects.filter(
-                    subject_identifier=self.subject_identifier).order_by('visit_code')
-        return self._appointments
-
-    @property
-    def selected_appointment(self):
-        if not self._selected_appointment:
-            try:
-                self._selected_appointment = Appointment.objects.get(pk=self.kwargs.get('appointment_pk'))
-            except Appointment.DoesNotExist:
-                self._selected_appointment = None
-        return self._selected_appointment
+    def get_context_data(self, **kwargs):
+        context = super(DashboardSubjectMixin, self).get_context_data(**kwargs)
+        self.subject_identifier = self.kwargs.get('subject_identifier')
+        self.show = self.kwargs.get('show')
+        context.update(
+            subject_identifier=self.subject_identifier,
+            show=self.show,
+            dashboard_url_name=self.dashboard_url_name,
+        )
+        return context
 
     @property
     def dashboard_url(self):
         try:
-            dashboard_url = 'subject_dashboard_url' if self.dashboard == 'td_maternal' else 'infant_subject_dashboard_url'
             dashboard_url = reverse(
-                dashboard_url,
-                kwargs={
-                    'subject_identifier': self.subject_identifier,
-                    'appointment_pk': self.selected_appointment.pk})
+                self.dashboard_url_name,
+                kwargs=dict(subject_identifier=self.subject_identifier))
         except AttributeError:
             dashboard_url = None
         return dashboard_url
 
-    @property
-    def subject_identifier(self):
-        return self.context.get('subject_identifier')
+
+class DashboardAppointmentMixin:
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardAppointmentMixin, self).get_context_data(**kwargs)
+        appointment_pk = self.kwargs.get('appointment_pk')
+        print('appointment', self.subject_identifier)
+        try:
+            self.selected_appointment = Appointment.objects.get(pk=appointment_pk)
+            appointments = []
+        except Appointment.DoesNotExist:
+            appointments = Appointment.objects.filter(
+                subject_identifier=self.subject_identifier).order_by('visit_code')
+            self.selected_appointment = None
+        context.update(
+            appointments=appointments,
+            selected_appointment=self.selected_appointment,
+            appointment_pk=appointment_pk)
+        return context
+
+
+class DashboardMetaDataMixin:
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardMetaDataMixin, self).get_context_data(**kwargs)
+        context.update(
+            crfs=self.crfs,
+            requisitions=self.requisitions)
+        return context
 
     @property
     def crfs(self):
-        if not self._crfs:
-            if self.selected_appointment:
-                self._crfs = []
-                crfs = CrfMetadata.objects.filter(
-                    subject_identifier=self.subject_identifier,
-                    visit_code=self.selected_appointment.visit_code).order_by('show_order')
-                for crf in crfs:
-                    try:
-                        obj = None
-                        if self.dashboard == 'td_maternal':
-                            obj = crf.model_class.objects.get(
-                                maternal_visit__appointment=self.selected_appointment)
-                        else:
-                            obj = crf.model_class.objects.get(
-                                infant_visit__appointment=self.selected_appointment)
-                        crf.instance = obj
-                        crf.url = obj.get_absolute_url()
-                        crf.title = obj._meta.verbose_name
-                    except crf.model_class.DoesNotExist:
-                        crf.instance = None
-                        crf.url = crf.model_class().get_absolute_url()
-                        crf.title = crf.model_class()._meta.verbose_name
-                    self._crfs.append(crf)
-        return self._crfs
+        crfs = []
+        if self.selected_appointment:
+            crf_meta_datas = CrfMetadata.objects.filter(
+                subject_identifier=self.subject_identifier,
+                visit_code=self.selected_appointment.visit_code).order_by('show_order')
+            for crf in crf_meta_datas:
+                try:
+                    obj = None
+                    if self.dashboard == 'td_maternal':
+                        obj = crf.model_class.objects.get(
+                            maternal_visit__appointment=self.selected_appointment)
+                    else:
+                        obj = crf.model_class.objects.get(
+                            infant_visit__appointment=self.selected_appointment)
+                    crf.instance = obj
+                    crf.url = obj.get_absolute_url()
+                    crf.title = obj._meta.verbose_name
+                except crf.model_class.DoesNotExist:
+                    crf.instance = None
+                    crf.url = crf.model_class().get_absolute_url()
+                    crf.title = crf.model_class()._meta.verbose_name
+                crfs.append(crf)
+        return crfs
 
     @property
     def requisitions(self):
-        requisitions = None
+        requisitions = []
         if self.selected_appointment:
-            self._requisitions = []
-            requisitions = RequisitionMetadata.objects.filter(
+            requisition_meta_data = RequisitionMetadata.objects.filter(
                 subject_identifier=self.subject_identifier, visit_code=self.selected_appointment.visit_code)
-            for requisition in requisitions:
+            for requisition in requisition_meta_data:
                 try:
                     obj = None
                     if self.dashboard == 'td_maternal':
@@ -101,24 +108,9 @@ class DashboardMixin:
                     requisition.instance = None
                     requisition.url = requisition.model_class().get_absolute_url()
                     requisition.title = requisition.model_class()._meta.verbose_name
-                self._requisitions.append(requisition)
-        return self._requisitions
+                requisitions.append(requisition)
+        return requisitions
 
-    @property
-    def enrollments(self):
-        """ """
-        enrollments = []
-        for model_lower in self.enrollments_models:
-            app_label, model_name = model_lower.split('.')
-            model = apps.get_app_config(self.dashboard).get_model(model_name)
-            obj = None
-            try:
-                obj = model.objects.get(subject_identifier=self.subject_identifier)
-                admin_model_url_label = model._meta.verbose_name
-                admin_model_change_url = obj.get_absolute_url()
-                enrollments.append([admin_model_url_label, admin_model_change_url])
-            except model.DoesNotExist:
-                admin_model_url_label = "Add {}".format(model._meta.verbose_name)
-                admin_model_add_url = reverse('td_maternal_admin:{}_{}_add'.format(app_label, model_name))
-                enrollments.append([admin_model_url_label, admin_model_add_url])
-        return enrollments
+
+class DashboardMixin(DashboardMetaDataMixin, DashboardAppointmentMixin, DashboardSubjectMixin):
+    pass
