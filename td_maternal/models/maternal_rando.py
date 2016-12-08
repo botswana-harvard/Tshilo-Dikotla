@@ -40,6 +40,9 @@ class MaternalRando (MaternalCrfModel):
         >>> else:
         >>>     print "Error"
 """
+
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     site = models.CharField(
         verbose_name='Site',
         max_length=15)

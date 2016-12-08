@@ -16,6 +16,8 @@ class MaternalCrfModel(CrfModelMixin, OffstudyMixin,
 
     """Model mixin for all Maternal CRF models."""
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     maternal_visit = models.OneToOneField(MaternalVisit)
 
     objects = CrfModelManager()

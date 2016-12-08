@@ -16,6 +16,8 @@ class MaternalLocator(LocatorModelMixin, MaternalCrfModel):
     """ A model completed by the user to capture locator information and
     the details of the infant caretaker. """
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     appointment = models.ForeignKey(Appointment, null=True)
 
     care_clinic = OtherCharField(

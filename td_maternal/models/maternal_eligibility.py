@@ -20,6 +20,8 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
 
     This model has no PII."""
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",
         max_length=50,

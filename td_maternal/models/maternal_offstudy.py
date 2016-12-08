@@ -8,6 +8,8 @@ class MaternalOffstudy(OffstudyModelMixin, BaseUuidModel):
 
     """ A model completed by the user on the visit when the mother is taken off-study. """
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     objects = OffstudyModelManager()
 
     history = HistoricalRecords()

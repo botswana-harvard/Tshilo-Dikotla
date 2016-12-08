@@ -27,7 +27,7 @@ class InfantDashboardView(EdcBaseViewMixin, DashboardMixin, TemplateView):
         self._appointments = None
         self.maternal_status_helper = None
         self.dashboard = 'td_infant'
-        self.template_name = 'td_dashboard/infant/subject_dashboard.html'
+        self.template_name = 'td_dashboard/subject_dashboard.html'
         self._selected_appointment = None
         self.enrollments_models = ['td_infant.infantbirth']
 

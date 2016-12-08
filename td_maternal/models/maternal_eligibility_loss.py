@@ -11,6 +11,8 @@ from ..managers import MaternalEligibilityLossManager
 class MaternalEligibilityLoss(UrlMixin, BaseUuidModel):
     """ A model triggered and completed by system when a mother is in-eligible. """
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     maternal_eligibility_reference = models.UUIDField()
 
     report_datetime = models.DateTimeField(

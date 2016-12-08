@@ -11,6 +11,8 @@ class MaternalDeathReport(DeathReportModelMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on the mother's death. """
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     maternal_visit = models.OneToOneField(MaternalVisit)
 
     history = HistoricalRecords()

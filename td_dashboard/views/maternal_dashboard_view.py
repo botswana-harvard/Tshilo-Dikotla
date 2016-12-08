@@ -24,7 +24,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
 
     dashboard_url_name = 'subject_dashboard_url'
     add_visit_url_name = MaternalVisit().admin_url_name
-    template_name = 'td_dashboard/maternal/subject_dashboard.html'
+    template_name = 'td_dashboard/subject_dashboard.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

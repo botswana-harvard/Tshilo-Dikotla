@@ -18,7 +18,7 @@ from dateutil.relativedelta import relativedelta
 
 class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointmentsOnEligibleMixin,
                           RequiresConsentMixin, UrlMixin, BaseUuidModel):
-    
+
     ADMIN_SITE_NAME = 'td_maternal_admin'
 
     is_diabetic = models.CharField(

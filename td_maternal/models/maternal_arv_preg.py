@@ -51,6 +51,8 @@ class MaternalArv(CrfInlineModelMixin, BaseUuidModel):
 
     """ ARV table to indicate ARV medication taken by mother """
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     maternal_arv_preg = models.ForeignKey(MaternalArvPreg)
 
     arv_code = models.CharField(
