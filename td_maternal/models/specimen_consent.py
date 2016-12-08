@@ -13,6 +13,8 @@ class SpecimenConsent(SpecimenConsentMixin, SampleCollectionFieldsMixin, Require
 
     """ A model completed by the user when a mother gives consent for specimen storage. """
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",
         max_length=50,

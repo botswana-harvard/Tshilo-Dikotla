@@ -1,12 +1,13 @@
 from django.contrib import admin
 
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalObstericalHistoryForm
 from ..models import MaternalObstericalHistory
 
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-@admin.register(MaternalObstericalHistory)
+@admin.register(MaternalObstericalHistory, site=td_maternal_admin)
 class MaternalObstericalHistoryAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalObstericalHistoryForm

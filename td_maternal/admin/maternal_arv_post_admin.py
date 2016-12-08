@@ -5,6 +5,7 @@ from django.contrib import admin
 from edc_export.actions import export_as_csv_action
 from edc_base.modeladmin_mixins import TabularInlineMixin
 
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalArvPostForm, MaternalArvPostMedForm, MaternalArvPostAdhForm
 from ..models import MaternalVisit, MaternalArvPost, MaternalArvPostMed, MaternalArvPostAdh
 
@@ -18,7 +19,7 @@ class MaternalArvPostModInlineAdmin(TabularInlineMixin, admin.TabularInline):
     extra = 1
 
 
-@admin.register(MaternalArvPostMed)
+@admin.register(MaternalArvPostMed, site=td_maternal_admin)
 class MaternalArvPostMedAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalArvPostMedForm
@@ -31,7 +32,7 @@ class MaternalArvPostMedAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     }
 
 
-@admin.register(MaternalArvPost)
+@admin.register(MaternalArvPost, site=td_maternal_admin)
 class MaternalArvPostAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalArvPostForm
@@ -70,7 +71,7 @@ class MaternalArvPostAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
         return super(MaternalArvPostAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-@admin.register(MaternalArvPostAdh)
+@admin.register(MaternalArvPostAdh, site=td_maternal_admin)
 class MaternalArvPostAdhAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalArvPostAdhForm

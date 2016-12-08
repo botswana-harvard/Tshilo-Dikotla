@@ -1,13 +1,13 @@
 from django.contrib import admin
 
-from edc_export.actions import export_as_csv_action
-
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalUltraSoundFuForm
 from ..models import MaternalUltraSoundFu
+
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-@admin.register(MaternalUltraSoundFu)
+@admin.register(MaternalUltraSoundFu, site=td_maternal_admin)
 class MaternalUltraSoundFuAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalUltraSoundFuForm

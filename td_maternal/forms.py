@@ -1356,7 +1356,7 @@ class NvpDispensingForm(ModelFormMixin, forms.ModelForm):
 class RapidTestResultForm(ModelFormMixin, forms.ModelForm):
 
     def clean(self):
-        cleaned_data = super(RapidTestResultForm, forms.ModelForm, self).clean()
+        cleaned_data = super(RapidTestResultForm, self).clean()
         if cleaned_data.get('rapid_test_done') == YES:
             if not cleaned_data.get('result_date'):
                 raise forms.ValidationError(

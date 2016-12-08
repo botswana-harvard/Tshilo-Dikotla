@@ -24,6 +24,8 @@ class MaternalLabDel(EnrollmentModelMixin, LabourAndDeliveryModelMixin, CreateAp
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     delivery_hospital = models.CharField(
         verbose_name="Place of delivery? ",
         max_length=65,

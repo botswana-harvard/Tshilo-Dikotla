@@ -1,12 +1,13 @@
 from django.contrib import admin
 
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalSubstanceUseDuringPregForm
 from ..models import MaternalSubstanceUseDuringPreg
 
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-@admin.register(MaternalSubstanceUseDuringPreg)
+@admin.register(MaternalSubstanceUseDuringPreg, site=td_maternal_admin)
 class MaternalSubstanceUseDuringPregAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalSubstanceUseDuringPregForm

@@ -1,14 +1,46 @@
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import MultipleObjectsReturned
 from django.core.paginator import Paginator, EmptyPage
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView
 
-from td_maternal.models.maternal_eligibility import MaternalEligibility
+from edc_base.view_mixins import EdcBaseViewMixin
+
+from td_maternal.models import MaternalEligibility, MaternalConsent
 
 from ..forms import MaternalEligibilityCrispyForm
 
-from edc_base.view_mixins import EdcBaseViewMixin
-from td_maternal.models.maternal_consent import MaternalConsent
-from django.core.exceptions import MultipleObjectsReturned
+
+class QuerysetWrapper:
+    def __init__(self, qs):
+        self.qs = qs or []
+        self._object_list = []
+
+    @property
+    def object_list(self):
+        if not self._object_list:
+            for obj in self.qs:
+                try:
+                    maternal_consent = MaternalConsent.objects.get(maternal_eligibility_reference=obj.reference)
+                    obj.maternal_consent_pks = [str(maternal_consent.pk)]
+                    obj.subject_identifier = maternal_consent.subject_identifier
+                except MultipleObjectsReturned:
+                    maternal_consents = MaternalConsent.objects.filter(maternal_eligibility_reference=obj.reference)
+                    obj.maternal_consent_pks = [
+                        str(obj.pk) for obj in maternal_consents]
+                    obj.subject_identifier = maternal_consents[0].subject_identifier
+                except MaternalConsent.DoesNotExist:
+                    obj.maternal_consent_pks = None
+                    obj.subject_identifier = None
+                if obj.subject_identifier:
+                    obj.subject_label = obj.subject_identifier
+                elif obj.is_eligible:
+                    obj.subject_label = 'pending consent'
+                elif not obj.is_eligible:
+                    obj.subject_label = 'not eligible'
+                self._object_list.append(obj)
+        return self._object_list
 
 
 class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
@@ -18,45 +50,45 @@ class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
 
     def __init__(self, **kwargs):
         self.maternal_eligibility = None
-        self.infant = None
         super(SearchDasboardView, self).__init__(**kwargs)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(SearchDasboardView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         if form.is_valid():
-            results = None
+            subject_identifier = form.cleaned_data['subject_identifier']
             try:
-                results = [MaternalEligibility.objects.get(
-                    maternal_consent__subject_identifier=form.cleaned_data['subject_identifier'])]
+                qs = [MaternalEligibility.objects.get(
+                    subject_identifier__icontains=subject_identifier)]
             except MaternalEligibility.DoesNotExist:
-                results = None
+                qs = None
                 form.add_error(
                     'subject_identifier',
-                    'Maternal eligibility not found for {}.'.format(form.cleaned_data['subject_identifier']))
-            context = self.get_context_data(
+                    'Maternal eligibility not found for {}.'.format(subject_identifier))
+            except MultipleObjectsReturned:
+                qs = MaternalEligibility.objects.filter(
+                    subject_identifier__icontains=subject_identifier).order_by('subject_identifier', '-created')
+            context = self.get_context_data()
+            context.update(
                 form=form,
-                results=results)
+                results=self.paginate(QuerysetWrapper(qs).object_list))
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super(SearchDasboardView, self).get_context_data(**kwargs)
-        results = MaternalEligibility.objects.all().order_by('-created')
-        for obj in results:
-            try:
-                maternal_consent = MaternalConsent.objects.get(maternal_eligibility_reference=obj.reference)
-                obj.subject_identifier = maternal_consent.subject_identifier
-            except MaternalConsent.DoesNotExist:
-                obj.subject_identifier = None
-            except MultipleObjectsReturned:
-                maternal_consent = MaternalConsent.objects.filter(maternal_eligibility_reference=obj.reference)[0]
-                obj.subject_identifier = maternal_consent.subject_identifier
-        results_paginator = Paginator(results, self.paginate_by)
-        try:
-            results = results_paginator.page(self.kwargs.get('page', 1))
-        except EmptyPage:
-            results = results_paginator.page(results_paginator.num_pages)
+        qs = MaternalEligibility.objects.all().order_by('subject_identifier', '-created')
+        results = QuerysetWrapper(qs).object_list
         context.update(
             site_header=admin.site.site_header,
-            results=results)
-        context.update({
-            'infant': self.infant})
+            results=self.paginate(results))
         return context
+
+    def paginate(self, qs):
+        paginator = Paginator(qs, self.paginate_by)
+        try:
+            page = paginator.page(self.kwargs.get('page', 1))
+        except EmptyPage:
+            page = paginator.page(paginator.num_pages)
+        return page

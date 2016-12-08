@@ -1,13 +1,15 @@
 from django.contrib import admin
 
-from td.admin_mixins import ModelAdminMixin
-
-from ..forms import MaternalEligibilityForm
-from ..models import MaternalEligibility
 from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 
+from td.admin_mixins import ModelAdminMixin
 
-@admin.register(MaternalEligibility)
+from ..admin_site import td_maternal_admin
+from ..forms import MaternalEligibilityForm
+from ..models import MaternalEligibility
+
+
+@admin.register(MaternalEligibility, site=td_maternal_admin)
 class MaternalEligibilityAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     form = MaternalEligibilityForm

@@ -1,9 +1,9 @@
+from django.test import TestCase
+
 from django.apps import apps as django_apps
 
-from .base_test_case import BaseTestCase
 
-
-class TestNaturalKey(BaseTestCase):
+class TestNaturalKey(TestCase):
 
     def test_natural_key_maternal(self):
         """Confirms all models have a natural_key method (except Audit models)"""

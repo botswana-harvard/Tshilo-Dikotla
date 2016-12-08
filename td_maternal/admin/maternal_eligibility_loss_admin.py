@@ -2,11 +2,12 @@ from django.contrib import admin
 
 from td.admin_mixins import ModelAdminMixin
 
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalEligibilityLossForm
 from ..models import MaternalEligibilityLoss, MaternalEligibility
 
 
-@admin.register(MaternalEligibilityLoss)
+@admin.register(MaternalEligibilityLoss, site=td_maternal_admin)
 class MaternalEligibilityLossAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     form = MaternalEligibilityLossForm

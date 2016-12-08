@@ -20,6 +20,13 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
 
     This model has no PII."""
 
+    subject_identifier = models.CharField(
+        verbose_name="Subject Identifier",
+        max_length=50,
+        blank=True,
+        editable=False,
+    )
+
     reference = models.UUIDField(
         verbose_name="Anonymous Reference",
         unique=True,
@@ -61,9 +68,19 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
 
     history = HistoricalRecords()
 
+    def __str__(self):
+        return "Screened, age ({})".format(self.age_in_years)
+
     def save(self, *args, **kwargs):
         self.is_eligible, self.ineligibility = self.get_is_eligible()
         super(MaternalEligibility, self).save(*args, **kwargs)
+
+    def natural_key(self):
+        return self.eligibility_id
+
+    @property
+    def reasons_not_eligible(self):
+        return self.ineligibility
 
     def get_is_eligible(self):
         """Returns a tuple (True, None) if mother is eligible otherwise (False, error_messsage) where
@@ -79,12 +96,6 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
             error_message.append('Not a citizen')
         is_eligible = False if error_message else True
         return (is_eligible, ','.join(error_message))
-
-    def __str__(self):
-        return "Screened, age ({})".format(self.age_in_years)
-
-    def natural_key(self):
-        return self.eligibility_id
 
     @property
     def is_consented(self):

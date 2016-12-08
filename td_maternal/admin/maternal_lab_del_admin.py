@@ -1,15 +1,17 @@
 from django.contrib import admin
 
+from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
+
 from td.admin_mixins import ModelAdminMixin
 
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalLabDelForm, MaternalHivInterimHxForm
 from ..models import MaternalLabDel, MaternalHivInterimHx
 
 from .base_maternal_model_admin import BaseMaternalModelAdmin
-from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
 
 
-@admin.register(MaternalLabDel)
+@admin.register(MaternalLabDel, site=td_maternal_admin)
 class MaternalLabDelAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
 
     dashboard_type = 'maternal'

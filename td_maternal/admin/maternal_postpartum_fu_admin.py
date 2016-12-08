@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalPostPartumFuForm
 from ..models import MaternalPostPartumFu
+
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-@admin.register(MaternalPostPartumFu)
+@admin.register(MaternalPostPartumFu, site=td_maternal_admin)
 class MaternalPostPartumFuAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalPostPartumFuForm

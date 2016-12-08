@@ -24,6 +24,8 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
 
     """ A model completed by the user on the mother's consent. """
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     maternal_eligibility_reference = models.UUIDField()
 
     recruit_source = models.CharField(

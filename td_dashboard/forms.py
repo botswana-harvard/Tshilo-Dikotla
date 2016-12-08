@@ -10,16 +10,17 @@ class MaternalEligibilityCrispyForm(forms.Form):
 
     subject_identifier = forms.CharField(
         label='Subject Identifier',
-        max_length=36)
+        max_length=36,
+        required=False)
 
     def __init__(self, *args, **kwargs):
         super(MaternalEligibilityCrispyForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
+        # self.helper = FormHelper(self)
         self.helper = FormHelper()
         self.helper.form_action = reverse('search_url')
         self.helper.form_id = 'maternaleligibility-crispy-form-search'
         self.helper.form_method = 'post'
-        self.helper.html5_required = True
+        self.helper.html5_required = False
         self.helper.form_show_labels = False
         self.helper.layout = Layout(
             FieldWithButtons('subject_identifier', StrictButton('Search', type='submit')))

@@ -1,15 +1,13 @@
-from collections import OrderedDict
-
 from django.contrib import admin
 
-from edc_export.actions import export_as_csv_action
-
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalUltraSoundInitialForm
 from ..models import MaternalUltraSoundInitial
+
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-@admin.register(MaternalUltraSoundInitial)
+@admin.register(MaternalUltraSoundInitial, site=td_maternal_admin)
 class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalUltraSoundInitialForm
@@ -33,7 +31,7 @@ class MaternalUltraSoundInitialAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     readonly_fields = ('edd_confirmed', 'ga_confirmed', 'ga_by_lmp')
 
     radio_fields = {'number_of_gestations': admin.VERTICAL,
-                    'amniotic_fluid_volume': admin.VERTICAL,}
+                    'amniotic_fluid_volume': admin.VERTICAL}
 
     list_display = ('report_datetime', 'number_of_gestations', 'ga_method', 'edd_confirmed',
                     'ga_confirmed', 'ga_by_lmp')

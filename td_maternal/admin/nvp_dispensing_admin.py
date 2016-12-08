@@ -1,12 +1,13 @@
 from django.contrib import admin
 
+from ..admin_site import td_maternal_admin
 from ..forms import NvpDispensingForm
 from ..models import NvpDispensing, MaternalLabDel
 
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-@admin.register(NvpDispensing)
+@admin.register(NvpDispensing, site=td_maternal_admin)
 class NvpDispensingAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = NvpDispensingForm

@@ -1,12 +1,13 @@
 from django.contrib import admin
 
+from ..admin_site import td_maternal_admin
 from ..forms import MaternalDemographicsForm
 from ..models import MaternalDemographics
 
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
-@admin.register(MaternalDemographics)
+@admin.register(MaternalDemographics, site=td_maternal_admin)
 class MaternalDemographicsAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalDemographicsForm
