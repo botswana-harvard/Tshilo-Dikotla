@@ -10,36 +10,28 @@ from edc_sync.models import OutgoingTransaction
 from td.models import Appointment
 
 from edc_call_manager.models import Call, Log
-from edc_constants.constants import POS, YES
 from edc_identifier.models import SubjectIdentifier
 from edc_registration.models import RegisteredSubject
 
+from .mixins import NegMotherMixin, AntenatalVisitsMotherMixin
 
-class TestMaternalSerializers(TestCase):
+
+class TestMaternalSerializers(AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):
 
     def setUp(self):
-        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        self.maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent',
-            maternal_eligibility_reference=self.maternal_eligibility.reference)
-        self.antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment',
-            subject_identifier=self.maternal_consent.subject_identifier,
-            current_hiv_status=POS,
-            evidence_hiv_status=YES)
+        super(TestMaternalSerializers, self).setUp()
         self.appointment = Appointment.objects.get(
             visit_code='1000M',
-            subject_identifier=self.maternal_consent.subject_identifier)
-        self.maternal_visit = mommy.make_recipe('td_maternal.maternalvisit', appointment=self.appointment)
+            subject_identifier=self.subject_identifier)
+        self.maternal_visit = self.get_maternal_visit('1000M')
 
     def test_antenatal_enrollment_deserialising(self):
         """ Creating specimenconsent should creates outgoingtransaction """
-        maternalultrasound = mommy.make(
-            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit)
-        call = Call.objects.get(subject_identifier=self.maternal_consent.subject_identifier)
+        call = Call.objects.get(subject_identifier=self.subject_identifier)
         log = Log.objects.get(call=call)
-        registered_subject = RegisteredSubject.objects.get(subject_identifier=self.maternal_consent.subject_identifier)
-        subjectidentifier = SubjectIdentifier.objects.get(identifier=self.maternal_consent.subject_identifier)
+        registered_subject = RegisteredSubject.objects.get(subject_identifier=self.subject_identifier)
+        print(self.subject_identifier, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+#         subjectidentifier = SubjectIdentifier.objects.get(identifier=self.subject_identifier)
         outgoing_transactions = OutgoingTransaction.objects.all()
         self.assertGreater(outgoing_transactions.count(), 0)
         for outgoing_transaction in outgoing_transactions:
@@ -57,7 +49,7 @@ class TestMaternalSerializers(TestCase):
                 elif json_tx.get('model') == 'td_maternal.maternalvisit':
                     self.assertEqual(self.maternal_visit.pk, deserialised_obj.object.pk)
                 elif json_tx.get('model') == 'td_maternal.maternalultrasoundinitial':
-                    self.assertEqual(maternalultrasound.pk, deserialised_obj.object.pk)
+                    self.assertEqual(self.maternal_ultrasound.pk, deserialised_obj.object.pk)
                 elif json_tx.get('model') == 'td.appointment':
                     self.assertEqual(self.appointment.pk, deserialised_obj.object.pk)
                 elif json_tx.get('model') == 'edc_call_manager.call':
@@ -66,8 +58,8 @@ class TestMaternalSerializers(TestCase):
                     self.assertEqual(registered_subject.pk, deserialised_obj.object.pk)
                 elif json_tx.get('model') == 'edc_call_manager.log':
                     self.assertEqual(log.pk, deserialised_obj.object.pk)
-                elif json_tx.get('model') == 'edc_identifier.subjectidentifier':
-                    self.assertEqual(subjectidentifier.pk, deserialised_obj.object.pk)
+#                 elif json_tx.get('model') == 'edc_identifier.subjectidentifier':
+#                     self.assertEqual(subjectidentifier.pk, deserialised_obj.object.pk)
 
     def test_antenatal_enrollment_visit_crfs(self):
         """ Creating specimenconsent should creates outgoingtransaction """
@@ -105,13 +97,13 @@ class TestMaternalSerializers(TestCase):
     def test_antenatal_enrollmenttwo_crfs_deserialising(self):
         mommy.make('td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit, number_of_gestations=1)
         antenatalenrollmenttwo = mommy.make_recipe(
-            'td_maternal.antenatalenrollmenttwo', subject_identifier=self.maternal_consent.subject_identifier)
+            'td_maternal.antenatalenrollmenttwo', subject_identifier=self.subject_identifier)
         appointment = Appointment.objects.get(
-            subject_identifier=self.maternal_consent.subject_identifier, visit_code='1010M')
+            subject_identifier=self.subject_identifier, visit_code='1010M')
         mommy.make_recipe('td_maternal.maternalvisit', appointment=appointment, reason='scheduled')
 
         maternallabdel = mommy.make_recipe(
-            'td_maternal.maternallabdel', subject_identifier=self.maternal_consent.subject_identifier)
+            'td_maternal.maternallabdel', subject_identifier=self.subject_identifier)
 
         outgoing_transactions = OutgoingTransaction.objects.all()
         self.assertGreater(outgoing_transactions.count(), 0)
