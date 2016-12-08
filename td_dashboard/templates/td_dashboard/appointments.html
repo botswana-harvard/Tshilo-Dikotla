@@ -30,7 +30,7 @@
 						        		<a href="{{ appointment.visit.get_absolute_url }}?next={% url dashboard_url_name subject_identifier %}">{{ appointment.visit.report_datetime |date:"Y-m-d D"| capfirst }}</a>
 						        		<span class="pull-right"><a href="{% url dashboard_url_name appointment.str_pk subject_identifier %}" role="button" class="btn btn-sm btn-default">forms</a></span>
 						        	{% else %}
-						        		<a href="{% url add_visit_url_name %}?appointment={{ appointment.str_pk }}&next={% url dashboard_url_name subject_identifier %}&visit_code={{ appointment.visit_code }}">Add Visit</a>
+						        		<a href="{% url add_visit_url_name %}?appointment={{ appointment.str_pk }}&next={% url dashboard_url_name subject_identifier %}&appointment={{ appointment.pk }}">Add Visit</a>
 						        	{% endif %}
 						        </td>
 					            </tr>
