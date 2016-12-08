@@ -12,7 +12,7 @@
         <li class="list-group-item"><span class="test small text-default">Randomized</span>&nbsp<span class="test small text-info">{{ maternal_rando.rx|default:"No" }}</span></li>
         <li class="list-group-item"><span class="test small text-default">Delivery date</span>&nbsp<span class="test small text-info">{{ pregnancy.delivery_date|date:"Y-m-d"|default:"?" }}</span></li>
         <li class="list-group-item"><span class="test small text-default">Born</span>&nbsp<span class="test small text-info">{{ maternal_consent.dob|date:"Y-m-d" }}</span></li>
-        <li class="list-group-item"><span class="test small text-default">Age</span>&nbsp<span class="test small text-info">{{ maternal_consent.dob }}</span></li>
+        <li class="list-group-item"><span class="test small text-default">Age</span>&nbsp<span class="test small text-info">{% age_in_years maternal_consent.dob %}</span></li>
         <li class="list-group-item"><span class="test small text-default">Consented</span>&nbsp<span class="test small text-info">{{ maternal_consent.consent_datetime|date:"Y-m-d" }}</span></li>
         <li class="list-group-item"><span class="test small text-default">HIV status at Enrollment</span>&nbsp<span class="test small text-info">{{ maternal_hiv_status.enrollment_result.result }}</span></li>
         <li class="list-group-item"><span class="test small text-default">GA by LMP</span>&nbsp<span class="test small text-info">{{ pregnancy.ga_by_lmp }}wks</span></li>
