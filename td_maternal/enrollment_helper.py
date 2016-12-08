@@ -10,7 +10,7 @@ from edc_pregnancy_utils import Edd, Ga, Lmp, Ultrasound
 
 from td.hiv_result import (
     Enrollment as EnrollmentResult, Recent, Rapid, Current, EnrollmentNoResultError,
-    EnrollmentRapidTestRequiredError)
+    RapidTestRequiredError, ElisaRequiredError)
 
 
 class EnrollmentError(Exception):
@@ -21,6 +21,16 @@ class Messages(OrderedDict):
 
     def as_string(self):
         return ', '.join(self.values())
+
+
+class Obj:
+    """An AntenatalEnrollment model-like object given a data dictionary such as cleaned_data."""
+    def __init__(self, **data):
+        AntenatalEnrollment = django_apps.get_model('td_maternal', 'AntenatalEnrollment')
+        for attr in [field.name for field in AntenatalEnrollment._meta.get_fields()]:
+            setattr(self, attr, None)
+        for k, v in data.items():
+            setattr(self, k, v)
 
 
 class EnrollmentHelper(object):
@@ -39,14 +49,20 @@ class EnrollmentHelper(object):
         self.lmp = None
         self.messages = Messages()
         self.on_art_4wks_in_pregnancy = None
-        self.subject_identifier = obj.subject_identifier
+        try:
+            self.subject_identifier = obj.subject_identifier
+        except AttributeError:
+            self.subject_identifier = obj.get('subject_identifier')
+            obj = Obj(**obj)
 
         # enrollment HIV result
         try:
             self.enrollment_result = self.get_enrollment_result(obj)
         except EnrollmentNoResultError as e:
             self.messages.update(enrollment_result=str(e))
-        except EnrollmentRapidTestRequiredError as e:
+        except RapidTestRequiredError as e:
+            self.messages.update(enrollment_result=str(e))
+        except ElisaRequiredError as e:
             self.messages.update(enrollment_result=str(e))
 
         # check if delivered, and if so, was mother on art for 4 weeks during pregnancy
@@ -74,7 +90,7 @@ class EnrollmentHelper(object):
             self.edd = Edd(lmp=self.lmp, ultrasound=self.ultrasound)
         try:
             if not 16 < self.ga.weeks <= 36:
-                self.messages.update(ga='gestation not 16 to 36wks')
+                self.messages.update(ga='gestation not 16 to 36wks, got {}'.format(self.ga.weeks))
         except TypeError as e:
             # if GA not known or invalid, allow enrollment to continue, but set this flag for future reference.
             self.ga_pending = True

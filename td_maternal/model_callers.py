@@ -7,7 +7,7 @@ from edc_registration.models import RegisteredSubject
 from .models import MaternalLocator, MaternalConsent, AntenatalEnrollment, MaternalOffstudy
 
 
-@register(AntenatalEnrollment, MaternalOffstudy)
+# @register(AntenatalEnrollment, MaternalOffstudy)
 class MaternalModelCaller(ModelCaller):
     call_model = (Call, 'subject_identifier')
     label = 'subjects'

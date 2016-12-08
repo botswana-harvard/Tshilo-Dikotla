@@ -1,7 +1,7 @@
 	<div class="panel-group">
 		<div class="panel panel-warning">
 			{% if selected_appointment %}
-				<div class="panel-heading clearfix"><B>{{ selected_appointment.title }}</B>: {{ selected_appointment.subject_visit.report_datetime|date:"Y-m-d"| capfirst }}<span class="pull-right"><a href="{% url 'subject_dashboard_url' subject_identifier %} role="button" class="btn btn-sm btn-default">appointments</a></span></div>
+				<div class="panel-heading clearfix"><B>{{ selected_appointment.title }}</B>: {{ selected_appointment.subject_visit.report_datetime|date:"Y-m-d"| capfirst }}<span class="pull-right"><a href="{% url dashboard_url_name subject_identifier %} role="button" class="btn btn-sm btn-default">appointments</a></span></div>
 			{% else %}
 				<div class="panel-heading">Appointments</div>
 		     	<div class="panel-body">                              
@@ -15,7 +15,7 @@
 						    <th>Visit Report</th>
 						</thead>
 					    <tbody>
-			    		{% if not appointments%}
+			    		{% if not appointments %}
 			        		<tr><td colspan="8"><i>No appointments scheduled</i></td></tr>
 			    		{% else %}
 			        		{% for appointment in appointments %}
@@ -24,13 +24,13 @@
 						        <td>{{appointment.title}}</td>
 								<td>{{appointment.appt_type | capfirst}}</td>
 								<td>{{appointment.appt_datetime|date:"D d M Y"| capfirst}}</td>
-								<td><a href="{% url 'admin:td_appointment_change' appointment.str_pk %}?next={% url 'subject_dashboard_url' appointment.subject_identifier %}">{{ appointment.appt_status | capfirst }}</a></td>
+								<td><a href="{{ appointment.get_absolute_url }} %}?next={% url dashboard_url_name subject_identifier %}">{{ appointment.appt_status | capfirst }}</a></td>
 						        <td>
 						        	{% if appointment.maternal_visit %}
-						        		<a href="{% url 'admin:td_maternal_maternalvisit_change' appointment.maternal_visit.pk %}?next={% url 'subject_dashboard_url' appointment.subject_identifier %}">{{ appointment.maternal_visit.report_datetime |date:"Y-m-d D"| capfirst }}</a>
-						        		<span class="pull-right"><a href="{% url 'subject_dashboard_url' appointment.str_pk appointment.subject_identifier %}" role="button" class="btn btn-sm btn-default">forms</a></span>
+						        		<a href="{{ appointment.maternal_visit.get_absolute_url }}?next={% url dashboard_url_name subject_identifier %}">{{ appointment.maternal_visit.report_datetime |date:"Y-m-d D"| capfirst }}</a>
+						        		<span class="pull-right"><a href="{% url dashboard_url_name appointment.str_pk subject_identifier %}" role="button" class="btn btn-sm btn-default">forms</a></span>
 						        	{% else %}
-						        		<a href="{% url 'admin:td_maternal_maternalvisit_add' %}?appointment={{appointment.str_pk}}&next={% url 'subject_dashboard_url' appointment.subject_identifier %}&visit_code={{ appointment.visit_code }}">Add Visit</a>
+						        		<a href="{% url add_visit_url_name %}?appointment={{appointment.str_pk}}&next={% url dashboard_url_name subject_identifier %}&visit_code={{ appointment.visit_code }}">Add Visit</a>
 						        	{% endif %}
 						        </td>
 					            </tr>

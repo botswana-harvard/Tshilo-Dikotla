@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 
-from edc_constants.constants import YES, POS, NEG
+from edc_constants.constants import YES, POS, NEG, IND
 
 
 class EnrollmentResultError(Exception):
@@ -11,11 +11,15 @@ class PostEnrollmentResultError(Exception):
     pass
 
 
+class ElisaRequiredError(Exception):
+    pass
+
+
 class EnrollmentNoResultError(Exception):
     pass
 
 
-class EnrollmentRapidTestRequiredError(Exception):
+class RapidTestRequiredError(Exception):
     pass
 
 
@@ -62,7 +66,7 @@ class Enrollment:
                 if self.rapid.result:
                     raise EnrollmentNoResultError('Unable to determine a POS or NEG result. Got {}.'.format(self.result))
                 else:
-                    raise EnrollmentRapidTestRequiredError('Rapid test is required.')
+                    raise RapidTestRequiredError('Rapid test is required.')
 
 
 class Test:
@@ -93,14 +97,17 @@ class Recent(Test):
 
     within_3m is not inclusive."""
     def __init__(self, reference_datetime=None, evidence=None, **kwargs):
+        kwargs.update(tested=evidence)
         super(Recent, self).__init__(**kwargs)
         self.within_3m = None
-        if evidence == YES and reference_datetime:
+        if self.result_date and evidence == YES and reference_datetime:
             try:
                 self.within_3m = self.result_date > (reference_datetime - relativedelta(months=3)).date()
             except TypeError:
-                raise RecentResultError('Invalid dates for within_3m calc.')
-            if self.result == NEG and not self.within_3m:
+                raise RecentResultError(
+                    'Invalid dates for within_3m calc. Got reference_datetime={} and result_date={}'.format(
+                        reference_datetime, self.result_date))
+            if self.result in [NEG, IND] and not self.within_3m:
                 self.result = None
                 self.result_date = None
                 self.within_3m = None
@@ -155,11 +162,13 @@ class PostEnrollment:
                         result=test.result,
                         result_date=test.result_date,
                         tested=YES, evidence=YES)
-                    if recent.result == NEG:
+                    if recent.result in [NEG, IND]:
                         recent_results.append(recent)
-                # sort NEG results reversed by date
+                # sort NEG/IND results reversed by date
                 recent_results.sort(key=lambda test: test.result_date, reverse=True)
                 if recent_results:
                     # select most recent result (not POS)
                     self.result = recent_results[0].result
                     self.result_date = None if not self.result else recent_results[0].result_date
+                    if self.result == IND:
+                        raise ElisaRequiredError('Elisa test is required for indeterminate result.')

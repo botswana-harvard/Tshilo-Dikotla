@@ -3,11 +3,11 @@ from django.test import TestCase
 
 from edc_base.faker import EdcBaseProvider
 from edc_base.utils import get_utcnow
-from edc_constants.constants import POS, YES, NEG, NO, UNK
+from edc_constants.constants import POS, YES, NEG, NO, UNK, IND
 
 from dateutil.relativedelta import relativedelta
 
-from .hiv_result import Recent, Current, Rapid, Enrollment, PostEnrollment, Test
+from .hiv_result import Recent, Current, Rapid, Enrollment, PostEnrollment, Test, ElisaRequiredError
 
 fake = Faker()
 fake.add_provider(EdcBaseProvider)
@@ -224,6 +224,48 @@ class TestEnrollment(TestCase):
 
 
 class TestPostEnrollment(TestCase):
+
+    def test_enrolled_neg_rapid_ind_1m(self):
+        """Asserts raises exception is result is IND."""
+        dt = get_utcnow()
+        result_date = (dt - relativedelta(months=5)).date()
+        rapid_results = (
+            Test(tested=YES, result=IND, result_date=dt - relativedelta(months=1)),
+        )
+        self.assertRaises(
+            ElisaRequiredError,
+            PostEnrollment,
+            reference_datetime=dt,
+            enrollment_result=Test(result=NEG, result_date=result_date, tested=YES),
+            rapid_results=rapid_results)
+
+    def test_enrolled_neg_rapid_ind_3m(self):
+        """Asserts raises exception is result is IND within 3 months."""
+        dt = get_utcnow()
+        result_date = (dt - relativedelta(months=5)).date()
+        rapid_results = (
+            Test(tested=YES, result=IND, result_date=dt - relativedelta(months=3)),
+        )
+        post_enrollment = PostEnrollment(
+            reference_datetime=dt,
+            enrollment_result=Test(result=NEG, result_date=result_date, tested=YES),
+            rapid_results=rapid_results)
+        self.assertEquals(post_enrollment.result, None)
+        self.assertEquals(post_enrollment.result_date, None)
+
+    def test_enrolled_neg_rapid_ind_4m(self):
+        """Asserts returns None for old NEG, IND results."""
+        dt = get_utcnow()
+        result_date = (dt - relativedelta(months=5)).date()
+        rapid_results = (
+            Test(tested=YES, result=IND, result_date=dt - relativedelta(months=4)),
+        )
+        post_enrollment = PostEnrollment(
+            reference_datetime=dt,
+            enrollment_result=Test(result=NEG, result_date=result_date, tested=YES),
+            rapid_results=rapid_results)
+        self.assertEquals(post_enrollment.result, None)
+        self.assertEquals(post_enrollment.result_date, None)
 
     def test_enrolled_neg_still_neg_no_rapid_2m(self):
         dt = get_utcnow()
