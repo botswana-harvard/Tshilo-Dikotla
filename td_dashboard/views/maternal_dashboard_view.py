@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from datetime import datetime
 
 from django.apps import apps as django_apps
 from django.contrib.auth.decorators import login_required
@@ -67,6 +68,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
             maternal_lab_del=maternal_lab_del,
             maternal_locator=maternal_locator,
             enrollment_objects=self.enrollment_objects,
+            reference_datetime=datetime.astimezone(get_utcnow())
         )
         return context
 
