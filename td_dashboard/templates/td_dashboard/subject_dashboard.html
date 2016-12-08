@@ -2,13 +2,17 @@
 
 {% load staticfiles %}
 
-{% block demographics %}
-    {% include "td_dashboard/demographics.html" %}
-{% endblock demographics %}
+{% block top_bar %}
+    {% include "td_dashboard/top_bar.html" %}
+{% endblock top_bar %}
 
 {% block enrollments %}
     {% include "td_dashboard/enrollments.html" %}
 {% endblock enrollments %}
+
+{% block left_side_bar %}
+  {% include "td_dashboard/demographics.html" %}
+{% endblock left_side_bar%}
 
 {% block appointments %}
   	 {% include "td_dashboard/appointments.html" %} 

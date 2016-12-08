@@ -1,25 +1,22 @@
 {% load tshilo_dikotla_extras %}
-    <div class="panel-group">
     	<div class="panel panel-info">
-          <div class="panel-heading clearfix">{{ subject_identifier }}<span class="pull-right"><a href="{% url 'search_url' %}" role="button" class="btn btn-sm btn-primary">Close</a></span></div>
-      <div class="panel-body">
+        <ul class="list-group">
         {% if antenatalenrollment %}
           {% if not antenatalenrollment.is_eligible %}
-            <span class="label label-danger">Not eligible</span> <span class="test small text-danger">{{ antenatalenrollment.reasons_not_eligible|default:"eligibility error!!" }}</span>
+            <li class="list-group-item"><span class="text text-danger small">Not eligible {{ antenatalenrollment.reasons_not_eligible|default:"eligibility error!!" }}</span></li>
           {% endif %}
         {% endif %}
-        <span class="label label-default">Reference date: {% now "Y-m-d" %}</span>
-        <span class="label label-default">Born</span>&nbsp<span class="test small text-info">{{ maternal_consent.dob|date:"Y-m-d" }}</span>
-        <span class="label label-default">Age</span>&nbsp<span class="test small text-info">{{ maternal_consent.dob }}</span>
-        <span class="label label-default">Consented</span>&nbsp<span class="test small text-info">{{ maternal_consent.consent_datetime|date:"Y-m-d" }}</span>
-        <span class="label label-default">HIV status at Enrollment</span>&nbsp<span class="test small text-info">{{ maternal_hiv_status.enrollment_result.result }}</span>
-        <span class="label label-default">HIV status</span>&nbsp<span class="test small text-info">{{ maternal_hiv_status.result }}</span>
-        <span class="label label-default">GA by LMP</span>&nbsp<span class="test small text-info">{{ pregnancy.ga_by_lmp }}wks</span>
-        <span class="label label-default">GA</span>&nbsp<span class="test small text-info">{{ pregnancy.ga.weeks }}wks</span>
-        <span class="label label-default">EDD</span>&nbsp<span class="test small text-info">{{ pregnancy.edd.edd|date:"Y-m-d" }}</span>
-        <span class="label label-default">Planned delivery site</span>&nbsp<span class="test small text-info">{% if maternal_lab_del.delivery_hospital == 'OTHER' %}{{ maternal_lab_del.delivery_hospital_other }}{% else %}{{ maternal_lab_del.delivery_hospital|default:"?" }} {% endif %}</span>
-        <span class="label label-default">Delivery date</span>&nbsp<span class="test small text-info">{{ pregnancy.delivery_date|date:"Y-m-d"|default:"?" }}</span>
-        <span class="label label-default">Randomized</span>&nbsp<span class="test small text-info">{{ maternal_rando.rx|default:"No" }}</span>
-      </div>
+        <li class="list-group-item"><span class="test text-default">Reference date: {% now "Y-m-d" %}</span></li>
+        <li class="list-group-item"><span class="test small text-default">Born</span>&nbsp<span class="test small text-info">{{ maternal_consent.dob|date:"Y-m-d" }}</span></li>
+        <li class="list-group-item"><span class="test small text-default">Age</span>&nbsp<span class="test small text-info">{{ maternal_consent.dob }}</span></li>
+        <li class="list-group-item"><span class="test small text-default">Consented</span>&nbsp<span class="test small text-info">{{ maternal_consent.consent_datetime|date:"Y-m-d" }}</span></li>
+        <li class="list-group-item"><span class="test small text-default">HIV status at Enrollment</span>&nbsp<span class="test small text-info">{{ maternal_hiv_status.enrollment_result.result }}</span></li>
+        <li class="list-group-item"><span class="test small text-default">HIV status</span>&nbsp<span class="test small text-info">{{ maternal_hiv_status.result }}</span></li>
+        <li class="list-group-item"><span class="test small text-default">GA by LMP</span>&nbsp<span class="test small text-info">{{ pregnancy.ga_by_lmp }}wks</span></li>
+        <li class="list-group-item"><span class="test small text-default">GA</span>&nbsp<span class="test small text-info">{{ pregnancy.ga.weeks }}wks</span></li>
+        <li class="list-group-item"><span class="test small text-default">EDD</span>&nbsp<span class="test small text-info">{{ pregnancy.edd.edd|date:"Y-m-d" }}</span></li>
+        <li class="list-group-item"><span class="test small text-default">Planned delivery site</span>&nbsp<span class="test small text-info">{% if maternal_lab_del.delivery_hospital == 'OTHER' %}{{ maternal_lab_del.delivery_hospital_other }}{% else %}{{ maternal_lab_del.delivery_hospital|default:"?" }} {% endif %}</span></li>
+        <li class="list-group-item"><span class="test small text-default">Delivery date</span>&nbsp<span class="test small text-info">{{ pregnancy.delivery_date|date:"Y-m-d"|default:"?" }}</span></li>
+        <li class="list-group-item"><span class="test small text-default">Randomized</span>&nbsp<span class="test small text-info">{{ maternal_rando.rx|default:"No" }}</span></li>
+        </ul>
     </div>
-  </div>
