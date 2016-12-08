@@ -81,7 +81,6 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
 #             'locator': self.locator,
 #             'site_header': admin.site.site_header,
 #         })
-        print(context)
         return context
 
     @property

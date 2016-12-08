@@ -100,7 +100,6 @@ class Recent(Test):
         kwargs.update(tested=evidence)
         super(Recent, self).__init__(**kwargs)
         self.within_3m = None
-        print(reference_datetime, evidence, kwargs)
         if self.result_date and evidence == YES and reference_datetime:
             try:
                 self.within_3m = self.result_date > (reference_datetime - relativedelta(months=3)).date()

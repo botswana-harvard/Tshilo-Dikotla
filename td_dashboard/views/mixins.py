@@ -36,7 +36,6 @@ class DashboardAppointmentMixin:
     def get_context_data(self, **kwargs):
         context = super(DashboardAppointmentMixin, self).get_context_data(**kwargs)
         appointment_pk = self.kwargs.get('appointment_pk')
-        print('appointment', self.subject_identifier)
         try:
             self.selected_appointment = Appointment.objects.get(pk=appointment_pk)
             appointments = []
