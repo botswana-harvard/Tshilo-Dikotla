@@ -12,7 +12,7 @@ from edc_rule_groups.rule_group import RuleGroup
 from td.constants import ONE
 
 from .lab_profiles import cd4_panel, pbmc_vl_panel, pbmc_panel, hiv_elisa_panel
-from .maternal_hiv_status import MaternalHivStatus
+from .maternal_hiv_status import MaternalHivStatus, ElisaRequiredError
 from .models import (
     MaternalUltraSoundInitial, MaternalPostPartumDep, RapidTestResult, MaternalRando, MaternalInterimIdcc)
 
@@ -39,12 +39,14 @@ def func_mother_neg(visit_instance, *args):
 
 def show_elisa_requisition_hiv_status_ind(visit_instance, *args):
     """return True if Mother's Rapid Test Result is Inditerminate"""
-    maternal_hiv_status = MaternalHivStatus(
-        subject_identifier=visit_instance.subject_identifier,
-        reference_datetime=visit_instance.report_datetime)
-    if maternal_hiv_status.result == IND:
-        return True
-    return False
+    show_elisa_requisition = False
+    try:
+        MaternalHivStatus(
+            subject_identifier=visit_instance.subject_identifier,
+            reference_datetime=visit_instance.report_datetime)
+    except ElisaRequiredError:
+        show_elisa_requisition = True
+    return show_elisa_requisition
 
 
 def func_require_cd4(visit_instance, *args):
