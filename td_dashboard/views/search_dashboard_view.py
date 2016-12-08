@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import MultipleObjectsReturned
 from django.core.paginator import Paginator, EmptyPage
+from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, FormView
 
@@ -9,7 +10,7 @@ from edc_base.view_mixins import EdcBaseViewMixin
 
 from td_maternal.models import MaternalEligibility, MaternalConsent
 
-from ..forms import MaternalEligibilityCrispyForm
+from ..forms import SearchForm
 
 
 class QuerysetWrapper:
@@ -44,7 +45,7 @@ class QuerysetWrapper:
 
 
 class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
-    form_class = MaternalEligibilityCrispyForm
+    form_class = SearchForm
     template_name = 'td_dashboard/search_dashboard.html'
     paginate_by = 10
 
@@ -58,18 +59,22 @@ class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
 
     def form_valid(self, form):
         if form.is_valid():
-            subject_identifier = form.cleaned_data['subject_identifier']
+            search_term = form.cleaned_data['search_term']
+            options = (
+                Q(subject_identifier__icontains=search_term) |
+                Q(reference__icontains=search_term) |
+                Q(user_created__iexact=search_term) |
+                Q(user_modified__iexact=search_term)
+            )
             try:
-                qs = [MaternalEligibility.objects.get(
-                    subject_identifier__icontains=subject_identifier)]
+                qs = [MaternalEligibility.objects.get(options)]
             except MaternalEligibility.DoesNotExist:
                 qs = None
                 form.add_error(
-                    'subject_identifier',
-                    'Maternal eligibility not found for {}.'.format(subject_identifier))
+                    'search_term',
+                    'No matching records for \'{}\'.'.format(search_term))
             except MultipleObjectsReturned:
-                qs = MaternalEligibility.objects.filter(
-                    subject_identifier__icontains=subject_identifier).order_by('subject_identifier', '-created')
+                qs = MaternalEligibility.objects.filter(options).order_by('subject_identifier', '-created')
             context = self.get_context_data()
             context.update(
                 form=form,

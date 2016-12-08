@@ -28,6 +28,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
         super(MaternalDashboardView, self).__init__(**kwargs)
         self.request = None
         self.show = None
+        self._antenatal_enrollment = None
         self.maternal_status_helper = None
         self._crfs = []
         self._selected_appointment = None
@@ -80,23 +81,25 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
     @property
     def demographics(self):
         demographics = OrderedDict()
-        enrollment_hiv_status = None
-        result = None
-        if self.latest_visit:
-            maternal_hiv_status = MaternalHivStatus(
-                subject_identifier=self.latest_visit.subject_identifier,
-                reference_datetime=self.latest_visit.report_datetime)
-            enrollment_hiv_status = maternal_hiv_status.enrollment_hiv_status if self.latest_visit else None
-            result = maternal_hiv_status.result if self.latest_visit else None
+        try:
+            maternal_consent = MaternalConsent.objects.get(subject_identifier=self.subject_identifier)
+            demographics.update(
+                maternal_consent=maternal_consent,
+                maternal_hiv_status=maternal_hiv_status,
+            )
+        except MaternalConsent.DoesNotExist:
+            pass
+        maternal_hiv_status = MaternalHivStatus(
+            subject_identifier=self.subject_identifier,
+            reference_datetime=get_utcnow())
         if self.consent:
-            demographics['Name'] = '{} ({})'.format(self.consent.first_name, self.consent.initials),
             demographics['Born'] = self.consent.dob,
             demographics['Age'] = None,
             demographics['Consented'] = self.consent.consent_datetime,
-            demographics['Antenatal enrollment status'] = enrollment_hiv_status,
-            demographics['Enrollment HIV status'] = enrollment_hiv_status,
-            demographics['Current HIV status'] = result,
-            demographics['Pregnant, GA'] = None, #self.gestational_age,
+            demographics['Antenatal enrollment status'] = maternal_hiv_status.enrollment_result,
+            demographics['Enrollment HIV status'] = maternal_hiv_status.enrollment_result,
+            demographics['Current HIV status'] = maternal_hiv_status.result,
+            demographics['Pregnant, GA'] = self.gestational_age,
             demographics['Planned delivery site'] = self.delivery_site,
             demographics['Randomized'] = (self.randomized,)
         return demographics
@@ -113,11 +116,6 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
             else:
                 antenatal_enrollment_status = 'Not filled'
         return antenatal_enrollment_status
-
-    @property
-    def latest_visit(self):
-        return MaternalVisit.objects.filter(
-            subject_identifier=self.subject_identifier).order_by('-report_datetime').first()
 
     @property
     def consent(self):
@@ -191,11 +189,12 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
 
     @property
     def antenatal_enrollment(self):
-        try:
-            antenatal_enrollment = AntenatalEnrollment.objects.get(subject_identifier=self.subject_identifier)
-        except AntenatalEnrollment.DoesNotExist:
-            antenatal_enrollment = None
-        return antenatal_enrollment
+        if not self._antenatal_enrollment:
+            try:
+                self._antenatal_enrollment = AntenatalEnrollment.objects.get(subject_identifier=self.subject_identifier)
+            except AntenatalEnrollment.DoesNotExist:
+                pass
+        return self._antenatal_enrollment
 
     @property
     def randomized(self):

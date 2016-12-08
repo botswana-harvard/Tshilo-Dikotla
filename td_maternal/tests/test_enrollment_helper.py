@@ -14,12 +14,13 @@ from edc_pregnancy_utils import Lmp
 from td.hiv_result import EnrollmentResultError
 from td.models import Appointment
 
-from ..enrollment_helper import EnrollmentHelper
+from ..enrollment_helper import EnrollmentHelper, Obj as ModellikeObj
 from ..models import AntenatalEnrollment
 
 
-class Obj:
+class Obj(ModellikeObj):
     def __init__(self, **kwargs):
+        super(Obj, self).__init__(**kwargs)
         for attr in [field.name for field in AntenatalEnrollment._meta.get_fields()]:
             setattr(self, attr, None)
         for k, v in kwargs.items():

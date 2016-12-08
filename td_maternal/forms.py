@@ -38,10 +38,19 @@ class ModelFormMixin(Many2ManyModelFormMixin):
 
     @property
     def maternal_hiv_status(self):
-        visit = self.cleaned_data.get('maternal_visit')
-        return MaternalHivStatus(
-            subject_identifier=visit.subject_identifier,
-            reference_datetime=visit.report_datetime)
+        try:
+            visit = self.cleaned_data.get('maternal_visit')
+            options = dict(
+                subject_identifier=visit.subject_identifier,
+                reference_datetime=visit.report_datetime)
+        except AttributeError:
+            subject_identifier = self.cleaned_data.get('subject_identifier')
+            report_datetime = self.cleaned_data.get('report_datetime')
+            options = dict(
+                subject_identifier=subject_identifier,
+                reference_datetime=report_datetime)
+        print(options)
+        return MaternalHivStatus(**options)
 
 
 class MaternalVisitForm (VisitFormMixin, forms.ModelForm):
@@ -129,8 +138,10 @@ class AntenatalEnrollmentForm(ModelFormMixin, forms.ModelForm):
     def clean(self):
         cleaned_data = super(AntenatalEnrollmentForm, self).clean()
         self.validate_last_period_date(cleaned_data.get('report_datetime'), cleaned_data.get('last_period_date'))
-        enrollment_helper = EnrollmentHelper(self._meta.model(**cleaned_data), exception_cls=forms.ValidationError)
-        enrollment_helper.raise_validation_error_for_rapidtest()
+        try:
+            enrollment_helper = EnrollmentHelper(cleaned_data, exception_cls=forms.ValidationError)
+        except AttributeError as e:
+            pass
         return cleaned_data
 
     def validate_last_period_date(self, report_datetime, last_period_date):
@@ -151,6 +162,14 @@ class AntenatalEnrollmentTwoForm(ModelFormMixin, forms.ModelForm):
         required=True,
         help_text='This field is read only.',
         widget=forms.TextInput(attrs={'size': 15, 'readonly': True}))
+
+    def clean(self):
+        cleaned_data = super(AntenatalEnrollmentTwoForm, self).clean()
+        try:
+            AntenatalEnrollment.objects.get(subject_identifier=cleaned_data['subject_identifier'])
+        except AntenatalEnrollment.DoesNotExist:
+            raise forms.ValidationError('Complete the AntenatalEnrollment form before proceeding.')
+        return cleaned_data
 
     class Meta:
         model = AntenatalEnrollmentTwo
@@ -707,20 +726,20 @@ class MaternalInterimIdccForm(ModelFormMixin, forms.ModelForm):
 
 class MaternalLabDelForm(ModelFormMixin, forms.ModelForm):
 
+    subject_identifier = forms.CharField(
+        label='Subject Identifier',
+        required=True,
+        help_text='This field is read only.',
+        widget=forms.TextInput(attrs={'size': 15, 'readonly': True}))
+
     def clean(self):
         cleaned_data = super(MaternalLabDelForm, self).clean()
+        try:
+            AntenatalEnrollment.objects.get(subject_identifier=cleaned_data['subject_identifier'])
+        except AntenatalEnrollment.DoesNotExist:
+            raise forms.ValidationError('Complete the AntenatalEnrollment form before proceeding.')
         self.validate_valid_regimen_hiv_pos_only()
         return cleaned_data
-
-    @property
-    def maternal_hiv_status(self):
-        cleaned_data = self.cleaned_data
-        subject_identifier = cleaned_data['subject_identifier']
-        visit = MaternalVisit.objects.filter(
-            subject_identifier=subject_identifier).order_by('-created').first()
-        return MaternalHivStatus(
-            subject_identifier=visit.subject_identifier,
-            reference_datetime=visit.report_datetime)
 
     def validate_valid_regimen_hiv_pos_only(self):
         cleaned_data = self.cleaned_data

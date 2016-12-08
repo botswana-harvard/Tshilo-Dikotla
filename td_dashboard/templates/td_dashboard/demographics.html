@@ -1,7 +1,15 @@
     <div class="panel-group">
     	<div class="panel panel-info">
           <div class="panel-heading clearfix">{{ subject_identifier }}<span class="pull-right"><a href="{% url 'search_url' %}" role="button" class="btn btn-sm btn-primary">Close</a></span></div>
-      <div class="panel-body"> 
+      <div class="panel-body">
+        Reference date: {{ now|date:"Y-m-d" }}
+        Born: {{ maternal_consent.dob }}
+        Age: {{ maternal_consent.dob|age_in_years }}
+        Consented: {{ maternal_consent.consent_datetime|date:"Y-m-d" }}
+        Enrollment HIV status: {{ maternal_hiv_status.enrollment_result }}
+        Current HIV status: {{ maternal_hiv_status.result }}
+        GA: 
+
         {% for key, value in demographics.items %}
         	{% if value.0 %}
     		 	<small><strong>{{ key|title }}: </strong> {{ value.0 }}</small>
