@@ -97,13 +97,17 @@ class Recent(Test):
 
     within_3m is not inclusive."""
     def __init__(self, reference_datetime=None, evidence=None, **kwargs):
+        kwargs.update(tested=evidence)
         super(Recent, self).__init__(**kwargs)
         self.within_3m = None
-        if evidence == YES and reference_datetime:
+        print(reference_datetime, evidence, kwargs)
+        if self.result_date and evidence == YES and reference_datetime:
             try:
                 self.within_3m = self.result_date > (reference_datetime - relativedelta(months=3)).date()
             except TypeError:
-                raise RecentResultError('Invalid dates for within_3m calc.')
+                raise RecentResultError(
+                    'Invalid dates for within_3m calc. Got reference_datetime={} and result_date={}'.format(
+                        reference_datetime, self.result_date))
             if self.result in [NEG, IND] and not self.within_3m:
                 self.result = None
                 self.result_date = None

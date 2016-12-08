@@ -10,7 +10,7 @@ from edc_pregnancy_utils import Edd, Ga, Lmp, Ultrasound
 
 from td.hiv_result import (
     Enrollment as EnrollmentResult, Recent, Rapid, Current, EnrollmentNoResultError,
-    RapidTestRequiredError)
+    RapidTestRequiredError, ElisaRequiredError)
 
 
 class EnrollmentError(Exception):
@@ -62,6 +62,8 @@ class EnrollmentHelper(object):
             self.messages.update(enrollment_result=str(e))
         except RapidTestRequiredError as e:
             self.messages.update(enrollment_result=str(e))
+        except ElisaRequiredError as e:
+            self.messages.update(enrollment_result=str(e))
 
         # check if delivered, and if so, was mother on art for 4 weeks during pregnancy
         try:
@@ -88,7 +90,7 @@ class EnrollmentHelper(object):
             self.edd = Edd(lmp=self.lmp, ultrasound=self.ultrasound)
         try:
             if not 16 < self.ga.weeks <= 36:
-                self.messages.update(ga='gestation not 16 to 36wks')
+                self.messages.update(ga='gestation not 16 to 36wks, got {}'.format(self.ga.weeks))
         except TypeError as e:
             # if GA not known or invalid, allow enrollment to continue, but set this flag for future reference.
             self.ga_pending = True
