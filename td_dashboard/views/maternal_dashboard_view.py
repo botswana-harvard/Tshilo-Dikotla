@@ -1,5 +1,4 @@
 from collections import OrderedDict
-from datetime import datetime
 
 from django.apps import apps as django_apps
 from django.contrib.auth.decorators import login_required
@@ -37,22 +36,22 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
         try:
             maternal_rando = MaternalRando.objects.get(maternal_visit__subject_identifier=self.subject_identifier)
         except MaternalRando.DoesNotExist:
-            maternal_rando = None
+            maternal_rando = MaternalRando()
         try:
             maternal_consent = MaternalConsent.objects.get(subject_identifier=self.subject_identifier)
         except MaternalConsent.DoesNotExist:
-            maternal_consent = None
+            maternal_consent = MaternalConsent()
         except MultipleObjectsReturned:
             maternal_consent = MaternalConsent.objects.filter(
                 subject_identifier=self.subject_identifier).order_by('-version').first()
         try:
             maternal_lab_del = MaternalLabDel.objects.get(subject_identifier=self.subject_identifier)
         except MaternalLabDel.DoesNotExist:
-            maternal_lab_del = None
+            maternal_lab_del = MaternalLabDel()
         try:
             maternal_locator = MaternalLocator.objects.get(subject_identifier=self.subject_identifier)
         except MaternalLocator.DoesNotExist:
-            maternal_locator = None
+            maternal_locator = MaternalLocator()
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=self.subject_identifier,
             reference_datetime=reference_datetime)

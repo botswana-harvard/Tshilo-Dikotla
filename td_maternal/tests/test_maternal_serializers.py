@@ -30,7 +30,6 @@ class TestMaternalSerializers(AntenatalVisitsMotherMixin, NegMotherMixin, TestCa
         call = Call.objects.get(subject_identifier=self.subject_identifier)
         log = Log.objects.get(call=call)
         registered_subject = RegisteredSubject.objects.get(subject_identifier=self.subject_identifier)
-        print(self.subject_identifier, '&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
 #         subjectidentifier = SubjectIdentifier.objects.get(identifier=self.subject_identifier)
         outgoing_transactions = OutgoingTransaction.objects.all()
         self.assertGreater(outgoing_transactions.count(), 0)

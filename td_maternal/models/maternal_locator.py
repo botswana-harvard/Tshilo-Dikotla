@@ -54,9 +54,9 @@ class MaternalLocator(LocatorModelMixin, RequiresConsentMixin, UrlMixin, BaseUui
         blank=True,
         null=True)
 
-    def save(self, *args, **kwargs):
-        self.subject_identifier = self.appointment.subject_identifier
-        super(MaternalLocator, self).save(*args, **kwargs)
+#     def save(self, *args, **kwargs):
+#         self.subject_identifier = self.appointment.subject_identifier
+#         super(MaternalLocator, self).save(*args, **kwargs)
 
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
