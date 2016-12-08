@@ -42,8 +42,7 @@ class TestMaternalObstericalHistoryForm(AntenatalVisitsMotherMixin, PosMotherMix
         self.options.update(
             prev_pregnancies=3,
             lost_before_24wks=2,
-            lost_after_24wks=2,
-            ga_by_ultrasound_wks=20)
+            lost_after_24wks=2)
         self.maternal_ultrasound.ga_confirmed = 20
         self.maternal_ultrasound.save()
         mob_form = MaternalObstericalHistoryForm(data=self.options)
