@@ -1,5 +1,8 @@
 from django.test.testcases import TestCase
+from django.utils import timezone
 from datetime import timedelta
+
+from dateutil.relativedelta import relativedelta
 
 from edc_base.utils import get_utcnow
 
@@ -27,7 +30,7 @@ class TestMaternalObstericalHistoryForm(AntenatalVisitsMotherMixin, PosMotherMix
 
     def test_maternal_obsterical_less_than_24_wks_ga_prev_preg_1(self):
         self.options.update(lost_after_24wks=1)
-        self.maternal_ultrasound.ga_confirmed = 22
+        self.maternal_ultrasound.ga_confirmed = 20
         self.maternal_ultrasound.save()
         mob_form = MaternalObstericalHistoryForm(data=self.options)
         self.assertIn(
@@ -40,7 +43,7 @@ class TestMaternalObstericalHistoryForm(AntenatalVisitsMotherMixin, PosMotherMix
             prev_pregnancies=3,
             lost_before_24wks=2,
             lost_after_24wks=2)
-        self.maternal_ultrasound.ga_confirmed = 22
+        self.maternal_ultrasound.ga_confirmed = 20
         self.maternal_ultrasound.save()
         mob_form = MaternalObstericalHistoryForm(data=self.options)
         self.assertIn(
@@ -52,9 +55,8 @@ class TestMaternalObstericalHistoryForm(AntenatalVisitsMotherMixin, PosMotherMix
             prev_pregnancies=3,
             lost_before_24wks=2,
             lost_after_24wks=2)
-        self.maternal_ultrasound.ga_confirmed = 27
-        self.maternal_ultrasound.save()
-        self.maternal_ultrasound.est_edd_ultrasound = (get_utcnow() + timedelta(days=90)).date()
+        self.maternal_ultrasound.ga_by_ultrasound_wks = 27
+        self.maternal_ultrasound.est_edd_ultrasound = timezone.now() + relativedelta(weeks=13)
         self.maternal_ultrasound.save()
         mob_form = MaternalObstericalHistoryForm(data=self.options)
         self.assertIn(
@@ -71,8 +73,7 @@ class TestMaternalObstericalHistoryForm(AntenatalVisitsMotherMixin, PosMotherMix
             children_died_b4_5yrs=0,
             children_deliv_before_37wks=2,
             children_deliv_aftr_37wks=3)
-        self.maternal_ultrasound.ga_confirmed = 22
-        self.maternal_ultrasound.est_edd_ultrasound = (get_utcnow() + timedelta(days=90)).date()
+        self.maternal_ultrasound.est_edd_ultrasound = timezone.now() + relativedelta(weeks=20)
         self.maternal_ultrasound.save()
         mob_form = MaternalObstericalHistoryForm(data=self.options)
         self.assertIn(
