@@ -13,7 +13,6 @@ class MaternalOffstudyAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     form = MaternalOffstudyForm
 
     fields = (
-        'maternal_visit',
         'report_datetime',
         'offstudy_date',
         'reason',

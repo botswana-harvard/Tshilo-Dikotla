@@ -13,6 +13,7 @@ class MaternalContraceptionAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     form = MaternalContraceptionForm
 
     fields = ('maternal_visit',
+              'report_datetime',
               'more_children',
               'next_child',
               'contraceptive_partner',

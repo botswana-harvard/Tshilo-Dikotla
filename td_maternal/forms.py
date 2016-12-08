@@ -139,8 +139,8 @@ class AntenatalEnrollmentForm(ModelFormMixin, forms.ModelForm):
         cleaned_data = super(AntenatalEnrollmentForm, self).clean()
         self.validate_last_period_date(cleaned_data.get('report_datetime'), cleaned_data.get('last_period_date'))
         try:
-            enrollment_helper = EnrollmentHelper(cleaned_data, exception_cls=forms.ValidationError)
-        except AttributeError as e:
+            EnrollmentHelper(cleaned_data, exception_cls=forms.ValidationError)
+        except AttributeError:
             pass
         return cleaned_data
 

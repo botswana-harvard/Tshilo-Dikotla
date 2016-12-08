@@ -68,7 +68,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
             maternal_lab_del=maternal_lab_del,
             maternal_locator=maternal_locator,
             enrollment_objects=self.enrollment_objects,
-            reference_datetime=datetime.astimezone(get_utcnow())
+            reference_datetime=get_utcnow(),
         )
         return context
 

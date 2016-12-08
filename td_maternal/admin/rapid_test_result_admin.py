@@ -9,6 +9,7 @@ from .base_maternal_model_admin import BaseMaternalModelAdmin
 @admin.register(RapidTestResult, site=td_maternal_admin)
 class RapidTestResultAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     fields = ('maternal_visit',
+              'report_datetime',
               'rapid_test_done',
               'result_date',
               'result',
