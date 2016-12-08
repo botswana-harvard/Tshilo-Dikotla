@@ -23,7 +23,7 @@
 								{% endif %}
 						    <td>
 								<span class="pull-right">
-								<a role="button" class="btn btn-sm {% if crf.instance %}btn-success{% else %}btn-danger{% endif %}" href="{{ crf.url }}?visit_code={{ crf.visit_code }}&appointment_pk={{crf.appointment.str_pk}}&subject_identifier={{subject_identifier}}&next={{ dashboard_url }}">{% if crf.instance %}Edit{% else %}Add{% endif %}</a>
+								<a role="button" class="btn btn-sm {% if crf.instance %}btn-success{% else %}btn-danger{% endif %}" href="{{ crf.url }}?visit_code={{ crf.visit_code }}&appointment_pk={{crf.appointment.str_pk}}&subject_identifier={{subject_identifier}}&next={{ dashboard_url }}&{{ crf.visit_attr_name }}={{ selected_appointment.visit.pk }}">{% if crf.instance %}<span class="glyphicon glyphicon-pencil"></span>Edit{% else %}<span class="glyphicon glyphicon-plus"></span> Add{% endif %}</a>
 						        <a href="#" role="button" class="btn btn-sm btn-default">View</a>
 						        <a href="#" role="button" class="btn btn-sm btn-default">Audit</a>
 						       	</span>
