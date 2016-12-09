@@ -10,8 +10,8 @@ from edc_identifier.models import IdentifierModel
 
 from td.constants import INFANT
 from td_list.models import DeliveryComplications
-from td_maternal.enrollment_helper import EnrollmentHelper
 
+from ..enrollment_helper import EnrollmentHelper
 from ..forms import MaternalLabDelForm
 
 from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
@@ -20,6 +20,7 @@ from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
+        super(TestMaternalLabDel, self).setUp()
 
         complications = DeliveryComplications.objects.create(
             hostname_created="django", name="None",

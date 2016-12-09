@@ -74,7 +74,9 @@ class EnrollmentHelper(object):
             if self.on_art_4wks_in_pregnancy == NO:
                 self.messages.update(
                     on_art_4wks_in_pregnancy='Mother was not on ART for at least 4 weeks during pregnancy')
-        except AttributeError:
+        except AttributeError as e:
+            if 'valid_regiment_duration' not in str(e):
+                raise AttributeError(str(e))
             self.on_art_4wks_in_pregnancy = None
 
         # lmp, ga and edd. Only ga for eligibility
@@ -180,7 +182,7 @@ class EnrollmentHelper(object):
         if not self._delivery:
             MaternalLabDel = django_apps.get_model('td_maternal', 'MaternalLabDel')
             try:
-                self.delivery = MaternalLabDel.objects.get(
+                self._delivery = MaternalLabDel.objects.get(
                     subject_identifier=self.subject_identifier)
             except MaternalLabDel.DoesNotExist:
                 self._delivery = None

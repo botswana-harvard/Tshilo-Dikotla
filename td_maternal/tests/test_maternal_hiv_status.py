@@ -91,7 +91,10 @@ class TestMaternalHivStatusNeg(DeliverMotherMixin, AntenatalVisitsMotherMixin, A
             reference_datetime=maternal_visit.report_datetime)
         self.assertEqual(maternal_hiv_status.result, NEG)
         self.add_maternal_visits('2020M', '2060M')
-        mommy.make_recipe('td_maternal.rapidtestresult', maternal_visit=maternal_visit, result=POS)
+        mommy.make_recipe(
+            'td_maternal.rapidtestresult',
+            maternal_visit=maternal_visit,
+            result=POS)
         maternal_visit = self.get_maternal_visit('2060M')
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=self.subject_identifier,
