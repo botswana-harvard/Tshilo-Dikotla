@@ -39,14 +39,13 @@ requisition_followup = (
 
 # crfs
 enrollment_crfs = (
-    Crf(show_order=10, model='td_maternal.maternallocator'),
-    Crf(show_order=20, model='td_maternal.maternalultrasoundinitial'),
-    Crf(show_order=30, model='td_maternal.maternalobstericalhistory'),
-    Crf(show_order=40, model='td_maternal.maternalmedicalhistory'),
-    Crf(show_order=50, model='td_maternal.maternaldemographics'),
-    Crf(show_order=60, model='td_maternal.maternallifetimearvhistory'),
-    Crf(show_order=70, model='td_maternal.maternalarvpreg'),
-    Crf(show_order=80, model='td_maternal.maternalclinicalmeasurementsone'),
+    Crf(show_order=10, model='td_maternal.maternalultrasoundinitial'),
+    Crf(show_order=20, model='td_maternal.maternalobstericalhistory'),
+    Crf(show_order=30, model='td_maternal.maternalmedicalhistory'),
+    Crf(show_order=40, model='td_maternal.maternaldemographics'),
+    Crf(show_order=50, model='td_maternal.maternallifetimearvhistory'),
+    Crf(show_order=60, model='td_maternal.maternalarvpreg'),
+    Crf(show_order=70, model='td_maternal.maternalclinicalmeasurementsone'),
 )
 
 antenatal1_crfs = (
