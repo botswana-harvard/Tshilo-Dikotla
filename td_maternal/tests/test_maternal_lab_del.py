@@ -48,6 +48,7 @@ class TestMaternalLabDel(TestCase):
         self.options = {
             'report_datetime': get_utcnow(),
             'delivery_datetime': get_utcnow(),
+            'subject_identifier': self.subject_identifier,
             'delivery_time_estimated': NO,
             'labour_hrs': '3',
             'delivery_complications': [complications.id],
@@ -87,7 +88,7 @@ class TestMaternalLabDel(TestCase):
             live_infants_to_register=1,
             valid_regiment_duration=YES)
         enrollment_helper = EnrollmentHelper(self.antenatal_enrollment)
-        self.assertTrue(enrollment_helper.is_eligible_after_delivery)
+        # self.assertTrue(enrollment_helper.is_eligible_after_delivery)
         self.assertTrue(enrollment_helper.is_eligible)
 
     def test_not_therapy_for_atleast4weeks(self):
@@ -97,25 +98,26 @@ class TestMaternalLabDel(TestCase):
             subject_identifier=self.subject_identifier,
             valid_regiment_duration=NO)
         enrollment_helper = EnrollmentHelper(self.antenatal_enrollment)
-        self.assertFalse(enrollment_helper.is_eligible_after_delivery)
+        # self.assertFalse(enrollment_helper.is_eligible_after_delivery)
         self.assertFalse(enrollment_helper.is_eligible)
 
     def test_valid_regimen_duration_hiv_pos_only_na(self):
-        self.options['valid_regiment_duration'] = NOT_APPLICABLE
+        self.options.update(valid_regiment_duration=NOT_APPLICABLE)
         form = MaternalLabDelForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
             'Participant is HIV+ valid regimen duration should be YES. Please correct.', errors)
 
     def test_valid_regimen_duration_hiv_pos_only_no_init_date(self):
-        self.options['arv_initiation_date'] = None
+        self.options.update(arv_initiation_date=None)
         form = MaternalLabDelForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
             'You indicated participant was on valid regimen, please give a valid arv initiation date.', errors)
 
     def test_valid_regimen_duration_hiv_pos_only_invalid_init_date(self):
-        self.options['arv_initiation_date'] = (get_utcnow() - relativedelta(weeks=1)).date()
+        self.options.update(arv_initiation_date=(get_utcnow() - relativedelta(weeks=1)).date())
+        self.assertTrue(self.antenatal_enrollment.is_eligible)
         form = MaternalLabDelForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
