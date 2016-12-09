@@ -7,13 +7,28 @@
           {% endif %}
         {% endif %}
         {% for infant in infants %}
-            <li class="list-group-item"><a role="button" class="btn btn-sm btn-default" href="{% url 'infant_dashboard_url' subject_identifier=infant }}?subject_identifier={{ infant }}"><i class="fa fa-smile-o" aria-hidden="true"></i> {{ infant }}</a></li>
+            <li class="list-group-item list-group-item-success"><a role="button" class="btn btn-sm btn-default" href="{% url 'infant_dashboard_url' subject_identifier=infant }}?subject_identifier={{ infant }}"><i class="fa fa-smile-o" aria-hidden="true"></i> {{ infant }}</a></li>
         {% endfor %}
         <li class="list-group-item"><a role="button" class="btn btn-sm {% if maternal_locator.pk %}btn-default{% else %}btn-danger{% endif %}" href="{{ maternal_locator.get_absolute_url }}?subject_identifier={{ subject_identifier }}&next={{ subject_dashboard_url_name }},subject_identifier"><i class="fa fa-pencil" aria-hidden="true"></i> <i class="fa fa-address-card" aria-hidden="true"></i> Maternal Locator</a></li>
         <li class="list-group-item"><span class="test text-default"><i class="fa fa-female" aria-hidden="true"></i>  as of {% now "Y-m-d" %}</span></li>
+        {% if maternal_offstudy %}
+            <li class="list-group-item list-group-item-danger"><i class="fa fa-ban" aria-hidden="true"></i> <span class="test small text-default">Offstudy as of</span>&nbsp<span class="test small text-default">{{ maternal_offstudy.offstudy_datetime|date:"Y-m-d"}}</span></li>
+        {% endif %}
+        {% if not antenatalenrollment.ga_pending %}
+            <li class="list-group-item list-group-item-warning"><i class="fa fa-hourglass-2" aria-hidden="true"></i> <span class="test small text-default">Pending Ultrasound</span></li>
+        {% endif %}
+        <li class="list-group-item"><span class="test small text-default">Eligible</span>&nbsp<span class="test small text-info">{{ antenatal_enrollment.is_eligible|yesno|title }}</span></li>
         <li class="list-group-item"><span class="test small text-default">HIV status</span>&nbsp<span class="test small text-info">{{ maternal_hiv_status.result }}</span></li>
-        <li class="list-group-item"><span class="test small text-default">Randomized</span>&nbsp<span class="test small text-info">{{ maternal_rando.rx|default:"No" }}</span></li>
-        <li class="list-group-item"><span class="test small text-default">Delivered</span>&nbsp<span class="test small text-info">{{ pregnancy.delivery_datetime|date:"Y-m-d"|default:"?" }}</span></li>
+        {% if maternal_rando.rx %}
+            <li class="list-group-item"><span class="test small text-default">Randomized</span></li>
+        {% else %}
+            <li class="list-group-item list-group-item-warning"><i class="fa fa-hourglass-2" aria-hidden="true"></i> <span class="test small text-default">Not yet randomized</span></li>
+        {% endif %}
+        {% if pregnancy.delivery_datetime %}
+            <li class="list-group-item"><span class="test small text-default">Delivered on {{ pregnancy.delivery_datetime|date:"Y-m-d" }}</span></li>
+        {% else %}
+            <li class="list-group-item list-group-item-warning"><i class="fa fa-hourglass-2" aria-hidden="true"></i> <span class="test small text-default">Not yet delivered</span></li>
+        {% endif %}
         <li class="list-group-item"><span class="test small text-default">Born</span>&nbsp<span class="test small text-info">{{ maternal_consent.dob|date:"Y-m-d" }}</span></li>
         <li class="list-group-item"><span class="test small text-default">Age</span>&nbsp<span class="test small text-info">{% age_in_years maternal_consent.dob %}</span></li>
         <li class="list-group-item"><span class="test small text-default">Consented</span>&nbsp<span class="test small text-info">{{ maternal_consent.consent_datetime|date:"Y-m-d" }}</span></li>

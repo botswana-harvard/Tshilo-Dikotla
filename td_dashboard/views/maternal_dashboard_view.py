@@ -16,7 +16,7 @@ from td_infant.models.infant_birth import InfantBirth
 from td_maternal.maternal_hiv_status import MaternalHivStatus
 from td_maternal.models import (
     AntenatalEnrollment, MaternalConsent, MaternalLabDel, MaternalLocator,
-    MaternalRando, MaternalVisit)
+    MaternalRando, MaternalVisit, MaternalOffstudy)
 from td_maternal.pregnancy import Pregnancy
 
 
@@ -33,6 +33,11 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(MaternalDashboardView, self).get_context_data(**kwargs)
         reference_datetime = get_utcnow()
+        try:
+            antenatal_enrollment = AntenatalEnrollment.objects.get(
+                subject_identifier=self.subject_identifier)
+        except AntenatalEnrollment.DoesNotExist:
+            antenatal_enrollment = AntenatalEnrollment()
         try:
             maternal_rando = MaternalRando.objects.get(maternal_visit__subject_identifier=self.subject_identifier)
         except MaternalRando.DoesNotExist:
@@ -54,6 +59,10 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
             maternal_locator = MaternalLocator.objects.get(subject_identifier=self.subject_identifier)
         except MaternalLocator.DoesNotExist:
             maternal_locator = MaternalLocator()
+        try:
+            maternal_offstudy = MaternalOffstudy.objects.get(subject_identifier=self.subject_identifier)
+        except MaternalOffstudy.DoesNotExist:
+            maternal_offstudy = None
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=self.subject_identifier,
             reference_datetime=reference_datetime)
@@ -64,7 +73,9 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
             visit_url=MaternalVisit().get_absolute_url(),
             maternal_rando=maternal_rando,
             infants=infants,
+            antenatal_enrollment=antenatal_enrollment,
             maternal_consent=maternal_consent,
+            maternal_offstudy=maternal_offstudy,
             maternal_hiv_status=maternal_hiv_status,
             pregnancy=pregnancy,
             maternal_lab_del=maternal_lab_del,
