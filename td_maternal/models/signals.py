@@ -80,8 +80,7 @@ def maternal_lab_del_on_post_save(sender, instance, raw, created, using, **kwarg
     if not raw:
         try:
             antenatal_enrollment = AntenatalEnrollment.objects.get(
-                subject_identifier=instance.maternal_visit.subject_identifier,
-                pending_ultrasound=True)
+                subject_identifier=instance.subject_identifier)
             antenatal_enrollment.pending_ultrasound = False
             antenatal_enrollment.save()
         except AntenatalEnrollment.DoesNotExist:
