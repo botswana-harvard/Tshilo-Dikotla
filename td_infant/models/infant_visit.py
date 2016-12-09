@@ -15,12 +15,6 @@ from td.models import Appointment
 from .infant_birth import InfantBirth
 
 
-class InfantVisitManager(VisitModelManager, models.Manager):
-
-    def get_by_natural_key(self, subject_identifier, visit_code):
-        return self.get(subject_identifier=subject_identifier, visit_code=visit_code)
-
-
 class InfantVisit(
         VisitModelMixin, CreatesMetadataModelMixin, OffstudyMixin,
         CaretakerFieldsMixin, UrlMixin, BaseUuidModel):
@@ -29,7 +23,7 @@ class InfantVisit(
 
     appointment = models.OneToOneField(Appointment, on_delete=PROTECT)
 
-    objects = InfantVisitManager()
+    objects = VisitModelManager()
 
     history = HistoricalRecords()
 
