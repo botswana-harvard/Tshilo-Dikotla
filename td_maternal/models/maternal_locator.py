@@ -3,20 +3,21 @@ from django.db import models
 
 from django_crypto_fields.fields import EncryptedCharField
 from edc_base.model.fields import OtherCharField
+from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_base.model.validators import CellNumber, TelephoneNumber
+from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO
 from edc_locator.model_mixins import LocatorModelMixin
-from td.models import Appointment
 
 from .maternal_crf_model import MaternalCrfModel
 
 
-class MaternalLocator(LocatorModelMixin, MaternalCrfModel):
+class MaternalLocator(LocatorModelMixin, RequiresConsentMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user to capture locator information and
     the details of the infant caretaker. """
 
-    appointment = models.ForeignKey(Appointment, null=True)
+    ADMIN_SITE_NAME = 'td_maternal_admin'
 
     care_clinic = OtherCharField(
         verbose_name="Health clinic where your infant will receive their routine care ",
@@ -53,11 +54,12 @@ class MaternalLocator(LocatorModelMixin, MaternalCrfModel):
         blank=True,
         null=True)
 
-    def save(self, *args, **kwargs):
-        self.subject_identifier = self.appointment.subject_identifier
-        super(MaternalLocator, self).save(*args, **kwargs)
+#     def save(self, *args, **kwargs):
+#         self.subject_identifier = self.appointment.subject_identifier
+#         super(MaternalLocator, self).save(*args, **kwargs)
 
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = 'Maternal Locator'
         verbose_name_plural = 'Maternal Locator'
+        consent_model = 'td_maternal.maternalconsent'

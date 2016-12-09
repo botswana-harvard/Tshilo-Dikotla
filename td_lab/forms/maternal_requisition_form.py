@@ -25,7 +25,6 @@ class MaternalRequisitionForm(RequisitionFormMixin):
 
     def clean(self):
         cleaned_data = super(MaternalRequisitionForm, self).clean()
-        print(cleaned_data, "cleaned_data, cleaned_data, cleaned_data, cleaned_data")
         if cleaned_data.get('drawn_datetime'):
             if cleaned_data.get('drawn_datetime').date() < cleaned_data.get('requisition_datetime').date():
                 raise forms.ValidationError(

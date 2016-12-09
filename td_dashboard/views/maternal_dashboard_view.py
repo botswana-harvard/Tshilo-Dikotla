@@ -24,7 +24,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
 
     dashboard_url_name = 'subject_dashboard_url'
     add_visit_url_name = MaternalVisit().admin_url_name
-    template_name = 'td_dashboard/maternal/subject_dashboard.html'
+    template_name = 'td_dashboard/subject_dashboard.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -36,22 +36,22 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
         try:
             maternal_rando = MaternalRando.objects.get(maternal_visit__subject_identifier=self.subject_identifier)
         except MaternalRando.DoesNotExist:
-            maternal_rando = None
+            maternal_rando = MaternalRando()
         try:
             maternal_consent = MaternalConsent.objects.get(subject_identifier=self.subject_identifier)
         except MaternalConsent.DoesNotExist:
-            maternal_consent = None
+            maternal_consent = MaternalConsent()
         except MultipleObjectsReturned:
             maternal_consent = MaternalConsent.objects.filter(
                 subject_identifier=self.subject_identifier).order_by('-version').first()
         try:
             maternal_lab_del = MaternalLabDel.objects.get(subject_identifier=self.subject_identifier)
         except MaternalLabDel.DoesNotExist:
-            maternal_lab_del = None
+            maternal_lab_del = MaternalLabDel()
         try:
             maternal_locator = MaternalLocator.objects.get(subject_identifier=self.subject_identifier)
         except MaternalLocator.DoesNotExist:
-            maternal_locator = None
+            maternal_locator = MaternalLocator()
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=self.subject_identifier,
             reference_datetime=reference_datetime)
@@ -67,6 +67,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
             maternal_lab_del=maternal_lab_del,
             maternal_locator=maternal_locator,
             enrollment_objects=self.enrollment_objects,
+            reference_datetime=get_utcnow(),
         )
         return context
 

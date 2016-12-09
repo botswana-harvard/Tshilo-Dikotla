@@ -23,8 +23,14 @@ class MaternalVisitAdmin(VisitModelAdminMixin, BaseMaternalModelAdmin, admin.Mod
     def get_fields(self, request, obj=None):
         fields = admin.ModelAdmin.get_fields(self, request, obj=obj)
         if fields:
-            fields.remove('information_provider')
-            fields.remove('information_provider_other')
+            try:
+                fields.remove(fields.index('information_provider'))
+            except ValueError:
+                pass
+            try:
+                fields.remove(fields.index('information_provider_other'))
+            except ValueError:
+                pass
         return fields
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):

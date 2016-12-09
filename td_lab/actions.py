@@ -18,8 +18,5 @@ create_order.short_description = "Create order from selected aliquots"
 def reject_aliquot_label(modeladmin, request, query_set):
     for aliquot in query_set:
         aliquot.is_rejected = True
-        try:
-            aliquot.save()
-        except Exception:
-            print('Label could not be marked as rejected {}'.format(aliquot.subject_identifier))
+        aliquot.save()
 reject_aliquot_label.short_description = "Mark label as rejected"

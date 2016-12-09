@@ -1,4 +1,5 @@
 import os
+import sys
 
 from unipath import Path
 
@@ -33,7 +34,7 @@ try:
 except TypeError:
     PRODUCTION_POSTGRES = None
     PRODUCTION_SECRET_KEY = None
-    print('Path to production database credentials does not exist')
+    sys.stdout.write('Path to production database credentials does not exist!')
 
 TRAVIS_POSTGRES = {
     'default': {

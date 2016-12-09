@@ -49,7 +49,6 @@ class ModelFormMixin(Many2ManyModelFormMixin):
             options = dict(
                 subject_identifier=subject_identifier,
                 reference_datetime=report_datetime)
-        print(options)
         return MaternalHivStatus(**options)
 
 
@@ -122,6 +121,12 @@ class MaternalDeathReportForm(DeathReportFormMixin, ModelFormMixin, forms.ModelF
 
 class MaternalLocatorForm(LocatorFormMixin, forms.ModelForm):
 
+    subject_identifier = forms.CharField(
+        label='Subject Identifier',
+        required=True,
+        help_text='This field is read only.',
+        widget=forms.TextInput(attrs={'size': 15, 'readonly': True}))
+
     class Meta:
         model = MaternalLocator
         fields = '__all__'
@@ -139,8 +144,8 @@ class AntenatalEnrollmentForm(ModelFormMixin, forms.ModelForm):
         cleaned_data = super(AntenatalEnrollmentForm, self).clean()
         self.validate_last_period_date(cleaned_data.get('report_datetime'), cleaned_data.get('last_period_date'))
         try:
-            enrollment_helper = EnrollmentHelper(cleaned_data, exception_cls=forms.ValidationError)
-        except AttributeError as e:
+            EnrollmentHelper(cleaned_data, exception_cls=forms.ValidationError)
+        except AttributeError:
             pass
         return cleaned_data
 
@@ -471,7 +476,6 @@ class MaternalConsentForm(ConsentFormMixin, forms.ModelForm):
             identity = cleaned_data.get('identity')
             consent_v1 = MaternalConsent.objects.get(identity=identity, version=1)
             consent_age = relativedelta(consent_v1.consent_datetime.date(), consent_v1.dob).years
-            print(consent_age, "consent_age, consent_age, consent_age")
         except MaternalConsent.DoesNotExist:
             pass
 #             consent_age = relativedelta(
@@ -1316,9 +1320,10 @@ class MaternalUltraSoundInitialForm(ModelFormMixin, forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalUltraSoundInitialForm, self).clean()
-        antenatal_enrollment = AntenatalEnrollment.objects.get()
+        antenatal_enrollment = AntenatalEnrollment.objects.get(
+            subject_identifier=cleaned_data.get('maternal_visit').subject_identifier)
         lmp = Lmp(
-            lmp=antenatal_enrollment.ga_by_lmp,
+            lmp=antenatal_enrollment.last_period_date,
             reference_date=cleaned_data.get('report_datetime'))
         ultrasound = Ultrasound(
             ultrasound_date=cleaned_data.get('report_datetime'),

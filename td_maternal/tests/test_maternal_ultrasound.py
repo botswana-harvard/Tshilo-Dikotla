@@ -91,7 +91,6 @@ class TestMaternalUltrasound(AddVisitMotherMixin, PosMotherMixin, TestCase):
 #         antenatal_enrollment.last_period_date = (timezone.now() - relativedelta(weeks=25)).date()
 #         antenatal_enrollment.save()
 #         antenatal_enrollment = AntenatalEnrollment.objects.get(subject_identifier=self.subject_identifier)
-#         print(antenatal_enrollment.edd_by_lmp)
 #         maternal_ultrasound = mommy.make_recipe(
 #             'td_maternal.maternalultrasoundinitial',
 #             maternal_visit=maternal_visit,

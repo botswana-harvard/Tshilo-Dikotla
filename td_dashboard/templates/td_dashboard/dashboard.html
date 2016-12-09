@@ -5,16 +5,18 @@
 <div class="container">
 
   <div class="col-md-12">
-    {% block demographics%}{% endblock demographics%}
+    {% block top_bar%}{% endblock top_bar%}
+  </div>
+
+  <div class="col-md-3">
+    {% block left_side_bar %}{% endblock left_side_bar%}
   </div>
 
   {% if locator %}
-    <div class="col-md-9">
+    <div class="col-md-7">
   {% else %}
-    <div class="col-md-12">
+    <div class="col-md-9">
   {% endif %}
-    {% block enrollments %}
-  	{% endblock enrollments %}
   
   	{% block appointments %}
   	{% endblock appointments %}

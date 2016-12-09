@@ -38,7 +38,8 @@ class MaternalArvPostAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
     form = MaternalArvPostForm
 
     fields = (
-        "maternal_visit",
+        'maternal_visit',
+        'report_datetime',
         "on_arv_since",
         "on_arv_reason",
         "on_arv_reason_other",

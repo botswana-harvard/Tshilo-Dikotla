@@ -5,7 +5,6 @@ from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel, HistoricalRecords, UrlMixin
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import YES_NO, YES_NO_NA
-from edc_constants.constants import NOT_APPLICABLE
 from edc_pregnancy_utils.model_mixins import LabourAndDeliveryModelMixin
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
@@ -172,69 +171,6 @@ class MaternalLabDelMed(MaternalCrfModel):
         app_label = 'td_maternal'
         verbose_name = "Delivery: Medical"
         verbose_name_plural = "Delivery: Medical"
-
-
-class MaternalHivInterimHx(MaternalCrfModel):
-
-    """ Laboratory and other clinical information collected during labor and delivery.
-    for HIV +ve mothers ONLY"""
-
-    has_cd4 = models.CharField(
-        verbose_name=("During this pregnancy did the mother have at least one CD4 count"
-                      " performed (outside the study)? "),
-        max_length=3,
-        choices=YES_NO)
-
-    cd4_date = models.DateField(
-        verbose_name="Date of most recent CD4 test? ",
-        blank=True,
-        null=True)
-
-    cd4_result = models.CharField(
-        verbose_name="Result of most recent CD4 test",
-        max_length=35,
-        blank=True,
-        null=True)
-
-    has_vl = models.CharField(
-        verbose_name=("During this pregnancy did the mother have a viral load perfomed"
-                      " (outside the study)? "),
-        max_length=3,
-        choices=YES_NO,
-        help_text="(if 'YES' continue. Otherwise go to question 9)")
-
-    vl_date = models.DateField(
-        verbose_name="If yes, Date of most recent VL test? ",
-        blank=True,
-        null=True)
-
-    vl_detectable = models.CharField(
-        verbose_name="Was the viral load detectable?",
-        max_length=3,
-        choices=YES_NO_NA,
-        default=NOT_APPLICABLE,
-        help_text="")
-
-    vl_result = models.CharField(
-        verbose_name="Result of most recent VL test",
-        max_length=35,
-        blank=True,
-        null=True)
-
-    comment = models.TextField(
-        verbose_name="Comment if any additional pertinent information ",
-        max_length=250,
-        blank=True,
-        null=True)
-
-    history = HistoricalRecords()
-
-    class Meta(MaternalCrfModel.Meta):
-        app_label = 'td_maternal'
-        verbose_name = "Maternal Hiv Interim Hx"
-        verbose_name_plural = "Maternal Hiv Interim Hx"
-#         verbose_name = "Delivery: Clinical"
-#         verbose_name_plural = "Delivery: Clinical"
 
 
 class MaternalLabDelDx(MaternalCrfModel):

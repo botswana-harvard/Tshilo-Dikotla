@@ -12,7 +12,6 @@ class MaternalDeathReportAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalDeathReportForm
     fields = (
-        "maternal_visit",
         "report_datetime",
         "death_date",
         "cause",

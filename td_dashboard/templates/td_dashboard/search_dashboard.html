@@ -31,7 +31,7 @@
                             <td>{{ forloop.counter }}</td>
                             <td>{{ obj.subject_label }}</td>
                             {% if obj.subject_identifier %}
-                              <td><a role="button" title="Go to dashboard" class="btn btn-sm btn-success" href="{% url 'subject_dashboard_url' obj.subject_identifier %}">Dashboard</a></td>
+                              <td><a role="button" title="Go to dashboard" class="btn btn-sm btn-success" href="{% url 'subject_dashboard_url' obj.subject_identifier %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></td>
                             {% else %}
                               <td><a role="button" title="" class="btn btn-sm btn-success" disabled >Dashboard</a></td>
                             {% endif %}

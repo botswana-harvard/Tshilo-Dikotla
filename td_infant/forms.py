@@ -775,7 +775,7 @@ class VaccinesReceivedForm(forms.ModelForm):
                 infant_birth = InfantBirth.objects.get(registered_subject__subject_identifier=infant_identifier)
                 return infant_birth.dob
             except Exception as e:
-                print(e)
+                pass
 
     def validate_date_not_before_birth(self):
         cleaned_data = self.cleaned_data

@@ -1,7 +1,4 @@
 from django.db import models
-# from edc_base.audit_trail import AuditTrail
-from edc_base.model.fields import OtherCharField
-from edc_constants.choices import YES_NO, YES_NO_NA
 
 from td.choices import LAUGH, ENJOYMENT, BLAME, UNHAPPY, ANXIOUS, SAD, PANICK, TOP, CRYING, HARM
 

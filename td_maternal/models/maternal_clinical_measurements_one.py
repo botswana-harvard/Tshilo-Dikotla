@@ -6,6 +6,8 @@ from .base_maternal_clinical_measurements import BaseMaternalClinicalMeasurement
 
 class MaternalClinicalMeasurementsOne(BaseMaternalClinicalMeasurements):
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     height = models.DecimalField(
         max_digits=5,
         decimal_places=2,

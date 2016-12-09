@@ -16,6 +16,8 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
 
     """ The initial ultra sound model that influences mother's enrollment in to study. """
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     number_of_gestations = models.CharField(
         verbose_name="Number of viable gestations seen?",
         max_length=3,

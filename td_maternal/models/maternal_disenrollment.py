@@ -5,6 +5,8 @@ from edc_visit_schedule.model_mixins import DisenrollmentModelMixin
 
 class MaternalDisenrollment(DisenrollmentModelMixin, RequiresConsentMixin, BaseUuidModel):
 
+    ADMIN_SITE_NAME = 'td_maternal_admin'
+
     class Meta(DisenrollmentModelMixin.Meta):
         visit_schedule_name = 'maternal_visit_schedule'
         consent_model = 'td_maternal.maternalconsent'
