@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'django_revision.apps.AppConfig',
     'edc_call_manager.apps.AppConfig',
     'edc_code_lists.apps.AppConfig',
+    'edc_dashboard.apps.AppConfig',
     'edc_death_report.apps.AppConfig',
     'edc_export.apps.AppConfig',
     'edc_locator.apps.AppConfig',
