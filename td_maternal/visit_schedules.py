@@ -114,14 +114,12 @@ antenatal_enrollment1.add_visit(
     base_interval=0,
     base_interval_unit=DAYS,
     requisitions=(),
-    crfs=enrollment_crfs
-)
+    crfs=enrollment_crfs)
 
 # antenatal schedule
 antenatal_enrollment2 = Schedule(
     name='maternal_enrollment_step2',
     enrollment_model='td_maternal.antenatalenrollmenttwo')
-
 
 antenatal_enrollment2.add_visit(
     code='1010M',
@@ -130,8 +128,7 @@ antenatal_enrollment2.add_visit(
     base_interval=0,
     base_interval_unit=DAYS,
     requisitions=requisition_antenatal1,
-    crfs=antenatal1_crfs
-)
+    crfs=antenatal1_crfs)
 
 antenatal_enrollment2.add_visit(
     code='1020M',
@@ -140,8 +137,7 @@ antenatal_enrollment2.add_visit(
     base_interval=3,
     base_interval_unit=MONTHS,
     requisitions=requisition_antenatal2,
-    crfs=antenatal2_crfs
-)
+    crfs=antenatal2_crfs)
 
 # follow up visit
 follow_up = Schedule(
