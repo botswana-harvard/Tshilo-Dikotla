@@ -12,7 +12,8 @@ from edc_visit_tracking.constants import SCHEDULED
 from td.constants import MODIFIED, NORMAL
 
 from .models import (InfantBirth, InfantBirthData, InfantBirthExam, InfantFeeding, InfantBirthArv, InfantFu,
-                     InfantFuPhysical, InfantArvProph, InfantVisit, InfantFuImmunizations)
+                     InfantFuPhysical, InfantArvProph, InfantVisit, InfantFuImmunizations,
+                     InfantBirthFeedingVaccine, InfantCongenitalAnomalies)
 
 
 class TdProvider(BaseProvider):
@@ -49,7 +50,6 @@ infantbirthdata = Recipe(
 infantbirthexam = Recipe(
     InfantBirthExam,
     report_datetime=get_utcnow(),
-    infant_exam_date=get_utcnow().date(),
     general_activity=NORMAL,
     physical_exam_result=NORMAL,
     heent_exam=YES,
@@ -85,6 +85,13 @@ infantfeeding = Recipe(
     complete_weaning=NOT_APPLICABLE,
     weaned_completely=NO,
     times_breastfed='<1 per week',)
+
+infantbirthfeedingvaccine = Recipe(
+    InfantBirthFeedingVaccine,
+    feeding_after_delivery='Breastfeeding only',)
+
+infantcongenitalanomalies = Recipe(
+    InfantCongenitalAnomalies,)
 
 infantbirtharv = Recipe(
     InfantBirthArv,

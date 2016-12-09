@@ -13,6 +13,7 @@ from edc_protocol.validators import datetime_not_before_study_start
 from ..managers import InfantBirthModelManager
 from edc_pregnancy_utils.model_mixins import BirthModelMixin
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
+from edc_registration.models import RegisteredSubject
 
 
 class InfantBirth(BirthModelMixin, EnrollmentModelMixin, CreateAppointmentsMixin, OffstudyMixin, UrlMixin, BaseUuidModel):
@@ -39,10 +40,9 @@ class InfantBirth(BirthModelMixin, EnrollmentModelMixin, CreateAppointmentsMixin
     def registration_instance(self):
         registration_instance = None
         try:
-            model = django_apps.get_app_config('edc_registration').model
-            registration_instance = model.objects.get(subject_identifier=self.get_subject_identifier())
-        except model.DoesNotExist as e:
-            raise model.DoesNotExist('{} subject_identifier=\'{}\''.format(str(e), self.subject_identifier))
+            registration_instance = RegisteredSubject.objects.get(subject_identifier=self.get_subject_identifier())
+        except RegisteredSubject.DoesNotExist as e:
+            raise RegisteredSubject.DoesNotExist('{} subject_identifier=\'{}\''.format(str(e), self.subject_identifier))
         return registration_instance
 
     def get_subject_identifier(self):

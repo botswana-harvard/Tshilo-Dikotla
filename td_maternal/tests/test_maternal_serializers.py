@@ -10,7 +10,6 @@ from edc_sync.models import OutgoingTransaction
 from td.models import Appointment
 
 from edc_call_manager.models import Call, Log
-from edc_identifier.models import SubjectIdentifier
 from edc_registration.models import RegisteredSubject
 
 from .mixins import NegMotherMixin, AntenatalVisitsMotherMixin
