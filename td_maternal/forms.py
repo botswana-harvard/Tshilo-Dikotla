@@ -175,6 +175,18 @@ class AntenatalEnrollmentTwoForm(ModelFormMixin, forms.ModelForm):
             AntenatalEnrollment.objects.get(subject_identifier=cleaned_data['subject_identifier'])
         except AntenatalEnrollment.DoesNotExist:
             raise forms.ValidationError('Complete the AntenatalEnrollment form before proceeding.')
+        try:
+            AntenatalEnrollment.objects.get(
+                subject_identifier=cleaned_data['subject_identifier'],
+                is_eligible=True)
+        except AntenatalEnrollment.DoesNotExist:
+            raise forms.ValidationError('Subject is not eligible to proceed to step 2 of enrollment.')
+        try:
+            MaternalVisit.objects.get(
+                appointment__subject_identifier=cleaned_data['subject_identifier'],
+                visit_code='1000M')
+        except MaternalVisit.DoesNotExist:
+            raise forms.ValidationError('Complete the 1000M visit before proceeding.')
         return cleaned_data
 
     class Meta:
