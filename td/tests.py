@@ -242,7 +242,7 @@ class TestPostEnrollment(TestCase):
     def test_enrolled_neg_rapid_ind_3m(self):
         """Asserts raises exception is result is IND within 3 months."""
         dt = get_utcnow()
-        result_date = (dt - relativedelta(months=5)).date()
+        result_date = (dt - relativedelta(months=2)).date()
         rapid_results = (
             Test(tested=YES, result=IND, result_date=dt - relativedelta(months=3)),
         )
