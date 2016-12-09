@@ -1,19 +1,20 @@
+from dateutil.relativedelta import relativedelta
+from model_mommy import mommy
 from django.test import TestCase
+from django.utils import timezone
 
 from edc_base.utils import get_utcnow
+from edc_pregnancy_utils.constants import ULTRASOUND
 
-from ..models import AntenatalEnrollment
+from td_infant.tests.mixins import InfantBirthMixin
+
+from ..models import MaternalLabDel
 from ..pregnancy import Pregnancy
 
 from .mixins import AddVisitMotherMixin, PosMotherMixin, DeliverMotherMixin
-from model_mommy import mommy
-from django.utils import timezone
-from dateutil.relativedelta import relativedelta
-from edc_pregnancy_utils.constants import ULTRASOUND
-from td_maternal.models.maternal_lab_del import MaternalLabDel
 
 
-class TestPregnancy(DeliverMotherMixin, AddVisitMotherMixin, PosMotherMixin, TestCase):
+class TestPregnancy(InfantBirthMixin, DeliverMotherMixin, AddVisitMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestPregnancy, self).setUp()

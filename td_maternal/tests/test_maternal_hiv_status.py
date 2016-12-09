@@ -11,8 +11,7 @@ from td.models import Appointment
 
 from ..maternal_hiv_status import MaternalHivStatus
 
-from .mixins import PosMotherMixin, NegMotherMixin, AntenatalVisitsMotherMixin, DeliverMotherMixin
-from td_maternal.tests.mixins import AddVisitInfantMixin
+from .mixins import PosMotherMixin, NegMotherMixin, AntenatalVisitsMotherMixin, DeliverMotherMixin, AddVisitInfantMixin
 
 
 class TestMaternalHivStatusPos(DeliverMotherMixin, AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):

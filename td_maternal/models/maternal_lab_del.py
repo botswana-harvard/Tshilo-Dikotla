@@ -18,8 +18,8 @@ from ..choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION_REASON
 from .maternal_crf_model import MaternalCrfModel
 
 
-class MaternalLabDel(EnrollmentModelMixin, LabourAndDeliveryModelMixin, CreateAppointmentsMixin,
-                     RequiresConsentMixin, UrlMixin, BaseUuidModel):
+class MaternalLabDel(EnrollmentModelMixin, RequiresConsentMixin, LabourAndDeliveryModelMixin, CreateAppointmentsMixin,
+                     UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
 

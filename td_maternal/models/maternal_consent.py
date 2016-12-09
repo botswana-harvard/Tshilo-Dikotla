@@ -18,8 +18,9 @@ from ..choices import RECRUIT_SOURCE, RECRUIT_CLINIC
 from .maternal_eligibility import MaternalEligibility
 
 
-class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin, PersonalFieldsMixin,
-                      UpdatesOrCreatesRegistrationModelMixin, CitizenFieldsMixin, VulnerabilityFieldsMixin,
+class MaternalConsent(ConsentModelMixin, UpdatesOrCreatesRegistrationModelMixin, ReviewFieldsMixin,
+                      IdentityFieldsMixin, PersonalFieldsMixin,
+                      CitizenFieldsMixin, VulnerabilityFieldsMixin,
                       SubjectTypeCapMixin, UrlMixin, BaseUuidModel):
 
     """ A model completed by the user on the mother's consent. """
@@ -57,10 +58,6 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
     def natural_key(self):
         return (self.subject_identifier, self.first_name, self.dob, self.initials, self.version,)
 
-    def __str__(self):
-        return '{0} {1} {2} ({3})'.format(self.subject_identifier, self.first_name,
-                                          self.last_name, self.initials)
-
     def save(self, *args, **kwargs):
         try:
             MaternalEligibility.objects.get(reference=self.maternal_eligibility_reference)
@@ -75,7 +72,8 @@ class MaternalConsent(ConsentModelMixin, ReviewFieldsMixin, IdentityFieldsMixin,
                 maternal_identifier = MaternalIdentifier(
                     subject_type_name='maternal',
                     model=self._meta.label_lower,
-                    study_site=self.study_site)
+                    study_site=self.study_site,
+                    create_registration=False)
                 self.subject_identifier = maternal_identifier.identifier
         super(MaternalConsent, self).save(*args, **kwargs)
 

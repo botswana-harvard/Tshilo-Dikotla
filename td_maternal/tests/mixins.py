@@ -9,6 +9,8 @@ import os
 from unipath import Path
 
 from td_list.models import RandomizationItem
+from edc_base.utils import get_utcnow
+from dateutil.relativedelta import relativedelta
 
 
 class TestMixinError(Exception):
@@ -84,7 +86,7 @@ class AddVisitMotherMixin(AddVisitMixin):
         return self.get_visit(self.maternal_model_label, code)
 
 
-class MotherMixin():
+class MotherMixin:
     """Creates a POS mother."""
     def setUp(self):
         super(MotherMixin, self).setUp()
@@ -93,8 +95,10 @@ class MotherMixin():
         self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         self.maternal_consent = mommy.make_recipe(
             'td_maternal.maternalconsent',
+            consent_datetime=get_utcnow() - relativedelta(minutes=1),
             maternal_eligibility_reference=self.maternal_eligibility.reference)
         self.subject_identifier = self.maternal_consent.subject_identifier
+        RegisteredSubject = django_apps.get_app_config('edc_registration').model
 
 
 class PosMotherMixin(MotherMixin):
@@ -137,15 +141,10 @@ class AntenatalVisitsMotherMixin(AddVisitMotherMixin):
 
 
 class DeliverMotherMixin:
-    """Adds the delivery and birth model."""
+    """Adds the delivery model."""
     def setUp(self):
         super(DeliverMotherMixin, self).setUp()
         self.maternal_lab_del = mommy.make_recipe(
             'td_maternal.maternallabdel',
             subject_identifier=self.subject_identifier,
             live_infants=1)
-        self.infant_birth = mommy.make_recipe(
-            'td_infant.infantbirth',
-            delivery_reference=self.maternal_lab_del.reference,
-            birth_order=1,
-            birth_order_denominator=1)

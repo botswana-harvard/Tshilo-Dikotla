@@ -1,12 +1,13 @@
-from dateutil.relativedelta import relativedelta
 from django.test import TestCase
+
 from edc_base.utils import get_utcnow
 from edc_code_lists.models import WcsDxAdult
-from edc_constants.constants import (YES, NEG, NOT_APPLICABLE, NO)
-from model_mommy import mommy
+from edc_constants.constants import (YES, NOT_APPLICABLE, NO)
 
+from td_infant.tests.mixins import InfantBirthMixin
 from td_list.models import MaternalDiagnoses, MaternalHospitalization
-from td_maternal.forms import MaternalPostPartumFuForm
+
+from ..forms import MaternalPostPartumFuForm
 
 from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin, NegMotherMixin
 
@@ -69,7 +70,9 @@ class DiagnosesMixinWcsDxAdultMixin:
             'who': [self.who_dx.id]}
 
 
-class TestMaternalPostPartumFuPosMotherMixin(DiagnosesMixinWcsDxAdultMixin, DeliverMotherMixin, AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalPostPartumFuPosMotherMixin(DiagnosesMixinWcsDxAdultMixin,
+                                             InfantBirthMixin, DeliverMotherMixin, AntenatalVisitsMotherMixin,
+                                             PosMotherMixin, TestCase):
 
     def test_diagnosis_list_none(self):
         """check if the diagnosis list is empty"""

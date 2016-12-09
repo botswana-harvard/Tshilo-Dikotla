@@ -5,12 +5,14 @@ from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO
 
 from td_list.models import Contraceptives, MaternalRelatives
-from td_maternal.forms import MaternalContraceptionForm
+
+from ..forms import MaternalContraceptionForm
 
 from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
 
 
-class TestMaternalContraceptionForm(AntenatalVisitsMotherMixin, DeliverMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalContraceptionForm(AntenatalVisitsMotherMixin,
+                                    DeliverMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalContraceptionForm, self).setUp()

@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 from django.db import models
-from django.apps import apps
+from django.apps import apps as django_apps
 
 from edc_base.model.models import BaseUuidModel, UrlMixin
 from edc_base.model.validators import datetime_not_future
@@ -105,7 +105,7 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
 
     @property
     def previous_consents(self):
-        MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
+        MaternalConsent = django_apps.get_model('td_maternal', 'MaternalConsent')
         return MaternalConsent.objects.filter(maternal_eligibility_reference=self.reference).order_by('version')
 
     def create_update_or_delete_eligibility_loss(self):
@@ -129,7 +129,7 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
 
     @property
     def maternal_eligibility_loss(self):
-        MaternalEligibilityLoss = apps.get_model('td_maternal', 'MaternalEligibilityLoss')
+        MaternalEligibilityLoss = django_apps.get_model('td_maternal', 'MaternalEligibilityLoss')
         try:
             maternal_eligibility_loss = MaternalEligibilityLoss.objects.get(
                 maternal_eligibility_reference=self.reference)

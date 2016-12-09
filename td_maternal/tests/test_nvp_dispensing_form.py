@@ -3,12 +3,14 @@ from django.test import TestCase
 
 from edc_constants.constants import YES, NO
 
+from td_infant.tests.mixins import InfantBirthMixin
+
 from ..forms import NvpDispensingForm
 
 from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
 
 
-class TestNvpDispensingForm(AntenatalVisitsMotherMixin, DeliverMotherMixin, PosMotherMixin, TestCase):
+class TestNvpDispensingForm(AntenatalVisitsMotherMixin, InfantBirthMixin, DeliverMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestNvpDispensingForm, self).setUp()

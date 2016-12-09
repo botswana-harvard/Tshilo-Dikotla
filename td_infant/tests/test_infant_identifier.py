@@ -1,13 +1,17 @@
-from django.apps import apps as django_apps
-from td_infant.tests.mixins import MaternalMixin
-from django.test import TestCase
 from model_mommy import mommy
 
+from django.apps import apps as django_apps
+from django.test import TestCase
 
-class TestInfantIdentifier(TestCase, MaternalMixin):
+from td_maternal.tests.mixins import MotherMixin
+
+
+class TestInfantIdentifier(MotherMixin, TestCase):
 
     def setUp(self):
-        self.maternal_identifier = self.create_mother()
+        super(TestInfantIdentifier, self).setUp()
+        self.subject_identifier = None
+        self.maternal_identifier = self.maternal_consent.subject_identifier
 
     def test_infant_identifier(self):
         RegisteredSubject = django_apps.get_app_config('edc_registration').model

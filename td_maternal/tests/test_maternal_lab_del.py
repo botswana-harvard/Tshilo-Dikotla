@@ -9,33 +9,17 @@ from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
 from edc_identifier.models import IdentifierModel
 
 from td.constants import INFANT
-from td.models import Appointment
 from td_list.models import DeliveryComplications
 from td_maternal.enrollment_helper import EnrollmentHelper
 
 from ..forms import MaternalLabDelForm
 
+from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
-class TestMaternalLabDel(TestCase):
+
+class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
-        self.maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
-        self.maternal_consent = mommy.make_recipe(
-            'td_maternal.maternalconsent',
-            maternal_eligibility_reference=self.maternal_eligibility.reference)
-        self.subject_identifier = self.maternal_consent.subject_identifier
-        self.antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment',
-            subject_identifier=self.subject_identifier)
-        self.appointment = Appointment.objects.get(
-            subject_identifier=self.subject_identifier, visit_code='1000M')
-        self.maternal_visit_1000 = mommy.make_recipe(
-            'td_maternal.maternalvisit', appointment=self.appointment, reason='scheduled')
-        self.maternal_ultrasound = mommy.make_recipe(
-            'td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit_1000, number_of_gestations=1)
-        self.antenatal_enrollment_two = mommy.make_recipe(
-            'td_maternal.antenatalenrollmenttwo',
-            subject_identifier=self.subject_identifier)
 
         complications = DeliveryComplications.objects.create(
             hostname_created="django", name="None",
