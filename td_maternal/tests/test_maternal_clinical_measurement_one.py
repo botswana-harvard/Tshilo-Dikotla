@@ -1,9 +1,8 @@
 from django.test import TestCase
-from model_mommy import mommy
 
 from td_maternal.forms import MaternalClinicalMeasurementsOneForm
 
-from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
 class TestMaternalClinicalMeasurementOne(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):

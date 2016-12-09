@@ -5,7 +5,7 @@ from edc_constants.constants import YES, NO, NEG
 
 from ..forms import RapidTestResultForm
 
-from .mixins import NegMotherMixin, AntenatalVisitsMotherMixin
+from .test_mixins import NegMotherMixin, AntenatalVisitsMotherMixin
 
 
 class TestRapidTestForm(AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):

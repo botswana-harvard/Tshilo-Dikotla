@@ -9,7 +9,7 @@ from edc_constants.constants import NO, YES, NEG, POS, NOT_APPLICABLE
 from edc_pregnancy_utils import Edd, Ga, Lmp, Ultrasound
 
 from td.hiv_result import (
-    Enrollment as EnrollmentResult, Recent, Rapid, Current, EnrollmentNoResultError,
+    EnrollmentResult, Recent, Rapid, Current, EnrollmentNoResultError,
     RapidTestRequiredError, ElisaRequiredError)
 
 
@@ -60,10 +60,13 @@ class EnrollmentHelper(object):
             self.enrollment_result = self.get_enrollment_result(obj)
         except EnrollmentNoResultError as e:
             self.messages.update(enrollment_result=str(e))
+            self.enrollment_result = EnrollmentResult()
         except RapidTestRequiredError as e:
             self.messages.update(enrollment_result=str(e))
+            self.enrollment_result = EnrollmentResult()
         except ElisaRequiredError as e:
             self.messages.update(enrollment_result=str(e))
+            self.enrollment_result = EnrollmentResult()
 
         # check if delivered, and if so, was mother on art for 4 weeks during pregnancy
         try:

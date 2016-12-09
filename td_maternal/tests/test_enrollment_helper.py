@@ -11,7 +11,7 @@ from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NEG, NO
 from edc_pregnancy_utils import Lmp
 
-from td.hiv_result import EnrollmentResultError
+from td.hiv_result import EnrollmentResultError, RapidTestRequiredError
 from td.models import Appointment
 
 from ..enrollment_helper import EnrollmentHelper, Obj as ModellikeObj
@@ -39,14 +39,14 @@ class TestResult(unittest.TestCase):
     def test_result_pos_no_evidence(self):
         """Asserts POS result without evidence requires rapid."""
         obj = Obj(current_hiv_status=POS, evidence_hiv_status=NO)
-        self.assertRaises(EnrollmentResultError, EnrollmentHelper, obj)
+        self.assertRaises(RapidTestRequiredError, EnrollmentHelper, obj)
 
     def test_result_neg_no_evidence(self):
         """Asserts NEG result with or without evidence is None."""
         obj = Obj(current_hiv_status=NEG, evidence_hiv_status=NO)
-        self.assertRaises(EnrollmentResultError, EnrollmentHelper, obj)
+        self.assertRaises(RapidTestRequiredError, EnrollmentHelper, obj)
         obj = Obj(current_hiv_status=NEG, evidence_hiv_status=YES)
-        self.assertRaises(EnrollmentResultError, EnrollmentHelper, obj)
+        self.assertRaises(RapidTestRequiredError, EnrollmentHelper, obj)
 
     def test_result_neg_by_week32(self):
         """Asserts NEG result by week 32 test alone requires rapid."""

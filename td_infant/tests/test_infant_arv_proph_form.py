@@ -7,18 +7,11 @@ from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE, UNKNOWN
 from edc_registration.models import RegisteredSubject
 
 from td.constants import MODIFIED, NO_MODIFICATIONS, DISCONTINUED, NEVER_STARTED
-from td_maternal.tests import BaseTestCase
-from td_maternal.tests.factories import (
-    MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory, AntenatalEnrollmentFactory,
-    AntenatalEnrollmentTwoFactory, MaternalLabDelFactory, MaternalVisitFactory)
-from td.models import Appointment
 
 from ..forms import InfantArvProphForm, InfantArvProphModForm
 
-from .factories import InfantBirthFactory, InfantVisitFactory, InfantArvProphFactory, InfantBirthArvFactory
 
-
-class TestInfantArvProph(BaseTestCase):
+class TestInfantArvProph(TestCase):
 
     def setUp(self):
         super(TestInfantArvProph, self).setUp()

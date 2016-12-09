@@ -6,7 +6,7 @@ from model_mommy.recipe import Recipe, seq
 
 from edc_base.faker import EdcBaseProvider
 from edc_base.utils import get_utcnow
-from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG, UNKNOWN, CONTINUOUS
+from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG, UNKNOWN, CONTINUOUS, IND
 from edc_lab.faker import EdcLabProvider
 from edc_visit_tracking.constants import SCHEDULED
 
@@ -31,6 +31,9 @@ class TdProvider(BaseProvider):
 
     def four_weeks_ago(self):
         return (get_utcnow() - relativedelta(weeks=4)).date()
+
+    def yesterday(self):
+        return (get_utcnow() - relativedelta(days=1)).date()
 
 
 class MyEdcBaseProvider(EdcBaseProvider):
@@ -211,12 +214,6 @@ maternalinterimidcc = Recipe(
     recent_cd4=571.00,
     recent_cd4_date=get_utcnow)
 
-rapidtest = Recipe(
-    RapidTestResult,
-    rapid_test_done=YES,
-    result_date=date.today,
-    result=POS)
-
 maternalobstericalhistory = Recipe(
     MaternalObstericalHistory,
     report_datetime=get_utcnow,
@@ -252,6 +249,13 @@ maternalarvlifetimehistory = Recipe(
 
 maternalarvinthispreg = Recipe(
     MaternalArvPreg,
+)
+
+rapidtestresult = Recipe(
+    RapidTestResult,
+    rapid_test_done=YES,
+    result_date=fake.yesterday,
+    result=POS,
 )
 
 maternalaztnvp = Recipe(

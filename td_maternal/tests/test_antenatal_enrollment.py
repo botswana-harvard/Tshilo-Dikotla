@@ -110,7 +110,8 @@ class TestAntenatalEnrollment(TestCase):
         self.assertTrue(antenatal_enrollment.is_eligible)
 
     def test_mother_tested_POS_32weeks_with_NO_evidence(self):
-        """Test for a mother who tested POS at or after 32weeks and has NO documentation of hiv_status"""
+        """Asserts eligible if no evidence of current status, no evidence of recent test but
+        has a rapid."""
         options = {'subject_identifier': self.subject_identifier,
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
@@ -120,6 +121,7 @@ class TestAntenatalEnrollment(TestCase):
                    'evidence_32wk_hiv_status': NO,
                    'will_get_arvs': YES,
                    'rapid_test_done': YES,
+                   'rapid_test_date': (get_utcnow() - relativedelta(days=1)).date(),
                    'rapid_test_result': POS,
                    'last_period_date': (get_utcnow() - relativedelta(weeks=34)).date()}
         antenatal_enrollment = mommy.make_recipe('td_maternal.antenatalenrollment_pos', **options)

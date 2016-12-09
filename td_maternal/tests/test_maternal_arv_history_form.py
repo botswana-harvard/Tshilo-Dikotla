@@ -9,7 +9,7 @@ from edc_constants.constants import (YES, NOT_APPLICABLE, NO, CONTINUOUS, STOPPE
 from td_list.models import PriorArv
 from td_maternal.forms import MaternalLifetimeArvHistoryForm
 
-from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
 class TestMaternalLifetimeArvHistoryForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):

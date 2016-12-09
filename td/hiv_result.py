@@ -27,19 +27,31 @@ class RecentResultError(Exception):
     pass
 
 
-class Enrollment:
-    """Determines hiv status for enrollment, returns POS, NEG or None.
+class EnrollmentResult:
+    """Determines hiv status for enrollment, returns POS, NEG.
 
-    Raises an exception if a rapid test is required."""
+    A final result of None raises an error.
+
+    Raises an exception if a rapid test or ELISA is required."""
     def __init__(self, current=None, recent=None, rapid=None, exception_cls=None):
         self.result = None
         self.result_date = None
         self.exception_cls = exception_cls or EnrollmentResultError
-        self.current = current or Current()
-        self.recent = recent or Recent()
-        self.rapid = rapid or Rapid()
+        try:
+            self.current = current if current.result else Current()
+        except AttributeError:
+            self.current = Current()
+        try:
+            self.recent = recent if recent.result else Recent()
+        except AttributeError:
+            self.recent = Recent()
+        try:
+            self.rapid = rapid if rapid.result else Rapid()
+        except AttributeError:
+            self.rapid = Rapid()
         if not self.current.result and not self.recent.result and not self.rapid.result:
-            pass
+            raise RapidTestRequiredError(
+                'Rapid test is required for null or invalid result.')
         else:
             try:
                 if self.recent.result_date > self.rapid.result_date:
@@ -62,9 +74,13 @@ class Enrollment:
                     raise self.exception_cls(
                         'A rapid test result is required. Got current.result == {}, recent.result == {}'.format(
                             self.current.result, self.recent.result))
-            if self.result not in [POS, NEG]:
+            if not self.result:
+                raise RapidTestRequiredError(
+                    'Rapid test is required for null result or result that is no longer valid.')
+            elif self.result not in [POS, NEG]:
                 if self.rapid.result:
-                    raise EnrollmentNoResultError('Unable to determine a POS or NEG result. Got {}.'.format(self.result))
+                    raise EnrollmentNoResultError(
+                        'Unable to determine a POS or NEG result. Got {}.'.format(self.result))
                 else:
                     raise RapidTestRequiredError('Rapid test is required.')
 
@@ -121,7 +137,7 @@ class Rapid(Test):
     pass
 
 
-class PostEnrollment:
+class PostEnrollmentResult:
     """Determines hiv status anytime post-enrollment, returns POS, NEG or None."""
     def __init__(self, reference_datetime, enrollment_result, rapid_results=None, exception_cls=None):
         rapid_results = [] if not rapid_results else list(rapid_results)

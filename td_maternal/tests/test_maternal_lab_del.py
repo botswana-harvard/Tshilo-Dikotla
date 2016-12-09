@@ -14,7 +14,7 @@ from td_maternal.enrollment_helper import EnrollmentHelper
 
 from ..forms import MaternalLabDelForm
 
-from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
 class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):

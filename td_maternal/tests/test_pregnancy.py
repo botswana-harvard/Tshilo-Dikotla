@@ -6,15 +6,13 @@ from django.utils import timezone
 from edc_base.utils import get_utcnow
 from edc_pregnancy_utils.constants import ULTRASOUND
 
-from td_infant.tests.mixins import InfantBirthMixin
-
 from ..models import MaternalLabDel
 from ..pregnancy import Pregnancy
 
-from .mixins import AddVisitMotherMixin, PosMotherMixin, DeliverMotherMixin
+from .test_mixins import AddVisitMotherMixin, PosMotherMixin, DeliverMotherMixin
 
 
-class TestPregnancy(InfantBirthMixin, DeliverMotherMixin, AddVisitMotherMixin, PosMotherMixin, TestCase):
+class TestPregnancy(DeliverMotherMixin, AddVisitMotherMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestPregnancy, self).setUp()

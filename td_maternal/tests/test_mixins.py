@@ -4,10 +4,9 @@ from dateutil.relativedelta import relativedelta
 from unipath import Path
 from model_mommy import mommy
 
-from django.apps import apps as django_apps
 from edc_base.utils import get_utcnow
 
-from td.models import Appointment
+from td.test_mixins import AddVisitMixin
 from td_list.models import RandomizationItem
 
 
@@ -24,50 +23,6 @@ def load_test_randomization():
             continue
         seq, drug_assignment = line.split(',')
         RandomizationItem.objects.get_or_create(name=seq, field_name=drug_assignment)
-
-
-class AddVisitMixin:
-
-    def add_visit(self, model_label, code, reason=None):
-        """Adds (or gets) and returns a visit for give model and code."""
-        reason = reason or 'scheduled'
-        model = django_apps.get_model(*model_label.split('.'))
-        appointment = Appointment.objects.get(
-            subject_identifier=self.subject_identifier, visit_code=code)
-        try:
-            visit = self.get_visit(model_label, code)
-        except model.DoesNotExist:
-            visit = mommy.make_recipe(
-                model_label,
-                appointment=appointment, reason=reason)
-        return visit
-
-    def add_visits(self, model_label, *codes):
-        """Adds a sequence of visits for the codes provided.
-
-        If a infant visit already exists, it will just pass."""
-        for code in codes:
-            self.add_visit(model_label, code)
-
-    def get_visit(self, model_label, code):
-        """Returns a visit instance if it exists."""
-        model = django_apps.get_model(*model_label.split('.'))
-        return model.objects.get(
-            appointment__subject_identifier=self.subject_identifier, visit_code=code)
-
-
-class AddVisitInfantMixin(AddVisitMixin):
-
-    infant_model_label = 'td_infant.infantvisit'
-
-    def add_infant_visit(self, code, reason=None):
-        return self.add_visit(self.infant_model_label, code, reason)
-
-    def add_infant_visits(self, *codes):
-        self.add_visits(self.infant_model_label, *codes)
-
-    def get_infant_visit(self, code):
-        return self.get_visit(self.infant_model_label, code)
 
 
 class AddVisitMotherMixin(AddVisitMixin):

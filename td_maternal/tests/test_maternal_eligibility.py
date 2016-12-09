@@ -2,7 +2,7 @@ from model_mommy import mommy
 
 from django.test import TestCase
 
-from td_maternal.models import MaternalEligibilityLoss
+from ..models import MaternalEligibilityLoss
 
 
 class TestMaternalEligibility(TestCase):

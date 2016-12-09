@@ -5,7 +5,7 @@ from edc_constants.constants import YES, NO
 
 from ..forms import MaternalArvPostForm
 
-from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
+from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
 
 
 class TestMaternalArvPost(AntenatalVisitsMotherMixin, DeliverMotherMixin, PosMotherMixin, TestCase):

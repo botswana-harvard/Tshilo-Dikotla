@@ -8,7 +8,7 @@ from td_list.models import ChronicConditions, MaternalMedications
 from ..forms import MaternalMedicalHistoryForm
 from ..maternal_hiv_status import MaternalHivStatus
 
-from .mixins import NegMotherMixin, PosMotherMixin, AntenatalVisitsMotherMixin
+from .test_mixins import NegMotherMixin, PosMotherMixin, AntenatalVisitsMotherMixin
 
 
 class ChronicAndMedicationsMixin:

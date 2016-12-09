@@ -5,7 +5,7 @@ from edc_constants.constants import YES, NO
 
 from ..forms import MaternalInterimIdccForm
 
-from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
 class TestMaternalInterimIdccDataForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):

@@ -7,7 +7,7 @@ from edc_constants.constants import (YES, NO)
 from td_list.models import MaternalDiagnoses
 from td_maternal.forms import MaternalDiagnosesForm
 
-from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
 class TestMaternalDiagnosesForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):

@@ -7,7 +7,7 @@ from edc_constants.constants import YES, NO
 
 from ..forms import MaternalArvPregForm, MaternalArvForm
 
-from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
 class TestMaternalArvPregForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):

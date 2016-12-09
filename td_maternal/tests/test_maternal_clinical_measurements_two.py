@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from td_maternal.forms import MaternalClinicalMeasurementsTwoForm
 
-from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
 class TestMaternalClinicalMeasurementsTwo(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):

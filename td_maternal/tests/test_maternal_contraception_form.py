@@ -8,7 +8,7 @@ from td_list.models import Contraceptives, MaternalRelatives
 
 from ..forms import MaternalContraceptionForm
 
-from .mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
+from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
 
 
 class TestMaternalContraceptionForm(AntenatalVisitsMotherMixin,

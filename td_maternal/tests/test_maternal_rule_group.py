@@ -1,16 +1,19 @@
 from dateutil.relativedelta import relativedelta
 from model_mommy import mommy
 
+from django.test.testcases import TestCase
+
 from edc_base.utils import get_utcnow
 from edc_constants.constants import (POS, NEG, YES, NO, NOT_APPLICABLE)
 from edc_metadata.constants import REQUIRED
+from edc_metadata.models import CrfMetadata, RequisitionMetadata
 
 from td.models import Appointment
-from td_maternal.models import CrfMetadata, RequisitionMetadata, MaternalVisit
-from td_maternal.tests import BaseTestCase
+
+from ..models import MaternalVisit
 
 
-class TestMaternalRuleGroups(BaseTestCase):
+class TestMaternalRuleGroups(TestCase):
 
     def setUp(self):
         super(TestMaternalRuleGroups, self).setUp()

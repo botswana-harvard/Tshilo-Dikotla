@@ -2,9 +2,11 @@ from django.test import TestCase
 
 from edc_constants.constants import YES, NO
 
+from td_infant.tests.test_mixins import AddVisitInfantMixin
+
 from ..forms import MaternalSubstanceUsePriorPregForm
 
-from .mixins import AntenatalVisitsMotherMixin, AddVisitInfantMixin, NegMotherMixin
+from .test_mixins import AntenatalVisitsMotherMixin, NegMotherMixin
 
 
 class TestMaternalSubstanceUsePriorPreg(AntenatalVisitsMotherMixin, AddVisitInfantMixin, NegMotherMixin, TestCase):

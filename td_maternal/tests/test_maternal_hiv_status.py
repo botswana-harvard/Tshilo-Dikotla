@@ -8,10 +8,11 @@ from edc_constants.constants import POS, YES, NO, NEG, NOT_APPLICABLE, UNK, IND
 from edc_metadata.models import RequisitionMetadata
 
 from td.models import Appointment
+from td_infant.tests.test_mixins import AddVisitInfantMixin
 
 from ..maternal_hiv_status import MaternalHivStatus
 
-from .mixins import PosMotherMixin, NegMotherMixin, AntenatalVisitsMotherMixin, DeliverMotherMixin, AddVisitInfantMixin
+from .test_mixins import PosMotherMixin, NegMotherMixin, AntenatalVisitsMotherMixin, DeliverMotherMixin
 
 
 class TestMaternalHivStatusPos(DeliverMotherMixin, AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
@@ -81,16 +82,6 @@ class TestMaternalHivStatusNeg(DeliverMotherMixin, AntenatalVisitsMotherMixin, A
             subject_identifier=self.subject_identifier,
             reference_datetime=maternal_visit.report_datetime)
         self.assertEqual(maternal_hiv_status.result, NEG)
-
-    def test_dnapcr_for_non_heu_infant(self):
-        """test that for a NON HEU infant, then the DNA PCR requisition is NOT made available."""
-        self.add_infant_visits('2000', '2010')
-        self.assertEqual(
-            RequisitionMetadata.objects.filter(
-                entry_status='NOT_REQUIRED',
-                model='td_lab.infantrequisition',
-                panel_name='DNA PCR',
-                visit_code='2010').count(), 1)
 
     def test_ind_status_from_rapid_test(self):
         """test that we can figure out a posetive status taking in to consideration rapid tests."""

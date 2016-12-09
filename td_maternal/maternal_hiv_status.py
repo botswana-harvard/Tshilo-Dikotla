@@ -1,10 +1,10 @@
-
-from td.hiv_result import PostEnrollment, Recent, Test
-from td_maternal.models import AntenatalEnrollment, RapidTestResult
 from edc_constants.constants import YES
 
+from td.hiv_result import PostEnrollmentResult, Recent, Test
+from td_maternal.models import AntenatalEnrollment, RapidTestResult
 
-class MaternalHivStatus(PostEnrollment):
+
+class MaternalHivStatus(PostEnrollmentResult):
     """Returns an instance with the result and result date of the subjects HIV status
     as of reference_datetime.
 

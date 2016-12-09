@@ -6,8 +6,9 @@ from edc_constants.constants import YES
 
 from td.models import Appointment
 
-from .mixins import NegMotherMixin, PosMotherMixin, AntenatalVisitsMotherMixin
-from td_maternal.forms import MaternalRandoForm
+from ..forms import MaternalRandoForm
+
+from .test_mixins import NegMotherMixin, PosMotherMixin, AntenatalVisitsMotherMixin
 
 
 class TestMaternalRandomizationForm(AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):

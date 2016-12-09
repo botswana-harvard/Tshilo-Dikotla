@@ -1,18 +1,17 @@
 import json
 
-from django.core import serializers
-from django.test.testcases import TestCase
 from model_mommy import mommy
 
-from edc_sync.models import OutgoingTransaction
-
-
-from td.models import Appointment
+from django.core import serializers
+from django.test.testcases import TestCase
 
 from edc_call_manager.models import Call, Log
 from edc_registration.models import RegisteredSubject
+from edc_sync.models import OutgoingTransaction
 
-from .mixins import NegMotherMixin, AntenatalVisitsMotherMixin
+from td.models import Appointment
+
+from .test_mixins import NegMotherMixin, AntenatalVisitsMotherMixin
 
 
 class TestMaternalSerializers(AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):

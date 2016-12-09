@@ -1,13 +1,13 @@
+from dateutil.relativedelta import relativedelta
+
 from django.test.testcases import TestCase
 from django.utils import timezone
-from datetime import timedelta
-
-from dateutil.relativedelta import relativedelta
 
 from edc_base.utils import get_utcnow
 
-from td_maternal.forms import MaternalObstericalHistoryForm
-from td_maternal.tests.mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from ..forms import MaternalObstericalHistoryForm
+
+from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
 
 
 class TestMaternalObstericalHistoryForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):

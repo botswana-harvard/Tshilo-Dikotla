@@ -6,11 +6,11 @@ from model_mommy import mommy
 
 from edc_constants.constants import NO
 from edc_pregnancy_utils.constants import ULTRASOUND
+from edc_pregnancy_utils.lmp import Lmp
 
 from ..models import AntenatalEnrollment, MaternalOffstudy
 
-from .mixins import AddVisitMotherMixin, PosMotherMixin
-from edc_pregnancy_utils.lmp import Lmp
+from .test_mixins import AddVisitMotherMixin, PosMotherMixin
 
 
 class TestMaternalUltrasound(AddVisitMotherMixin, PosMotherMixin, TestCase):
