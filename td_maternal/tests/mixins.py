@@ -1,16 +1,14 @@
+import os
+
+from dateutil.relativedelta import relativedelta
+from unipath import Path
 from model_mommy import mommy
 
 from django.apps import apps as django_apps
-from td.models import Appointment
-
-
-import os
-
-from unipath import Path
-
-from td_list.models import RandomizationItem
 from edc_base.utils import get_utcnow
-from dateutil.relativedelta import relativedelta
+
+from td.models import Appointment
+from td_list.models import RandomizationItem
 
 
 class TestMixinError(Exception):
@@ -98,7 +96,6 @@ class MotherMixin:
             consent_datetime=get_utcnow() - relativedelta(minutes=1),
             maternal_eligibility_reference=self.maternal_eligibility.reference)
         self.subject_identifier = self.maternal_consent.subject_identifier
-        RegisteredSubject = django_apps.get_app_config('edc_registration').model
 
 
 class PosMotherMixin(MotherMixin):
