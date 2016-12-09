@@ -2,12 +2,11 @@
 {% load staticfiles %}
 
 
+{% block top_bar %}
+    {% include "td_dashboard/maternal_top_bar.html" %}
+{% endblock top_bar %}
+
+
 {% block left_side_bar %}
   {% include "td_dashboard/maternal_demographics.html" %}
 {% endblock left_side_bar%}
-
-{% block locator_information %}
-	{% if maternal_locator.pk %}
-	 {% include "td_dashboard/maternal_locator.html" %}
-	{% endif %}
-{% endblock locator_information %}

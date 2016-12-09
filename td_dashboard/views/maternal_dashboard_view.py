@@ -46,8 +46,10 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
                 subject_identifier=self.subject_identifier).order_by('-version').first()
         try:
             maternal_lab_del = MaternalLabDel.objects.get(subject_identifier=self.subject_identifier)
+            infants = maternal_lab_del.infants
         except MaternalLabDel.DoesNotExist:
             maternal_lab_del = MaternalLabDel()
+            infants = []
         try:
             maternal_locator = MaternalLocator.objects.get(subject_identifier=self.subject_identifier)
         except MaternalLocator.DoesNotExist:
@@ -61,6 +63,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
         context.update(
             visit_url=MaternalVisit().get_absolute_url(),
             maternal_rando=maternal_rando,
+            infants=infants,
             maternal_consent=maternal_consent,
             maternal_hiv_status=maternal_hiv_status,
             pregnancy=pregnancy,

@@ -14,6 +14,7 @@ class MaternalLocatorAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admi
     form = MaternalLocatorForm
 
     fields = ('subject_identifier',
+              'report_datetime',
               'date_signed',
               'mail_address',
               'care_clinic',

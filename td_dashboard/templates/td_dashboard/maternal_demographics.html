@@ -6,7 +6,10 @@
             <li class="list-group-item"><span class="text text-danger small">Not eligible {{ antenatalenrollment.reasons_not_eligible|default:"eligibility error!!" }}</span></li>
           {% endif %}
         {% endif %}
-        <li class="list-group-item"><a role="button" class="btn btn-sm {% if maternal_locator.pk %}btn-default{% else %}btn-danger{% endif %}" href="{{ maternal_locator.get_absolute_url }}?subject_identifier={{ subject_identifier }}&next={{ subject_dashboard_url_name }},subject_identifier"><i class="fa fa-address-card" aria-hidden="true"></i> Maternal Locator</a></li>
+        {% for infant in infants %}
+            <li class="list-group-item"><a role="button" class="btn btn-sm btn-default" href="{% url 'infant_dashboard_url' subject_identifier=infant }}?subject_identifier={{ infant }}"><i class="fa fa-smile-o" aria-hidden="true"></i> {{ infant }}</a></li>
+        {% endfor %}
+        <li class="list-group-item"><a role="button" class="btn btn-sm {% if maternal_locator.pk %}btn-default{% else %}btn-danger{% endif %}" href="{{ maternal_locator.get_absolute_url }}?subject_identifier={{ subject_identifier }}&next={{ subject_dashboard_url_name }},subject_identifier"><i class="fa fa-pencil" aria-hidden="true"></i> <i class="fa fa-address-card" aria-hidden="true"></i> Maternal Locator</a></li>
         <li class="list-group-item"><span class="test text-default"><span class="glyphicon glyphicon-user"></span>  as of {% now "Y-m-d" %}</span></li>
         <li class="list-group-item"><span class="test small text-default">HIV status</span>&nbsp<span class="test small text-info">{{ maternal_hiv_status.result }}</span></li>
         <li class="list-group-item"><span class="test small text-default">Randomized</span>&nbsp<span class="test small text-info">{{ maternal_rando.rx|default:"No" }}</span></li>
