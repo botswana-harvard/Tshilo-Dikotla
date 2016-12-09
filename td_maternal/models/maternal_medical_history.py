@@ -75,7 +75,7 @@ class MaternalMedicalHistory(MaternalCrfModel):
         choices=YES_NO,)
 
     date_hiv_diagnosis = models.DateField(
-        verbose_name="If HIV sero-posetive, what is the approximate date of diagnosis?",
+        verbose_name="If HIV sero-positive, what is the approximate date of diagnosis?",
         help_text='EDD Confirmed. Derived variable, see AntenatalEnrollment.',
         blank=True,
         null=True)

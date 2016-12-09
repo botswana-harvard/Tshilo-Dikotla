@@ -8,6 +8,7 @@ from edc_constants.constants import POS, YES, NEG, NO, UNK, IND
 from dateutil.relativedelta import relativedelta
 
 from .hiv_result import Recent, Current, Rapid, EnrollmentResult, PostEnrollmentResult, Test, ElisaRequiredError
+from td.hiv_result import RapidTestRequiredError
 
 fake = Faker()
 fake.add_provider(EdcBaseProvider)
@@ -24,25 +25,15 @@ class TestRapid(TestCase):
 
     def test_rapid_pos(self):
         dt = get_utcnow()
-        rapid = Rapid(tested=YES, result=POS, result_date=dt)
+        rapid = Rapid(reference_datetime=get_utcnow(), result=POS, result_date=dt)
         self.assertEqual(rapid.result, POS)
         self.assertEqual(rapid.result_date, dt.date())
 
-    def test_rapid_pos_no_evidence_is_none(self):
-        rapid = Rapid(tested=NO, result=POS, result_date=get_utcnow())
-        self.assertEqual(rapid.result, None)
-        self.assertEqual(rapid.result_date, None)
-
     def test_rapid_neg(self):
         dt = get_utcnow()
-        rapid = Rapid(tested=YES, result=NEG, result_date=dt)
+        rapid = Rapid(reference_datetime=get_utcnow(), result=NEG, result_date=dt)
         self.assertEqual(rapid.result, NEG)
         self.assertEqual(rapid.result_date, dt.date())
-
-    def test_rapid_neg_no_evidence_is_none(self):
-        rapid = Rapid(tested=NO, result=POS, result_date=get_utcnow())
-        self.assertEqual(rapid.result, None)
-        self.assertEqual(rapid.result_date, None)
 
     def test_rapid_none(self):
         rapid = Rapid()
@@ -50,9 +41,37 @@ class TestRapid(TestCase):
         self.assertEqual(rapid.result_date, None)
 
     def test_rapid_missing_date(self):
-        rapid = Rapid(tested=YES, result=POS)
+        rapid = Rapid(reference_datetime=get_utcnow(), result=POS)
         self.assertEqual(rapid.result, None)
         self.assertEqual(rapid.result_date, None)
+
+    def test_result_neg_timing(self):
+        """Assert NEG until past 3m, then None."""
+        rapid = Rapid(
+            reference_datetime=get_utcnow(),
+            result_date=(get_utcnow() - relativedelta(months=0)).date(),
+            result=NEG)
+        self.assertEqual(rapid.result, NEG)
+        rapid = Rapid(
+            reference_datetime=get_utcnow(),
+            result_date=(get_utcnow() - relativedelta(months=1)).date(),
+            result=NEG)
+        self.assertEqual(rapid.result, NEG)
+        rapid = Rapid(
+            reference_datetime=get_utcnow(),
+            result_date=(get_utcnow() - relativedelta(months=2)).date(),
+            result=NEG)
+        self.assertEqual(rapid.result, NEG)
+        rapid = Rapid(
+            reference_datetime=get_utcnow(),
+            result_date=(get_utcnow() - relativedelta(months=3)).date(),
+            result=NEG)
+        self.assertEqual(rapid.result, None)
+        rapid = Rapid(
+            reference_datetime=get_utcnow(),
+            result_date=(get_utcnow() - relativedelta(months=4)).date(),
+            result=NEG)
+        self.assertEqual(rapid.result, None)
 
 
 class TestCurrent(TestCase):
@@ -60,23 +79,33 @@ class TestCurrent(TestCase):
     def test_pos_with_evidence(self):
         """Assert POS from recent class with evidence is POS."""
         dt = get_utcnow().date()
-        current = Current(result=POS, result_date=dt, evidence=YES)
+        current = Current(
+            reference_datetime=get_utcnow(),
+            result=POS, result_date=dt, evidence=YES)
         self.assertEqual(current.result, POS)
 
     def test_none_without_evidence(self):
         """Assert POS from recent class with evidence is POS, else None."""
         dt = get_utcnow().date()
-        current = Current(result=POS, result_date=dt, evidence=YES)
+        current = Current(
+            reference_datetime=get_utcnow(),
+            result=POS, result_date=dt, evidence=YES)
         self.assertEqual(current.result, POS)
-        current = Current(result=POS, result_date=dt, evidence=NO)
+        current = Current(
+            reference_datetime=get_utcnow(),
+            result=POS, result_date=dt, evidence=NO)
         self.assertEqual(current.result, None)
 
     def test_none_if_neg(self):
         """Assert NEG from recent class with/without evidence is None."""
         dt = get_utcnow().date()
-        current = Current(result=NEG, result_date=dt, evidence=NO)
+        current = Current(
+            reference_datetime=get_utcnow(),
+            result=NEG, result_date=dt, evidence=NO)
         self.assertEqual(current.result, None)
-        current = Current(result=NEG, result_date=dt, evidence=YES)
+        current = Current(
+            reference_datetime=get_utcnow(),
+            result=NEG, result_date=dt, evidence=YES)
         self.assertEqual(current.result, None)
 
 
@@ -139,7 +168,7 @@ class TestRecent(TestCase):
             tested=YES,
             result_date=(get_utcnow() - relativedelta(months=4)).date(),
             result=NEG,
-            evidence=NO)
+            evidence=YES)
         self.assertEqual(recent.result, None)
 
     def test_testeddate_not_within3m(self):
@@ -197,12 +226,52 @@ class TestRecent(TestCase):
             evidence=YES)
         self.assertEqual(recent.within_3m, True)
 
+    def test_result_neg_timing(self):
+        """Assert NEG until past 3m, then None."""
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=(get_utcnow() - relativedelta(months=0)).date(),
+            result=NEG,
+            evidence=YES)
+        self.assertEqual(recent.result, NEG)
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=(get_utcnow() - relativedelta(months=1)).date(),
+            result=NEG,
+            evidence=YES)
+        self.assertEqual(recent.result, NEG)
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=(get_utcnow() - relativedelta(months=2)).date(),
+            result=NEG,
+            evidence=YES)
+        self.assertEqual(recent.result, NEG)
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=(get_utcnow() - relativedelta(months=3)).date(),
+            result=NEG,
+            evidence=YES)
+        self.assertEqual(recent.result, None)
+        recent = Recent(
+            reference_datetime=get_utcnow(),
+            tested=YES,
+            result_date=(get_utcnow() - relativedelta(months=4)).date(),
+            result=NEG,
+            evidence=YES)
+        self.assertEqual(recent.result, None)
+
 
 class TestEnrollment(TestCase):
 
     def test_neg(self):
         dt = get_utcnow()
-        current = Current(result=None, result_date=None, evidence=None)
+        current = Current(
+            reference_datetime=get_utcnow(),
+            result=None, result_date=None, evidence=None)
         self.assertEqual(current.result, None)
         recent = Recent(
             reference_datetime=get_utcnow(),
@@ -211,16 +280,30 @@ class TestEnrollment(TestCase):
             result=NEG,
             evidence=YES)
         self.assertEqual(recent.result, NEG)
-        rapid = Rapid(tested=YES, result=NEG, result_date=dt)
+        rapid = Rapid(reference_datetime=get_utcnow(), result=NEG, result_date=dt)
         self.assertEqual(rapid.result, NEG)
-        enrollment = EnrollmentResult(current=current, recent=recent, rapid=rapid)
+        enrollment = EnrollmentResult(
+            reference_datetime=get_utcnow(),
+            current=current, recent=recent, rapid=rapid)
         self.assertEqual(enrollment.result, NEG)
 
-    def test_pos(self):
-        current = Current(result=None, result_date=None, evidence=None)
+    def test_raises_rapid_required(self):
+        """Asserts a None result raises an exception."""
+        current = Current(
+            reference_datetime=get_utcnow(),
+            result=None, result_date=None, evidence=None)
         self.assertEqual(current.result, None)
-        enrollment = EnrollmentResult(current=current, recent=None, rapid=None)
-        self.assertEqual(enrollment.result, None)
+        self.assertRaises(RapidTestRequiredError, EnrollmentResult, current=current, recent=None, rapid=None)
+
+    def test_pos(self):
+        current = Current(
+            reference_datetime=get_utcnow(),
+            result=POS, result_date=get_utcnow().date(), evidence=YES)
+        self.assertEqual(current.result, POS)
+        enrollment = EnrollmentResult(
+            reference_datetime=get_utcnow(),
+            current=current, recent=None, rapid=None)
+        self.assertEqual(enrollment.result, POS)
 
 
 class TestPostEnrollmentResult(TestCase):
@@ -240,18 +323,17 @@ class TestPostEnrollmentResult(TestCase):
             rapid_results=rapid_results)
 
     def test_enrolled_neg_rapid_ind_3m(self):
-        """Asserts raises exception is result is IND within 3 months."""
+        """Asserts raises ElisaRequiredError exception if rapid result is IND within 3 months."""
         dt = get_utcnow()
         result_date = (dt - relativedelta(months=2)).date()
         rapid_results = (
-            Test(tested=YES, result=IND, result_date=dt - relativedelta(months=3)),
+            Test(tested=YES, result=IND, result_date=dt - relativedelta(months=1)),
         )
-        post_enrollment_result = PostEnrollmentResult(
+        self.assertRaises(
+            ElisaRequiredError, PostEnrollmentResult,
             reference_datetime=dt,
             enrollment_result=Test(result=NEG, result_date=result_date, tested=YES),
             rapid_results=rapid_results)
-        self.assertEquals(post_enrollment_result.result, None)
-        self.assertEquals(post_enrollment_result.result_date, None)
 
     def test_enrolled_neg_rapid_ind_4m(self):
         """Asserts returns None for old NEG, IND results."""

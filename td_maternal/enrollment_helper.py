@@ -137,6 +137,7 @@ class EnrollmentHelper(object):
         """Returns a populated EnrollmentResult instance where enrollment_result.result
         is the final result."""
         current = Current(
+            reference_datetime=obj.report_datetime,
             result=obj.current_hiv_status,
             result_date=obj.report_datetime.date(),
             evidence=obj.evidence_hiv_status)
@@ -147,10 +148,12 @@ class EnrollmentHelper(object):
             result=obj.week32_result,
             result_date=obj.week32_test_date)
         rapid = Rapid(
-            tested=obj.rapid_test_done,
+            reference_datetime=obj.report_datetime,
             result=obj.rapid_test_result,
             result_date=obj.rapid_test_date)
-        return EnrollmentResult(current=current, recent=recent, rapid=rapid)
+        return EnrollmentResult(
+            reference_datetime=obj.report_datetime,
+            current=current, recent=recent, rapid=rapid)
 
     @property
     def ultrasound(self):

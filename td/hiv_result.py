@@ -33,21 +33,35 @@ class EnrollmentResult:
     A final result of None raises an error.
 
     Raises an exception if a rapid test or ELISA is required."""
-    def __init__(self, current=None, recent=None, rapid=None, exception_cls=None):
+    def __init__(self, reference_datetime=None, current=None, recent=None, rapid=None, exception_cls=None):
         self.result = None
         self.result_date = None
         self.exception_cls = exception_cls or EnrollmentResultError
         try:
-            self.current = current if current.result else Current()
-        except AttributeError:
+            self.current = Current(
+                reference_datetime=reference_datetime,
+                result=current.result,
+                result_date=current.result_date,
+                evidence=current.tested)
+        except AttributeError as e:
+            print(str(e))
             self.current = Current()
         try:
-            self.recent = recent if recent.result else Recent()
-        except AttributeError:
+            self.recent = Recent(
+                reference_datetime=reference_datetime,
+                result=recent.result,
+                result_date=recent.result_date,
+                evidence=recent.tested)
+        except AttributeError as e:
+            print(str(e))
             self.recent = Recent()
         try:
-            self.rapid = rapid if rapid.result else Rapid()
-        except AttributeError:
+            self.rapid = Rapid(
+                reference_datetime=reference_datetime,
+                result=rapid.result,
+                result_date=rapid.result_date)
+        except AttributeError as e:
+            print(str(e))
             self.rapid = Rapid()
         if not self.current.result and not self.recent.result and not self.rapid.result:
             raise RapidTestRequiredError(
@@ -90,22 +104,14 @@ class Test:
     def __init__(self, tested=None, result=None, result_date=None):
         self.result_date = None
         self.result = None
+        self.tested = None
         if tested == YES and result_date and result:
             self.result = result
+            self.tested = YES
             try:
                 self.result_date = result_date.date()
             except AttributeError:
                 self.result_date = result_date
-
-
-class Current:
-    """Current HIV result/status, but only if POS, returns POS or None"""
-    def __init__(self, result=None, result_date=None, evidence=None):
-        self.result = None
-        self.result_date = None
-        if evidence == YES and result == POS:
-            self.result = POS
-            self.result_date = result_date
 
 
 class Recent(Test):
@@ -126,20 +132,43 @@ class Recent(Test):
             if self.result in [NEG, IND] and not self.within_3m:
                 self.result = None
                 self.result_date = None
+                self.tested = None
                 self.within_3m = None
         else:
             self.result = None
             self.result_date = None
+            self.tested = None
+            self.within_3m = None
 
 
-class Rapid(Test):
+class Current(Recent):
+    """Current HIV result/status, but only if POS, returns POS or None."""
+    def __init__(self, reference_datetime=None, result=None, result_date=None, evidence=None):
+        super(Current, self).__init__(
+            reference_datetime=reference_datetime,
+            evidence=evidence,
+            result=result,
+            result_date=result_date)
+        if self.result != POS:
+            self.result = None
+            self.result_date = None
+            self.tested = None
+            self.within_3m = None
+
+
+class Rapid(Recent):
     """HIV result by rapid test whihc is required if cannot determine POS status by other means."""
-    pass
+    def __init__(self, reference_datetime=None, result=None, result_date=None):
+        super(Rapid, self).__init__(
+            reference_datetime=reference_datetime,
+            evidence=YES,
+            result=result,
+            result_date=result_date)
 
 
 class PostEnrollmentResult:
     """Determines hiv status anytime post-enrollment, returns POS, NEG or None."""
-    def __init__(self, reference_datetime, enrollment_result, rapid_results=None, exception_cls=None):
+    def __init__(self, reference_datetime=None, enrollment_result=None, rapid_results=None, exception_cls=None):
         rapid_results = [] if not rapid_results else list(rapid_results)
         self.result = None
         self.result_date = None
@@ -168,10 +197,17 @@ class PostEnrollmentResult:
                 self.result = pos_rapid_results[0].result
                 self.result_date = pos_rapid_results[0].result_date
             else:
+                # not POS so ...
                 # select tests within last three months
                 recent_results = []
                 if self.enrollment_result.result == NEG:
-                    recent_results.append(self.enrollment_result)
+                    recent = Recent(
+                        reference_datetime=reference_datetime,
+                        result=enrollment_result.result,
+                        result_date=enrollment_result.result_date,
+                        tested=YES, evidence=YES)
+                    if recent.result in [NEG, IND]:
+                        recent_results.append(recent)
                 for test in rapid_results:
                     recent = Recent(
                         reference_datetime=reference_datetime,
