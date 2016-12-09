@@ -70,12 +70,12 @@ class EnrollmentHelper(object):
 
         # check if delivered, and if so, was mother on art for 4 weeks during pregnancy
         try:
-            self.on_art_4wks_in_pregnancy = self.delivery.valid_regiment_duration
+            self.on_art_4wks_in_pregnancy = self.delivery.valid_regimen_duration
             if self.on_art_4wks_in_pregnancy == NO:
                 self.messages.update(
                     on_art_4wks_in_pregnancy='Mother was not on ART for at least 4 weeks during pregnancy')
         except AttributeError as e:
-            if 'valid_regiment_duration' not in str(e):
+            if 'valid_regimen_duration' not in str(e):
                 raise AttributeError(str(e))
             self.on_art_4wks_in_pregnancy = None
 

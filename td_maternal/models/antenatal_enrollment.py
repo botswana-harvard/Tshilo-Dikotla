@@ -14,6 +14,9 @@ from ..enrollment_helper import EnrollmentHelper
 from ..managers import EnrollmentManager
 
 from dateutil.relativedelta import relativedelta
+from td_maternal.models.maternal_visit import MaternalVisit
+from django.core.exceptions import MultipleObjectsReturned
+from td_maternal.enrollment_helper import EnrollmentError
 
 
 class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointmentsOnEligibleMixin,
@@ -220,6 +223,17 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
         self.edd = enrollment_helper.edd.edd
         self.edd_method = enrollment_helper.edd.method
         self.unenrolled = enrollment_helper.messages.as_string()
+        error_msg = (
+            'Blocking attempt to change eligibility from \'eligible\' to \'not eligible\' for subject '
+            'who has already attended scheduled visits.')
+        if not self.is_eligible:
+            try:
+                MaternalVisit.objects.get(appointment__subject_identifier=self.subject_identifier)
+                raise EnrollmentError(error_msg)
+            except MultipleObjectsReturned:
+                raise EnrollmentError(error_msg)
+            except MaternalVisit.DoesNotExist:
+                pass
         super(AntenatalEnrollment, self).save(*args, **kwargs)
 
     def natural_key(self):

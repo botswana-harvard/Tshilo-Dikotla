@@ -160,7 +160,7 @@ maternallabdel = Recipe(
     labour_hrs='3',
     live_infants_to_register=1,
     mode_delivery='spontaneous vaginal',
-    valid_regiment_duration=YES,
+    valid_regimen_duration=YES,
     is_eligible=True,
     schedule_name='follow_up')
 

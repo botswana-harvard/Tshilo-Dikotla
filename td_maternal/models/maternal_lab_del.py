@@ -60,7 +60,7 @@ class MaternalLabDel(EnrollmentModelMixin, RequiresConsentMixin, LabourAndDelive
 
     delivery_complications_other = OtherCharField()
 
-    valid_regiment_duration = models.CharField(
+    valid_regimen_duration = models.CharField(
         verbose_name="(Interviewer) If HIV+ve, has the participant been on the ART "
                      "regimen for at least 4 weeks in pregnancy?",
         choices=YES_NO_NA,

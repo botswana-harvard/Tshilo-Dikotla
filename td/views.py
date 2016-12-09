@@ -127,16 +127,16 @@ class StatisticsView(EdcBaseViewMixin, TemplateView):
     @asyncio.coroutine
     def delivery_stats(self, future):
         response_data = {}
-        columns = ['id', 'valid_regiment_duration', 'modified']
+        columns = ['id', 'valid_regimen_duration', 'modified']
         qs = MaternalLabDel.objects.values_list(*columns).all()
         deliveries = pd.DataFrame(list(qs), columns=columns)
         if not deliveries.empty:
             response_data.update({
                 'delivered': int(deliveries['id'].count()),
                 'delivered_pos': int(deliveries.query(
-                    'valid_regiment_duration != "{}"'.format('N/A'))['valid_regiment_duration'].count()),
+                    'valid_regimen_duration != "{}"'.format('N/A'))['valid_regimen_duration'].count()),
                 'delivered_neg': int(deliveries.query(
-                    'valid_regiment_duration == "{}"'.format('N/A'))['valid_regiment_duration'].count()),
+                    'valid_regimen_duration == "{}"'.format('N/A'))['valid_regimen_duration'].count()),
             })
         future.set_result(self.verified_response_data(response_data))
 

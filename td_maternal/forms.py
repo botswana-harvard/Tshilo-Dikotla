@@ -414,7 +414,7 @@ class MaternalAztNvpForm(ModelFormMixin, forms.ModelForm):
         maternal_rando = MaternalRando.objects.get(
             subject_identifier=cleaned_data.get('maternal_visit').appointment.subject_identifier)
         if maternal_rando.rx != cleaned_data.get('azt_nvp_delivery'):
-            raise forms.ValidationError('The chosen prophylaxis regiment does not match the randomized regiment. '
+            raise forms.ValidationError('The chosen prophylaxis regimen does not match the randomized regimen. '
                                         ' Got {}, while randomization was {}'.format(cleaned_data.get('azt_nvp'),
                                                                                      maternal_rando.rx))
 
@@ -723,7 +723,7 @@ class MaternalInterimIdccForm(ModelFormMixin, forms.ModelForm):
                cleaned_data.get('value_vl') < 400)):
                 raise forms.ValidationError('You indicated that the value of the most recent VL is equal to a'
                                             ' number, therefore the value of VL should be between 400 and 750000'
-                                            '(inclusive of 400 and 750,000)')
+                                            '(inclusive of 400 and 750000)')
 
     def validate_info_since_last_visit_no(self):
         cleaned_data = self.cleaned_data
@@ -761,26 +761,26 @@ class MaternalLabDelForm(ModelFormMixin, forms.ModelForm):
     def validate_valid_regimen_hiv_pos_only(self):
         cleaned_data = self.cleaned_data
         if self.maternal_hiv_status.result == POS:
-            if cleaned_data.get('valid_regiment_duration') not in YES:
+            if cleaned_data.get('valid_regimen_duration') != YES:
                 raise forms.ValidationError(
-                    'Participant is HIV+ valid regimen duration should be YES. Please correct.')
-            if cleaned_data.get('valid_regiment_duration') == YES and not cleaned_data.get('arv_initiation_date'):
+                    'Participant is HIV+ and should have a valid regimen duration. Please correct.')
+            if cleaned_data.get('valid_regimen_duration') == YES and not cleaned_data.get('arv_initiation_date'):
                 raise forms.ValidationError(
-                    'You indicated participant was on valid regimen, please give a valid arv initiation date.')
-            if (cleaned_data.get('valid_regiment_duration') == YES and
+                    'You indicated participant was on a valid regimen, please give a valid ARV initiation date.')
+            if (cleaned_data.get('valid_regimen_duration') == YES and
                 (cleaned_data.get('delivery_datetime').date() - relativedelta(weeks=4) <
                     cleaned_data.get('arv_initiation_date'))):
                 raise forms.ValidationError(
-                    'You indicated that the mother was on REGIMEN for a valid duration, but'
-                    ' delivery date is within 4weeks of art initiation date. Please correct.')
+                    'You indicated that the mother was on her ARV regimen for a valid duration yet her '
+                    'delivery date is within 4weeks of her ART initiation date. Please correct.')
         else:
-            if cleaned_data.get('valid_regiment_duration') not in [NOT_APPLICABLE]:
+            if cleaned_data.get('valid_regimen_duration') not in [NOT_APPLICABLE]:
                 raise forms.ValidationError(
-                    'Participant\'s HIV status is {}, valid regimen duration should be Not Applicable.'.format(
+                    'Participant\'s HIV status is {}, a valid regimen duration is applicable. Please correct'.format(
                         self.maternal_hiv_status.result))
             if cleaned_data.get('arv_initiation_date'):
                 raise forms.ValidationError(
-                    'Participant\'s HIV status is {}, arv initiation date should not filled.'.format(
+                    'Participant\'s HIV status is {}, ARV initiation date should be left blank.'.format(
                         self.maternal_hiv_status.result))
 
     class Meta:

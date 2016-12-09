@@ -41,7 +41,7 @@ class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
             'mode_delivery': 'spontaneous vaginal',
             'csection_reason': NOT_APPLICABLE,
             'live_infants_to_register': 1,
-            'valid_regiment_duration': YES,
+            'valid_regimen_duration': YES,
             'arv_initiation_date': (get_utcnow() - relativedelta(weeks=6)).date()
         }
 
@@ -71,7 +71,7 @@ class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
             'td_maternal.maternallabdel',
             subject_identifier=self.subject_identifier,
             live_infants_to_register=1,
-            valid_regiment_duration=YES)
+            valid_regimen_duration=YES)
         enrollment_helper = EnrollmentHelper(self.antenatal_enrollment)
         # self.assertTrue(enrollment_helper.is_eligible_after_delivery)
         self.assertTrue(enrollment_helper.is_eligible)
@@ -81,13 +81,13 @@ class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
         mommy.make_recipe(
             'td_maternal.maternallabdel',
             subject_identifier=self.subject_identifier,
-            valid_regiment_duration=NO)
+            valid_regimen_duration=NO)
         enrollment_helper = EnrollmentHelper(self.antenatal_enrollment)
         # self.assertFalse(enrollment_helper.is_eligible_after_delivery)
         self.assertFalse(enrollment_helper.is_eligible)
 
     def test_valid_regimen_duration_hiv_pos_only_na(self):
-        self.options.update(valid_regiment_duration=NOT_APPLICABLE)
+        self.options.update(valid_regimen_duration=NOT_APPLICABLE)
         form = MaternalLabDelForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(

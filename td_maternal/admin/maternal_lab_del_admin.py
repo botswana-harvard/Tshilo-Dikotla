@@ -19,17 +19,17 @@ class MaternalLabDelAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin
                     'delivery_datetime',
                     'labour_hrs',
                     'delivery_hospital',
-                    'valid_regiment_duration')
+                    'valid_regimen_duration')
 
     list_filter = ('delivery_hospital',
-                   'valid_regiment_duration')
+                   'valid_regimen_duration')
 
     search_fields = ('subject_identifier', )
     readonly_fields = ('live_infants_to_register',)
 
     radio_fields = {'delivery_time_estimated': admin.VERTICAL,
                     'delivery_hospital': admin.VERTICAL,
-                    'valid_regiment_duration': admin.VERTICAL,
+                    'valid_regimen_duration': admin.VERTICAL,
                     'mode_delivery': admin.VERTICAL,
                     'csection_reason': admin.VERTICAL,
                     'csection_reason': admin.VERTICAL, }

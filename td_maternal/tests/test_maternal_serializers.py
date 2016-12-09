@@ -11,7 +11,7 @@ from edc_sync.models import OutgoingTransaction
 
 from td.models import Appointment
 
-from .test_mixins import NegMotherMixin, AntenatalVisitsMotherMixin
+from .test_mixins import NegMotherMixin, AntenatalVisitsMotherMixin, DeliverMotherMixin
 
 
 class TestMaternalSerializers(AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):
@@ -61,13 +61,19 @@ class TestMaternalSerializers(AntenatalVisitsMotherMixin, NegMotherMixin, TestCa
     def test_antenatal_enrollment_visit_crfs(self):
         """ Creating specimenconsent should creates outgoingtransaction """
         maternallocator = mommy.make_recipe(
-            'td_maternal.maternallocator', maternal_visit=self.maternal_visit, appointment=self.appointment)
-        maternalobstericalhistory = mommy.make_recipe('td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit)
-        maternalmedicalhistory = mommy.make_recipe('td_maternal.maternalmedicalhistory', maternal_visit=self.maternal_visit)
-        maternaldemographics = mommy.make_recipe('td_maternal.maternaldemographics', maternal_visit=self.maternal_visit)
-        maternalarvlifetimehistory = mommy.make_recipe('td_maternal.maternalarvlifetimehistory', maternal_visit=self.maternal_visit)
-        maternalarvinthispreg = mommy.make_recipe('td_maternal.maternalarvinthispreg', maternal_visit=self.maternal_visit)
-        maternalclinicalmeasurementsone = mommy.make_recipe('td_maternal.maternalclinicalmeasurementsone', maternal_visit=self.maternal_visit)
+            'td_maternal.maternallocator', subject_identifier=self.subject_identifier)
+        maternalobstericalhistory = mommy.make_recipe(
+            'td_maternal.maternalobstericalhistory', maternal_visit=self.maternal_visit)
+        maternalmedicalhistory = mommy.make_recipe(
+            'td_maternal.maternalmedicalhistory', maternal_visit=self.maternal_visit)
+        maternaldemographics = mommy.make_recipe(
+            'td_maternal.maternaldemographics', maternal_visit=self.maternal_visit)
+        maternalarvlifetimehistory = mommy.make_recipe(
+            'td_maternal.maternalarvlifetimehistory', maternal_visit=self.maternal_visit)
+        maternalarvinthispreg = mommy.make_recipe(
+            'td_maternal.maternalarvinthispreg', maternal_visit=self.maternal_visit)
+        maternalclinicalmeasurementsone = mommy.make_recipe(
+            'td_maternal.maternalclinicalmeasurementsone', maternal_visit=self.maternal_visit)
         outgoing_transactions = OutgoingTransaction.objects.all()
         self.assertGreater(outgoing_transactions.count(), 0)
         for outgoing_transaction in outgoing_transactions:
@@ -91,17 +97,10 @@ class TestMaternalSerializers(AntenatalVisitsMotherMixin, NegMotherMixin, TestCa
                 elif json_tx.get('model') == 'td_maternal.maternalclinicalmeasurementsone':
                     self.assertEqual(maternalclinicalmeasurementsone.pk, deserialised_obj.object.pk)
 
+
+class TestMaternalSerializersDelivered(DeliverMotherMixin, AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):
+
     def test_antenatal_enrollmenttwo_crfs_deserialising(self):
-        mommy.make('td_maternal.maternalultrasoundinitial', maternal_visit=self.maternal_visit, number_of_gestations=1)
-        antenatalenrollmenttwo = mommy.make_recipe(
-            'td_maternal.antenatalenrollmenttwo', subject_identifier=self.subject_identifier)
-        appointment = Appointment.objects.get(
-            subject_identifier=self.subject_identifier, visit_code='1010M')
-        mommy.make_recipe('td_maternal.maternalvisit', appointment=appointment, reason='scheduled')
-
-        maternallabdel = mommy.make_recipe(
-            'td_maternal.maternallabdel', subject_identifier=self.subject_identifier)
-
         outgoing_transactions = OutgoingTransaction.objects.all()
         self.assertGreater(outgoing_transactions.count(), 0)
         for outgoing_transaction in outgoing_transactions:
@@ -111,6 +110,6 @@ class TestMaternalSerializers(AntenatalVisitsMotherMixin, NegMotherMixin, TestCa
                     use_natural_foreign_keys=True,
                     use_natural_primary_keys=True):
                 if json_tx.get('model') == 'td_maternal.antenatalenrollmenttwo':
-                    self.assertEqual(antenatalenrollmenttwo.pk, deserialised_obj.object.pk)
+                    self.assertEqual(self.antenatal_enrollment_two.pk, deserialised_obj.object.pk)
                 elif json_tx.get('model') == 'td_maternal.maternalLabourdel':
-                    self.assertEqual(maternallabdel.pk, deserialised_obj.object.pk)
+                    self.assertEqual(self.maternal_lab_del.pk, deserialised_obj.object.pk)

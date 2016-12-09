@@ -39,7 +39,7 @@ class TestPregnancy(DeliverMotherMixin, AddVisitMotherMixin, PosMotherMixin, Tes
     def test_reference_datetime_before_delivery(self):
         """Asserts ignores delivery if reference datetime before delivery datetime."""
         maternal_visit = self.get_maternal_visit('1000M')
-        est_edd = (timezone.now() + relativedelta(weeks=20))
+        est_edd = (timezone.now() + relativedelta(weeks=20)).date()
         delivery_datetime = (timezone.now() + relativedelta(weeks=20) + relativedelta(days=6))
         reference_datetime = (timezone.now() + relativedelta(weeks=19))
         maternal_lab_del = MaternalLabDel.objects.get(subject_identifier=self.subject_identifier)
@@ -48,7 +48,7 @@ class TestPregnancy(DeliverMotherMixin, AddVisitMotherMixin, PosMotherMixin, Tes
         mommy.make_recipe(
             'td_maternal.maternalultrasoundinitial',
             maternal_visit=maternal_visit,
-            est_edd_ultrasound=est_edd.date(),
+            est_edd_ultrasound=est_edd,
             ga_by_ultrasound_wks=20,
             ga_by_ultrasound_days=4)
         pregnancy = Pregnancy(
