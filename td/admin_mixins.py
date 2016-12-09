@@ -13,6 +13,3 @@ class ModelAdminMixin(ModelAdminFormInstructionsMixin, ModelAdminNextUrlRedirect
     list_per_page = 10
     date_hierarchy = 'modified'
     empty_value_display = '-'
-
-#     def redirect_url(self, request, obj, post_url_continue=None):
-#         return request.GET.get('next')

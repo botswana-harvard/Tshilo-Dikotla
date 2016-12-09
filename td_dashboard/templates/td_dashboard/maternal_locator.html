@@ -7,7 +7,7 @@
    			{% if dashboard_type == 'infant' %}
    				<div class="panel-heading">Mother</div>
   	   			<div class="panel-body">
- 						<a href="{% url 'subject_dashboard_url' consent.subject_identifier %}" class="btn btn-sm btn-default">
+ 						<a href="{% url 'maternal_dashboard_url' subject_identifier=subject_identifier %}" class="btn btn-sm btn-default">
  							{{consent.subject_identifier}} {{consent.first_name}}
  						</a>
 	   			</div>

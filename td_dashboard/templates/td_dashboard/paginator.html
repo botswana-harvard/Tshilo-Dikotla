@@ -1,13 +1,13 @@
     <div class="paginator" style="text-align:center">
      <span class="step-links">
      	{% if results %}
-    	 <a href="{% url 'subject_dashboard_url' page=1 %}" class="btn btn-sm btn-default"><<</a>
+    	 <a href="{% url search_url_name page=1 %}" class="btn btn-sm btn-default"><<</a>
     	{% else %}
     	<a class="btn btn-sm disabled btn-default"><<</a>
     	{% endif %}
     	
         {% if results.has_previous %}
-            <a href="{% url 'subject_dashboard_url' page=results.previous_page_number %}" class="btn btn-sm btn-default"><</a>
+            <a href="{% url search_url_name page=results.previous_page_number %}" class="btn btn-sm btn-default"><</a>
         {% else %}
         	<a class="btn btn-sm disabled btn-default"><</a>
         {% endif %}
@@ -23,13 +23,13 @@
         {% endif %}
         
         {% if results.has_next %}
-            <a href="{% url 'subject_dashboard_url' page=results.next_page_number %}" class="btn btn-sm btn-default">></a>
+            <a href="{% url search_url_name page=results.next_page_number %}" class="btn btn-sm btn-default">></a>
         {% else %}
         	<a class="btn btn-sm disabled btn-default">></a>
         {% endif %}
         
         {% if results %}
-        	<a href="{% url 'subject_dashboard_url' page=results.paginator.num_pages %}" class="btn btn-sm btn-default">>></a>
+        	<a href="{% url search_url_name page=results.paginator.num_pages %}" class="btn btn-sm btn-default">>></a>
         {% else %}
         	<a class="btn btn-sm disabled btn-default">>></a>
         {% endif %}       

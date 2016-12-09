@@ -8,7 +8,7 @@ from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
 @admin.register(MaternalRando, site=td_maternal_admin)
-class MartenalRandoAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
+class MaternalRandoAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
 
     form = MaternalRandoForm
 

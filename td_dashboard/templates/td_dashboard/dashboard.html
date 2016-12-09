@@ -12,7 +12,7 @@
     {% block left_side_bar %}{% endblock left_side_bar%}
   </div>
 
-  {% if locator %}
+  {% if maternal_locator.pk %}
     <div class="col-md-7">
   {% else %}
     <div class="col-md-9">
@@ -28,10 +28,9 @@
     {% endblock requisitions %}
 	</div>
 
-  {% if locator %}
+  {% if maternal_locator.pk %}
   	<div class="col-md-3">
-    	{% block locator_information %}
-    	{% endblock locator_information %}
+    	{% block locator_information %}{% endblock locator_information %}
   	</div>
   {% endif %}
 

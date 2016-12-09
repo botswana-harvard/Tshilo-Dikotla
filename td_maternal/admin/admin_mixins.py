@@ -1,10 +1,9 @@
 from td.admin_mixins import ModelAdminMixin
 
 from ..models import MaternalVisit
-from edc_base.modeladmin_mixins import ModelAdminReadOnlyMixin
 
 
-class CrfModelAdminMixin(ModelAdminMixin, ModelAdminReadOnlyMixin):
+class CrfModelAdminMixin(ModelAdminMixin):
 
     instructions = (
         'Please complete the questions below. Required questions are in bold. '

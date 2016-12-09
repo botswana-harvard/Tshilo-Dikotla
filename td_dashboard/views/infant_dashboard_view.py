@@ -13,7 +13,7 @@ from td.constants import INFANT
 from td_infant.models import InfantBirth, InfantVisit
 from td_maternal.models import MaternalConsent, MaternalLocator
 
-from .mixins import DashboardMixin
+from edc_dashboard.view_mixins import DashboardMixin
 
 
 class InfantDashboardView(EdcBaseViewMixin, DashboardMixin, TemplateView):

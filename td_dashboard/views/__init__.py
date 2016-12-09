@@ -1,3 +1,3 @@
 from .infant_dashboard_view import InfantDashboardView
 from .maternal_dashboard_view import MaternalDashboardView
-from .search_dashboard_view import SearchDasboardView
+from .search_dashboard_view import SearchDashboardView

@@ -1,7 +1,5 @@
 from django.contrib import admin
 
-from edc_base.modeladmin_mixins import ModelAdminNextUrlRedirectMixin
-
 from td.admin_mixins import ModelAdminMixin
 
 from ..admin_site import td_maternal_admin
@@ -10,7 +8,7 @@ from ..models import MaternalConsent
 
 
 @admin.register(MaternalConsent, site=td_maternal_admin)
-class MaternalConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admin.ModelAdmin):
+class MaternalConsentAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     form = MaternalConsentForm
 
@@ -74,6 +72,3 @@ class MaternalConsentAdmin(ModelAdminMixin, ModelAdminNextUrlRedirectMixin, admi
                    'is_verified',
                    'is_literate',
                    'identity_type')
-
-    def redirect_url(self, request, obj, post_url_continue=None):
-        return request.GET.get(self.querystring_name)

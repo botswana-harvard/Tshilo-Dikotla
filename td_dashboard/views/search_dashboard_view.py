@@ -44,18 +44,20 @@ class QuerysetWrapper:
         return self._object_list
 
 
-class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
+class SearchDashboardView(EdcBaseViewMixin, TemplateView, FormView):
     form_class = SearchForm
     template_name = 'td_dashboard/search_dashboard.html'
     paginate_by = 10
+    subject_dashboard_url_name = 'maternal_dashboard_url'
+    search_url_name = 'search_url'
 
     def __init__(self, **kwargs):
         self.maternal_eligibility = None
-        super(SearchDasboardView, self).__init__(**kwargs)
+        super(SearchDashboardView, self).__init__(**kwargs)
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(SearchDasboardView, self).dispatch(*args, **kwargs)
+        return super(SearchDashboardView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         if form.is_valid():
@@ -82,11 +84,13 @@ class SearchDasboardView(EdcBaseViewMixin, TemplateView, FormView):
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
-        context = super(SearchDasboardView, self).get_context_data(**kwargs)
+        context = super(SearchDashboardView, self).get_context_data(**kwargs)
         qs = MaternalEligibility.objects.all().order_by('subject_identifier', '-created')
         results = QuerysetWrapper(qs).object_list
         context.update(
-            site_header=admin.site.site_header,
+            # site_header=admin.site.site_header,
+            subject_dashboard_url_name=self.subject_dashboard_url_name,
+            search_url_name=self.search_url_name,
             results=self.paginate(results))
         return context
 

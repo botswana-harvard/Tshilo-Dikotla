@@ -22,9 +22,9 @@ from td_maternal.pregnancy import Pregnancy
 
 class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
 
-    dashboard_url_name = 'subject_dashboard_url'
+    subject_dashboard_url_name = 'maternal_dashboard_url'
     add_visit_url_name = MaternalVisit().admin_url_name
-    template_name = 'td_dashboard/subject_dashboard.html'
+    template_name = 'td_dashboard/maternal_dashboard.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -59,7 +59,7 @@ class MaternalDashboardView(DashboardMixin, EdcBaseViewMixin, TemplateView):
             self.subject_identifier,
             reference_datetime=reference_datetime)
         context.update(
-            add_visit_url_name=self.add_visit_url_name,
+            visit_url=MaternalVisit().get_absolute_url(),
             maternal_rando=maternal_rando,
             maternal_consent=maternal_consent,
             maternal_hiv_status=maternal_hiv_status,
