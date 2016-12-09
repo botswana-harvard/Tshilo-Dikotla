@@ -43,8 +43,7 @@ class EnrollmentResult:
                 result=current.result,
                 result_date=current.result_date,
                 evidence=current.tested)
-        except AttributeError as e:
-            print(str(e))
+        except AttributeError:
             self.current = Current()
         try:
             self.recent = Recent(
@@ -52,16 +51,14 @@ class EnrollmentResult:
                 result=recent.result,
                 result_date=recent.result_date,
                 evidence=recent.tested)
-        except AttributeError as e:
-            print(str(e))
+        except AttributeError:
             self.recent = Recent()
         try:
             self.rapid = Rapid(
                 reference_datetime=reference_datetime,
                 result=rapid.result,
                 result_date=rapid.result_date)
-        except AttributeError as e:
-            print(str(e))
+        except AttributeError:
             self.rapid = Rapid()
         if not self.current.result and not self.recent.result and not self.rapid.result:
             raise RapidTestRequiredError(

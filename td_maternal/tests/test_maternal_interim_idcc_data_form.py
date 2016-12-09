@@ -65,7 +65,7 @@ class TestMaternalInterimIdccDataForm(AntenatalVisitsMotherMixin, PosMotherMixin
         forms = MaternalInterimIdccForm(data=self.options)
         self.assertIn("You indicated that the value of the most recent VL is equal to a number,"
                       " therefore the value of VL should be between 400 and 750000"
-                      "(inclusive of 400 and 750,000)", forms.errors.get('__all__'))
+                      "(inclusive of 400 and 750000)", forms.errors.get('__all__'))
 
     def test_recent_vl_value_date_not_provided(self):
         """If the VL value is provided then the date should be provided as well"""

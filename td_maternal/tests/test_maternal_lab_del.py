@@ -97,8 +97,8 @@ class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
         self.options.update(arv_initiation_date=None)
         form = MaternalLabDelForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn(
-            'You indicated participant was on valid regimen, please give a valid arv initiation date.', errors)
+        self.assertIn('You indicated participant was on a valid regimen, '
+                      'please give a valid ARV initiation date.', errors)
 
     def test_valid_regimen_duration_hiv_pos_only_invalid_init_date(self):
         self.options.update(arv_initiation_date=(get_utcnow() - relativedelta(weeks=1)).date())
@@ -106,5 +106,5 @@ class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
         form = MaternalLabDelForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
-            'You indicated that the mother was on REGIMEN for a valid duration, but '
-            'delivery date is within 4weeks of art initiation date. Please correct.', errors)
+            'You indicated that the mother was on her ARV regimen for a valid duration '
+            'yet her delivery date is within 4weeks of her ART initiation date. Please correct.', errors)
