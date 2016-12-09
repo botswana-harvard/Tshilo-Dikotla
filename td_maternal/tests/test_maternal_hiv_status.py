@@ -45,17 +45,6 @@ class TestMaternalHivStatusPos(DeliverMotherMixin, AntenatalVisitsMotherMixin, P
             reference_datetime=maternal_visit.report_datetime)
         self.assertEqual(maternal_hiv_status.result, POS)
 
-    def test_dnapcr_for_exposed_infant(self):
-        """Asserts that DNA PCR requisition is made available for an HIV exposed infant.
-        """
-        self.add_infant_visits('2000', '2010')
-        self.assertEqual(
-            RequisitionMetadata.objects.filter(
-                entry_status='REQUIRED',
-                model='td_lab.infantrequisition',
-                panel_name='DNA PCR',
-                visit_code='2010').count(), 1)
-
 
 class TestMaternalHivStatusNeg(DeliverMotherMixin, AntenatalVisitsMotherMixin, AddVisitInfantMixin,
                                NegMotherMixin, TestCase):
@@ -121,14 +110,14 @@ class TestMaternalHivStatusNeg(DeliverMotherMixin, AntenatalVisitsMotherMixin, A
     def test_neg_status_from_rapid_test(self):
         """test that we can figure out a negative status taking in to consideration rapid tests."""
         self.add_maternal_visits('1020M', '2000M', '2010M')
-        maternal_visit = self.get_maternal_visit('2010')
+        maternal_visit = self.get_maternal_visit('2010M')
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=self.subject_identifier,
             reference_datetime=maternal_visit.report_datetime)
         self.assertEqual(maternal_hiv_status.result, NEG)
         mommy.make_recipe('td_maternal.rapidtestresult', maternal_visit=maternal_visit, result=NEG)
         # Visit within 3months of rapid test.
-        maternal_visit = self.add_maternal_visit('2020')
+        maternal_visit = self.add_maternal_visit('2020M')
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=self.subject_identifier,
             reference_datetime=maternal_visit.report_datetime)

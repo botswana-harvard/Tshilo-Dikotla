@@ -32,6 +32,7 @@ from .models import (
     MaternalOffstudy, MaternalPostPartumDep, MaternalPostPartumFu, MaternalSubstanceUseDuringPreg,
     MaternalSubstanceUsePriorPreg, MaternalUltraSoundFu, NvpDispensing, RapidTestResult, SpecimenConsent
 )
+from td.hiv_result import RapidTestRequiredError, ElisaRequiredError
 
 
 class ModelFormMixin(Many2ManyModelFormMixin):
@@ -145,8 +146,8 @@ class AntenatalEnrollmentForm(ModelFormMixin, forms.ModelForm):
         self.validate_last_period_date(cleaned_data.get('report_datetime'), cleaned_data.get('last_period_date'))
         try:
             EnrollmentHelper(cleaned_data, exception_cls=forms.ValidationError)
-        except AttributeError:
-            pass
+        except (RapidTestRequiredError, ElisaRequiredError) as e:
+            raise forms.ValidationError(str(e))
         return cleaned_data
 
     def validate_last_period_date(self, report_datetime, last_period_date):

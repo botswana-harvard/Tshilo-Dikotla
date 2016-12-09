@@ -65,7 +65,7 @@ class EnrollmentResult:
             self.rapid = Rapid()
         if not self.current.result and not self.recent.result and not self.rapid.result:
             raise RapidTestRequiredError(
-                'Rapid test is required for null or invalid result.')
+                'Rapid test is required if result is not known or no longer valid.')
         else:
             try:
                 if self.recent.result_date > self.rapid.result_date:
@@ -90,13 +90,15 @@ class EnrollmentResult:
                             self.current.result, self.recent.result))
             if not self.result:
                 raise RapidTestRequiredError(
-                    'Rapid test is required for null result or result that is no longer valid.')
+                    'Rapid test is required if result is not known or no longer valid.')
+            elif self.result == IND:
+                raise ElisaRequiredError('ELISA is required to resolve indeterminate HIV result.')
             elif self.result not in [POS, NEG]:
                 if self.rapid.result:
                     raise EnrollmentNoResultError(
                         'Unable to determine a POS or NEG result. Got {}.'.format(self.result))
                 else:
-                    raise RapidTestRequiredError('Rapid test is required.')
+                    raise RapidTestRequiredError('Rapid test is required if result is not known or no longer valid.')
 
 
 class Test:
