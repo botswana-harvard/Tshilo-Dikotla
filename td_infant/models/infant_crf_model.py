@@ -22,6 +22,10 @@ class InfantCrfModel(CrfModelMixin, OffstudyMixin,
 
     history = HistoricalRecords()
 
+    def natural_key(self):
+        return self.infant_visit.natural_key()
+    natural_key.dependencies = ['td_infant.infantvisit']
+
     def __str__(self):
         return "{}: {}".format(self.__class__._meta.model_name,
                                self.infant_visit.appointment.subject_identifier)
