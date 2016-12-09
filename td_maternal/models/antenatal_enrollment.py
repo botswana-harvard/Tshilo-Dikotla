@@ -1,25 +1,25 @@
+from dateutil.relativedelta import relativedelta
+
 from django.db import models
 
 from edc_appointment.model_mixins import CreateAppointmentsOnEligibleMixin
 from edc_base.model.models import BaseUuidModel, HistoricalRecords, UrlMixin
 from edc_base.model.validators import date_not_future
+from edc_base.utils import get_utcnow
 from edc_consent.model_mixins import RequiresConsentMixin
 from edc_constants.choices import POS_NEG_UNTESTED_REFUSAL, YES_NO_NA, POS_NEG, YES_NO
-from edc_constants.constants import NO
-from edc_offstudy.model_mixins import OffstudyMixin
+from edc_constants.constants import NO, FAILED_ELIGIBILITY
 from edc_protocol.validators import date_not_before_study_start
 from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 
-from ..enrollment_helper import EnrollmentHelper
+from ..enrollment_helper import EnrollmentHelper, EnrollmentError
 from ..managers import EnrollmentManager
 
-from dateutil.relativedelta import relativedelta
-from td_maternal.models.maternal_visit import MaternalVisit
-from django.core.exceptions import MultipleObjectsReturned
-from td_maternal.enrollment_helper import EnrollmentError
+from .maternal_visit import MaternalVisit
+from .maternal_offstudy import MaternalOffstudy
 
 
-class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointmentsOnEligibleMixin,
+class AntenatalEnrollment(EnrollmentModelMixin, CreateAppointmentsOnEligibleMixin,
                           RequiresConsentMixin, UrlMixin, BaseUuidModel):
 
     ADMIN_SITE_NAME = 'td_maternal_admin'
@@ -223,17 +223,25 @@ class AntenatalEnrollment(EnrollmentModelMixin, OffstudyMixin, CreateAppointment
         self.edd = enrollment_helper.edd.edd
         self.edd_method = enrollment_helper.edd.method
         self.unenrolled = enrollment_helper.messages.as_string()
-        error_msg = (
-            'Blocking attempt to change eligibility from \'eligible\' to \'not eligible\' for subject '
-            'who has already attended scheduled visits.')
-        if not self.is_eligible:
+        if self.id and not self.is_eligible:
+            if MaternalVisit.objects.filter(
+                    appointment__subject_identifier=self.subject_identifier).exclude(
+                    visit_code__in=['1000M', '1010M']).exists():
+                raise EnrollmentError(
+                    'Blocking attempt to change eligibility from \'eligible\' to \'not eligible\' for subject '
+                    'who has already attended scheduled visits beyond 1010M.')
             try:
-                MaternalVisit.objects.get(appointment__subject_identifier=self.subject_identifier)
-                raise EnrollmentError(error_msg)
-            except MultipleObjectsReturned:
-                raise EnrollmentError(error_msg)
-            except MaternalVisit.DoesNotExist:
-                pass
+                maternal_off_study = MaternalOffstudy.objects.get(
+                    subject_identifier=self.subject_identifier)
+                maternal_off_study.offstudy_datetime = self.report_datetime
+                maternal_off_study.comment = self.reasons_not_eligible
+                maternal_off_study.save()
+            except MaternalOffstudy.DoesNotExist:
+                maternal_off_study = MaternalOffstudy.objects.create(
+                    subject_identifier=self.subject_identifier,
+                    offstudy_datetime=get_utcnow(),
+                    reason=FAILED_ELIGIBILITY,
+                    comment=self.reasons_not_eligible)
         super(AntenatalEnrollment, self).save(*args, **kwargs)
 
     def natural_key(self):

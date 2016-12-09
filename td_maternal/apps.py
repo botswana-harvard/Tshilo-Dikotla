@@ -6,7 +6,11 @@ class AppConfig(DjangoAppConfig):
     verbose_name = 'Mothers'
 
     def ready(self):
-        from .models.signals import (
+        from td_maternal.models.signals import (
+            delete_offstudy_on_antenatalenrollment_post_delete,
             delete_offstudy_on_eligible,
-            create_offstudy_on_ineligible,
-            maternal_eligibility_on_post_save)
+            maternal_consent_on_post_save,
+            maternal_eligibility_on_post_save,
+            maternal_lab_del_on_post_save,
+            maternal_ultrasound_initial_on_post_save,
+        )
