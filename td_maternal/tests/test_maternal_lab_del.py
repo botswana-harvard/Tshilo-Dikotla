@@ -91,7 +91,7 @@ class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
         form = MaternalLabDelForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
-            'Participant is HIV+ valid regimen duration should be YES. Please correct.', errors)
+            'Participant is HIV+ and should have a valid regimen duration. Please correct.', errors)
 
     def test_valid_regimen_duration_hiv_pos_only_no_init_date(self):
         self.options.update(arv_initiation_date=None)
