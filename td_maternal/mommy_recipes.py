@@ -16,7 +16,6 @@ from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, Antena
                      MaternalDemographics, MaternalAztNvp, MaternalDiagnosis, MaternalSubstanceUseDuringPreg,
                      MaternalClinicalMeasurementsTwo, MaternalLifetimeArvHistory, MaternalArvPreg,
                      MaternalClinicalMeasurementsOne, MaternalHivInterimHx, MaternalSubstanceUsePriorPreg)
-from td_list.models import WhoAdultDiagnosis, AdultDiagnoses
 
 
 class TdProvider(BaseProvider):
@@ -45,20 +44,6 @@ fake.add_provider(MyEdcBaseProvider)
 fake.add_provider(EdcLabProvider)
 fake.add_provider(TdProvider)
 
-
-whoadultdiagnosis = Recipe(
-    WhoAdultDiagnosis,
-    name=NOT_APPLICABLE,
-    short_name=NOT_APPLICABLE,
-    display_index=seq(1),
-)
-
-adultdiagnoses = Recipe(
-    AdultDiagnoses,
-    name=NOT_APPLICABLE,
-    short_name=NOT_APPLICABLE,
-    display_index=seq(1),
-)
 
 maternaleligibility = Recipe(
     MaternalEligibility,

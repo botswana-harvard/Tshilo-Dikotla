@@ -6,11 +6,12 @@ from dateutil.relativedelta import relativedelta
 from model_mommy import mommy
 from unipath import Path
 
-from edc_base.test_mixins import AddVisitMixin, ReferenceDateMixin, CompleteCrfsMixin, TestMixinError
+from edc_base.test_mixins import AddVisitMixin, ReferenceDateMixin, CompleteCrfsMixin, TestMixinError, LoadListDataMixin
 from edc_constants.constants import NEG, YES, NO, UNKNOWN
 
 from td_list.models import RandomizationItem
 from td_maternal.models.antenatal_enrollment import AntenatalEnrollment
+from td_list.list_data import list_data
 
 
 RAPID = 'rapid'
@@ -63,8 +64,9 @@ class CompleteMaternalCrfsMixin(CompleteCrfsMixin):
                 visit_code, maternal_visit, 'maternal_visit')
 
 
-class MaternalTestMixin(CompleteMaternalCrfsMixin, AddMaternalVisitMixin):
-    pass
+class MaternalTestMixin(CompleteMaternalCrfsMixin, AddMaternalVisitMixin, LoadListDataMixin):
+
+    list_data = list_data
 
 
 class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
@@ -173,17 +175,20 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
             report_datetime=report_datetime,
             subject_identifier=self.subject_identifier,
             **options)
+        self.requery_antenatal_enrollment()
 
     def make_rapid_test(self, result, result_date=None, visit=None):
         """Makes a rapid test with the given result.
 
         If no visit use last visit, if no result date use visit report_datetime."""
         visit = visit or self.get_last_maternal_visit()
-        return mommy.make_recipe(
+        rapid_test = mommy.make_recipe(
             'td_maternal.rapidtestresult',
             maternal_visit=visit,
             result=result,
             result_date=result_date or visit.report_datetime.date())
+        self.requery_antenatal_enrollment()
+        return rapid_test
 
     def make_ultrasound(self, visit=None, **options):
         """Makes an ultrasound GA 20wks reported on day of maternal visit unless different options provided."""
@@ -202,7 +207,7 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
             ga_by_ultrasound_wks=ga_by_ultrasound_wks,
             ga_by_ultrasound_days=ga_by_ultrasound_days)
         maternal_ultrasound = mommy.make_recipe('td_maternal.maternalultrasoundinitial', **options)
-        # self.requery_antenatal_enrollment() do this now or in the test??
+        self.requery_antenatal_enrollment()
         return maternal_ultrasound
 
 
