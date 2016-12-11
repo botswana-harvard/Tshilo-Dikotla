@@ -3,7 +3,7 @@ from django.db import models
 from edc_base.model.fields import OtherCharField
 from edc_constants.choices import YES_NO, YES_NO_NA
 
-from td_list.models import AdultDiagnoses, WhoAdultDiagnosis
+from td_list.models import AdultDiagnosis, WhoAdultDiagnosis
 
 
 class DiagnosisMixin(models.Model):
@@ -18,7 +18,7 @@ class DiagnosisMixin(models.Model):
     )
 
     diagnoses = models.ManyToManyField(
-        AdultDiagnoses,
+        AdultDiagnosis,
         verbose_name="Have any of the following diagnoses occured since last visit?",
         blank=True,
         help_text="",

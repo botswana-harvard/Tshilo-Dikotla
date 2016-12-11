@@ -1,4 +1,4 @@
-from .models import WhoAdultDiagnosis, AdultDiagnoses, DeliveryComplications
+from .models import WhoAdultDiagnosis, AdultDiagnosis, DeliveryComplications
 from edc_constants.constants import NOT_APPLICABLE
 from model_mommy.recipe import Recipe, seq
 
@@ -9,8 +9,8 @@ whoadultdiagnosis = Recipe(
     display_index=seq(1),
 )
 
-adultdiagnoses = Recipe(
-    AdultDiagnoses,
+adultdiagnosis = Recipe(
+    AdultDiagnosis,
     name=NOT_APPLICABLE,
     short_name=NOT_APPLICABLE,
     display_index=seq(1),

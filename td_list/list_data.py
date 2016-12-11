@@ -63,7 +63,7 @@ list_data.update({
         "Other",
     ]})
 list_data.update({
-    'td_list.adultdiagnoses': [
+    'td_list.adultdiagnosis': [
         NOT_APPLICABLE,
         "Asthma requiring steroids",
         "Chlamydia",

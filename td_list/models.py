@@ -73,7 +73,7 @@ class Malformations(ListModelMixin, BaseUuidModel):
         verbose_name_plural = "Fetal Malformations"
 
 
-class AdultDiagnoses(ListModelMixin, BaseUuidModel):
+class AdultDiagnosis(ListModelMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'td_list'

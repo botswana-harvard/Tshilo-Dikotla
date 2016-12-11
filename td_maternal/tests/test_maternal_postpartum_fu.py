@@ -1,52 +1,54 @@
 from django.test import TestCase, tag
 
-from edc_constants.constants import (YES, NOT_APPLICABLE, NO)
+from edc_base.test_mixins import LoadListDataMixin
+from edc_constants.constants import YES, NOT_APPLICABLE, NO
 
-from td_list.models import AdultDiagnoses, MaternalHospitalization, WhoAdultDiagnosis
+from td_list.models import AdultDiagnosis, MaternalHospitalization, WhoAdultDiagnosis
 
 from ..forms import MaternalPostPartumFuForm
 
-from .test_mixins import PosMotherMixin, NegMotherMixin
+from .test_mixins import MotherMixin
+
+
+class DxMixin(LoadListDataMixin):
+    def setUp(self):
+        super(DxMixin, self).setUp()
+        self.load_list_data('td_list.adultdiagnosis')
+        self.load_list_data('td_list.whoadultdiagnosis')
+        self.load_list_data('td_list.maternalhospitalization')
+        self.diagnoses = AdultDiagnosis.objects.get(name="Gestational Hypertension")
+        self.diagnoses_na = AdultDiagnosis.objects.get(name=NOT_APPLICABLE)
+        self.who_dx = WhoAdultDiagnosis.objects.get(name='Recurrent severe bacterial pneumo')
+        self.who_dx_na = WhoAdultDiagnosis.objects.get(name=NOT_APPLICABLE)
+        self.hospitalization_reason = MaternalHospitalization.objects.get(
+            name="Pneumonia or other respiratory disease")
+        self.hospitalization_reason_na = MaternalHospitalization.objects.get(name=NOT_APPLICABLE)
+        self.options = {
+            'new_diagnoses': YES,
+            'diagnoses': [str(self.diagnoses.id)],
+            'hospitalized': YES,
+            'hospitalization_reason': [str(self.hospitalization_reason.id)],
+            'hospitalization_days': 1,
+            'has_who_dx': YES,
+            'who': [self.who_dx.id]}
 
 
 @tag('review')
-class AdultDiagnosesMixin(PosMotherMixin):
+class TestMaternalPostPartumFuPos(DxMixin, MotherMixin, TestCase):
 
     def setUp(self):
-        super(AdultDiagnosesMixin, self).setUp()
-        self.diagnoses = AdultDiagnoses.objects.create(
-            name="Gestational Hypertension",
-            short_name="Gestational Hypertension")
-        self.diagnoses_na = AdultDiagnoses.objects.create(name="N/A", short_name="N/A")
-        self.who_dx = WhoAdultDiagnosis.objects.create(
-            short_name="Recurrent severe bacterial pneumo",
-            name="Recurrent severe bacterial pneumonia")
-        self.who_dx_na = WhoAdultDiagnosis.objects.create(name="N/A", short_name="N/A")
-        self.hospitalization_reason = MaternalHospitalization.objects.create(
-            name="Pneumonia or other respiratory disease",
-            short_name="Pneumonia or other respiratory disease")
-        self.hospitalization_reason_na = MaternalHospitalization.objects.create(name="N/A", short_name="N/A")
+        super(TestMaternalPostPartumFuPos, self).setUp()
+        self.make_positive_mother()
         self.add_maternal_visits('1000M')
         self.make_antenatal_enrollment_two()
         self.add_maternal_visits('1010M', '1020M')
         self.make_delivery()
         self.add_maternal_visits('2000M', '2010M')
         maternal_visit = self.add_maternal_visit('2010M')
-        self.options = {
-            'maternal_visit': maternal_visit.id,
-            'new_diagnoses': YES,
-            'diagnoses': [self.diagnoses.id],
-            'hospitalized': YES,
-            'hospitalization_reason': [self.hospitalization_reason.id],
-            'hospitalization_days': 1,
-            'has_who_dx': YES,
-            'who': [self.who_dx.id]}
-
-
-class TestMaternalPostPartumFuPosMotherMixin(AdultDiagnosesMixin, TestCase):
+        self.options.update(maternal_visit=maternal_visit.id)
 
     def test_diagnosis_list_none(self):
-        """check if the diagnosis list is empty"""
+        """Assert diagnosis may not be empty"""
         self.options.update(diagnoses=None)
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
@@ -54,7 +56,7 @@ class TestMaternalPostPartumFuPosMotherMixin(AdultDiagnosesMixin, TestCase):
             'Question4: Diagnosis field should not be left empty', errors)
 
     def test_new_diagnoses_no_diagnosis_list_no_not_applicable(self):
-        """checks if the diagnosis list is given when the patient has no new diagnoses"""
+        """Assert diagnosis list is blank if no new diagnoses"""
         self.options.update(new_diagnoses=NO)
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
@@ -62,18 +64,18 @@ class TestMaternalPostPartumFuPosMotherMixin(AdultDiagnosesMixin, TestCase):
             'Question4: Participant has no new diagnoses, do not give a listing, rather give N/A', errors)
 
     def test_new_diagnoses_no_diagnosis_list_listed_has_not_applicable(self):
-        """Checks if multiple options are selected with N/A as one of them"""
+        """Assert N/A cannot be amongst multiple options selected."""
         self.options.update(
             new_diagnoses=NO,
-            diagnoses=[self.diagnoses.id, self.diagnoses_na.id])
+            diagnoses=[str(self.diagnoses.id), str(self.diagnoses_na.id)])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
             'Question4: Participant has no new diagnoses, do not give a listing, only give N/A', errors)
 
     def test_new_diagnoses_yes_diagnosis_list_has_not_applicable(self):
-        """Checks if diagnoses listing is N/A even though mother has new diagnoses"""
-        self.options.update(diagnoses=[self.diagnoses_na.id])
+        """Assert N/A is invalid if new diagnoses."""
+        self.options.update(diagnoses=[str(self.diagnoses_na.id)])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
@@ -89,7 +91,7 @@ class TestMaternalPostPartumFuPosMotherMixin(AdultDiagnosesMixin, TestCase):
 
     def test_hospitalized_yes_hospitalization_reason_not_applicable(self):
         """check if hospitalization reason is N/A even though the mother was hospitalized"""
-        self.options.update(hospitalization_reason=[self.hospitalization_reason_na.id])
+        self.options.update(hospitalization_reason=[str(self.hospitalization_reason_na.id)])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(
@@ -123,7 +125,7 @@ class TestMaternalPostPartumFuPosMotherMixin(AdultDiagnosesMixin, TestCase):
         """Check if the field for hospitalization reason is listed and has N/A as one of the options"""
         self.options.update(
             hospitalized=NO,
-            hospitalization_reason=[self.hospitalization_reason.id, self.hospitalization_reason_na.id])
+            hospitalization_reason=[str(self.hospitalization_reason.id), str(self.hospitalization_reason_na.id)])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Question7: Participant was not hospitalized, reason should only be N/A', errors)
@@ -132,7 +134,7 @@ class TestMaternalPostPartumFuPosMotherMixin(AdultDiagnosesMixin, TestCase):
         """Check if the field for hospitalization reason is listed and has N/A as one of the options"""
         self.options.update(
             hospitalized=NO,
-            hospitalization_reason=[self.hospitalization_reason_na.id],
+            hospitalization_reason=[str(self.hospitalization_reason_na.id)],
             hospitalization_other="Asthma")
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
@@ -143,7 +145,7 @@ class TestMaternalPostPartumFuPosMotherMixin(AdultDiagnosesMixin, TestCase):
         """Check if the field for hospitalization reason is listed and has N/A as one of the options"""
         self.options.update(
             hospitalized=NO,
-            hospitalization_reason=[self.hospitalization_reason_na.id],
+            hospitalization_reason=[str(self.hospitalization_reason_na.id)],
             hospitalization_other=None,
             hospitalization_days=5)
         form = MaternalPostPartumFuForm(data=self.options)
@@ -167,16 +169,16 @@ class TestMaternalPostPartumFuPosMotherMixin(AdultDiagnosesMixin, TestCase):
 
     def test_mother_positive_who_diagnoses_yes_who_listing_not_applicable(self):
         """checks if who listing is not N/A provided question 10 is yes"""
-        self.options.update(who=[self.who_dx_na.id])
+        self.options.update(who=[str(self.who_dx_na.id)])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('Question 10 is indicated as YES, who listing cannot be N/A', errors)
+        self.assertIn('Question 10 is indicated as YES, WHO listing cannot be N/A', errors)
 
     def test_mother_positive_who_diagnoses_no_who_listed_not_applicable_not_there(self):
         """checks if who listing is N/A given that question 10 is No"""
         self.options.update(
             has_who_dx=NO,
-            who=[self.who_dx.id])
+            who=[str(self.who_dx.id)])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Question 10 is indicated as NO, who listing should be N/A', errors)
@@ -185,17 +187,27 @@ class TestMaternalPostPartumFuPosMotherMixin(AdultDiagnosesMixin, TestCase):
         """checks if who listing is only N/A"""
         self.options.update(
             has_who_dx=NO,
-            who=[self.who_dx.id, self.who_dx_na.id])
+            who=[str(self.who_dx.id), str(self.who_dx_na.id)])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('Question 10 is indicated as NO, who listing should only be N/A', errors)
 
 
-class TestMaternalPostPartumFuNegMother(AdultDiagnosesMixin, NegMotherMixin, TestCase):
+class TestMaternalPostPartumFuNegMother(DxMixin, MotherMixin, TestCase):
+
+    def setUp(self):
+        super(TestMaternalPostPartumFuNegMother, self).setUp()
+        self.make_negative_mother()
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M', '1020M')
+        self.make_delivery()
+        self.add_maternal_visits('2000M', '2010M')
+        maternal_visit = self.add_maternal_visit('2010M')
+        self.options.update(maternal_visit=maternal_visit.id)
 
     def test_mother_negative_who_diagnosis_yes(self):
-        """checks whether question 10 for WHO Stage III/IV is N/A if the mother is negative"""
-        self.options.update(maternal_visit=self.get_maternal_visit('2010M').id)
+        """Assert question 10 for WHO Stage III/IV is N/A if the mother is negative"""
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('The mother is Negative, question 10 for WHO Stage III/IV should be N/A', errors)
@@ -203,7 +215,6 @@ class TestMaternalPostPartumFuNegMother(AdultDiagnosesMixin, NegMotherMixin, Tes
     def test_mother_negative_who_listing_none(self):
         """Checks if the field for who diagnosis listing is empty"""
         self.options.update(
-            maternal_visit=self.get_maternal_visit('2010M').id,
             has_who_dx=NOT_APPLICABLE,
             who=None)
         form = MaternalPostPartumFuForm(data=self.options)
@@ -213,9 +224,8 @@ class TestMaternalPostPartumFuNegMother(AdultDiagnosesMixin, NegMotherMixin, Tes
     def test_mother_negative_who_listing_not_not_applicable(self):
         """checks if who listing is N/A given that the mother is negative"""
         self.options.update(
-            maternal_visit=self.get_maternal_visit('2010M').id,
             has_who_dx=NOT_APPLICABLE,
-            who=[self.who_dx.id])
+            who=[str(self.who_dx.id)])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('The mother is Negative, question 11 for WHO Stage III/IV listing should be N/A', errors)
@@ -223,9 +233,8 @@ class TestMaternalPostPartumFuNegMother(AdultDiagnosesMixin, NegMotherMixin, Tes
     def test_mother_negative_who_listed_not_applicable_there(self):
         """checks if who listing is only N/A if multiple options are selected given that the mother is negative"""
         self.options.update(
-            maternal_visit=self.get_maternal_visit('2010M').id,
             has_who_dx=NOT_APPLICABLE,
-            who=[self.who_dx.id, self.who_dx_na.id])
+            who=[str(self.who_dx.id), str(self.who_dx_na.id)])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn(

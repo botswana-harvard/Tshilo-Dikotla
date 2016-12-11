@@ -2,7 +2,7 @@ from django.test import TestCase, tag
 
 from edc_constants.constants import (YES, NO)
 
-from td_list.models import AdultDiagnoses, WhoAdultDiagnosis
+from td_list.models import AdultDiagnosis, WhoAdultDiagnosis
 from td_maternal.forms import MaternalDiagnosisForm
 
 from .test_mixins import PosMotherMixin
@@ -19,11 +19,11 @@ class TestMaternalDiagnosisForm(PosMotherMixin, TestCase):
         self.add_maternal_visits('1010M', '1020M')
         maternal_visit = self.get_maternal_visit('1020M')
 
-        self.diagnoses = AdultDiagnoses.objects.create(
+        self.diagnoses = AdultDiagnosis.objects.create(
             name="Gestational Hypertension",
             short_name="Gestational Hypertension")
 
-        self.diagnoses_na = AdultDiagnoses.objects.create(
+        self.diagnoses_na = AdultDiagnosis.objects.create(
             name="Not Applicable",
             short_name="N/A")
 
