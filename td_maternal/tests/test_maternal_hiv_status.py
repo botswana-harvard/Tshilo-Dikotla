@@ -121,10 +121,10 @@ class TestMaternalHivStatusNeg(MotherMixin, TestCase):
         self.add_maternal_visit('2010M')
         maternal_visit = self.add_maternal_visit('2020M')
         # Visit within 3months of rapid test.
-        self.assertGreaterEqual(
+        self.assertLessEqual(
             relativedelta(
                 self.get_maternal_visit('2020M').report_datetime,
-                self.get_maternal_visit('2010M').report_datetime).months, 1)
+                self.get_maternal_visit('2000M').report_datetime).months, 3)
         maternal_hiv_status = MaternalHivStatus(
             subject_identifier=self.subject_identifier,
             reference_datetime=maternal_visit.report_datetime)

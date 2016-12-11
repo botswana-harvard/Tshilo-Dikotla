@@ -3,18 +3,16 @@ import unittest
 from dateutil.relativedelta import relativedelta
 
 from django.test import TestCase
+from django.test.utils import tag
 
 from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NEG, NO, NOT_APPLICABLE
 from edc_pregnancy_utils import Lmp
 
-from td.hiv_result import RapidTestRequiredError
-
 from ..enrollment_helper import EnrollmentHelper, Obj as ModellikeObj
 from ..models import AntenatalEnrollment
 
 from .test_mixins import MotherMixin
-from django.test.utils import tag
 
 
 class Obj(ModellikeObj):
