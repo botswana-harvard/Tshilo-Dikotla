@@ -5,7 +5,7 @@ from ..forms import MaternalObstericalHistoryForm
 from .test_mixins import PosMotherMixin
 
 
-@tag('review')
+@tag('forms')
 class TestMaternalObstericalHistoryForm(PosMotherMixin, TestCase):
 
     def setUp(self):
