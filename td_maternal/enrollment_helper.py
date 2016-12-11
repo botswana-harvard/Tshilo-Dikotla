@@ -22,6 +22,9 @@ class Messages(OrderedDict):
     def as_string(self):
         return ', '.join(self.values())
 
+    def as_list(self):
+        return list(self.values())
+
 
 class Obj:
     """An AntenatalEnrollment model-like object given a data dictionary such as cleaned_data."""
@@ -39,7 +42,10 @@ class EmptyResult(Test):
 
 class EnrollmentHelper(object):
 
-    """Class that determines maternal eligibility."""
+    """Class that determines maternal eligibility.
+
+    Exceptions are supressed and instead a messages object is updated. To determine
+    what failed inspect the messages attr."""
 
     def __init__(self, obj, exception_cls=None):
         self._delivery = None

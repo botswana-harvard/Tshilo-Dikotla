@@ -10,6 +10,7 @@ from edc_base.test_mixins import AddVisitMixin, ReferenceDateMixin, CompleteCrfs
 from edc_constants.constants import NEG, YES, NO, UNKNOWN
 
 from td_list.models import RandomizationItem
+from td_maternal.models.antenatal_enrollment import AntenatalEnrollment
 
 
 RAPID = 'rapid'
@@ -76,25 +77,33 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
         self.maternal_consent = self.make_consent()
         self.subject_identifier = self.maternal_consent.subject_identifier
 
+    def requery_antenatal_enrollment(self):
+        self.antenatal_enrollment = AntenatalEnrollment.objects.get(subject_identifier=self.subject_identifier)
+
     def make_eligibility(self):
         return mommy.make_recipe('td_maternal.maternaleligibility')
 
     def make_consent(self):
         return mommy.make_recipe(
             'td_maternal.maternalconsent',
-            consent_datetime=self.mixin_reference_datetime,
+            consent_datetime=self.test_mixin_reference_datetime,
             maternal_eligibility_reference=self.maternal_eligibility.reference,)
 
-    def make_positive_mother(self):
+    def make_positive_mother(self, **options):
         """Make a POS mother LMP 25wks with POS result with evidence (no recent or rapid test)."""
+        report_datetime = options.get('report_datetime', self.test_mixin_reference_datetime)
+        last_period_date = options.get(
+            'last_period_date', (report_datetime - relativedelta(weeks=25)).date())
+        options.update(
+            report_datetime=report_datetime,
+            last_period_date=last_period_date)
         self.antenatal_enrollment = mommy.make_recipe(
             'td_maternal.antenatalenrollment_pos',
-            report_datetime=self.mixin_reference_datetime,
-            last_period_date=(self.mixin_reference_datetime - relativedelta(weeks=25)).date(),
             rapid_test_done=None,
             rapid_test_result=None,
             week32_test_date=None,
-            subject_identifier=self.subject_identifier)
+            subject_identifier=self.subject_identifier,
+            **options)
         if self.antenatal_enrollment.reasons_not_eligible:
             self.assertIsNone(self.antenatal_enrollment.reasons_not_eligible)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
@@ -118,7 +127,7 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
                 current_hiv_status=UNKNOWN,
                 evidence_hiv_status=NO,
                 week32_test=YES,
-                week32_test_date=(self.mixin_reference_datetime - relativedelta(weeks=4)).date(),
+                week32_test_date=(self.test_mixin_reference_datetime - relativedelta(weeks=4)).date(),
                 week32_result=NEG,
                 evidence_32wk_hiv_status=YES,
                 rapid_test_done=NO,
@@ -133,12 +142,12 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
                 week32_result=None,
                 evidence_32wk_hiv_status=None,
                 rapid_test_done=YES,
-                rapid_test_date=(self.mixin_reference_datetime - relativedelta(weeks=4)).date(),
+                rapid_test_date=(self.test_mixin_reference_datetime - relativedelta(weeks=4)).date(),
                 rapid_test_result=NEG)
         self.antenatal_enrollment = mommy.make_recipe(
             'td_maternal.antenatalenrollment_neg',
-            report_datetime=self.mixin_reference_datetime,
-            last_period_date=(self.mixin_reference_datetime - relativedelta(weeks=25)).date(),
+            report_datetime=self.test_mixin_reference_datetime,
+            last_period_date=(self.test_mixin_reference_datetime - relativedelta(weeks=25)).date(),
             subject_identifier=self.subject_identifier,
             **options)
         if self.antenatal_enrollment.reasons_not_eligible:
@@ -185,16 +194,16 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
         weeks_until_edd = 40 - (
             relativedelta(weeks=ga_by_ultrasound_wks) + relativedelta(days=ga_by_ultrasound_days)).weeks
         suggested_edd = (report_datetime + relativedelta(weeks=weeks_until_edd)).date()
-        est_edd_ultrasound = options.get(
-            'est_edd_ultrasound', suggested_edd)
+        est_edd_ultrasound = options.get('est_edd_ultrasound', suggested_edd)
         options.update(
             maternal_visit=visit,
             report_datetime=report_datetime,
             est_edd_ultrasound=est_edd_ultrasound,
             ga_by_ultrasound_wks=ga_by_ultrasound_wks,
             ga_by_ultrasound_days=ga_by_ultrasound_days)
-        return mommy.make_recipe(
-            'td_maternal.maternalultrasoundinitial', **options)
+        maternal_ultrasound = mommy.make_recipe('td_maternal.maternalultrasoundinitial', **options)
+        # self.requery_antenatal_enrollment() do this now or in the test??
+        return maternal_ultrasound
 
 
 class PosMotherMixin(MotherMixin):
