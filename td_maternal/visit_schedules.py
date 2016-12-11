@@ -58,14 +58,14 @@ antenatal1_crfs = (
 
 antenatal2_crfs = (
     Crf(show_order=10, model='td_maternal.maternalinterimidcc'),
-    Crf(show_order=20, model='td_maternal.maternaldiagnoses'),
+    Crf(show_order=20, model='td_maternal.maternaldiagnosis'),
     Crf(show_order=30, model='td_maternal.maternalsubstanceusepriorpreg'),
     Crf(show_order=40, model='td_maternal.maternalclinicalmeasurementstwo'),
     Crf(show_order=50, model='td_maternal.rapidtestresult'),
 )
 
 delivery_crfs = (
-    Crf(show_order=10, model='td_maternal.maternaldiagnoses'),
+    Crf(show_order=10, model='td_maternal.maternaldiagnosis'),
     Crf(show_order=20, model='td_maternal.maternalhivinterimhx'),
     Crf(show_order=30, model='td_maternal.maternalarvpreg'),
     Crf(show_order=40, model='td_maternal.maternalinterimidcc'),

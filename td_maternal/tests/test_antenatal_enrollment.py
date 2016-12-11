@@ -1,15 +1,14 @@
 from dateutil.relativedelta import relativedelta
 
-from django.test import TestCase
+from django.test import TestCase, tag
 from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
 from edc_constants.constants import (
     POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN)
 
-from td.hiv_result import EnrollmentResultError
 
-
+@tag('enrollment', 'pos', 'neg')
 class TestAntenatalEnrollment(TestCase):
     """Test eligibility of a mother for antenatal enrollment."""
 

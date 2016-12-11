@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO
@@ -8,6 +8,7 @@ from ..forms import MaternalArvPostForm
 from .test_mixins import PosMotherMixin
 
 
+@tag('postenrollment', 'forms')
 class TestMaternalArvPostForm(PosMotherMixin, TestCase):
 
     def setUp(self):

@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 
 from edc_constants.constants import YES, NO
 
@@ -9,6 +9,7 @@ from ..forms import MaternalSubstanceUseDuringPregForm
 from .test_mixins import NegMotherMixin
 
 
+@tag('review')
 class TestMaternalSubstanceUseDuringPreg(AddVisitInfantMixin, NegMotherMixin, TestCase):
 
     def setUp(self):

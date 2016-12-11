@@ -1,4 +1,4 @@
-from django.test.testcases import TestCase
+from django.test import TestCase, tag
 from django.utils import timezone
 from model_mommy import mommy
 
@@ -9,6 +9,7 @@ from ..forms import MaternalRandoForm
 from .test_mixins import NegMotherMixin, MotherMixin
 
 
+@tag('review')
 class TestMaternalRandomizationForm(NegMotherMixin, TestCase):
 
     def test_pos_mother_validation(self):
@@ -25,6 +26,7 @@ class TestMaternalRandomizationForm(NegMotherMixin, TestCase):
         self.assertIn('Mother must be HIV(+) to randomize.', form.errors.get('__all__'))
 
 
+@tag('review')
 class TestMaternalRandomization(MotherMixin, TestCase):
 
     def test_pick_correct_next_randomization_item(self):

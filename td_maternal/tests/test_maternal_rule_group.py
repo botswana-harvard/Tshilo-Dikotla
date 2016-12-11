@@ -1,16 +1,17 @@
 from dateutil.relativedelta import relativedelta
 from model_mommy import mommy
 
-from django.test.testcases import TestCase
+from django.test import TestCase, tag
 
 from edc_base.utils import get_utcnow
-from edc_constants.constants import NEG, YES
+from edc_constants.constants import NEG
 from edc_metadata.constants import REQUIRED, NOT_REQUIRED
 from edc_metadata.models import CrfMetadata, RequisitionMetadata
 
 from .test_mixins import PosMotherMixin, NegMotherMixin
 
 
+@tag('review')
 class TestMaternalRuleGroupsPos(PosMotherMixin, TestCase):
 
     def test_maternal_hiv_maternalrando(self):
@@ -135,6 +136,7 @@ class TestMaternalRuleGroupsPos(PosMotherMixin, TestCase):
                 visit_code='2000M').count(), 1)
 
 
+@tag('review')
 class TestMaternalRuleGroupsNeg(NegMotherMixin, TestCase):
 
     def test_maternal_rapid_test_required_delivery(self):

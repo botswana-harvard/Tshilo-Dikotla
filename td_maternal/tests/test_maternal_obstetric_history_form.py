@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 
-from django.test.testcases import TestCase
+from django.test.testcases import TestCase, tag
 from django.utils import timezone
 
 from edc_base.utils import get_utcnow
@@ -10,6 +10,7 @@ from ..forms import MaternalObstericalHistoryForm
 from .test_mixins import PosMotherMixin
 
 
+@tag('review')
 class TestMaternalObstericalHistoryForm(PosMotherMixin, TestCase):
 
     def setUp(self):

@@ -13,10 +13,10 @@ from edc_visit_tracking.constants import SCHEDULED
 from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, AntenatalEnrollment, AntenatalEnrollmentTwo,
                      MaternalLabDel, SpecimenConsent, MaternalRando, MaternalLocator, MaternalUltraSoundInitial,
                      MaternalInterimIdcc, RapidTestResult, MaternalObstericalHistory, MaternalMedicalHistory,
-                     MaternalDemographics, MaternalAztNvp, MaternalDiagnoses, MaternalSubstanceUseDuringPreg,
+                     MaternalDemographics, MaternalAztNvp, MaternalDiagnosis, MaternalSubstanceUseDuringPreg,
                      MaternalClinicalMeasurementsTwo, MaternalLifetimeArvHistory, MaternalArvPreg,
                      MaternalClinicalMeasurementsOne, MaternalHivInterimHx, MaternalSubstanceUsePriorPreg)
-from td_list.models import WhoAdultDiagnosis
+from td_list.models import WhoAdultDiagnosis, AdultDiagnoses
 
 
 class TdProvider(BaseProvider):
@@ -53,8 +53,8 @@ whoadultdiagnosis = Recipe(
     display_index=seq(1),
 )
 
-maternaldiagnoses = Recipe(
-    MaternalDiagnoses,
+adultdiagnoses = Recipe(
+    AdultDiagnoses,
     name=NOT_APPLICABLE,
     short_name=NOT_APPLICABLE,
     display_index=seq(1),
@@ -279,8 +279,8 @@ maternalaztnvp = Recipe(
     date_given=get_utcnow,
     instructions_given=NO)
 
-maternaldiagnoses = Recipe(
-    MaternalDiagnoses,
+maternaldiagnosis = Recipe(
+    MaternalDiagnosis,
     new_diagnoses=NO,
     has_who_dx=NO,
 )

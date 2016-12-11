@@ -1,6 +1,7 @@
 from dateutil.relativedelta import relativedelta
 
 from django.test import TestCase
+from django.test.utils import tag
 
 from edc_constants.constants import POS, NEG
 
@@ -11,6 +12,7 @@ from td_maternal.tests.test_mixins import MotherMixin, RAPID, ENROLLMENT, RECENT
 from edc_base.test_mixins import TestMixinError
 
 
+@tag('pos')
 class TestMaternalHivStatusPos(PosMotherMixin, TestCase):
     """Tests where the mother is POS."""
 
@@ -45,6 +47,7 @@ class TestMaternalHivStatusPos(PosMotherMixin, TestCase):
         self.assertEqual(maternal_hiv_status.result, POS)
 
 
+@tag('neg')
 class TestMaternalHivStatusNeg(MotherMixin, TestCase):
 
     def test_neg_status_enrollment(self):

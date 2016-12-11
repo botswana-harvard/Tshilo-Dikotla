@@ -1,8 +1,7 @@
 from dateutil.relativedelta import relativedelta
-from model_mommy import mommy
 
 from django.apps import apps as django_apps
-from django.test import TestCase
+from django.test import TestCase, tag
 
 from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
@@ -17,6 +16,7 @@ from ..forms import MaternalLabDelForm
 from .test_mixins import PosMotherMixin
 
 
+@tag('review')
 class TestMaternalLabDel(PosMotherMixin, TestCase):
 
     def setUp(self):

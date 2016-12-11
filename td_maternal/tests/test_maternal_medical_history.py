@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO, NOT_APPLICABLE, NEG
 
@@ -40,6 +40,7 @@ class ChronicAndMedicationsMixin:
             'is_date_estimated': NO}
 
 
+@tag('review')
 class TestMaternalMedicalHistoryPosMother(ChronicAndMedicationsMixin, PosMotherMixin, TestCase):
 
     def test_mother_chronic_multiple_selection_not_applicable_there(self):

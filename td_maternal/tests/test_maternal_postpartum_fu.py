@@ -1,23 +1,23 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 
-from edc_base.utils import get_utcnow
 from edc_constants.constants import (YES, NOT_APPLICABLE, NO)
 
-from td_list.models import MaternalDiagnoses, MaternalHospitalization, WhoAdultDiagnosis
+from td_list.models import AdultDiagnoses, MaternalHospitalization, WhoAdultDiagnosis
 
 from ..forms import MaternalPostPartumFuForm
 
 from .test_mixins import PosMotherMixin, NegMotherMixin
 
 
-class DiagnosesMixinWcsDxAdultMixin(PosMotherMixin):
+@tag('review')
+class AdultDiagnosesMixin(PosMotherMixin):
 
     def setUp(self):
-        super(DiagnosesMixinWcsDxAdultMixin, self).setUp()
-        self.diagnoses = MaternalDiagnoses.objects.create(
+        super(AdultDiagnosesMixin, self).setUp()
+        self.diagnoses = AdultDiagnoses.objects.create(
             name="Gestational Hypertension",
             short_name="Gestational Hypertension")
-        self.diagnoses_na = MaternalDiagnoses.objects.create(name="N/A", short_name="N/A")
+        self.diagnoses_na = AdultDiagnoses.objects.create(name="N/A", short_name="N/A")
         self.who_dx = WhoAdultDiagnosis.objects.create(
             short_name="Recurrent severe bacterial pneumo",
             name="Recurrent severe bacterial pneumonia")
@@ -43,7 +43,7 @@ class DiagnosesMixinWcsDxAdultMixin(PosMotherMixin):
             'who': [self.who_dx.id]}
 
 
-class TestMaternalPostPartumFuPosMotherMixin(DiagnosesMixinWcsDxAdultMixin, TestCase):
+class TestMaternalPostPartumFuPosMotherMixin(AdultDiagnosesMixin, TestCase):
 
     def test_diagnosis_list_none(self):
         """check if the diagnosis list is empty"""
@@ -191,7 +191,7 @@ class TestMaternalPostPartumFuPosMotherMixin(DiagnosesMixinWcsDxAdultMixin, Test
         self.assertIn('Question 10 is indicated as NO, who listing should only be N/A', errors)
 
 
-class TestMaternalPostPartumFuNegMother(DiagnosesMixinWcsDxAdultMixin, NegMotherMixin, TestCase):
+class TestMaternalPostPartumFuNegMother(AdultDiagnosesMixin, NegMotherMixin, TestCase):
 
     def test_mother_negative_who_diagnosis_yes(self):
         """checks whether question 10 for WHO Stage III/IV is N/A if the mother is negative"""

@@ -27,7 +27,7 @@ from .models import (
     MaternalObstericalHistory, MaternalArvPost, MaternalArvPostMed, MaternalArvPostAdh,
     MaternalArvPreg, MaternalArv, MaternalAztNvp, MaternalRando, MaternalClinicalMeasurementsOne,
     MaternalClinicalMeasurementsTwo, MaternalContraception, MaternalDeathReport, MaternalDemographics,
-    MaternalDiagnoses, MaternalEligibility, MaternalEligibilityLoss, MaternalInterimIdcc, MaternalHivInterimHx,
+    MaternalDiagnosis, MaternalEligibility, MaternalEligibilityLoss, MaternalInterimIdcc, MaternalHivInterimHx,
     MaternalLabDel, MaternalVisit, MaternalLocator, MaternalMedicalHistory, MaternalUltraSoundInitial,
     MaternalOffstudy, MaternalPostPartumDep, MaternalPostPartumFu, MaternalSubstanceUseDuringPreg,
     MaternalSubstanceUsePriorPreg, MaternalUltraSoundFu, NvpDispensing, RapidTestResult, SpecimenConsent
@@ -611,10 +611,10 @@ class MaternalDemographicsForm(ModelFormMixin, forms.ModelForm):
         fields = '__all__'
 
 
-class MaternalDiagnosesForm(ModelFormMixin, forms.ModelForm):
+class MaternalDiagnosisForm(ModelFormMixin, forms.ModelForm):
 
     def clean(self):
-        cleaned_data = super(MaternalDiagnosesForm, self).clean()
+        cleaned_data = super(MaternalDiagnosisForm, self).clean()
         self.validate_has_diagnoses()
         self.validate_who_dignoses()
         return cleaned_data
@@ -648,7 +648,7 @@ class MaternalDiagnosesForm(ModelFormMixin, forms.ModelForm):
                         cleaned_data.get('has_who_dx')))
 
     class Meta:
-        model = MaternalDiagnoses
+        model = MaternalDiagnosis
         fields = '__all__'
 
 

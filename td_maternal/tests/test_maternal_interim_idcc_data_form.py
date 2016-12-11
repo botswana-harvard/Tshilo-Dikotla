@@ -1,5 +1,5 @@
 from datetime import date
-from django.test import TestCase
+from django.test import TestCase, tag
 
 from edc_constants.constants import YES, NO
 
@@ -8,6 +8,7 @@ from ..forms import MaternalInterimIdccForm
 from .test_mixins import PosMotherMixin
 
 
+@tag('review')
 class TestMaternalInterimIdccDataForm(PosMotherMixin, TestCase):
 
     def setUp(self):

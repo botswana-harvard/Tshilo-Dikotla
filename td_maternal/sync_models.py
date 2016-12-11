@@ -14,7 +14,7 @@ sync_models = [
     'td_maternal.maternalconsent',
     'td_maternal.maternaldeathreport',
     'td_maternal.maternaldemographics',
-    'td_maternal.maternaldiagnoses',
+    'td_maternal.maternaldiagnosis',
     'td_maternal.maternaleligibility',
     'td_maternal.maternaleligibilityloss',
     'td_maternal.maternalhivinterimhx',

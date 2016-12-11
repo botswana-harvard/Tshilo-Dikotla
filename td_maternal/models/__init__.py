@@ -2,7 +2,6 @@ from .antenatal_enrollment import AntenatalEnrollment
 from .antenatal_enrollment_two import AntenatalEnrollmentTwo
 from .base_maternal_clinical_measurements import BaseMaternalClinicalMeasurements
 from .base_ultra_sound_model import BaseUtraSoundModel
-from .diagnoses_mixin import DiagnosesMixin
 from .maternal_arv_post import MaternalArvPost
 from .maternal_arv_post import MaternalArvPostAdh
 from .maternal_arv_post import MaternalArvPostMed
@@ -16,7 +15,7 @@ from .maternal_contraception import MaternalContraception
 from .maternal_crf_model import MaternalCrfModel
 from .maternal_death_report import MaternalDeathReport
 from .maternal_demographics import MaternalDemographics
-from .maternal_diagnoses import MaternalDiagnoses
+from .maternal_diagnosis import MaternalDiagnosis
 from .maternal_disenrollment import MaternalDisenrollment
 from .maternal_eligibility import MaternalEligibility
 from .maternal_eligibility_loss import MaternalEligibilityLoss

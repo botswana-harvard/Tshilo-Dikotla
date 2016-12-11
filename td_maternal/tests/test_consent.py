@@ -1,13 +1,14 @@
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
-from django.test import TestCase
+from django.test import TestCase, tag
 
 from model_mommy import mommy
 
 from ..models import MaternalConsent
 
 
+@tag('consent', 'enrollment')
 class TestConsent(TestCase):
 
     def test_cannot_create_consent_without_eligibility(self):

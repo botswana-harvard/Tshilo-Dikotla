@@ -13,7 +13,7 @@ from .maternal_consent_admin import MaternalConsentAdmin
 from .maternal_contraception_admin import MaternalContraception
 from .maternal_death_report_admin import MaternalDeathReportAdmin
 from .maternal_demographics_admin import MaternalDemographicsAdmin
-from .maternal_diagnoses_admin import MaternalDiagnosesAdmin
+from .maternal_diagnosis_admin import MaternalDiagnosisAdmin
 from .maternal_eligibility_admin import MaternalEligibilityAdmin
 from .maternal_eligibility_loss_admin import MaternalEligibilityLossAdmin
 from .maternal_interim_idcc_admin import MaternalInterimIdccAdmin

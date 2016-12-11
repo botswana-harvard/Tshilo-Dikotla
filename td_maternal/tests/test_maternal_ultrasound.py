@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.utils import timezone
 from model_mommy import mommy
 
@@ -13,6 +13,7 @@ from ..models import AntenatalEnrollment, MaternalOffstudy
 from .test_mixins import PosMotherMixin
 
 
+@tag('pos', 'pregnancy')
 class TestMaternalUltrasound(PosMotherMixin, TestCase):
 
     def test_pass_eligibility_on_singleton_pregnancy(self):

@@ -1,10 +1,11 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 
 from td_maternal.forms import MaternalClinicalMeasurementsTwoForm
 
 from .test_mixins import PosMotherMixin
 
 
+@tag('postenrollment', 'forms')
 class TestMaternalClinicalMeasurementsTwo(PosMotherMixin, TestCase):
 
     def setUp(self):

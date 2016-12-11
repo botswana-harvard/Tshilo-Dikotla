@@ -1,6 +1,6 @@
 from datetime import date
 from dateutil.relativedelta import relativedelta
-from django.test import TestCase
+from django.test import TestCase, tag
 from model_mommy import mommy
 
 from edc_base.utils import get_utcnow
@@ -12,6 +12,7 @@ from td_maternal.forms import MaternalLifetimeArvHistoryForm
 from .test_mixins import PosMotherMixin
 
 
+@tag('review')
 class TestMaternalLifetimeArvHistoryForm(PosMotherMixin, TestCase):
 
     def setUp(self):

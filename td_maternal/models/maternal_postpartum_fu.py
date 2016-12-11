@@ -6,10 +6,10 @@ from edc_constants.choices import YES_NO
 from td_list.models import MaternalHospitalization
 
 from .maternal_crf_model import MaternalCrfModel
-from .diagnoses_mixin import DiagnosesMixin
+from .diagnosis_mixin import DiagnosisMixin
 
 
-class MaternalPostPartumFu(DiagnosesMixin, MaternalCrfModel):
+class MaternalPostPartumFu(DiagnosisMixin, MaternalCrfModel):
 
     hospitalized = models.CharField(
         max_length=25,

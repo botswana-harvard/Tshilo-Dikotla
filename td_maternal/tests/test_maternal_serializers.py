@@ -3,7 +3,7 @@ import json
 from model_mommy import mommy
 
 from django.core import serializers
-from django.test.testcases import TestCase
+from django.test import TestCase, tag
 
 from edc_call_manager.models import Call, Log
 from edc_registration.models import RegisteredSubject
@@ -14,6 +14,7 @@ from td.models import Appointment
 from .test_mixins import NegMotherMixin
 
 
+@tag('review')
 class TestMaternalSerializers(NegMotherMixin, TestCase):
 
     def setUp(self):
@@ -98,6 +99,7 @@ class TestMaternalSerializers(NegMotherMixin, TestCase):
                     self.assertEqual(maternalclinicalmeasurementsone.pk, deserialised_obj.object.pk)
 
 
+@tag('review')
 class TestMaternalSerializersDelivered(NegMotherMixin, TestCase):
 
     def test_antenatal_enrollmenttwo_crfs_deserialising(self):

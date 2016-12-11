@@ -2,8 +2,7 @@ import unittest
 
 from dateutil.relativedelta import relativedelta
 
-from django.test import TestCase
-from django.test.utils import tag
+from django.test import TestCase, tag
 
 from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NEG, NO, NOT_APPLICABLE
@@ -25,6 +24,7 @@ class Obj(ModellikeObj):
         self.report_datetime = get_utcnow()
 
 
+@tag('enrollment', 'pos', 'neg')
 class TestResult(unittest.TestCase):
 
     def test_pos(self):
@@ -126,6 +126,7 @@ class TestResult(unittest.TestCase):
         self.assertEqual(enrollment_helper.enrollment_result.result, POS)
 
 
+@tag('reviewed')
 class TestGa(unittest.TestCase):
 
     opts = dict(
@@ -189,6 +190,7 @@ class TestGa(unittest.TestCase):
         self.assertTrue(enrollment_helper.ga_pending)
 
 
+@tag('reviewed')
 class TestEdd(MotherMixin, TestCase):
 
     def test_edd_and_ga_is_from_lmp(self):
