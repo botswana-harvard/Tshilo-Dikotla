@@ -193,6 +193,7 @@ class TestMaternalPostPartumFuPos(DxMixin, MotherMixin, TestCase):
         self.assertIn('Question 10 is indicated as NO, who listing should only be N/A', errors)
 
 
+@tag('review')
 class TestMaternalPostPartumFuNegMother(DxMixin, MotherMixin, TestCase):
 
     def setUp(self):

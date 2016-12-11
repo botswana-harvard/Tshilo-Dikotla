@@ -75,6 +75,8 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
         super(MotherMixin, self).setUp()
         load_test_randomization()
         self.study_site = '40'
+
+    def make_new_consented_mother(self):
         self.maternal_eligibility = self.make_eligibility()
         self.maternal_consent = self.make_consent()
         self.subject_identifier = self.maternal_consent.subject_identifier
@@ -93,6 +95,7 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
 
     def make_positive_mother(self, **options):
         """Make a POS mother LMP 25wks with POS result with evidence (no recent or rapid test)."""
+        self.make_new_consented_mother()
         report_datetime = options.get('report_datetime', self.test_mixin_reference_datetime)
         last_period_date = options.get(
             'last_period_date', (report_datetime - relativedelta(weeks=25)).date())
@@ -112,6 +115,7 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
 
     def make_negative_mother(self, use_result=None):
         """Make a NEG mother LMP 25wks with NEG by current, recent or rapid."""
+        self.make_new_consented_mother()
         use_result = use_result or RAPID
         if use_result == ENROLLMENT:
             options = dict(

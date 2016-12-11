@@ -1,32 +1,14 @@
 from django.test import TestCase, tag
-from django.utils import timezone
 from model_mommy import mommy
 
 from edc_constants.constants import YES
 
 from ..forms import MaternalRandoForm
 
-from .test_mixins import NegMotherMixin, MotherMixin
+from .test_mixins import MotherMixin
 
 
-@tag('review')
-class TestMaternalRandomizationForm(NegMotherMixin, TestCase):
-
-    def test_pos_mother_validation(self):
-        options = {
-            'maternal_visit': self.add_maternal_visit('1000M').id,
-            'site': 'gaborone',
-            'sid': 1,
-            'randomization_datetime': timezone.now(),
-            'initials': 'CT',
-            'dispensed': YES,
-            'delivery_clinic': 'PMH'
-        }
-        form = MaternalRandoForm(data=options)
-        self.assertIn('Mother must be HIV(+) to randomize.', form.errors.get('__all__'))
-
-
-@tag('review')
+@tag('rando')
 class TestMaternalRandomization(MotherMixin, TestCase):
 
     def test_pick_correct_next_randomization_item(self):
@@ -52,3 +34,18 @@ class TestMaternalRandomization(MotherMixin, TestCase):
             'td_maternal.maternalrando',
             maternal_visit=self.add_maternal_visit('1010M'))
         self.assertEqual(maternal_rando.sid, 3)
+
+    def test_pos_mother_validation(self):
+        self.make_negative_mother()
+        maternal_visit = self.add_maternal_visit('1000M')
+        options = {
+            'maternal_visit': maternal_visit.id,
+            'site': 'gaborone',
+            'sid': 1,
+            'randomization_datetime': maternal_visit.report_datetime,
+            'initials': 'CT',
+            'dispensed': YES,
+            'delivery_clinic': 'PMH'
+        }
+        form = MaternalRandoForm(data=options)
+        self.assertIn('Mother must be HIV(+) to randomize.', form.errors.get('__all__'))
