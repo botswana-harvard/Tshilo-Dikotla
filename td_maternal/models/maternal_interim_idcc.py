@@ -55,10 +55,6 @@ class MaternalInterimIdcc(MaternalCrfModel):
         blank=True,
         null=True)
 
-    @property
-    def visit(self):
-        return getattr(self, 'maternal_visit')
-
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'
         verbose_name = "Maternal Interim Idcc Data"
