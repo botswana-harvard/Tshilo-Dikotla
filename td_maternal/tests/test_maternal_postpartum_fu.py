@@ -1,14 +1,13 @@
 from django.test import TestCase
 
 from edc_base.utils import get_utcnow
-from edc_code_lists.models import WcsDxAdult
 from edc_constants.constants import (YES, NOT_APPLICABLE, NO)
 
-from td_list.models import MaternalDiagnoses, MaternalHospitalization
+from td_list.models import MaternalDiagnoses, MaternalHospitalization, WhoAdultDiagnosis
 
 from ..forms import MaternalPostPartumFuForm
 
-from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin, NegMotherMixin
+from .test_mixins import PosMotherMixin, NegMotherMixin
 
 
 class DiagnosesMixinWcsDxAdultMixin:
@@ -31,14 +30,14 @@ class DiagnosesMixinWcsDxAdultMixin:
             display_index=1, user_created="django", field_name=None,
             revision=":develop:")
 
-        self.who_dx = WcsDxAdult.objects.create(
+        self.who_dx = WhoAdultDiagnosis.objects.create(
             hostname_created="cabel", code="CS4003", short_name="Recurrent severe bacterial pneumo",
             created=get_utcnow(), user_modified="", modified=get_utcnow(),
             hostname_modified="cabel",
             long_name="Recurrent severe bacterial pneumonia", user_created="abelc",
             list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
 
-        self.who_dx_na = WcsDxAdult.objects.create(
+        self.who_dx_na = WhoAdultDiagnosis.objects.create(
             hostname_created="cabel", code="cs9999999", short_name="N/A",
             created=get_utcnow(), user_modified="", modified=get_utcnow(),
             hostname_modified="cabel", long_name="N/A",
@@ -69,9 +68,7 @@ class DiagnosesMixinWcsDxAdultMixin:
             'who': [self.who_dx.id]}
 
 
-class TestMaternalPostPartumFuPosMotherMixin(DiagnosesMixinWcsDxAdultMixin,
-                                             DeliverMotherMixin, AntenatalVisitsMotherMixin,
-                                             PosMotherMixin, TestCase):
+class TestMaternalPostPartumFuPosMotherMixin(DiagnosesMixinWcsDxAdultMixin, PosMotherMixin, TestCase):
 
     def test_diagnosis_list_none(self):
         """check if the diagnosis list is empty"""
@@ -219,7 +216,7 @@ class TestMaternalPostPartumFuPosMotherMixin(DiagnosesMixinWcsDxAdultMixin,
         self.assertIn('Question 10 is indicated as NO, who listing should only be N/A', errors)
 
 
-class TestMaternalPostPartumFuNegMother(DiagnosesMixinWcsDxAdultMixin, DeliverMotherMixin, AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):
+class TestMaternalPostPartumFuNegMother(DiagnosesMixinWcsDxAdultMixin, NegMotherMixin, TestCase):
 
     def test_mother_negative_who_diagnosis_yes(self):
         """checks whether question 10 for WHO Stage III/IV is N/A if the mother is negative"""

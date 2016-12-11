@@ -1,10 +1,9 @@
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
-from edc_code_lists.models import WcsDxAdult
 from edc_constants.choices import YES_NO, YES_NO_NA
 
-from td_list.models import ChronicConditions, MaternalMedications
+from td_list.models import ChronicConditions, MaternalMedications, WhoAdultDiagnosis
 
 from ..choices import KNOW_HIV_STATUS, LOWEST_CD4_KNOWN, IS_DATE_ESTIMATED
 
@@ -29,7 +28,7 @@ class MaternalMedicalHistory(MaternalCrfModel):
         help_text="Please use the WHO Staging Guidelines. ONLY for HIV infected mothers")
 
     who = models.ManyToManyField(
-        WcsDxAdult,
+        WhoAdultDiagnosis,
         verbose_name="List any new WHO Stage III/IV diagnoses that are not reported")
 
     mother_chronic = models.ManyToManyField(

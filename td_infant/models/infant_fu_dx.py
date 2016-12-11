@@ -1,8 +1,7 @@
 from django.db import models
 
 from edc_constants.choices import YES_NO
-from edc_base.model.models import BaseUuidModel
-from edc_base.model.models import HistoricalRecords
+from edc_base.model.models import BaseUuidModel, UrlMixin, HistoricalRecords
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from td.choices import DX_INFANT
@@ -10,7 +9,6 @@ from td.choices import DX_INFANT
 from ..managers import InfantFuDxItemsManager
 
 from .infant_crf_model import InfantCrfModel
-from edc_base.model.models.url_mixin import UrlMixin
 
 
 class InfantFuDx(InfantCrfModel):

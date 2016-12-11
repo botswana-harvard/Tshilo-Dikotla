@@ -7,12 +7,13 @@ from model_mommy import mommy
 
 from td.models import Appointment
 
-from td_maternal.tests.mixins import NegMotherMixin, AntenatalVisitsMotherMixin, AddVisitInfantMixin
+from td_maternal.tests.test_mixins import NegMotherMixin, CompleteMaternalCrfsMixin
+from .test_mixins import AddVisitInfantMixin
 from edc_sync.models import OutgoingTransaction
 from edc_visit_tracking.constants import SCHEDULED
 
 
-class TestInfantSerializers(AntenatalVisitsMotherMixin, NegMotherMixin, AddVisitInfantMixin, TestCase):
+class TestInfantSerializers(CompleteMaternalCrfsMixin, NegMotherMixin, AddVisitInfantMixin, TestCase):
 
     def setUp(self):
         super(TestInfantSerializers, self).setUp()

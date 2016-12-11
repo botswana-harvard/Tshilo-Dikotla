@@ -1,8 +1,6 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
-from edc_constants.constants import FAILED_ELIGIBILITY
-
 from .antenatal_enrollment import AntenatalEnrollment
 from .maternal_consent import MaternalConsent
 from .maternal_eligibility import MaternalEligibility
@@ -29,22 +27,6 @@ def maternal_consent_on_post_save(sender, instance, raw, created, using, **kwarg
         maternal_eligibility = MaternalEligibility.objects.get(reference=instance.maternal_eligibility_reference)
         maternal_eligibility.subject_identifier = instance.subject_identifier
         maternal_eligibility.save()
-
-
-# @receiver(post_save, sender=AntenatalEnrollment, weak=False, dispatch_uid="ineligible_take_off_study")
-# def create_offstudy_on_ineligible(sender, instance, raw, created, using, **kwargs):
-#     """If not eligible, create off study."""
-#     if not raw:
-#         try:
-#             if not instance.is_eligible:
-#                 MaternalOffstudy.objects.create(
-#                     subject_identifier=instance.subject_identifier,
-#                     offstudy_datetime=instance.report_datetime,
-#                     reason=FAILED_ELIGIBILITY,
-#                     comment=instance.reasons_not_eligible)
-#         except AttributeError as e:
-#             if 'is_eligible' not in str(e):
-#                 raise AttributeError(str(e))
 
 
 @receiver(post_save, sender=AntenatalEnrollment, weak=False, dispatch_uid="eligible_put_back_on_study")

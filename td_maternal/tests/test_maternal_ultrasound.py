@@ -10,10 +10,10 @@ from edc_pregnancy_utils.lmp import Lmp
 
 from ..models import AntenatalEnrollment, MaternalOffstudy
 
-from .test_mixins import AddVisitMotherMixin, PosMotherMixin
+from .test_mixins import PosMotherMixin
 
 
-class TestMaternalUltrasound(AddVisitMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalUltrasound(PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalUltrasound, self).setUp()

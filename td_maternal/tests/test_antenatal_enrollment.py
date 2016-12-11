@@ -146,7 +146,6 @@ class TestAntenatalEnrollment(TestCase):
 
     def test_mother_tested_NEG_after_32weeks_then_rapidtest_notenforced(self):
         """Test for a mother who tested NEG AFTER 32weeks, with documentation then rapid test not enforced"""
-
         options = {'subject_identifier': self.subject_identifier,
                    'current_hiv_status': UNKNOWN,
                    'evidence_hiv_status': None,
@@ -159,12 +158,10 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_result': None,
                    'rapid_test_date': None,
                    'last_period_date': (get_utcnow() - relativedelta(weeks=34)).date()}
-        with self.assertRaises(EnrollmentResultError):
-            mommy.make_recipe('td_maternal.antenatalenrollment', **options)
+        mommy.make_recipe('td_maternal.antenatalenrollment', **options)
 
     def test_mother_tested_NEG_no_LMP_rapidtest_enforced(self):
         """Test for a mother who tested NEG with documentation but no LMP then rapid test is enforced"""
-
         options = {'subject_identifier': self.subject_identifier,
                    'knows_lmp': NO,
                    'last_period_date': None,
@@ -179,8 +176,7 @@ class TestAntenatalEnrollment(TestCase):
                    'rapid_test_result': None,
                    'rapid_test_date': None,
                    'last_period_date': (get_utcnow() - relativedelta(weeks=34)).date()}
-        with self.assertRaises(EnrollmentResultError):
-            mommy.make_recipe('td_maternal.antenatalenrollment', **options)
+        mommy.make_recipe('td_maternal.antenatalenrollment', **options)
 
     def test_mother_untested_at_32weeks_undergoes_rapid(self):
         """Test for a mother who is at 35weeks of gestational age,

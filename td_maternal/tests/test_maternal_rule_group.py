@@ -8,13 +8,15 @@ from edc_constants.constants import NEG, YES
 from edc_metadata.constants import REQUIRED, NOT_REQUIRED
 from edc_metadata.models import CrfMetadata, RequisitionMetadata
 
-from .test_mixins import PosMotherMixin, AntenatalVisitsMotherMixin, NegMotherMixin
+from .test_mixins import PosMotherMixin, NegMotherMixin
 
 
-class TestMaternalRuleGroupsPos(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalRuleGroupsPos(PosMotherMixin, TestCase):
 
     def test_maternal_hiv_maternalrando(self):
-        self.add_maternal_visits('1000M', '1010M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M')
         self.assertEqual(
             CrfMetadata.objects.filter(
                 entry_status=REQUIRED,
@@ -34,6 +36,8 @@ class TestMaternalRuleGroupsPos(AntenatalVisitsMotherMixin, PosMotherMixin, Test
 
     def test_maternal_hiv_maternal_interim_idcc(self):
         """Assert maternalinterimidcc is required for POS at 1010M."""
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M')
         self.assertEqual(
             CrfMetadata.objects.filter(
                 entry_status=REQUIRED,
@@ -43,8 +47,9 @@ class TestMaternalRuleGroupsPos(AntenatalVisitsMotherMixin, PosMotherMixin, Test
 
     def test_maternal_cd4_required_recent_grt_3months(self):
         """Test that CD4 requisition is required for all POS is recent CD4 > 3months."""
-        self.add_maternal_visits('1000M', '1010M')
-        maternal_visit = self.get_maternal_visit('1010M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        maternal_visit = self.add_maternal_visits('1010M')
         mommy.make_recipe(
             'td_maternal.maternalinterimidcc',
             maternal_visit=maternal_visit,
@@ -59,8 +64,9 @@ class TestMaternalRuleGroupsPos(AntenatalVisitsMotherMixin, PosMotherMixin, Test
 
     def test_maternal_cd4_not_required_recent_lt_3months(self):
         """Test that CD4 requisition not required for all POS if recent CD4 < 3months."""
-        self.add_maternal_visits('1000M', '1010M')
-        maternal_visit = self.get_maternal_visit('1010M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        maternal_visit = self.add_maternal_visits('1010M')
         mommy.make_recipe(
             'td_maternal.maternalinterimidcc',
             maternal_visit=maternal_visit,
@@ -75,7 +81,9 @@ class TestMaternalRuleGroupsPos(AntenatalVisitsMotherMixin, PosMotherMixin, Test
                 visit_code='1010M').count(), 1)
 
     def test_maternal_pbmc_pl_not_req_hiv_pos(self):
-        self.add_maternal_visits('1000M', '1010M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M')
         self.assertEqual(
             RequisitionMetadata.objects.filter(
                 entry_status=NOT_REQUIRED,
@@ -86,8 +94,9 @@ class TestMaternalRuleGroupsPos(AntenatalVisitsMotherMixin, PosMotherMixin, Test
 
     def test_nvp_dispensing_required_2000M_NVP(self):
         '''Test NVP Dispensing required for NVP randomized mother/infant at 2000M visit'''
-        self.add_maternal_visits('1000M', '1010M')
-        maternal_visit = self.get_maternal_visit('1010M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        maternal_visit = self.add_maternal_visits('1010M')
         mommy.make_recipe(
             'td_maternal.maternalrando',
             maternal_visit=maternal_visit,
@@ -106,8 +115,9 @@ class TestMaternalRuleGroupsPos(AntenatalVisitsMotherMixin, PosMotherMixin, Test
 
     def test_nvp_dispensing_not_required_2000M_AZT(self):
         '''Test NVP Dispensing required for NVP randomized mother/infant at 2000M visit'''
-        self.add_maternal_visits('1000M', '1010M')
-        maternal_visit = self.get_maternal_visit('1010M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        maternal_visit = self.add_maternal_visits('1010M')
         mommy.make_recipe(
             'td_maternal.maternalrando',
             maternal_visit=maternal_visit,
@@ -125,21 +135,17 @@ class TestMaternalRuleGroupsPos(AntenatalVisitsMotherMixin, PosMotherMixin, Test
                 visit_code='2000M').count(), 1)
 
 
-class TestMaternalRuleGroupsNeg(AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):
+class TestMaternalRuleGroupsNeg(NegMotherMixin, TestCase):
 
     def test_maternal_rapid_test_required_delivery(self):
-        self.add_maternal_visits('1000M', '1010M', '1020M')
-        self.maternal_labour_del = mommy.make_recipe(
-            'td_maternal.maternallabdel',
-            subject_identifier=self.subject_identifier,
-            live_infants_to_register=1)
-        maternal_visit = self.get_maternal_visit('1020M')
-        mommy.make_recipe(
-            'td_maternal.rapidtestresult',
-            maternal_visit=maternal_visit,
-            rapid_test_done=YES, result=NEG,
-            result_date=(get_utcnow() - relativedelta(days=90)).date())
-        self.add_maternal_visits('2000M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M', '1020M')
+        maternal_visit = self.get_last_maternal_visit()
+        self.make_delivery()
+        self.make_rapid_test(
+            result=NEG, result_date=(get_utcnow() - relativedelta(days=90)).date(), visit=maternal_visit)
+        maternal_visit = self.add_maternal_visit('2000M')
         self.assertEqual(
             CrfMetadata.objects.filter(
                 subject_identifier=self.subject_identifier,
@@ -148,7 +154,9 @@ class TestMaternalRuleGroupsNeg(AntenatalVisitsMotherMixin, NegMotherMixin, Test
                 visit_code='2000M').count(), 1)
 
     def test_maternal_required_pbmc_pl_hiv_neg(self):
-        self.add_maternal_visits('1000M', '1010M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M')
         self.assertEqual(
             RequisitionMetadata.objects.filter(
                 entry_status=REQUIRED,
@@ -158,7 +166,9 @@ class TestMaternalRuleGroupsNeg(AntenatalVisitsMotherMixin, NegMotherMixin, Test
                 visit_code='1010M').count(), 1)
 
     def test_maternal_ultra_sound_initial_not_required_at_1010(self):
-        self.add_maternal_visits('1000M', '1010M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M')
         self.assertEqual(
             CrfMetadata.objects.filter(
                 entry_status=REQUIRED,
@@ -167,7 +177,9 @@ class TestMaternalRuleGroupsNeg(AntenatalVisitsMotherMixin, NegMotherMixin, Test
                 visit_code='1010M').count(), 0)
 
     def test_maternal_ultra_sound_initial_required_at_1010(self):
-        self.add_maternal_visits('1000M', '1010M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M')
         self.assertEqual(
             CrfMetadata.objects.filter(
                 subject_identifier=self.subject_identifier,

@@ -6,14 +6,16 @@ from td_infant.tests.test_mixins import AddVisitInfantMixin
 
 from ..forms import MaternalSubstanceUsePriorPregForm
 
-from .test_mixins import AntenatalVisitsMotherMixin, NegMotherMixin
+from .test_mixins import NegMotherMixin
 
 
-class TestMaternalSubstanceUsePriorPreg(AntenatalVisitsMotherMixin, AddVisitInfantMixin, NegMotherMixin, TestCase):
+class TestMaternalSubstanceUsePriorPreg(AddVisitInfantMixin, NegMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalSubstanceUsePriorPreg, self).setUp()
-        self.add_maternal_visits('1000M', '1010M', '1020M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M', '1020M')
         maternal_visit = self.get_maternal_visit('1020M')
         self.options = {
             'maternal_visit': maternal_visit.id,

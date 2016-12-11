@@ -5,15 +5,17 @@ from edc_constants.constants import YES, NO, NEG
 
 from ..forms import RapidTestResultForm
 
-from .test_mixins import NegMotherMixin, AntenatalVisitsMotherMixin
+from .test_mixins import NegMotherMixin
 
 
-class TestRapidTestForm(AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):
+class TestRapidTestForm(NegMotherMixin, TestCase):
 
     def setUp(self):
         super(TestRapidTestForm, self).setUp()
+        self.add_maternal_visit('1000M')
+        self.make_antenatal_enrollment_two()
         self.data = {
-            'maternal_visit': self.get_maternal_visit('1010M').id,
+            'maternal_visit': self.add_maternal_visit('1010M').id,
             'rapid_test_done': YES,
             'result_date': get_utcnow(),
             'result': NEG}

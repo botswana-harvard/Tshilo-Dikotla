@@ -1,54 +1,41 @@
 from django.test import TestCase
 
-from edc_base.utils import get_utcnow
-from edc_code_lists.models import WcsDxAdult
 from edc_constants.constants import (YES, NO)
 
-from td_list.models import MaternalDiagnoses
+from td_list.models import MaternalDiagnoses, WhoAdultDiagnosis
 from td_maternal.forms import MaternalDiagnosesForm
 
-from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import PosMotherMixin
 
 
-class TestMaternalDiagnosesForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalDiagnosesForm(PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalDiagnosesForm, self).setUp()
 
-        self.add_maternal_visits('1000M', '1010M', '1020M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M', '1020M')
         maternal_visit = self.get_maternal_visit('1020M')
 
         self.diagnoses = MaternalDiagnoses.objects.create(
-            hostname_created="django", name="Gestational Hypertension",
-            short_name="Gestational Hypertension", created=get_utcnow(),
-            user_modified="", modified=get_utcnow(),
-            hostname_modified="django", version="1.0",
-            display_index=1, user_created="django", field_name=None,
-            revision=":develop:")
+            name="Gestational Hypertension",
+            short_name="Gestational Hypertension")
 
         self.diagnoses_na = MaternalDiagnoses.objects.create(
-            hostname_created="django", name="Not Applicable",
-            short_name="N/A", created=get_utcnow(),
-            user_modified="", modified=get_utcnow(),
-            hostname_modified="django", version="1.0",
-            display_index=1, user_created="django", field_name=None,
-            revision=":develop:")
+            name="Not Applicable",
+            short_name="N/A")
 
-        self.who_dx = WcsDxAdult.objects.create(
-            hostname_created="cabel", code="CS4003", short_name="Recurrent severe bacterial pneumo",
-            created=get_utcnow(), user_modified="", modified=get_utcnow(), hostname_modified="cabel",
-            long_name="Recurrent severe bacterial pneumonia", user_created="abelc",
-            list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
+        self.who_dx = WhoAdultDiagnosis.objects.create(
+            short_name="Recurrent severe bacterial pneumo",
+            name="Recurrent severe bacterial pneumonia")
 
-        self.who_dx_na = WcsDxAdult.objects.create(
-            hostname_created="cabel", code="CS4002", short_name="N/A",
-            created=get_utcnow(), user_modified="",
-            modified=get_utcnow(), hostname_modified="cabel",
-            long_name="Not Applicable", user_created="abelc",
-            list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
+        self.who_dx_na = WhoAdultDiagnosis.objects.create(
+            short_name="N/A",
+            long_name="Not Applicable")
 
         self.options = {
-            'maternal_visit': maternal_visit,
+            'maternal_visit': maternal_visit.id,
             'new_diagnoses': YES,
             'diagnoses': [self.diagnoses.id],
             'has_who_dx': YES,

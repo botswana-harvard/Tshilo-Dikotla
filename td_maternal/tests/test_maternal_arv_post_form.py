@@ -5,16 +5,19 @@ from edc_constants.constants import YES, NO
 
 from ..forms import MaternalArvPostForm
 
-from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
+from .test_mixins import PosMotherMixin
 
 
-class TestMaternalArvPost(AntenatalVisitsMotherMixin, DeliverMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalArvPostForm(PosMotherMixin, TestCase):
 
     def setUp(self):
-        super(TestMaternalArvPost, self).setUp()
+        super(TestMaternalArvPostForm, self).setUp()
 
-        self.add_maternal_visits('1000M', '1010M', '1020M', '2000M')
-        maternal_visit = self.get_maternal_visit('2000M')
+        self.complete_required_crfs('1000M')
+        self.make_antenatal_enrollment_two()
+        self.complete_required_crfs('1010M', '1020M')
+        self.make_delivery()
+        maternal_visit = self.add_maternal_visit('2000M')
 
         self.data = {
             'maternal_visit': maternal_visit.id,

@@ -62,7 +62,8 @@ class MaternalConsent(ConsentModelMixin, UpdatesOrCreatesRegistrationModelMixin,
         try:
             MaternalEligibility.objects.get(reference=self.maternal_eligibility_reference)
         except MaternalEligibility.DoesNotExist:
-            ValidationError('Unable to determine eligibility criteria. Was Maternal Eligibility completed?')
+            MaternalEligibility.DoesNotExist(
+                'Unable to determine eligibility criteria. Was Maternal Eligibility completed?')
         if not self.id:
             try:
                 RegisteredSubject = django_apps.get_app_config('edc_registration').model

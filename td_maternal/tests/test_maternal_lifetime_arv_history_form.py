@@ -9,23 +9,15 @@ from edc_constants.constants import (YES, NOT_APPLICABLE, NO, CONTINUOUS, STOPPE
 from td_list.models import PriorArv
 from td_maternal.forms import MaternalLifetimeArvHistoryForm
 
-from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import PosMotherMixin
 
 
-class TestMaternalLifetimeArvHistoryForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalLifetimeArvHistoryForm(PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalLifetimeArvHistoryForm, self).setUp()
-
-        self.add_maternal_visit('1000M')
-        self.maternal_visit = self.get_maternal_visit('1000M')
-
-        prior_arv = PriorArv.objects.create(
-            hostname_created="django", name="Atripla", short_name="Atripla",
-            created=get_utcnow(), user_modified="", modified=get_utcnow(),
-            hostname_modified="django", version="1.0", display_index=1, user_created="django",
-            field_name=None, revision=":develop")
-
+        self.maternal_visit = self.add_maternal_visit('1000M')
+        prior_arv = PriorArv.objects.create(name="Atripla", short_name="Atripla")
         self.options = {
             'maternal_visit': self.maternal_visit.id,
             'report_datetime': get_utcnow(),

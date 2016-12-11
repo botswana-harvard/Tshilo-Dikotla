@@ -1,6 +1,5 @@
 from django.db import models
 from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
 
 from edc_base.model.models import HistoricalRecords
 from edc_constants.constants import NO
@@ -94,7 +93,7 @@ class MaternalRando (MaternalCrfModel):
 
     def save(self, *args, **kwargs):
         if not self.id:
-            randomization = Randomization(self, ValidationError)
+            randomization = Randomization(self)
             self.initials = randomization.initials
             self.randomization_datetime = randomization.randomization_datetime
             self.rx = randomization.rx

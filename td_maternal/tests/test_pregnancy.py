@@ -9,17 +9,17 @@ from edc_pregnancy_utils.constants import ULTRASOUND
 from ..models import MaternalLabDel
 from ..pregnancy import Pregnancy
 
-from .test_mixins import AddVisitMotherMixin, PosMotherMixin, DeliverMotherMixin
+from .test_mixins import PosMotherMixin
 
 
-class TestPregnancy(DeliverMotherMixin, AddVisitMotherMixin, PosMotherMixin, TestCase):
+class TestPregnancy(PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestPregnancy, self).setUp()
         self.add_maternal_visit('1000M')
 
     def test_basics(self):
-        maternal_visit = self.get_maternal_visit('1000M')
+        maternal_visit = self.add_maternal_visit('1000M')
         est_edd = (timezone.now() + relativedelta(weeks=20)).date()
         mommy.make_recipe(
             'td_maternal.maternalultrasoundinitial',
@@ -38,7 +38,7 @@ class TestPregnancy(DeliverMotherMixin, AddVisitMotherMixin, PosMotherMixin, Tes
 
     def test_reference_datetime_before_delivery(self):
         """Asserts ignores delivery if reference datetime before delivery datetime."""
-        maternal_visit = self.get_maternal_visit('1000M')
+        maternal_visit = self.add_maternal_visit('1000M')
         est_edd = (timezone.now() + relativedelta(weeks=20)).date()
         delivery_datetime = (timezone.now() + relativedelta(weeks=20) + relativedelta(days=6))
         reference_datetime = (timezone.now() + relativedelta(weeks=19))

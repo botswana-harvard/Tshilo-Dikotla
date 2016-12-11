@@ -1,8 +1,7 @@
 from django.db import models
 
-from edc_base.model.models import BaseUuidModel, UrlMixin
+from edc_base.model.models import BaseUuidModel, UrlMixin, HistoricalRecords
 from edc_offstudy.model_mixins import OffstudyModelMixin
-from edc_base.model.models import HistoricalRecords
 
 from .infant_visit import InfantVisit
 

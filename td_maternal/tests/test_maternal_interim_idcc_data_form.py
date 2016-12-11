@@ -5,15 +5,16 @@ from edc_constants.constants import YES, NO
 
 from ..forms import MaternalInterimIdccForm
 
-from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import PosMotherMixin
 
 
-class TestMaternalInterimIdccDataForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalInterimIdccDataForm(PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalInterimIdccDataForm, self).setUp()
-
-        self.add_maternal_visits('1000M', '1010M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M')
         maternal_visit = self.get_maternal_visit('1010M')
 
         self.options = {

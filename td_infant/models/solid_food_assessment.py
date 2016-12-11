@@ -1,9 +1,7 @@
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
-from edc_constants.constants import NOT_APPLICABLE
-from edc_constants.choices import (NORMAL_ABNORMAL, YES_NO_UNKNOWN,
-                                   YES_NO_NOT_EVALUATED_NA, NORMAL_ABNORMAL_NOEXAM)
+from edc_constants.choices import YES_NO_UNKNOWN
 
 from td_list.models import Foods, Rations
 

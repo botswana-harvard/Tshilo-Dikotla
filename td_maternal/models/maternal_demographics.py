@@ -107,11 +107,6 @@ class MaternalDemographics(MaternalCrfModel):
         verbose_name="What is the primary method of cooking in this house / compound?",
         choices=COOKING_METHOD,
         help_text="",)
-# 
-#     hh_goods = models.ManyToManyField(
-#         HouseholdGoods,
-#         verbose_name="Do you have any of the following in the household?  ",
-#         help_text="Tick all that apply",)
 
     toilet_facility = models.CharField(
         max_length=50,

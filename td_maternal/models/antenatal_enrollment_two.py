@@ -8,6 +8,8 @@ from edc_visit_schedule.model_mixins import EnrollmentModelMixin
 
 from ..managers import EnrollmentManager
 
+from .antenatal_enrollment import AntenatalEnrollment
+
 
 class AntenatalEnrollmentTwo(EnrollmentModelMixin, RequiresConsentMixin, CreateAppointmentsOnEligibleMixin,
                              UrlMixin, BaseUuidModel):
@@ -28,6 +30,10 @@ class AntenatalEnrollmentTwo(EnrollmentModelMixin, RequiresConsentMixin, CreateA
 
     def __str__(self):
         return self.subject_identifier
+
+    def save(self, *args, **kwargs):
+        self.is_eligible = AntenatalEnrollment.objects.get(subject_identifier=self.subject_identifier).is_eligible
+        super(AntenatalEnrollmentTwo, self).save(*args, **kwargs)
 
     def natural_key(self):
         return (self.subject_identifier, )

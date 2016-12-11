@@ -1,5 +1,5 @@
 from model_mommy import mommy
-from td.test_mixins import AddVisitMixin
+from edc_base.test_mixins import AddVisitMixin
 
 
 class AddVisitInfantMixin(AddVisitMixin):

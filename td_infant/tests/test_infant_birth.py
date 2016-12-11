@@ -2,11 +2,11 @@ from django.test.testcases import TestCase
 
 from td.models import Appointment
 
-from td_maternal.tests.mixins import AntenatalVisitsMotherMixin, PosMotherMixin, DeliverMotherMixin
+from td_maternal.tests.test_mixins import CompleteMaternalCrfsMixin, PosMotherMixin, DeliverMotherMixin
 from model_mommy import mommy
 
 
-class TestInfantBirth(DeliverMotherMixin, AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+class TestInfantBirth(DeliverMotherMixin, CompleteMaternalCrfsMixin, PosMotherMixin, TestCase):
 
     def setUp(self):
         self.maternal_identifier = self.create_mother()

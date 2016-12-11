@@ -11,7 +11,7 @@ from ..models import MaternalConsent
 class TestConsent(TestCase):
 
     def test_cannot_create_consent_without_eligibility(self):
-        """Assert add ing a consent without MaternalEligibility first raises an Exception."""
+        """Assert adding a consent without MaternalEligibility first raises an Exception."""
         try:
             mommy.make_recipe('td_maternal.maternalconsent')
             self.fail('Exception not raised')

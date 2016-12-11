@@ -62,7 +62,6 @@ INSTALLED_APPS = [
     'django_crypto_fields.apps.AppConfig',
     'django_revision.apps.AppConfig',
     'edc_call_manager.apps.AppConfig',
-    'edc_code_lists.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
     'edc_death_report.apps.AppConfig',
     'edc_export.apps.AppConfig',
@@ -91,7 +90,6 @@ INSTALLED_APPS = [
     'tshilo_dikotla.apps.EdcVisitTrackingAppConfig',
     'tshilo_dikotla.apps.AppConfig',
 ]
-
 
 SECRET_KEY = 'sdfsd32fs#*@(@dfsdf'
 
@@ -162,7 +160,6 @@ if 'test' in sys.argv and 'mysql' not in DATABASES.get('default').get('ENGINE'):
         "edc_call_manager": None,
         "edc_appointment": None,
         "edc_call_manager": None,
-        "edc_code_lists": None,
         "edc_consent": None,
         "edc_death_report": None,
         "edc_export": None,
@@ -172,9 +169,9 @@ if 'test' in sys.argv and 'mysql' not in DATABASES.get('default').get('ENGINE'):
         "edc_registration": None,
         "edc_sync": None,
         "td": None,
+        "td_list": None,
         "td_infant": None,
         "td_lab": None,
-        "td_list": None,
         "td_maternal": None,
         'django_crypto_fields': None}
 

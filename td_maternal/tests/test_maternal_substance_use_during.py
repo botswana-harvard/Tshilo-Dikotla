@@ -6,10 +6,10 @@ from td_infant.tests.test_mixins import AddVisitInfantMixin
 
 from ..forms import MaternalSubstanceUseDuringPregForm
 
-from .test_mixins import AntenatalVisitsMotherMixin, NegMotherMixin
+from .test_mixins import NegMotherMixin
 
 
-class TestMaternalSubstanceUseDuringPreg(AntenatalVisitsMotherMixin, AddVisitInfantMixin, NegMotherMixin, TestCase):
+class TestMaternalSubstanceUseDuringPreg(AddVisitInfantMixin, NegMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalSubstanceUseDuringPreg, self).setUp()

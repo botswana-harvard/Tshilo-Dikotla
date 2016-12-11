@@ -224,12 +224,14 @@ class AntenatalEnrollment(EnrollmentModelMixin, CreateAppointmentsOnEligibleMixi
         self.edd_method = enrollment_helper.edd.method
         self.unenrolled = enrollment_helper.messages.as_string()
         if self.id and not self.is_eligible:
-            if MaternalVisit.objects.filter(
-                    appointment__subject_identifier=self.subject_identifier).exclude(
-                    visit_code__in=['1000M', '1010M']).exists():
+            maternal_visits = MaternalVisit.objects.filter(
+                appointment__subject_identifier=self.subject_identifier).exclude(
+                visit_code__in=['1000M', '1010M']).order_by('-report_datetime')
+            if maternal_visits:
                 raise EnrollmentError(
                     'Blocking attempt to change eligibility from \'eligible\' to \'not eligible\' for subject '
-                    'who has already attended scheduled visits beyond 1010M.')
+                    'who has already attended scheduled visits beyond 1010M. Got {} reported on {}.'.format(
+                        maternal_visits[0].visit_code, maternal_visits[0].report_datetime.strftime('%Y-%m-%d')))
             try:
                 maternal_off_study = MaternalOffstudy.objects.get(
                     subject_identifier=self.subject_identifier)

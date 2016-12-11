@@ -7,10 +7,10 @@ from edc_base.utils import get_utcnow
 
 from ..forms import MaternalObstericalHistoryForm
 
-from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import PosMotherMixin
 
 
-class TestMaternalObstericalHistoryForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalObstericalHistoryForm(PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalObstericalHistoryForm, self).setUp()

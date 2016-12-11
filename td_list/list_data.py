@@ -1,8 +1,10 @@
 from collections import OrderedDict
+from edc_constants.constants import NOT_APPLICABLE
 
 list_data = OrderedDict()
 list_data.update({
     'td_list.chronicconditions': [
+        NOT_APPLICABLE,
         "Asthma",
         "Chronic Hepatitis B carrier",
         "Diabetes",
@@ -12,9 +14,10 @@ list_data.update({
         "Hypercholesterolemia",
         "Hypertension",
         "Other, specify",
-        "Not Applicable"]})
+    ]})
 list_data.update({
     'td_list.contraceptives': [
+        NOT_APPLICABLE,
         "Abstinence",
         "Condom",
         "Depo Provera (Injection)",
@@ -28,7 +31,7 @@ list_data.update({
         "Spemicide",
         "Withdrawal",
         "Other, specify",
-        "Not Applicable"]})
+    ]})
 list_data.update({
     'td_list.deliverycomplications': [
         "Chorioamnioitis or sus. chorioamnionitis",
@@ -52,14 +55,16 @@ list_data.update({
         "Other"]})
 list_data.update({
     'td_list.malformations': [
+        NOT_APPLICABLE,
         "Choroid Plexus Cyst",
         "Intracranial Calcification",
         "Posterior Fossa Cyst",
         "Intracranial Cyst",
         "Other",
-        "Not Applicable"]})
+    ]})
 list_data.update({
     'td_list.maternaldiagnoses': [
+        NOT_APPLICABLE,
         "Asthma requiring steroids",
         "Chlamydia",
         "Depression",
@@ -72,22 +77,24 @@ list_data.update({
         "Pre-eclampsia",
         "Syphillis",
         "Tuberculosis",
-        "Other, specify",
-        "Not Applicable"]})
+        "Other, specify"
+    ]})
 list_data.update({
     'td_list.maternalhospitalization': [
+        NOT_APPLICABLE,
         "Pneumonia or other respiratory disease",
         "Other, specify",
-        "Not Applicable"]})
+    ]})
 list_data.update({
     'td_list.maternalmedications': [
+        NOT_APPLICABLE,
         "None",
         "Cholesterol medications",
         "Hypertensive medications",
         "Prenatal Vitamins",
         "Traditional medications",
         "Vitamin D supplement",
-        "Not Applicable"]})
+    ]})
 list_data.update({
     'td_list.maternalrelatives': [
         "No one",
@@ -115,7 +122,7 @@ list_data.update({
         "Trizivir (AZT, 3TC, Abacavir)",
         "Truvada (Tenofovir, FTC)",
         "Other, specify",
-        "Not Applicable"]})
+        NOT_APPLICABLE]})
 list_data.update({
     'td_list.rations': [
         "Beans",
@@ -123,4 +130,94 @@ list_data.update({
         "Infant Formula",
         "Plumpy Nut",
         "Tsabana",
-        "Other"]})
+        "OTHER"]})
+list_data.update({
+    'td_list.whoadultdiagnosis': [
+        NOT_APPLICABLE,
+        "Anaemia/neutropaenia/thrombocytopa",
+        "Angular cheilitis",
+        "Asymptomatic",
+        "Atypical disseminated leishmaniasis",
+        "CNS toxoplasmosis",
+        "Chronic cryptosporidiosis",
+        "Chronic herpes simplex infection ",
+        "Chronic isosporiasis",
+        "Cytomegalovirus infection",
+        "Diss non-TB mycobacterial infection",
+        "Disseminated mycosis",
+        "Exp cryptococcosis/meningitis",
+        "Extrapulmonary tuberculosis",
+        "Fungal nail infections",
+        "HIV encephalopathy",
+        "HIV wasting syndrome",
+        "Herpes zoster",
+        "Invasive cervical carcinoma",
+        "Kaposi\u2019s sarcoma",
+        "Lymphoma ",
+        "Oesophageal candidiasis",
+        "Oral hairy leukoplakia",
+        "Papular pruritic eruptions",
+        "Persistent generalized lymphadeno",
+        "Persistent oral candidiasis",
+        "Pneumocystis pneumonia",
+        "Prog multifocal leukoencephalopathy",
+        "Pulmonary tuberculosis",
+        "Recurrent oral ulceration",
+        "Recurrent resp tract infection",
+        "Recurrent septicaemia",
+        "Recurrent severe bacterial pneumo",
+        "Seborrhoeic dermatitis",
+        "Severe bacterial infections",
+        "Stomatitis/gingivitis/periodontis",
+        "Sympt nephropathy/cardiomyopathy",
+        "Unexplained chronic diarrhoea",
+        "Unexplained moderate weight loss",
+        "Unexplained persistent fever",
+        "Unexplained* severe weight loss",
+    ]})
+list_data.update({
+    'td_list.whopedsdiagnosis': [
+        NOT_APPLICABLE,
+        "Anaemia/neutropaenia/thrombocytopa",
+        "Asymptomatic",
+        "CNS toxoplasmosis",
+        "Cerebral/B-cell non-Hodgkin lymphom",
+        "Chronic HIV-associated lung disease",
+        "Chronic cryptosporidiosis",
+        "Chronic herpes simplex infection ",
+        "Chronic isosporiasis",
+        "Chronic upper resp tract infections",
+        "Cytomegalovirus infection",
+        "Diss  non-TBmycobacterial infection",
+        "Disseminated endemic mycosis ",
+        "Extensive molluscum contagiosum",
+        "Extensive wart virus infection",
+        "Extrapulmonary cryptococcosis ",
+        "Extrapulmonary tuberculosis",
+        "Fungal nail infections",
+        "HIV encephalopathy",
+        "Herpes zoster",
+        "Kaposi sarcoma",
+        "Lineal gingival erythema",
+        "Lymph node tuberculosis",
+        "Necrotiz ulcer gingivit/periodontis",
+        "Oesophageal candidiasis ",
+        "Oral hairy leukoplakia",
+        "Papular pruritic eruptions",
+        "Persistent gen lymphadenopathy",
+        "Persistent oral candidiasis ",
+        "Pneumocystis pneumonia",
+        "Prog multifocal leukoencephalopathy",
+        "Pulmonary tuberculosis",
+        "Recurr severe bacterial infections",
+        "Recurrent oral ulcerations",
+        "Severe recurrent bacterial pneumoni",
+        "Symp lymph interstitial pneumonitis",
+        "Sympt nephropathy/cardiomyopathy",
+        "Unexp. persistent hepatosplenomegaly",
+        "Unexp. persistent parotid enlargemen",
+        "Unexplained persistent diarrhoea ",
+        "Unexplained persistent fever ",
+        "Unexplained sev wasting/stunting/mulnutri",
+        "Unexplained** moderate malnutrition",
+    ]})

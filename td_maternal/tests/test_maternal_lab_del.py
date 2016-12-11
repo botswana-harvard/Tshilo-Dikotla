@@ -14,14 +14,16 @@ from td_list.models import DeliveryComplications
 from ..enrollment_helper import EnrollmentHelper
 from ..forms import MaternalLabDelForm
 
-from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import PosMotherMixin
 
 
-class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalLabDel(PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalLabDel, self).setUp()
-
+        self.add_maternal_visit('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M', '1020M')
         complications = DeliveryComplications.objects.create(
             hostname_created="django", name="None",
             short_name="None", created=get_utcnow(),
@@ -29,7 +31,6 @@ class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
             hostname_modified="django", version="1.0",
             display_index=1, user_created="django", field_name=None,
             revision=":develop:")
-
         self.options = {
             'report_datetime': get_utcnow(),
             'delivery_datetime': get_utcnow(),
@@ -46,20 +47,14 @@ class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
         }
 
     def test_new_infant_identifiers(self):
-        mommy.make_recipe(
-            'td_maternal.maternallabdel',
-            subject_identifier=self.subject_identifier,
-            live_infants_to_register=1)
+        self.make_delivery()
         self.assertEqual(IdentifierModel.objects.filter(linked_identifier=self.subject_identifier).count(), 1)
         self.assertTrue(
             IdentifierModel.objects.get(linked_identifier=self.subject_identifier).identifier.endswith('10'))
 
     def test_new_infant_registration(self):
         RegisteredSubject = django_apps.get_app_config('edc_registration').model
-        mommy.make_recipe(
-            'td_maternal.maternallabdel',
-            subject_identifier=self.subject_identifier,
-            live_infants_to_register=1)
+        self.make_delivery()
         self.assertEqual(RegisteredSubject.objects.filter(
             subject_type=INFANT,
             registration_status='DELIVERED',
@@ -67,23 +62,14 @@ class TestMaternalLabDel(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
 
     def test_on_therapy_for_atleast4weeks(self):
         self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
-        mommy.make_recipe(
-            'td_maternal.maternallabdel',
-            subject_identifier=self.subject_identifier,
-            live_infants_to_register=1,
-            valid_regimen_duration=YES)
+        self.make_delivery(valid_regimen_duration=YES)
         enrollment_helper = EnrollmentHelper(self.antenatal_enrollment)
-        # self.assertTrue(enrollment_helper.is_eligible_after_delivery)
         self.assertTrue(enrollment_helper.is_eligible)
 
     def test_not_therapy_for_atleast4weeks(self):
         self.assertEqual(self.antenatal_enrollment.enrollment_hiv_status, POS)
-        mommy.make_recipe(
-            'td_maternal.maternallabdel',
-            subject_identifier=self.subject_identifier,
-            valid_regimen_duration=NO)
+        self.make_delivery(valid_regimen_duration=YES)
         enrollment_helper = EnrollmentHelper(self.antenatal_enrollment)
-        # self.assertFalse(enrollment_helper.is_eligible_after_delivery)
         self.assertFalse(enrollment_helper.is_eligible)
 
     def test_valid_regimen_duration_hiv_pos_only_na(self):

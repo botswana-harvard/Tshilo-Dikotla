@@ -19,39 +19,31 @@ from .lab_profiles import (
 from .models import InfantArvProph
 
 
-def maternal_hiv_status_visit(visit_instance, *args):
-    try:
-        relative_identifier = RegisteredSubject.objects.get(
-            subject_identifier=visit_instance.appointment.subject_identifier).relative_identifier
-        maternal_visit = MaternalVisit.objects.filter(
-            appointment__subject_identifier=relative_identifier).order_by('-created').first()
-        return func_mother_pos(maternal_visit)
-    except Exception:
-        pass
+def func_infant_is_heu(infant_visit, *args):
+    """Returns True infant is HIV NEG and mother is HIV POS."""
+    # TODO: what is status of infant, if HEU is NEG?? Should this be verified?
+    maternal_identifier = RegisteredSubject.objects.get(
+        subject_identifier=infant_visit.appointment.subject_identifier).relative_identifier
+    maternal_visit = MaternalVisit.objects.filter(
+        appointment__subject_identifier=maternal_identifier).order_by('-created').first()
+    return func_mother_pos(maternal_visit)
 
 
 def func_show_infant_arv_proph(infant_visit, *args):
+    show_infant_arv_proph = False
     infant_birth_schedule = site_visit_schedules.get_visit_schedule(
         'infant_visit_schedule').schedules.get('infant_birth')
     previous_visit = infant_birth_schedule.get_previous_visit(infant_visit.appointment.visit_code)
-    if not previous_visit:
-        return False
-    else:
+    if previous_visit:
         try:
             infant_arv_proph = InfantArvProph.objects.get(
                 infant_visit__appointment__visit_code=previous_visit.code)
-            return infant_arv_proph.arv_status in [NO_MODIFICATIONS, START, MODIFIED]
+            show_infant_arv_proph = infant_arv_proph.arv_status in [NO_MODIFICATIONS, START, MODIFIED]
         except InfantArvProph.DoesNotExist:
             if infant_visit.appointment.visit_code == '2010':
-                return maternal_hiv_status_visit(infant_visit)
-            return False
-
-
-def func_infant_heu(infant_visit, *args):
-    """Returns true if mother of the infant is hiv positive."""
-    if maternal_hiv_status_visit(infant_visit):
-        return True
-    return False
+                # always show at 2010 if HEU
+                show_infant_arv_proph = func_infant_is_heu(infant_visit)
+    return show_infant_arv_proph
 
 
 @register()
@@ -126,7 +118,7 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     require_pbmc_pl_heu_pp1 = RequisitionRule(
         logic=Logic(
-            predicate=func_infant_heu,
+            predicate=func_infant_is_heu,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_model='infantrequisition',
@@ -134,7 +126,7 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     require_pbmc_pl_huu_pp1 = RequisitionRule(
         logic=Logic(
-            predicate=func_infant_heu,  # TODO: Result must be false
+            predicate=func_infant_is_heu,  # TODO: Result must be false
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_model='infantrequisition',
@@ -142,7 +134,7 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     require_heel_stick = RequisitionRule(
         logic=Logic(
-            predicate=func_infant_heu,
+            predicate=func_infant_is_heu,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_model='infantrequisition',
@@ -150,7 +142,7 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     require_insulin_heu_pp18 = RequisitionRule(
         logic=Logic(
-            predicate=func_infant_heu,
+            predicate=func_infant_is_heu,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_model='infantrequisition',
@@ -158,7 +150,7 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     require_insulin_huu_pp18 = RequisitionRule(
         logic=Logic(
-            predicate=func_infant_heu,  # TODO: Result must be false
+            predicate=func_infant_is_heu,  # TODO: Result must be false
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_model='infantrequisition',

@@ -7,16 +7,15 @@ from edc_constants.constants import YES, NO
 
 from ..forms import MaternalArvPregForm, MaternalArvForm
 
-from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import PosMotherMixin
 
 
-class TestMaternalArvPregForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalArvPregForm(PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalArvPregForm, self).setUp()
 
-        self.add_maternal_visit('1000M')
-        maternal_visit = self.get_maternal_visit('1000M')
+        maternal_visit = self.add_maternal_visit('1000M')
 
         self.options = {
             'maternal_visit': maternal_visit.id,
@@ -74,8 +73,8 @@ class TestMaternalArvPregForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCa
         """"""
         maternal_arv_preg = mommy.make_recipe(
             'td_maternal.maternalarvpreg', maternal_visit=self.get_maternal_visit('1000M'), took_arv=YES)
-        maternalarvhistory = mommy.make_recipe(
-            'td_maternal.maternalarvhistory',
+        maternallifetimearvhistory = mommy.make_recipe(
+            'td_maternal.maternallifetimearvhistory',
             maternal_visit=self.get_maternal_visit('1000M'),
             haart_start_date=(get_utcnow() - relativedelta(weeks=9)).date())
         inline_data = {
@@ -87,5 +86,5 @@ class TestMaternalArvPregForm(AntenatalVisitsMotherMixin, PosMotherMixin, TestCa
         form = MaternalArvForm(data=inline_data)
         self.assertIn(
             "Your ARV start date {} in this pregnancy cannot be before your "
-            "Historical ARV date {}".format(inline_data['start_date'], maternalarvhistory.haart_start_date),
+            "Historical ARV date {}".format(inline_data['start_date'], maternallifetimearvhistory.haart_start_date),
             form.errors.get('__all__'))

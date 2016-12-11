@@ -770,19 +770,16 @@ class VaccinesReceivedForm(forms.ModelForm):
                 raise forms.ValidationError('No vaccines received. Do not fill Received Vaccines'
                                             ' table')
 
-    def get_infant_birth_date(self, infant_identifier):
-            try:
-                infant_birth = InfantBirth.objects.get(registered_subject__subject_identifier=infant_identifier)
-                return infant_birth.dob
-            except Exception as e:
-                pass
-
     def validate_date_not_before_birth(self):
         cleaned_data = self.cleaned_data
         infant_identifier = cleaned_data.get('infant_fu_immunizations').infant_visit.subject_identifier
-        infant_birth_date = self.get_infant_birth_date(infant_identifier)
-        if cleaned_data.get('date_given') < infant_birth_date:
-            raise forms.ValidationError("Vaccine date cannot be before infant date of birth. ")
+        try:
+            infant_birth = InfantBirth.objects.get(registered_subject__subject_identifier=infant_identifier)
+            infant_birth_date = infant_birth.dob
+            if cleaned_data.get('date_given') < infant_birth_date:
+                raise forms.ValidationError("Vaccine date cannot be before infant date of birth. ")
+        except InfantBirth.DoesNotExist:
+            pass
 
     def validate_received_vaccine_fields(self):
         cleaned_data = self.cleaned_data

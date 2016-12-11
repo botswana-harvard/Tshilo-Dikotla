@@ -1,14 +1,13 @@
 from django.test import TestCase
 from edc_base.utils import get_utcnow
-from edc_code_lists.models import WcsDxAdult
 from edc_constants.constants import YES, NO, NOT_APPLICABLE, NEG
 
-from td_list.models import ChronicConditions, MaternalMedications
+from td_list.models import ChronicConditions, MaternalMedications, WhoAdultDiagnosis
 
 from ..forms import MaternalMedicalHistoryForm
 from ..maternal_hiv_status import MaternalHivStatus
 
-from .test_mixins import NegMotherMixin, PosMotherMixin, AntenatalVisitsMotherMixin
+from .test_mixins import NegMotherMixin, PosMotherMixin
 
 
 class ChronicAndMedicationsMixin:
@@ -36,13 +35,13 @@ class ChronicAndMedicationsMixin:
             created=get_utcnow(), user_modified="", modified=get_utcnow(), hostname_modified="django",
             version="1.0", display_index=5, user_created="django", field_name=None, revision=":develop")
 
-        self.who_dx = WcsDxAdult.objects.create(
+        self.who_dx = WhoAdultDiagnosis.objects.create(
             hostname_created="cabel", code="CS4003", short_name="Recurrent severe bacterial pneumo",
             created=get_utcnow(), user_modified=get_utcnow(), modified=get_utcnow(),
             hostname_modified="cabel", long_name="Recurrent severe bacterial pneumonia",
             user_created="abelc", list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
 
-        self.who_dx_na = WcsDxAdult.objects.create(
+        self.who_dx_na = WhoAdultDiagnosis.objects.create(
             hostname_created="cabel", code="cs9999999", short_name="N/A",
             created=get_utcnow(), user_modified="", modified=get_utcnow(),
             hostname_modified="cabel", long_name="N/A",
@@ -66,10 +65,7 @@ class ChronicAndMedicationsMixin:
             'is_date_estimated': NO}
 
 
-class TestMaternalMedicalHistoryPosMother(ChronicAndMedicationsMixin, AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
-
-    def setUp(self):
-        super(TestMaternalMedicalHistoryPosMother, self).setUp()
+class TestMaternalMedicalHistoryPosMother(ChronicAndMedicationsMixin, PosMotherMixin, TestCase):
 
     def test_mother_chronic_multiple_selection_not_applicable_there(self):
         """check that N/A is not selected with other options"""
@@ -275,7 +271,7 @@ class TestMaternalMedicalHistoryPosMother(ChronicAndMedicationsMixin, AntenatalV
                       form.errors.get('__all__'))
 
 
-class TestMaternalMedicalHistoryNegMother(ChronicAndMedicationsMixin, AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):
+class TestMaternalMedicalHistoryNegMother(ChronicAndMedicationsMixin, NegMotherMixin, TestCase):
 
     def test_negative_mother_chronic_since_yes_who_diagnosis_not_applicable(self):
         """The mother is HIV Negative but indicated that mother had chronic conditions prior to current pregnancy,

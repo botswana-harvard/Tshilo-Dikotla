@@ -2,9 +2,8 @@ from django.db import models
 
 from edc_base.model.fields import OtherCharField
 from edc_constants.choices import YES_NO, YES_NO_NA
-from edc_code_lists.models import WcsDxAdult
 
-from td_list.models import MaternalDiagnoses
+from td_list.models import MaternalDiagnoses, WhoAdultDiagnosis
 
 
 class DiagnosesMixin(models.Model):
@@ -12,7 +11,8 @@ class DiagnosesMixin(models.Model):
     """Base Model for forms with diagnosis questions i.e Maternal Diagnoses, Maternal Post Partum Fu1 etc"""
     new_diagnoses = models.CharField(
         max_length=25,
-        verbose_name="Have there been any new diagnoses or medical problems in the mother's health since last visit?",
+        verbose_name=(
+            "Have there been any new diagnoses or medical problems in the mother's health since last visit?"),
         choices=YES_NO,
         help_text="",
     )
@@ -40,8 +40,9 @@ class DiagnosesMixin(models.Model):
         choices=YES_NO_NA)
 
     who = models.ManyToManyField(
-        WcsDxAdult,
-        verbose_name="List any new WHO Stage III/IV diagnoses that are not reported in Question ?? above:")
+        WhoAdultDiagnosis,
+        verbose_name="List any new WHO Stage III/IV diagnoses that are not reported in Question ?? above:",
+        blank=True)
 
     class Meta:
         abstract = True

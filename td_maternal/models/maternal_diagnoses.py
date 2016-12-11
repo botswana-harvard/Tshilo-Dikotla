@@ -3,7 +3,7 @@ from .maternal_crf_model import MaternalCrfModel
 from .diagnoses_mixin import DiagnosesMixin
 
 
-class MaternalDiagnoses(MaternalCrfModel, DiagnosesMixin):
+class MaternalDiagnoses(DiagnosesMixin, MaternalCrfModel):
 
     class Meta(MaternalCrfModel.Meta):
         app_label = 'td_maternal'

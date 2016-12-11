@@ -11,10 +11,10 @@ from edc_sync.models import OutgoingTransaction
 
 from td.models import Appointment
 
-from .test_mixins import NegMotherMixin, AntenatalVisitsMotherMixin, DeliverMotherMixin
+from .test_mixins import NegMotherMixin
 
 
-class TestMaternalSerializers(AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):
+class TestMaternalSerializers(NegMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalSerializers, self).setUp()
@@ -98,7 +98,7 @@ class TestMaternalSerializers(AntenatalVisitsMotherMixin, NegMotherMixin, TestCa
                     self.assertEqual(maternalclinicalmeasurementsone.pk, deserialised_obj.object.pk)
 
 
-class TestMaternalSerializersDelivered(DeliverMotherMixin, AntenatalVisitsMotherMixin, NegMotherMixin, TestCase):
+class TestMaternalSerializersDelivered(NegMotherMixin, TestCase):
 
     def test_antenatal_enrollmenttwo_crfs_deserialising(self):
         outgoing_transactions = OutgoingTransaction.objects.all()

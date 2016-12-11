@@ -2,15 +2,14 @@ from django.test import TestCase
 
 from td_maternal.forms import MaternalClinicalMeasurementsOneForm
 
-from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import PosMotherMixin
 
 
-class TestMaternalClinicalMeasurementOne(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalClinicalMeasurementOne(PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalClinicalMeasurementOne, self).setUp()
-        self.add_maternal_visit('1000M')
-        maternal_visit = self.get_maternal_visit('1000M')
+        maternal_visit = self.add_maternal_visit('1000M')
 
         self.data = {
             'maternal_visit': maternal_visit.id,

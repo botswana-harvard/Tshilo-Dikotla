@@ -2,16 +2,16 @@ from django.test import TestCase
 
 from td_maternal.forms import MaternalClinicalMeasurementsTwoForm
 
-from .test_mixins import AntenatalVisitsMotherMixin, PosMotherMixin
+from .test_mixins import PosMotherMixin
 
 
-class TestMaternalClinicalMeasurementsTwo(AntenatalVisitsMotherMixin, PosMotherMixin, TestCase):
+class TestMaternalClinicalMeasurementsTwo(PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalClinicalMeasurementsTwo, self).setUp()
-
-        self.add_maternal_visit('1000M', '1010M')
-        maternal_visit = self.get_maternal_visit('1010M')
+        self.complete_required_crfs('1000M')
+        self.make_antenatal_enrollment_two()
+        maternal_visit = self.add_maternal_visit('1010M')
 
         self.options = {
             'maternal_visit': maternal_visit.id,

@@ -3,12 +3,12 @@ from django.db.models.deletion import PROTECT
 
 from edc_base.model.models import UrlMixin, BaseUuidModel, HistoricalRecords
 from edc_constants.constants import (DEAD, MALE)
+from edc_offstudy.model_mixins import OffstudyMixin
 from edc_metadata.model_mixins import CreatesMetadataModelMixin
 from edc_visit_tracking.constants import (
     UNSCHEDULED, SCHEDULED, COMPLETED_PROTOCOL_VISIT, MISSED_VISIT)
-from edc_visit_tracking.model_mixins import CaretakerFieldsMixin, VisitModelMixin
-from edc_offstudy.model_mixins import OffstudyMixin
 from edc_visit_tracking.managers import VisitModelManager
+from edc_visit_tracking.model_mixins import CaretakerFieldsMixin, VisitModelMixin
 
 from td.models import Appointment
 

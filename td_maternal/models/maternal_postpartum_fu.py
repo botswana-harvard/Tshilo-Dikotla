@@ -9,7 +9,7 @@ from .maternal_crf_model import MaternalCrfModel
 from .diagnoses_mixin import DiagnosesMixin
 
 
-class MaternalPostPartumFu(MaternalCrfModel, DiagnosesMixin):
+class MaternalPostPartumFu(DiagnosesMixin, MaternalCrfModel):
 
     hospitalized = models.CharField(
         max_length=25,

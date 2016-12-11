@@ -8,13 +8,17 @@ from td_maternal.models.antenatal_enrollment import AntenatalEnrollment
 from edc_registration.models import RegisteredSubject
 
 
+class RandomizationError(Exception):
+    pass
+
+
 class Randomization(object):
 
     def __init__(self, obj, exception_cls=None):
         """Selects the next available record from the Pre-Populated Randomization list.
         Update the record with subject_identifier, initials and other maternal specific data."""
         self.obj = obj
-        self.exception_cls = exception_cls
+        self.exception_cls = exception_cls or Randomization
         self.initials = None
         self.randomization_datetime = None
         self.rx = None

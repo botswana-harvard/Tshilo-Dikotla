@@ -20,22 +20,24 @@ from .models import (
 
 def func_mother_pos(visit_instance, *args):
     """Returns true if mother is hiv positive."""
+    func_mother_pos = False
     maternal_hiv_status = MaternalHivStatus(
         subject_identifier=visit_instance.subject_identifier,
         reference_datetime=visit_instance.report_datetime)
     if maternal_hiv_status.result == POS:
-        return True
-    return False
+        func_mother_pos = True
+    return func_mother_pos
 
 
 def func_mother_neg(visit_instance, *args):
     """Returns true if mother is hiv neg."""
+    func_mother_neg = False
     maternal_hiv_status = MaternalHivStatus(
         subject_identifier=visit_instance.subject_identifier,
         reference_datetime=visit_instance.report_datetime)
     if maternal_hiv_status.result == NEG:
-        return True
-    return False
+        func_mother_neg = True
+    return func_mother_neg
 
 
 def show_elisa_requisition_hiv_status_ind(visit_instance, *args):

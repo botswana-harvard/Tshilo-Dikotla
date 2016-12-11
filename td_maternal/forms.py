@@ -13,7 +13,7 @@ from edc_consent.form_mixins import ConsentFormMixin
 from edc_death_report.modelform_mixins import DeathReportFormMixin
 from edc_locator.forms import LocatorFormMixin
 from edc_offstudy.modelform_mixins import OffStudyFormMixin
-from edc_pregnancy_utils import Lmp, Edd, Ultrasound
+from edc_pregnancy_utils import Lmp, Edd, Ultrasound, UltrasoundError
 from edc_visit_tracking.choices import VISIT_REASON
 from edc_visit_tracking.form_mixins import VisitFormMixin
 
@@ -478,27 +478,9 @@ class MaternalConsentForm(ConsentFormMixin, forms.ModelForm):
         cleaned_data = super(MaternalConsentForm, self).clean()
         if cleaned_data.get('identity_type') == OMANG and cleaned_data.get('identity')[4] != '2':
             raise forms.ValidationError('Identity provided indicates participant is Male. Please correct.')
-        self.validate_eligibility_age()
         self.validate_recruit_source()
         self.validate_recruitment_clinic()
         return cleaned_data
-
-    def validate_eligibility_age(self):
-        cleaned_data = self.cleaned_data
-        try:
-            identity = cleaned_data.get('identity')
-            consent_v1 = MaternalConsent.objects.get(identity=identity, version=1)
-            consent_age = relativedelta(consent_v1.consent_datetime.date(), consent_v1.dob).years
-        except MaternalConsent.DoesNotExist:
-            pass
-#             consent_age = relativedelta(
-#                 get_utcnow().date(),
-#                 pytz.utc.localize(datetime.combine(cleaned_data.get('dob'), time()))).years
-#         eligibility_age = cleaned_data.get('maternal_eligibility').age_in_years
-#         if consent_age != eligibility_age:
-#             raise forms.ValidationError(
-#                 'In Maternal Eligibility you indicated the participant is {}, '
-#                 'but age derived from the DOB is {}.'.format(eligibility_age, consent_age))
 
     def validate_recruit_source(self):
         cleaned_data = self.cleaned_data
@@ -639,7 +621,7 @@ class MaternalDiagnosesForm(ModelFormMixin, forms.ModelForm):
 
     def validate_has_diagnoses(self):
         cleaned_data = self.cleaned_data
-        if cleaned_data.get('new_diagnoses') in [YES]:
+        if cleaned_data.get('new_diagnoses') == YES:
             if not cleaned_data.get('diagnoses'):
                 raise forms.ValidationError('Participant has new diagnoses, please give a diagnosis.')
             if self.validate_not_applicable_in_there('diagnoses'):
@@ -712,18 +694,21 @@ class MaternalInterimIdccForm(ModelFormMixin, forms.ModelForm):
                                                 ' date it was determined')
 
             if cleaned_data.get('value_vl_size') == 'less_than' and cleaned_data.get('value_vl') != 400:
-                raise forms.ValidationError('You indicated that the value of the most recent VL is less_than a number,'
-                                            ' therefore the value of VL should be 400')
+                raise forms.ValidationError(
+                    'You indicated that the value of the most recent VL is less_than a number,'
+                    ' therefore the value of VL should be 400')
 
             if cleaned_data.get('value_vl_size') == 'greater_than' and cleaned_data.get('value_vl') != 750000:
-                raise forms.ValidationError('You indicated that the value of the most recent VL is greater_than a'
-                                            ' number, therefore the value of VL should be 750000')
+                raise forms.ValidationError(
+                    'You indicated that the value of the most recent VL is greater_than a'
+                    ' number, therefore the value of VL should be 750000')
 
             if(cleaned_data.get('value_vl_size') == 'equal' and (cleaned_data.get('value_vl') > 750000 or
                cleaned_data.get('value_vl') < 400)):
-                raise forms.ValidationError('You indicated that the value of the most recent VL is equal to a'
-                                            ' number, therefore the value of VL should be between 400 and 750000'
-                                            '(inclusive of 400 and 750000)')
+                raise forms.ValidationError(
+                    'You indicated that the value of the most recent VL is equal to a'
+                    ' number, therefore the value of VL should be between 400 and 750000'
+                    '(inclusive of 400 and 750000)')
 
     def validate_info_since_last_visit_no(self):
         cleaned_data = self.cleaned_data
@@ -776,7 +761,8 @@ class MaternalLabDelForm(ModelFormMixin, forms.ModelForm):
         else:
             if cleaned_data.get('valid_regimen_duration') not in [NOT_APPLICABLE]:
                 raise forms.ValidationError(
-                    'Participant\'s HIV status is {}, a valid regimen duration is applicable. Please correct'.format(
+                    'Participant\'s HIV status is {}, a valid regimen duration is applicable. '
+                    'Please correct'.format(
                         self.maternal_hiv_status.result))
             if cleaned_data.get('arv_initiation_date'):
                 raise forms.ValidationError(
@@ -792,9 +778,9 @@ class MaternalHivInterimHxForm(ModelFormMixin, forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalHivInterimHxForm, self).clean()
-#         self.validate_cd4()
-#         self.validate_viral_load()
-#         self.validate_vl_result()
+        self.validate_cd4()
+        self.validate_viral_load()
+        self.validate_vl_result()
         return cleaned_data
 
     def validate_cd4(self):
@@ -899,7 +885,8 @@ class MaternalMedicalHistoryForm(ModelFormMixin, forms.ModelForm):
         if cleaned_data.get('chronic_since') == NO and self.maternal_hiv_status.result == POS:
             if cleaned_data.get('who_diagnosis') != NO:
                 raise forms.ValidationError(
-                    "The mother is HIV positive, because Chronic_since is NO and Who Diagnosis should also be NO")
+                    'The mother is HIV positive, because Chronic_since is NO and Who '
+                    'Diagnosis should also be NO')
 
     def validate_who_diagnosis_who_chronic_list(self):
         cleaned_data = self.cleaned_data
@@ -921,7 +908,8 @@ class MaternalMedicalHistoryForm(ModelFormMixin, forms.ModelForm):
         if cleaned_data.get('who_diagnosis') == NO:
             if self.validate_not_applicable_not_there('who') and self.maternal_hiv_status.result == POS:
                 raise forms.ValidationError(
-                    'Question5: The mother does not have prior who stage III and IV illnesses. Should provide N/A')
+                    'Question5: The mother does not have prior who stage III and IV illnesses. '
+                    'Should provide N/A')
             if self.validate_not_applicable_and_other_options('who'):
                 raise forms.ValidationError(
                     'Question5: The mother does not have prior who stage III and IV illnesses. '
@@ -941,7 +929,8 @@ class MaternalMedicalHistoryForm(ModelFormMixin, forms.ModelForm):
 
     def validate_mother_medications_multiple_selections(self):
         if self.validate_many_to_many_not_blank('mother_medications'):
-            raise forms.ValidationError('Question10: The field for the mothers medications should not be left blank')
+            raise forms.ValidationError(
+                'Question10: The field for the mothers medications should not be left blank')
         if self.validate_not_applicable_and_other_options('mother_medications'):
             raise forms.ValidationError('Question10: You cannot select options that have N/A in them')
 
@@ -1013,7 +1002,8 @@ class MaternalMedicalHistoryForm(ModelFormMixin, forms.ModelForm):
                     "The Mother is HIV Negative, the approximate date of diagnosis should not be supplied")
             if cleaned_data.get('perinataly_infected') != NOT_APPLICABLE:
                 raise forms.ValidationError(
-                    "The Mother is HIV Negative, the field for whether she was Perinataly Infected should be N/A")
+                    'The Mother is HIV Negative, the field for whether she was '
+                    'Perinataly Infected should be N/A')
             if cleaned_data.get('know_hiv_status') != NOT_APPLICABLE:
                 raise forms.ValidationError(
                     "The Mother is HIV Negative, the field for whether anyone knows the if the mother is HIV"
@@ -1102,7 +1092,8 @@ class MaternalObstericalHistoryForm(ModelFormMixin, forms.ModelForm):
                             cleaned_data.get('children_deliv_aftr_37wks'))
         sum_lost_24_wks = cleaned_data.get('lost_before_24wks') + cleaned_data.get('lost_after_24wks')
         if sum_deliv_37_wks != ((cleaned_data.get('prev_pregnancies') - 1) - sum_lost_24_wks):
-            raise forms.ValidationError('The sum of Q8 and Q9 must be equal to (Q2 -1) - (Q4 + Q5). Please correct.')
+            raise forms.ValidationError(
+                'The sum of Q8 and Q9 must be equal to (Q2 -1) - (Q4 + Q5). Please correct.')
 
     class Meta:
         model = MaternalObstericalHistory
@@ -1176,7 +1167,8 @@ class MaternalPostPartumFuForm(ModelFormMixin, forms.ModelForm):
         cleaned_data = self.cleaned_data
         if self.maternal_hiv_status.result == NEG:
             if cleaned_data.get('has_who_dx') != NOT_APPLICABLE:
-                raise forms.ValidationError('The mother is Negative, question 10 for WHO Stage III/IV should be N/A')
+                raise forms.ValidationError(
+                    'The mother is Negative, question 10 for WHO Stage III/IV should be N/A')
             if self.validate_many_to_many_not_blank('who'):
                 raise forms.ValidationError(
                     'Question11: Participant is HIV {}, WHO Diagnosis field should be N/A'.format(
@@ -1246,7 +1238,8 @@ class MaternalSubstanceUseDuringPregForm(ModelFormMixin, forms.ModelForm):
         else:
             if cleaned_data.get('smoking_during_preg_freq'):
                 raise forms.ValidationError(
-                    'Participant has never smoked tobacco during this pregnancy, please do not give a frequency.')
+                    'Participant has never smoked tobacco during this pregnancy, '
+                    'please do not give a frequency.')
 
     def validate_alcohol_during_pregnancy(self):
         cleaned_data = self.cleaned_data
@@ -1268,7 +1261,8 @@ class MaternalSubstanceUseDuringPregForm(ModelFormMixin, forms.ModelForm):
         else:
             if cleaned_data.get('marijuana_during_preg_freq'):
                 raise forms.ValidationError(
-                    'Participant has never smoked marijuana during this pregnancy, please do not give a frequency.')
+                    'Participant has never smoked marijuana during this pregnancy, '
+                    'please do not give a frequency.')
 
     class Meta:
         model = MaternalSubstanceUseDuringPreg
@@ -1293,7 +1287,8 @@ class MaternalSubstanceUsePriorPregForm(ModelFormMixin, forms.ModelForm):
         else:
             if cleaned_data.get('smoking_prior_preg_freq'):
                 raise forms.ValidationError(
-                    'Participant has never smoked tobacco prior to this pregnancy, please do not give a frequency.')
+                    'Participant has never smoked tobacco prior to this pregnancy, '
+                    'please do not give a frequency.')
 
     def validate_alcohol_prior_pregnancy(self):
         cleaned_data = self.cleaned_data
@@ -1315,7 +1310,8 @@ class MaternalSubstanceUsePriorPregForm(ModelFormMixin, forms.ModelForm):
         else:
             if cleaned_data.get('marijuana_prior_preg_freq'):
                 raise forms.ValidationError(
-                    'Participant has never smoked marijuana prior to this pregnancy, please do not give a frequency.')
+                    'Participant has never smoked marijuana prior to this pregnancy, '
+                    'please do not give a frequency.')
 
     class Meta:
         model = MaternalSubstanceUsePriorPreg
@@ -1338,11 +1334,14 @@ class MaternalUltraSoundInitialForm(ModelFormMixin, forms.ModelForm):
         lmp = Lmp(
             lmp=antenatal_enrollment.last_period_date,
             reference_date=cleaned_data.get('report_datetime'))
-        ultrasound = Ultrasound(
-            ultrasound_date=cleaned_data.get('report_datetime'),
-            ga_confirmed_weeks=cleaned_data.get('ga_by_ultrasound_wks'),
-            ga_confirmed_days=cleaned_data.get('ga_by_ultrasound_days'),
-            ultrasound_edd=cleaned_data.get('est_edd_ultrasound'))
+        try:
+            ultrasound = Ultrasound(
+                ultrasound_date=cleaned_data.get('report_datetime'),
+                ga_confirmed_weeks=cleaned_data.get('ga_by_ultrasound_wks'),
+                ga_confirmed_days=cleaned_data.get('ga_by_ultrasound_days'),
+                ultrasound_edd=cleaned_data.get('est_edd_ultrasound'))
+        except UltrasoundError as e:
+            raise forms.ValidationError(str(e))
         edd = Edd(lmp=lmp, ultrasound=ultrasound)
         if not edd.edd:
             raise forms.ValidationError('Cannot determine EDD.')

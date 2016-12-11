@@ -1,5 +1,4 @@
-from edc_base.model.models import ListModelMixin
-from edc_base.model.models import BaseUuidModel
+from edc_base.model.models import ListModelMixin, BaseUuidModel
 
 
 class AutopsyInfoSource (ListModelMixin, BaseUuidModel):
@@ -157,3 +156,19 @@ class Supplements (ListModelMixin, BaseUuidModel):
         app_label = 'td_list'
         verbose_name = "Supplements"
         verbose_name_plural = "Supplements"
+
+
+class WhoAdultDiagnosis (ListModelMixin, BaseUuidModel):
+
+    class Meta:
+        app_label = 'td_list'
+        verbose_name = "WHO Adult Diagnosis"
+        verbose_name_plural = "WHO Adult Diagnoses"
+
+
+class WhoPedsDiagnosis (ListModelMixin, BaseUuidModel):
+
+    class Meta:
+        app_label = 'td_list'
+        verbose_name = "WHO Pediatric Diagnosis"
+        verbose_name_plural = "WHO Pediatric Diagnoses"

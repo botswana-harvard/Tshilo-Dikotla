@@ -2,7 +2,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from faker import Faker
 from faker.providers import BaseProvider
-from model_mommy.recipe import Recipe, seq
+from model_mommy.recipe import Recipe, seq, related
 
 from edc_base.faker import EdcBaseProvider
 from edc_base.utils import get_utcnow
@@ -15,7 +15,8 @@ from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, Antena
                      MaternalInterimIdcc, RapidTestResult, MaternalObstericalHistory, MaternalMedicalHistory,
                      MaternalDemographics, MaternalAztNvp, MaternalDiagnoses, MaternalSubstanceUseDuringPreg,
                      MaternalClinicalMeasurementsTwo, MaternalLifetimeArvHistory, MaternalArvPreg,
-                     MaternalClinicalMeasurementsOne)
+                     MaternalClinicalMeasurementsOne, MaternalHivInterimHx, MaternalSubstanceUsePriorPreg)
+from td_list.models import WhoAdultDiagnosis
 
 
 class TdProvider(BaseProvider):
@@ -44,6 +45,20 @@ fake.add_provider(MyEdcBaseProvider)
 fake.add_provider(EdcLabProvider)
 fake.add_provider(TdProvider)
 
+
+whoadultdiagnosis = Recipe(
+    WhoAdultDiagnosis,
+    name=NOT_APPLICABLE,
+    short_name=NOT_APPLICABLE,
+    display_index=seq(1),
+)
+
+maternaldiagnoses = Recipe(
+    MaternalDiagnoses,
+    name=NOT_APPLICABLE,
+    short_name=NOT_APPLICABLE,
+    display_index=seq(1),
+)
 
 maternaleligibility = Recipe(
     MaternalEligibility,
@@ -266,17 +281,27 @@ maternalaztnvp = Recipe(
 
 maternaldiagnoses = Recipe(
     MaternalDiagnoses,
-    diagnoses=NO,
-    has_who_dx=NO,)
+    new_diagnoses=NO,
+    has_who_dx=NO,
+)
 
-substanceusepriortopregnancy = Recipe(
-    MaternalSubstanceUseDuringPreg,
+maternalsubstanceusepriorpreg = Recipe(
+    MaternalSubstanceUsePriorPreg,
     smoked_prior_to_preg=YES,
     smoking_prior_preg_freq='daily',
     alcohol_prior_pregnancy=YES,
     alcohol_prior_preg_freq='daily',
     marijuana_prior_preg=YES,
     marijuana_prior_preg_freq='daily',)
+
+maternalsubstanceuseduringpreg = Recipe(
+    MaternalSubstanceUseDuringPreg,
+    smoked_during_pregnancy=YES,
+    smoking_during_preg_freq='daily',
+    alcohol_during_pregnancy=YES,
+    alcohol_during_preg_freq='daily',
+    marijuana_during_preg=YES,
+    marijuana_during_preg_freq='daily',)
 
 maternalclinicalmeasurementstwo = Recipe(
     MaternalClinicalMeasurementsTwo,
@@ -296,10 +321,15 @@ maternalarvpreg = Recipe(
     is_interrupt=NO,
     interrupt=NOT_APPLICABLE,)
 
-maternalarvhistory = Recipe(
+maternallifetimearvhistory = Recipe(
     MaternalLifetimeArvHistory,
     haart_start_date=fake.twenty_five_weeks_ago,
     is_date_estimated='-',
     preg_on_haart=YES,
     haart_changes=0,
     prior_preg=CONTINUOUS,)
+
+maternalhivinterimhx = Recipe(
+    MaternalHivInterimHx,
+    has_cd4=NO,
+    has_vl=NO)

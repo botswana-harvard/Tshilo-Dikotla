@@ -3,12 +3,12 @@ from django.test.testcases import TestCase
 from edc_metadata.constants import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import RequisitionMetadata
 
-from td_maternal.tests.test_mixins import DeliverMotherMixin, AntenatalVisitsMotherMixin, PosMotherMixin
+from td_maternal.tests.test_mixins import DeliverMotherMixin, CompleteMaternalCrfsMixin, PosMotherMixin
 
 from .test_mixins import AddVisitInfantMixin, InfantBirthMixin
 
 
-class TestHivStatus(InfantBirthMixin, DeliverMotherMixin, AddVisitInfantMixin, AntenatalVisitsMotherMixin,
+class TestHivStatus(InfantBirthMixin, DeliverMotherMixin, AddVisitInfantMixin, CompleteMaternalCrfsMixin,
                     PosMotherMixin, TestCase):
 
     def test_dnapcr_for_non_heu_infant(self):
