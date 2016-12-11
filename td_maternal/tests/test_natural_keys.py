@@ -1,34 +1,30 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 
-from django.apps import apps as django_apps
+from edc_sync.test_mixins import SyncTestSerializerMixin
+
+from .test_mixins import MotherMixin
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
 
-class TestNaturalKey(TestCase):
+@tag('review', 'slow')
+class TestNaturalKey(SyncTestSerializerMixin, MotherMixin, TestCase):
 
-    def test_natural_key_maternal(self):
-        """Confirms all models have a natural_key method (except Audit models)"""
-        td_maternal_models = django_apps.get_app_config('td_maternal').get_models()
-        for model in td_maternal_models:
-            if 'Audit' not in model._meta.object_name:
-                self.assertTrue('natural_key' in dir(model), 'natural key not found in {0}'.format(model._meta.object_name))
+    def test_natural_key_attrs(self):
+        self.sync_test_natural_key_attr('td', 'td_infant', 'td_maternal', 'td_lab')
 
-    def test_natural_key_infant(self):
-        """Confirms all models have a natural_key method (except Audit models)"""
-        td_maternal_models = django_apps.get_app_config('td_infant').get_models()
-        for model in td_maternal_models:
-            if 'Audit' not in model._meta.object_name:
-                self.assertTrue('natural_key' in dir(model), 'natural key not found in {0}'.format(model._meta.object_name))
+    def test_get_by_natural_key_attr(self):
+        self.sync_test_get_by_natural_key_attr('td', 'td_infant', 'td_maternal', 'td_lab')
 
-    def test_natural_key_lab(self):
-        """Confirms all models have a natural_key method (except Audit models)"""
-        td_maternal_models = django_apps.get_app_config('td_lab').get_models()
-        for model in td_maternal_models:
-            if 'Audit' not in model._meta.object_name:
-                self.assertTrue('natural_key' in dir(model), 'natural key not found in {0}'.format(model._meta.object_name))
-
-    def test_natural_key_appointment(self):
-        """Confirms all models have a natural_key method (except Audit models)"""
-        td_maternal_models = django_apps.get_app_config('td').get_models()
-        for model in td_maternal_models:
-            if 'Audit' not in model._meta.object_name:
-                self.assertTrue('natural_key' in dir(model), 'natural key not found in {0}'.format(model._meta.object_name))
+    @tag('crf_natural_keys')
+    def test_crf_natural_keys(self):
+        verbose = True
+        self.make_positive_mother()
+        complete_required_crfs = self.complete_required_crfs('1000M')
+        self.sync_test_natural_keys(complete_required_crfs, verbose=verbose)
+        self.make_antenatal_enrollment_two()
+        complete_required_crfs = self.complete_required_crfs('1010M')
+        self.sync_test_natural_keys(complete_required_crfs, verbose=verbose)
+        complete_required_crfs = self.complete_required_crfs('1020M')
+        self.sync_test_natural_keys(complete_required_crfs, verbose=verbose)
+        maternal_delivery = self.make_delivery()
+        self.sync_test_natural_keys_by_schedule(maternal_delivery, verbose=verbose)

@@ -1,5 +1,6 @@
 from django.db import models
 
+from edc_base.model.models import HistoricalRecords
 from edc_pregnancy_utils import Edd, Lmp, Ultrasound, Ga
 from edc_protocol.validators import date_not_before_study_start
 
@@ -8,8 +9,8 @@ from td.validators import validate_ga_by_ultrasound, validate_fetal_weight
 
 from ..choices import CONFIRMATION_METHOD
 
+from .antenatal_enrollment import AntenatalEnrollment
 from .base_ultra_sound_model import BaseUtraSoundModel
-from td_maternal.models.antenatal_enrollment import AntenatalEnrollment
 
 
 class MaternalUltraSoundInitial(BaseUtraSoundModel):
@@ -79,6 +80,8 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
         null=True,
         editable=False,
         help_text='Derived variable.')
+
+    history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
         antenatal_enrollment = AntenatalEnrollment.objects.get(subject_identifier=self.subject_identifier)

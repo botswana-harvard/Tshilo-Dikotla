@@ -186,6 +186,7 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
             subject_identifier=self.subject_identifier,
             **options)
         self.requery_antenatal_enrollment()
+        return self.maternal_lab_del
 
     def make_rapid_test(self, result, result_date=None, visit=None):
         """Makes a rapid test with the given result.

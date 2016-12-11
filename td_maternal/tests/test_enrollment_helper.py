@@ -199,7 +199,7 @@ class TestEdd(MotherMixin, TestCase):
         lmp = self.test_mixin_reference_datetime - relativedelta(weeks=25)
         lmp = Lmp(lmp=lmp, reference_date=self.antenatal_enrollment.report_datetime)
         self.assertIsNotNone(lmp.edd)
-        self.assertEqual(self.antenatal_enrollment.edd_by_lmp, lmp.edd.date())
+        self.assertEqual(self.antenatal_enrollment.edd_by_lmp, lmp.edd)
         self.assertEqual(self.antenatal_enrollment.ga_lmp_enrollment_wks, lmp.ga.weeks)
         self.assertEqual(self.antenatal_enrollment.ga_by_lmp, 25)
         self.assertFalse(self.antenatal_enrollment.ga_pending)
