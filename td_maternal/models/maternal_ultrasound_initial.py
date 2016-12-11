@@ -54,18 +54,21 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
 
     edd_confirmed = models.DateField(
         verbose_name="EDD Confirmed.",
+        null=True,
         editable=False,
-        help_text='EDD Confirmed. Derived variable, see AntenatalEnrollment.')
+        help_text='Derived variable.')
 
     edd_method = models.CharField(
         verbose_name="The method used to derive edd.",
         max_length=3,
         choices=CONFIRMATION_METHOD,
+        null=True,
         editable=False,
         help_text='Derived variable.')
 
     ga_confirmed = models.IntegerField(
         verbose_name="GA confirmed in weeks.",
+        null=True,
         editable=False,
         help_text='Derived variable.')
 
@@ -73,6 +76,7 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
         verbose_name="The method used to derive ga.",
         max_length=3,
         choices=CONFIRMATION_METHOD,
+        null=True,
         editable=False,
         help_text='Derived variable.')
 
