@@ -171,15 +171,18 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
             report_datetime=report_datetime,
             subject_identifier=self.subject_identifier)
 
-    def make_delivery(self, report_datetime=None, **options):
+    def make_delivery(self, report_datetime=None, delivery_datetime=None, **options):
         """Deliver one live infant on given report_datetime."""
         report_datetime = report_datetime or pytz.utc.localize(
+            datetime.combine(self.antenatal_enrollment.edd, time()))
+        delivery_datetime = delivery_datetime or pytz.utc.localize(
             datetime.combine(self.antenatal_enrollment.edd, time()))
         live_infants = options.get('live_infants', 1)
         options.update(live_infants=live_infants)
         self.maternal_lab_del = mommy.make_recipe(
             'td_maternal.maternallabdel',
             report_datetime=report_datetime,
+            delivery_datetime=delivery_datetime,
             subject_identifier=self.subject_identifier,
             **options)
         self.requery_antenatal_enrollment()

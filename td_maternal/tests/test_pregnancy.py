@@ -1,61 +1,68 @@
 from dateutil.relativedelta import relativedelta
-from model_mommy import mommy
-from django.test import TestCase
-from django.utils import timezone
 
-from edc_base.utils import get_utcnow
+from django.test import TestCase, tag
+
 from edc_pregnancy_utils.constants import ULTRASOUND
 
-from ..models import MaternalLabDel
 from ..pregnancy import Pregnancy
 
-from .test_mixins import PosMotherMixin
+from .test_mixins import MotherMixin
+import pytz
+from datetime import datetime, time
 
 
-class TestPregnancy(PosMotherMixin, TestCase):
+@tag('review')
+class TestPregnancy(MotherMixin, TestCase):
 
-    def setUp(self):
-        super(TestPregnancy, self).setUp()
+    def test_delivered(self):
+        self.make_positive_mother()
         self.add_maternal_visit('1000M')
-
-    def test_basics(self):
-        maternal_visit = self.add_maternal_visit('1000M')
-        est_edd = (timezone.now() + relativedelta(weeks=20)).date()
-        mommy.make_recipe(
-            'td_maternal.maternalultrasoundinitial',
-            maternal_visit=maternal_visit,
-            est_edd_ultrasound=est_edd,
-            ga_by_ultrasound_wks=20,
-            ga_by_ultrasound_days=4)
+        self.make_antenatal_enrollment_two()
+        maternal_ultrasound = self.make_ultrasound()
+        self.add_maternal_visits('1010M', '1020M')
+        report_datetime = self.get_last_maternal_visit().report_datetime
+        delivery_datetime = pytz.utc.localize(datetime.combine(maternal_ultrasound.est_edd_ultrasound, time()))
+        self.make_delivery(
+            report_datetime=report_datetime,
+            delivery_datetime=delivery_datetime)
         pregnancy = Pregnancy(
             self.subject_identifier,
-            reference_datetime=get_utcnow())
+            reference_datetime=delivery_datetime)
         self.assertEqual(pregnancy.ga_by_lmp, 25)
         self.assertEqual(pregnancy.ga.weeks, 20)
+        self.assertEqual(pregnancy.edd.method, ULTRASOUND)
+        self.assertEqual(pregnancy.delivery_datetime, delivery_datetime)
+        self.assertEqual(pregnancy.edd.edd, maternal_ultrasound.est_edd_ultrasound)
+
+    def test_not_delivered(self):
+        self.make_positive_mother()
+        self.add_maternal_visit('1000M')
+        self.make_antenatal_enrollment_two()
+        maternal_ultrasound = self.make_ultrasound(ga_by_ultrasound_wks=25)
+        self.add_maternal_visits('1010M', '1020M')
+        pregnancy = Pregnancy(
+            self.subject_identifier,
+            reference_datetime=self.get_last_maternal_visit().report_datetime)
+        self.assertEqual(pregnancy.ga_by_lmp, 25)
+        self.assertEqual(pregnancy.ga.weeks, 25)
         self.assertIsNone(pregnancy.delivery_datetime)
-        self.assertEqual(pregnancy.edd.edd.date(), est_edd)
+        self.assertEqual(pregnancy.edd.edd, self.antenatal_enrollment.edd_by_lmp)
+        self.assertEqual(pregnancy.edd.edd, maternal_ultrasound.est_edd_ultrasound)
         self.assertEqual(pregnancy.edd.method, ULTRASOUND)
 
     def test_reference_datetime_before_delivery(self):
         """Asserts ignores delivery if reference datetime before delivery datetime."""
-        maternal_visit = self.add_maternal_visit('1000M')
-        est_edd = (timezone.now() + relativedelta(weeks=20)).date()
-        delivery_datetime = (timezone.now() + relativedelta(weeks=20) + relativedelta(days=6))
-        reference_datetime = (timezone.now() + relativedelta(weeks=19))
-        maternal_lab_del = MaternalLabDel.objects.get(subject_identifier=self.subject_identifier)
-        maternal_lab_del.delivery_datetime = delivery_datetime
-        maternal_lab_del.save()
-        mommy.make_recipe(
-            'td_maternal.maternalultrasoundinitial',
-            maternal_visit=maternal_visit,
-            est_edd_ultrasound=est_edd,
-            ga_by_ultrasound_wks=20,
-            ga_by_ultrasound_days=4)
+        self.make_positive_mother()
+        self.add_maternal_visit('1000M')
+        self.make_antenatal_enrollment_two()
+        maternal_ultrasound = self.make_ultrasound()
+        self.add_maternal_visits('1010M', '1020M')
+        report_datetime = self.get_last_maternal_visit().report_datetime
+        delivery_datetime = pytz.utc.localize(datetime.combine(maternal_ultrasound.est_edd_ultrasound, time()))
+        self.make_delivery(
+            report_datetime=report_datetime,
+            delivery_datetime=delivery_datetime)
         pregnancy = Pregnancy(
             self.subject_identifier,
-            reference_datetime=reference_datetime)
-        self.assertEqual(pregnancy.ga_by_lmp, 25)
-        self.assertEqual(pregnancy.ga.weeks, 20)
+            reference_datetime=delivery_datetime - relativedelta(weeks=4))
         self.assertIsNone(pregnancy.delivery_datetime)
-        self.assertEqual(pregnancy.edd.edd.date(), est_edd)
-        self.assertEqual(pregnancy.edd.method, ULTRASOUND)
