@@ -176,6 +176,26 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
             result=result,
             result_date=result_date or visit.report_datetime.date())
 
+    def make_ultrasound(self, visit=None, **options):
+        """Makes an ultrasound GA 20wks reported on day of maternal visit unless different options provided."""
+        visit = visit or self.get_last_maternal_visit()
+        report_datetime = options.get('report_datetime', visit.report_datetime)
+        ga_by_ultrasound_wks = options.get('ga_by_ultrasound_wks', 20)
+        ga_by_ultrasound_days = options.get('ga_by_ultrasound_days', 0)
+        weeks_until_edd = 40 - (
+            relativedelta(weeks=ga_by_ultrasound_wks) + relativedelta(days=ga_by_ultrasound_days)).weeks
+        suggested_edd = (report_datetime + relativedelta(weeks=weeks_until_edd)).date()
+        est_edd_ultrasound = options.get(
+            'est_edd_ultrasound', suggested_edd)
+        options.update(
+            maternal_visit=visit,
+            report_datetime=report_datetime,
+            est_edd_ultrasound=est_edd_ultrasound,
+            ga_by_ultrasound_wks=ga_by_ultrasound_wks,
+            ga_by_ultrasound_days=ga_by_ultrasound_days)
+        return mommy.make_recipe(
+            'td_maternal.maternalultrasoundinitial', **options)
+
 
 class PosMotherMixin(MotherMixin):
     """Creates an eligible POS mother."""
