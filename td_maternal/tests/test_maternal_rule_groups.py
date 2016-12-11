@@ -50,7 +50,7 @@ class TestMaternalRuleGroupsPos(PosMotherMixin, TestCase):
         """Test that CD4 requisition is required for all POS is recent CD4 > 3months."""
         self.add_maternal_visits('1000M')
         self.make_antenatal_enrollment_two()
-        maternal_visit = self.add_maternal_visits('1010M')
+        maternal_visit = self.add_maternal_visit('1010M')
         mommy.make_recipe(
             'td_maternal.maternalinterimidcc',
             maternal_visit=maternal_visit,
@@ -67,7 +67,7 @@ class TestMaternalRuleGroupsPos(PosMotherMixin, TestCase):
         """Test that CD4 requisition not required for all POS if recent CD4 < 3months."""
         self.add_maternal_visits('1000M')
         self.make_antenatal_enrollment_two()
-        maternal_visit = self.add_maternal_visits('1010M')
+        maternal_visit = self.add_maternal_visit('1010M')
         mommy.make_recipe(
             'td_maternal.maternalinterimidcc',
             maternal_visit=maternal_visit,

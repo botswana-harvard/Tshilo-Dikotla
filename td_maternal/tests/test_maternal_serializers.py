@@ -9,8 +9,6 @@ from edc_call_manager.models import Call, Log
 from edc_registration.models import RegisteredSubject
 from edc_sync.models import OutgoingTransaction
 
-from td.models import Appointment
-
 from .test_mixins import NegMotherMixin
 
 
@@ -19,9 +17,6 @@ class TestMaternalSerializers(NegMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalSerializers, self).setUp()
-        self.appointment = Appointment.objects.get(
-            visit_code='1000M',
-            subject_identifier=self.subject_identifier)
         self.maternal_visit = self.add_maternal_visit('1000M')
 
     def test_antenatal_enrollment_deserialising(self):
@@ -29,7 +24,6 @@ class TestMaternalSerializers(NegMotherMixin, TestCase):
         call = Call.objects.get(subject_identifier=self.subject_identifier)
         log = Log.objects.get(call=call)
         registered_subject = RegisteredSubject.objects.get(subject_identifier=self.subject_identifier)
-#         subjectidentifier = SubjectIdentifier.objects.get(identifier=self.subject_identifier)
         outgoing_transactions = OutgoingTransaction.objects.all()
         self.assertGreater(outgoing_transactions.count(), 0)
         for outgoing_transaction in outgoing_transactions:
