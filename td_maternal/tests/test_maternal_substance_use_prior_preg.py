@@ -9,7 +9,7 @@ from ..forms import MaternalSubstanceUsePriorPregForm
 from .test_mixins import NegMotherMixin
 
 
-@tag('review')
+@tag('forms')
 class TestMaternalSubstanceUsePriorPreg(AddVisitInfantMixin, NegMotherMixin, TestCase):
 
     def setUp(self):
