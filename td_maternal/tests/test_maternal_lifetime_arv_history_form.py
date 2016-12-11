@@ -31,7 +31,6 @@ class TestMaternalLifetimeArvHistoryForm(PosMotherMixin, TestCase):
     def test_arv_interrupt_1(self):
         """Assert that if was not still on ARV then 'interruption never restarted'
         is not a valid option."""
-
         self.options.update(
             prior_preg=STOPPED,
             haart_start_date=date(2015, 4, 10),
