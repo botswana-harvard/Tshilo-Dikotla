@@ -205,11 +205,11 @@ class AntenatalEnrollment(EnrollmentModelMixin, CreateAppointmentsOnEligibleMixi
         enrollment_helper = EnrollmentHelper(self)
         self.is_eligible = enrollment_helper.is_eligible
         try:
-            self.date_at_32wks = (enrollment_helper.edd.edd - relativedelta(weeks=6)).date()
+            self.date_at_32wks = enrollment_helper.edd.edd - relativedelta(weeks=6)
         except TypeError:
             self.date_at_32wks = None
         try:
-            self.edd_by_lmp = enrollment_helper.lmp.edd.date()
+            self.edd_by_lmp = enrollment_helper.lmp.edd
         except AttributeError:
             self.edd_by_lmp = None
         self.enrollment_hiv_status = enrollment_helper.enrollment_result.result

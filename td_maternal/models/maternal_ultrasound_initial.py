@@ -91,6 +91,10 @@ class MaternalUltraSoundInitial(BaseUtraSoundModel):
             ga_confirmed_weeks=self.ga_by_ultrasound_wks,
             ga_confirmed_days=self.ga_by_ultrasound_days,
             ultrasound_edd=self.est_edd_ultrasound)
+        try:
+            self.est_edd_ultrasound = self.est_edd_ultrasound.date()
+        except AttributeError:
+            pass
         ga = Ga(lmp, ultrasound, prefer_ultrasound=True)
         edd = Edd(lmp=lmp, ultrasound=ultrasound)
         self.ga_confirmed = ga.weeks

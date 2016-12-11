@@ -2,11 +2,11 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from faker import Faker
 from faker.providers import BaseProvider
-from model_mommy.recipe import Recipe, seq, related
+from model_mommy.recipe import Recipe, seq
 
 from edc_base.faker import EdcBaseProvider
 from edc_base.utils import get_utcnow
-from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG, UNKNOWN, CONTINUOUS, IND
+from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG, UNKNOWN, CONTINUOUS
 from edc_lab.faker import EdcLabProvider
 from edc_visit_tracking.constants import SCHEDULED
 

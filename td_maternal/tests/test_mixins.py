@@ -58,10 +58,13 @@ class CompleteMaternalCrfsMixin(CompleteCrfsMixin):
 
     def complete_required_crfs(self, *visit_codes):
         """Complete all required CRFs for a visit(s) using mommy defaults."""
+        complete_required_crfs = {}
         for visit_code in visit_codes:
             maternal_visit = self.add_maternal_visit(visit_code)
-            super(CompleteMaternalCrfsMixin, self).complete_required_crfs(
+            completed_crfs = super(CompleteMaternalCrfsMixin, self).complete_required_crfs(
                 visit_code, maternal_visit, 'maternal_visit')
+            complete_required_crfs.update({visit_code: completed_crfs})
+        return complete_required_crfs
 
 
 class MaternalTestMixin(CompleteMaternalCrfsMixin, AddMaternalVisitMixin, LoadListDataMixin):
