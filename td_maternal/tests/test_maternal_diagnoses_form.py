@@ -32,7 +32,7 @@ class TestMaternalDiagnosesForm(PosMotherMixin, TestCase):
 
         self.who_dx_na = WhoAdultDiagnosis.objects.create(
             short_name="N/A",
-            long_name="Not Applicable")
+            name="Not Applicable")
 
         self.options = {
             'maternal_visit': maternal_visit.id,

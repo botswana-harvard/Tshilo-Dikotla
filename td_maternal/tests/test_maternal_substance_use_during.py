@@ -13,7 +13,9 @@ class TestMaternalSubstanceUseDuringPreg(AddVisitInfantMixin, NegMotherMixin, Te
 
     def setUp(self):
         super(TestMaternalSubstanceUseDuringPreg, self).setUp()
-        self.add_maternal_visits('1000M', '1010M', '1020M')
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M', '1020M')
         maternal_visit = self.get_maternal_visit('1020M')
         self.options = {
             'maternal_visit': maternal_visit.pk,

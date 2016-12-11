@@ -21,7 +21,7 @@ class TestMaternalSerializers(NegMotherMixin, TestCase):
         self.appointment = Appointment.objects.get(
             visit_code='1000M',
             subject_identifier=self.subject_identifier)
-        self.maternal_visit = self.get_maternal_visit('1000M')
+        self.maternal_visit = self.add_maternal_visit('1000M')
 
     def test_antenatal_enrollment_deserialising(self):
         """ Creating specimenconsent should creates outgoingtransaction """

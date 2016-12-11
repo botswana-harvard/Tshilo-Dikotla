@@ -4,12 +4,9 @@ from model_mommy import mommy
 
 from edc_constants.constants import YES
 
-from td.models import Appointment
-
 from ..forms import MaternalRandoForm
 
-from .test_mixins import NegMotherMixin, PosMotherMixin
-from td_maternal.tests.test_mixins import MotherMixin
+from .test_mixins import NegMotherMixin, MotherMixin
 
 
 class TestMaternalRandomizationForm(NegMotherMixin, TestCase):

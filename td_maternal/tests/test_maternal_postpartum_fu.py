@@ -10,53 +10,28 @@ from ..forms import MaternalPostPartumFuForm
 from .test_mixins import PosMotherMixin, NegMotherMixin
 
 
-class DiagnosesMixinWcsDxAdultMixin:
+class DiagnosesMixinWcsDxAdultMixin(PosMotherMixin):
 
     def setUp(self):
         super(DiagnosesMixinWcsDxAdultMixin, self).setUp()
-
         self.diagnoses = MaternalDiagnoses.objects.create(
-            hostname_created="django", name="Gestational Hypertension",
-            short_name="Gestational Hypertension", created=get_utcnow(),
-            user_modified="", modified=get_utcnow(),
-            hostname_modified="django", version="1.0",
-            display_index=1, user_created="django", field_name=None, revision=None)
-
-        self.diagnoses_na = MaternalDiagnoses.objects.create(
-            hostname_created="django", name="N/A",
-            short_name="N/A", created=get_utcnow(),
-            user_modified="", modified=get_utcnow(),
-            hostname_modified="django", version="1.0",
-            display_index=1, user_created="django", field_name=None,
-            revision=":develop:")
-
+            name="Gestational Hypertension",
+            short_name="Gestational Hypertension")
+        self.diagnoses_na = MaternalDiagnoses.objects.create(name="N/A", short_name="N/A")
         self.who_dx = WhoAdultDiagnosis.objects.create(
-            hostname_created="cabel", code="CS4003", short_name="Recurrent severe bacterial pneumo",
-            created=get_utcnow(), user_modified="", modified=get_utcnow(),
-            hostname_modified="cabel",
-            long_name="Recurrent severe bacterial pneumonia", user_created="abelc",
-            list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
-
-        self.who_dx_na = WhoAdultDiagnosis.objects.create(
-            hostname_created="cabel", code="cs9999999", short_name="N/A",
-            created=get_utcnow(), user_modified="", modified=get_utcnow(),
-            hostname_modified="cabel", long_name="N/A",
-            user_created="abelc", list_ref="", revision=None)
-
+            short_name="Recurrent severe bacterial pneumo",
+            name="Recurrent severe bacterial pneumonia")
+        self.who_dx_na = WhoAdultDiagnosis.objects.create(name="N/A", short_name="N/A")
         self.hospitalization_reason = MaternalHospitalization.objects.create(
-            name="Pneumonia or other respiratory disease", short_name="Pneumonia or other respiratory disease",
-            display_index=1, version="1.0", created=get_utcnow(), modified=get_utcnow(),
-            user_created="", user_modified="", hostname_created="otse.bhp.org.bw",
-            hostname_modified="otse.bhp.org.bw", revision=None)
-
-        self.hospitalization_reason_na = MaternalHospitalization.objects.create(
-            name="Not Applicable", short_name="N/A", display_index=2, version="1.0",
-            created=get_utcnow(), modified=get_utcnow(), user_created="", user_modified="",
-            hostname_created="otse.bhp.org.bw", hostname_modified="otse.bhp.org.bw", revision=None)
-
-        self.add_maternal_visits('1000M', '1010M', '1020M', '2000M', '2010M')
-        maternal_visit = self.get_maternal_visit('2010M')
-
+            name="Pneumonia or other respiratory disease",
+            short_name="Pneumonia or other respiratory disease")
+        self.hospitalization_reason_na = MaternalHospitalization.objects.create(name="N/A", short_name="N/A")
+        self.add_maternal_visits('1000M')
+        self.make_antenatal_enrollment_two()
+        self.add_maternal_visits('1010M', '1020M')
+        self.make_delivery()
+        self.add_maternal_visits('2000M', '2010M')
+        maternal_visit = self.add_maternal_visit('2010M')
         self.options = {
             'maternal_visit': maternal_visit.id,
             'new_diagnoses': YES,
@@ -68,7 +43,7 @@ class DiagnosesMixinWcsDxAdultMixin:
             'who': [self.who_dx.id]}
 
 
-class TestMaternalPostPartumFuPosMotherMixin(DiagnosesMixinWcsDxAdultMixin, PosMotherMixin, TestCase):
+class TestMaternalPostPartumFuPosMotherMixin(DiagnosesMixinWcsDxAdultMixin, TestCase):
 
     def test_diagnosis_list_none(self):
         """check if the diagnosis list is empty"""

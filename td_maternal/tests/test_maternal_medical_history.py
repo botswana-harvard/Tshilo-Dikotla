@@ -14,39 +14,14 @@ class ChronicAndMedicationsMixin:
 
     def setUp(self):
         super(ChronicAndMedicationsMixin, self).setUp()
-
-        self.chronic_cond = ChronicConditions.objects.create(
-            hostname_created="django", name="Asthma", short_name="Asthma",
-            created=get_utcnow(), user_modified="", modified=get_utcnow(), hostname_modified="",
-            version=1.0, display_index=3, user_created="django", field_name=None, revision=":develop")
-
-        self.chronic_cond_na = ChronicConditions.objects.create(
-            hostname_created="django", name="Not Applicable", short_name="N/A",
-            created=get_utcnow(), user_modified="", modified=get_utcnow(), hostname_modified="",
-            version=1.0, display_index=3, user_created="django", field_name=None, revision=":develop")
-
+        self.chronic_cond = ChronicConditions.objects.create(name="Asthma", short_name="Asthma")
+        self.chronic_cond_na = ChronicConditions.objects.create(name="Not Applicable", short_name="N/A")
         self.mother_medications = MaternalMedications.objects.create(
-            hostname_created="django", name="Prenatal Vitamins", short_name="Prenatal Vitamins",
-            created=get_utcnow(), user_modified="", modified=get_utcnow(), hostname_modified="django",
-            version="1.0", display_index=5, user_created="django", field_name=None, revision=":develop")
-
-        self.mother_medications_na = MaternalMedications.objects.create(
-            hostname_created="django", name="Not Applicable", short_name="N/A",
-            created=get_utcnow(), user_modified="", modified=get_utcnow(), hostname_modified="django",
-            version="1.0", display_index=5, user_created="django", field_name=None, revision=":develop")
-
+            name="Prenatal Vitamins", short_name="Prenatal Vitamins")
+        self.mother_medications_na = MaternalMedications.objects.create(name="Not Applicable", short_name="N/A")
         self.who_dx = WhoAdultDiagnosis.objects.create(
-            hostname_created="cabel", code="CS4003", short_name="Recurrent severe bacterial pneumo",
-            created=get_utcnow(), user_modified=get_utcnow(), modified=get_utcnow(),
-            hostname_modified="cabel", long_name="Recurrent severe bacterial pneumonia",
-            user_created="abelc", list_ref="WHO CLINICAL STAGING OF HIV INFECTION 2006", revision=None)
-
-        self.who_dx_na = WhoAdultDiagnosis.objects.create(
-            hostname_created="cabel", code="cs9999999", short_name="N/A",
-            created=get_utcnow(), user_modified="", modified=get_utcnow(),
-            hostname_modified="cabel", long_name="N/A",
-            user_created="abelc", list_ref="", revision=None)
-
+            short_name="Recurrent severe bacterial pneumo", name="Recurrent severe bacterial pneumonia")
+        self.who_dx_na = WhoAdultDiagnosis.objects.create(short_name="N/A", name="N/A")
         self.options = {
             'maternal_visit': self.get_maternal_visit('1000M').id,
             'chronic_since': YES,

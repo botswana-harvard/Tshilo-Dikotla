@@ -14,10 +14,9 @@ class TestMaternalObstericalHistoryForm(PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalObstericalHistoryForm, self).setUp()
-
         self.options = {
             'report_datetime': get_utcnow(),
-            'maternal_visit': self.get_maternal_visit('1000M').id,
+            'maternal_visit': self.add_maternal_visit('1000M').id,
             'prev_pregnancies': 1,
             'pregs_24wks_or_more': 0,
             'lost_before_24wks': 0,
