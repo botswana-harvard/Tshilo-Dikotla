@@ -5,7 +5,7 @@ from django.test import TestCase, tag
 from ..models import MaternalEligibilityLoss
 
 
-@tag('review')
+@tag('enrollment')
 class TestMaternalEligibility(TestCase):
     """Test eligibility of a mother."""
 
