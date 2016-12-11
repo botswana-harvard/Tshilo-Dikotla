@@ -214,6 +214,17 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
         self.requery_antenatal_enrollment()
         return maternal_ultrasound
 
+    def make_rando(self, rx=None, **options):
+        """Makes a maternal rando selecting the given RX."""
+        rx = rx or 'AZT'
+        maternal_visit = options.get('maternal_visit', self.get_last_maternal_visit())
+        randomization_datetime = options.get('randomization_datetime', maternal_visit.report_datetime)
+        options.update(
+            maternal_visit=maternal_visit,
+            randomization_datetime=randomization_datetime,
+            rx=rx)
+        return mommy.make_recipe('td_maternal.maternalrando', **options)
+
 
 class PosMotherMixin(MotherMixin):
     """Creates an eligible POS mother."""
