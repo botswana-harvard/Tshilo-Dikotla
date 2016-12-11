@@ -1,7 +1,7 @@
 td_infant/migrations/*
 td_maternal/migrations/*
 td_lab/migrations/*
-td_list/migrations/*
+# td_list/migrations/*
 td/migrations/*
 
 # Byte-compiled / optimized / DLL files
