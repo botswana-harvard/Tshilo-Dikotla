@@ -8,7 +8,7 @@ from ..forms import MaternalInterimIdccForm
 from .test_mixins import PosMotherMixin
 
 
-@tag('review')
+@tag('pos', 'forms')
 class TestMaternalInterimIdccDataForm(PosMotherMixin, TestCase):
 
     def setUp(self):
