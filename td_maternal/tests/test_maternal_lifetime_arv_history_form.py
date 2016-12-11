@@ -19,7 +19,8 @@ class TestMaternalLifetimeArvHistoryForm(PosMotherMixin, TestCase):
     def setUp(self):
         super(TestMaternalLifetimeArvHistoryForm, self).setUp()
         maternal_visit = self.add_maternal_visit('1000M')
-        prior_arv = PriorArv.objects.create(name="Atripla", short_name="Atripla")
+        self.load_list_data('td_list.priorarv')
+        prior_arv = PriorArv.objects.get(name="Atripla")
         haart_start_date = (maternal_visit.report_datetime - relativedelta(months=9)).date()
         self.options = {
             'maternal_visit': maternal_visit.id,
