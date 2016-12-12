@@ -24,10 +24,10 @@ class TestInfantArvProph(AddVisitInfantMixin, InfantBirthMixin, MotherMixin, Tes
         self.add_maternal_visit('1020M')
         self.make_delivery()
         self.add_maternal_visit('2000M')
-        self.add_infant_visits('2000M')
+        self.add_infant_visit('2000M')
         self.make_infant_birth()
         self.make_infant_birth_arv(self.get_infant_visit('2000M'))
-        self.add_infant_visits('2010M')
+        self.add_infant_visit('2010M')
         self.make_infant_arv_proph(self.get_infant_visit('2010M'))
 
         self.data = {
