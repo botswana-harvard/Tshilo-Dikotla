@@ -104,9 +104,9 @@ class TestMaternalUltrasound(PosMotherMixin, TestCase):
         maternal_ultrasound = self.make_ultrasound(
             maternal_visit,
             ga_by_ultrasound_days=4)
-        self.assertEqual(maternal_ultrasound.edd_confirmed, maternal_ultrasound.est_edd_ultrasound)
+        self.assertEqual(maternal_ultrasound.edd_confirmed.date(), maternal_ultrasound.est_edd_ultrasound)
         antenatal_enrollment = AntenatalEnrollment.objects.get(subject_identifier=self.subject_identifier)
-        self.assertEqual(antenatal_enrollment.edd, maternal_ultrasound.edd_confirmed)
+        self.assertEqual(antenatal_enrollment.edd, maternal_ultrasound.edd_confirmed.date())
         self.assertEqual(antenatal_enrollment.edd_method, str(ULTRASOUND))
 
     def test_no_lmp_with_ultrasound_gaconfirmed_eligible(self):
