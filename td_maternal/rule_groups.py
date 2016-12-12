@@ -58,7 +58,7 @@ def func_require_cd4(visit_instance, *args):
     maternal_hiv_status = MaternalHivStatus(
         subject_identifier=visit_instance.subject_identifier,
         reference_datetime=visit_instance.report_datetime)
-    if not maternal_hiv_status.result == POS:
+    if maternal_hiv_status.result == POS:
         try:
             obj = MaternalInterimIdcc.objects.get(maternal_visit=visit_instance)
             if obj.recent_cd4_date:
