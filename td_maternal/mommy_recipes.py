@@ -16,6 +16,7 @@ from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, Antena
                      MaternalDemographics, MaternalAztNvp, MaternalDiagnosis, MaternalSubstanceUseDuringPreg,
                      MaternalClinicalMeasurementsTwo, MaternalLifetimeArvHistory, MaternalArvPreg,
                      MaternalClinicalMeasurementsOne, MaternalHivInterimHx, MaternalSubstanceUsePriorPreg)
+from td_infant.models import InfantBirthArv, InfantBirth
 
 
 class TdProvider(BaseProvider):
@@ -318,3 +319,9 @@ maternalhivinterimhx = Recipe(
     MaternalHivInterimHx,
     has_cd4=NO,
     has_vl=NO)
+
+infantbirth = Recipe(InfantBirth)
+
+infantbirtharv = Recipe(
+    InfantBirthArv,
+    azt_discharge_supply=YES)
