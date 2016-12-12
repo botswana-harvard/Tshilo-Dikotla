@@ -172,7 +172,7 @@ class TestMaternalPostPartumFuPos(DxMixin, MotherMixin, TestCase):
         self.options.update(who=[str(self.who_dx_na.id)])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('Question 10 is indicated as YES, WHO listing cannot be N/A', errors)
+        self.assertIn('Question 10 is indicated as YES, who listing cannot be N/A', errors)
 
     def test_mother_positive_who_diagnoses_no_who_listed_not_applicable_not_there(self):
         """checks if who listing is N/A given that question 10 is No"""
