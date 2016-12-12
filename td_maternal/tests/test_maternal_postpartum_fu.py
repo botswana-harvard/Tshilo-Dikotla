@@ -7,7 +7,7 @@ from td_list.models import AdultDiagnosis, MaternalHospitalization, WhoAdultDiag
 
 from ..forms import MaternalPostPartumFuForm
 
-from .test_mixins import MotherMixin
+from .test_mixins import MotherMixin, RAPID
 
 
 class DxMixin(LoadListDataMixin):
@@ -198,13 +198,14 @@ class TestMaternalPostPartumFuNegMother(DxMixin, MotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalPostPartumFuNegMother, self).setUp()
-        self.make_negative_mother()
+        self.make_negative_mother(use_result=RAPID)
         self.add_maternal_visits('1000M')
         self.make_antenatal_enrollment_two()
         self.add_maternal_visits('1010M', '1020M')
         self.make_delivery()
         self.add_maternal_visits('2000M', '2010M')
         maternal_visit = self.add_maternal_visit('2010M')
+        self.make_rapid_test(result='NEG', visit=maternal_visit)
         self.options.update(maternal_visit=maternal_visit.id)
 
     def test_mother_negative_who_diagnosis_yes(self):
