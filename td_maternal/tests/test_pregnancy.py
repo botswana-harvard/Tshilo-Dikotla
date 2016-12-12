@@ -2,7 +2,7 @@ from dateutil.relativedelta import relativedelta
 
 from django.test import TestCase, tag
 
-from edc_pregnancy_utils.constants import ULTRASOUND
+from edc_pregnancy_utils.constants import LMP
 
 from ..pregnancy import Pregnancy
 
@@ -30,7 +30,7 @@ class TestPregnancy(MotherMixin, TestCase):
             reference_datetime=delivery_datetime)
         self.assertEqual(pregnancy.ga_by_lmp, 25)
         self.assertEqual(pregnancy.ga.weeks, 20)
-        self.assertEqual(pregnancy.edd.method, ULTRASOUND)
+        self.assertEqual(pregnancy.edd.method, LMP)
         self.assertEqual(pregnancy.delivery_datetime, delivery_datetime)
         self.assertEqual(pregnancy.edd.edd, maternal_ultrasound.est_edd_ultrasound)
 
@@ -48,7 +48,7 @@ class TestPregnancy(MotherMixin, TestCase):
         self.assertIsNone(pregnancy.delivery_datetime)
         self.assertEqual(pregnancy.edd.edd, self.antenatal_enrollment.edd_by_lmp)
         self.assertEqual(pregnancy.edd.edd, maternal_ultrasound.est_edd_ultrasound)
-        self.assertEqual(pregnancy.edd.method, ULTRASOUND)
+        self.assertEqual(pregnancy.edd.method, LMP)
 
     def test_reference_datetime_before_delivery(self):
         """Asserts ignores delivery if reference datetime before delivery datetime."""
