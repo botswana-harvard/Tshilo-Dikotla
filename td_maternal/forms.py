@@ -1191,14 +1191,14 @@ class MaternalPostPartumFuForm(ModelFormMixin, forms.ModelForm):
             if cleaned_data.get('has_who_dx') == YES:
                 if self.validate_not_applicable_in_there('who'):
                     raise forms.ValidationError(
-                        'Question 10 is indicated as YES, who listing cannot be N/A')
+                        'Question 10 is indicated as YES, WHO listing cannot be N/A')
             if cleaned_data.get('has_who_dx') == NO:
                 if self.validate_not_applicable_not_there('who'):
                     raise forms.ValidationError(
-                        'Question 10 is indicated as NO, who listing should be N/A')
+                        'Question 10 is indicated as NO, WHO listing should be N/A')
                 if self.validate_not_applicable_and_other_options('who'):
                     raise forms.ValidationError(
-                        'Question 10 is indicated as NO, who listing should only be N/A')
+                        'Question 10 is indicated as NO, WHO listing should only be N/A')
 
     class Meta:
         model = MaternalPostPartumFu

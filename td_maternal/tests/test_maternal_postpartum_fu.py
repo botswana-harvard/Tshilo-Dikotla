@@ -7,7 +7,7 @@ from td_list.models import AdultDiagnosis, MaternalHospitalization, WhoAdultDiag
 
 from ..forms import MaternalPostPartumFuForm
 
-from .test_mixins import MotherMixin
+from .test_mixins import MotherMixin, RAPID
 
 
 class DxMixin(LoadListDataMixin):
@@ -181,7 +181,7 @@ class TestMaternalPostPartumFuPos(DxMixin, MotherMixin, TestCase):
             who=[str(self.who_dx.id)])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('Question 10 is indicated as NO, who listing should be N/A', errors)
+        self.assertIn('Question 10 is indicated as NO, WHO listing should be N/A', errors)
 
     def test_mother_positive_who_diagnoses_no_who_listed_not_applicable_there(self):
         """checks if who listing is only N/A"""
@@ -190,7 +190,7 @@ class TestMaternalPostPartumFuPos(DxMixin, MotherMixin, TestCase):
             who=[str(self.who_dx.id), str(self.who_dx_na.id)])
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
-        self.assertIn('Question 10 is indicated as NO, who listing should only be N/A', errors)
+        self.assertIn('Question 10 is indicated as NO, WHO listing should only be N/A', errors)
 
 
 @tag('review')
@@ -198,17 +198,18 @@ class TestMaternalPostPartumFuNegMother(DxMixin, MotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalPostPartumFuNegMother, self).setUp()
-        self.make_negative_mother()
+        self.make_negative_mother(use_result=RAPID)
         self.add_maternal_visits('1000M')
         self.make_antenatal_enrollment_two()
         self.add_maternal_visits('1010M', '1020M')
         self.make_delivery()
         self.add_maternal_visits('2000M', '2010M')
         maternal_visit = self.add_maternal_visit('2010M')
+        self.make_rapid_test(result='NEG', visit=maternal_visit)
         self.options.update(maternal_visit=maternal_visit.id)
 
     def test_mother_negative_who_diagnosis_yes(self):
-        """Assert question 10 for WHO Stage III/IV is N/A if the mother is negative"""
+        """Assert has_who_dx is N/A if the mother is negative"""
         form = MaternalPostPartumFuForm(data=self.options)
         errors = ''.join(form.errors.get('__all__'))
         self.assertIn('The mother is Negative, question 10 for WHO Stage III/IV should be N/A', errors)
