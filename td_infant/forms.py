@@ -773,7 +773,7 @@ class VaccinesReceivedForm(forms.ModelForm):
         cleaned_data = self.cleaned_data
         infant_identifier = cleaned_data.get('infant_fu_immunizations').infant_visit.subject_identifier
         try:
-            infant_birth = InfantBirth.objects.get(registered_subject__subject_identifier=infant_identifier)
+            infant_birth = InfantBirth.objects.get(subject_identifier=infant_identifier)
             infant_birth_date = infant_birth.dob
             if cleaned_data.get('date_given') < infant_birth_date:
                 raise forms.ValidationError("Vaccine date cannot be before infant date of birth. ")
