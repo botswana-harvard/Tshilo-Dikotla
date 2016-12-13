@@ -34,17 +34,29 @@ class AddMaternalVisitMixin(AddVisitMixin):
 
     maternal_model_label = 'td_maternal.maternalvisit'
 
-    def add_maternal_visit(self, visit_code, reason=None):
-        return self.add_visit(self.maternal_model_label, visit_code, reason)
+    def add_maternal_visit(self, visit_code=None, reason=None):
+        return self.add_visit(
+            model_label=self.maternal_model_label,
+            visit_code=visit_code,
+            reason=reason,
+            subject_identifier=self.maternal_identifier)
 
     def add_maternal_visits(self, *visit_codes):
-        return self.add_visits(self.maternal_model_label, *visit_codes)
+        return self.add_visits(
+            *visit_codes,
+            model_label=self.maternal_model_label,
+            subject_identifier=self.maternal_identifier)
 
-    def get_maternal_visit(self, visit_code):
-        return self.get_visit(self.maternal_model_label, visit_code)
+    def get_maternal_visit(self, visit_code=None):
+        return self.get_visit(
+            visit_code=visit_code,
+            model_label=self.maternal_model_label,
+            subject_identifier=self.maternal_identifier)
 
     def get_last_maternal_visit(self):
-        return self.get_last_visit(self.maternal_model_label)
+        return self.get_last_visit(
+            model_label=self.maternal_model_label,
+            subject_identifier=self.maternal_identifier)
 
 
 class CompleteMaternalCrfsMixin(CompleteCrfsMixin):
@@ -62,7 +74,10 @@ class CompleteMaternalCrfsMixin(CompleteCrfsMixin):
         for visit_code in visit_codes:
             maternal_visit = self.add_maternal_visit(visit_code)
             completed_crfs = super(CompleteMaternalCrfsMixin, self).complete_required_crfs(
-                visit_code, maternal_visit, 'maternal_visit')
+                visit_code=visit_code,
+                visit=maternal_visit,
+                visit_attr='maternal_visit',
+                subject_identifier=self.maternal_identifier)
             complete_required_crfs.update({visit_code: completed_crfs})
         return complete_required_crfs
 
@@ -82,10 +97,10 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
     def make_new_consented_mother(self):
         self.maternal_eligibility = self.make_eligibility()
         self.maternal_consent = self.make_consent()
-        self.subject_identifier = self.maternal_consent.subject_identifier
+        self.maternal_identifier = self.maternal_consent.subject_identifier
 
     def requery_antenatal_enrollment(self):
-        self.antenatal_enrollment = AntenatalEnrollment.objects.get(subject_identifier=self.subject_identifier)
+        self.antenatal_enrollment = AntenatalEnrollment.objects.get(subject_identifier=self.maternal_identifier)
 
     def make_eligibility(self):
         return mommy.make_recipe('td_maternal.maternaleligibility')
@@ -110,7 +125,7 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
             rapid_test_done=None,
             rapid_test_result=None,
             week32_test_date=None,
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             **options)
         if self.antenatal_enrollment.reasons_not_eligible:
             self.assertIsNone(self.antenatal_enrollment.reasons_not_eligible)
@@ -157,7 +172,7 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
             'td_maternal.antenatalenrollment_neg',
             report_datetime=self.test_mixin_reference_datetime,
             last_period_date=(self.test_mixin_reference_datetime - relativedelta(weeks=25)).date(),
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             **options)
         if self.antenatal_enrollment.reasons_not_eligible:
             raise TestMixinError(self.antenatal_enrollment.reasons_not_eligible)
@@ -169,7 +184,7 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
         self.antenatal_enrollment_two = mommy.make_recipe(
             'td_maternal.antenatalenrollmenttwo',
             report_datetime=report_datetime,
-            subject_identifier=self.subject_identifier)
+            subject_identifier=self.maternal_identifier)
 
     def make_delivery(self, report_datetime=None, delivery_datetime=None, **options):
         """Deliver one live infant on given report_datetime."""
@@ -183,7 +198,7 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
             'td_maternal.maternallabdel',
             report_datetime=report_datetime,
             delivery_datetime=delivery_datetime,
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             **options)
         self.requery_antenatal_enrollment()
         return self.maternal_lab_del

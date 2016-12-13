@@ -26,23 +26,23 @@ class TestMaternalHivStatusPos(PosMotherMixin, TestCase):
         """Asserts can determine POS at any visit."""
         maternal_visit = self.add_maternal_visit('1010M')
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=maternal_visit.report_datetime)
         self.assertEqual(maternal_hiv_status.result, POS)
         self.make_delivery()
         maternal_visit = self.add_maternal_visit('2000M')
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=maternal_visit.report_datetime)
         self.assertEqual(maternal_hiv_status.result, POS)
         maternal_visit = self.add_maternal_visit('2010M')
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=maternal_visit.report_datetime)
         self.assertEqual(maternal_hiv_status.result, POS)
         maternal_visit = self.add_maternal_visit('2020M')
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=maternal_visit.report_datetime)
         self.assertEqual(maternal_hiv_status.result, POS)
 
@@ -62,11 +62,11 @@ class TestMaternalHivStatusNeg(MotherMixin, TestCase):
         maternal_visit = self.add_maternal_visit('1000M')
         # rapid test date is 4 weeks prior to enrollment, so add 2 months
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=maternal_visit.report_datetime + relativedelta(months=2))
         self.assertEqual(maternal_hiv_status.result, NEG)
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=maternal_visit.report_datetime + relativedelta(months=3))
         self.assertEqual(maternal_hiv_status.result, None)
 
@@ -76,11 +76,11 @@ class TestMaternalHivStatusNeg(MotherMixin, TestCase):
         maternal_visit = self.add_maternal_visit('1000M')
         # rapid test date is 4 weeks prior to enrollment, so add 2 months
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=maternal_visit.report_datetime + relativedelta(months=2))
         self.assertEqual(maternal_hiv_status.result, NEG)
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=maternal_visit.report_datetime + relativedelta(months=3))
         self.assertEqual(maternal_hiv_status.result, None)
 
@@ -89,7 +89,7 @@ class TestMaternalHivStatusNeg(MotherMixin, TestCase):
         self.make_negative_mother(use_result=RAPID)
         self.add_maternal_visits('1000M')
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=self.get_last_maternal_visit().report_datetime)
         self.assertEqual(maternal_hiv_status.result, NEG)
         self.make_antenatal_enrollment_two()
@@ -99,7 +99,7 @@ class TestMaternalHivStatusNeg(MotherMixin, TestCase):
         self.make_rapid_test(result=POS)
         maternal_visit = self.get_maternal_visit('2060M')
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=maternal_visit.report_datetime)
         self.assertEqual(maternal_hiv_status.result, POS)
 
@@ -108,14 +108,14 @@ class TestMaternalHivStatusNeg(MotherMixin, TestCase):
         self.make_negative_mother(use_result=RAPID)
         maternal_visit = self.add_maternal_visit('1000M')
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=maternal_visit.report_datetime)
         self.assertEqual(maternal_hiv_status.result, NEG)
         self.make_antenatal_enrollment_two()
         self.add_maternal_visit('1010M')
         maternal_visit = self.add_maternal_visit('1020M')  # 4 months, enrollment result no longer valid
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=maternal_visit.report_datetime)
         self.assertEqual(maternal_hiv_status.result, None)
         self.make_delivery()
@@ -129,7 +129,7 @@ class TestMaternalHivStatusNeg(MotherMixin, TestCase):
                 self.get_maternal_visit('2020M').report_datetime,
                 self.get_maternal_visit('2000M').report_datetime).months, 3)
         maternal_hiv_status = MaternalHivStatus(
-            subject_identifier=self.subject_identifier,
+            subject_identifier=self.maternal_identifier,
             reference_datetime=maternal_visit.report_datetime)
         self.assertEqual(maternal_hiv_status.result, NEG)
 

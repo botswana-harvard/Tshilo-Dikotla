@@ -2,18 +2,17 @@ from django.test import TestCase, tag
 
 from edc_constants.constants import YES, NO
 
-from td_infant.tests.test_mixins import AddVisitInfantMixin
+from td_infant.tests.test_mixins import InfantMixin
 
 from ..forms import MaternalSubstanceUsePriorPregForm
 
-from .test_mixins import NegMotherMixin
-
 
 @tag('forms')
-class TestMaternalSubstanceUsePriorPreg(AddVisitInfantMixin, NegMotherMixin, TestCase):
+class TestMaternalSubstanceUsePriorPreg(InfantMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalSubstanceUsePriorPreg, self).setUp()
+        self.make_negative_mother()
         self.add_maternal_visits('1000M')
         self.make_antenatal_enrollment_two()
         self.add_maternal_visits('1010M', '1020M')

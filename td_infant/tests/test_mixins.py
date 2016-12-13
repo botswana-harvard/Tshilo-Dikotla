@@ -9,17 +9,30 @@ class AddInfantVisitMixin(AddMaternalVisitMixin):
 
     infant_model_label = 'td_infant.infantvisit'
 
-    def add_infant_visit(self, visit_code, reason=None):
-        return self.add_visit(self.infant_model_label, visit_code, reason)
+    def add_infant_visit(self, visit_code=None, reason=None):
+        return self.add_visit(
+            visit_code=visit_code,
+            model_label=self.infant_model_label,
+            reason=reason,
+            subject_identifier=self.infant_identifier)
 
-    def add_infant_visits(self, *visit_codes):
-        return self.add_visits(self.infant_model_label, *visit_codes)
+    def add_infant_visits(self, *visit_codes, reason=None):
+        return self.add_visits(
+            *visit_codes,
+            model_label=self.infant_model_label,
+            subject_identifier=self.infant_identifier,
+            reason=reason)
 
     def get_infant_visit(self, visit_code):
-        return self.get_visit(self.infant_model_label, visit_code)
+        return self.get_visit(
+            visit_code=visit_code,
+            model_label=self.infant_model_label,
+            subject_identifier=self.infant_identifier)
 
     def get_last_infant_visit(self):
-        return self.get_last_visit(self.infant_model_label)
+        return self.get_last_visit(
+            model_label=self.infant_model_label,
+            subject_identifier=self.infant_identifier)
 
 
 class CompleteInfantCrfsMixin(MotherMixin):
@@ -30,7 +43,10 @@ class CompleteInfantCrfsMixin(MotherMixin):
         for visit_code in visit_codes:
             infant_visit = self.add_infant_visit(visit_code)
             completed_crfs = super(CompleteInfantCrfsMixin, self).complete_required_crfs(
-                visit_code, infant_visit, 'infant_visit')
+                visit_code=visit_code,
+                visit=infant_visit,
+                visit_attr='infant_visit',
+                subject_identifier=self.infant_identifier)
             complete_required_crfs.update({visit_code: completed_crfs})
         return complete_required_crfs
 
@@ -77,6 +93,7 @@ class InfantMixin(InfantTestMixin):
             birth_order=1,
             birth_order_denominator=1,
             **options)
+        self.infant_identifier = self.infant_birth.subject_identifier
 
     def make_infant_birth_arv(self, infant_visit=None, **options):
         infant_visit = infant_visit or self.get_last_infant_visit()

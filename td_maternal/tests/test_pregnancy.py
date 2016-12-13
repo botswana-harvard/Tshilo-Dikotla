@@ -26,7 +26,7 @@ class TestPregnancy(MotherMixin, TestCase):
             report_datetime=report_datetime,
             delivery_datetime=delivery_datetime)
         pregnancy = Pregnancy(
-            self.subject_identifier,
+            self.maternal_identifier,
             reference_datetime=delivery_datetime)
         self.assertEqual(pregnancy.ga_by_lmp, 25)
         self.assertEqual(pregnancy.ga.weeks, 20)
@@ -41,7 +41,7 @@ class TestPregnancy(MotherMixin, TestCase):
         maternal_ultrasound = self.make_ultrasound(ga_by_ultrasound_wks=25)
         self.add_maternal_visits('1010M', '1020M')
         pregnancy = Pregnancy(
-            self.subject_identifier,
+            self.maternal_identifier,
             reference_datetime=self.get_last_maternal_visit().report_datetime)
         self.assertEqual(pregnancy.ga_by_lmp, 25)
         self.assertEqual(pregnancy.ga.weeks, 25)
@@ -63,6 +63,6 @@ class TestPregnancy(MotherMixin, TestCase):
             report_datetime=report_datetime,
             delivery_datetime=delivery_datetime)
         pregnancy = Pregnancy(
-            self.subject_identifier,
+            self.maternal_identifier,
             reference_datetime=delivery_datetime - relativedelta(weeks=4))
         self.assertIsNone(pregnancy.delivery_datetime)

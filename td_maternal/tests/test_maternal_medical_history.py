@@ -478,7 +478,7 @@ class TestMaternalMedicalHistoryPosMother(MotherMixin, TestCase):
         self.options.update(maternal_visit=self.add_maternal_visit('1000M').id)
         self.assertEqual(
             MaternalHivStatus(
-                subject_identifier=self.subject_identifier,
+                subject_identifier=self.maternal_identifier,
                 reference_datetime=self.get_maternal_visit('1000M').report_datetime).result, NEG)
         self.options.update(
             maternal_visit=self.get_maternal_visit('1000M').id,

@@ -25,7 +25,7 @@ class TestMaternalRuleGroupsPos(PosMotherMixin, TestCase):
         self.assertEqual(
             CrfMetadata.objects.filter(
                 entry_status=REQUIRED,
-                subject_identifier=self.subject_identifier,
+                subject_identifier=self.maternal_identifier,
                 model='td_maternal.maternalrando',
                 visit_code='1010M').count(), 1)
 
@@ -35,7 +35,7 @@ class TestMaternalRuleGroupsPos(PosMotherMixin, TestCase):
         self.assertEqual(
             CrfMetadata.objects.filter(
                 entry_status=REQUIRED,
-                subject_identifier=self.subject_identifier,
+                subject_identifier=self.maternal_identifier,
                 model='td_maternal.maternallifetimearvhistory',
                 visit_code='1000M').count(), 1)
 
@@ -47,7 +47,7 @@ class TestMaternalRuleGroupsPos(PosMotherMixin, TestCase):
         self.assertEqual(
             CrfMetadata.objects.filter(
                 entry_status=REQUIRED,
-                subject_identifier=self.subject_identifier,
+                subject_identifier=self.maternal_identifier,
                 model='td_maternal.maternalinterimidcc',
                 visit_code='1010M').count(), 1)
 
@@ -63,7 +63,7 @@ class TestMaternalRuleGroupsPos(PosMotherMixin, TestCase):
         self.assertEqual(
             RequisitionMetadata.objects.filter(
                 entry_status=REQUIRED,
-                subject_identifier=self.subject_identifier,
+                subject_identifier=self.maternal_identifier,
                 model='td_lab.maternalrequisition',
                 panel_name='CD4',
                 visit_code='1010M').count(), 1)
@@ -81,7 +81,7 @@ class TestMaternalRuleGroupsPos(PosMotherMixin, TestCase):
         self.assertEqual(
             RequisitionMetadata.objects.filter(
                 entry_status=NOT_REQUIRED,
-                subject_identifier=self.subject_identifier,
+                subject_identifier=self.maternal_identifier,
                 model='td_lab.maternalrequisition',
                 panel_name='CD4',
                 visit_code='1010M').count(), 1)
@@ -93,7 +93,7 @@ class TestMaternalRuleGroupsPos(PosMotherMixin, TestCase):
         self.assertEqual(
             RequisitionMetadata.objects.filter(
                 entry_status=NOT_REQUIRED,
-                subject_identifier=self.subject_identifier,
+                subject_identifier=self.maternal_identifier,
                 model='td_lab.maternalrequisition',
                 panel_name='PBMC Plasma (STORE ONLY)',
                 visit_code='1010M').count(), 1)
@@ -192,7 +192,7 @@ class TestMaternalRuleGroupsPos(PosMotherMixin, TestCase):
         self.add_maternal_visits('2000M')
         self.assertEqual(
             CrfMetadata.objects.filter(
-                subject_identifier=self.subject_identifier,
+                subject_identifier=self.maternal_identifier,
                 entry_status=NOT_REQUIRED,
                 model='td_maternal.nvpdispensing',
                 visit_code='2000M').count(), 1)
@@ -214,7 +214,7 @@ class TestMaternalRuleGroupsNeg(NegMotherMixin, TestCase):
         maternal_visit = self.add_maternal_visit('2000M')
         self.assertEqual(
             CrfMetadata.objects.filter(
-                subject_identifier=self.subject_identifier,
+                subject_identifier=self.maternal_identifier,
                 entry_status=REQUIRED,
                 model='td_maternal.rapidtestresult',
                 visit_code='2000M').count(), 1)
@@ -226,7 +226,7 @@ class TestMaternalRuleGroupsNeg(NegMotherMixin, TestCase):
         self.assertEqual(
             RequisitionMetadata.objects.filter(
                 entry_status=REQUIRED,
-                subject_identifier=self.subject_identifier,
+                subject_identifier=self.maternal_identifier,
                 model='td_lab.maternalrequisition',
                 panel_name='PBMC Plasma (STORE ONLY)',
                 visit_code='1010M').count(), 1)
@@ -240,7 +240,7 @@ class TestMaternalRuleGroupsNeg(NegMotherMixin, TestCase):
         self.assertEqual(
             CrfMetadata.objects.filter(
                 entry_status=NOT_REQUIRED,
-                subject_identifier=self.subject_identifier,
+                subject_identifier=self.maternal_identifier,
                 model='td_maternal.maternalultrasoundinitial',
                 visit_code='1010M').count(), 1)
 
@@ -251,7 +251,7 @@ class TestMaternalRuleGroupsNeg(NegMotherMixin, TestCase):
         self.add_maternal_visits('1010M')
         self.assertEqual(
             CrfMetadata.objects.filter(
-                subject_identifier=self.subject_identifier,
+                subject_identifier=self.maternal_identifier,
                 entry_status=REQUIRED,
                 model='td_maternal.maternalultrasoundinitial',
                 visit_code='1010M').count(), 1)

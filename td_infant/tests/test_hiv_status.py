@@ -15,6 +15,7 @@ class TestHivStatus(InfantMixin, TestCase):
         self.add_infant_visits('2000', '2010')
         self.assertEqual(
             RequisitionMetadata.objects.filter(
+                subject_identifier=self.infant_identifier,
                 entry_status=NOT_REQUIRED,
                 model='td_lab.infantrequisition',
                 panel_name='DNA PCR',
@@ -27,6 +28,7 @@ class TestHivStatus(InfantMixin, TestCase):
         self.add_infant_visits('2000', '2010')
         self.assertEqual(
             RequisitionMetadata.objects.filter(
+                subject_identifier=self.infant_identifier,
                 entry_status=REQUIRED,
                 model='td_lab.infantrequisition',
                 panel_name='DNA PCR',

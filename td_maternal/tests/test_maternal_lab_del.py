@@ -26,9 +26,9 @@ class TestMaternalLabDel(MotherMixin, TestCase):
 
     def test_new_infant_identifiers(self):
         self.make_delivery()
-        self.assertEqual(IdentifierModel.objects.filter(linked_identifier=self.subject_identifier).count(), 1)
+        self.assertEqual(IdentifierModel.objects.filter(linked_identifier=self.maternal_identifier).count(), 1)
         self.assertTrue(
-            IdentifierModel.objects.get(linked_identifier=self.subject_identifier).identifier.endswith('10'))
+            IdentifierModel.objects.get(linked_identifier=self.maternal_identifier).identifier.endswith('10'))
 
     def test_new_infant_registration(self):
         RegisteredSubject = django_apps.get_app_config('edc_registration').model
@@ -67,7 +67,7 @@ class TestMaternalLabDelForm(MotherMixin, TestCase):
         self.options = {
             'report_datetime': self.delivery_datetime,
             'delivery_datetime': self.delivery_datetime,
-            'subject_identifier': self.subject_identifier,
+            'subject_identifier': self.maternal_identifier,
             'delivery_time_estimated': NO,
             'labour_hrs': '3',
             'delivery_complications': [delivery_complication.id],
