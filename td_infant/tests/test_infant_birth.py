@@ -2,19 +2,16 @@ from django.test.testcases import TestCase
 
 from td.models import Appointment
 
-from td_maternal.tests.test_mixins import CompleteMaternalCrfsMixin, PosMotherMixin, DeliverMotherMixin
+from .test_mixins import InfantMixin
 from model_mommy import mommy
 
 
-class TestInfantBirth(DeliverMotherMixin, CompleteMaternalCrfsMixin, PosMotherMixin, TestCase):
+class TestInfantBirth(InfantMixin, TestCase):
 
     def setUp(self):
-        self.maternal_identifier = self.create_mother()
+        super(TestInfantBirth, self).setUp()
 
     def test_birth(self):
-        infant_birth = mommy.make_recipe(
-            'td_infant.infantbirth',
-            delivery_reference=self.maternal_labour_del,
-            registered_subject=self.infant_registered_subject)
+        self.make_infant_birth()
         self.assertEqual(Appointment.objects.filter(
-            subject_identifier=infant_birth.registered_subject.subject_identifier).count(), 9)
+            subject_identifier=self.infant_identifier).count(), 9)

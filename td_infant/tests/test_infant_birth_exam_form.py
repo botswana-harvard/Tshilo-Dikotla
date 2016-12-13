@@ -41,65 +41,65 @@ class TestInfantBirthExam(InfantMixin, TestCase):
         self.options.update(
             general_activity='ABNORMAL',
             abnormal_activity=None)
-        self.infant_birth_exam = InfantBirthExamForm(data=self.options)
-        errors = ''.join(self.infant_birth_exam.errors.get('__all__'))
+        infant_birth_exam = InfantBirthExamForm(data=self.options)
+        errors = ''.join(infant_birth_exam.errors.get('__all__'))
         self.assertIn(u'If abnormal, please specify.', errors)
 
     def test_validate_general_activity2(self):
         self.options.update(
             general_activity='NORMAL',
             abnormal_activity='looks sideways')
-        self.infant_birth_exam = InfantBirthExamForm(data=self.options)
-        errors = ''.join(self.infant_birth_exam.errors.get('__all__'))
+        infant_birth_exam = InfantBirthExamForm(data=self.options)
+        errors = ''.join(infant_birth_exam.errors.get('__all__'))
         self.assertIn(u'You indicated that there was NO abnormality in general activity', errors)
 
     def test_validate_heent_exam1(self):
         self.options.update(
             heent_exam=YES,
             heent_no_other='HEENT problems')
-        self.infant_birth_exam = InfantBirthExamForm(data=self.options)
-        errors = ''.join(self.infant_birth_exam.errors.get('__all__'))
+        infant_birth_exam = InfantBirthExamForm(data=self.options)
+        errors = ''.join(infant_birth_exam.errors.get('__all__'))
         self.assertIn(u'If HEENT Exam is normal, Do not answer the following Question (Q7).', errors)
 
     def test_validate_heent_exam2(self):
         self.options.update(heent_exam=NO)
-        self.infant_birth_exam = InfantBirthExamForm(data=self.options)
-        errors = ''.join(self.infant_birth_exam.errors.get('__all__'))
+        infant_birth_exam = InfantBirthExamForm(data=self.options)
+        errors = ''.join(infant_birth_exam.errors.get('__all__'))
         self.assertIn(u'Provide answer to Q7.', errors)
 
     def test_validate_resp_exam1(self):
         self.options.update(
             resp_exam=YES,
             resp_exam_other='Asthma')
-        self.infant_birth_exam = InfantBirthExamForm(data=self.options)
-        errors = ''.join(self.infant_birth_exam.errors.get('__all__'))
+        infant_birth_exam = InfantBirthExamForm(data=self.options)
+        errors = ''.join(infant_birth_exam.errors.get('__all__'))
         self.assertIn(u'If Respiratory Exam is normal, Do not answer the following Question (Q9).', errors)
 
     def test_validate_resp_exam2(self):
         self.options.update(resp_exam=NO)
-        self.infant_birth_exam = InfantBirthExamForm(data=self.options)
-        errors = ''.join(self.infant_birth_exam.errors.get('__all__'))
+        infant_birth_exam = InfantBirthExamForm(data=self.options)
+        errors = ''.join(infant_birth_exam.errors.get('__all__'))
         self.assertIn(u'Provide answer to Q9.', errors)
 
     def test_validate_cardiac_exam1(self):
         self.options.update(
             cardiac_exam=YES,
             cardiac_exam_other='Palpitations')
-        self.infant_birth_exam = InfantBirthExamForm(data=self.options)
-        errors = ''.join(self.infant_birth_exam.errors.get('__all__'))
+        infant_birth_exam = InfantBirthExamForm(data=self.options)
+        errors = ''.join(infant_birth_exam.errors.get('__all__'))
         self.assertIn(u'If Cardiac Exam is normal, Do not answer the following Question (Q11).', errors)
 
     def test_validate_cardiac_exam2(self):
         self.options.update(cardiac_exam=NO)
-        self.infant_birth_exam = InfantBirthExamForm(data=self.options)
-        errors = ''.join(self.infant_birth_exam.errors.get('__all__'))
+        infant_birth_exam = InfantBirthExamForm(data=self.options)
+        errors = ''.join(infant_birth_exam.errors.get('__all__'))
         self.assertIn(u'Provide answer to Q11.', errors)
 
     def test_validate_report_datetime_invalid(self):
         self.options.update(
             report_datetime=get_utcnow() - relativedelta(years=34))
-        self.infant_birth_exam = InfantBirthExamForm(data=self.options)
-        errors = ''.join(self.infant_birth_exam.errors.get('__all__'))
+        infant_birth_exam = InfantBirthExamForm(data=self.options)
+        errors = ''.join(infant_birth_exam.errors.get('__all__'))
         self.assertIn(u'Report_Datetime CANNOT be before consent datetime', errors)
 
     def test_abdominal_exam_1(self):
