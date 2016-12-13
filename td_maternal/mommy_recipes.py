@@ -15,8 +15,9 @@ from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, Antena
                      MaternalInterimIdcc, RapidTestResult, MaternalObstericalHistory, MaternalMedicalHistory,
                      MaternalDemographics, MaternalAztNvp, MaternalDiagnosis, MaternalSubstanceUseDuringPreg,
                      MaternalClinicalMeasurementsTwo, MaternalLifetimeArvHistory, MaternalArvPreg,
-                     MaternalClinicalMeasurementsOne, MaternalHivInterimHx, MaternalSubstanceUsePriorPreg)
-from td_infant.models import InfantBirthArv, InfantBirth
+                     MaternalClinicalMeasurementsOne, MaternalHivInterimHx, MaternalSubstanceUsePriorPreg,
+                     MaternalPostPartumFu, MaternalArvPost, MaternalArvPostAdh, MaternalContraception,
+                     MaternalPostPartumDep)
 
 
 class TdProvider(BaseProvider):
@@ -252,6 +253,24 @@ maternalarvinthispreg = Recipe(
     MaternalArvPreg,
 )
 
+maternalcontraception = Recipe(
+    MaternalContraception,
+)
+maternalpostpartumfu = Recipe(
+    MaternalPostPartumFu,
+)
+maternalarvpost = Recipe(
+    MaternalArvPost,
+)
+
+maternalarvpostadh = Recipe(
+    MaternalArvPostAdh,
+)
+
+maternalpostpartumdep = Recipe(
+    MaternalPostPartumDep
+)
+
 rapidtestresult = Recipe(
     RapidTestResult,
     rapid_test_done=YES,
@@ -319,9 +338,3 @@ maternalhivinterimhx = Recipe(
     MaternalHivInterimHx,
     has_cd4=NO,
     has_vl=NO)
-
-infantbirth = Recipe(InfantBirth)
-
-infantbirtharv = Recipe(
-    InfantBirthArv,
-    azt_discharge_supply=YES)

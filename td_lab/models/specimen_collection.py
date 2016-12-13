@@ -9,6 +9,7 @@ from edc_lab.model_mixins import SpecimenCollectionModelMixin, SpecimenCollectio
 
 class SpecimenCollection(SpecimenCollectionModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
+
     history = HistoricalRecords()
 
     class Meta(SpecimenCollectionModelMixin.Meta):

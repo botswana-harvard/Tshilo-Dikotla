@@ -3,11 +3,16 @@ from edc_death_report.model_mixins import DeathReportModelMixin
 from edc_death_report.models import InfantDrugRelationshipMixin
 from edc_registration.model_mixins import SubjectIdentifierModelMixin
 
+from ..managers import InfantDeathReportManager
+
 
 class InfantDeathReport (DeathReportModelMixin, SubjectIdentifierModelMixin,
                          InfantDrugRelationshipMixin, BaseUuidModel):
 
     """ A model completed by the user after an infant's death. """
+
+    objects = InfantDeathReportManager()
+
     def natural_key(self):
         return (self.subject_identifier, )
 

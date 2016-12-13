@@ -13,7 +13,7 @@ class TestNaturalKey(SyncTestSerializerMixin, MotherMixin, TestCase):
         self.sync_test_natural_key_attr('td', 'td_infant', 'td_maternal', 'td_lab')
 
     def test_get_by_natural_key_attr(self):
-        self.sync_test_get_by_natural_key_attr('td', 'td_infant', 'td_maternal', 'td_lab')
+        self.sync_test_get_by_natural_key_attr('td', 'td_infant', 'td_maternal')
 
     @tag('crf_natural_keys')
     def test_crf_natural_keys(self):
