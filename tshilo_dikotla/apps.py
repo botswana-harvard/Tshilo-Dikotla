@@ -61,8 +61,8 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
             style.NOTICE(
                 'WARNING! Overwriting AppConfig study_open_datetime and study_end_datetime for tests only. \n'
                 'See EdcProtocolAppConfig\n'))
-        teststudyopen = get_utcnow() - relativedelta(years=3)
-        teststudyend = get_utcnow() + relativedelta(years=2)
+        teststudyopen = get_utcnow() - relativedelta(years=6)
+        teststudyend = get_utcnow() - relativedelta(years=1)
     else:
         teststudyopen = None
         teststudyend = None
@@ -81,8 +81,8 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
             style.NOTICE(
                 'WARNING! Overwriting AppConfig maternalconsent.start and end dates for tests only. \n'
                 'See EdcConsentAppConfig\n'))
-        testconsentstart = get_utcnow() - relativedelta(years=3)
-        testconsentend = get_utcnow() + relativedelta(years=2)
+        testconsentstart = get_utcnow() - relativedelta(years=6)
+        testconsentend = get_utcnow() - relativedelta(years=1)
     else:
         testconsentstart = None
         testconsentend = None

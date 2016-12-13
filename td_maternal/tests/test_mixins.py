@@ -103,13 +103,15 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
         self.antenatal_enrollment = AntenatalEnrollment.objects.get(subject_identifier=self.maternal_identifier)
 
     def make_eligibility(self):
-        return mommy.make_recipe('td_maternal.maternaleligibility')
+        return mommy.make_recipe(
+            'td_maternal.maternaleligibility',
+            report_datetime=self.test_mixin_reference_datetime)
 
     def make_consent(self):
         return mommy.make_recipe(
             'td_maternal.maternalconsent',
             consent_datetime=self.test_mixin_reference_datetime,
-            maternal_eligibility_reference=self.maternal_eligibility.reference,)
+            maternal_eligibility_reference=self.maternal_eligibility.reference)
 
     def make_positive_mother(self, **options):
         """Make a POS mother LMP 25wks with POS result with evidence (no recent or rapid test)."""
