@@ -71,6 +71,7 @@ class InfantMixin(InfantTestMixin):
         birth_order_denominator = birth_order_denominator or 1
         self.infant_birth = mommy.make_recipe(
             'td_infant.infantbirth',
+            report_datetime=self.maternal_lab_del.report_datetime,
             delivery_reference=delivery_reference,
             dob=self.maternal_lab_del.delivery_datetime.date(),
             birth_order=1,
