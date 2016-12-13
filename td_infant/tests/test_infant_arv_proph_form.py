@@ -2,36 +2,42 @@ from datetime import date
 from django.test import TestCase
 
 from edc_base.utils import get_utcnow
-from edc_constants.constants import YES, NO, UNKNOWN
+from edc_constants.constants import YES, NO, UNKNOWN, POS
 
 from td.constants import MODIFIED, DISCONTINUED, NEVER_STARTED
 
 from ..forms import InfantArvProphForm, InfantArvProphModForm
+from edc_visit_tracking.constants import SCHEDULED
 
-from td_maternal.tests.test_mixins import MotherMixin
-from .test_mixins import AddVisitInfantMixin, InfantBirthMixin
+from .test_mixins import InfantMixin
+from td.models import Appointment
+from model_mommy import mommy
 
 
-class TestInfantArvProph(AddVisitInfantMixin, InfantBirthMixin, MotherMixin, TestCase):
+class TestInfantArvProph(InfantMixin, TestCase):
 
     def setUp(self):
         super(TestInfantArvProph, self).setUp()
-        self.make_positive_mother()
-        self.add_maternal_visit('1000M')
-        self.make_ultrasound(self.get_maternal_visit('1000M'))
-        self.make_antenatal_enrollment_two()
-        self.add_maternal_visit('1010M')
-        self.add_maternal_visit('1020M')
-        self.make_delivery()
-        self.add_maternal_visit('2000M')
-        self.add_infant_visit('2000M')
-        self.make_infant_birth()
-        self.make_infant_birth_arv(self.get_infant_visit('2000M'))
-        self.add_infant_visit('2010M')
-        self.make_infant_arv_proph(self.get_infant_visit('2010M'))
+        self.make_infant_birth(maternal_status=POS)
+        infant_appointment_2000 = Appointment.objects.get(subject_identifier=self.infant_identifier, visit_code='2000')
+        mommy.make_recipe(
+            'td_infant.infantvisit',
+            appointment=infant_appointment_2000,
+            report_datetime=infant_appointment_2000.appt_datetime,
+            reason=SCHEDULED)
+
+        infant_appointment_2010 = Appointment.objects.get(subject_identifier=self.infant_identifier, visit_code='2010')
+        mommy.make_recipe(
+            'td_infant.infantvisit',
+            appointment=infant_appointment_2010,
+            report_datetime=infant_appointment_2010.appt_datetime,
+            reason=SCHEDULED)
+
+        self.make_infant_birth_arv(infant_visit=self.get_infant_visit('2000'))
+        self.make_infantarvproph(infant_visit=self.get_infant_visit('2010'))
 
         self.data = {
-            'infant_visit': self.get_infant_visit('2010M').id,
+            'infant_visit': self.get_infant_visit('2010').id,
             'report_datetime': get_utcnow(),
             'prophylatic_nvp': YES,
             'arv_status': MODIFIED,
@@ -118,6 +124,8 @@ class TestInfantArvProph(AddVisitInfantMixin, InfantBirthMixin, MotherMixin, Tes
                        'dose_status': 'New',
                        'modification_date': date.today(),
                        'modification_code': 'Initial dose'}
+        self.infantarvproph.arv_status = MODIFIED
+        self.infantarvproph.save()
         infant_arv_proph = InfantArvProphModForm(data=inline_data)
         self.assertIn(
             u'Infant birth ARV shows that infant was discharged with an additional dose of AZT, '
@@ -131,6 +139,8 @@ class TestInfantArvProph(AddVisitInfantMixin, InfantBirthMixin, MotherMixin, Tes
                        'dose_status': 'New',
                        'modification_date': date.today(),
                        'modification_code': 'Initial dose'}
+        self.infantarvproph.arv_status = MODIFIED
+        self.infantarvproph.save()
         infant_arv_proph = InfantArvProphModForm(data=inline_data)
         self.assertIn(
             u'Infant birth ARV shows that infant was discharged with an additional dose of AZT, '
