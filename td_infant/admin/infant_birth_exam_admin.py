@@ -12,6 +12,7 @@ from .admin_mixins import CrfModelAdminMixin
 
 @admin.register(InfantBirthExam)
 class InfantBirthExamAdmin(CrfModelAdminMixin, admin.ModelAdmin):
+
     form = InfantBirthExamForm
 
     list_display = (

@@ -47,7 +47,7 @@ def get_birth_arv_visit_2000(infant_identifier):
 class InfantArvProphForm(ModelFormMixin, forms.ModelForm):
 
     def clean(self):
-        cleaned_data = self.cleaned_data
+        cleaned_data = super().clean()
         self.validate_taking_arv_proph_no()
         self.validate_taking_arv_proph_unknown()
         self.validate_taking_arv_proph_yes()
@@ -139,7 +139,7 @@ class InfantBirthArvForm(forms.ModelForm):
         fields = '__all__'
 
     def clean(self):
-        cleaned_data = super(InfantBirthArvForm, self).clean()
+        cleaned_data = super().clean()
         self.validate_azt_after_birth()
         self.validate_sdnvp_after_birth()
         return cleaned_data
