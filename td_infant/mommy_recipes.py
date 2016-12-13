@@ -14,6 +14,7 @@ from td.constants import MODIFIED, NORMAL
 from .models import (InfantBirth, InfantBirthData, InfantBirthExam, InfantFeeding, InfantBirthArv, InfantFu,
                      InfantFuPhysical, InfantArvProph, InfantVisit, InfantFuImmunizations,
                      InfantBirthFeedingVaccine, InfantCongenitalAnomalies)
+from td_infant.models.infant_fu_dx import InfantFuDx
 
 
 class TdProvider(BaseProvider):
@@ -101,7 +102,7 @@ infantbirtharv = Recipe(
     sdnvp_after_birth=NO,
     azt_discharge_supply=NO,)
 
-infantfollowup = Recipe(
+infantfu = Recipe(
     InfantFu,
     report_datetime=get_utcnow(),
     physical_assessment=NO,
@@ -109,7 +110,9 @@ infantfollowup = Recipe(
     has_dx=NO,
     was_hospitalized=NO,)
 
-infantfollowup = Recipe(
+infantfudx = Recipe(InfantFuDx)
+
+infantfuphysical = Recipe(
     InfantFuPhysical,
     report_datetime=get_utcnow(),
     weight_kg=3,
@@ -125,7 +128,7 @@ infantfollowup = Recipe(
     skin_exam=YES,
     neurologic_exam=YES,)
 
-infantfollowup = Recipe(
+infantarvproph = Recipe(
     InfantArvProph,
     report_datetime=get_utcnow(),
     prophylatic_nvp=YES,

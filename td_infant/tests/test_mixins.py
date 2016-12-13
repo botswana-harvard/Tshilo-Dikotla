@@ -109,6 +109,6 @@ class InfantMixin(InfantTestMixin):
         arv_status = options.get('arv_status', YES)
         options.update(arv_status=arv_status)
         self.infantarvproph = mommy.make_recipe(
-            'td_infant.infantfollowup',
+            'td_infant.infantarvproph',
             infant_visit=infant_visit,
             arv_status=arv_status)
