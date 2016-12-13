@@ -44,7 +44,6 @@ infant_birth_crf = (
     Crf(show_order=30, model='td_infant.infantbirthfeedingvaccine'),
     Crf(show_order=40, model='td_infant.infantbirtharv'),
     Crf(show_order=50, model='td_infant.infantcongenitalanomalies', required=False),
-    Crf(show_order=60, model='td_infant.infantdeathreport', required=False),
 )
 
 infant_1month_visit_crfs = (
