@@ -27,4 +27,8 @@ class TestNaturalKey(SyncTestSerializerMixin, MotherMixin, TestCase):
         complete_required_maternal_crfs = self.complete_required_maternal_crfs('1020M')
         self.sync_test_natural_keys(complete_required_maternal_crfs, verbose=verbose)
         maternal_delivery = self.make_delivery()
-        self.sync_test_natural_keys_by_schedule(maternal_delivery, verbose=verbose)
+        maternal_visits = self.add_maternal_visits(*[visit.code for visit in maternal_delivery.schedule.visits])
+        self.sync_test_natural_keys_by_schedule(
+            visits=maternal_visits,
+            verbose=verbose,
+            visit_attr='maternal_visit')
