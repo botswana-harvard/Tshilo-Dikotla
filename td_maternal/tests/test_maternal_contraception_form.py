@@ -17,11 +17,11 @@ class TestMaternalContraceptionForm(PosMotherMixin, TestCase):
     def setUp(self):
         super(TestMaternalContraceptionForm, self).setUp()
 
-        self.complete_required_crfs('1000M')
+        self.complete_required_maternal_crfs('1000M')
         self.make_antenatal_enrollment_two()
-        self.complete_required_crfs('1010M', '1020M')
+        self.complete_required_maternal_crfs('1010M', '1020M')
         self.make_delivery()
-        self.complete_required_crfs('2000M')
+        self.complete_required_maternal_crfs('2000M')
         maternal_visit = self.add_maternal_visit('2010M')
 
         contraceptives = Contraceptives.objects.create(

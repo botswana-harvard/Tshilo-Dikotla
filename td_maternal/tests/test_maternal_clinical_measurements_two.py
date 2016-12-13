@@ -10,7 +10,7 @@ class TestMaternalClinicalMeasurementsTwo(PosMotherMixin, TestCase):
 
     def setUp(self):
         super(TestMaternalClinicalMeasurementsTwo, self).setUp()
-        self.complete_required_crfs('1000M')
+        self.complete_required_maternal_crfs('1000M')
         self.make_antenatal_enrollment_two()
         maternal_visit = self.add_maternal_visit('1010M')
 

@@ -19,12 +19,12 @@ class TestNaturalKey(SyncTestSerializerMixin, MotherMixin, TestCase):
     def test_crf_natural_keys(self):
         verbose = True
         self.make_positive_mother()
-        complete_required_crfs = self.complete_required_crfs('1000M')
-        self.sync_test_natural_keys(complete_required_crfs, verbose=verbose)
+        complete_required_maternal_crfs = self.complete_required_maternal_crfs('1000M')
+        self.sync_test_natural_keys(complete_required_maternal_crfs, verbose=verbose)
         self.make_antenatal_enrollment_two()
-        complete_required_crfs = self.complete_required_crfs('1010M')
-        self.sync_test_natural_keys(complete_required_crfs, verbose=verbose)
-        complete_required_crfs = self.complete_required_crfs('1020M')
-        self.sync_test_natural_keys(complete_required_crfs, verbose=verbose)
+        complete_required_maternal_crfs = self.complete_required_maternal_crfs('1010M')
+        self.sync_test_natural_keys(complete_required_maternal_crfs, verbose=verbose)
+        complete_required_maternal_crfs = self.complete_required_maternal_crfs('1020M')
+        self.sync_test_natural_keys(complete_required_maternal_crfs, verbose=verbose)
         maternal_delivery = self.make_delivery()
         self.sync_test_natural_keys_by_schedule(maternal_delivery, verbose=verbose)

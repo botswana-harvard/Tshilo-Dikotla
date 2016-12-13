@@ -56,7 +56,7 @@ class CompleteMaternalCrfsMixin(CompleteCrfsMixin):
                 ga_by_ultrasound_wks=20)
         }
 
-    def complete_required_crfs(self, *visit_codes):
+    def complete_required_maternal_crfs(self, *visit_codes):
         """Complete all required CRFs for a visit(s) using mommy defaults."""
         complete_required_crfs = {}
         for visit_code in visit_codes:

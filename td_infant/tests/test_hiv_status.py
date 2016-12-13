@@ -1,18 +1,17 @@
-from django.test.testcases import TestCase
+from django.test import TestCase, tag
 
 from edc_metadata.constants import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import RequisitionMetadata
 
-from td_maternal.tests.test_mixins import DeliverMotherMixin, CompleteMaternalCrfsMixin, PosMotherMixin
-
-from .test_mixins import AddVisitInfantMixin, InfantBirthMixin
+from .test_mixins import InfantMixin
 
 
-class TestHivStatus(InfantBirthMixin, DeliverMotherMixin, AddVisitInfantMixin, CompleteMaternalCrfsMixin,
-                    PosMotherMixin, TestCase):
+@tag('review')
+class TestHivStatus(InfantMixin, TestCase):
 
     def test_dnapcr_for_non_heu_infant(self):
         """Asserts if NON HEU infant DNA PCR requisition is NOT made available."""
+        self.make_infant_birth()
         self.add_infant_visits('2000', '2010')
         self.assertEqual(
             RequisitionMetadata.objects.filter(
@@ -24,6 +23,7 @@ class TestHivStatus(InfantBirthMixin, DeliverMotherMixin, AddVisitInfantMixin, C
     def test_dnapcr_for_exposed_infant(self):
         """Asserts that DNA PCR requisition is made available for an HIV exposed infant.
         """
+        self.make_infant_birth()
         self.add_infant_visits('2000', '2010')
         self.assertEqual(
             RequisitionMetadata.objects.filter(

@@ -14,9 +14,9 @@ class TestMaternalArvPostForm(PosMotherMixin, TestCase):
     def setUp(self):
         super(TestMaternalArvPostForm, self).setUp()
 
-        self.complete_required_crfs('1000M')
+        self.complete_required_maternal_crfs('1000M')
         self.make_antenatal_enrollment_two()
-        self.complete_required_crfs('1010M', '1020M')
+        self.complete_required_maternal_crfs('1010M', '1020M')
         self.make_delivery()
         maternal_visit = self.add_maternal_visit('2000M')
 
