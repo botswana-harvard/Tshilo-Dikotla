@@ -5,7 +5,7 @@ from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NO
 
 from td_infant.forms import InfantBirthDataForm
-from td_infant.tests.test_mixins import InfantMixin
+from .test_mixins import InfantMixin
 
 
 class TestInfantBirthData(InfantMixin, TestCase):
