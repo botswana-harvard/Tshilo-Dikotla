@@ -64,52 +64,54 @@ class TestInfantFeedingForm(InfantMixin, TestCase):
 
     def test_child_received_other_feeding_date_no_date(self):
         """Test that if the child received other feeding, the date the food was introduced is given"""
-        self.options['formula_intro_date'] = None
+        self.options.update(formula_intro_date=None)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question3: If received formula milk | foods | liquids since last"
                       " attended visit. Please provide intro date", forms.errors.get('__all__'))
 
     def test_child_not_received_other_feeding_date_given(self):
         """Test that if the child did not receive other feeding, the date the food was introduced is not given"""
-        self.options['formula_intro_occur'] = NO
+        self.options.update(formula_intro_occur=NO)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("You mentioned no formula milk | foods | liquids received"
                       " since last visit in question 3. DO NOT PROVIDE DATE", forms.errors.get('__all__'))
 
     def test_infant_formula_feeding_YES(self):
         """"Test if the child took formula, the field for whether this is the first reporting in not N/A"""
-        self.options['is_first_formula'] = None
+        self.options.update(is_first_formula=None)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question7: Infant took formula, is this the first reporting of infant formula use? Please"
                       " provide YES or NO", forms.errors.get('__all__'))
 
     def test_infant_formula_feeding_not_yes(self):
         """Test if the child did not take formula, the field for whether this is the first reporting is N/A not YES"""
-        self.options['took_formula'] = NO
+        self.options.update(took_formula=NO)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question7: You mentioned that infant did not take formula, PLEASE DO NOT PROVIDE FIRST FORMULA"
                       " USE INFO", forms.errors.get('__all__'))
 
     def test_infant_formula_feeding_not_yes_date_provided(self):
         """Test if the child did not take formula, the field for whether this is the first reporting is N/A not None"""
-        self.options['took_formula'] = NO
-        self.options['is_first_formula'] = None
+        self.options.update(
+            took_formula=NO,
+            is_first_formula=None)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question8: You mentioned that infant did not take formula, PLEASE DO NOT PROVIDE DATE OF"
                       " FIRST FORMULA USE", forms.errors.get('__all__'))
 
     def test_infant_formula_feeding_not_yes_est_date_provided(self):
         """Test if the child did not take formula, the date of estimated first formula use is not provided"""
-        self.options['took_formula'] = NO
-        self.options['is_first_formula'] = None
-        self.options['date_first_formula'] = None
+        self.options.update(
+            took_formula=NO,
+            is_first_formula=None,
+            date_first_formula=None)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question9: You mentioned that infant did not take formula, PLEASE DO NOT PROVIDE ESTIMATED DATE"
                       " OF FIRST FORMULA USE", forms.errors.get('__all__'))
 
     def test_is_first_formula_yes_no_date(self):
         """Test that if this is the first reporting of infant formula, the date should be provided"""
-        self.options['date_first_formula'] = None
+        self.options.update(date_first_formula=None)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("If this is a first reporting of infant formula"
                       " please provide date and if date is estimated", forms.errors.get('__all__'))
@@ -124,7 +126,7 @@ class TestInfantFeedingForm(InfantMixin, TestCase):
 
     def test_is_first_formula_no_date_provided(self):
         """Test that if this is not the first reporting of infant formula, the date should not be provided"""
-        self.options['is_first_formula'] = NO
+        self.options.update(is_first_formula=NO)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question8: You mentioned that is not the first reporting of infant formula"
                       " PLEASE DO NOT PROVIDE DATE", forms.errors.get('__all__'))
@@ -132,59 +134,61 @@ class TestInfantFeedingForm(InfantMixin, TestCase):
     def test_is_first_formula_no_date_estimated_given(self):
         """Test that if this is not the first reporting of infant formula, whether the date is estimated should not
            be indicated"""
-        self.options['is_first_formula'] = NO
-        self.options['date_first_formula'] = None
+        self.options.update(
+            is_first_formula=NO,
+            date_first_formula=None)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question9: You mentioned that is not the first reporting of infant formula"
                       " PLEASE DO NOT PROVIDE EST DATE", forms.errors.get('__all__'))
 
     def test_took_cow_milk_yes(self):
         """test that if the infant received cow milk, the field question13 should not be N/A"""
-        self.options['cow_milk_yes'] = NOT_APPLICABLE
+        self.options.update(cow_milk_yes=NOT_APPLICABLE)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question13: If infant took cows milk. Answer CANNOT be Not Applicable",
                       forms.errors.get('__all__'))
 
     def test_took_cow_milk__not_yes(self):
         """test that if the infant did not receive cow milk, the field question13 should be N/A"""
-        self.options['cow_milk'] = NO
+        self.options.update(cow_milk=NO)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question13: Infant did not take cows milk. Answer is NOT APPLICABLE",
                       forms.errors.get('__all__'))
 
     def test_took_milk_other_yes_animal_not_specified(self):
         """Test that if the infant took milk from another animal, that animal is specified"""
-        self.options['other_milk'] = YES
+        self.options.update(other_milk=YES)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question15: The infant took milk from another animal, please specify which?",
                       forms.errors.get('__all__'))
 
     def test_took_milk__yes_milk_boiled_not_applicable(self):
         """Test that if the infant took milk from another animal, the answer to Question16 is not N/A"""
-        self.options['other_milk'] = YES
-        self.options['other_milk_animal'] = 'Goat'
-        self.options['milk_boiled'] = NOT_APPLICABLE
+        self.options.update(
+            other_milk=YES,
+            other_milk_animal='Goat',
+            milk_boiled=NOT_APPLICABLE)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question16:The infant took milk from another animal, answer"
                       " cannot be N/A", forms.errors.get('__all__'))
 
     def test_took_milk_other_not_yes_animal_specified(self):
         """Test that if the infant did not take milk from another animal, that animal is not specified"""
-        self.options['other_milk_animal'] = 'Goat'
+        self.options.update(other_milk_animal='Goat')
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question15: The infant did not take milk from any other animal, please"
                       " do not provide the name of the animal", forms.errors.get('__all__'))
 
     def test_took_milk_other_not_yes_boiled_not_not_applicable(self):
         """Test that if the infant did not take milk from another animal, the answer to question 16 is N/A"""
-        self.options['milk_boiled'] = YES
+        self.options.update(milk_boiled=YES)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question16: The infant did not take milk from any other animal, the"
                       " answer for whether the milk was boiled should be N/A", forms.errors.get('__all__'))
 
     def test_child_breastfed_complete_weaning_not_not_applicable(self):
         """Test that if the infant has been breast fed since the last visit, the answer to question24 is N/A"""
-        self.options['complete_weaning'] = NO
+        self.options.update(complete_weaning=NO)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question24: The infant has been breastfed since the last visit, The answer"
                       " answer should be N/A", forms.errors.get('__all__'))
@@ -192,20 +196,22 @@ class TestInfantFeedingForm(InfantMixin, TestCase):
     def test_child_not_breastfed_complete_weaning_not_applicable(self):
         """Test that if the child has not been breast fed since the last visit, the answer to question24 should not be
         NA"""
-        self.options['ever_breastfeed'] = NO
-        self.options['complete_weaning'] = NOT_APPLICABLE
+        self.options.update(
+            ever_breastfeed=NO,
+            complete_weaning=NOT_APPLICABLE)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question24: The infant has not been breastfed since the last visit, "
                       "The answer should not be N/A", forms.errors.get('__all__'))
 
     def test_formula_intro_occur_yes_no_foods_indicated(self):
-        self.options['juice'] = NO
-        self.options['cow_milk'] = NO
-        self.options['cow_milk_yes'] = NOT_APPLICABLE
-        self.options['other_milk'] = NO
-        self.options['fruits_veg'] = NO
-        self.options['cereal_porridge'] = NO
-        self.options['solid_liquid'] = NO
+        self.options.update(
+            juice=NO,
+            cow_milk=NO,
+            cow_milk_yes=NOT_APPLICABLE,
+            other_milk=NO,
+            fruits_veg=NO,
+            cereal_porridge=NO,
+            solid_liquid=NO)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("You should answer YES on either one of the questions about the juice, cow_milk, other milk, "
                       "fruits_veg, cereal_porridge or solid_liquid", forms.errors.get('__all__'))

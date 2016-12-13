@@ -50,8 +50,9 @@ class TestInfantFuDxItemsForm(InfantMixin, TestCase):
 
     def test_validate_seen_at_health_facility(self):
         """Test validate if the participant was hospitalized and seen at a health facility"""
-        self.options['was_hospitalized'] = YES
-        self.options['health_facility'] = NO
+        self.options.update(
+            was_hospitalized=YES,
+            health_facility=NO)
         infant_fu_dx_items = InfantFuDxItemsForm(data=self.options)
         self.assertIn(
             'You indicated that participant was hospitalized, therefore the participant '
@@ -69,32 +70,36 @@ class TestInfantFuDxItemsForm(InfantMixin, TestCase):
 
     def test_validate_other_serious_grade3or4_infection_specification(self):
         """Test if diagnosis specification for infections is provided"""
-        self.options['fu_dx'] = 'Other serious (grade 3 or 4)infection(not listed above),specify'
-        self.options['fu_dx_specify'] = None
+        self.options.update(
+            fu_dx='Other serious (grade 3 or 4)infection(not listed above),specify',
+            fu_dx_specify=None)
         infant_fu_dx = InfantFuDxItemsForm(data=self.options)
         self.assertIn('You mentioned there is other serious (grade 3 or 4) infection, Please specify',
                       infant_fu_dx.errors.get('__all__'))
 
     def test_other_serious_grade3or4_non_infectious_specification(self):
         """Test if diagnosis specification for non-infectious is provided"""
-        self.options['fu_dx'] = 'Other serious (grade 3 or 4) non-infectious(not listed above),specify'
-        self.options['fu_dx_specify'] = None
+        self.options.update(
+            fu_dx='Other serious (grade 3 or 4) non-infectious(not listed above),specify',
+            fu_dx_specify=None)
         infant_fu_dx = InfantFuDxItemsForm(data=self.options)
         self.assertIn('You mentioned there is other serious (grade 3 or 4) non-infectious, Please specify',
                       infant_fu_dx.errors.get('__all__'))
 
     def test_other_abnormallaboratory_tests_specification(self):
         """Test if test and result of other abnormal laboratory is provided"""
-        self.options['fu_dx'] = 'Other abnormallaboratory tests(other than tests listed above ''or tests done as part of this study), specify test and result'
-        self.options['fu_dx_specify'] = None
+        self.options.update(
+            fu_dx='Other abnormallaboratory tests(other than tests listed above ''or tests done as part of this study), specify test and result',
+            fu_dx_specify=None)
         infant_fu_dx = InfantFuDxItemsForm(data=self.options)
         self.assertIn('You mentioned there is abnormallaboratory tests, Please specify',
                       infant_fu_dx.errors.get('__all__'))
 
     def test_validate_new_congenital_abnormality_not_previously_identified_specification(self):
         """Test if new congenital abnormality not previously identified is specified'"""
-        self.options['fu_dx'] = 'New congenital abnormality not previously identified?,specify'
-        self.options['fu_dx_specify'] = None
+        self.options.update(
+            fu_dx='New congenital abnormality not previously identified?,specify',
+            fu_dx_specify=None)
         infant_fu_dx = InfantFuDxItemsForm(data=self.options)
         self.assertIn('You mentioned there is new congenital abnormality not previously identified , Please specify',
                       infant_fu_dx.errors.get('__all__'))
