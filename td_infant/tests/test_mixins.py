@@ -94,21 +94,3 @@ class InfantMixin(InfantTestMixin):
             birth_order_denominator=1,
             **options)
         self.infant_identifier = self.infant_birth.subject_identifier
-
-    def make_infant_birth_arv(self, infant_visit=None, **options):
-        infant_visit = infant_visit or self.get_last_infant_visit()
-        azt_discharge_supply = options.get('azt_discharge_supply', YES)
-        options.update(azt_discharge_supply=azt_discharge_supply)
-        self.infant_birth_arv = mommy.make_recipe(
-            'td_infant.infantbirtharv',
-            infant_visit=infant_visit,
-            **options)
-
-    def make_infantarvproph(self, infant_visit=None, **options):
-        infant_visit = infant_visit or self.get_last_infant_visit()
-        arv_status = options.get('arv_status', YES)
-        options.update(arv_status=arv_status)
-        self.infantarvproph = mommy.make_recipe(
-            'td_infant.infantarvproph',
-            infant_visit=infant_visit,
-            arv_status=arv_status)
