@@ -4,6 +4,7 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 
+from ..forms import InfantBirthArvForm
 from ..models import InfantBirthArv
 
 from .admin_mixins import CrfModelAdminMixin
@@ -11,6 +12,8 @@ from .admin_mixins import CrfModelAdminMixin
 
 @admin.register(InfantBirthArv)
 class InfantBirthArvAdmin(CrfModelAdminMixin, admin.ModelAdmin):
+
+    form = InfantBirthArvForm
 
     list_display = (
         'infant_visit', 'azt_after_birth',
