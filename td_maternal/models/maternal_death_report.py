@@ -6,6 +6,8 @@ from edc_death_report.model_mixins import DeathReportModelMixin
 from .maternal_visit import MaternalVisit
 from edc_base.model.models.url_mixin import UrlMixin
 
+from ..managers import MaternalDeathReportManager
+
 
 class MaternalDeathReport(DeathReportModelMixin, UrlMixin, BaseUuidModel):
 
@@ -14,6 +16,8 @@ class MaternalDeathReport(DeathReportModelMixin, UrlMixin, BaseUuidModel):
     ADMIN_SITE_NAME = 'td_maternal_admin'
 
     maternal_visit = models.OneToOneField(MaternalVisit)
+
+    objects = MaternalDeathReportManager()
 
     history = HistoricalRecords()
 

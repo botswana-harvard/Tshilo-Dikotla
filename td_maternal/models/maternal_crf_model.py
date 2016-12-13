@@ -10,6 +10,12 @@ from edc_visit_tracking.model_mixins import CrfModelMixin, PreviousVisitModelMix
 from .maternal_visit import MaternalVisit
 
 
+class TdCrfModelManager(CrfModelManager):
+
+    def get_by_natural_key(self, maternal_visit):
+        return self.get(**{self.model.visit_model_attr(): maternal_visit})
+
+
 class MaternalCrfModel(CrfModelMixin, OffstudyMixin,
                        RequiresConsentMixin, PreviousVisitModelMixin,
                        UpdatesCrfMetadataModelMixin, UrlMixin, BaseUuidModel):
@@ -20,10 +26,10 @@ class MaternalCrfModel(CrfModelMixin, OffstudyMixin,
 
     maternal_visit = models.OneToOneField(MaternalVisit)
 
-    objects = CrfModelManager()
+    objects = TdCrfModelManager()
 
     def natural_key(self):
-        return self.maternal_visit.natural_key()
+        return (self.maternal_visit, )
     natural_key.dependencies = ['td_maternal.maternalvisit']
 
     class Meta:

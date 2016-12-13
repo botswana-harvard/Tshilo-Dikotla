@@ -2,6 +2,20 @@ from django.db import models
 from django.apps import apps as django_apps
 
 
+class InfantDeathReportManager(models.Manager):
+
+    def get_by_natural_key(self, subject_identifier_as_pk):
+        return self.get(subject_identifier=subject_identifier_as_pk)
+
+
+class InfantDisenrollmentManager(models.Manager):
+
+    def get_by_natural_key(self, subject_identifier, visit_schedule_name, schedule_name):
+        return self.get(
+            subject_identifier=subject_identifier,
+            visit_schedule_name=visit_schedule_name, schedule_name=schedule_name)
+
+
 class InfantCnsManager(models.Manager):
 
     def get_by_natural_key(self, cns, report_datetime, visit_instance, code, subject_identifier_as_pk):

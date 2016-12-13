@@ -6,6 +6,20 @@ from edc_consent.managers import ConsentManager
 from edc_registration.models import RegisteredSubject
 
 
+class MaternalDeathReportManager(models.Manager):
+
+    def get_by_natural_key(self, subject_identifier_as_pk):
+        return self.get(subject_identifier=subject_identifier_as_pk)
+
+
+class MaternalDisenrollmentManager(models.Manager):
+
+    def get_by_natural_key(self, subject_identifier, visit_schedule_name, schedule_name):
+        return self.get(
+            subject_identifier=subject_identifier,
+            visit_schedule_name=visit_schedule_name, schedule_name=schedule_name)
+
+
 class EnrollmentManager(models.Manager):
 
     def get_by_natural_key(self, subject_identifier_as_pk):
