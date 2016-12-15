@@ -25,3 +25,5 @@ git+https://github.com/botswana-harvard/edc-visit-schedule@develop#egg=edc_visit
 git+https://github.com/botswana-harvard/edc-visit-tracking@develop#egg=edc_visit_tracking
 git+https://github.com/erikvw/django-crypto-fields@develop#egg=django_crypto_fields
 git+https://github.com/erikvw/django-revision@develop#egg=django_revision
+numpy
+pandas

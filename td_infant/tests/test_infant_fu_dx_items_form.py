@@ -29,12 +29,11 @@ class TestInfantFuDxItemsForm(InfantMixin, TestCase):
             appointment=infant_appointment_2010,
             report_datetime=infant_appointment_2010.appt_datetime,
             reason=SCHEDULED)
-        self.make_infant_birth_arv(infant_visit=self.get_infant_visit('2000'))
 
-        self.infantfu = mommy.make_recipe(
-            'td_infant.infantfu',
-            infant_visit=self.get_infant_visit('2010'),
-            was_hospitalized=YES)
+        mommy.make_recipe(
+            'td_infant.infantbirtharv',
+            infant_visit=self.get_infant_visit('2000'),
+            azt_discharge_supply=NO)
 
         self.infant_fu_dx = mommy.make_recipe(
             'td_infant.infantfudx',
@@ -61,8 +60,10 @@ class TestInfantFuDxItemsForm(InfantMixin, TestCase):
 
     def test_validate_reported_hospitalization(self):
         """Test validate if Question6 on Infant Follow Up form is answered YES"""
-        self.infantfu.was_hospitalized = NO
-        self.infantfu.save()
+        mommy.make_recipe(
+            'td_infant.infantfu',
+            infant_visit=self.get_infant_visit('2010'),
+            was_hospitalized=NO)
         self.options.update(infant_fu_dx=self.infant_fu_dx.id)
         infant_fu_dx_items = InfantFuDxItemsForm(data=self.options)
         self.assertIn('Question6 in Infant Follow Up is not answered YES, you cannot fill this form.',
