@@ -8,6 +8,8 @@ from edc_base.model.models.url_mixin import UrlMixin
 from edc_constants.choices import CONFIRMED_SUSPECTED
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 from edc_base.model.models import HistoricalRecords
+from edc_base.model.validators import datetime_not_future
+from edc_protocol.validators import datetime_not_before_study_start
 
 from td.choices import (
     CNS_ABNORMALITIES, FACIAL_DEFECT, CLEFT_DISORDER, MOUTH_UP_GASTROINT_DISORDER,
@@ -33,7 +35,7 @@ class InfantCongenitalAnomalies(InfantCrfModel):
         verbose_name = "Congenital Anomalies"
 
 
-class BaseCnsItem(CrfInlineModelMixin, BaseUuidModel):
+class BaseCnsItem(CrfInlineModelMixin, InfantCrfModel):
 
     congenital_anomalies = models.ForeignKey(InfantCongenitalAnomalies)
 
@@ -431,6 +433,13 @@ class InfantSkin(BaseCnsItem):
 
 
 class InfantTrisomies(BaseCnsItem):
+
+#     report_datetime = models.DateTimeField(
+#         verbose_name="Date and Time infant enrolled",
+#         validators=[
+#             datetime_not_before_study_start,
+#             datetime_not_future, ],
+#         help_text='')
 
     trisomies = models.CharField(
         max_length=250,

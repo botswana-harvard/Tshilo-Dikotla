@@ -40,7 +40,7 @@ class InfantArvProph(InfantCrfModel):
         unique_together = ('infant_visit', 'prophylatic_nvp')
 
 
-class InfantArvProphMod(CrfInlineModelMixin, BaseUuidModel):
+class InfantArvProphMod(CrfInlineModelMixin, InfantCrfModel):
     """ A model completed by the user on the infant's nvp or azt prophylaxis modifications. """
 
     infant_arv_proph = models.ForeignKey(InfantArvProph)

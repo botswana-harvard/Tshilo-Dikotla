@@ -455,9 +455,7 @@ class InfantTrisomiesAdmin(CrfModelAdminMixin, admin.ModelAdmin):
                      'hostname_modified'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
-                 'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
-                 'gender': 'congenital_anomalies__infant_visit__appointment__registered_subject__gender',
-                 'dob': 'congenital_anomalies__infant_visit__appointment__registered_subject__dob',
+                 'congenital_anomalies__infant_visit__appointment__subject_identifier',
                  }),
         )]
 

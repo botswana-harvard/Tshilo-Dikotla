@@ -121,7 +121,6 @@ infantfuphysical = Recipe(
     general_activity=NORMAL,
     physical_exam_result=NORMAL,
     heent_exam=YES,
-    was_hospitalized=YES,
     resp_exam=YES,
     cardiac_exam=YES,
     abdominal_exam=YES,

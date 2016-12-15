@@ -997,6 +997,8 @@ class InfantFuPhysicalForm(forms.ModelForm):
                     prev_fu_phy = InfantFuPhysical.objects.get(
                         infant_visit__appointment__subject_identifier=subject_identifier,
                         infant_visit__appointment__visit_code=visit[prev_visit])
+                    print(prev_fu_phy.head_circumference, 'prev_fu_phy.head_circumference')
+                    print(cleaned_data.get('head_circumference'), 'cleaned_data.get(head_circumference)')
                     if cleaned_data.get('head_circumference') < prev_fu_phy.head_circumference:
                         raise forms.ValidationError(
                             'You stated that the head circumference for the participant as {}, '
@@ -1012,14 +1014,14 @@ class InfantFuPhysicalForm(forms.ModelForm):
         cleaned_data = self.cleaned_data
         try:
             subject_identifier = cleaned_data.get('infant_visit').appointment.subject_identifier
-            infant_birth = InfantBirth.objects.get(registered_subject__subject_identifier=subject_identifier)
-            if (cleaned_data.get('report_datetime').date() <
-                    infant_birth.dob):
+            registered_subject = RegisteredSubject.objects.get(subject_identifier=subject_identifier)
+            infant_birth = InfantBirth.objects.get(subject_identifier=subject_identifier)
+            if cleaned_data.get('report_datetime').date() < infant_birth.dob:
                 raise forms.ValidationError('Report date {} cannot be before infant DOB of {}'.format(
                     cleaned_data.get('report_datetime').date(),
-                    infant_birth.registered_subject.dob))
+                    infant_birth.dob))
             maternal_consent = MaternalConsent.objects.get(
-                maternal_eligibility__registered_subject__subject_identifier=infant_birth.registered_subject.relative_identifier)
+                subject_identifier=registered_subject.relative_identifier)
             if cleaned_data.get('report_datetime') < maternal_consent.consent_datetime:
                 raise forms.ValidationError(
                     "Report date of {} CANNOT be before consent datetime".format(cleaned_data.get('report_datetime')))
@@ -1027,6 +1029,8 @@ class InfantFuPhysicalForm(forms.ModelForm):
             raise forms.ValidationError('Infant Birth does not exist.')
         except MaternalConsent.DoesNotExist:
             raise forms.ValidationError('Maternal Consent does not exist.')
+        except RegisteredSubject.DoesNotExist:
+            raise forms.ValidationError('Registered Subject does not exist.')
 
     def validate_general_activity(self):
         cleaned_data = self.cleaned_data
