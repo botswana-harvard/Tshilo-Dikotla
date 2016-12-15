@@ -40,7 +40,7 @@ class MaternalContraceptionForm(BaseMaternalModelForm):
             if not cleaned_data.get('contraceptive_startdate'):
                 raise forms.ValidationError('Participant uses a contraceptive method, please give a contraceptive startdate.')
         else:
-            if cleaned_data.get('contr'):
+            if self.validate_not_applicable_not_there('contr'):
                 raise forms.ValidationError(
                     'Participant does not use a contraceptive method, no need to give a contraceptive method')
             if cleaned_data.get('contraceptive_startdate'):
