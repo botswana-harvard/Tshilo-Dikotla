@@ -997,8 +997,6 @@ class InfantFuPhysicalForm(forms.ModelForm):
                     prev_fu_phy = InfantFuPhysical.objects.get(
                         infant_visit__appointment__subject_identifier=subject_identifier,
                         infant_visit__appointment__visit_code=visit[prev_visit])
-                    print(prev_fu_phy.head_circumference, 'prev_fu_phy.head_circumference')
-                    print(cleaned_data.get('head_circumference'), 'cleaned_data.get(head_circumference)')
                     if cleaned_data.get('head_circumference') < prev_fu_phy.head_circumference:
                         raise forms.ValidationError(
                             'You stated that the head circumference for the participant as {}, '

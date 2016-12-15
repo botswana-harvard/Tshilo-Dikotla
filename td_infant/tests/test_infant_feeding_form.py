@@ -1,11 +1,7 @@
 from datetime import date
 from django.test import TestCase
-from model_mommy import mommy
 
 from edc_constants.constants import POS, YES, NO, NOT_APPLICABLE
-from edc_visit_tracking.constants import SCHEDULED
-
-from td.models import Appointment
 
 from td_infant.forms import InfantFeedingForm
 
