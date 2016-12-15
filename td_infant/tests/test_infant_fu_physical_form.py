@@ -1,5 +1,4 @@
 from dateutil.relativedelta import relativedelta
-from django.utils import timezone
 from django.test import TestCase
 from model_mommy import mommy
 
