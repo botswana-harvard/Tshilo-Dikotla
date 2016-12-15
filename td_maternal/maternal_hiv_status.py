@@ -18,8 +18,11 @@ class MaternalHivStatus(PostEnrollmentResult):
                 rapid_results=self.get_rapid_results(reference_datetime, subject_identifier),
                 enrollment_result=self.get_enrollment_result(reference_datetime, subject_identifier))
         except AntenatalEnrollment.DoesNotExist:
-            raise PostEnrollmentResultError(
-                'Antenatal Enrollment is required to assess HIV status post-enrollment')
+            return None
+        #  After consent there is no antenatal enrollmenrt.
+        # This error will be thrown when loading the dashboard to be fixed.
+#             raise PostEnrollmentResultError(
+#                 'Antenatal Enrollment is required to assess HIV status post-enrollment')
         super(MaternalHivStatus, self).__init__(**options)
 
     def get_enrollment_result(self, reference_datetime, subject_identifier):
