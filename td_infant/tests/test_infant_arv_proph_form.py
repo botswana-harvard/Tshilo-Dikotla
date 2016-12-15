@@ -10,6 +10,7 @@ from ..forms import InfantArvProphForm, InfantArvProphModForm
 
 from .test_mixins import InfantMixin
 
+
 @tag('me')
 class TestInfantArvProph(InfantMixin, TestCase):
 
@@ -19,7 +20,8 @@ class TestInfantArvProph(InfantMixin, TestCase):
         self.add_infant_visits('2000', '2010')
 
     def test_validate_taking_arv_proph_no(self):
-        """Test if the infant was not taking prophylactic arv and arv status is not Not Applicable"""
+        """Assert InfantArvProphForm is invalid if the infant was not taking prophylactic arv
+        and arv_status is not Not Applicable."""
         mommy.make_recipe(
             'td_infant.infantbirtharv',
             infant_visit=self.get_infant_visit('2000'),
@@ -34,7 +36,7 @@ class TestInfantArvProph(InfantMixin, TestCase):
                       form.errors.get('__all__'))
 
     def test_validate_taking_arv_proph_discontinued(self):
-        """Assert cannot discontinue ARVs never taken."""
+        """Assert InfantArvProphForm is invalid if arv_status is discontinued."""
         # not given ARVs at discharge 2000
         mommy.make_recipe(
             'td_infant.infantbirtharv',
@@ -53,7 +55,8 @@ class TestInfantArvProph(InfantMixin, TestCase):
             form.errors.get('__all__'))
 
     def test_validate_taking_arv_proph_yes(self):
-        """Test if the infant was not taking prophylactic arv and arv status is Never Started"""
+        """Assert InfantArvProphForm is invalid if the infant was not taking prophylactic arv and
+        arv_status is Never Started"""
         mommy.make_recipe(
             'td_infant.infantbirtharv',
             infant_visit=self.get_infant_visit('2000'),
@@ -70,7 +73,7 @@ class TestInfantArvProph(InfantMixin, TestCase):
             form.errors.get('__all__'))
 
     def test_validate_infant_arv_proph_mod_dose_status(self):
-        """Asserts what???"""
+        """Assert InfantArvProphForm is invalid if arv_code is given but dose_status is none."""
         mommy.make_recipe(
             'td_infant.infantbirtharv',
             infant_visit=self.get_infant_visit('2000'),
@@ -91,7 +94,7 @@ class TestInfantArvProph(InfantMixin, TestCase):
                       form.errors.get('__all__'))
 
     def test_validate_infant_arv_proph_mod_date(self):
-        """Asserts what???"""
+        """Assert InfantArvProphForm is invalid if arv_code is given but modification_date is none."""
         mommy.make_recipe(
             'td_infant.infantbirtharv',
             infant_visit=self.get_infant_visit('2000'),
@@ -112,7 +115,7 @@ class TestInfantArvProph(InfantMixin, TestCase):
             form.errors.get('__all__'))
 
     def test_validate_infant_arv_proph_mod_code(self):
-        """Asserts what???"""
+        """Assert InfantArvProphForm is invalid if arv_code is given but modification_code is none."""
         mommy.make_recipe(
             'td_infant.infantbirtharv',
             infant_visit=self.get_infant_visit('2000'),
@@ -133,7 +136,7 @@ class TestInfantArvProph(InfantMixin, TestCase):
             form.errors.get('__all__'))
 
     def test_validate_infant_arv_proph_mod_not_needed(self):
-        """Asserts what???"""
+        """Assert InfantArvProphForm is invalid if inline is completed with arv_status not in modified."""
         mommy.make_recipe(
             'td_infant.infantbirtharv',
             infant_visit=self.get_infant_visit('2000'),
@@ -153,7 +156,7 @@ class TestInfantArvProph(InfantMixin, TestCase):
                       form.errors.get('__all__'))
 
     def test_validate_infant_arv_azt_initiated(self):
-        """Check that the azt dose is not initiated more than once"""
+        """Assert that the azt dose is not initiated more than once."""
         mommy.make_recipe(
             'td_infant.infantbirtharv',
             infant_visit=self.get_infant_visit('2000'),
@@ -175,7 +178,7 @@ class TestInfantArvProph(InfantMixin, TestCase):
             form.errors.get('__all__'))
 
     def test_validate_infant_arv_azt_different(self):
-        """Check that the dose being modified is the same one infant was discharged with."""
+        """Assert that the dose being modified is the same one infant was discharged with."""
         mommy.make_recipe(
             'td_infant.infantbirtharv',
             infant_visit=self.get_infant_visit('2000'),
