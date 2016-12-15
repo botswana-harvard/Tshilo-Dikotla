@@ -16,23 +16,8 @@ class TestInfantFeedingForm(InfantMixin, TestCase):
 
     def setUp(self):
         super(TestInfantFeedingForm, self).setUp()
-
         self.make_infant_birth(maternal_status=POS)
-        infant_appointment_2000 = Appointment.objects.get(subject_identifier=self.infant_identifier, visit_code='2000')
-        mommy.make_recipe(
-            'td_infant.infantvisit',
-            appointment=infant_appointment_2000,
-            report_datetime=infant_appointment_2000.appt_datetime,
-            reason=SCHEDULED)
-
-        infant_appointment_2010 = Appointment.objects.get(subject_identifier=self.infant_identifier, visit_code='2010')
-        mommy.make_recipe(
-            'td_infant.infantvisit',
-            appointment=infant_appointment_2010,
-            report_datetime=infant_appointment_2010.appt_datetime,
-            reason=SCHEDULED)
-        self.make_infant_birth_arv(infant_visit=self.get_infant_visit('2000'))
-
+        self.add_infant_visits('2000', '2010')
         self.options = {
             'infant_visit': self.get_infant_visit('2010').id,
             'other_feeding': YES,
@@ -63,35 +48,40 @@ class TestInfantFeedingForm(InfantMixin, TestCase):
             'comments': ''}
 
     def test_child_received_other_feeding_date_no_date(self):
-        """Test that if the child received other feeding, the date the food was introduced is given"""
+        """Assert that a validation message is raised if the child received other
+        feeding but formula_intro_date not given."""
         self.options.update(formula_intro_date=None)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question3: If received formula milk | foods | liquids since last"
                       " attended visit. Please provide intro date", forms.errors.get('__all__'))
 
     def test_child_not_received_other_feeding_date_given(self):
-        """Test that if the child did not receive other feeding, the date the food was introduced is not given"""
+        """Assert that a validation message is raised if the child did not receive other feeding
+        but formula_intro_date given."""
         self.options.update(formula_intro_occur=NO)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("You mentioned no formula milk | foods | liquids received"
                       " since last visit in question 3. DO NOT PROVIDE DATE", forms.errors.get('__all__'))
 
     def test_infant_formula_feeding_YES(self):
-        """"Test if the child took formula, the field for whether this is the first reporting in not N/A"""
+        """"Assert that a validation message is raised if the child took formula,
+        is_first_formula is not N/A."""
         self.options.update(is_first_formula=None)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question7: Infant took formula, is this the first reporting of infant formula use? Please"
                       " provide YES or NO", forms.errors.get('__all__'))
 
     def test_infant_formula_feeding_not_yes(self):
-        """Test if the child did not take formula, the field for whether this is the first reporting is N/A not YES"""
+        """Assert that a validation message is raised if a child did not take formula,
+        is_first_formula is N/A not YES."""
         self.options.update(took_formula=NO)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("Question7: You mentioned that infant did not take formula, PLEASE DO NOT PROVIDE FIRST FORMULA"
                       " USE INFO", forms.errors.get('__all__'))
 
     def test_infant_formula_feeding_not_yes_date_provided(self):
-        """Test if the child did not take formula, the field for whether this is the first reporting is N/A not None"""
+        """Assert that a validation message is raised if the child did not take formula,
+        is_first_formula is N/A not None."""
         self.options.update(
             took_formula=NO,
             is_first_formula=None)
@@ -100,7 +90,8 @@ class TestInfantFeedingForm(InfantMixin, TestCase):
                       " FIRST FORMULA USE", forms.errors.get('__all__'))
 
     def test_infant_formula_feeding_not_yes_est_date_provided(self):
-        """Test if the child did not take formula, the date of estimated first formula use is not provided"""
+        """Assert that a validation message is raised if the child did not take formula,
+        est_date_first_formula is provided."""
         self.options.update(
             took_formula=NO,
             is_first_formula=None,
@@ -110,7 +101,8 @@ class TestInfantFeedingForm(InfantMixin, TestCase):
                       " OF FIRST FORMULA USE", forms.errors.get('__all__'))
 
     def test_is_first_formula_yes_no_date(self):
-        """Test that if this is the first reporting of infant formula, the date should be provided"""
+        """Assert that a validation message is raised if this is the first reporting of infant formula,
+        the date should be provided"""
         self.options.update(date_first_formula=None)
         forms = InfantFeedingForm(data=self.options)
         self.assertIn("If this is a first reporting of infant formula"
