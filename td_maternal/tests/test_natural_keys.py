@@ -3,7 +3,6 @@ from django.test import TestCase, tag
 from edc_sync.test_mixins import SyncTestSerializerMixin
 
 from .test_mixins import MotherMixin
-from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
 
 @tag('review', 'slow')

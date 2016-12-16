@@ -1,11 +1,10 @@
 from django.test import TestCase
 
-from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO, NEG
 
 from ..forms import RapidTestResultForm
 
-from .test_mixins import NegMotherMixin
+from .test_mixins import NegMotherMixin, get_utcnow
 
 
 class TestRapidTestForm(NegMotherMixin, TestCase):

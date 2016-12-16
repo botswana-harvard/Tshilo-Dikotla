@@ -1,14 +1,13 @@
 from datetime import date
 from django.test import TestCase, tag
 
-from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO
 
 from td_list.models import Contraceptives, MaternalRelatives
 
 from ..forms import MaternalContraceptionForm
 
-from .test_mixins import PosMotherMixin
+from .test_mixins import PosMotherMixin, get_utcnow
 
 
 @tag('postenrollment', 'forms')

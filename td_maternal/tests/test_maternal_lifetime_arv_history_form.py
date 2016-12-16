@@ -3,14 +3,13 @@ from model_mommy import mommy
 
 from django.test import TestCase, tag
 
-from edc_base.utils import get_utcnow
 from edc_constants.constants import (YES, NOT_APPLICABLE, NO, CONTINUOUS, STOPPED, RESTARTED)
 
 from td_list.models import PriorArv
 
 from ..forms import MaternalLifetimeArvHistoryForm
 
-from .test_mixins import PosMotherMixin
+from .test_mixins import PosMotherMixin, get_utcnow
 
 
 @tag('forms')

@@ -1,5 +1,5 @@
 from django.test import TestCase, tag
-from edc_base.utils import get_utcnow
+
 from edc_constants.constants import YES, NO, NOT_APPLICABLE, NEG
 
 from td_list.models import ChronicConditions, MaternalMedications, WhoAdultDiagnosis
@@ -7,7 +7,7 @@ from td_list.models import ChronicConditions, MaternalMedications, WhoAdultDiagn
 from ..forms import MaternalMedicalHistoryForm
 from ..maternal_hiv_status import MaternalHivStatus
 
-from .test_mixins import MotherMixin
+from .test_mixins import MotherMixin, get_utcnow
 
 
 @tag('forms')

@@ -4,12 +4,11 @@ from django.test import TestCase
 from django.test.utils import tag
 
 from edc_constants.constants import POS, NEG
+from edc_base.test_mixins import TestMixinError
 
 from ..maternal_hiv_status import MaternalHivStatus
 
-from .test_mixins import PosMotherMixin
-from td_maternal.tests.test_mixins import MotherMixin, RAPID, ENROLLMENT, RECENT
-from edc_base.test_mixins import TestMixinError
+from .test_mixins import PosMotherMixin, MotherMixin, RAPID, ENROLLMENT, RECENT
 
 
 @tag('pos')

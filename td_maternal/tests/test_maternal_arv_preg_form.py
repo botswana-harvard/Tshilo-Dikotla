@@ -2,12 +2,11 @@ from dateutil.relativedelta import relativedelta
 from django.test import TestCase, tag
 from model_mommy import mommy
 
-from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, NO
 
 from ..forms import MaternalArvPregForm, MaternalArvForm
 
-from .test_mixins import PosMotherMixin
+from .test_mixins import PosMotherMixin, get_utcnow
 
 
 @tag('postenrollment', 'forms')

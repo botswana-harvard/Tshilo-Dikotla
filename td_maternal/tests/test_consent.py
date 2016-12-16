@@ -18,7 +18,7 @@ class TestConsent(MaternalReferenceDateMixin, TestCase):
         try:
             mommy.make_recipe(
                 'td_maternal.maternalconsent',
-                consent_datetime=self.test_get_utcnow(),
+                consent_datetime=self.get_utcnow(),
             )
             self.fail('Exception not raised')
         except (IntegrityError, ValidationError):
@@ -29,7 +29,7 @@ class TestConsent(MaternalReferenceDateMixin, TestCase):
         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         mommy.make_recipe(
             'td_maternal.maternalconsent',
-            consent_datetime=self.test_get_utcnow(),
+            consent_datetime=self.get_utcnow(),
             maternal_eligibility_reference=maternal_eligibility.reference)
         RegisteredSubject = django_apps.get_app_config('edc_registration').model
         rs = RegisteredSubject.objects.all()[0]
@@ -43,7 +43,7 @@ class TestConsent(MaternalReferenceDateMixin, TestCase):
         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         mommy.make_recipe(
             'td_maternal.maternalconsent',
-            consent_datetime=self.test_get_utcnow(),
+            consent_datetime=self.get_utcnow(),
             maternal_eligibility_reference=maternal_eligibility.reference)
         try:
             MaternalConsent.objects.get(maternal_eligibility_reference=maternal_eligibility.reference)

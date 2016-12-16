@@ -196,7 +196,7 @@ class TestEdd(MotherMixin, TestCase):
     def test_edd_and_ga_is_from_lmp(self):
         """Asserts GA none if lmp not know."""
         self.make_positive_mother()
-        lmp = self.test_mixin_reference_datetime - relativedelta(weeks=25)
+        lmp = self.get_utcnow() - relativedelta(weeks=25)
         lmp = Lmp(lmp=lmp, reference_date=self.antenatal_enrollment.report_datetime)
         self.assertIsNotNone(lmp.edd)
         self.assertEqual(self.antenatal_enrollment.edd_by_lmp, lmp.edd)
@@ -207,7 +207,7 @@ class TestEdd(MotherMixin, TestCase):
 
     def test_edd_ultrasound(self):
         """Asserts EDD from ultrasound is used."""
-        lmp_27wks_ago = self.test_mixin_reference_datetime - relativedelta(weeks=27)
+        lmp_27wks_ago = self.get_utcnow() - relativedelta(weeks=27)
         self.make_positive_mother(last_period_date=lmp_27wks_ago)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
         self.add_maternal_visit('1000M')

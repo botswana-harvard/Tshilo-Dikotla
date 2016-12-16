@@ -17,15 +17,8 @@ from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, Antena
                      MaternalClinicalMeasurementsOne, MaternalHivInterimHx, MaternalSubstanceUsePriorPreg,
                      MaternalPostPartumFu, MaternalArvPost, MaternalArvPostAdh, MaternalContraception,
                      MaternalPostPartumDep)
-from edc_base.test_mixins import ReferenceDateMixin
 
-
-class ReferenceDate(ReferenceDateMixin):
-    consent_model = 'td_maternal.maternalconsent'
-
-
-def get_utcnow():
-    return ReferenceDate().get_utcnow()
+from .tests.test_mixins import get_utcnow
 
 
 class TdProvider(BaseProvider):

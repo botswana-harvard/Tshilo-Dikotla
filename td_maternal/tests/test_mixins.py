@@ -287,3 +287,7 @@ class NegMotherMixin(MotherMixin):
     def setUp(self):
         super(NegMotherMixin, self).setUp()
         self.make_negative_mother(use_result=RAPID)
+
+
+def get_utcnow():
+    return MaternalReferenceDateMixin().get_utcnow()

@@ -1,5 +1,6 @@
-from dateutil.relativedelta import relativedelta
 import pytz
+
+from dateutil.relativedelta import relativedelta
 
 from datetime import time, datetime
 
@@ -11,8 +12,9 @@ from edc_constants.constants import NEG
 from edc_metadata.constants import REQUIRED, NOT_REQUIRED
 from edc_metadata.models import CrfMetadata, RequisitionMetadata
 
-from .test_mixins import PosMotherMixin, NegMotherMixin
 from td.models import Appointment
+
+from .test_mixins import PosMotherMixin, NegMotherMixin
 
 
 @tag('review')
