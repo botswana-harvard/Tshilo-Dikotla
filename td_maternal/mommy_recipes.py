@@ -5,7 +5,6 @@ from faker.providers import BaseProvider
 from model_mommy.recipe import Recipe, seq
 
 from edc_base.faker import EdcBaseProvider
-from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, POS, NOT_APPLICABLE, NO, NEG, UNKNOWN, CONTINUOUS
 from edc_lab.faker import EdcLabProvider
 from edc_visit_tracking.constants import SCHEDULED
@@ -18,6 +17,15 @@ from .models import (MaternalConsent, MaternalVisit, MaternalEligibility, Antena
                      MaternalClinicalMeasurementsOne, MaternalHivInterimHx, MaternalSubstanceUsePriorPreg,
                      MaternalPostPartumFu, MaternalArvPost, MaternalArvPostAdh, MaternalContraception,
                      MaternalPostPartumDep)
+from edc_base.test_mixins import ReferenceDateMixin
+
+
+class ReferenceDate(ReferenceDateMixin):
+    consent_model = 'td_maternal.maternalconsent'
+
+
+def get_utcnow():
+    return ReferenceDate().get_utcnow()
 
 
 class TdProvider(BaseProvider):
