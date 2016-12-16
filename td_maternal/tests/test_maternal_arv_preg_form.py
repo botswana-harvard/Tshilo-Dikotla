@@ -20,12 +20,17 @@ class TestMaternalArvPregForm(PosMotherMixin, TestCase):
 
         self.options = {
             'maternal_visit': maternal_visit.id,
-            'report_datetime': get_utcnow(),
+            'report_datetime': get_utcnow() - relativedelta(years=2),
             'took_arv': YES,
             'is_interrupt': NO,
             'interrupt': 'N/A',
             'interrupt_other': '',
             'comment': ''}
+        
+    def test_medical_arv_preg_valid(self):
+        form = MaternalArvPregForm(data=self.options)
+        self.assertTrue(form.is_valid())
+        form.save()
 
     def test_medication_interrupted(self):
         """Assert that ARV indicated as interrupted, then reason expected"""
@@ -46,7 +51,10 @@ class TestMaternalArvPregForm(PosMotherMixin, TestCase):
     def test_took_arv(self):
         """Assert arv taken but none listed"""
         maternal_arv_preg = mommy.make_recipe(
-            'td_maternal.maternalarvpreg', maternal_visit=self.get_maternal_visit('1000M'))
+            'td_maternal.maternalarvpreg',
+            maternal_visit=self.get_maternal_visit('1000M'),
+            report_datetime=get_utcnow() - relativedelta(years=2),)
+        
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
             'arv_code': '3TC',
@@ -73,10 +81,14 @@ class TestMaternalArvPregForm(PosMotherMixin, TestCase):
     def test_validate_historical_and_present_arv_start_dates(self):
         """"""
         maternal_arv_preg = mommy.make_recipe(
-            'td_maternal.maternalarvpreg', maternal_visit=self.get_maternal_visit('1000M'), took_arv=YES)
+            'td_maternal.maternalarvpreg', 
+            maternal_visit=self.get_maternal_visit('1000M'),
+            report_datetime=get_utcnow() - relativedelta(years=2),
+            took_arv=YES)
         maternallifetimearvhistory = mommy.make_recipe(
             'td_maternal.maternallifetimearvhistory',
             maternal_visit=self.get_maternal_visit('1000M'),
+            report_datetime=get_utcnow() - relativedelta(years=2),
             haart_start_date=(get_utcnow() - relativedelta(weeks=9)).date())
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
