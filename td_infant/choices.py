@@ -1,4 +1,4 @@
-from edc_constants.constants import NOT_APPLICABLE, OTHER
+from edc_constants.constants import NOT_APPLICABLE, OTHER, NEW
 
 from .constants import BROUGHT, REALTIME, CLOTH_NAPPY
 
@@ -128,7 +128,7 @@ ARV_MODIFICATION_REASON = (
 )
 
 DOSE_STATUS = (
-    ('New', 'New'),
+    (NEW, NEW),
     ('Permanently discontinued', 'Permanently discontinued'),
     ('Temporarily held', 'Temporarily held'),
     ('Dose modified', 'Dose modified'),
