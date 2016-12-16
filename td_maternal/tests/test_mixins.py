@@ -6,12 +6,13 @@ from dateutil.relativedelta import relativedelta
 from model_mommy import mommy
 from unipath import Path
 
-from edc_base.test_mixins import AddVisitMixin, ReferenceDateMixin, CompleteCrfsMixin, TestMixinError, LoadListDataMixin
-from edc_constants.constants import NEG, YES, NO, UNKNOWN
+from edc_base.test_mixins import (
+    AddVisitMixin, ReferenceDateMixin, CompleteCrfsMixin, TestMixinError, LoadListDataMixin)
+from edc_constants.constants import NEG, YES, NO, UNKNOWN, POS
 
+from td_list.list_data import list_data
 from td_list.models import RandomizationItem
 from td_maternal.models.antenatal_enrollment import AntenatalEnrollment
-from td_list.list_data import list_data
 
 
 RAPID = 'rapid'
@@ -87,7 +88,12 @@ class MaternalTestMixin(CompleteMaternalCrfsMixin, AddMaternalVisitMixin, LoadLi
     list_data = list_data
 
 
-class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
+class MaternalReferenceDateMixin(ReferenceDateMixin):
+
+    consent_model = 'td_maternal.maternalconsent'
+
+
+class MotherMixin(MaternalReferenceDateMixin, MaternalTestMixin):
     """Creates a POS mother."""
     def setUp(self):
         super(MotherMixin, self).setUp()
@@ -105,30 +111,49 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
     def make_eligibility(self):
         return mommy.make_recipe(
             'td_maternal.maternaleligibility',
-            report_datetime=self.test_mixin_reference_datetime)
+            report_datetime=self.get_utcnow())
+
+    def make_antenatal_enrollment(self, status=None, **options):
+        report_datetime = options.get('report_datetime', self.get_utcnow())
+        last_period_date = options.get('last_period_date', (self.get_utcnow() - relativedelta(weeks=25)).date())
+        options.update(
+            report_datetime=report_datetime,
+            last_period_date=last_period_date,
+            subject_identifier=self.maternal_identifier)
+        if status == POS:
+            antenatal_enrollment = mommy.make_recipe(
+                'td_maternal.antenatalenrollment_pos',
+                **options)
+        elif status == NEG:
+            antenatal_enrollment = mommy.make_recipe(
+                'td_maternal.antenatalenrollment_neg',
+                **options)
+        elif not status:
+            antenatal_enrollment = mommy.make_recipe(
+                'td_maternal.antenatalenrollment',
+                **options)
+        return antenatal_enrollment
 
     def make_consent(self):
         return mommy.make_recipe(
             'td_maternal.maternalconsent',
-            consent_datetime=self.test_mixin_reference_datetime,
+            consent_datetime=self.get_utcnow(),
             maternal_eligibility_reference=self.maternal_eligibility.reference)
 
     def make_positive_mother(self, **options):
         """Make a POS mother LMP 25wks with POS result with evidence (no recent or rapid test)."""
+        options = options or {}
         self.make_new_consented_mother()
-        report_datetime = options.get('report_datetime', self.test_mixin_reference_datetime)
+        report_datetime = options.get('report_datetime', self.get_utcnow())
         last_period_date = options.get(
             'last_period_date', (report_datetime - relativedelta(weeks=25)).date())
         options.update(
             report_datetime=report_datetime,
-            last_period_date=last_period_date)
-        self.antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment_pos',
+            last_period_date=last_period_date,
             rapid_test_done=None,
             rapid_test_result=None,
-            week32_test_date=None,
-            subject_identifier=self.maternal_identifier,
-            **options)
+            week32_test_date=None)
+        self.antenatal_enrollment = self.make_antenatal_enrollment(POS, **options)
         if self.antenatal_enrollment.reasons_not_eligible:
             self.assertIsNone(self.antenatal_enrollment.reasons_not_eligible)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
@@ -136,9 +161,14 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
     def make_negative_mother(self, use_result=None):
         """Make a NEG mother LMP 25wks with NEG by current, recent or rapid."""
         self.make_new_consented_mother()
+        report_datetime = self.get_utcnow()
+        last_period_date = (report_datetime - relativedelta(weeks=25)).date()
+        options = dict(
+            report_datetime=report_datetime,
+            last_period_date=last_period_date)
         use_result = use_result or RAPID
         if use_result == ENROLLMENT:
-            options = dict(
+            options.update(
                 current_hiv_status=NEG,  # never valid
                 evidence_hiv_status=YES,
                 week32_test=NO,
@@ -149,18 +179,18 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
                 rapid_test_date=None,
                 rapid_test_result=None)
         elif use_result == RECENT:  # a.k.a week32, e.g. a recent test some time after 32wks GA
-            options = dict(
+            options.update(
                 current_hiv_status=UNKNOWN,
                 evidence_hiv_status=NO,
                 week32_test=YES,
-                week32_test_date=(self.test_mixin_reference_datetime - relativedelta(weeks=4)).date(),
+                week32_test_date=(self.get_utcnow() - relativedelta(weeks=4)).date(),
                 week32_result=NEG,
                 evidence_32wk_hiv_status=YES,
                 rapid_test_done=NO,
                 rapid_test_date=None,
                 rapid_test_result=None)
         elif use_result == RAPID:
-            options = dict(
+            options.update(
                 current_hiv_status=UNKNOWN,
                 evidence_hiv_status=NO,
                 week32_test=NO,
@@ -168,14 +198,9 @@ class MotherMixin(ReferenceDateMixin, MaternalTestMixin):
                 week32_result=None,
                 evidence_32wk_hiv_status=None,
                 rapid_test_done=YES,
-                rapid_test_date=(self.test_mixin_reference_datetime - relativedelta(weeks=4)).date(),
+                rapid_test_date=(self.get_utcnow() - relativedelta(weeks=4)).date(),
                 rapid_test_result=NEG)
-        self.antenatal_enrollment = mommy.make_recipe(
-            'td_maternal.antenatalenrollment_neg',
-            report_datetime=self.test_mixin_reference_datetime,
-            last_period_date=(self.test_mixin_reference_datetime - relativedelta(weeks=25)).date(),
-            subject_identifier=self.maternal_identifier,
-            **options)
+        self.antenatal_enrollment = self.make_antenatal_enrollment(NEG, **options)
         if self.antenatal_enrollment.reasons_not_eligible:
             raise TestMixinError(self.antenatal_enrollment.reasons_not_eligible)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
