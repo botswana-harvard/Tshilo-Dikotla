@@ -1,7 +1,8 @@
 from model_mommy import mommy
 
+from edc_constants.constants import NEG
+
 from td_list.list_data import list_data
-from edc_constants.constants import YES, NEG
 from td_maternal.tests.test_mixins import MotherMixin, AddMaternalVisitMixin
 
 

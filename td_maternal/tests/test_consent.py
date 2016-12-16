@@ -7,14 +7,19 @@ from model_mommy import mommy
 
 from ..models import MaternalConsent
 
+from .test_mixins import MaternalReferenceDateMixin
+
 
 @tag('consent', 'enrollment')
-class TestConsent(TestCase):
+class TestConsent(MaternalReferenceDateMixin, TestCase):
 
     def test_cannot_create_consent_without_eligibility(self):
         """Assert adding a consent without MaternalEligibility first raises an Exception."""
         try:
-            mommy.make_recipe('td_maternal.maternalconsent')
+            mommy.make_recipe(
+                'td_maternal.maternalconsent',
+                consent_datetime=self.test_get_utcnow(),
+            )
             self.fail('Exception not raised')
         except (IntegrityError, ValidationError):
             pass
@@ -24,6 +29,7 @@ class TestConsent(TestCase):
         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         mommy.make_recipe(
             'td_maternal.maternalconsent',
+            consent_datetime=self.test_get_utcnow(),
             maternal_eligibility_reference=maternal_eligibility.reference)
         RegisteredSubject = django_apps.get_app_config('edc_registration').model
         rs = RegisteredSubject.objects.all()[0]
@@ -37,6 +43,7 @@ class TestConsent(TestCase):
         maternal_eligibility = mommy.make_recipe('td_maternal.maternaleligibility')
         mommy.make_recipe(
             'td_maternal.maternalconsent',
+            consent_datetime=self.test_get_utcnow(),
             maternal_eligibility_reference=maternal_eligibility.reference)
         try:
             MaternalConsent.objects.get(maternal_eligibility_reference=maternal_eligibility.reference)
