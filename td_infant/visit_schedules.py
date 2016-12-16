@@ -130,7 +130,7 @@ infant_birth_schedule.add_visit(
     title='Infant 12 Month Visit',
     timepoint=4,
     base_interval=4,
-    requisitions=None,
+    requisitions=(),
     crfs=infant_followup_crfs)
 
 infant_birth_schedule.add_visit(
@@ -146,7 +146,7 @@ infant_birth_schedule.add_visit(
     title='Infant 24 Month Visit',
     timepoint=6,
     base_interval=6,
-    requisitions=None,
+    requisitions=(),
     crfs=infant_followup_crfs)
 
 infant_birth_schedule.add_visit(
@@ -154,7 +154,7 @@ infant_birth_schedule.add_visit(
     title='Infant 30 Month Visit',
     timepoint=7,
     base_interval=7,
-    requisitions=None,
+    requisitions=(),
     crfs=infant_followup_crfs)
 
 infant_birth_schedule.add_visit(

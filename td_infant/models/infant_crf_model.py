@@ -11,6 +11,12 @@ from edc_visit_tracking.managers import CrfModelManager
 from .infant_visit import InfantVisit
 
 
+class TdCrfModelManager(CrfModelManager):
+
+    def get_by_natural_key(self, infant_visit):
+        return self.get(**{self.model.visit_model_attr(): infant_visit})
+
+
 class InfantCrfModel(CrfModelMixin, OffstudyMixin,
                      UpdatesCrfMetadataModelMixin, UrlMixin, BaseUuidModel):
 
@@ -18,12 +24,12 @@ class InfantCrfModel(CrfModelMixin, OffstudyMixin,
 
     infant_visit = models.OneToOneField(InfantVisit)
 
-    objects = CrfModelManager()
+    objects = TdCrfModelManager()
 
     history = HistoricalRecords()
 
     def natural_key(self):
-        return self.infant_visit.natural_key()
+        return (self.infant_visit, )
     natural_key.dependencies = ['td_infant.infantvisit']
 
     def __str__(self):

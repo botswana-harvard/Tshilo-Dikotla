@@ -13,8 +13,8 @@ from td.constants import MODIFIED, NORMAL
 
 from .models import (InfantBirth, InfantBirthData, InfantBirthExam, InfantFeeding, InfantBirthArv, InfantFu,
                      InfantFuPhysical, InfantArvProph, InfantVisit, InfantFuImmunizations,
-                     InfantBirthFeedingVaccine, InfantCongenitalAnomalies)
-from td_infant.models.infant_fu_dx import InfantFuDx
+                     InfantBirthFeedingVaccine, InfantCongenitalAnomalies, InfantFuNewMed, InfantFuImmunizations,
+                     SolidFoodAssessment, InfantFuDx)
 
 
 class TdProvider(BaseProvider):
@@ -137,3 +137,12 @@ infantimmunizations = Recipe(
     InfantFuImmunizations,
     vaccines_received=YES,
     vaccines_missed=YES,)
+
+infantfunewmed = Recipe(
+    InfantFuNewMed,)
+
+infantfuimmunizations = Recipe(
+    InfantFuImmunizations,)
+
+solidfoodassessment = Recipe(
+    SolidFoodAssessment,)
