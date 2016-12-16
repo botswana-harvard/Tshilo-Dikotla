@@ -47,7 +47,7 @@ def func_show_infant_arv_proph(infant_visit, *args):
 
 
 @register()
-class InfantRegisteredSubjectRuleGroup(RuleGroup):
+class InfantVisitRuleGroup(RuleGroup):
 
     arv_proph = CrfRule(
         logic=Logic(
@@ -58,7 +58,7 @@ class InfantRegisteredSubjectRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_infant'
-        source_model = 'edc_registration.registeredsubject'
+        source_model = 'td_infant.infantvisit'
 
 
 @register()
@@ -126,7 +126,7 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     require_pbmc_pl_huu_pp1 = RequisitionRule(
         logic=Logic(
-            predicate=func_infant_is_heu,  # TODO: Result must be false
+            predicate=func_infant_is_heu,
             consequence=REQUIRED,
             alternative=NOT_REQUIRED),
         target_model='infantrequisition',
@@ -158,4 +158,4 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     class Meta:
         app_label = 'td_lab'
-        source_model = 'edc_registration.registeredsubject'
+        source_model = 'td_infant.infantvisit'
