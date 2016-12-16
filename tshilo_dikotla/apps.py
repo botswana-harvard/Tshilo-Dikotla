@@ -1,9 +1,8 @@
 import os
 import pytz
-import sys
 
 from datetime import datetime
-from dateutil.relativedelta import MO, TU, WE, TH, FR, relativedelta
+from dateutil.relativedelta import MO, TU, WE, TH, FR
 from django.apps import AppConfig as DjangoAppConfig
 from django.conf import settings
 
@@ -26,7 +25,6 @@ from edc_visit_tracking.apps import AppConfig as EdcVisitTrackingAppConfigParent
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 from edc_protocol.cap import Cap
 from edc_protocol.subject_type import SubjectType
-from edc_base.utils import get_utcnow
 from django.core.management.color import color_style
 
 style = color_style()
@@ -56,18 +54,8 @@ class EdcProtocolAppConfig(EdcProtocolAppConfigParent):
         SubjectType('maternal', 'Mothers', Cap(model_name='td_maternal.maternallabdel', max_subjects=9999)),
         SubjectType('infant', 'Infants', Cap(model_name='td_infant.infantbirth', max_subjects=9999))
     ]
-    if 'test' in sys.argv:
-        sys.stdout.write(
-            style.NOTICE(
-                'WARNING! Overwriting AppConfig study_open_datetime and study_end_datetime for tests only. \n'
-                'See EdcProtocolAppConfig\n'))
-        teststudyopen = get_utcnow() - relativedelta(years=6)
-        teststudyend = get_utcnow() - relativedelta(years=1)
-    else:
-        teststudyopen = None
-        teststudyend = None
-    study_open_datetime = teststudyopen or datetime(2016, 4, 1, 0, 0, 0, tzinfo=pytz.utc)
-    study_end_datetime = teststudyend or datetime(2018, 12, 1, 0, 0, 0, tzinfo=pytz.utc)
+    study_open_datetime = datetime(2016, 4, 1, 0, 0, 0, tzinfo=pytz.utc)
+    study_close_datetime = datetime(2022, 12, 1, 0, 0, 0, tzinfo=pytz.utc)
 
 
 class EdcBaseAppConfig(EdcBaseAppConfigParent):
@@ -76,21 +64,12 @@ class EdcBaseAppConfig(EdcBaseAppConfigParent):
 
 
 class EdcConsentAppConfig(EdcConsentAppConfigParent):
-    if 'test' in sys.argv:
-        sys.stdout.write(
-            style.NOTICE(
-                'WARNING! Overwriting AppConfig maternalconsent.start and end dates for tests only. \n'
-                'See EdcConsentAppConfig\n'))
-        testconsentstart = get_utcnow() - relativedelta(years=6)
-        testconsentend = get_utcnow() - relativedelta(years=1)
-    else:
-        testconsentstart = None
-        testconsentend = None
+
     consent_configs = [
         ConsentConfig(
             'td_maternal.maternalconsent',
-            start=datetime(2016, 5, 1, 0, 0, 0, tzinfo=pytz.utc) if 'test' not in sys.argv else testconsentstart,
-            end=datetime(2022, 12, 1, 0, 0, 0, tzinfo=pytz.utc) if 'test' not in sys.argv else testconsentend,
+            start=datetime(2016, 5, 1, 0, 0, 0, tzinfo=pytz.utc),
+            end=datetime(2022, 12, 1, 0, 0, 0, tzinfo=pytz.utc),
             version='1',
             age_min=18,
             age_is_adult=18,
