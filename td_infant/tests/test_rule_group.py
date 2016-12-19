@@ -5,7 +5,6 @@ from edc_constants.constants import (POS, NEG, YES, NO)
 from edc_metadata.constants import REQUIRED, NOT_REQUIRED
 from edc_metadata.models import RequisitionMetadata, CrfMetadata
 
-
 from td.constants import NO_MODIFICATIONS, DISCONTINUED
 
 from .test_mixins import InfantMixin

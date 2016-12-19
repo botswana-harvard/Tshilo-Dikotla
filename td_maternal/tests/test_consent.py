@@ -2,10 +2,16 @@ from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from django.test import TestCase, tag
+from dateutil.relativedelta import relativedelta
+
+from django.utils import timezone
 
 from model_mommy import mommy
 
+from edc_base.utils import get_utcnow
+
 from ..models import MaternalConsent
+from td_maternal.forms import MaternalConsentForm
 
 from .test_mixins import MaternalReferenceDateMixin
 
@@ -49,3 +55,34 @@ class TestConsent(MaternalReferenceDateMixin, TestCase):
             MaternalConsent.objects.get(maternal_eligibility_reference=maternal_eligibility.reference)
         except MaternalConsent.DoesNotExist:
             self.fail('MaternalConsent.DoesNotExist unexpectedly raised')
+
+
+class TestConsentForm(TestCase):
+    """Test consent form validations not at the base."""
+
+    def test_dob_n_age_dnt_match(self):
+        """Assert if the dob on the consent and age in year on eligibility do not match."""
+        maternal_eligibility = mommy.make_recipe(
+            'td_maternal.maternaleligibility',
+            age_in_years=55,
+            report_datetime=get_utcnow() - relativedelta(years=2))
+        data = {
+            'maternal_eligibility_reference': maternal_eligibility.reference,
+            'subject_identifier': None,
+            'study_site': '40',
+            'consent_datetime': get_utcnow() - relativedelta(years=2),
+            'dob': timezone.datetime(1989, 7, 7).date(),
+            'first_name': 'ZEST',
+            'last_name': 'ZEST',
+            'initials': 'ZZ',
+            'gender': 'F',
+            'identity': '222222222',
+            'confirm_identity': '222222222',
+            'identity_type': 'OMANG',
+            'is_dob_estimated': '-'}
+
+        form = MaternalConsentForm(data=data)
+        self.assertFalse(form.is_valid())
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn(
+            'The date of birth entered does not match the age on the.', errors)

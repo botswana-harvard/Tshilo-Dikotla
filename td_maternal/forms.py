@@ -6,6 +6,7 @@ from django.conf import settings
 from django.forms.utils import ErrorList
 
 from edc_base.modelform_mixins import Many2ManyModelFormMixin
+from edc_base.utils import formatted_age
 from edc_constants.constants import (
     YES, NO, STOPPED, CONTINUOUS, RESTARTED, NOT_APPLICABLE, FEMALE, OMANG, OTHER, POS, NEG, IND, ON_STUDY)
 from edc_consent.forms import BaseSpecimenConsentForm
@@ -480,7 +481,20 @@ class MaternalConsentForm(ConsentFormMixin, forms.ModelForm):
             raise forms.ValidationError('Identity provided indicates participant is Male. Please correct.')
         self.validate_recruit_source()
         self.validate_recruitment_clinic()
+        self.validate_dob_and_eligibility_age()
         return cleaned_data
+
+    def validate_dob_and_eligibility_age(self):
+        """Validate if the dod matchs with the age provided on the eligibility."""
+        dob = self.cleaned_data.get('dob')
+        maternal_eligibility_reference = self.cleaned_data.get('maternal_eligibility_reference')
+        try:
+            maternal_eligibility = MaternalEligibility.objects.get(reference=maternal_eligibility_reference)
+            dob_age_at_eligibility = relativedelta(maternal_eligibility.report_datetime.date(), dob).years
+            if dob_age_at_eligibility != maternal_eligibility.age_in_years:
+                raise forms.ValidationError('The date of birth entered does not match the age on the.')
+        except MaternalEligibility.DoesNotExist:
+            raise forms.ValidationError('Complete the Maternal Elligibility form before proceeding.')
 
     def validate_recruit_source(self):
         cleaned_data = self.cleaned_data

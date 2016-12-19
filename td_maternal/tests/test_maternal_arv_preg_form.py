@@ -25,7 +25,7 @@ class TestMaternalArvPregForm(PosMotherMixin, TestCase):
             'interrupt': 'N/A',
             'interrupt_other': '',
             'comment': ''}
-        
+
     def test_medical_arv_preg_valid(self):
         form = MaternalArvPregForm(data=self.options)
         self.assertTrue(form.is_valid())
@@ -53,7 +53,7 @@ class TestMaternalArvPregForm(PosMotherMixin, TestCase):
             'td_maternal.maternalarvpreg',
             maternal_visit=self.get_maternal_visit('1000M'),
             report_datetime=get_utcnow() - relativedelta(years=2),)
-        
+
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
             'arv_code': '3TC',
@@ -80,7 +80,7 @@ class TestMaternalArvPregForm(PosMotherMixin, TestCase):
     def test_validate_historical_and_present_arv_start_dates(self):
         """"""
         maternal_arv_preg = mommy.make_recipe(
-            'td_maternal.maternalarvpreg', 
+            'td_maternal.maternalarvpreg',
             maternal_visit=self.get_maternal_visit('1000M'),
             report_datetime=get_utcnow() - relativedelta(years=2),
             took_arv=YES)

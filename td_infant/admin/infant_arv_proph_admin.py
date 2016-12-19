@@ -44,7 +44,7 @@ class InfantArvProphAdmin(CrfModelAdminMixin, admin.ModelAdmin):
 
 
 @admin.register(InfantArvProphMod)
-class InfantArvProphModAdmin(CrfModelAdminMixin, admin.ModelAdmin):
+class InfantArvProphModAdmin(admin.ModelAdmin):
 
     form = InfantArvProphModForm
 
