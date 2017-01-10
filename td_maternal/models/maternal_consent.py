@@ -9,6 +9,7 @@ from edc_consent.field_mixins import (
     IdentityFieldsMixin)
 from edc_consent.model_mixins import ConsentModelMixin
 from edc_identifier.maternal_identifier import MaternalIdentifier
+from edc_identifier.model_mixins import UniqueSubjectIdentifierFieldMixin
 from edc_protocol.mixins import SubjectTypeCapMixin
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 
@@ -19,7 +20,7 @@ from .maternal_eligibility import MaternalEligibility
 
 
 class MaternalConsent(ConsentModelMixin, UpdatesOrCreatesRegistrationModelMixin, ReviewFieldsMixin,
-                      IdentityFieldsMixin, PersonalFieldsMixin,
+                      IdentityFieldsMixin, PersonalFieldsMixin, UniqueSubjectIdentifierFieldMixin,
                       CitizenFieldsMixin, VulnerabilityFieldsMixin,
                       SubjectTypeCapMixin, UrlMixin, BaseUuidModel):
 
