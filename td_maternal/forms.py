@@ -10,7 +10,7 @@ from edc_base.utils import formatted_age
 from edc_constants.constants import (
     YES, NO, STOPPED, CONTINUOUS, RESTARTED, NOT_APPLICABLE, FEMALE, OMANG, OTHER, POS, NEG, IND, ON_STUDY)
 from edc_consent.forms import BaseSpecimenConsentForm
-from edc_consent.form_mixins import ConsentFormMixin
+from edc_consent.modelform_mixins import ConsentModelFormMixin
 from edc_death_report.modelform_mixins import DeathReportFormMixin
 from edc_locator.forms import LocatorFormMixin
 from edc_offstudy.modelform_mixins import OffStudyFormMixin
@@ -459,7 +459,7 @@ class MaternalClinicalMeasurementsTwoForm(ModelFormMixin, forms.ModelForm):
         fields = '__all__'
 
 
-class MaternalConsentForm(ConsentFormMixin, forms.ModelForm):
+class MaternalConsentForm(ConsentModelFormMixin, forms.ModelForm):
 
     maternal_eligibility_reference = forms.CharField(
         label='Reference',
