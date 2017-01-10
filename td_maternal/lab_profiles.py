@@ -2,7 +2,7 @@ from edc_lab.aliquot_type import AliquotType
 from edc_lab.processing_profile import ProcessingProfile
 from edc_lab.lab_profile import LabProfile
 from edc_lab.requisition_panel import RequisitionPanel
-from edc_lab.site_lab_profiles import site_lab_profiles
+from edc_lab.site_labs import site_labs
 
 lab_profile = LabProfile('td_lab')
 
@@ -75,4 +75,4 @@ cd4_panel = RequisitionPanel('CD4', wb)
 cd4_panel.processing_profile = cd4_processing
 lab_profile.add_panel(cd4_panel)
 
-site_lab_profiles.register('td_lab.maternalrequisition', lab_profile)
+site_labs.register('td_lab.maternalrequisition', lab_profile)
