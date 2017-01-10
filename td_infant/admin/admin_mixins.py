@@ -6,7 +6,7 @@ from td.admin_mixins import ModelAdminMixin
 class CrfModelAdminMixin(VisitTrackingCrfModelAdminMixin, ModelAdminMixin):
 
     visit_model = 'td_infant.infantvisit'
-    visit_attr = 'infant_visit'
+    visit_model_attr = 'infant_visit'
 
     instructions = (
         'Please complete the questions below. Required questions are in bold. '
