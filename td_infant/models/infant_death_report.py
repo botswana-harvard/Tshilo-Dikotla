@@ -1,12 +1,12 @@
 from edc_base.model.models import BaseUuidModel
 from edc_death_report.model_mixins import DeathReportModelMixin
 from edc_death_report.models import InfantDrugRelationshipMixin
-from edc_registration.model_mixins import SubjectIdentifierModelMixin
+from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 
 from ..managers import InfantDeathReportManager
 
 
-class InfantDeathReport (DeathReportModelMixin, SubjectIdentifierModelMixin,
+class InfantDeathReport (DeathReportModelMixin, NonUniqueSubjectIdentifierFieldMixin,
                          InfantDrugRelationshipMixin, BaseUuidModel):
 
     """ A model completed by the user after an infant's death. """
