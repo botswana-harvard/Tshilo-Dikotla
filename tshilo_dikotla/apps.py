@@ -10,8 +10,8 @@ from edc_appointment.apps import AppConfig as EdcAppointmentAppConfigParent
 from edc_appointment.facility import Facility
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
 from edc_consent.apps import AppConfig as EdcConsentAppConfigParent
-from edc_consent.consent_config import ConsentConfig
-from edc_constants.constants import FAILED_ELIGIBILITY
+from edc_consent.consent import Consent
+from edc_constants.constants import FAILED_ELIGIBILITY, FEMALE
 from edc_device.apps import AppConfig as EdcDeviceAppConfigParent
 from edc_identifier.apps import AppConfig as EdcIdentifierAppConfigParent
 from edc_lab.apps import AppConfig as EdcLabAppConfig
@@ -66,7 +66,7 @@ class EdcBaseAppConfig(EdcBaseAppConfigParent):
 class EdcConsentAppConfig(EdcConsentAppConfigParent):
 
     consent_configs = [
-        ConsentConfig(
+        Consent(
             'td_maternal.maternalconsent',
             start=datetime(2016, 5, 1, 0, 0, 0, tzinfo=pytz.utc),
             end=datetime(2022, 12, 1, 0, 0, 0, tzinfo=pytz.utc),
@@ -74,7 +74,7 @@ class EdcConsentAppConfig(EdcConsentAppConfigParent):
             age_min=18,
             age_is_adult=18,
             age_max=50,
-            gender=['F']),
+            gender=[FEMALE]),
     ]
 
 
