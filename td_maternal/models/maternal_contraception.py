@@ -124,6 +124,8 @@ class MaternalContraception(MaternalCrfModel):
         verbose_name='Do you know the result of your last Pap smear',
         max_length=20,
         choices=YES_NO_DWTA,
+        blank=True,
+        null=True,
         help_text='')
 
     pap_smear_result_status = models.CharField(
@@ -153,7 +155,6 @@ class MaternalContraception(MaternalCrfModel):
         max_length=25,
         choices=YES_NO_DWTA,
         help_text='')
-
 
     class Meta:
         app_label = 'td_maternal'
