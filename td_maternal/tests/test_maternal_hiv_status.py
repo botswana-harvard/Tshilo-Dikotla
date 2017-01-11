@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.test.utils import tag
 
 from edc_constants.constants import POS, NEG
-from edc_base.test_mixins import TestMixinError
+from edc_base_test.exceptions import TestMixinError
 
 from ..maternal_hiv_status import MaternalHivStatus
 

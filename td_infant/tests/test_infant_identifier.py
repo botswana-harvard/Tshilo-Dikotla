@@ -3,7 +3,7 @@ from model_mommy import mommy
 from django.apps import apps as django_apps
 from django.test import TestCase
 
-from td_maternal.tests.mixins import MotherMixin
+from td_maternal.tests.test_mixins import MotherMixin
 
 
 class TestInfantIdentifier(MotherMixin, TestCase):

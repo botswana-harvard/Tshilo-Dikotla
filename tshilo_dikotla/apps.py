@@ -9,6 +9,7 @@ from django.conf import settings
 from edc_appointment.apps import AppConfig as EdcAppointmentAppConfigParent
 from edc_appointment.facility import Facility
 from edc_base.apps import AppConfig as EdcBaseAppConfigParent
+from edc_base_test.apps import AppConfig as EdcBaseTestAppConfigParent
 from edc_constants.constants import FAILED_ELIGIBILITY
 from edc_device.apps import AppConfig as EdcDeviceAppConfigParent
 from edc_identifier.apps import AppConfig as EdcIdentifierAppConfigParent
@@ -31,6 +32,10 @@ style = color_style()
 class AppConfig(DjangoAppConfig):
     name = 'tshilo_dikotla'
     verbose_name = 'Tshilo Dikotla'
+
+
+class EdcBaseTestAppConfig(EdcBaseTestAppConfigParent):
+    consent_model = 'td_maternal.maternalconsent'
 
 
 class EdcDeviceAppConfig(EdcDeviceAppConfigParent):

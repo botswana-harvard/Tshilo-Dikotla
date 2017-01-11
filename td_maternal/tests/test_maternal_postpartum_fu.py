@@ -1,6 +1,6 @@
 from django.test import TestCase, tag
 
-from edc_base.test_mixins import LoadListDataMixin
+from edc_base_test.mixins import LoadListDataMixin
 from edc_constants.constants import YES, NOT_APPLICABLE, NO
 
 from td_list.models import AdultDiagnosis, MaternalHospitalization, WhoAdultDiagnosis

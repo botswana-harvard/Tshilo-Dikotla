@@ -1,7 +1,7 @@
 from faker import Faker
 from django.test import TestCase
 
-from edc_base.faker import EdcBaseProvider
+from edc_base_test.faker import EdcBaseProvider
 from edc_base.utils import get_utcnow
 from edc_constants.constants import POS, YES, NEG, NO, UNK, IND
 

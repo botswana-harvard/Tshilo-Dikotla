@@ -80,6 +80,7 @@ INSTALLED_APPS = [
     'td_maternal.apps.AppConfig',
     'tshilo_dikotla.apps.EdcAppointmentAppConfig',
     'tshilo_dikotla.apps.EdcBaseAppConfig',
+    'tshilo_dikotla.apps.EdcBaseTestAppConfig',
     #'tshilo_dikotla.apps.EdcConsentAppConfig',
     'tshilo_dikotla.apps.EdcDeviceAppConfig',
     'tshilo_dikotla.apps.EdcIdentifierAppConfig',
