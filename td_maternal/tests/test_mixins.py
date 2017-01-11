@@ -6,8 +6,9 @@ from dateutil.relativedelta import relativedelta
 from model_mommy import mommy
 from unipath import Path
 
-from edc_base.test_mixins import (
-    AddVisitMixin, ReferenceDateMixin, CompleteCrfsMixin, TestMixinError, LoadListDataMixin)
+from edc_base_test.exceptions import TestMixinError
+from edc_base_test.mixins import (
+    AddVisitMixin, ReferenceDateMixin, CompleteCrfsMixin, LoadListDataMixin)
 from edc_constants.constants import NEG, YES, NO, UNKNOWN, POS
 
 from td_list.list_data import list_data
