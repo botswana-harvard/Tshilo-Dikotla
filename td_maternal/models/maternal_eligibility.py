@@ -88,8 +88,9 @@ class MaternalEligibility (UrlMixin, BaseUuidModel):
         """Returns a tuple (True, None) if mother is eligible otherwise (False, error_messsage) where
         error message is the reason for eligibility test failed."""
         error_message = []
-        consent_config = site_consents.get_consents_by_model(
-            consent_model='td_maternal.maternalconsent')[0]
+        consent_config = site_consents.get_consent(
+            consent_model='td_maternal.maternalconsent',
+            report_datetime=self.report_datetime)
         if self.age_in_years < consent_config.age_min:
             error_message.append('Mother is under {}'.format(consent_config.age_min))
         if self.age_in_years > consent_config.age_max:
