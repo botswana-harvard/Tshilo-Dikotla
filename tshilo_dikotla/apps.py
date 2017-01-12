@@ -10,7 +10,7 @@ from edc_sync.apps import AppConfig as EdcSyncAppConfigParent
 from edc_sync.constants import SERVER
 
 study_start_datetime = timezone.datetime(2016, 4, 1, 0, 0, 0)
-study_end_datetime = timezone.datetime(2016, 12, 1, 0, 0, 0)
+study_end_datetime = timezone.datetime(2018, 12, 1, 0, 0, 0)
 
 try:
     edc_sync_role = settings.EDC_SYNC_ROLE

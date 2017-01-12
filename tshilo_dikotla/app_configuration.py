@@ -17,7 +17,7 @@ except ImportError:
     aliquot_label = None
 
 study_start_datetime = datetime(2016, 4, 1, 0, 0, 0)
-study_end_datetime = datetime(2016, 12, 1, 0, 0, 0)
+study_end_datetime = datetime(2018, 12, 1, 0, 0, 0)
 
 
 class AppConfiguration(BaseAppConfiguration):
@@ -56,26 +56,26 @@ class AppConfiguration(BaseAppConfiguration):
         'device_id': Device().device_id}
 
     holidays_setup = {
-        'New Year': date(2016, 1, 1),
-        'New Year Holiday': date(2016, 1, 2),
-        'Good Friday': date(2016, 3, 25),
-        'Easter Monday': date(2016, 3, 28),
-        'Labour Day': date(2016, 5, 1),
-        'Labour Day Holiday': date(2016, 5, 2),
-        'Ascension Day': date(2016, 5, 5),
-        'Sir Seretse Khama Day': date(2016, 7, 1),
-        'President\'s Day': date(2016, 7, 18),
-        'President\'s Day Holiday': date(2016, 7, 19),
-        'Independence Day': date(2016, 9, 30),
-        'Botswana Day Holiday': date(2016, 10, 1),
-        'Christmas Day': date(2016, 12, 25),
-        'Boxing Day': date(2016, 12, 26)}
+        'New Year': date(2017, 1, 1),
+        'New Year Holiday': date(2017, 1, 2),
+        'Good Friday': date(2017, 4, 14),
+        'Easter Monday': date(2017, 4, 17),
+        'Labour Day': date(2017, 5, 1),
+        'Ascension Day': date(2017, 5, 25),
+        'Sir Seretse Khama Day': date(2017, 7, 1),
+        'President\'s Day': date(2017, 7, 17),
+        'President\'s Day Holiday': date(2017, 7, 18),
+        'Independence Day': date(2017, 9, 30),
+        'Botswana Day Holiday': date(2017, 10, 1),
+        'Botswana Day Holiday': date(2017, 10, 2),
+        'Christmas Day': date(2017, 12, 25),
+        'Boxing Day': date(2017, 12, 26)}
 
     consent_type_setup = [
         {'app_label': 'td_maternal',
          'model_name': 'maternalconsent',
          'start_datetime': study_start_datetime,
-         'end_datetime': datetime(2016, 12, 31, 23, 59),
+         'end_datetime': datetime(2018, 12, 31, 23, 59),
          'version': '1'}
     ]
 
@@ -83,6 +83,7 @@ class AppConfiguration(BaseAppConfiguration):
 
     lab_clinic_api_setup = {
         'panel': [PanelTuple('CD4', 'TEST', 'WB'),
+                  PanelTuple('Viral Load', 'TEST', 'WB'),
                   PanelTuple('PBMC VL', 'TEST', 'WB'),
                   PanelTuple('Infant Glucose', 'TEST', 'WB'),
                   PanelTuple('Fasting Glucose', 'TEST', 'WB'),
@@ -102,6 +103,7 @@ class AppConfiguration(BaseAppConfiguration):
                  'destination': [DestinationTuple('BHHRL', 'Botswana-Harvard HIV Reference Laboratory',
                                                   'Gaborone', '3902671', 'bhhrl@bhp.org.bw')],
                  'panel': [PanelTuple('CD4', 'TEST', 'WB'),
+                           PanelTuple('Viral Load', 'TEST', 'WB'),
                            PanelTuple('PBMC VL', 'TEST', 'WB'),
                            PanelTuple('Infant Glucose', 'TEST', 'WB'),
                            PanelTuple('Fasting Glucose', 'TEST', 'WB'),
@@ -119,7 +121,8 @@ class AppConfiguration(BaseAppConfiguration):
                                   AliquotTypeTuple('Buffy Coat', 'BC', '16'),
                                   AliquotTypeTuple('PBMC', 'PBMC', '31'),
                                   AliquotTypeTuple('Serum', 'SERUM', '06')],
-                 'profile': [ProfileTuple('PBMC VL', 'WB'),
+                 'profile': [ProfileTuple('Viral Load', 'WB'),
+                             ProfileTuple('PBMC VL', 'WB'),
                              ProfileTuple('Glucose', 'WB'),
                              ProfileTuple('ELISA', 'WB'),
                              ProfileTuple('CD4', 'WB'),
@@ -127,7 +130,9 @@ class AppConfiguration(BaseAppConfiguration):
                              ProfileTuple('Infant Glucose', 'WB'),
                              ProfileTuple('Infant PBMC PL', 'WB'),
                              ProfileTuple('Infant Serum (Store Only)', 'SERUM')],
-                 'profile_item': [ProfileItemTuple('PBMC VL', 'PL', 1.0, 4),
+                 'profile_item': [ProfileItemTuple('Viral Load', 'PL', 1.0, 2),
+                                  ProfileItemTuple('Viral Load', 'BC', 0.5, 1),
+                                  ProfileItemTuple('PBMC VL', 'PL', 1.0, 4),
                                   ProfileItemTuple('PBMC VL', 'PBMC', 0.5, 4),
                                   ProfileItemTuple('Glucose', 'PL', 1, 3),
                                   ProfileItemTuple('ELISA', 'PL', 1.0, 1),

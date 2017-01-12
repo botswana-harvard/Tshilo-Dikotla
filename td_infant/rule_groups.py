@@ -70,6 +70,22 @@ def func_infant_heu(visit_instance):
     return False
 
 
+class InfantRegisteredSubjectRuleGroup(RuleGroup):
+
+    arv_proph = CrfRule(
+        logic=Logic(
+            predicate=func_show_infant_arv_proph,
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_infant', 'infantarvproph'), ])
+
+    class Meta:
+        app_label = 'td_infant'
+        source_fk = None
+        source_model = RegisteredSubject
+site_rule_groups.register(InfantRegisteredSubjectRuleGroup)
+
+
 class InfantFuRuleGroup(RuleGroup):
 
     physical_assessment_yes = CrfRule(

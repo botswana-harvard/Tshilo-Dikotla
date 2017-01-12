@@ -27,8 +27,9 @@ class TestRuleGroups(BaseTestCase):
     def setUp(self):
         super(TestRuleGroups, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
 
     def test_congentinal_yes(self):
         options = {'registered_subject': self.registered_subject,
@@ -497,7 +498,7 @@ class TestRuleGroups(BaseTestCase):
                 crf_entry__model_name='infantarvproph',
                 appointment=self.appointment).count(), 1)
 
-    def test_infant_arv_proph_not_required_at_2060(self):
+    def test_infant_arv_proph_required_at_2060(self):
         options = {'registered_subject': self.registered_subject,
                    'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
@@ -605,7 +606,7 @@ class TestRuleGroups(BaseTestCase):
                 crf_entry__model_name='infantbirtharv',
                 appointment=self.appointment).count(), 1)
 
-def test_infant_arv_proph_not_required_at_2060(self):
+    def test_infant_arv_proph_not_required_at_2060_1(self):
         options = {'registered_subject': self.registered_subject,
                    'current_hiv_status': POS,
                    'evidence_hiv_status': YES,

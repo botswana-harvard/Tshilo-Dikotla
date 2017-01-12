@@ -97,6 +97,12 @@ maternal_requisition_antenatal2 = (
         'ELISA', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
 )
 
+maternal_delivery_1m_postpartum = (
+    RequisitionPanelTuple(
+        10, 'td_lab', 'maternalrequisition',
+        'Viral Load', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+)
+
 maternal_requisition_followup = (
     RequisitionPanelTuple(
         20, 'td_lab', 'maternalrequisition',

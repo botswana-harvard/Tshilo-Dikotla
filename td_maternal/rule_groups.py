@@ -154,7 +154,7 @@ class MaternalRequisitionRuleGroup(RuleGroup):
             consequence=UNKEYED,
             alternative=NOT_REQUIRED),
         target_model=[('td_lab', 'maternalrequisition')],
-        target_requisition_panels=['PBMC VL'])
+        target_requisition_panels=['PBMC VL', 'Viral Load'])
 
     require_pbmc_storage = RequisitionRule(
         logic=Logic(

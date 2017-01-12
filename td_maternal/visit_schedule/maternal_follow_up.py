@@ -6,7 +6,7 @@ from edc_visit_schedule.classes import (
 from ..models import MaternalLabourDel, MaternalVisit
 
 from .entries import (maternal_birth_entries, maternal_followup1_entries, maternal_followup2_entries,
-                      maternal_followup3_entries, maternal_requisition_followup)
+                      maternal_followup3_entries, maternal_requisition_followup, maternal_delivery_1m_postpartum)
 
 
 class MaternalFollowUpSchedule(VisitScheduleConfiguration):
@@ -35,7 +35,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': '',
-        'requisitions': maternal_requisition_followup,
+        'requisitions': maternal_delivery_1m_postpartum,
         'entries': maternal_birth_entries}
 
     visit_definitions['2010M'] = {
@@ -51,7 +51,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': '',
-        'requisitions': maternal_requisition_followup,
+        'requisitions': maternal_delivery_1m_postpartum,
         'entries': maternal_followup1_entries}
 
     visit_definitions['2020M'] = {

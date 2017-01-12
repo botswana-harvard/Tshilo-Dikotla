@@ -382,3 +382,48 @@ class TestMaternalRuleGroups(BaseTestCase):
                 crf_entry__app_label='td_maternal',
                 crf_entry__model_name='maternalultrasoundinitial',
                 appointment=self.appointment).count(), 1)
+
+    def test_maternal_viral_load_required_delivery(self):
+        options = {'registered_subject': self.registered_subject,
+                   'current_hiv_status': POS,
+                   'evidence_hiv_status': YES,
+                   'will_get_arvs': YES,
+                   'is_diabetic': NO,
+                   'will_remain_onstudy': YES,
+                   'rapid_test_done': NOT_APPLICABLE,
+                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+
+        self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
+        self.maternal_visit_1000 = MaternalVisit.objects.get(
+            appointment__registered_subject=options.get('registered_subject'),
+            reason=SCHEDULED,
+            appointment__visit_definition__code='1000M')
+        self.maternal_ultrasound = MaternalUltraSoundIniFactory(maternal_visit=self.maternal_visit_1000,
+                                                                number_of_gestations=1,
+                                                                )
+        self.antenatal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=options.get('registered_subject'))
+        self.appointment = Appointment.objects.get(registered_subject=options.get('registered_subject'),
+                                                   visit_definition__code='1010M')
+        self.maternal_labour_del = MaternalLabourDelFactory(registered_subject=options.get('registered_subject'),
+                                                            live_infants_to_register=1)
+        self.antenatal_visit_1 = MaternalVisitFactory(appointment=self.appointment)
+
+        self.antenatal_visit_2 = MaternalVisitFactory(
+            appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
+                                                visit_definition__code='1020M'))
+        RapidTestResultFactory(
+            maternal_visit=self.antenatal_visit_2, rapid_test_done=YES, result=POS,
+            result_date=(timezone.datetime.now() - relativedelta(days=90)).date())
+
+        self.appointment = Appointment.objects.get(
+            registered_subject=options.get('registered_subject'),
+            visit_definition__code='2000M')
+        self.maternal_visit_2000 = MaternalVisitFactory(appointment=self.appointment)
+        self.assertEqual(
+            RequisitionMetaData.objects.filter(
+                entry_status='NEW',
+                lab_entry__app_label='td_lab',
+                lab_entry__model_name='maternalrequisition',
+                lab_entry__requisition_panel__name='Viral Load',
+                appointment=self.appointment).count(), 1)
