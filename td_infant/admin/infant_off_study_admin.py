@@ -4,14 +4,15 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 
-from tshilo_dikotla.base_model_admin import BaseModelAdmin
 from tshilo_dikotla.constants import INFANT
 
 from ..forms import InfantOffStudyForm
 from ..models import InfantOffStudy
 
+from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
 
-class InfantOffStudyAdmin(BaseModelAdmin):
+
+class InfantOffStudyAdmin(BaseInfantScheduleModelAdmin):
 
     form = InfantOffStudyForm
     dashboard_type = INFANT
