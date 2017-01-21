@@ -79,6 +79,13 @@ class InfantRegisteredSubjectRuleGroup(RuleGroup):
             alternative=NOT_REQUIRED),
         target_model=[('td_infant', 'infantarvproph'), ])
 
+    birth_arv = CrfRule(
+        logic=Logic(
+            predicate=func_infant_heu,
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_infant', 'infantbirtharv'), ])
+
     class Meta:
         app_label = 'td_infant'
         source_fk = None

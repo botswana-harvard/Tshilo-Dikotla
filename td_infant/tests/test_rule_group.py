@@ -559,7 +559,7 @@ class TestRuleGroups(BaseTestCase):
                 crf_entry__model_name='infantarvproph',
                 appointment=self.appointment).count(), 0)
 
-    def test_infant_birth_arv(self):
+    def test_infant_birth_arv_required_2000(self):
         options = {'registered_subject': self.registered_subject,
                    'current_hiv_status': POS,
                    'evidence_hiv_status': YES,
@@ -606,15 +606,19 @@ class TestRuleGroups(BaseTestCase):
                 crf_entry__model_name='infantbirtharv',
                 appointment=self.appointment).count(), 1)
 
-    def test_infant_arv_proph_not_required_at_2060_1(self):
+    def test_infant_birth_arv_not_required_2000(self):
         options = {'registered_subject': self.registered_subject,
-                   'current_hiv_status': POS,
+                   'current_hiv_status': NEG,
                    'evidence_hiv_status': YES,
-                   'will_get_arvs': YES,
-                   'is_diabetic': NO,
-                   'will_remain_onstudy': YES,
-                   'rapid_test_done': NOT_APPLICABLE,
-                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=25)).date()}
+                   'week32_test': YES,
+                   'week32_test_date': (timezone.datetime.now() - relativedelta(weeks=4)).date(),
+                   'week32_result': NEG,
+                   'evidence_32wk_hiv_status': YES,
+                   'will_get_arvs': NOT_APPLICABLE,
+                   'rapid_test_done': YES,
+                   'rapid_test_date': date.today(),
+                   'rapid_test_result': NEG,
+                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
 
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(self.antenatal_enrollment.is_eligible)
@@ -646,21 +650,9 @@ class TestRuleGroups(BaseTestCase):
             registered_subject=infant_registered_subject,
             visit_definition__code='2000')
         self.infant_visit = InfantVisitFactory(appointment=self.appointment)
-        self.appointment = Appointment.objects.get(
-            registered_subject=infant_registered_subject,
-            visit_definition__code='2010')
-        self.infant_visit = InfantVisitFactory(appointment=self.appointment)
-        self.appointment = Appointment.objects.get(
-            registered_subject=infant_registered_subject,
-            visit_definition__code='2020')
-        self.infant_visit = InfantVisitFactory(appointment=self.appointment)
-        self.appointment = Appointment.objects.get(
-            registered_subject=infant_registered_subject,
-            visit_definition__code='2060')
-        self.infant_visit = InfantVisitFactory(appointment=self.appointment)
         self.assertEqual(
             CrfMetaData.objects.filter(
                 entry_status=NEW,
                 crf_entry__app_label='td_infant',
-                crf_entry__model_name='solidfoodassessment',
-                appointment=self.appointment).count(), 1)
+                crf_entry__model_name='infantbirtharv',
+                appointment=self.appointment).count(), 0)
