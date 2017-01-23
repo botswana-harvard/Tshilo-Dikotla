@@ -29,9 +29,12 @@ class MaternalDeathReportAdmin(BaseMaternalModelAdmin):
         "days_hospitalized",
         "comment")
     radio_fields = {
+        "cause": admin.VERTICAL,
         "perform_autopsy": admin.VERTICAL,
         "participant_hospitalized": admin.VERTICAL,
-    }
-    filter_horizontal = ('cause', 'cause_category', 'diagnosis_code', 'reason_hospitalized', 'medical_responsibility')
+        "cause_category": admin.VERTICAL,
+        "diagnosis_code": admin.VERTICAL,
+        "medical_responsibility": admin.VERTICAL,
+        "reason_hospitalized": admin.VERTICAL}
 
 admin.site.register(MaternalDeathReport, MaternalDeathReportAdmin)

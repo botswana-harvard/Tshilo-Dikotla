@@ -42,14 +42,18 @@ class InfantDeathReportAdmin(BaseModelAdmin):
     )
 
     radio_fields = {
+        "reason_hospitalized": admin.VERTICAL,
+        "medical_responsibility": admin.VERTICAL,
+        "cause": admin.VERTICAL,
+        "cause_category": admin.VERTICAL,
         "perform_autopsy": admin.VERTICAL,
         "participant_hospitalized": admin.VERTICAL,
         "study_drug_relationship": admin.VERTICAL,
         "infant_nvp_relationship": admin.VERTICAL,
         "haart_relationship": admin.VERTICAL,
         "trad_med_relationship": admin.VERTICAL,
+        "diagnosis_code": admin.VERTICAL
     }
-    filter_horizontal = ('cause', 'cause_category', 'diagnosis_code', 'reason_hospitalized', 'medical_responsibility')
 
     actions = [
         export_as_csv_action(
