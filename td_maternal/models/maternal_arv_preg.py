@@ -6,7 +6,9 @@ from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
 from edc_base.model.validators import date_not_future
 # from edc_sync.models import SyncModelMixin
+from edc_export.models import ExportTrackingFieldsMixin
 from edc_visit_tracking.models import CrfInlineModelMixin
+
 
 from tshilo_dikotla.choices import ARV_INTERRUPTION_REASON, ARV_DRUG_LIST, REASON_ARV_STOP
 
@@ -50,7 +52,7 @@ class MaternalArvPreg(MaternalCrfModel):
         verbose_name_plural = 'Maternal ARV In This Preg'
 
 
-class MaternalArv(CrfInlineModelMixin, BaseUuidModel):
+class MaternalArv(CrfInlineModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ ARV table to indicate ARV medication taken by mother """
 

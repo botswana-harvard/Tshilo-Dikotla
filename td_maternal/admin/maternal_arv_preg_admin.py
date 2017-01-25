@@ -37,6 +37,7 @@ class MaternalArvAdmin(BaseMaternalModelAdmin):
                  'interrupt': 'maternal_arv_preg__interrupt',
                  'interrupt_other': 'maternal_arv_preg__interrupt_other'}),
         )]
+admin.site.register(MaternalArv, MaternalArvAdmin)
 
 
 class MaternalArvPregAdmin(BaseMaternalModelAdmin):
