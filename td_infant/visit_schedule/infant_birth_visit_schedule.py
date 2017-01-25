@@ -53,6 +53,9 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         RequisitionPanelTuple(
             50, 'td_lab', 'infantrequisition',
             'Infant Serum (Store Only)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            60, 'td_lab', 'infantrequisition',
+            'DBS (Store Only)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
     )
 
     infant_dnapcr_requisitions = (
@@ -70,7 +73,10 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             'Infant Glucose', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
         RequisitionPanelTuple(
             30, 'td_lab', 'infantrequisition',
-            'PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL)
+            'PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            40, 'td_lab', 'infantrequisition',
+            'DBS (Store Only)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
     )
 
     infant_18month_requisitions = (

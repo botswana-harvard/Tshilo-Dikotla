@@ -115,7 +115,8 @@ class AppConfiguration(BaseAppConfiguration):
                            PanelTuple('ELISA', 'TEST', 'WB'),
                            PanelTuple('Insulin', 'TEST', 'WB'),
                            PanelTuple('Infant PBMC PL', 'TEST', 'WB'),
-                           PanelTuple('Infant Serum (Store Only)', 'STORAGE', 'WB')],
+                           PanelTuple('Infant Serum (Store Only)', 'STORAGE', 'WB'),
+                           PanelTuple('DBS (Store Only)', 'STORAGE', 'WB')],
                  'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
                                   AliquotTypeTuple('Plasma', 'PL', '32'),
                                   AliquotTypeTuple('Buffy Coat', 'BC', '16'),
@@ -129,7 +130,8 @@ class AppConfiguration(BaseAppConfiguration):
                              ProfileTuple('PBMC Plasma (STORE ONLY)', 'WB'),
                              ProfileTuple('Infant Glucose', 'WB'),
                              ProfileTuple('Infant PBMC PL', 'WB'),
-                             ProfileTuple('Infant Serum (Store Only)', 'SERUM')],
+                             ProfileTuple('Infant Serum (Store Only)', 'SERUM'),
+                             ProfileTuple('DBS (Store Only)', 'WB')],
                  'profile_item': [ProfileItemTuple('Viral Load', 'PL', 1.0, 2),
                                   ProfileItemTuple('Viral Load', 'BC', 0.5, 1),
                                   ProfileItemTuple('PBMC VL', 'PL', 1.0, 4),
@@ -142,7 +144,8 @@ class AppConfiguration(BaseAppConfiguration):
                                   ProfileItemTuple('Infant Glucose', 'PL', 0.5, 1),
                                   ProfileItemTuple('Infant Serum (Store Only)', 'SERUM', 0.5, 1),
                                   ProfileItemTuple('Infant PBMC PL', 'PL', 1.0, 2),
-                                  ProfileItemTuple('Infant PBMC PL', 'PBMC', 1.0, 2)]}}
+                                  ProfileItemTuple('Infant PBMC PL', 'PBMC', 1.0, 2),
+                                  ProfileItemTuple('DBS (Store Only)', 'WB', 0.5, 1)]}}
     labeling_setup = {
         'zpl_template': [
             aliquot_label or ZplTemplateTuple(

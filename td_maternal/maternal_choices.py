@@ -366,6 +366,7 @@ INFLUENTIAL_IN_DECISION_MAKING = (
     ('auntie_most_influential', 'My auntie was the most influential.'),
     ('mother_in_law_most_influential', 'My mother-in-law was the most influential'),
     ('DWTA', 'I do not wish to answer this question'),
+    (NOT_APPLICABLE, 'Not Applicable'),
     (OTHER, 'Another person was the most influential (Please type in the description of this person below)')
 )
 

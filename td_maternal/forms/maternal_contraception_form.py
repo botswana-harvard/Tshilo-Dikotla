@@ -84,7 +84,7 @@ class MaternalContraceptionForm(BaseMaternalModelForm):
                cleaned_data.get('date_notified')):
                 raise forms.ValidationError(
                     'Participant pap smear result not known, no need to give pap smear status or notification date.')
-    
+
     class Meta:
         model = MaternalContraception
-        fields = '__all__'     
+        fields = '__all__'

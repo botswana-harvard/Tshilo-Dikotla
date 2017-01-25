@@ -161,14 +161,14 @@ class InfantRequisitionRuleGroup(RuleGroup):
         target_model=[('td_lab', 'infantrequisition')],
         target_requisition_panels=['DNA PCR'])
 
-#     require_elisa = RequisitionRule(
-#         logic=Logic(
-#             predicate=func_infant_elisa,
-#             consequence=UNKEYED,
-#             alternative=NOT_REQUIRED),
-#         target_model=[('td_lab', 'maternalrequisition')],
-#         target_requisition_panels=['ELISA'])
-# 
+    require_dbs = RequisitionRule(
+        logic=Logic(
+            predicate=func_infant_heu,
+            consequence=NOT_REQUIRED,
+            alternative=UNKEYED),
+        target_model=[('td_lab', 'infantrequisition')],
+        target_requisition_panels=['DBS (Store Only)'])
+
 #     require_plasma_pbmc = RequisitionRule(
 #         logic=Logic(
 #             predicate=func_plasma_pbmc,
