@@ -132,7 +132,7 @@ class AppConfiguration(BaseAppConfiguration):
                              ProfileTuple('Infant PBMC PL', 'WB'),
                              ProfileTuple('Infant Serum (Store Only)', 'SERUM'),
                              ProfileTuple('DBS (Store Only)', 'WB')],
-                 'profile_item': [ProfileItemTuple('Viral Load', 'PL', 1.0, 2),
+                 'profile_item': [ProfileItemTuple('Viral Load', 'PL', 1.0, 3),
                                   ProfileItemTuple('Viral Load', 'BC', 0.5, 1),
                                   ProfileItemTuple('PBMC VL', 'PL', 1.0, 4),
                                   ProfileItemTuple('PBMC VL', 'PBMC', 0.5, 4),

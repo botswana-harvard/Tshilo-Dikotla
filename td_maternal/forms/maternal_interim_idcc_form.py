@@ -34,7 +34,7 @@ class MaternalInterimIdccForm(BaseMaternalModelForm):
                     raise forms.ValidationError('You indicated that there was a VL value, please provide the'
                                                 ' date it was determined')
 
-            if cleaned_data.get('value_vl_size') == 'less_than' and cleaned_data.get('value_vl') != 400:
+            if cleaned_data.get('value_vl_size') == 'less_than' and cleaned_data.get('value_vl') != 40:
                 raise forms.ValidationError('You indicated that the value of the most recent VL is less_than a number,'
                                             ' therefore the value of VL should be 400')
 
@@ -43,7 +43,7 @@ class MaternalInterimIdccForm(BaseMaternalModelForm):
                                             ' number, therefore the value of VL should be 750000')
 
             if(cleaned_data.get('value_vl_size') == 'equal' and (cleaned_data.get('value_vl') > 750000 or
-               cleaned_data.get('value_vl') < 400)):
+               cleaned_data.get('value_vl') < 40)):
                 raise forms.ValidationError('You indicated that the value of the most recent VL is equal to a'
                                             ' number, therefore the value of VL should be between 400 and 750000'
                                             '(inclusive of 400 and 750,000)')

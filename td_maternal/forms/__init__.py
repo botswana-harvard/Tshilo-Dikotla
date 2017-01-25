@@ -20,7 +20,6 @@ from .maternal_arv_preg_form import MaternalArvForm
 from .antenatal_visit_membership_form import AntenatalVisitMembershipForm
 from .maternal_labour_del_form import MaternalLabourDelForm
 from .maternal_interim_idcc_form import MaternalInterimIdccForm
-from .maternal_azt_nvp_form import MaternalAztNvpForm
 from .maternal_diagnoses_form import MaternalDiagnosesForm
 from .maternal_labour_del_form import MaternalHivInterimHxForm
 from .maternal_postpartum_fu_form import MaternalPostPartumFuForm

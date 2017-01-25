@@ -26,7 +26,6 @@ from .maternal_clinical_measurements_one import MaternalClinicalMeasurementsOne
 from .antenatal_visit_membership import AntenatalVisitMembership
 from .maternal_interim_idcc_data import MaternalInterimIdcc
 from .maternal_clinical_measurements_two import MaternalClinicalMeasurementsTwo
-from .maternal_azt_nvp import MaternalAztNvp
 from .diagnoses_mixin import DiagnosesMixin
 from .maternal_diagnoses import MaternalDiagnoses
 from .maternal_labour_del import MaternalHivInterimHx

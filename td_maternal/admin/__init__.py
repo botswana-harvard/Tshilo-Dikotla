@@ -19,7 +19,6 @@ from .antenatal_visit_membership_admin import AntenataVisitMembershipAdmin
 from .maternal_labour_del_admin import MaternalLabourDelAdmin
 from .maternal_ultrasound_fu_admin import MaternalUltraSoundFuAdmin
 from .maternal_interim_idcc_admin import MaternalInterimIdccAdmin
-from .maternal_azt_nvp_admin import MaternalAztNvp
 from .maternal_diagnoses_admin import MaternalDiagnosesAdmin
 from .maternal_labour_del_admin import MaternalHivInterimHxAdmin
 from .maternal_postpartum_dep_admin import MaternalPostPartumDepAdmin
