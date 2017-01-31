@@ -2,17 +2,16 @@ from django.contrib import admin
 
 from edc_registration.models import RegisteredSubject
 
+from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin, BaseModelAdmin
 from ..forms import MaternalLocatorForm
 from ..models import MaternalLocator
 
-from .base_maternal_model_admin import BaseMaternalModelAdmin
 
-
-class MaternalLocatorAdmin(BaseMaternalModelAdmin):
+class MaternalLocatorAdmin(BaseModelAdmin):
 
     form = MaternalLocatorForm
 
-    fields = ('maternal_visit',
+    fields = (#'maternal_visit',
               'registered_subject',
               'date_signed',
               'mail_address',
@@ -38,7 +37,7 @@ class MaternalLocatorAdmin(BaseMaternalModelAdmin):
               'caretaker_cell',
               'caretaker_tel')
 
-    list_display = ('maternal_visit',
+    list_display = (#'maternal_visit',
                     'care_clinic',
                     'caretaker_name',
                     'caretaker_cell',

@@ -21,8 +21,9 @@ class TestInfantBirthMembership(BaseTestCase):
     def setUp(self):
         super(TestInfantBirthMembership, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
-        self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
-        self.registered_subject = self.maternal_consent.registered_subject
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
+        self.registered_subject = self.maternal_eligibility.registered_subject
         # maternal visit created here.
         self.antenatal_enrollment = AntenatalEnrollmentFactory(registered_subject=self.registered_subject)
         self.maternal_visit = MaternalVisit.objects.get(

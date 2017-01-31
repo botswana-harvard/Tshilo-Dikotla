@@ -3,7 +3,7 @@ from edc_constants.constants import NOT_REQUIRED, REQUIRED, ADDITIONAL, NOT_ADDI
 
 
 maternal_enrollment_entries = (
-    CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
+    #CrfTuple(10, 'td_maternal', 'maternallocator', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(20, 'td_maternal', 'maternalultrasoundinitial', REQUIRED, NOT_ADDITIONAL),
     CrfTuple(30, 'td_maternal', 'maternalobstericalhistory', NOT_REQUIRED, ADDITIONAL),
     CrfTuple(40, 'td_maternal', 'maternalmedicalhistory', NOT_REQUIRED, ADDITIONAL),

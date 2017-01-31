@@ -41,9 +41,8 @@ def show_elisa_requisition_hiv_status_ind(visit_instance):
 
 
 def disable_pbmc_vl_visit_2000m_2010m(visit_instance):
-
     if visit_instance.appointment.visit_definition.code in ['2000M', '2010M']:
-        return False
+        return True
 
 
 def func_require_cd4(visit_instance):
