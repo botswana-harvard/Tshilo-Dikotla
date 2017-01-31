@@ -13,6 +13,7 @@ class MaternalLocatorAdmin(BaseModelAdmin):
 
     fields = (#'maternal_visit',
               'registered_subject',
+              'report_datetime',
               'date_signed',
               'mail_address',
               'care_clinic',

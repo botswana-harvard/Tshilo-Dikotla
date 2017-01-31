@@ -100,7 +100,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
     @property
     def maternal_locator(self):
         return self.locator_model.objects.get(
-            maternal_visit__appointment__registered_subject__subject_identifier=self.subject_identifier)
+            registered_subject__subject_identifier=self.subject_identifier)
 
     @property
     def subject_identifier(self):

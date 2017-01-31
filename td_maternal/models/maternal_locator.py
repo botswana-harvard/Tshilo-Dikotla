@@ -1,15 +1,18 @@
 from django.db import models
+from django.utils import timezone
 
 # from edc_base.audit_trail import AuditTrail
 from django_crypto_fields.fields import EncryptedCharField
 from edc_appointment.models import Appointment
 from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import CellNumber, TelephoneNumber
+from edc_base.model.validators import (CellNumber, TelephoneNumber, 
+    datetime_not_before_study_start, datetime_not_future)
 from edc_constants.choices import YES_NO
 from edc_locator.models import LocatorMixin
 from edc_meta_data.managers import CrfMetaDataManager
 from edc_registration.models import RegisteredSubject
+
 
 from .maternal_visit import MaternalVisit
 
@@ -30,7 +33,15 @@ class MaternalLocator(LocatorMixin, BaseUuidModel):
 
     registered_subject = models.OneToOneField(RegisteredSubject, null=True)
 
-    appointment = models.ForeignKey(Appointment, null=True)
+    #appointment = models.ForeignKey(Appointment, null=True)
+    report_datetime = models.DateTimeField(
+        verbose_name="Report Date",
+        validators=[
+            datetime_not_before_study_start,
+            datetime_not_future, ],
+        default=timezone.now,
+        help_text=('If reporting today, use today\'s date/time, otherwise use '
+                   'the date/time this information was reported.'))
 
     care_clinic = OtherCharField(
         verbose_name="Health clinic where your infant will receive their routine care ",
