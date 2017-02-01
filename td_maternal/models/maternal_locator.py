@@ -2,13 +2,15 @@ from django.db import models
 from django.utils import timezone
 
 # from edc_base.audit_trail import AuditTrail
+    
 from django_crypto_fields.fields import EncryptedCharField
 from edc_appointment.models import Appointment
 from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import (CellNumber, TelephoneNumber, 
+from edc_base.model.validators import (CellNumber, TelephoneNumber,
     datetime_not_before_study_start, datetime_not_future)
 from edc_constants.choices import YES_NO
+from edc_export.models import ExportTrackingFieldsMixin
 from edc_locator.models import LocatorMixin
 from edc_meta_data.managers import CrfMetaDataManager
 from edc_registration.models import RegisteredSubject
@@ -26,14 +28,14 @@ class LocalCrfMetaDataManager(CrfMetaDataManager):
             pass
 
 
-class MaternalLocator(LocatorMixin, BaseUuidModel):
+class MaternalLocator(LocatorMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ A model completed by the user to capture locator information and
     the details of the infant caretaker. """
 
     registered_subject = models.OneToOneField(RegisteredSubject, null=True)
 
-    #appointment = models.ForeignKey(Appointment, null=True)
+    # appointment = models.ForeignKey(Appointment, null=True)
     report_datetime = models.DateTimeField(
         verbose_name="Report Date",
         validators=[

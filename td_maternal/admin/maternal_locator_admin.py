@@ -7,7 +7,7 @@ from ..forms import MaternalLocatorForm
 from ..models import MaternalLocator
 
 
-class MaternalLocatorAdmin(BaseModelAdmin):
+class MaternalLocatorAdmin(MembershipBaseModelAdmin, BaseModelAdmin):
 
     form = MaternalLocatorForm
 

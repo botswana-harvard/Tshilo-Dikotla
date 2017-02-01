@@ -144,7 +144,7 @@ class AppConfiguration(BaseAppConfiguration):
                                   ProfileItemTuple('Infant Glucose', 'PL', 0.5, 1),
                                   ProfileItemTuple('Infant Serum (Store Only)', 'SERUM', 0.5, 1),
                                   ProfileItemTuple('Infant PBMC PL', 'PL', 1.0, 2),
-                                  ProfileItemTuple('Infant PBMC PL', 'PBMC', 1.0, 2),
+                                  ProfileItemTuple('Infant PBMC PL', 'PBMC', 1.0, 7),
                                   ProfileItemTuple('DBS (Store Only)', 'WB', 0.5, 1)]}}
     labeling_setup = {
         'zpl_template': [

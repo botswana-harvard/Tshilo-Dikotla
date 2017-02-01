@@ -40,11 +40,6 @@ def show_elisa_requisition_hiv_status_ind(visit_instance):
     return False
 
 
-def disable_pbmc_vl_visit_2000m_2010m(visit_instance):
-    if visit_instance.appointment.visit_definition.code in ['2000M', '2010M']:
-        return True
-
-
 def func_require_cd4(visit_instance):
     """Return true if mother is HIV+ and does not have a CD4 in the last 3 months."""
     maternal_status_helper = MaternalStatusHelper(visit_instance)
@@ -159,14 +154,6 @@ class MaternalRequisitionRuleGroup(RuleGroup):
             alternative=NOT_REQUIRED),
         target_model=[('td_lab', 'maternalrequisition')],
         target_requisition_panels=['PBMC VL', 'Viral Load'])
-
-    disable_pbmb_vl = RequisitionRule(
-        logic=Logic(
-            predicate=disable_pbmc_vl_visit_2000m_2010m,
-            consequence=NOT_REQUIRED,
-            alternative=UNKEYED),
-        target_model=[('td_lab', 'maternalrequisition')],
-        target_requisition_panels=['PBMC VL'])
 
     require_pbmc_storage = RequisitionRule(
         logic=Logic(
