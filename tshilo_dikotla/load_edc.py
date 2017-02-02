@@ -1,4 +1,5 @@
 import os
+import sys
 from unipath import Path
 from django.contrib import admin
 
@@ -16,8 +17,12 @@ from td_list.models import RandomizationItem
 
 def load_edc():
 
-    f = open(os.path.join(
-             Path(os.path.dirname(os.path.realpath(__file__))).ancestor(2).child('etc'), 'randomization.csv'))
+    if 'test' in sys.argv:
+        f = open(os.path.join(
+                 Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1).child('td_maternal').child('tests'), 'test_randomization.csv'))
+    else:
+        f = open(os.path.join(
+                 Path(os.path.dirname(os.path.realpath(__file__))).ancestor(2).child('etc'), 'randomization.csv'))
     for index, line in enumerate(f.readlines()):
         if index == 0:
             continue

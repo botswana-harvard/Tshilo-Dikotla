@@ -5,11 +5,11 @@ from edc_rule_groups.classes import RuleGroup, site_rule_groups, Logic, CrfRule,
 
 from tshilo_dikotla.constants import NO_MODIFICATIONS, START, MODIFIED
 from td_maternal.rule_groups import func_mother_pos
-from td_maternal.models import MaternalVisit
+from td_maternal.models import MaternalVisit, MaternalRando
 
 from .models import InfantArvProph
 
-from .models import InfantVisit, InfantFu, InfantBirthData, InfantFeeding
+from .models import InfantVisit, InfantFu, InfantBirthData, InfantFeeding, InfantNvpDispensing
 
 
 def get_previous_visit(visit_instance, timepoints, visit_model):
@@ -32,9 +32,16 @@ def get_previous_visit(visit_instance, timepoints, visit_model):
     return None
 
 
+def get_subject_identifier(infant_subject_identifier):
+    try:
+        return RegisteredSubject.objects.get(subject_identifier=infant_subject_identifier)
+    except RegisteredSubject.DoesNotExist:
+        pass
+
+
 def maternal_hiv_status_visit(visit_instance):
-    maternal_registered_subject = RegisteredSubject.objects.get(
-        subject_identifier=visit_instance.appointment.registered_subject.relative_identifier)
+    maternal_registered_subject = get_subject_identifier(
+        visit_instance.appointment.registered_subject.relative_identifier)
     try:
         maternal_visit_2000 = MaternalVisit.objects.get(
             subject_identifier=maternal_registered_subject.subject_identifier,
@@ -70,6 +77,33 @@ def func_infant_heu(visit_instance):
     return False
 
 
+def func_show_infant_nvp_dispensing(visit_instance):
+    show_infant_nvp_dispensing = False
+    maternal_registered_subject = get_subject_identifier(
+        visit_instance.appointment.registered_subject.relative_identifier)
+    try:
+        maternal_rando = MaternalRando.objects.get(subject_identifier=maternal_registered_subject.subject_identifier)
+        show_infant_nvp_dispensing = func_infant_heu and maternal_rando.rx.strip('\n') == 'NVP'
+    except MaternalRando.DoesNotExist:
+        pass
+    return show_infant_nvp_dispensing
+
+
+def func_show_nvp_adjustment_2010(visit_instance):
+    nvp_adjustment = False
+    try:
+        if visit_instance.appointment.visit_definition.code == '2010':
+            visit_2000 = InfantVisit.objects.filter(
+                appointment__visit_definition__code='2000').order_by('created').first()
+            nvp_dispensing = InfantNvpDispensing.objects.get(infant_visit=visit_2000)
+            nvp_adjustment = func_infant_heu and nvp_dispensing.nvp_prophylaxis == YES
+    except InfantVisit.DoesNotExist:
+        pass
+    except InfantNvpDispensing.DoesNotExist:
+        pass
+    return nvp_adjustment
+
+
 class InfantRegisteredSubjectRuleGroup(RuleGroup):
 
     arv_proph = CrfRule(
@@ -85,6 +119,20 @@ class InfantRegisteredSubjectRuleGroup(RuleGroup):
             consequence=UNKEYED,
             alternative=NOT_REQUIRED),
         target_model=[('td_infant', 'infantbirtharv'), ])
+
+    infant_nvp_dispensing = CrfRule(
+        logic=Logic(
+            predicate=func_show_infant_nvp_dispensing,
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_infant', 'infantnvpdispensing'), ])
+
+    nvp_adjustment = CrfRule(
+        logic=Logic(
+            predicate=func_show_nvp_adjustment_2010,
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_infant', 'infantnvpadjustment'), ])
 
     class Meta:
         app_label = 'td_infant'

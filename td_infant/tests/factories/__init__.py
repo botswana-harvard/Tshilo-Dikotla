@@ -7,3 +7,4 @@ from .infant_fu_factory import InfantFuFactory
 from .infant_fu_dx_factory import InfantFuDxFactory
 from .infant_fu_physical_factory import InfantFuPhysicalFactory
 from .infant_fu_immunizations_factory import InfantFuImmunizationsFactory
+from .infant_nvp_dispensing_factory import InfantNvpDispensingFactory

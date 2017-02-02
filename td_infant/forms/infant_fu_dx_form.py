@@ -3,7 +3,6 @@ from django import forms
 from edc_constants.constants import NO, YES
 
 from ..models import InfantFuDx, InfantFuDxItems, InfantFu
-from ..forms import InfantFuForm
 from .base_infant_model_form import BaseInfantModelForm
 
 
