@@ -12,7 +12,7 @@ class InfantNvpDispensingForm(BaseInfantModelForm, forms.ModelForm):
     def clean(self):
         cleaned_data = super(InfantNvpDispensingForm, self).clean()
         self.validate_nvp_prohylaxis()
-        self.validate_correct_dose()
+        self.validate_azt_prophylaxis()
         return cleaned_data
 
     def validate_nvp_prohylaxis(self):
@@ -20,7 +20,7 @@ class InfantNvpDispensingForm(BaseInfantModelForm, forms.ModelForm):
         if cleaned_data.get('nvp_prophylaxis') == YES:
             if not cleaned_data.get('azt_prophylaxis'):
                 raise forms.ValidationError(
-                    'Was the infant given AZT infant prophylaxis? Please answer YES or NO')
+                    'Was the infant given AZT infant prophylaxis? Please answer YES or NO.')
             if cleaned_data.get('reason_not_given'):
                 raise forms.ValidationError(
                     'Infant received NVP prophylaxis, do not give reason.')

@@ -1011,21 +1011,21 @@ class TestRuleGroups(BaseTestCase):
         infant_registered_subject = RegisteredSubject.objects.get(
             relative_identifier=self.registered_subject.subject_identifier,
             subject_type='infant')
-        self.infant_birth = InfantBirthFactory(
+        InfantBirthFactory(
             registered_subject=infant_registered_subject,
             maternal_labour_del=self.maternal_labour_del)
-        self.appointment = Appointment.objects.get(
+        appointment = Appointment.objects.get(
             registered_subject=infant_registered_subject,
             visit_definition__code='2000')
-        self.infant_visit = InfantVisitFactory(appointment=self.appointment)
-        InfantNvpDispensingFactory(infant_visit=self.infant_visit, nvp_prophylaxis=NO)
-        self.appointment = Appointment.objects.get(
+        infant_visit = InfantVisitFactory(appointment=appointment)
+        InfantNvpDispensingFactory(infant_visit=infant_visit, nvp_prophylaxis=NO)
+        appointment = Appointment.objects.get(
             registered_subject=infant_registered_subject,
             visit_definition__code='2010')
-        self.infant_visit = InfantVisitFactory(appointment=self.appointment)
+        InfantVisitFactory(appointment=appointment)
         self.assertEqual(
             CrfMetaData.objects.filter(
                 entry_status=NEW,
                 crf_entry__app_label='td_infant',
                 crf_entry__model_name='infantnvpadjustment',
-                appointment=self.appointment).count(), 0)
+                appointment=appointment).count(), 0)
