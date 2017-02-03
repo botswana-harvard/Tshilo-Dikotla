@@ -8,7 +8,10 @@ from tshilo_dikotla.base_model_admin import BaseModelAdmin
 from ..forms import SolidFoodAssessementForm
 from ..models import SolidFoodAssessment
 
-class SolidFoodAssessmentAdmin(BaseModelAdmin):
+from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
+
+
+class SolidFoodAssessmentAdmin(BaseInfantScheduleModelAdmin, admin.ModelAdmin):
 
     form = SolidFoodAssessementForm
 
@@ -27,7 +30,7 @@ class SolidFoodAssessmentAdmin(BaseModelAdmin):
                     'eggs': admin.VERTICAL,
                     'yogurt': admin.VERTICAL,
                     'cheese': admin.VERTICAL,
-                    'rations': admin.VERTICAL,                     
+                    'rations': admin.VERTICAL,
                     }
     filter_horizontal = ('solid_foods', 'rations_receviced')
 

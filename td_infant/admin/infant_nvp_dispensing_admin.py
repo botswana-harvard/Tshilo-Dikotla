@@ -3,10 +3,10 @@ from django.contrib import admin
 from ..forms import InfantNvpDispensingForm
 from ..models import InfantNvpDispensing, MaternalLabDel
 
-from .base_maternal_model_admin import BaseMaternalModelAdmin
+from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
 
 
-class InfantNvpDispensingAdmin(BaseMaternalModelAdmin, admin.ModelAdmin):
+class InfantNvpDispensingAdmin(BaseInfantScheduleModelAdmin, admin.ModelAdmin):
 
     form = InfantNvpDispensingForm
 
