@@ -11,7 +11,7 @@ from ..models import SolidFoodAssessment
 from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
 
 
-class SolidFoodAssessmentAdmin(BaseInfantScheduleModelAdmin, admin.ModelAdmin):
+class SolidFoodAssessmentAdmin(BaseInfantScheduleModelAdmin, BaseModelAdmin):
 
     form = SolidFoodAssessementForm
 

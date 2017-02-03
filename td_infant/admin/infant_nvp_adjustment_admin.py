@@ -14,7 +14,7 @@ class InfantNvpAdjustmentAdmin(BaseInfantScheduleModelAdmin, admin.ModelAdmin):
         'dose_adjustment': admin.VERTICAL,
         'dose_4_weeks': admin.VERTICAL}
 
-    list_display = {'infant_visit', 'dose_adjustment', 'dose_4_weeks'}
+    list_display = ('infant_visit', 'dose_adjustment', 'dose_4_weeks',)
 
-    list_filter = {'dose_adjustment', 'dose_4_weeks'}
+    list_filter = ('dose_adjustment', 'dose_4_weeks',)
 admin.site.register(InfantNvpAdjustment, InfantNvpAdjustmentAdmin)
