@@ -91,10 +91,12 @@ def func_show_infant_nvp_dispensing(visit_instance):
 
 def func_show_nvp_adjustment_2010(visit_instance):
     nvp_adjustment = False
+    subject_identifier = visit_instance.appointment.registered_subject.subject_identifier
     try:
         if visit_instance.appointment.visit_definition.code == '2010':
             visit_2000 = InfantVisit.objects.filter(
-                appointment__visit_definition__code='2000').order_by('created').first()
+                appointment__visit_definition__code='2000',
+                appointment__registered_subject__subject_identifier=subject_identifier).order_by('created').first()
             nvp_dispensing = InfantNvpDispensing.objects.get(infant_visit=visit_2000)
             nvp_adjustment = func_infant_heu and nvp_dispensing.nvp_prophylaxis == YES
     except InfantVisit.DoesNotExist:

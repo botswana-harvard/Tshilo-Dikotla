@@ -208,7 +208,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
     visit_definitions['2180'] = {
         'title': 'Infant 18 Month Visit',
         'time_point': 180,
-        'base_interval': 20,
+        'base_interval': 21,
         'base_interval_unit': 'M',
         'window_lower_bound': 0,
         'window_lower_bound_unit': 'D',
@@ -231,7 +231,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
     visit_definitions['2240'] = {
         'title': 'Infant 24 Month Visit',
         'time_point': 240,
-        'base_interval': 24,
+        'base_interval': 27,
         'base_interval_unit': 'M',
         'window_lower_bound': 0,
         'window_lower_bound_unit': 'D',
@@ -254,7 +254,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
     visit_definitions['2300'] = {
         'title': 'Infant 30 Month Visit',
         'time_point': 300,
-        'base_interval': 30,
+        'base_interval': 32,
         'base_interval_unit': 'M',
         'window_lower_bound': 0,
         'window_lower_bound_unit': 'D',
