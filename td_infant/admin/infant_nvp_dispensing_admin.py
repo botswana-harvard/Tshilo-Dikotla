@@ -31,9 +31,9 @@ class InfantNvpDispensingAdmin(BaseInfantScheduleModelAdmin, admin.ModelAdmin):
                      'hostname_modified'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
-                 'infant_nvp_dispensing__infant_visit__appointment__registered_subject__subject_identifier',
+                 'infant_visit__appointment__registered_subject__subject_identifier',
                  'gender': 'registered_subject__gender',
-                 'dob': 'registered_subject__dob',
+                 'dob': 'infant_visit__appointment__registered_subject__dob',
                  'nvp_prophylaxis': 'infant_nvp_dispensing__nvp_prophylaxis',
                  'reason_not_given': 'infant_nvp_dispensing__reason_not_given',
                  'azt_prophylaxis': 'infant_nvp_dispensing__azt_prophylaxis',

@@ -118,7 +118,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'title': 'Infant 1 Month Visit',
         'time_point': 10,
         'base_interval': 1,
-        'base_interval_unit': 'D',
+        'base_interval_unit': 'M',
         'window_lower_bound': 0,
         'window_lower_bound_unit': 'D',
         'window_upper_bound': 0,
