@@ -378,7 +378,7 @@ OFF_STUDY_REASON = [
      'Completion of protocol required period of time for observation (see Study Protocol for definition of'
      ' "Completion") (skip to end of form)'),
     ('unable_to_determine_ga', 'Unable to confirm GA by Ultrasound.'),
-    ('enrolled_erroneously', 'Enrolled erroneously – did not meet eligibility criteria')
+    ('enrolled_erroneously', 'Enrolled erroneously – did not meet eligibility criteria'),
     (OTHER, 'Other'),
 ]
 

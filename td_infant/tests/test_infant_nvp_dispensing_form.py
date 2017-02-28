@@ -19,7 +19,7 @@ from .factories import InfantBirthFactory, InfantVisitFactory
 class TestInfantNvpDispensingForm(BaseTestCase):
 
     def setUp(self):
-        super(InfantNvpDispensingForm, self).setUp()
+        super(TestInfantNvpDispensingForm, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
         self.maternal_consent = MaternalConsentFactory(
             maternal_eligibility=self.maternal_eligibility)

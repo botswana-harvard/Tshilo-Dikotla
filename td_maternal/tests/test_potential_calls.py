@@ -3,7 +3,7 @@ from django.utils import timezone
 from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES, NO, NEG, NOT_APPLICABLE, UNK
 from edc_appointment.models import Appointment
 
-from td_maternal.models import MaternalVisit, PotentialCall
+from td_maternal.models import MaternalVisit
 
 from .base_test_case import BaseTestCase
 from .factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory, MaternalConsentFactory,
@@ -19,32 +19,32 @@ class TestPotentialCalls(BaseTestCase):
         self.maternal_consent = MaternalConsentFactory(registered_subject=self.maternal_eligibility.registered_subject)
         self.registered_subject = self.maternal_consent.registered_subject
 
-    def test_appointment_creates_potential_call(self):
-        """test that creating an appointment creates a similar potential call record"""
-        self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
-        self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
-                                                     visit_code='1010M').exists())
-        self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
-                                                     visit_code='1020M').exists())
-        MaternalLabourDelFactory(registered_subject=self.registered_subject)
-        self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
-                                                     visit_code='2000M').exists())
-        self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
-                                                     visit_code='2010M').exists())
-        self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
-                                                     visit_code='2020M').exists())
-        self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
-                                                     visit_code='2060M').exists())
-        self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
-                                                     visit_code='2120M').exists())
-        self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
-                                                     visit_code='2180M').exists())
-        self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
-                                                     visit_code='2240M').exists())
-        self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
-                                                     visit_code='2300M').exists())
-        self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
-                                                     visit_code='2360M').exists())
+#     def test_appointment_creates_potential_call(self):
+#         """test that creating an appointment creates a similar potential call record"""
+#         self.create_mother(self.hiv_neg_mother_options(self.registered_subject))
+#         self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
+#                                                      visit_code='1010M').exists())
+#         self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
+#                                                      visit_code='1020M').exists())
+#         MaternalLabourDelFactory(registered_subject=self.registered_subject)
+#         self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
+#                                                      visit_code='2000M').exists())
+#         self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
+#                                                      visit_code='2010M').exists())
+#         self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
+#                                                      visit_code='2020M').exists())
+#         self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
+#                                                      visit_code='2060M').exists())
+#         self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
+#                                                      visit_code='2120M').exists())
+#         self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
+#                                                      visit_code='2180M').exists())
+#         self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
+#                                                      visit_code='2240M').exists())
+#         self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
+#                                                      visit_code='2300M').exists())
+#         self.assertTrue(PotentialCall.objects.filter(subject_identifier=self.registered_subject.subject_identifier,
+#                                                      visit_code='2360M').exists())
 
     def create_mother(self, status_options):
         self.antenatal_enrollment = AntenatalEnrollmentFactory(**status_options)

@@ -39,5 +39,5 @@ from .maternal_contraception import MaternalContraception
 from .maternal_randomization import MaternalRando
 from .maternal_substance_during_preg import MaternalSubstanceUseDuringPreg
 from .maternal_substance_prior_preg import MaternalSubstanceUsePriorPreg
-from .potential_call import PotentialCall
+from .maternal_contact import MaternalContact
 from .signals import *

@@ -423,3 +423,21 @@ POS_NEG_IND = (
     (NEG, 'Negative'),
     (IND, 'Indeterminate')
 )
+
+CALL_REASON = (
+    ('follow_up', 'Follow up'),
+    ('follow_up_pending_delivery', 'Follow up for pending delivery'),
+    ('missed_visit_follow_up', 'Missed visit follow up'),
+    ('scheduled_appointment', 'Confirm scheduled appointment'),
+    ('follow_up_delivery', 'Follow up on delivery status'),
+    ('follow_up_labs', 'Follow up on abnormal labs'),
+    ('nvp_2_week_adjustment', 'NCP 2 week dose adjustment'),
+    (OTHER, 'Other, specify')
+)
+
+CONTACT_TYPE = (
+    ('voice_call', 'Voice Call'),
+    ('text_message', 'Text Message'),
+    ('in_person', 'In person, e.g. Home visit')
+)
+
