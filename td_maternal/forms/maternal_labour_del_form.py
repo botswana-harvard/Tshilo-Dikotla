@@ -15,7 +15,7 @@ class MaternalLabourDelForm(forms.ModelForm):
         cleaned_data = super(MaternalLabourDelForm, self).clean()
         self.validate_valid_regimen_hiv_pos_only()
         return cleaned_data
-    
+
     def validate_valid_regimen_hiv_pos_only(self):
         cleaned_data = self.cleaned_data
         registered_subject = cleaned_data.get('registered_subject')
@@ -36,7 +36,7 @@ class MaternalLabourDelForm(forms.ModelForm):
                 raise forms.ValidationError('Participant\'s HIV status is {}, valid regimen duration should be Not Applicable.'.format(maternal_status_helper.hiv_status))
             if cleaned_data.get('arv_initiation_date'):
                 raise forms.ValidationError('Participant\'s HIV status is {}, arv initiation date should not filled.'.format(maternal_status_helper.hiv_status))
-    
+
     class Meta:
         model = MaternalLabourDel
         fields = '__all__'

@@ -1,4 +1,3 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.apps import apps
 
@@ -6,7 +5,7 @@ from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
 # from edc_code_lists.models import WcsDxAdult
-from edc_constants.choices import YES_NO, YES_NO_UNKNOWN, YES_NO_NA
+from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE, YES, POS
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.models import CrfInlineModelMixin
@@ -119,7 +118,7 @@ class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin, AppointmentMixin, 
     objects = MaternalLabourDelManager()
 
     def save(self, *args, **kwargs):
-        self.live_infants_to_register = 1
+        # self.live_infants_to_register = 1
         super(MaternalLabourDel, self).save(*args, **kwargs)
 
     def __str__(self):

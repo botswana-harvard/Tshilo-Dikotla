@@ -36,9 +36,9 @@ class MaternalContactAdmin(BaseModelAdmin):
 
     list_display = [
         'registered_subject', 'contact_type',
-        'visit_code', 'call_reason', 'contact_success']
+        'contact_datetime', 'call_reason', 'contact_success']
 
-    list_filter = ['registered_subject', 'contact_type', 'call_reason', 'contact_success']
+    list_filter = ['contact_type', 'call_reason', 'contact_success']
 
     radio_fields = {
         'contact_type': admin.VERTICAL,
@@ -46,7 +46,7 @@ class MaternalContactAdmin(BaseModelAdmin):
         'contact_success': admin.VERTICAL
     }
 
-    search_fields = ['subject_identifier', 'contact_type', 'call_reason', 'contact_success']
+    search_fields = ['registered_subject__subject_identifier', 'contact_type', 'call_reason', 'contact_success']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "registered_subject":

@@ -431,7 +431,7 @@ CALL_REASON = (
     ('scheduled_appointment', 'Confirm scheduled appointment'),
     ('follow_up_delivery', 'Follow up on delivery status'),
     ('follow_up_labs', 'Follow up on abnormal labs'),
-    ('nvp_2_week_adjustment', 'NCP 2 week dose adjustment'),
+    ('nvp_2_week_adjustment', 'NVP 2 week dose adjustment'),
     (OTHER, 'Other, specify')
 )
 

@@ -1,11 +1,12 @@
 from django.db import models
 
 # from edc_base.audit_trail import AuditTrail
+from edc_base.model.models import BaseUuidModel
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
-from edc_visit_tracking.models import CrfInlineModelMixin
+from edc_export.models import ExportTrackingFieldsMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-from edc_base.model.models import BaseUuidModel
+from edc_visit_tracking.models import CrfInlineModelMixin
 
 from tshilo_dikotla.choices import ARV_STATUS_WITH_NEVER
 
@@ -39,7 +40,7 @@ class InfantArvProph(InfantCrfModel):
         verbose_name_plural = 'Infant NVP or AZT Proph'
 
 
-class InfantArvProphMod(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
+class InfantArvProphMod(CrfInlineModelMixin, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
     """ A model completed by the user on the infant's nvp or azt prophylaxis modifications. """
 
     infant_arv_proph = models.ForeignKey(InfantArvProph)

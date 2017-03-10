@@ -8,7 +8,6 @@ class MaternalContactForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalContactForm, self).clean()
-        self.validate_more_children()
         self.validate_maternal_locator()
         self.validate_contact_success()
         return cleaned_data

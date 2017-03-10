@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 
 # from edc_base.audit_trail import AuditTrail
-    
 from django_crypto_fields.fields import EncryptedCharField
 from edc_appointment.models import Appointment
 from edc_base.model.fields import OtherCharField

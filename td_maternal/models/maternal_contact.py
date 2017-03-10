@@ -46,18 +46,15 @@ class MaternalContact(AppointmentMixin, SyncModelMixin, BaseUuidModel):
         null=True,
         blank=True)
 
-    visit_code = models.CharField(
-        max_length=10)
-
     call_reason = models.CharField(
         verbose_name='Reason for call',
-        max_length=25,
+        max_length=30,
         choices=CALL_REASON,
     )
 
     call_reason_other = models.CharField(
         verbose_name='Other, specify',
-        max_length=25,
+        max_length=70,
         null=True,
         blank=True
     )
@@ -71,7 +68,7 @@ class MaternalContact(AppointmentMixin, SyncModelMixin, BaseUuidModel):
 
     contact_comment = models.TextField(
         verbose_name='Outcome of call',
-        max_length=150,
+        max_length=500,
         null=True,
         blank=True
     )

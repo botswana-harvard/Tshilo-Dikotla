@@ -11,10 +11,10 @@ from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
 class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
-    
+
     dashboard_type = 'maternal'
     form = MaternalLabourDelForm
-    
+
     list_display = ('registered_subject',
                     'delivery_datetime',
                     'labour_hrs',
@@ -25,7 +25,7 @@ class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
                    'valid_regiment_duration')
 
     search_fields = ('registered_subject__subject_identifier', )
-    readonly_fields = ('live_infants_to_register',)
+    # readonly_fields = ('live_infants_to_register',)
 
     radio_fields = {'delivery_time_estimated': admin.VERTICAL,
                     'delivery_hospital': admin.VERTICAL,
