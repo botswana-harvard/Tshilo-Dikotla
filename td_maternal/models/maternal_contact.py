@@ -102,4 +102,4 @@ class MaternalContact(AppointmentMixin, SyncModelMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'td_maternal'
-        unique_together = ('visit_code', 'registered_subject', 'contact_datetime')
+        unique_together = ('registered_subject', 'contact_datetime')

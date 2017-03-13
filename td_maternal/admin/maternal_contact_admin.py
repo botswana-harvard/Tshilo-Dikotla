@@ -28,7 +28,6 @@ class MaternalContactAdmin(BaseModelAdmin):
         'report_datetime',
         'contact_type',
         'contact_datetime',
-        'visit_code',
         'call_reason',
         'call_reason_other',
         'contact_success',

@@ -87,6 +87,10 @@ class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin, AppointmentMixin, 
     live_infants_to_register = models.IntegerField(
         verbose_name="How many babies are you registering to the study? ")
 
+    still_births = models.IntegerField(
+        default=0,
+        verbose_name="How many still births?")
+
     valid_regiment_duration = models.CharField(
         verbose_name="(Interviewer) If HIV+ve, has the participant been on the ART "
                      "regimen for at least 4 weeks in pregnancy?",
