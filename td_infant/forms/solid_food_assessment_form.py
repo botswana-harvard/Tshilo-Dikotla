@@ -24,7 +24,7 @@ class SolidFoodAssessementForm(BaseInfantModelForm):
         self.validate_has_had_eggs()
         self.validate_has_had_yogurt()
         self.validate_has_had_cheese()
-        # self.validate_other_solid_food_assessment_specified()
+        self.validate_other_solid_food_assessment_specified()
         return cleaned_data
 
     def validate_had_any_poridge(self):
