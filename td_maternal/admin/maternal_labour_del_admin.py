@@ -1,6 +1,8 @@
 from django.contrib import admin
+from collections import OrderedDict
 
 from edc_registration.models import RegisteredSubject
+from edc_export.actions import export_as_csv_action
 
 from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
 
@@ -34,6 +36,20 @@ class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
                     'csection_reason': admin.VERTICAL,
                     'csection_reason': admin.VERTICAL, }
     filter_horizontal = ('delivery_complications',)
+
+    actions = [
+        export_as_csv_action(
+            description="CSV Export of Maternal Deliveries",
+            fields=[],
+            delimiter=',',
+            exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
+                     'hostname_modified', ],
+            extra_fields=OrderedDict(
+                {'subject_identifier': 'registered_subject__subject_identifier',
+                 'gender': 'registered_subject__gender',
+                 'dob': 'registered_subject__dob',
+                 'registered': 'registered_subject__registration_datetime'}),
+        )]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "registered_subject":

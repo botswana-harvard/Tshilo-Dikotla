@@ -2,10 +2,10 @@ from django.contrib import admin
 
 from edc_export.actions import export_as_csv_action
 from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
-# from lis.labeling.actions import print_aliquot_label
+from lis.labeling.actions import print_aliquot_label
 
 from ..actions import create_order, reject_aliquot_label
-from ..classes.aliquot_label import print_aliquot_label
+# from ..classes.aliquot_label import print_aliquot_label
 from ..models import Aliquot
 
 
@@ -19,7 +19,7 @@ class AliquotAdmin(MembershipBaseModelAdmin):
                             'hostname_modified', 'user_created', 'user_modified'],)]
 
     list_display = ("aliquot_identifier", 'subject_identifier',
-                    'processing', #'related',
+                    'processing',  # 'related',
                     'to_receive', 'drawn', "aliquot_type",
                     'aliquot_condition', 'is_packed', 'is_rejected', 'created',
                     'user_created', 'hostname_created')

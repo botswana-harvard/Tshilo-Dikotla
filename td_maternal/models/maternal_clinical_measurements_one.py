@@ -1,8 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-from edc_registration.models import RegisteredSubject
-
 from .base_maternal_clinical_measurements import BaseMaternalClinicalMeasurements
 
 
@@ -12,9 +10,8 @@ class MaternalClinicalMeasurementsOne(BaseMaternalClinicalMeasurements):
         max_digits=5,
         decimal_places=2,
         verbose_name="Mother's height? ",
-        validators=[MinValueValidator(134), MaxValueValidator(195), ],
+        validators=[MinValueValidator(114), MaxValueValidator(195), ],
         help_text="Measured in Centimeters (cm)")
-
 
     class Meta:
         app_label = 'td_maternal'
