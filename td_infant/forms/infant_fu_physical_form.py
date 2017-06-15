@@ -28,17 +28,20 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
 
     def validate_height(self):
         cleaned_data = self.cleaned_data
-        visit = ['2000', '2010', '2020', '2060', '2120', '2180', '2240', '2300', '2360']
+        visit = ['2000', '2010', '2020', '2060',
+                 '2120', '2180', '2240', '2300', '2360']
 
         if (not cleaned_data.get('infant_visit').appointment.visit_definition.code == '2000' and
                 not cleaned_data.get('infant_visit').appointment.visit_definition.code == '2010'):
-            prev_visit = visit.index(cleaned_data.get('infant_visit').appointment.visit_definition.code) - 1
+            prev_visit = visit.index(
+                cleaned_data.get('infant_visit').appointment.visit_definition.code) - 1
             while prev_visit > 0:
                 try:
-                    registered_subject = cleaned_data.get('infant_visit').appointment.registered_subject
-                    prev_fu_phy = InfantFuPhysical.objects.get(
+                    registered_subject = cleaned_data.get(
+                        'infant_visit').appointment.registered_subject
+                    prev_fu_phy = InfantFuPhysical.objects.filter(
                         infant_visit__appointment__registered_subject=registered_subject,
-                        infant_visit__appointment__visit_definition__code=visit[prev_visit])
+                        infant_visit__appointment__visit_definition__code=visit[prev_visit]).order_by('-created').first()
                     if cleaned_data.get('height') < prev_fu_phy.height:
                         raise forms.ValidationError(
                             'You stated that the height for the participant as {}, yet in visit {} '
@@ -50,17 +53,20 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
 
     def validate_head_circum(self):
         cleaned_data = self.cleaned_data
-        visit = ['2000', '2010', '2020', '2060', '2120', '2180', '2240', '2300', '2360']
+        visit = ['2000', '2010', '2020', '2060',
+                 '2120', '2180', '2240', '2300', '2360']
 
         if (not cleaned_data.get('infant_visit').appointment.visit_definition.code == '2000' and
                 not cleaned_data.get('infant_visit').appointment.visit_definition.code == '2000'):
-            prev_visit = visit.index(cleaned_data.get('infant_visit').appointment.visit_definition.code) - 1
+            prev_visit = visit.index(
+                cleaned_data.get('infant_visit').appointment.visit_definition.code) - 1
             while prev_visit > 0:
                 try:
-                    registered_subject = cleaned_data.get('infant_visit').appointment.registered_subject
-                    prev_fu_phy = InfantFuPhysical.objects.get(
+                    registered_subject = cleaned_data.get(
+                        'infant_visit').appointment.registered_subject
+                    prev_fu_phy = InfantFuPhysical.objects.filter(
                         infant_visit__appointment__registered_subject=registered_subject,
-                        infant_visit__appointment__visit_definition__code=visit[prev_visit])
+                        infant_visit__appointment__visit_definition__code=visit[prev_visit]).order_by('-created').first()
                     if cleaned_data.get('head_circumference') < prev_fu_phy.head_circumference:
                         raise forms.ValidationError(
                             'You stated that the head circumference for the participant as {}, '
@@ -77,13 +83,15 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
         try:
             subject_identifier = cleaned_data.get(
                 'infant_visit').appointment.registered_subject.subject_identifier
-            infant_birth = InfantBirth.objects.get(registered_subject__subject_identifier=subject_identifier)
+            infant_birth = InfantBirth.objects.get(
+                registered_subject__subject_identifier=subject_identifier)
             if (cleaned_data.get('report_datetime').date() <
                     infant_birth.dob):
                 raise forms.ValidationError('Report date {} cannot be before infant DOB of {}'.format(
                     cleaned_data.get('report_datetime').date(),
                     cleaned_data.get('infant_visit').appointment.registered_subject.dob))
-            relative_identifier = cleaned_data.get('infant_visit').appointment.registered_subject.relative_identifier
+            relative_identifier = cleaned_data.get(
+                'infant_visit').appointment.registered_subject.relative_identifier
             maternal_consent = MaternalConsent.objects.get(
                 maternal_eligibility__registered_subject__subject_identifier=relative_identifier)
             if cleaned_data.get('report_datetime') < maternal_consent.consent_datetime:

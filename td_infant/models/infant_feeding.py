@@ -30,7 +30,8 @@ class InfantFeeding(InfantCrfModel):
         help_text="If Formula Feeding or received any other foods or liquids answer YES.")
 
     formula_intro_occur = models.CharField(
-        verbose_name=("Since the last attended scheduled visit has the child received any solid foods?"),
+        verbose_name=(
+            "Since the last attended scheduled visit has the child received any solid foods?"),
         max_length=3,
         choices=YES_NO_NA,
         default=NOT_APPLICABLE)
@@ -211,7 +212,8 @@ class InfantFeeding(InfantCrfModel):
         visit = ['2000', '2010', '2030', '2060', '2090', '2120']
         try:
             registered_subject = infant_visit.appointment.registered_subject
-            previous_visit_code = visit[visit.index(self.infant_visit.appointment.visit_definition.code) - 1]
+            previous_visit_code = visit[
+                visit.index(self.infant_visit.appointment.visit_definition.code) - 1]
             previous_appointment = Appointment.objects.get(registered_subject=registered_subject,
                                                            visit_definition__code=previous_visit_code)
             return InfantVisit.objects.get(appointment=previous_appointment)
@@ -231,14 +233,16 @@ class InfantFeeding(InfantCrfModel):
             visit.append(x.code)
 
         if not (self.infant_visit.appointment.visit_definition.code in ['2000', '2010']):
-            prev_visit_index = visit.index(self.infant_visit.appointment.visit_definition.code) - 1
+            prev_visit_index = visit.index(
+                self.infant_visit.appointment.visit_definition.code) - 1
             registered_subject = self.infant_visit.appointment.registered_subject
             while prev_visit_index > 0:
                 try:
-                    return InfantFeeding.objects.get(
+                    return InfantFeeding.objects.filter(
                         infant_visit__appointment__registered_subject=registered_subject,
-                        infant_visit__appointment__visit_definition__code=visit[prev_visit_index]
-                    ).report_datetime.date()
+                        infant_visit__appointment__visit_definition__code=visit[
+                            prev_visit_index]
+                    ).order_by('-created').first().report_datetime.date()
                 except InfantFeeding.DoesNotExist:
                     prev_visit_index = prev_visit_index - 1
         return None

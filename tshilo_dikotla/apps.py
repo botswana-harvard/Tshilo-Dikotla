@@ -32,13 +32,8 @@ class ConsentAppConfig(EdcConsentAppConfig):
         {'app_label': 'td_maternal',
          'model_name': 'maternalconsent',
          'start_datetime': study_start_datetime,
-         'end_datetime': consent_study_version_1_end,
-         'version': '1'},
-        {'app_label': 'td_maternal',
-         'model_name': 'maternalconsent',
-         'start_datetime': consent_version_2_start,
          'end_datetime': study_end_datetime,
-         'version': '2'}
+         'version': '1'},
     ]
 
 
