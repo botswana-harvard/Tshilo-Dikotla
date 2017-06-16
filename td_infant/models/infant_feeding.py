@@ -237,14 +237,14 @@ class InfantFeeding(InfantCrfModel):
                 self.infant_visit.appointment.visit_definition.code) - 1
             registered_subject = self.infant_visit.appointment.registered_subject
             while prev_visit_index > 0:
-                try:
-                    return InfantFeeding.objects.filter(
-                        infant_visit__appointment__registered_subject=registered_subject,
-                        infant_visit__appointment__visit_definition__code=visit[
-                            prev_visit_index]
-                    ).order_by('-created').first().report_datetime.date()
-                except InfantFeeding.DoesNotExist:
-                    prev_visit_index = prev_visit_index - 1
+                infant_feeding = InfantFeeding.objects.filter(
+                    infant_visit__appointment__registered_subject=registered_subject,
+                    infant_visit__appointment__visit_definition__code=visit[
+                        prev_visit_index]
+                ).order_by('-created', '-infant_visit__appointment__visit_instance').first()
+                if infant_feeding:
+                    return infant_feeding.report_datetime.date()
+                prev_visit_index = prev_visit_index - 1
         return None
 
     class Meta:
