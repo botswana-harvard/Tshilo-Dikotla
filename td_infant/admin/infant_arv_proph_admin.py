@@ -60,6 +60,7 @@ class InfantArvProphModAdmin(BaseInfantScheduleModelAdmin):
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'infant_arv_proph__infant_visit__appointment__registered_subject__subject_identifier',
+                 'report_datetime': 'infant_arv_proph__infant_visit__report_datetime',
                  'gender': 'infant_arv_proph__infant_visit__appointment__registered_subject__gender',
                  'dob': 'infant_arv_proph__infant_visit__appointment__registered_subject__dob',
                  'prophylatic_nvp': 'infant_arv_proph__prophylatic_nvp',

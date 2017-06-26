@@ -26,7 +26,7 @@ class InfantArvProphForm(BaseInfantModelForm):
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        self.validate_taking_arv_proph_no()
+        # self.validate_taking_arv_proph_no()
         self.validate_taking_arv_proph_unknown()
         self.validate_taking_arv_proph_yes()
         return cleaned_data
@@ -39,10 +39,10 @@ class InfantArvProphForm(BaseInfantModelForm):
                 raise forms.ValidationError(
                     'Infant was not taking prophylactic arv, prophylaxis should be Never Started or Discontinued.')
             if (cleaned_data.get('arv_status') == DISCONTINUED and
-               get_birth_arv_visit_2000(infant_identifier)) in [NO, UNKNOWN]:
-                    raise forms.ValidationError(
-                        'The azt discharge supply in Infant birth arv was answered as NO or Unknown, '
-                        'therefore Infant ARV proph in this visit cannot be permanently discontinued.')
+                    get_birth_arv_visit_2000(infant_identifier)) in [NO, UNKNOWN]:
+                raise forms.ValidationError(
+                    'The azt discharge supply in Infant birth arv was answered as NO or Unknown, '
+                    'therefore Infant ARV proph in this visit cannot be permanently discontinued.')
 
     def validate_taking_arv_proph_unknown(self):
         cleaned_data = self.cleaned_data
@@ -55,7 +55,7 @@ class InfantArvProphForm(BaseInfantModelForm):
     def validate_taking_arv_proph_yes(self):
         cleaned_data = self.cleaned_data
         if (cleaned_data.get('prophylatic_nvp') == YES and
-           cleaned_data.get('arv_status') in [NEVER_STARTED, DISCONTINUED]):
+                cleaned_data.get('arv_status') in [NEVER_STARTED, DISCONTINUED]):
             raise forms.ValidationError(
                 'Infant has been on prophylactic arv, cannot choose Never Started or Permanently discontinued.')
 
@@ -77,13 +77,16 @@ class InfantArvProphModForm(ModelForm):
         cleaned_data = self.cleaned_data
         if cleaned_data.get('arv_code'):
             if not cleaned_data.get('dose_status'):
-                raise forms.ValidationError('You entered an ARV Code, please give the dose status.')
+                raise forms.ValidationError(
+                    'You entered an ARV Code, please give the dose status.')
 
             if not cleaned_data.get('modification_date'):
-                raise forms.ValidationError('You entered an ARV Code, please give the modification date.')
+                raise forms.ValidationError(
+                    'You entered an ARV Code, please give the modification date.')
 
             if not cleaned_data.get('modification_code'):
-                raise forms.ValidationError('You entered an ARV Code, please give the modification reason.')
+                raise forms.ValidationError(
+                    'You entered an ARV Code, please give the modification reason.')
 
     def validate_infant_arv_proph_not_modified(self):
         cleaned_data = self.cleaned_data
@@ -93,9 +96,10 @@ class InfantArvProphModForm(ModelForm):
 
     def validate_infant_arv_code(self):
         cleaned_data = self.cleaned_data
-        infant_identifier = cleaned_data.get('infant_arv_proph').infant_visit.subject_identifier
+        infant_identifier = cleaned_data.get(
+            'infant_arv_proph').infant_visit.subject_identifier
         if (cleaned_data.get('arv_code') == 'Zidovudine' and
-           get_birth_arv_visit_2000(infant_identifier) in [YES]):
+                get_birth_arv_visit_2000(infant_identifier) in [YES]):
             if cleaned_data.get('modification_code') in ['Initial dose']:
                 raise forms.ValidationError(
                     'Infant birth ARV shows that infant was discharged with an additional dose of AZT, '

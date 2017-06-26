@@ -3,8 +3,8 @@ from django.db import models
 from edc_appointment.models import AppointmentMixin
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import (datetime_not_before_study_start, datetime_not_future, 
-    date_not_before_study_start, date_not_future)
+from edc_base.model.validators import (datetime_not_before_study_start, datetime_not_future,
+                                       date_not_before_study_start, date_not_future)
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_consent.models import RequiresConsentMixin
 from edc_constants.choices import YES_NO
@@ -16,7 +16,8 @@ from ..managers import AntenatalVisitMembershipManager
 from .maternal_consent import MaternalConsent
 
 
-class AntenatalVisitMembership(SyncModelMixin, RequiresConsentMixin, AppointmentMixin, BaseUuidModel):
+class AntenatalVisitMembership(SyncModelMixin, RequiresConsentMixin,
+                               AppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     consent_model = MaternalConsent
 

@@ -32,6 +32,7 @@ class MaternalArvAdmin(BaseMaternalModelAdmin):
                  'maternal_arv_preg__maternal_visit__appointment__registered_subject__subject_identifier',
                  'gender': 'maternal_arv_preg__maternal_visit__appointment__registered_subject__gender',
                  'dob': 'maternal_arv_preg__maternal_visit__appointment__registered_subject__dob',
+                 'report_datetime': 'maternal_arv_preg__report_datetime',
                  'took_arv': 'maternal_arv_preg__took_arv',
                  'is_interrupt': 'maternal_arv_preg__is_interrupt',
                  'interrupt': 'maternal_arv_preg__interrupt',
@@ -45,24 +46,12 @@ class MaternalArvPregAdmin(BaseMaternalModelAdmin):
     inlines = [MaternalArvInlineAdmin, ]
     list_display = ('maternal_visit', 'took_arv',)
     list_filter = ('took_arv',)
+    search_fields = (
+        'maternal_visit__appointment__registered_subject__subject_identifier',
+        'took_arv')
     radio_fields = {'took_arv': admin.VERTICAL,
                     'is_interrupt': admin.VERTICAL,
                     'interrupt': admin.VERTICAL
                     }
-
-    actions = [
-        export_as_csv_action(
-            description="CSV Export of Maternal ARV In This Preg: Pregnancy",
-            fields=[],
-            delimiter=',',
-            exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
-            extra_fields=OrderedDict(
-                {'subject_identifier':
-                 'maternal_arv_preg__maternal_visit__appointment__registered_subject__subject_identifier',
-                 'gender': 'maternal_arv_preg__maternal_visit__appointment__registered_subject__gender',
-                 'dob': 'maternal_arv_preg__maternal_visit__appointment__registered_subject__dob',
-                 }),
-        )]
 
 admin.site.register(MaternalArvPreg, MaternalArvPregAdmin)

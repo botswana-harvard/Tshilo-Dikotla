@@ -40,10 +40,17 @@ class MaternalLabourDelAdmin(MembershipBaseModelAdmin):
     actions = [
         export_as_csv_action(
             description="CSV Export of Maternal Deliveries",
-            fields=[],
+            fields=[
+                'delivery_datetime', 'delivery_time_estimated', 'delivery_hospital',
+                'delivery_hospital_other', 'labour_hrs', 'mode_delivery',
+                'mode_delivery_other', 'csection_reason', 'csection_reason_other',
+                'delivery_complications', 'delivery_complications_other',
+                'live_infants_to_register', 'still_births', 'valid_regiment_duration',
+                'arv_initiation_date', 'delivery_comment'
+            ],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified', ],
+                     'hostname_modified', 'exported', 'exported_datetime', 'export_change_type', 'export_uuid'],
             extra_fields=OrderedDict(
                 {'subject_identifier': 'registered_subject__subject_identifier',
                  'gender': 'registered_subject__gender',

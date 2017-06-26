@@ -1,4 +1,7 @@
 from django.contrib import admin
+from collections import OrderedDict
+
+from edc_export.actions import export_as_csv_action
 
 from edc_base.modeladmin.mixins import (ModelAdminRedirectMixin,
                                         ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
@@ -11,6 +14,8 @@ from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin, BaseModelA
 from td_maternal.models import MaternalContact
 from django.contrib.admin.templatetags.admin_list import admin_actions
 
+from ..forms import MaternalContactForm
+
 
 class BaseModelAdmin(ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMixin,
                      ModelAdminAuditFieldsMixin,
@@ -22,6 +27,8 @@ class BaseModelAdmin(ModelAdminFormInstructionsMixin, ModelAdminFormAutoNumberMi
 
 @admin.register(MaternalContact)
 class MaternalContactAdmin(BaseModelAdmin):
+
+    form = MaternalContactForm
 
     fields = [
         'registered_subject',
@@ -45,9 +52,22 @@ class MaternalContactAdmin(BaseModelAdmin):
         'contact_success': admin.VERTICAL
     }
 
-    search_fields = ['registered_subject__subject_identifier', 'contact_type', 'call_reason', 'contact_success']
+    actions = [
+        export_as_csv_action(
+            description="Export to CSV file",
+            fields=[],
+            delimiter=',',
+            exclude=['maternal_visit', 'user_created', 'user_modified', 'hostname_created',
+                     'hostname_modified'],
+            extra_fields=OrderedDict(
+                {'subject_identifier': 'registered_subject__subject_identifier', }),
+        )]
+
+    search_fields = ['registered_subject__subject_identifier',
+                     'contact_type', 'call_reason', 'contact_success']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "registered_subject":
-            kwargs["queryset"] = RegisteredSubject.objects.filter(id__exact=request.GET.get('registered_subject'))
+            kwargs["queryset"] = RegisteredSubject.objects.filter(
+                id__exact=request.GET.get('registered_subject'))
         return super(MaternalContactAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)

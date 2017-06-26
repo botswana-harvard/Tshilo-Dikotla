@@ -34,4 +34,17 @@ class SolidFoodAssessmentAdmin(BaseInfantScheduleModelAdmin, BaseModelAdmin):
                     }
     filter_horizontal = ('solid_foods', 'rations_receviced')
 
+    actions = [
+        export_as_csv_action(
+            description="CSV Export of Infant Congenital Anomalies",
+            fields=[],
+            delimiter=',',
+            exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
+                     'hostname_modified'],
+            extra_fields=OrderedDict(
+                {'subject_identifier':
+                 'infant_visit__appointment__registered_subject__subject_identifier',
+                 }),
+        )]
+
 admin.site.register(SolidFoodAssessment, SolidFoodAssessmentAdmin)

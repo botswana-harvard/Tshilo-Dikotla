@@ -125,7 +125,6 @@ class MaternalMedicalHistory(MaternalCrfModel):
         blank=True,
         null=True)
 
-
     class Meta:
         app_label = 'td_maternal'
         verbose_name = "Maternal Medical History"

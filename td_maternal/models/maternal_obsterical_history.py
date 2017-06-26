@@ -42,15 +42,16 @@ class MaternalObstericalHistory(MaternalCrfModel):
         help_text="")
 
     children_deliv_before_37wks = models.IntegerField(
-        verbose_name=("Number of previous prenancies delivered at < 37 weeks GA?"),
+        verbose_name=(
+            "Number of previous prenancies delivered at < 37 weeks GA?"),
         validators=[MinValueValidator(0), MaxValueValidator(20), ],
         help_text="")
 
     children_deliv_aftr_37wks = models.IntegerField(
-        verbose_name=("Number of previous prenancies delivered at >= 37 weeks GA?"),
+        verbose_name=(
+            "Number of previous prenancies delivered at >= 37 weeks GA?"),
         validators=[MinValueValidator(0), MaxValueValidator(20), ],
         help_text="")
-
 
     class Meta:
         app_label = 'td_maternal'

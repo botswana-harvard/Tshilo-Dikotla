@@ -1,4 +1,5 @@
 from django.contrib import admin
+from collections import OrderedDict
 
 from edc_export.actions import export_as_csv_action
 from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin
@@ -16,7 +17,12 @@ class AliquotAdmin(MembershipBaseModelAdmin):
                export_as_csv_action(
                    "Export as csv", fields=[], delimiter=',',
                    exclude=['id', 'revision', 'hostname_created',
-                            'hostname_modified', 'user_created', 'user_modified'],)]
+                            'hostname_modified', 'user_created', 'user_modified'],
+                   extra_fields=OrderedDict(
+                       {
+                           'report_datetime': 'receive__receive_datetime'
+                       }),
+               )]
 
     list_display = ("aliquot_identifier", 'subject_identifier',
                     'processing',  # 'related',

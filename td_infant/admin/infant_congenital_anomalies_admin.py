@@ -505,10 +505,24 @@ class InfantCongenitalAnomaliesAdmin(BaseInfantScheduleModelAdmin):
         InfantSkinInline,
         InfantTrisomiesInline]
 
+    actions = [
+        export_as_csv_action(
+            description="CSV Export of Infant Congenital Anomalies",
+            fields=[],
+            delimiter=',',
+            exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
+                     'hostname_modified'],
+            extra_fields=OrderedDict(
+                {'subject_identifier':
+                 'infant_visit__appointment__registered_subject__subject_identifier',
+                 }),
+        )]
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "infant_visit":
             if request.GET.get('infant_visit'):
-                kwargs["queryset"] = InfantVisit.objects.filter(id=request.GET.get('infant_visit'))
+                kwargs["queryset"] = InfantVisit.objects.filter(
+                    id=request.GET.get('infant_visit'))
         return super(InfantCongenitalAnomaliesAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(InfantCongenitalAnomalies, InfantCongenitalAnomaliesAdmin)
