@@ -49,7 +49,8 @@ class TestInfantFeedingForm(BaseTestCase):
             appointment__visit_definition__code='1000M')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(
             maternal_visit=self.maternal_visit, number_of_gestations=1,)
-        self.maternal_visits_membership = AntenatalVisitMembershipFactory(registered_subject=self.registered_subject)
+        self.maternal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=self.registered_subject)
         self.maternal_labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject,
                                                             live_infants_to_register=1)
         self.antenatal_visit_1 = MaternalVisitFactory(
@@ -72,7 +73,8 @@ class TestInfantFeedingForm(BaseTestCase):
             registered_subject=infant_registered_subject,
             visit_definition__code='2000')
         self.infant_visit = InfantVisitFactory(appointment=self.appointment)
-        self.infant_birth_arv = InfantBirthArvFactory(infant_visit=self.infant_visit, azt_discharge_supply=YES)
+        self.infant_birth_arv = InfantBirthArvFactory(
+            infant_visit=self.infant_visit, azt_discharge_supply=YES)
         self.appointment = Appointment.objects.get(
             registered_subject=infant_registered_subject,
             visit_definition__code='2010')

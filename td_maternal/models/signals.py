@@ -52,18 +52,22 @@ def maternal_eligibility_on_post_save(sender, instance, raw, created, using, **k
                         user_created=instance.user_created,
                         user_modified=instance.user_modified)
             else:
-                MaternalEligibilityLoss.objects.filter(maternal_eligibility_id=instance.id).delete()
+                MaternalEligibilityLoss.objects.filter(
+                    maternal_eligibility_id=instance.id).delete()
                 try:
                     registered_subject = RegisteredSubject.objects.get(
                         screening_identifier=instance.eligibility_id,
                         subject_type='maternal')
-                    MaternalConsent.objects.get(subject_identifier=registered_subject.subject_identifier)
+                    MaternalConsent.objects.get(
+                        subject_identifier=registered_subject.subject_identifier)
                 except RegisteredSubject.DoesNotExist:
-                    registered_subject = create_maternal_registered_subject(instance)
+                    registered_subject = create_maternal_registered_subject(
+                        instance)
                     instance.registered_subject = registered_subject
                     instance.save()
                 except MaternalConsent.DoesNotExist:
-                    registered_subject = update_maternal_registered_subject(registered_subject, instance)
+                    registered_subject = update_maternal_registered_subject(
+                        registered_subject, instance)
                     registered_subject.save()
 
 
@@ -120,11 +124,13 @@ def ineligible_take_off_study(sender, instance, raw, created, using, **kwargs):
         try:
             if not instance.is_eligible and not instance.pending_ultrasound:
                 report_datetime = instance.report_datetime
-                visit_definition = VisitDefinition.objects.get(code=instance.off_study_visit_code)
+                visit_definition = VisitDefinition.objects.get(
+                    code=instance.off_study_visit_code)
                 appointment = Appointment.objects.get(
                     registered_subject=instance.registered_subject,
                     visit_definition=visit_definition)
-                maternal_visit = MaternalVisit.objects.get(appointment=appointment)
+                maternal_visit = MaternalVisit.objects.get(
+                    appointment=appointment)
                 if maternal_visit.reason != FAILED_ELIGIBILITY:
                     maternal_visit.reason = FAILED_ELIGIBILITY
                     maternal_visit.study_status = OFF_STUDY
@@ -154,7 +160,8 @@ def put_back_on_study_from_failed_eligibility(instance):
             visit_definition = VisitDefinition.objects.get(code='1000M')
             appointment = Appointment.objects.get(
                 registered_subject=instance.registered_subject,
-                visit_definition=visit_definition)
+                visit_definition=visit_definition,
+                visit_instance='0')
             maternal_visit = MaternalVisit.objects.get(
                 appointment=appointment)
             maternal_visit.study_status = ON_STUDY
@@ -219,7 +226,8 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
                         maternal_identifier=maternal_registered_subject.subject_identifier,
                         study_site=maternal_consent.study_site,
                         birth_order=0,
-                        live_infants=int(maternal_ultrasound.number_of_gestations),
+                        live_infants=int(
+                            maternal_ultrasound.number_of_gestations),
                         live_infants_to_register=instance.live_infants_to_register,
                         user=instance.user_created)
                     RegisteredSubject.objects.using(using).create(
@@ -233,5 +241,3 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
                         registration_status='DELIVERED',
                         relative_identifier=maternal_consent.subject_identifier,
                         study_site=maternal_consent.study_site)
-
-

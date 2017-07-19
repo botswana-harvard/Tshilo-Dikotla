@@ -27,7 +27,8 @@ class AntenatalEnrollmentForm(BaseEnrollmentForm):
 #                 pass
 #         self.fill_postnatal_enrollment_if_recently_delivered()
 #         self.raise_if_rapid_test_required()
-        self.validate_last_period_date(cleaned_data.get('report_datetime'), cleaned_data.get('last_period_date'))
+        self.validate_last_period_date(
+            cleaned_data.get('report_datetime'), cleaned_data.get('last_period_date'))
         enrollment_helper = EnrollmentHelper(instance_antenatal=self._meta.model(**cleaned_data),
                                              exception_cls=forms.ValidationError)
         enrollment_helper.raise_validation_error_for_rapidtest()
@@ -36,9 +37,9 @@ class AntenatalEnrollmentForm(BaseEnrollmentForm):
 
     def validate_last_period_date(self, report_datetime, last_period_date):
         if last_period_date and (last_period_date >= report_datetime.date() - relativedelta(weeks=4)):
-                raise forms.ValidationError('LMP cannot be within 4weeks of report datetime. '
-                                            'Got LMP as {} and report datetime as {}'.format(last_period_date,
-                                                                                             report_datetime))
+            raise forms.ValidationError('LMP cannot be within 4weeks of report datetime. '
+                                        'Got LMP as {} and report datetime as {}'.format(last_period_date,
+                                                                                         report_datetime))
 
     def clean_rapid_test_date(self):
         rapid_test_date = self.cleaned_data['rapid_test_date']
@@ -49,7 +50,8 @@ class AntenatalEnrollmentForm(BaseEnrollmentForm):
                     registered_subject=registered_subject)
                 if initial:
                     if rapid_test_date != initial.rapid_test_date:
-                        raise forms.ValidationError('The rapid test result cannot be changed')
+                        raise forms.ValidationError(
+                            'The rapid test result cannot be changed')
             except AntenatalEnrollment.DoesNotExist:
                 pass
         return rapid_test_date
