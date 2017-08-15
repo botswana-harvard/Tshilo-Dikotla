@@ -39,15 +39,16 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
                 try:
                     registered_subject = cleaned_data.get(
                         'infant_visit').appointment.registered_subject
-                    prev_fu_phy = InfantFuPhysical.objects.filter(
+                    prev_fu_phy = InfantFuPhysical.objects.get(
                         infant_visit__appointment__registered_subject=registered_subject,
-                        infant_visit__appointment__visit_definition__code=visit[prev_visit]).order_by('-created').first()
-                    if cleaned_data.get('height') < prev_fu_phy.height:
-                        raise forms.ValidationError(
-                            'You stated that the height for the participant as {}, yet in visit {} '
-                            'you indicated that participant height was {}. Please correct.'.format(
-                                cleaned_data.get('height'), visit[prev_visit], prev_fu_phy.height))
-                    break
+                        infant_visit__appointment__visit_definition__code=visit[prev_visit])
+                    if prev_fu_phy.height:
+                        if cleaned_data.get('height') < prev_fu_phy.height:
+                            raise forms.ValidationError(
+                                'You stated that the height for the participant as {}, yet in visit {} '
+                                'you indicated that participant height was {}. Please correct.'.format(
+                                    cleaned_data.get('height'), visit[prev_visit], prev_fu_phy.height))
+                        break
                 except InfantFuPhysical.DoesNotExist:
                     prev_visit = prev_visit - 1
 
@@ -64,17 +65,18 @@ class InfantFuPhysicalForm(BaseInfantModelForm):
                 try:
                     registered_subject = cleaned_data.get(
                         'infant_visit').appointment.registered_subject
-                    prev_fu_phy = InfantFuPhysical.objects.filter(
+                    prev_fu_phy = InfantFuPhysical.objects.get(
                         infant_visit__appointment__registered_subject=registered_subject,
-                        infant_visit__appointment__visit_definition__code=visit[prev_visit]).order_by('-created').first()
-                    if cleaned_data.get('head_circumference') < prev_fu_phy.head_circumference:
-                        raise forms.ValidationError(
-                            'You stated that the head circumference for the participant as {}, '
-                            'yet in visit {} you indicated that participant height was {}. '
-                            'Please correct.'.format(
-                                cleaned_data.get('head_circumference'),
-                                visit[prev_visit], prev_fu_phy.head_circumference))
-                    break
+                        infant_visit__appointment__visit_definition__code=visit[prev_visit])
+                    if prev_fu_phy.head_circumference:
+                        if cleaned_data.get('head_circumference') < prev_fu_phy.head_circumference:
+                            raise forms.ValidationError(
+                                'You stated that the head circumference for the participant as {}, '
+                                'yet in visit {} you indicated that participant height was {}. '
+                                'Please correct.'.format(
+                                    cleaned_data.get('head_circumference'),
+                                    visit[prev_visit], prev_fu_phy.head_circumference))
+                        break
                 except InfantFuPhysical.DoesNotExist:
                     prev_visit = prev_visit - 1
 
