@@ -21,7 +21,8 @@ class MaternalArvPostModInlineAdmin(BaseTabularInline):
 class MaternalArvPostModAdmin(BaseMaternalModelAdmin):
 
     form = MaternalArvPostMedForm
-    list_display = ('maternal_arv_post', 'arv_code', 'dose_status', 'modification_date', 'modification_code')
+    list_display = ('maternal_arv_post', 'arv_code',
+                    'dose_status', 'modification_date', 'modification_code')
 
     radio_fields = {
         "arv_code": admin.VERTICAL,
@@ -67,26 +68,6 @@ class MaternalArvPostAdmin(BaseMaternalModelAdmin):
         "on_arv_reason": admin.VERTICAL,
         "arv_status": admin.VERTICAL}
     inlines = [MaternalArvPostModInlineAdmin, ]
-
-    actions = [
-        export_as_csv_action(
-            description="CSV Export of Maternal ARV Post",
-            fields=[],
-            delimiter=',',
-            exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
-            extra_fields=OrderedDict(
-                {'subject_identifier': 'maternal_visit__appointment__registered_subject__subject_identifier',
-                 'gender': 'maternal_visit__appointment__registered_subject__gender',
-                 'dob': 'maternal_visit__appointment__registered_subject__dob',
-                 }),
-        )]
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "maternal_visit":
-            if request.GET.get('maternal_visit'):
-                kwargs["queryset"] = MaternalVisit.objects.filter(id=request.GET.get('maternal_visit'))
-        return super(MaternalArvPostAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(MaternalArvPost, MaternalArvPostAdmin)
 
