@@ -36,7 +36,7 @@ class InfantBirthAdmin(MembershipBaseModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified', 'registered_subject'],
+                     'hostname_modified', 'registered_subject', 'first_name', 'initials', 'dob'],
             extra_fields=OrderedDict(
                 {'subject_identifier': 'registered_subject__subject_identifier',
                  'gender': 'registered_subject__gender',
