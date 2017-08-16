@@ -53,7 +53,7 @@ class VaccinesMissedAdmin(BaseModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified', 'infant_visit'],
+                     'hostname_modified'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'infant_fu_immunizations__infant_visit__appointment__registered_subject__subject_identifier',
