@@ -17,7 +17,7 @@ class BaseInfantScheduleModelAdmin(MembershipBaseModelAdmin):
 
     actions = [
         export_as_csv_action(
-            description="CSV Export of Infant Birth Feeding & Vaccination",
+            description="Export CSV file",
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
