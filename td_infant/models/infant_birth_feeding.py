@@ -3,6 +3,7 @@ from django.db import models
 from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_visit_tracking.models import CrfInlineModelMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_export.models import ExportTrackingFieldsMixin
 
 from tshilo_dikotla.choices import FEEDING_CHOICES
 
@@ -33,7 +34,7 @@ class InfantBirthFeedingVaccine(InfantCrfModel):
         verbose_name = "Birth Feeding & Vaccination"
 
 
-class InfantVaccines(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
+class InfantVaccines(CrfInlineModelMixin, SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     infant_birth_feed_vaccine = models.ForeignKey(InfantBirthFeedingVaccine)
 
@@ -58,4 +59,5 @@ class InfantVaccines(CrfInlineModelMixin, SyncModelMixin, BaseUuidModel):
         app_label = 'td_infant'
         verbose_name = "Infant Vaccines"
         verbose_name_plural = "Infant Vaccines"
-        unique_together = ('infant_birth_feed_vaccine', 'vaccination', 'vaccine_date')
+        unique_together = (
+            'infant_birth_feed_vaccine', 'vaccination', 'vaccine_date')
