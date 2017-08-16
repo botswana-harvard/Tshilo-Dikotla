@@ -27,6 +27,15 @@ class InfantArvProphAdmin(BaseInfantScheduleModelAdmin):
         'arv_status': admin.VERTICAL,
     }
 
+admin.site.register(InfantArvProph, InfantArvProphAdmin)
+
+
+class InfantArvProphModAdmin(BaseInfantScheduleModelAdmin):
+
+    form = InfantArvProphModForm
+
+    list_filter = ('infant_arv_proph',)
+
     actions = [
         export_as_csv_action(
             description="CSV Export of Infant NVP or AZT Proph",
@@ -40,14 +49,5 @@ class InfantArvProphAdmin(BaseInfantScheduleModelAdmin):
                  'dob': 'infant_arv_proph__infant_visit__appointment__registered_subject__dob',
                  }),
         )]
-
-admin.site.register(InfantArvProph, InfantArvProphAdmin)
-
-
-class InfantArvProphModAdmin(BaseInfantScheduleModelAdmin):
-
-    form = InfantArvProphModForm
-
-    list_filter = ('infant_arv_proph',)
 
 admin.site.register(InfantArvProphMod, InfantArvProphModAdmin)
