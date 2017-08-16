@@ -66,12 +66,6 @@ class SpecimenConsentAdmin(MembershipBaseModelAdmin):
             if request.GET.get('registered_subject'):
                 kwargs["queryset"] = RegisteredSubject.objects.filter(
                     id__exact=request.GET.get('registered_subject', 0))
-            else:
-                self.readonly_fields = list(self.readonly_fields)
-                try:
-                    self.readonly_fields.index('registered_subject')
-                except ValueError:
-                    self.readonly_fields.append('registered_subject')
         return super(SpecimenConsentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(SpecimenConsent, SpecimenConsentAdmin)

@@ -36,7 +36,8 @@ class AntenatalEnrollmentAdmin(MembershipBaseModelAdmin):
               'rapid_test_date',
               'rapid_test_result',
               'enrollment_hiv_status')
-    readonly_fields = ('edd_by_lmp', 'ga_lmp_enrollment_wks', 'enrollment_hiv_status')
+    readonly_fields = (
+        'edd_by_lmp', 'ga_lmp_enrollment_wks', 'enrollment_hiv_status')
     radio_fields = {'is_diabetic': admin.VERTICAL,
                     'will_breastfeed': admin.VERTICAL,
                     'will_remain_onstudy': admin.VERTICAL,
@@ -71,15 +72,6 @@ class AntenatalEnrollmentAdmin(MembershipBaseModelAdmin):
             if request.GET.get('registered_subject'):
                 kwargs["queryset"] = RegisteredSubject.objects.filter(
                     id__exact=request.GET.get('registered_subject', 0))
-            else:
-                self.readonly_fields = list(self.readonly_fields)
-                try:
-                    self.readonly_fields.index('registered_subject')
-                except ValueError:
-                    self.readonly_fields.append('registered_subject')
         return super(AntenatalEnrollmentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(AntenatalEnrollment, AntenatalEnrollmentAdmin)
-
-
-
