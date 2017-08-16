@@ -34,9 +34,8 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalV
     history = SyncHistoricalRecords()
 
     def __str__(self):
-        return '{} {} {}'.format(self.appointment.registered_subject.subject_identifier,
-                                 self.appointment.registered_subject.first_name,
-                                 self.appointment.visit_definition.code)
+        return '{} {}'.format(self.appointment.registered_subject.subject_identifier,
+                              self.appointment.visit_definition.code)
 
     def save(self, *args, **kwargs):
         self.subject_identifier = self.appointment.registered_subject.subject_identifier
@@ -75,7 +74,7 @@ class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalV
 #     @property
 #     def scheduled_rapid_test(self):
 #         """Returns the value of the \'result\' field of the RapidTestResult.
-# 
+#
 #         This is a scheduled maternal form for on-study participants."""
 #         RapidTestResult = apps.get_model('td_maternal', 'rapidtestresult')
 #         try:

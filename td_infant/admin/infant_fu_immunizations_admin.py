@@ -33,7 +33,7 @@ class VaccinesReceivedAdmin(BaseModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'infant_fu_immunizations__infant_visit__appointment__registered_subject__subject_identifier',
@@ -53,7 +53,7 @@ class VaccinesMissedAdmin(BaseModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'infant_fu_immunizations__infant_visit__appointment__registered_subject__subject_identifier',
@@ -69,19 +69,5 @@ class InfantFuImmunizationsAdmin(BaseInfantScheduleModelAdmin):
     inlines = [VaccinesReceivedInlineAdmin, VaccinesMissedInlineAdmin, ]
     radio_fields = {'vaccines_received': admin.VERTICAL,
                     'vaccines_missed': admin.VERTICAL}
-
-    actions = [
-        export_as_csv_action(
-            description="CSV Export of Infant Immunizations",
-            fields=[],
-            delimiter=',',
-            exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
-            extra_fields=OrderedDict(
-                {'subject_identifier': 'infant_visit__appointment__registered_subject__subject_identifier',
-                 'gender': 'infant_visit__appointment__registered_subject__gender',
-                 'dob': 'infant_visit__appointment__registered_subject__dob',
-                 }),
-        )]
 
 admin.site.register(InfantFuImmunizations, InfantFuImmunizationsAdmin)

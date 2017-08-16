@@ -57,7 +57,7 @@ class MaternalContactAdmin(BaseModelAdmin):
             description="Export to CSV file",
             fields=[],
             delimiter=',',
-            exclude=['maternal_visit', 'user_created', 'user_modified', 'hostname_created',
+            exclude=['user_created', 'user_modified', 'hostname_created',
                      'hostname_modified'],
             extra_fields=OrderedDict(
                 {'subject_identifier': 'registered_subject__subject_identifier', }),

@@ -57,27 +57,15 @@ class InfantDeathReportAdmin(BaseInfantScheduleModelAdmin, BaseModelAdmin):
         "diagnosis_code": admin.VERTICAL
     }
 
-    actions = [
-        export_as_csv_action(
-            description="CSV Export of Infant Death",
-            fields=[],
-            delimiter=',',
-            exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
-            extra_fields=OrderedDict(
-                {'subject_identifier': 'registered_subject__subject_identifier',
-                 'gender': 'registered_subject__gender',
-                 'dob': 'registered_subject__dob',
-                 }),
-        )]
-
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "infant_visit":
             if request.GET.get('infant_visit'):
-                kwargs["queryset"] = InfantVisit.objects.filter(id=request.GET.get('infant_visit'))
+                kwargs["queryset"] = InfantVisit.objects.filter(
+                    id=request.GET.get('infant_visit'))
         if db_field.name == "registered_subject":
             if request.GET.get('infant_visit'):
-                infant_visit = InfantVisit.objects.get(id=request.GET.get('infant_visit'))
+                infant_visit = InfantVisit.objects.get(
+                    id=request.GET.get('infant_visit'))
                 kwargs["queryset"] = RegisteredSubject.objects.filter(
                     subject_identifier=infant_visit.appointment.registered_subject.subject_identifier)
         return super(InfantDeathReportAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)

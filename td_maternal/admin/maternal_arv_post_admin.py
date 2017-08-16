@@ -46,6 +46,9 @@ class MaternalArvPostModAdmin(BaseMaternalModelAdmin):
                  'on_arv_reason': 'maternal_arv_post__on_arv_reason',
                  'on_arv_reason_other': 'maternal_arv_post__on_arv_reason_other',
                  'arv_status': 'maternal_arv_post__arv_status',
+                 'visit_code': 'maternal_arv_post__maternal_visit__appointment__visit_definition__code',
+                 'visit_reason': 'maternal_arv_post__maternal_visit__reason',
+                 'visit_study_status': 'maternal_arv_post__maternal_visit__study_status',
                  }),
         )]
 

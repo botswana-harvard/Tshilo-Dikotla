@@ -32,10 +32,9 @@ class MaternalPostPartumFuAdmin(BaseMaternalModelAdmin):
     actions = [
         export_as_csv_action(
             description="Export to CSV file",
-            fields=['hospitalized', 'hospitalization_reason', 'new_diagnoses',
+            fields=['hospitalized', 'new_diagnoses',
                     'hospitalization_other', 'hospitalization_days',
-                    'diagnoses', 'diagnoses_other', 'has_who_dx',
-                    'who__short_name'],
+                    'diagnoses_other', 'has_who_dx'],
             delimiter=',',
             exclude=['maternal_visit', 'user_created', 'user_modified', 'hostname_created',
                      'hostname_modified'],

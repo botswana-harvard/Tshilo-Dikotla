@@ -12,7 +12,7 @@ from ..models import (
     InfantCleftDisorder, InfantMouthUpGi, InfantCardioDisorder,
     InfantRespiratoryDefect, InfantLowerGi, InfantMaleGenital,
     InfantFemaleGenital, InfantRenal, InfantMusculoskeletal,
-    InfantSkin, InfantTrisomies, InfantVisit
+    InfantSkin, InfantTrisomies
 )
 
 
@@ -45,7 +45,7 @@ class InfantCnsAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -79,7 +79,7 @@ class InfantFacialDefectAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -113,7 +113,7 @@ class InfantCleftDisorderAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -148,7 +148,7 @@ class InfantMouthUpGiAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -183,7 +183,7 @@ class InfantCardioDisorderAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -218,7 +218,7 @@ class InfantRespiratoryDefectAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -253,7 +253,7 @@ class InfantLowerGiAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -288,7 +288,7 @@ class InfantFemaleGenitalAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -323,7 +323,7 @@ class InfantMaleGenitalAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -358,7 +358,7 @@ class InfantRenalAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -393,7 +393,7 @@ class InfantMusculoskeletalAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -428,7 +428,7 @@ class InfantSkinAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -463,7 +463,7 @@ class InfantTrisomiesAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier':
                  'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
@@ -504,25 +504,5 @@ class InfantCongenitalAnomaliesAdmin(BaseInfantScheduleModelAdmin):
         InfantMusculoskeletalInline,
         InfantSkinInline,
         InfantTrisomiesInline]
-
-    actions = [
-        export_as_csv_action(
-            description="CSV Export of Infant Congenital Anomalies",
-            fields=[],
-            delimiter=',',
-            exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
-            extra_fields=OrderedDict(
-                {'subject_identifier':
-                 'infant_visit__appointment__registered_subject__subject_identifier',
-                 }),
-        )]
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "infant_visit":
-            if request.GET.get('infant_visit'):
-                kwargs["queryset"] = InfantVisit.objects.filter(
-                    id=request.GET.get('infant_visit'))
-        return super(InfantCongenitalAnomaliesAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(InfantCongenitalAnomalies, InfantCongenitalAnomaliesAdmin)

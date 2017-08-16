@@ -40,7 +40,8 @@ class MaternalConsentAdmin(BaseModelAdmin):
               'consent_signature',
               'consent_copy')
 
-    search_fields = ('subject_identifier', 'id', 'identity', 'first_name', 'last_name')
+    search_fields = (
+        'subject_identifier', 'id', 'identity', 'first_name', 'last_name')
 
     radio_fields = {
         'assessment_score': admin.VERTICAL,
@@ -84,7 +85,7 @@ class MaternalConsentAdmin(BaseModelAdmin):
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
                      'hostname_modified', 'last_name', 'identity', 'confirm_identity', 'first_name', 'legal_marriage',
-                     'marriage_certificate', 'marriage_certificate_no'],
+                     'marriage_certificate', 'marriage_certificate_no', 'initials', 'dob'],
             extra_fields=OrderedDict(
                 {'subject_identifier': 'subject_identifier',
                  'gender': 'gender',
@@ -97,11 +98,11 @@ class MaternalConsentAdmin(BaseModelAdmin):
             kwargs["queryset"] = MaternalEligibility.objects.filter(
                 registered_subject__id__exact=request.GET.get('registered_subject'))
         else:
-                self.readonly_fields = list(self.readonly_fields)
-                try:
-                    self.readonly_fields.index('registered_subject')
-                except ValueError:
-                    self.readonly_fields.append('registered_subject')
+            self.readonly_fields = list(self.readonly_fields)
+            try:
+                self.readonly_fields.index('registered_subject')
+            except ValueError:
+                self.readonly_fields.append('registered_subject')
         return super(MaternalConsentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(MaternalConsent, MaternalConsentAdmin)

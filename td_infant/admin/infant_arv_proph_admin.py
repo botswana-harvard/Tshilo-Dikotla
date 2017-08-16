@@ -33,7 +33,7 @@ class InfantArvProphAdmin(BaseInfantScheduleModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'infant_visit'],
             extra_fields=OrderedDict(
                 {'subject_identifier': 'infant_visit__appointment__registered_subject__subject_identifier',
                  'gender': 'infant_visit__appointment__registered_subject__gender',
@@ -49,23 +49,5 @@ class InfantArvProphModAdmin(BaseInfantScheduleModelAdmin):
     form = InfantArvProphModForm
 
     list_filter = ('infant_arv_proph',)
-
-    actions = [
-        export_as_csv_action(
-            description="CSV Export of Infant NVP or AZT Proph",
-            fields=[],
-            delimiter=',',
-            exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
-            extra_fields=OrderedDict(
-                {'subject_identifier':
-                 'infant_arv_proph__infant_visit__appointment__registered_subject__subject_identifier',
-                 'report_datetime': 'infant_arv_proph__infant_visit__report_datetime',
-                 'gender': 'infant_arv_proph__infant_visit__appointment__registered_subject__gender',
-                 'dob': 'infant_arv_proph__infant_visit__appointment__registered_subject__dob',
-                 'prophylatic_nvp': 'infant_arv_proph__prophylatic_nvp',
-                 'arv_status': 'infant_arv_proph__arv_status',
-                 }),
-        )]
 
 admin.site.register(InfantArvProphMod, InfantArvProphModAdmin)

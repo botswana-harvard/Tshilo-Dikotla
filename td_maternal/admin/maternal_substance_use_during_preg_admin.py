@@ -12,10 +12,10 @@ class MaternalSubstanceUseDuringPregAdmin(BaseMaternalModelAdmin):
 
     list_display = (
         'smoked_during_pregnancy',
-        'smoking_during_preg_freq', 
+        'smoking_during_preg_freq',
         'alcohol_during_pregnancy',
         'alcohol_during_preg_freq',
-        'marijuana_during_preg', 
+        'marijuana_during_preg',
         'marijuana_during_preg_freq',
     )
 
@@ -27,4 +27,5 @@ class MaternalSubstanceUseDuringPregAdmin(BaseMaternalModelAdmin):
         'marijuana_during_preg': admin.VERTICAL,
         'marijuana_during_preg_freq': admin.VERTICAL}
 
-admin.site.register(MaternalSubstanceUseDuringPreg, MaternalSubstanceUseDuringPregAdmin)
+admin.site.register(
+    MaternalSubstanceUseDuringPreg, MaternalSubstanceUseDuringPregAdmin)

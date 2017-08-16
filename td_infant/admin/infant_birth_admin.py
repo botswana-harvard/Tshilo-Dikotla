@@ -36,7 +36,7 @@ class InfantBirthAdmin(MembershipBaseModelAdmin):
             fields=[],
             delimiter=',',
             exclude=['created', 'modified', 'user_created', 'user_modified', 'revision', 'id', 'hostname_created',
-                     'hostname_modified'],
+                     'hostname_modified', 'registered_subject'],
             extra_fields=OrderedDict(
                 {'subject_identifier': 'registered_subject__subject_identifier',
                  'gender': 'registered_subject__gender',
@@ -49,12 +49,6 @@ class InfantBirthAdmin(MembershipBaseModelAdmin):
             if request.GET.get('registered_subject'):
                 kwargs["queryset"] = RegisteredSubject.objects.filter(
                     id__exact=request.GET.get('registered_subject', 0))
-            else:
-                self.readonly_fields = list(self.readonly_fields)
-                try:
-                    self.readonly_fields.index('registered_subject')
-                except ValueError:
-                    self.readonly_fields.append('registered_subject')
         if db_field.name == "maternal_labour_del":
             if request.GET.get('registered_subject'):
                 maternal_subject_identifier = RegisteredSubject.objects.get(
