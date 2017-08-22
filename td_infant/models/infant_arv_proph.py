@@ -74,7 +74,7 @@ class InfantArvProphMod(CrfInlineModelMixin, SyncModelMixin, ExportTrackingField
         blank=True)
 
     objects = InfantArvProphModManager()
-    
+
     history = SyncHistoricalRecords()
 
     def natural_key(self):
@@ -84,4 +84,5 @@ class InfantArvProphMod(CrfInlineModelMixin, SyncModelMixin, ExportTrackingField
         app_label = 'td_infant'
         verbose_name = 'Infant NVP or AZT Proph: Mods'
         verbose_name_plural = 'Infant NVP or AZT Proph: Mods'
-        unique_together = ('infant_arv_proph', 'arv_code')
+        unique_together = (
+            'infant_arv_proph', 'arv_code', 'dose_status', 'modification_date')
