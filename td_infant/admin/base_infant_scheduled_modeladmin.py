@@ -8,6 +8,9 @@ from ..models import InfantVisit
 
 class BaseInfantScheduleModelAdmin(MembershipBaseModelAdmin):
 
+    search_fields = (
+        'infant_visit__appointment__registered_subject__subject_identifier',)
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "infant_visit":
             if request.GET.get('infant_visit'):
