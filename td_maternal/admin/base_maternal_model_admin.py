@@ -11,8 +11,8 @@ class BaseMaternalModelAdmin(MembershipBaseModelAdmin):
     dashboard_type = 'maternal'
     visit_model_name = 'maternalvisit'
 
-    search_fields = (
-        'maternal_visit__appointment__registered_subject__subject_identifier',)
+    search_fields = [
+        'maternal_visit__appointment__registered_subject__subject_identifier', ]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "maternal_visit":
