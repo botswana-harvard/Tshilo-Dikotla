@@ -2,7 +2,7 @@ from django.db import models
 
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
-from edc_constants.choices import YES_NO
+from edc_constants.choices import YES_NO, YES
 from edc_constants.constants import NOT_APPLICABLE
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
@@ -24,7 +24,7 @@ class InfantArvProph(InfantCrfModel):
             'Was the baby supposed to be taking taking prophylactic antiretroviral medication for '
             'any period since the last attended scheduled visit?'),
         max_length=3,
-        choices=YES_NO)
+        choices=YES)
 
     arv_status = models.CharField(
         max_length=25,
