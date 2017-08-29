@@ -48,7 +48,8 @@ class TestInfantImmunizationForm(BaseTestCase):
             appointment__visit_definition__code='1000M')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(
             maternal_visit=self.maternal_visit, number_of_gestations=1,)
-        self.maternal_visits_membership = AntenatalVisitMembershipFactory(registered_subject=self.registered_subject)
+        self.maternal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=self.registered_subject)
         self.maternal_labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject,
                                                             live_infants_to_register=1)
         self.antenatal_visit_1 = MaternalVisitFactory(
@@ -71,7 +72,8 @@ class TestInfantImmunizationForm(BaseTestCase):
             registered_subject=infant_registered_subject,
             visit_definition__code='2000')
         self.infant_visit = InfantVisitFactory(appointment=self.appointment)
-        self.infant_birth_arv = InfantBirthArvFactory(infant_visit=self.infant_visit, azt_discharge_supply=YES)
+        self.infant_birth_arv = InfantBirthArvFactory(
+            infant_visit=self.infant_visit, azt_discharge_supply=YES)
         self.appointment = Appointment.objects.get(
             registered_subject=infant_registered_subject,
             visit_definition__code='2010')
@@ -89,7 +91,14 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_vaccines_received_no_table_filling(self):
         """Test an infant who received vaccines but received vaccines table not filled"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        self.options = {
+            'report_datetime': timezone.now(),
+            'infant_visit': self.infant_visit,
+            'vaccines_received': YES,
+            'vaccines_missed': NO
+        }
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': None,
                            'date_given': None,
@@ -107,7 +116,8 @@ class TestInfantImmunizationForm(BaseTestCase):
             'vaccines_received': NO,
             'vaccines_missed': NO
         }
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'Hepatitis_B',
                            'date_given': date.today(),
@@ -124,7 +134,8 @@ class TestInfantImmunizationForm(BaseTestCase):
             'vaccines_received': NO,
             'vaccines_missed': YES
         }
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'missed_vaccine_name': None,
                            'reason_missed': None,
@@ -142,13 +153,14 @@ class TestInfantImmunizationForm(BaseTestCase):
             'vaccines_received': NO,
             'vaccines_missed': NO
         }
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'missed_vaccine_name': 'Vitamin_A',
                            'reason_missed': 'Was not in country',
                            'reason_missed_other': None}
         vaccine_missed_form = VaccinesMissedForm(data=received_inline)
-        self.assertIn("No vaccines missed. Do not fill Missed Vaccines table", 
+        self.assertIn("No vaccines missed. Do not fill Missed Vaccines table",
                       vaccine_missed_form.errors.get('__all__'))
 
     def test_missed_vaccine_fields(self):
@@ -159,7 +171,8 @@ class TestInfantImmunizationForm(BaseTestCase):
             'vaccines_received': NO,
             'vaccines_missed': YES
         }
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'missed_vaccine_name': 'BCG',
                            'reason_missed': None,
@@ -170,7 +183,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_vaccine_received_date_not_greater_than_birth(self):
         """test if the vaccine date is not greater than the birth date"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'BCG',
                            'date_given': (timezone.datetime.now() - relativedelta(weeks=37)).date(),
@@ -181,7 +195,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_received_vaccine_fields_date(self):
         """Test that when a receive vaccine name is filled that a date is provided"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'BCG',
                            'date_given': None,
@@ -192,7 +207,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_received_vaccine_fields_age(self):
         """Test that when a receive vaccine name is filled that a date is provided"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'BCG',
                            'date_given': (timezone.datetime.now() - relativedelta(weeks=37)).date(),
@@ -203,7 +219,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_received_vaccination_at_birth_bcg(self):
         """Test that the correct vaccine is given at birth or few days after birth"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'BCG',
                            'date_given': date.today(),
@@ -214,7 +231,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_received_hepatitis_vaccine(self):
         """Test that the hepatitis vaccine is not given at inappropriate infant age"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'Hepatitis_B',
                            'date_given': date.today(),
@@ -225,7 +243,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_receievd_dpt_vaccine(self):
         """Test that DPT vaccine is not given at inappropriate infant age"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'DPT',
                            'date_given': date.today(),
@@ -236,7 +255,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_received_haemophilus_vaccine(self):
         """Test that haemophilus influenza vaccine is not administered at inappropiate infant age"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'Haemophilus_influenza',
                            'date_given': date.today(),
@@ -247,7 +267,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_received_pcv_vaccine(self):
         """Test that PCV is administered at correct age"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'PCV_Vaccine',
                            'date_given': date.today(),
@@ -258,7 +279,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_received_polio_vaccine(self):
         """Test that polio vaccine is administered at correct age"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'Polio',
                            'date_given': date.today(),
@@ -269,7 +291,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_received_rotavirus_vaccine(self):
         """Test rotavirus administered to infant at age 4months"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'Rotavirus',
                            'date_given': date.today(),
@@ -280,7 +303,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_received_measles_vaccine(self):
         """Test measles vaccine administered to an infant who is only a month old"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'Measles',
                            'date_given': date.today(),
@@ -291,7 +315,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_received_pentavalent_vaccine(self):
         """Test for Pentavalent vaccine administered at 6-11 months of infant life"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'Pentavalent',
                            'date_given': date.today(),
@@ -302,7 +327,8 @@ class TestInfantImmunizationForm(BaseTestCase):
 
     def test_received_vitamin_a_vaccine(self):
         """Test for Vitamin A vaccine administered earlier than 6 months"""
-        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(**self.options)
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
         received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
                            'received_vaccine_name': 'Vitamin_A',
                            'date_given': date.today(),
