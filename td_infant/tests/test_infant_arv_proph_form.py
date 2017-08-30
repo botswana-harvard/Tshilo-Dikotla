@@ -9,7 +9,7 @@ from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, PO
 from edc_meta_data.models import RequisitionMetaData
 from edc_appointment.models import Appointment
 
-from tshilo_dikotla.constants import MODIFIED, NO_MODIFICATIONS, DISCONTINUED, NEVER_STARTED
+from tshilo_dikotla.constants import MODIFIED, NO_MODIFICATIONS, DISCONTINUED, NEVER_STARTED, START
 from td_maternal.models import MaternalVisit
 
 from td_maternal.tests import BaseTestCase
@@ -48,7 +48,8 @@ class TestInfantArvProph(BaseTestCase):
             appointment__visit_definition__code='1000M')
         self.maternal_ultrasound = MaternalUltraSoundIniFactory(
             maternal_visit=self.maternal_visit, number_of_gestations=1,)
-        self.maternal_visits_membership = AntenatalVisitMembershipFactory(registered_subject=self.registered_subject)
+        self.maternal_visits_membership = AntenatalVisitMembershipFactory(
+            registered_subject=self.registered_subject)
         self.maternal_labour_del = MaternalLabourDelFactory(registered_subject=self.registered_subject,
                                                             live_infants_to_register=1)
         self.antenatal_visit_1 = MaternalVisitFactory(
@@ -71,7 +72,8 @@ class TestInfantArvProph(BaseTestCase):
             registered_subject=infant_registered_subject,
             visit_definition__code='2000')
         self.infant_visit = InfantVisitFactory(appointment=self.appointment)
-        self.infant_birth_arv = InfantBirthArvFactory(infant_visit=self.infant_visit, azt_discharge_supply=YES)
+        self.infant_birth_arv = InfantBirthArvFactory(
+            infant_visit=self.infant_visit, azt_discharge_supply=YES)
         self.appointment = Appointment.objects.get(
             registered_subject=infant_registered_subject,
             visit_definition__code='2010')
@@ -91,16 +93,40 @@ class TestInfantArvProph(BaseTestCase):
         self.assertIn(u'Infant was not taking prophylactic arv, prophylaxis should be Never Started or Discontinued.',
                       infant_arv_proph.errors.get('__all__'))
 
-    def test_validate_taking_arv_proph_discontinued(self):
+    def test_validate_taking_arv_proph_no_mod(self):
         """Test if the was not taking  prophylactic arv and infant was not given arv's at birth"""
         self.infant_birth_arv.azt_discharge_supply = UNKNOWN
         self.infant_birth_arv.save()
         self.data['prophylatic_nvp'] = NO
-        self.data['arv_status'] = DISCONTINUED
+        self.data['arv_status'] = NO_MODIFICATIONS
         infant_arv_proph = InfantArvProphForm(data=self.data)
         self.assertIn(
             u'The azt discharge supply in Infant birth arv was answered as NO or Unknown, '
-            'therefore Infant ARV proph in this visit cannot be permanently discontinued.',
+            'therefore Infant ARV proph in this visit cannot have no modifications.',
+            infant_arv_proph.errors.get('__all__'))
+
+    def test_validate_taking_arv_proph_never_started(self):
+        """Test if the was not taking  prophylactic arv and infant was not given arv's at birth"""
+        self.infant_birth_arv.azt_discharge_supply = UNKNOWN
+        self.infant_birth_arv.save()
+        self.data['prophylatic_nvp'] = NO
+        self.data['arv_status'] = NEVER_STARTED
+        infant_arv_proph = InfantArvProphForm(data=self.data)
+        self.assertIn(
+            u'The azt discharge supply in Infant birth arv was answered as NO or Unknown, '
+            'therefore Infant ARV proph in this visit cannot have have never started.',
+            infant_arv_proph.errors.get('__all__'))
+
+    def test_validate_taking_arv_proph_mod(self):
+        """Test if the was not taking  prophylactic arv and infant was not given arv's at birth"""
+        self.infant_birth_arv.azt_discharge_supply = UNKNOWN
+        self.infant_birth_arv.save()
+        self.data['prophylatic_nvp'] = NO
+        self.data['arv_status'] = MODIFIED
+        infant_arv_proph = InfantArvProphForm(data=self.data)
+        self.assertIn(
+            u'The azt discharge supply in Infant birth arv was answered as NO or Unknown, '
+            'therefore Infant ARV proph in this visit cannot have have modifications.',
             infant_arv_proph.errors.get('__all__'))
 
     def test_validate_taking_arv_proph_yes(self):
@@ -112,7 +138,8 @@ class TestInfantArvProph(BaseTestCase):
                       infant_arv_proph.errors.get('__all__'))
 
     def test_validate_infant_arv_proph_mod_dose_status(self):
-        proph = InfantArvProphFactory(infant_visit=self.infant_visit, arv_status=MODIFIED)
+        proph = InfantArvProphFactory(
+            infant_visit=self.infant_visit, arv_status=MODIFIED)
         inline_data = {'infant_arv_proph': proph.id,
                        'arv_code': 'Nevirapine',
                        'dose_status': None,
@@ -123,7 +150,8 @@ class TestInfantArvProph(BaseTestCase):
                       infant_arv_proph.errors.get('__all__'))
 
     def test_validate_infant_arv_proph_mod_date(self):
-        proph = InfantArvProphFactory(infant_visit=self.infant_visit, arv_status=MODIFIED)
+        proph = InfantArvProphFactory(
+            infant_visit=self.infant_visit, arv_status=MODIFIED)
         inline_data = {'infant_arv_proph': proph.id,
                        'arv_code': 'Nevirapine',
                        'dose_status': 'New',
@@ -133,8 +161,21 @@ class TestInfantArvProph(BaseTestCase):
         self.assertIn(u'You entered an ARV Code, please give the modification date.',
                       infant_arv_proph.errors.get('__all__'))
 
+    def test_validate_infant_arv_proph_never_started(self):
+        proph = InfantArvProphFactory(
+            infant_visit=self.infant_visit, arv_status=NEVER_STARTED)
+        inline_data = {'infant_arv_proph': proph.id,
+                       'arv_code': 'Nevirapine',
+                       'dose_status': 'New',
+                       'modification_date': date.today(),
+                       'modification_code': 'Initial dose'}
+        infant_arv_proph = InfantArvProphModForm(data=inline_data)
+        self.assertIn(u'You did indicated that medication was never started, so do not ENTER arv inline.',
+                      infant_arv_proph.errors.get('__all__'))
+
     def test_validate_infant_arv_proph_mod_code(self):
-        proph = InfantArvProphFactory(infant_visit=self.infant_visit, arv_status=MODIFIED)
+        proph = InfantArvProphFactory(
+            infant_visit=self.infant_visit, arv_status=MODIFIED)
         inline_data = {'infant_arv_proph': proph.id,
                        'arv_code': 'Nevirapine',
                        'dose_status': 'New',
@@ -145,7 +186,8 @@ class TestInfantArvProph(BaseTestCase):
                       infant_arv_proph.errors.get('__all__'))
 
     def test_validate_infant_arv_proph_mod_not_needed(self):
-        proph = InfantArvProphFactory(infant_visit=self.infant_visit, arv_status=NO_MODIFICATIONS)
+        proph = InfantArvProphFactory(
+            infant_visit=self.infant_visit, arv_status=NO_MODIFICATIONS)
         inline_data = {'infant_arv_proph': proph.id,
                        'arv_code': 'Nevirapine',
                        'dose_status': 'New',
@@ -155,11 +197,48 @@ class TestInfantArvProph(BaseTestCase):
         self.assertIn(u'You did NOT indicate that medication was modified, so do not ENTER arv inline.',
                       infant_arv_proph.errors.get('__all__'))
 
+    def test_validate_infant_arv_proph_modified(self):
+        proph = InfantArvProphFactory(
+            infant_visit=self.infant_visit, arv_status=MODIFIED)
+        inline_data = {'infant_arv_proph': proph.id,
+                       'arv_code': None,
+                       'dose_status': None,
+                       'modification_date': date.today(),
+                       'modification_code': 'Initial dose'}
+        infant_arv_proph = InfantArvProphModForm(data=inline_data)
+        self.assertIn(u'You indicated that medication was modified, so ENTER arv inline.',
+                      infant_arv_proph.errors.get('__all__'))
+
+    def test_validate_infant_arv_proph_start(self):
+        proph = InfantArvProphFactory(
+            infant_visit=self.infant_visit, arv_status=START)
+        inline_data = {'infant_arv_proph': proph.id,
+                       'arv_code': None,
+                       'dose_status': None,
+                       'modification_date': date.today(),
+                       'modification_code': 'Initial dose'}
+        infant_arv_proph = InfantArvProphModForm(data=inline_data)
+        self.assertIn(u'You indicated that medication was started, so ENTER arv inline.',
+                      infant_arv_proph.errors.get('__all__'))
+
+    def test_validate_infant_arv_proph_never_started(self):
+        proph = InfantArvProphFactory(
+            infant_visit=self.infant_visit, arv_status=NEVER_STARTED)
+        inline_data = {'infant_arv_proph': proph.id,
+                       'arv_code': 'Nevirapine',
+                       'dose_status': 'New',
+                       'modification_date': date.today(),
+                       'modification_code': 'Initial dose'}
+        infant_arv_proph = InfantArvProphModForm(data=inline_data)
+        self.assertIn(u'You indicated that medication was never started, so do not ENTER arv inline.',
+                      infant_arv_proph.errors.get('__all__'))
+
     def test_validate_infant_arv_azt_initiated(self):
         """Check that the azt dose is not initiated more than once"""
         self.infant_birth_arv.azt_discharge_supply = YES
         self.infant_birth_arv.save()
-        proph = InfantArvProphFactory(infant_visit=self.infant_visit, arv_status=MODIFIED)
+        proph = InfantArvProphFactory(
+            infant_visit=self.infant_visit, arv_status=MODIFIED)
         inline_data = {'infant_arv_proph': proph.id,
                        'arv_code': 'Zidovudine',
                        'dose_status': 'New',
@@ -173,7 +252,8 @@ class TestInfantArvProph(BaseTestCase):
 
     def test_validate_infant_arv_azt_different(self):
         """Check that the dose being modified is the same one infant was discharged with."""
-        proph = InfantArvProphFactory(infant_visit=self.infant_visit, arv_status=MODIFIED)
+        proph = InfantArvProphFactory(
+            infant_visit=self.infant_visit, arv_status=MODIFIED)
         inline_data = {'infant_arv_proph': proph.id,
                        'arv_code': 'Nevarapine',
                        'dose_status': 'New',
