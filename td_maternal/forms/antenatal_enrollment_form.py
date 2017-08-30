@@ -10,7 +10,7 @@ from ..models import AntenatalEnrollment, MaternalEligibility
 from .base_enrollment_form import BaseEnrollmentForm
 
 
-class AntenatalEnrollmentForm(BaseEnrollmentForm):
+class AntenatalEnrollmentForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(AntenatalEnrollmentForm, self).clean()
@@ -36,25 +36,29 @@ class AntenatalEnrollmentForm(BaseEnrollmentForm):
         return cleaned_data
 
     def validate_last_period_date(self, report_datetime, last_period_date):
-        if last_period_date and (last_period_date >= report_datetime.date() - relativedelta(weeks=4)):
-            raise forms.ValidationError('LMP cannot be within 4weeks of report datetime. '
+        if last_period_date and (last_period_date > (report_datetime.date() - relativedelta(weeks=16))):
+            raise forms.ValidationError('LMP cannot be within 16weeks of report datetime. '
+                                        'Got LMP as {} and report datetime as {}'.format(last_period_date,
+                                                                                         report_datetime))
+        elif last_period_date and (last_period_date <= report_datetime.date() - relativedelta(weeks=36)):
+            raise forms.ValidationError('LMP cannot be more than 36weeks of report datetime. '
                                         'Got LMP as {} and report datetime as {}'.format(last_period_date,
                                                                                          report_datetime))
 
-    def clean_rapid_test_date(self):
-        rapid_test_date = self.cleaned_data['rapid_test_date']
-        registered_subject = self.cleaned_data['registered_subject']
-        if rapid_test_date:
-            try:
-                initial = AntenatalEnrollment.objects.get(
-                    registered_subject=registered_subject)
-                if initial:
-                    if rapid_test_date != initial.rapid_test_date:
-                        raise forms.ValidationError(
-                            'The rapid test result cannot be changed')
-            except AntenatalEnrollment.DoesNotExist:
-                pass
-        return rapid_test_date
+#     def clean_rapid_test_date(self):
+#         rapid_test_date = self.cleaned_data['rapid_test_date']
+#         registered_subject = self.cleaned_data['registered_subject']
+#         if rapid_test_date:
+#             try:
+#                 initial = AntenatalEnrollment.objects.get(
+#                     registered_subject=registered_subject)
+#                 if initial:
+#                     if rapid_test_date != initial.rapid_test_date:
+#                         raise forms.ValidationError(
+#                             'The rapid test result cannot be changed')
+#             except AntenatalEnrollment.DoesNotExist:
+#                 pass
+#         return rapid_test_date
 
     class Meta:
         model = AntenatalEnrollment

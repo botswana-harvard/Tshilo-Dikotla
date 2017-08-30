@@ -2,7 +2,8 @@ from django.db import models
 
 from edc_appointment.models import AppointmentMixin
 from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import (date_not_before_study_start, date_not_future)
+from edc_base.model.validators import (
+    date_not_before_study_start, date_not_future)
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_consent.models import RequiresConsentMixin
 from edc_constants.constants import NO, YES
@@ -80,19 +81,22 @@ class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, OffStudyMixin, Appoin
         (False, unenrolled_error_message) where error message is the reason enrollment failed."""
         unenrolled_error_message = []
         chronic_message = self.chronic_unenrolled_error_messages()
-        unenrolled_error_message.append(chronic_message) if chronic_message else None
+        unenrolled_error_message.append(
+            chronic_message) if chronic_message else None
         if self.will_breastfeed == NO:
             unenrolled_error_message.append('will not breastfeed')
         if self.will_remain_onstudy == NO:
             unenrolled_error_message.append('won\'t remain in study')
         if self.will_get_arvs == NO:
-            unenrolled_error_message.append('Will not get ARVs on this pregnancy.')
+            unenrolled_error_message.append(
+                'Will not get ARVs on this pregnancy.')
         if self.rapid_test_done == NO:
             unenrolled_error_message.append('rapid test not done')
         if self.ga_lmp_enrollment_wks and (self.ga_lmp_enrollment_wks < 16 or self.ga_lmp_enrollment_wks > 36):
             unenrolled_error_message.append('gestation not 16 to 36wks')
         if self.delivery and not self.delivery.keep_on_study:
-            unenrolled_error_message.append('Hiv+ and not on ART for atleast 4 weeks.')
+            unenrolled_error_message.append(
+                'Hiv+ and not on ART for atleast 4 weeks.')
         if self.ultrasound and not self.ultrasound.pass_antenatal_enrollment:
             unenrolled_error_message.append('Pregnancy is not a singleton.')
         return unenrolled_error_message

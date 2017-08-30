@@ -3,12 +3,12 @@ from dateutil.relativedelta import relativedelta
 
 from edc_appointment.models import Appointment
 from edc_constants.constants import (POS, YES, NO, NEG, NOT_APPLICABLE, UNKNOWN,
-    FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY,SCHEDULED)
+                                     FAILED_ELIGIBILITY, OFF_STUDY, ON_STUDY, SCHEDULED)
 
 from .factories import (
     AntenatalEnrollmentFactory, MaternalEligibilityFactory, MaternalConsentFactory)
 
-
+from ..forms import AntenatalEnrollmentForm
 from ..models import MaternalVisit, EnrollmentHelper, MaternalOffStudy
 
 from .base_test_case import BaseTestCase
@@ -21,7 +21,8 @@ class TestAntenatalEnrollment(BaseTestCase):
         super(TestAntenatalEnrollment, self).setUp()
         self.maternal_eligibility = MaternalEligibilityFactory()
         self.registered_subject = self.maternal_eligibility.registered_subject
-        self.maternal_consent = MaternalConsentFactory(maternal_eligibility=self.maternal_eligibility)
+        self.maternal_consent = MaternalConsentFactory(
+            maternal_eligibility=self.maternal_eligibility)
         self.data = {
             'registered_subject': self.registered_subject}
 
@@ -36,7 +37,8 @@ class TestAntenatalEnrollment(BaseTestCase):
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
+        self.off_study_visit_on_ineligible(
+            antenatal_enrollment.subject_identifier)
 
     def test_gestation_wks_lmp_above_36(self):
         """Test for a positive mother with evidence of hiv_status,
@@ -51,7 +53,8 @@ class TestAntenatalEnrollment(BaseTestCase):
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
+        self.off_study_visit_on_ineligible(
+            antenatal_enrollment.subject_identifier)
 
     def test_gestation_wks_lmp_between_16_and_36_notvalid_arv(self):
         """Test for a positive mother with evidence of hiv_status,
@@ -67,7 +70,8 @@ class TestAntenatalEnrollment(BaseTestCase):
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
+        self.off_study_visit_on_ineligible(
+            antenatal_enrollment.subject_identifier)
 
     def test_gestation_wks_lmp_between_16_and_36_valid_arv(self):
         """Test for a positive mother with evidence of hiv_status,
@@ -100,7 +104,8 @@ class TestAntenatalEnrollment(BaseTestCase):
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
+        self.off_study_visit_on_ineligible(
+            antenatal_enrollment.subject_identifier)
 
     def test_is_not_diabetic(self):
         """Test for a positive mother with valid documentation,
@@ -152,7 +157,8 @@ class TestAntenatalEnrollment(BaseTestCase):
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
+        self.off_study_visit_on_ineligible(
+            antenatal_enrollment.subject_identifier)
 
     def test_will_remain_onstudy(self):
         """Test for a posetive mother who has documenation of hiv_status,
@@ -188,7 +194,8 @@ class TestAntenatalEnrollment(BaseTestCase):
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, POS)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
+        self.off_study_visit_on_ineligible(
+            antenatal_enrollment.subject_identifier)
 
     def test_mother_tested_POS_at_32weeks_with_evidence(self):
         """Test for a mother who tested POS at or after 32weeks and has documentation of hiv_status"""
@@ -295,7 +302,7 @@ class TestAntenatalEnrollment(BaseTestCase):
 
 #     def test_mother_tested_NEG_after_32weeks_then_rapidtest_notenforced(self):
 #         """Test for a mother who tested NEG AFTER 32weeks, with documentation then rapid test not enforced"""
-# 
+#
 #         options = {'registered_subject': self.registered_subject,
 #                    'current_hiv_status': UNKNOWN,
 #                    'evidence_hiv_status': None,
@@ -308,7 +315,7 @@ class TestAntenatalEnrollment(BaseTestCase):
 #                    'rapid_test_result': None,
 #                    'rapid_test_date': None,
 #                    'last_period_date': (timezone.datetime.now() - relativedelta(weeks=34)).date()}
-# 
+#
 #         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
 #         enrollment_helper = EnrollmentHelper(antenatal_enrollment)
 #         self.assertEqual(antenatal_enrollment.enrollment_hiv_status, NEG)
@@ -369,7 +376,8 @@ class TestAntenatalEnrollment(BaseTestCase):
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertTrue(antenatal_enrollment.is_eligible)
-        self.scheduled_visit_on_eligible_or_pending(self.registered_subject.subject_identifier)
+        self.scheduled_visit_on_eligible_or_pending(
+            self.registered_subject.subject_identifier)
 
     def test_no_week32test_rapid_test_ineligible(self):
         """Test for a mother who is at 35weeks gestational age,
@@ -386,7 +394,8 @@ class TestAntenatalEnrollment(BaseTestCase):
 
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
-        self.off_study_visit_on_ineligible(antenatal_enrollment.subject_identifier)
+        self.off_study_visit_on_ineligible(
+            antenatal_enrollment.subject_identifier)
 
     def test_lmp_not_provided_status(self):
         """Test enrollment status is PENDING if lmp is not provided."""
@@ -402,7 +411,8 @@ class TestAntenatalEnrollment(BaseTestCase):
         antenatal_enrollment = AntenatalEnrollmentFactory(**options)
         self.assertFalse(antenatal_enrollment.is_eligible)
         self.assertTrue(antenatal_enrollment.pending_ultrasound)
-        self.scheduled_visit_on_eligible_or_pending(self.registered_subject.subject_identifier)
+        self.scheduled_visit_on_eligible_or_pending(
+            self.registered_subject.subject_identifier)
 
     def test_no_calculations_if_no_lmp(self):
         """Test if no lmp then ga_by_lmp and edd_by_lmp are not calculated."""
@@ -421,7 +431,25 @@ class TestAntenatalEnrollment(BaseTestCase):
         self.assertIsNone(antenatal_enrollment.ga_lmp_enrollment_wks)
         self.assertIsNone(antenatal_enrollment.edd_by_lmp)
         self.assertIsNone(antenatal_enrollment.date_at_32wks)
-        self.scheduled_visit_on_eligible_or_pending(self.registered_subject.subject_identifier)
+        self.scheduled_visit_on_eligible_or_pending(
+            self.registered_subject.subject_identifier)
+
+    def test_lt_16_weeks_lmp(self):
+
+        options = {'registered_subject': self.registered_subject,
+                   'report_datetime': timezone.datetime.now(),
+                   'current_hiv_status': UNKNOWN,
+                   'evidence_hiv_status': None,
+                   'week32_test': NO,
+                   'rapid_test_done': YES,
+                   'rapid_test_date': timezone.datetime.now().date(),
+                   'rapid_test_result': POS,
+                   'last_period_date': (timezone.datetime.now() - relativedelta(weeks=10)).date()}
+        form = AntenatalEnrollmentForm(data=options)
+        errors = ''.join(form.errors.get('__all__'))
+        self.assertIn(
+            'LMP cannot be within 16weeks of report datetime. '
+            'Got LMP as 2017-06-21 and report datetime as ', errors)
 
     def off_study_visit_on_ineligible(self, subject_identifier):
         self.assertEqual(MaternalVisit.objects.all().count(), 1)
@@ -437,4 +465,3 @@ class TestAntenatalEnrollment(BaseTestCase):
             reason=SCHEDULED,
             study_status=ON_STUDY,
             appointment__registered_subject__subject_identifier=subject_identifier).count(), 1)
-
