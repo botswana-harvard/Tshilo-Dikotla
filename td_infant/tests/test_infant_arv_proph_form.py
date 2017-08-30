@@ -93,16 +93,40 @@ class TestInfantArvProph(BaseTestCase):
         self.assertIn(u'Infant was not taking prophylactic arv, prophylaxis should be Never Started or Discontinued.',
                       infant_arv_proph.errors.get('__all__'))
 
-    def test_validate_taking_arv_proph_discontinued(self):
+    def test_validate_taking_arv_proph_no_mod(self):
         """Test if the was not taking  prophylactic arv and infant was not given arv's at birth"""
         self.infant_birth_arv.azt_discharge_supply = UNKNOWN
         self.infant_birth_arv.save()
         self.data['prophylatic_nvp'] = NO
-        self.data['arv_status'] = DISCONTINUED
+        self.data['arv_status'] = NO_MODIFICATIONS
         infant_arv_proph = InfantArvProphForm(data=self.data)
         self.assertIn(
             u'The azt discharge supply in Infant birth arv was answered as NO or Unknown, '
-            'therefore Infant ARV proph in this visit cannot be permanently discontinued.',
+            'therefore Infant ARV proph in this visit cannot have no modifications.',
+            infant_arv_proph.errors.get('__all__'))
+
+    def test_validate_taking_arv_proph_never_started(self):
+        """Test if the was not taking  prophylactic arv and infant was not given arv's at birth"""
+        self.infant_birth_arv.azt_discharge_supply = UNKNOWN
+        self.infant_birth_arv.save()
+        self.data['prophylatic_nvp'] = NO
+        self.data['arv_status'] = NEVER_STARTED
+        infant_arv_proph = InfantArvProphForm(data=self.data)
+        self.assertIn(
+            u'The azt discharge supply in Infant birth arv was answered as NO or Unknown, '
+            'therefore Infant ARV proph in this visit cannot have have never started.',
+            infant_arv_proph.errors.get('__all__'))
+
+    def test_validate_taking_arv_proph_mod(self):
+        """Test if the was not taking  prophylactic arv and infant was not given arv's at birth"""
+        self.infant_birth_arv.azt_discharge_supply = UNKNOWN
+        self.infant_birth_arv.save()
+        self.data['prophylatic_nvp'] = NO
+        self.data['arv_status'] = MODIFIED
+        infant_arv_proph = InfantArvProphForm(data=self.data)
+        self.assertIn(
+            u'The azt discharge supply in Infant birth arv was answered as NO or Unknown, '
+            'therefore Infant ARV proph in this visit cannot have have modifications.',
             infant_arv_proph.errors.get('__all__'))
 
     def test_validate_taking_arv_proph_yes(self):
