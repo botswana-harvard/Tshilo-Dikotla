@@ -23,6 +23,9 @@ class InfantFuDxItemsInline(BaseTabularInline):
 class InfantFuDxItemsAdmin(BaseModelAdmin):
     form = InfantFuDxItemsForm
 
+    search_fields = [
+        'infant_fu_dx__infant_visit__appointment__registered_subject__subject_identifier', ]
+
     actions = [
         export_as_csv_action(
             description="CSV Export of Infant Followup Diagnosis with diagnoses",

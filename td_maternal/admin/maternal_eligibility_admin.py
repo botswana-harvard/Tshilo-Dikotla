@@ -19,11 +19,15 @@ class MaternalEligibilityAdmin(BaseModelAdmin):
               'age_in_years',
               'has_omang')
 
+    search_fields = ['registered_subject__subject_identifier',
+                     'registered_subject__initials']
+
     radio_fields = {'has_omang': admin.VERTICAL}
 
     readonly_fields = ('eligibility_id',)
 
-    list_display = ('report_datetime', 'age_in_years', 'is_eligible', 'is_consented')
+    list_display = (
+        'report_datetime', 'age_in_years', 'is_eligible', 'is_consented')
 
     list_filter = ('report_datetime', 'is_eligible', 'is_consented')
 
@@ -32,7 +36,8 @@ class MaternalEligibilityAdmin(BaseModelAdmin):
             description="CSV Export of Maternal Eligibility",
             fields=[],
             delimiter=',',
-            exclude=['user_created', 'user_modified', 'hostname_created', 'hostname_modified'],
+            exclude=['user_created', 'user_modified',
+                     'hostname_created', 'hostname_modified'],
             extra_fields=OrderedDict(
                 {'subject_identifier': 'registered_subject__subject_identifier',
                  'gender': 'registered_subject__gender',

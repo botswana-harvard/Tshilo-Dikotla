@@ -18,12 +18,16 @@ class MaternalEligibilityLossAdmin(MembershipBaseModelAdmin):
               'report_datetime',
               'reason_ineligible')
 
+    search_fields = ['maternal_eligibility__registered_subject__subject_identifier',
+                     'maternal_eligibility__registered_subject__initials']
+
     actions = [
         export_as_csv_action(
             description="CSV Export of Maternal Eligibility",
             fields=[],
             delimiter=',',
-            exclude=['user_created', 'user_modified', 'hostname_created', 'hostname_modified'],
+            exclude=['user_created', 'user_modified',
+                     'hostname_created', 'hostname_modified'],
             extra_fields=OrderedDict(
                 {'subject_identifier': 'maternal_eligibility__registered_subject__subject_identifier',
                  'gender': 'maternal_eligibility__registered_subject__gender',
@@ -34,7 +38,8 @@ class MaternalEligibilityLossAdmin(MembershipBaseModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "maternal_eligibility":
             if request.GET.get('maternal_eligibility'):
-                kwargs["queryset"] = MaternalEligibility.objects.filter(id=request.GET.get('maternal_eligibility'))
+                kwargs["queryset"] = MaternalEligibility.objects.filter(
+                    id=request.GET.get('maternal_eligibility'))
         return super(MaternalEligibilityLossAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
 admin.site.register(MaternalEligibilityLoss, MaternalEligibilityLossAdmin)

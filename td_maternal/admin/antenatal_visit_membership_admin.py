@@ -15,6 +15,9 @@ class AntenataVisitMembershipAdmin(MembershipBaseModelAdmin):
     dashboard_type = 'maternal'
     form = AntenatalVisitMembershipForm
 
+    search_fields = ['registered_subject__subject_identifier',
+                     'registered_subject__initials']
+
     radio_fields = {'antenatal_visits': admin.VERTICAL}
 
     list_display = (

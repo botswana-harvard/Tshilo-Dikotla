@@ -1,6 +1,6 @@
 from .infant_birth_factory import InfantBirthFactory
 from .infant_visit_factory import InfantVisitFactory
-from .infant_arv_proph_factory import InfantArvProphFactory
+from .infant_arv_proph_factory import InfantArvProphFactory, InfantArvProphModFactory
 from .infant_birth_arv_factory import InfantBirthArvFactory
 from .infant_birth_data_factory import InfantBirthDataFactory
 from .infant_fu_factory import InfantFuFactory

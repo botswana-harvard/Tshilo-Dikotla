@@ -23,6 +23,9 @@ class InfantFuNewMedItemsAdmin(BaseModelAdmin):
 
     form = InfantFuNewMedItemsForm
 
+    search_fields = [
+        'infant_fu_med__infant_visit__appointment__registered_subject__subject_identifier', ]
+
     actions = [
         export_as_csv_action(
             description="CSV Export of Followup New Medications with meds list",

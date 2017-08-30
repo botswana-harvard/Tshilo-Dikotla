@@ -26,6 +26,8 @@ class InfantBirthAdmin(MembershipBaseModelAdmin):
         'gender',
     )
 
+    search_fields = ['registered_subject__subject_identifier', ]
+
     list_display = ('report_datetime', 'first_name', 'maternal_labour_del')
     list_filter = ('gender',)
     radio_fields = {'gender': admin.VERTICAL}

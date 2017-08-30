@@ -145,7 +145,9 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
                      REQUIRED, NOT_ADDITIONAL),
             CrfTuple(60, 'td_infant', 'infantfeeding',
                      REQUIRED, NOT_ADDITIONAL),
-            CrfTuple(70, 'td_infant', 'infantnvpadjustment', REQUIRED, NOT_ADDITIONAL))}
+            CrfTuple(
+                70, 'td_infant', 'infantnvpadjustment', REQUIRED, NOT_ADDITIONAL),
+            CrfTuple(80, 'td_infant', 'infantfuimmunizations', REQUIRED, NOT_ADDITIONAL),)}
     visit_definitions['2020'] = {
         'title': 'Infant 2 Month Visit',
         'time_point': 20,

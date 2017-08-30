@@ -17,6 +17,9 @@ class SpecimenConsentAdmin(MembershipBaseModelAdmin):
     dashboard_type = 'maternal'
     form = SpecimenConsentForm
 
+    search_fields = ['registered_subject__subject_identifier',
+                     'registered_subject__initials']
+
     fields = ('registered_subject',
               'consent_datetime',
               'language',

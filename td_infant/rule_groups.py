@@ -7,14 +7,15 @@ from tshilo_dikotla.constants import NO_MODIFICATIONS, START, MODIFIED
 from td_maternal.rule_groups import func_mother_pos
 from td_maternal.models import MaternalVisit, MaternalRando
 
-from .models import InfantArvProph
+from .models import InfantArvProph, InfantArvProphMod
 
 from .models import InfantVisit, InfantFu, InfantBirthData, InfantFeeding, InfantNvpDispensing
 
 
 def get_previous_visit(visit_instance, timepoints, visit_model):
     registered_subject = visit_instance.appointment.registered_subject
-    position = timepoints.index(visit_instance.appointment.visit_definition.code)
+    position = timepoints.index(
+        visit_instance.appointment.visit_definition.code)
     timepoints_slice = timepoints[:position]
     if len(timepoints_slice) > 1:
         timepoints_slice.reverse()
@@ -53,16 +54,23 @@ def maternal_hiv_status_visit(visit_instance):
 
 def func_show_infant_arv_proph(visit_instance):
     previous_visit = get_previous_visit(visit_instance,
-                                        ['2000', '2010', '2020', '2060', '2090', '2120', '2180', '2240', '2300', '2360'],
+                                        ['2000', '2010', '2020', '2060', '2090',
+                                            '2120', '2180', '2240', '2300', '2360'],
                                         InfantVisit)
     if not previous_visit:
         return False
     try:
-        infant_arv_proph = InfantArvProph.objects.get(infant_visit=previous_visit)
-        return infant_arv_proph.arv_status in [NO_MODIFICATIONS, START, MODIFIED]
+        infant_arv_proph = InfantArvProph.objects.get(
+            infant_visit=previous_visit)
     except InfantArvProph.DoesNotExist:
         if visit_instance.appointment.visit_definition.code == '2010':
             return maternal_hiv_status_visit(visit_instance)
+        return False
+    try:
+        arv_mod = InfantArvProphMod.objects.get(
+            infant_arv_proph=infant_arv_proph)
+        return arv_mod.dose_status == 'Permanently discontinued'
+    except InfantArvProphMod.DoesNotExist:
         return False
 
 
@@ -82,8 +90,10 @@ def func_show_infant_nvp_dispensing(visit_instance):
     maternal_registered_subject = get_subject_identifier(
         visit_instance.appointment.registered_subject.relative_identifier)
     try:
-        maternal_rando = MaternalRando.objects.get(subject_identifier=maternal_registered_subject.subject_identifier)
-        show_infant_nvp_dispensing = func_infant_heu and maternal_rando.rx.strip('\n') == 'NVP'
+        maternal_rando = MaternalRando.objects.get(
+            subject_identifier=maternal_registered_subject.subject_identifier)
+        show_infant_nvp_dispensing = func_infant_heu and maternal_rando.rx.strip(
+            '\n') == 'NVP'
     except MaternalRando.DoesNotExist:
         pass
     return show_infant_nvp_dispensing
@@ -97,7 +107,8 @@ def func_show_nvp_adjustment_2010(visit_instance):
             visit_2000 = InfantVisit.objects.filter(
                 appointment__visit_definition__code='2000',
                 appointment__registered_subject__subject_identifier=subject_identifier).order_by('created').first()
-            nvp_dispensing = InfantNvpDispensing.objects.get(infant_visit=visit_2000)
+            nvp_dispensing = InfantNvpDispensing.objects.get(
+                infant_visit=visit_2000)
             nvp_adjustment = func_infant_heu and nvp_dispensing.nvp_prophylaxis == YES
     except InfantVisit.DoesNotExist:
         pass
@@ -226,7 +237,7 @@ class InfantRequisitionRuleGroup(RuleGroup):
 #             alternative=NOT_REQUIRED),
 #         target_model=[('td_lab', 'maternalrequisition')],
 #         target_requisition_panels=['PBMC Plasma (STORE ONLY)'])
-# 
+#
 #     require_insulin_glucose = RequisitionRule(
 #         logic=Logic(
 #             predicate=func_insulin_glucose,

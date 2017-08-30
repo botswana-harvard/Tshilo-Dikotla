@@ -15,6 +15,9 @@ class AntenatalEnrollmentAdmin(MembershipBaseModelAdmin):
     dashboard_type = 'maternal'
     form = AntenatalEnrollmentForm
 
+    search_fields = ['registered_subject__subject_identifier',
+                     'registered_subject__initials']
+
     fields = ('registered_subject',
               'report_datetime',
               'knows_lmp',
