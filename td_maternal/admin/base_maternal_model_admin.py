@@ -12,7 +12,8 @@ class BaseMaternalModelAdmin(MembershipBaseModelAdmin):
     visit_model_name = 'maternalvisit'
 
     search_fields = [
-        'maternal_visit__appointment__registered_subject__subject_identifier', ]
+        'maternal_visit__appointment__registered_subject__subject_identifier',
+        'maternal_visit__appointment__registered_subject__initials', ]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "maternal_visit":
