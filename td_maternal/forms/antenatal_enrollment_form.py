@@ -10,7 +10,7 @@ from ..models import AntenatalEnrollment, MaternalEligibility
 from .base_enrollment_form import BaseEnrollmentForm
 
 
-class AntenatalEnrollmentForm(forms.ModelForm):
+class AntenatalEnrollmentForm(BaseEnrollmentForm):
 
     def clean(self):
         cleaned_data = super(AntenatalEnrollmentForm, self).clean()
@@ -45,20 +45,20 @@ class AntenatalEnrollmentForm(forms.ModelForm):
                                         'Got LMP as {} and report datetime as {}'.format(last_period_date,
                                                                                          report_datetime))
 
-#     def clean_rapid_test_date(self):
-#         rapid_test_date = self.cleaned_data['rapid_test_date']
-#         registered_subject = self.cleaned_data['registered_subject']
-#         if rapid_test_date:
-#             try:
-#                 initial = AntenatalEnrollment.objects.get(
-#                     registered_subject=registered_subject)
-#                 if initial:
-#                     if rapid_test_date != initial.rapid_test_date:
-#                         raise forms.ValidationError(
-#                             'The rapid test result cannot be changed')
-#             except AntenatalEnrollment.DoesNotExist:
-#                 pass
-#         return rapid_test_date
+    def clean_rapid_test_date(self):
+        rapid_test_date = self.cleaned_data['rapid_test_date']
+        registered_subject = self.cleaned_data['registered_subject']
+        if rapid_test_date:
+            try:
+                initial = AntenatalEnrollment.objects.get(
+                    registered_subject=registered_subject)
+                if initial:
+                    if rapid_test_date != initial.rapid_test_date:
+                        raise forms.ValidationError(
+                            'The rapid test result cannot be changed')
+            except AntenatalEnrollment.DoesNotExist:
+                pass
+        return rapid_test_date
 
     class Meta:
         model = AntenatalEnrollment

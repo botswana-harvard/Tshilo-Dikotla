@@ -1,3 +1,4 @@
+from dateutil.relativedelta import relativedelta
 from django import forms
 
 from ..models import MaternalUltraSoundInitial
@@ -17,7 +18,7 @@ class MaternalUltraSoundInitialForm(BaseMaternalModelForm):
     def validate_ga_by_lmp(self, cleaned_data):
         ga_by_lmp = cleaned_data.get('ga_by_lmp')
         report_datetime = cleaned_data.get('report_datetime')
-        if ga_by_lmp and (ga_by_lmp > (report_datetime.date() + report_datetime(weeks=40))):
+        if ga_by_lmp and (ga_by_lmp > (report_datetime.date() + relativedelta(weeks=40))):
             raise forms.ValidationError(
                 'Got GA by LMP as {} and report datetime as {}'.format(ga_by_lmp, report_datetime))
 
