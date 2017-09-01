@@ -38,4 +38,11 @@ class InfantRequisitionAdmin(RequisitionAdminMixin, MembershipBaseModelAdmin):
             pass
         return [(None, {'fields': fields})]
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "infant_visit":
+            if request.GET.get('infant_visit'):
+                kwargs["queryset"] = InfantVisit.objects.filter(
+                    id=request.GET.get('infant_visit'))
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 admin.site.register(InfantRequisition, InfantRequisitionAdmin)

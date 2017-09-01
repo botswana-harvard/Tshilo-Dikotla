@@ -38,4 +38,11 @@ class MaternalRequisitionAdmin(RequisitionAdminMixin, MembershipBaseModelAdmin):
             pass
         return [(None, {'fields': fields})]
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "maternal_visit":
+            if request.GET.get('maternal_visit'):
+                kwargs["queryset"] = MaternalVisit.objects.filter(
+                    id=request.GET.get('maternal_visit'))
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 admin.site.register(MaternalRequisition, MaternalRequisitionAdmin)
