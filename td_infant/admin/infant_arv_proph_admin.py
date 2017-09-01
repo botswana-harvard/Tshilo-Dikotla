@@ -36,6 +36,10 @@ class InfantArvProphModAdmin(BaseInfantScheduleModelAdmin):
 
     list_filter = ('infant_arv_proph',)
 
+    search_fields = [
+        'infant_arv_proph__infant_visit__appointment__registered_subject__subject_identifier',
+        'infant_arv_proph__infant_visit__appointment__registered_subject__initials', ]
+
     actions = [
         export_as_csv_action(
             description="CSV Export of Infant NVP or AZT Proph",

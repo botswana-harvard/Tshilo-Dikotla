@@ -6,7 +6,7 @@ from edc_constants.constants import SCREENED
 from edc_registration.models import RegisteredSubject
 from edc_identifier.models import SubjectIdentifier
 from edc_constants.constants import (
-    FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, UNKEYED, POS, NEG, YES, NO, NOT_APPLICABLE, UNKNOWN, NEW)
+    FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, UNKEYED, NOT_REQUIRED, POS, NEG, YES, NO, NOT_APPLICABLE, UNKNOWN, NEW)
 from edc_meta_data.models import RequisitionMetaData, CrfMetaData
 from edc_appointment.models import Appointment
 
@@ -503,17 +503,17 @@ class TestRuleGroups(BaseTestCase):
         self.infant_visit = InfantVisitFactory(appointment=self.appointment)
         infant_arv_proph = InfantArvProphFactory(
             infant_visit=self.infant_visit, prophylatic_nvp=YES, arv_status=NO_MODIFICATIONS)
-
         InfantArvProphModFactory(
             infant_arv_proph=infant_arv_proph, arv_code='Zidovudine',
             dose_status='Permanently discontinued')
+
         self.appointment = Appointment.objects.get(
             registered_subject=infant_registered_subject,
             visit_definition__code='2020')
         self.infant_visit = InfantVisitFactory(appointment=self.appointment)
         self.assertEqual(
             CrfMetaData.objects.filter(
-                entry_status=NEW,
+                entry_status=NOT_REQUIRED,
                 crf_entry__app_label='td_infant',
                 crf_entry__model_name='infantarvproph',
                 appointment=self.appointment).count(), 1)
