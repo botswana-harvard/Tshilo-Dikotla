@@ -10,7 +10,7 @@ class MaternalUltraSoundInitialForm(BaseMaternalModelForm):
     def clean(self):
         cleaned_data = super(MaternalUltraSoundInitialForm, self).clean()
 #         cleaned_data.pop('malformations')
-        self.validate_ga_by_lmp(cleaned_data)
+        self.validate_est_edd_ultrasound(cleaned_data)
         self.validate_ga_by_lmp(cleaned_data)
         MaternalUltraSoundInitial(
             **cleaned_data).evaluate_edd_confirmed(error_clss=forms.ValidationError)
