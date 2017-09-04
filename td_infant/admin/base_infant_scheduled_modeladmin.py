@@ -9,7 +9,8 @@ from ..models import InfantVisit
 class BaseInfantScheduleModelAdmin(MembershipBaseModelAdmin):
 
     search_fields = [
-        'infant_visit__appointment__registered_subject__subject_identifier', ]
+        'infant_visit__appointment__registered_subject__subject_identifier',
+        'infant_visit__appointment__registered_subject__initials', ]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "infant_visit":

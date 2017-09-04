@@ -36,7 +36,8 @@ class InfantVaccinesAdmin(admin.ModelAdmin):
     form = InfantVaccinesForm
 
     search_fields = [
-        'infant_birth_feed_vaccine__infant_visit__appointment__registered_subject__subject_identifier', ]
+        'infant_birth_feed_vaccine__infant_visit__appointment__registered_subject__subject_identifier',
+        'infant_birth_feed_vaccine__infant_visit__appointment__registered_subject__initials']
 
     actions = [
         export_as_csv_action(

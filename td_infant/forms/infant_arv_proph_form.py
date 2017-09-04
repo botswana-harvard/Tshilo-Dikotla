@@ -3,7 +3,7 @@ from django.forms.models import ModelForm
 
 from edc_constants.constants import NO, YES, NOT_APPLICABLE, UNKNOWN
 
-from tshilo_dikotla.constants import MODIFIED, DISCONTINUED, NEVER_STARTED
+from tshilo_dikotla.constants import MODIFIED, DISCONTINUED, NEVER_STARTED, START
 
 from ..models import InfantArvProph, InfantArvProphMod, InfantVisit, InfantBirthArv
 
@@ -17,7 +17,7 @@ def get_birth_arv_visit_2000(infant_identifier):
             subject_identifier=infant_identifier, appointment__visit_definition__code=2000)
         infant_birth_arv = InfantBirthArv.objects.get(infant_visit=visit_2000)
         return infant_birth_arv.azt_discharge_supply
-    except Exception as e:
+    except InfantBirthArv.DoesNotExist as e:
         pass
     return NOT_APPLICABLE
 
@@ -26,23 +26,16 @@ class InfantArvProphForm(BaseInfantModelForm):
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        # self.validate_taking_arv_proph_no()
+        self.validate_taking_arv_proph_no()
         self.validate_taking_arv_proph_unknown()
         self.validate_taking_arv_proph_yes()
         return cleaned_data
 
     def validate_taking_arv_proph_no(self):
         cleaned_data = self.cleaned_data
-        infant_identifier = cleaned_data.get('infant_visit').subject_identifier
         if cleaned_data.get('prophylatic_nvp') == NO:
-            if cleaned_data.get('arv_status') not in [NEVER_STARTED, DISCONTINUED]:
-                raise forms.ValidationError(
-                    'Infant was not taking prophylactic arv, prophylaxis should be Never Started or Discontinued.')
-            if (cleaned_data.get('arv_status') == DISCONTINUED and
-                    get_birth_arv_visit_2000(infant_identifier)) in [NO, UNKNOWN]:
-                raise forms.ValidationError(
-                    'The azt discharge supply in Infant birth arv was answered as NO or Unknown, '
-                    'therefore Infant ARV proph in this visit cannot be permanently discontinued.')
+            raise forms.ValidationError(
+                {'prophylatic_nvp': 'Infant is HEU, answer cannot be No.'})
 
     def validate_taking_arv_proph_unknown(self):
         cleaned_data = self.cleaned_data
@@ -54,10 +47,16 @@ class InfantArvProphForm(BaseInfantModelForm):
 
     def validate_taking_arv_proph_yes(self):
         cleaned_data = self.cleaned_data
-        if (cleaned_data.get('prophylatic_nvp') == YES and
-                cleaned_data.get('arv_status') in [NEVER_STARTED, DISCONTINUED]):
-            raise forms.ValidationError(
-                'Infant has been on prophylactic arv, cannot choose Never Started or Permanently discontinued.')
+        arv_proph_mod = self.data.get(
+            'infantarvprophmod_set-0-arv_code')
+        if cleaned_data.get('prophylatic_nvp') == YES:
+            if cleaned_data.get('arv_status') in [START, MODIFIED] and not arv_proph_mod:
+                raise forms.ValidationError(
+                    {'arv_status': 'Please complete the infant arv proph mods table.'})
+            if cleaned_data.get('arv_status') == NEVER_STARTED and arv_proph_mod:
+                raise forms.ValidationError(
+                    {'arv_status': 'Infant never started prophlaxis, do not complete '
+                     'the infant arv proph mods table.'})
 
     class Meta:
         model = InfantArvProph

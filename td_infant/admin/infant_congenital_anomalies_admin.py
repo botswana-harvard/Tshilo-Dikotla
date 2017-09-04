@@ -73,6 +73,10 @@ class InfantFacialDefectAdmin(BaseInfantScheduleModelAdmin):
         'abnormality_status': admin.VERTICAL
     }
 
+    search_fields = [
+        'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
+        'congenital_anomalies__infant_visit__appointment__registered_subject__initials', ]
+
     actions = [
         export_as_csv_action(
             description="CSV Export of Infant Facial Defect abnormality",
@@ -101,6 +105,10 @@ class InfantCleftDisorderAdmin(BaseInfantScheduleModelAdmin):
     form = InfantCleftDisorderForm
 
     list_display = ('congenital_anomalies',)
+
+    search_fields = [
+        'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
+        'congenital_anomalies__infant_visit__appointment__registered_subject__initials', ]
 
     radio_fields = {
         'cleft_disorder': admin.VERTICAL,
@@ -137,6 +145,10 @@ class InfantMouthUpGiAdmin(BaseInfantScheduleModelAdmin):
 
     list_display = ('congenital_anomalies',)
 
+    search_fields = [
+        'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
+        'congenital_anomalies__infant_visit__appointment__registered_subject__initials', ]
+
     radio_fields = {
         'mouth_up_gi': admin.VERTICAL,
         'abnormality_status': admin.VERTICAL
@@ -171,6 +183,10 @@ class InfantCardioDisorderAdmin(BaseInfantScheduleModelAdmin):
     form = InfantCardioDisorderForm
 
     list_display = ('congenital_anomalies',)
+
+    search_fields = [
+        'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
+        'congenital_anomalies__infant_visit__appointment__registered_subject__initials', ]
 
     radio_fields = {
         'cardio_disorder': admin.VERTICAL,
@@ -207,6 +223,10 @@ class InfantRespiratoryDefectAdmin(BaseInfantScheduleModelAdmin):
 
     list_display = ('congenital_anomalies',)
 
+    search_fields = [
+        'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
+        'congenital_anomalies__infant_visit__appointment__registered_subject__initials', ]
+
     radio_fields = {
         'respiratory_defect': admin.VERTICAL,
         'abnormality_status': admin.VERTICAL
@@ -241,6 +261,10 @@ class InfantLowerGiAdmin(BaseInfantScheduleModelAdmin):
     form = InfantLowerGiForm
 
     list_display = ('congenital_anomalies',)
+
+    search_fields = [
+        'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
+        'congenital_anomalies__infant_visit__appointment__registered_subject__initials', ]
 
     radio_fields = {
         'lower_gi': admin.VERTICAL,
@@ -277,6 +301,10 @@ class InfantFemaleGenitalAdmin(BaseInfantScheduleModelAdmin):
 
     list_display = ('congenital_anomalies',)
 
+    search_fields = [
+        'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
+        'congenital_anomalies__infant_visit__appointment__registered_subject__initials', ]
+
     radio_fields = {
         'female_genital': admin.VERTICAL,
         'abnormality_status': admin.VERTICAL
@@ -311,6 +339,10 @@ class InfantMaleGenitalAdmin(BaseInfantScheduleModelAdmin):
     form = InfantMaleGenitalForm
 
     list_display = ('congenital_anomalies',)
+
+    search_fields = [
+        'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
+        'congenital_anomalies__infant_visit__appointment__registered_subject__initials', ]
 
     radio_fields = {
         'male_genital': admin.VERTICAL,
@@ -347,6 +379,10 @@ class InfantRenalAdmin(BaseInfantScheduleModelAdmin):
 
     list_display = ('congenital_anomalies',)
 
+    search_fields = [
+        'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
+        'congenital_anomalies__infant_visit__appointment__registered_subject__initials', ]
+
     radio_fields = {
         'renal': admin.VERTICAL,
         'abnormality_status': admin.VERTICAL
@@ -381,6 +417,10 @@ class InfantMusculoskeletalAdmin(BaseInfantScheduleModelAdmin):
     form = form = InfantMusculoskeletalForm
 
     list_display = ('congenital_anomalies',)
+
+    search_fields = [
+        'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
+        'congenital_anomalies__infant_visit__appointment__registered_subject__initials', ]
 
     radio_fields = {
         'musculo_skeletal': admin.VERTICAL,
@@ -417,6 +457,10 @@ class InfantSkinAdmin(BaseInfantScheduleModelAdmin):
 
     list_display = ('congenital_anomalies',)
 
+    search_fields = [
+        'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
+        'congenital_anomalies__infant_visit__appointment__registered_subject__initials', ]
+
     radio_fields = {
         'skin': admin.VERTICAL,
         'abnormality_status': admin.VERTICAL
@@ -451,6 +495,10 @@ class InfantTrisomiesAdmin(BaseInfantScheduleModelAdmin):
     form = InfantTrisomiesForm
 
     list_display = ('congenital_anomalies',)
+
+    search_fields = [
+        'congenital_anomalies__infant_visit__appointment__registered_subject__subject_identifier',
+        'congenital_anomalies__infant_visit__appointment__registered_subject__initials', ]
 
     radio_fields = {
         'trisomies': admin.VERTICAL,

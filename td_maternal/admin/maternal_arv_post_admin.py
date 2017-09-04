@@ -24,6 +24,10 @@ class MaternalArvPostModAdmin(BaseMaternalModelAdmin):
     list_display = ('maternal_arv_post', 'arv_code',
                     'dose_status', 'modification_date', 'modification_code')
 
+    search_fields = [
+        'maternal_arv_post__maternal_visit__appointment__registered_subject__subject_identifier',
+        'maternal_arv_post__maternal_visit__appointment__registered_subject__initials', ]
+
     radio_fields = {
         "arv_code": admin.VERTICAL,
         "dose_status": admin.VERTICAL,

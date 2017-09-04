@@ -20,6 +20,10 @@ class MaternalArvInlineAdmin(BaseTabularInline):
 class MaternalArvAdmin(BaseMaternalModelAdmin):
     form = MaternalArvForm
 
+    search_fields = [
+        'maternal_arv_preg__maternal_visit__appointment__registered_subject__subject_identifier',
+        'maternal_arv_preg__maternal_visit__appointment__registered_subject__initials', ]
+
     actions = [
         export_as_csv_action(
             description="CSV Export of Maternal ARV In This Preg: Pregnancy with list",

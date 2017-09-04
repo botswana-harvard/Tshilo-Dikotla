@@ -69,7 +69,7 @@ def func_show_infant_arv_proph(visit_instance):
     try:
         arv_mod = InfantArvProphMod.objects.get(
             infant_arv_proph=infant_arv_proph)
-        return arv_mod.dose_status == 'Permanently discontinued'
+        return not arv_mod.dose_status == 'Permanently discontinued'
     except InfantArvProphMod.DoesNotExist:
         return False
 
