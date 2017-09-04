@@ -69,7 +69,7 @@ class VaccinesReceivedForm(BaseInfantModelForm):
         cleaned_data = self.cleaned_data
         if cleaned_data.get('infant_fu_immunizations').vaccines_missed == YES:
             if not cleaned_data.get('missed_vaccine_name'):
-                raise forms.ValidationError("You mentioned that vaccines where missed. Please"
+                raise forms.ValidationError("You mentioned that vaccines were missed. Please"
                                             " indicate which ones on the table.")
 
     def get_infant_birth_date(self, infant_identifier):

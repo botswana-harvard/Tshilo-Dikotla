@@ -11,16 +11,20 @@ STUDY_SITES = (
 
 VISIT_INFO_SOURCE = [
     (PARTICIPANT, 'Clinic visit with participant'),
-    ('other_contact', 'Other contact with participant (for example telephone call)'),
-    ('other_doctor', 'Contact with external health care provider/medical doctor'),
-    ('family', 'Contact with family or designated person who can provide information'),
+    ('other_contact',
+     'Other contact with participant (for example telephone call)'),
+    ('other_doctor',
+     'Contact with external health care provider/medical doctor'),
+    ('family',
+     'Contact with family or designated person who can provide information'),
     ('chart', 'Hospital chart or other medical record'),
     (OTHER, 'Other')]
 
 VISIT_REASON = [
     (SCHEDULED, 'Scheduled visit/contact'),
     (MISSED_VISIT, 'Missed Scheduled visit'),
-    (UNSCHEDULED, 'Unscheduled visit at which lab samples or data are being submitted'),
+    (UNSCHEDULED,
+     'Unscheduled visit at which lab samples or data are being submitted'),
     (LOST_VISIT, 'Lost to follow-up (use only when taking subject off study)'),
     (FAILED_ELIGIBILITY, 'Subject failed enrollment eligibility'),
     (COMPLETED_PROTOCOL_VISIT, 'Subject has completed the study')]
@@ -135,8 +139,10 @@ CARDIOVASCULAR_DISORDER = (
     ('Complete transposition of the great vessels (with VSD)',
      'Complete transposition of the great vessels (with VSD)'),
     ('Tetralogy of Fallot', 'Tetralogy of Fallot'),
-    ('Pulmonary valve stenosis or atresia', 'Pulmonary valve stenosis or atresia'),
-    ('Tricuspid valve stenosis or atresia', 'Tricuspid valve stenosis or atresia'),
+    ('Pulmonary valve stenosis or atresia',
+     'Pulmonary valve stenosis or atresia'),
+    ('Tricuspid valve stenosis or atresia',
+     'Tricuspid valve stenosis or atresia'),
     ('Mitral valve stenosis or atresia', 'Mitral valve stenosis or atresia'),
     ('Hypoplastic left ventricle', 'Hypoplastic left ventricle'),
     ('Hypoplastic right ventricle', 'Hypoplastic right ventricle'),
@@ -180,7 +186,8 @@ COWS_MILK = (
 )
 
 CTX_PLACEBO_STATUS = (
-    ('No modification', 'No modifications made to CTX/Placebo since the last scheduled visit or today'),
+    ('No modification',
+     'No modifications made to CTX/Placebo since the last scheduled visit or today'),
     ('Starting CTX/Placebo today',
      'Starting CTX/Placebo today or since the last scheduled visit'),
     ('Permanently discontinued',
@@ -194,7 +201,8 @@ CTX_PLACEBO_STATUS = (
 DX_INFANT = (
     ('Poor weight gain or failure to thrive',
      'Poor weight gain or failure to thrive'),
-    ('Severe diarrhea or gastroenteritis', 'Severe diarrhea or gastroenteritis'),
+    ('Severe diarrhea or gastroenteritis',
+     'Severe diarrhea or gastroenteritis'),
     ('Pneumonia, suspected (no CXR or microbiologic confirmation)',
      'Pneumonia, suspected (no CXR or microbiologic confirmation)'),
     ('Pneumonia, CXR confirmed, no bacterial pathogen',
@@ -210,7 +218,8 @@ DX_INFANT = (
     ('Extrapulmonary TB,suspected (no CXR or microbiologic confirmation)',
      'Extrapulmonary TB,suspected (no CXR or microbiologic confirmation)'),
     ('Bronchiolitis (not bronchitis)', 'Bronchiolitis (not bronchitis)'),
-    ('Hepatitis:Drug related', 'Hepatitis:Drug related (report for Grades 2,3,4)'),
+    ('Hepatitis:Drug related',
+     'Hepatitis:Drug related (report for Grades 2,3,4)'),
     ('Hepatitis:Traditional medication related',
      'Hepatitis:Traditional medication related'),
     ('Hepatitis:Hepatitis A', 'Hepatitis:Hepatitis A'),
@@ -226,7 +235,8 @@ DX_INFANT = (
     ('Pancreatitis', 'Pancreatitis'),
     ('Acute Renal Failure',
      'Acute Renal Failure (Record highest creatinine level if creatine tested outside of the study) '),
-    ('Anemia', 'Anemia(Only report grade 3 or 4 anemia based on a lab value drawn outside the study'),
+    ('Anemia',
+     'Anemia(Only report grade 3 or 4 anemia based on a lab value drawn outside the study'),
     ('Rash', 'Rash (report for Grades 2,3,4)'),
     ('Trauma/accident', 'Trauma/accident'),
     (
@@ -291,7 +301,8 @@ DX_MATERNAL = (
     ('Pancreatitis', 'Pancreatitis'),
     ('Acute Renal failure',
      'Acute Renal failure (Record highest creatinine level if tested outside of the study)'),
-    ('Anemia', 'Anemia (Only report grade 3 or 4 anemia based on the lab value drawn outside the study)'),
+    ('Anemia',
+     'Anemia (Only report grade 3 or 4 anemia based on the lab value drawn outside the study)'),
     ('Pregnancy/peripartum cardiomyopathy or CHF ',
      'Pregnancy/peripartum cardiomyopathy or CHF '),
     ('Drug rash on HAART', 'Drug rash on HAART'),
@@ -323,7 +334,8 @@ FEM_GENITAL_ANOMALY = (
     ('Vaginal agenesis', 'Vaginal agenesis'),
     ('Absent or streak ovary', 'Absent or streak ovary'),
     ('Uterine anomaly', 'Uterine anomaly'),
-    (OTHER, 'Other ovarian, fallopian, uterine, cervical, vaginal, or vulvar abnormality'),
+    (OTHER,
+     'Other ovarian, fallopian, uterine, cervical, vaginal, or vulvar abnormality'),
 )
 
 INFO_PROVIDER = (
@@ -336,26 +348,31 @@ INFO_PROVIDER = (
 )
 
 INFANT_OFF_DRUG_REASON = (
-    ('completed protocol', '1. Completion of protocol-required period of study treatment'),
-    ('off-study', '2. Participant going off-study for any reason, including death or lost to follow-up'),
+    ('completed protocol',
+     '1. Completion of protocol-required period of study treatment'),
+    ('off-study',
+     '2. Participant going off-study for any reason, including death or lost to follow-up'),
     (
         'toxicity',
         ('3. At Investigator\'s discretion, due to persistent toxicity '
          '(confirmed or suspected to be possibly related to study drug)')),
-    ('caregiver', '4. Participant\'s mother/caregiver no longer wants child to receive study drug'),
+    ('caregiver',
+     '4. Participant\'s mother/caregiver no longer wants child to receive study drug'),
     ('hiv infected', '5. Child is HIV- infected (Open-label CTX indicated)'),
     (OTHER, '9. Other'),
 )
 
 INFANT_VISIT_STUDY_STATUS = (
     (ON_STUDY, 'On study'),
-    (OFF_STUDY, 'Off study-no further follow-up (including death); use only for last study contact'),
+    (OFF_STUDY,
+     'Off study-no further follow-up (including death); use only for last study contact'),
 )
 
 
 MATERNAL_VISIT_STUDY_STATUS = (
     (ON_STUDY, 'On study'),
-    (OFF_STUDY, 'Off study-no further follow-up (including death); use only for last study contact'),
+    (OFF_STUDY,
+     'Off study-no further follow-up (including death); use only for last study contact'),
 )
 
 
@@ -364,7 +381,8 @@ OFF_STUDY_REASON = [
      'Multiple (2 or more) viable gestations seen on ultrasound'),
     ('miscarriage_or_arbotion_lt_20wks',
      'Miscarriage or arbotion (fetal demise < 20 weeks GA)'),
-    ('fetal_death_gt_20wks', 'fetal Death at >= 20weeks GA (IUFD) or still born'),
+    ('fetal_death_gt_20wks',
+     'fetal Death at >= 20weeks GA (IUFD) or still born'),
     ('maternal_seroconversion_gt_33wks',
      'Maternal seroconversion after 33 weeks GA'),
     ('took_art_less_than_4weeks',
@@ -403,7 +421,8 @@ OFF_STUDY_REASON = [
      'Completion of protocol required period of time for observation (see Study Protocol for definition of'
      ' "Completion") (skip to end of form)'),
     ('unable_to_determine_ga', 'Unable to confirm GA by Ultrasound.'),
-    ('enrolled_erroneously', 'Enrolled erroneously – did not meet eligibility criteria'),
+    ('enrolled_erroneously',
+     'Enrolled erroneously – did not meet eligibility criteria'),
     (OTHER, 'Other'),
 ]
 
@@ -413,7 +432,8 @@ LOWER_GASTROINTESTINAL_ABNORMALITY = (
      'Duodenal atresia, stenosis, or absence'),
     ('Jejunal atresis, stenosis, or absence',
      'Jejunal atresis, stenosis, or absence'),
-    ('Ileal atresia, stenosis, or absence', 'Ileal atresia, stenosis, or absence'),
+    ('Ileal atresia, stenosis, or absence',
+     'Ileal atresia, stenosis, or absence'),
     ('Atresia, stenosis, or absence of large intestine, rectum, or anus',
      'Atresia, stenosis, or absence of large intestine, rectum, or anus'),
     ('Hirschsprung disease', 'Hirschsprung disease'),
@@ -504,12 +524,14 @@ MOUTH_UP_GASTROINT_DISORDER = (
     ('None', 'None'),
     ('Aglossia', 'Aglossia'),
     ('Macroglossia', 'Macroglossia'),
-    ('OTHER mouth, lip, or tongue', 'Other mouth, lip, or tongue anomaly, specify'),
+    ('OTHER mouth, lip, or tongue',
+     'Other mouth, lip, or tongue anomaly, specify'),
     ('Esophageal atresia', 'Esophageal atresia'),
     ('Tracheoesphageal fistula', 'Tracheoesphageal fistula'),
     ('Esophageal web', 'Esophageal web'),
     ('Pyloric stenosis', 'Pyloric stenosis'),
-    ('OTHER esophageal or stomach', 'Other esophageal or stomach abnormality, specify'),
+    ('OTHER esophageal or stomach',
+     'Other esophageal or stomach abnormality, specify'),
 )
 
 MUSCULOSKELETAL_ABNORMALITY = (
@@ -567,11 +589,14 @@ RANDOMIZATION_SITE = (
 
 REASON_RCV_FORMULA = (
     ('no milk', '1. Mother did not have enough breast milk'),
-    ('back to work', '2. Mother returned to work so unable to breastfeed participant exclusively'),
-    ('off HAART', '3. Mother stopped breastfeeding because no longer taking HAART'),
+    ('back to work',
+     '2. Mother returned to work so unable to breastfeed participant exclusively'),
+    ('off HAART',
+     '3. Mother stopped breastfeeding because no longer taking HAART'),
     ('afraid to transmit', ('4. Mother stopped because she is afraid she will transmit HIV '
                             'to the participant even though she\'s taking HAART')),
-    ('advised to mix feed', '5. Mother advised to add other food/liquids by partner/family'),
+    ('advised to mix feed',
+     '5. Mother advised to add other food/liquids by partner/family'),
     ('felt to mix feed', ('6. Mother felt that baby needed other foods/liquids to be healthy '
                           '(for babies <= 6 months old)')),
     ('complete per protocol', ('7. <Per breastfeeding randomisation, infant is >5 months or >11 '
@@ -582,10 +607,12 @@ REASON_RCV_FORMULA = (
 
 REASON_MISSED_CTX_PLACEBO = (
     ('caregiver forgot', 'Caregiver forgot to give the CTX/Placebo'),
-    ('caregiver ran out/lost', 'Caregiver ran out of CTX/Placebo or lost the bottle'),
+    ('caregiver ran out/lost',
+     'Caregiver ran out of CTX/Placebo or lost the bottle'),
     ('caregiver away',
      'Primary caregiver was away from home and did not have another person give the CTX/Placebo'),
-    ('infant away', 'Infant was away from home and the CTX/Placebo bottle was not at the other location'),
+    ('infant away',
+     'Infant was away from home and the CTX/Placebo bottle was not at the other location'),
     ('caregiver decision/sick',
      'Caregiver chose not to give the CTX/Placebo because baby was sick or for other reasons'),
     (OTHER, 'Other'),
@@ -604,8 +631,10 @@ REASONS_VACCINES_MISSED = (
 REASON_MISSED_PROPHYLAXIS = (
     ('caregiver forgot', 'Caregiver forgot to give the NVP'),
     ('caregiver ran out/lost', 'Caregiver ran out of NVP or lost the bottle'),
-    ('caregiver away', 'Primary caregiver was away from home and did not have another person give the NVP'),
-    ('infant away', 'Infant was away from home and the NVP bottle was not at the other location'),
+    ('caregiver away',
+     'Primary caregiver was away from home and did not have another person give the NVP'),
+    ('infant away',
+     'Infant was away from home and the NVP bottle was not at the other location'),
     ('caregiver decision/sick',
      'Caregiver chose not to give the NVP because baby was sick or for other reasons'),
     (OTHER, 'Other'),
@@ -637,7 +666,8 @@ RESPIRATORY_DEFECT = (
     ('Single nostril, proboscis', 'Single nostril, proboscis'),
     ('OTHER nasal or sinus abnormality',
      'Other nasal or sinus abnormality, specify'),
-    ('Lryngeal web. glottic or subglottic', 'Lryngeal web. glottic or subglottic'),
+    ('Lryngeal web. glottic or subglottic',
+     'Lryngeal web. glottic or subglottic'),
     ('Congenital laryngeal stenosis', 'Congenital laryngeal stenosis'),
     ('OTHER laryngeal, tracheal or bronchial anomalies',
      'Other laryngeal, tracheal or bronchial anomalies'),
@@ -665,7 +695,8 @@ TIMES_BREASTFED = (
     ('about 1 per day on most days', '3. About once per day on most days'),
     ('>1 per day, but not for all feedings',
      '4. More than once per day, but not for all feedings'),
-    ('For all feedings', '5. For all feedings (i.e no formula or other foods or liquids)'),
+    ('For all feedings',
+     '5. For all feedings (i.e no formula or other foods or liquids)'),
     (NOT_APPLICABLE, 'Not Applicable'),
 )
 
@@ -694,7 +725,8 @@ VACCINES = (
 
 WATER_USED = (
     ('Water direct from source', 'Water direct from source'),
-    ('Water boiled immediately before use', 'Water boiled immediately before use'),
+    ('Water boiled immediately before use',
+     'Water boiled immediately before use'),
     ('Water boiled earlier and then stored',
      'Water boiled earlier and then stored'),
     ('Specifically treated water', 'Specifically treated water'),
@@ -714,7 +746,8 @@ STOOL_TEXTURE_DESC = (
 ILLNESS_CLASSIFICATION = (
     (NOT_APPLICABLE, 'Not applicable'),
     ('respi_illness', 'Respiratory Illness'),
-    ('gastro_illness', 'Gastrointestinal illness (examples including vomiting, diarrhea or both)'),
+    ('gastro_illness',
+     'Gastrointestinal illness (examples including vomiting, diarrhea or both)'),
     (OTHER, 'Other'),
 )
 
@@ -743,12 +776,13 @@ CONTINUOUS_LOOSE_STOOLS = (
 )
 
 ARV_STATUS_WITH_NEVER = (
-    (NO_MODIFICATIONS, '1. No modifications made since the last attended scheduled visit or today'),
-    (START, '2. Starting today or has started since last attended scheduled visit'),
-    (DISCONTINUED, '3. Permanently discontinued at or before the last attended scheduled visit'),
-    (NEVER_STARTED, '4. Never started'),
-    (MODIFIED, '5. Change in at least one medication since the last attended scheduled visit or today'),
-    (NOT_APPLICABLE, 'Not applicable'),
+    (NO_MODIFICATIONS,
+     '1. No modifications made since the last attended scheduled visit or today'),
+    (START,
+     '2. Starting today or has started since last attended scheduled visit'),
+    (NEVER_STARTED, '3. Never started'),
+    (MODIFIED,
+     '4. Change in at least one medication since the last attended scheduled visit or today'),
 )
 
 CIRCUMCISION = (
