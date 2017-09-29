@@ -40,7 +40,7 @@ class AntenatalEnrollmentForm(BaseEnrollmentForm):
             raise forms.ValidationError('LMP cannot be within 16weeks of report datetime. '
                                         'Got LMP as {} and report datetime as {}'.format(last_period_date,
                                                                                          report_datetime))
-        elif last_period_date and (last_period_date <= report_datetime.date() - relativedelta(weeks=36)):
+        elif last_period_date and (last_period_date <= report_datetime.date() - relativedelta(weeks=37)):
             raise forms.ValidationError('LMP cannot be more than 36weeks of report datetime. '
                                         'Got LMP as {} and report datetime as {}'.format(last_period_date,
                                                                                          report_datetime))
