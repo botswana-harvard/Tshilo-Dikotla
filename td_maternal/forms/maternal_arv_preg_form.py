@@ -5,8 +5,7 @@ from django.utils import timezone
 from edc_constants.constants import YES, NO, NOT_APPLICABLE
 from tshilo_dikotla.utils import weeks_between
 
-from ..models import (MaternalArvPreg, MaternalArv, MaternalLifetimeArvHistory, PostnatalEnrollment,
-                      AntenatalEnrollment)
+from ..models import (MaternalArvPreg, MaternalArv, MaternalLifetimeArvHistory)
 
 from .base_maternal_model_form import BaseMaternalModelForm
 
@@ -16,6 +15,7 @@ class MaternalArvPregForm(BaseMaternalModelForm):
     def clean(self):
         cleaned_data = super(MaternalArvPregForm, self).clean()
         self.validate_interrupted_medication()
+        self.validate_took_yes()
         return cleaned_data
 
     def validate_interrupted_medication(self):
@@ -28,6 +28,15 @@ class MaternalArvPregForm(BaseMaternalModelForm):
                 cleaned_data.get('interrupt') != NOT_APPLICABLE):
             raise forms.ValidationError('You indicated that ARVs were NOT interrupted during '
                                         'pregnancy. You cannot provide a reason. Please correct.')
+
+    def validate_took_yes(self):
+        cleaned_data = self.cleaned_data
+        maternal_arv = self.data.get(
+            'maternalarv_set-0-arv_code')
+        if cleaned_data.get('took_arv') == YES:
+            if not maternal_arv:
+                raise forms.ValidationError(
+                    {'took_arv': 'Please complete the maternal arv table.'})
 
 #     def validate_arv_exposed(self):
 #         cleaned_data = self.cleaned_data
@@ -58,11 +67,14 @@ class MaternalArvPregForm(BaseMaternalModelForm):
 
 
 class MaternalArvForm(BaseMaternalModelForm):
+
     def clean(self):
         cleaned_data = super(MaternalArvForm, self).clean()
         self.validate_start_stop_date()
         self.validate_took_arv()
         self.validate_historical_and_present_arv_start_dates()
+        self.validate_previous_maternal_arv_preg_arv_start_dates()
+        self.validate_stop_date_reason_for_stop()
         return cleaned_data
 
     def validate_start_stop_date(self):
@@ -92,8 +104,10 @@ class MaternalArvForm(BaseMaternalModelForm):
         """Confirms that the ARV start date is not less than the Historical ARV start date"""
         cleaned_data = self.cleaned_data
         try:
-            maternal_visit = cleaned_data.get('maternal_arv_preg').maternal_visit
-            arv_history = MaternalLifetimeArvHistory.objects.get(maternal_visit=maternal_visit)
+            maternal_visit = cleaned_data.get(
+                'maternal_arv_preg').maternal_visit
+            arv_history = MaternalLifetimeArvHistory.objects.get(
+                maternal_visit=maternal_visit)
             if arv_history.haart_start_date:
                 start_date = cleaned_data.get('start_date')
                 if start_date < arv_history.haart_start_date:
@@ -103,6 +117,36 @@ class MaternalArvForm(BaseMaternalModelForm):
                             start_date, arv_history.haart_start_date))
         except MaternalLifetimeArvHistory.DoesNotExist:
             pass
+
+    def validate_previous_maternal_arv_preg_arv_start_dates(self):
+        """Confirms that the ARV start date is equal to Maternal ARV
+        start date unless stopped.
+        """
+        cleaned_data = self.cleaned_data
+        subject_identifier = cleaned_data.get(
+            'maternal_arv_preg').maternal_visit.appointment.registered_subject.subject_identifier
+        previous_arv_preg = MaternalArv.objects.filter(
+            maternal_arv_preg__maternal_visit__appointment__registered_subject__subject_identifier=subject_identifier,
+            stop_date__isnull=True).order_by('-start_date').first()
+        if previous_arv_preg.start_date:
+            start_date = cleaned_data.get('start_date')
+            if start_date != previous_arv_preg.start_date:
+                raise forms.ValidationError(
+                    "ARV's were not stopped in this pregnancy, most recent ARV date was"
+                    "{}, dates must match, got {}.".format(
+                        previous_arv_preg.start_date, start_date))
+
+    def validate_stop_date_reason_for_stop(self):
+        cleaned_data = self.cleaned_data
+        if cleaned_data.get('stop_date'):
+            if not cleaned_data.get('reason_for_stop'):
+                raise forms.ValidationError(
+                    {'reason_for_stop': 'ARV stopped, please give reason for stop.'})
+        else:
+            if not cleaned_data.get('stop_date'):
+                if cleaned_data.get('reason_for_stop'):
+                    raise forms.ValidationError(
+                        {'reason_for_stop': 'ARV not stopped, do not give reason for stop.'})
 
     class Meta:
         model = MaternalArv
