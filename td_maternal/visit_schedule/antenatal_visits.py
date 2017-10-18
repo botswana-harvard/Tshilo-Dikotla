@@ -5,7 +5,9 @@ from edc_visit_schedule.classes import (
 
 from ..models import AntenatalVisitMembership, MaternalVisit
 
-from .entries import (maternal_antenatal1_entries, maternal_antenatal2_entries, maternal_requisition_antenatal1)
+from .entries import (maternal_antenatal1_entries,
+                      maternal_antenatal2_entries, maternal_requisition_antenatal1,
+                      maternal_requisition_antenatal2)
 
 
 class AntenatalVisitSchedule(VisitScheduleConfiguration):
@@ -50,7 +52,7 @@ class AntenatalVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Antenatal Visit',
         'instructions': '',
-        'requisitions': (),
+        'requisitions': maternal_requisition_antenatal2,
         'entries': maternal_antenatal2_entries}
 
 site_visit_schedules.register(AntenatalVisitSchedule)

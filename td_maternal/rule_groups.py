@@ -4,13 +4,16 @@ from edc_registration.models import RegisteredSubject
 
 from tshilo_dikotla.constants import ONE
 
-from .models import (MaternalUltraSoundInitial, MaternalVisit, MaternalPostPartumDep, RapidTestResult, MaternalInterimIdcc)
+from .models import (MaternalUltraSoundInitial, MaternalVisit,
+                     MaternalPostPartumDep, RapidTestResult, MaternalInterimIdcc)
 from .classes import MaternalStatusHelper
 
 
 def func_mother_pos(visit_instance):
     """Returns true if mother is hiv positive."""
     maternal_status_helper = MaternalStatusHelper(visit_instance)
+    if (visit_instance.appointment.visit_definition.code == '1020M'):
+        return False
     if maternal_status_helper.hiv_status == POS:
         return True
     return False
