@@ -12,11 +12,16 @@ from .classes import MaternalStatusHelper
 def func_mother_pos(visit_instance):
     """Returns true if mother is hiv positive."""
     maternal_status_helper = MaternalStatusHelper(visit_instance)
-    if (visit_instance.appointment.visit_definition.code == '1020M'):
-        return False
     if maternal_status_helper.hiv_status == POS:
         return True
     return False
+
+
+def func_mother_pos_visit_1020(visit_instance):
+    if (func_mother_pos(visit_instance) and
+            (visit_instance.appointment.visit_definition.code == '1020M')):
+        return False
+    return True
 
 
 def func_mother_neg(visit_instance):
@@ -152,7 +157,7 @@ class MaternalRequisitionRuleGroup(RuleGroup):
 
     require_vl = RequisitionRule(
         logic=Logic(
-            predicate=func_mother_pos,
+            predicate=func_mother_pos_visit_1020,
             consequence=UNKEYED,
             alternative=NOT_REQUIRED),
         target_model=[('td_lab', 'maternalrequisition')],
