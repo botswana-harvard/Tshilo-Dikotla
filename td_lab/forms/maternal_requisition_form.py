@@ -2,11 +2,12 @@ from django import forms
 from django.conf import settings
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
-from edc_constants.constants import SCHEDULED, UNSCHEDULED
+from edc_constants.constants import SCHEDULED, UNSCHEDULED, NO
 from lab_requisition.forms import RequisitionFormMixin
 
 from tshilo_dikotla.choices import STUDY_SITES
 from td_maternal.models import MaternalVisit
+from edc_base.modelform_validators.base_form_validator import NOT_REQUIRED_ERROR
 
 from ..models import MaternalRequisition
 
@@ -40,13 +41,15 @@ class MaternalRequisitionForm(RequisitionFormMixin):
             cleaned_data.get('panel').name == 'Vaginal STI Swab (Storage)'
         ):
             if cleaned_data.get('item_type') != 'swab':
-                raise forms.ValidationError('Panel is a swab therefore collection type is swab. Please correct.')
+                raise forms.ValidationError(
+                    'Panel is a swab therefore collection type is swab. Please correct.')
         else:
             if cleaned_data.get('item_type') != 'tube':
                 raise forms.ValidationError('Panel {} can only be tube therefore collection type is swab. '
                                             'Please correct.'.format(cleaned_data.get('panel').name))
         maternal_visit = MaternalVisit.objects.get(
-            appointment__registered_subject=cleaned_data.get('maternal_visit').appointment.registered_subject,
+            appointment__registered_subject=cleaned_data.get(
+                'maternal_visit').appointment.registered_subject,
             appointment=cleaned_data.get('maternal_visit').appointment,
             appointment__visit_instance=cleaned_data.get('maternal_visit').appointment.visit_instance)
         if maternal_visit:
@@ -56,6 +59,12 @@ class MaternalRequisitionForm(RequisitionFormMixin):
                     'Reason not drawn cannot be {}. Visit report reason is {}'.format(
                         cleaned_data.get('reason_not_drawn'),
                         maternal_visit.reason))
+
+        self.required_if(
+            NO,
+            field='is_drawn',
+            field_required='reason_not_drawn')
+
         return cleaned_data
 
     class Meta:
