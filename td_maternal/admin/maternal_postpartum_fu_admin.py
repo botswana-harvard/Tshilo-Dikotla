@@ -1,7 +1,7 @@
-from django.contrib import admin
 from collections import OrderedDict
-
 from edc_export.actions import export_as_csv_action
+
+from django.contrib import admin
 
 from ..forms import MaternalPostPartumFuForm
 from ..models import MaternalPostPartumFu
@@ -18,7 +18,7 @@ class MaternalPostPartumFuAdmin(BaseMaternalModelAdmin):
               'diagnoses_other',
               'hospitalized',
               'hospitalization_reason',
-              'hospitalization_other',
+              'hospitalization_reason_other',
               'hospitalization_days',
               'has_who_dx',
               'who')
@@ -33,7 +33,7 @@ class MaternalPostPartumFuAdmin(BaseMaternalModelAdmin):
         export_as_csv_action(
             description="Export to CSV file",
             fields=['hospitalized', 'new_diagnoses',
-                    'hospitalization_other', 'hospitalization_days',
+                    'hospitalization_reason_other', 'hospitalization_days',
                     'diagnoses_other', 'has_who_dx'],
             delimiter=',',
             exclude=['maternal_visit', 'user_created', 'user_modified', 'hostname_created',
@@ -48,5 +48,6 @@ class MaternalPostPartumFuAdmin(BaseMaternalModelAdmin):
                  'visit_reason': 'maternal_visit__reason',
                  'visit_study_status': 'maternal_visit__study_status'}),
         )]
+
 
 admin.site.register(MaternalPostPartumFu, MaternalPostPartumFuAdmin)

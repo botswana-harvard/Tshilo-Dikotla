@@ -1,13 +1,12 @@
+from edc_constants.constants import SCHEDULED, UNSCHEDULED, NO
+from lab_requisition.forms import RequisitionFormMixin
+
 from django import forms
 from django.conf import settings
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
-from edc_constants.constants import SCHEDULED, UNSCHEDULED, NO
-from lab_requisition.forms import RequisitionFormMixin
-
-from tshilo_dikotla.choices import STUDY_SITES
 from td_maternal.models import MaternalVisit
-from edc_base.modelform_validators.base_form_validator import NOT_REQUIRED_ERROR
+from tshilo_dikotla.choices import STUDY_SITES
 
 from ..models import MaternalRequisition
 
@@ -59,11 +58,6 @@ class MaternalRequisitionForm(RequisitionFormMixin):
                     'Reason not drawn cannot be {}. Visit report reason is {}'.format(
                         cleaned_data.get('reason_not_drawn'),
                         maternal_visit.reason))
-
-        self.required_if(
-            NO,
-            field='is_drawn',
-            field_required='reason_not_drawn')
 
         return cleaned_data
 
