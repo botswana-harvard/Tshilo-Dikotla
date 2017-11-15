@@ -1,8 +1,8 @@
-from django.contrib import admin
 from collections import OrderedDict
-
 from edc_consent.actions import flag_as_verified_against_paper, unflag_as_verified_against_paper
 from edc_export.actions import export_as_csv_action
+
+from django.contrib import admin
 
 from tshilo_dikotla.base_model_admin import BaseModelAdmin
 
@@ -41,7 +41,10 @@ class MaternalConsentAdmin(BaseModelAdmin):
               'consent_copy')
 
     search_fields = (
-        'subject_identifier', 'id', 'identity', 'first_name', 'last_name')
+        'subject_identifier', 'id',
+        'maternal_eligibility__registered_subject__identity',
+        'maternal_eligibility__registered_subject__first_name',
+        'maternal_eligibility__registered_subject__last_name')
 
     radio_fields = {
         'assessment_score': admin.VERTICAL,
@@ -104,5 +107,6 @@ class MaternalConsentAdmin(BaseModelAdmin):
             except ValueError:
                 self.readonly_fields.append('registered_subject')
         return super(MaternalConsentAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
 
 admin.site.register(MaternalConsent, MaternalConsentAdmin)

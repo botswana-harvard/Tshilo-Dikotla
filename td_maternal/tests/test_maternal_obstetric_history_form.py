@@ -101,13 +101,27 @@ class TestMaternalObstericalHistoryForm(BaseTestCase):
                 self.options['prev_pregnancies']),
             mob_form.errors.get('__all__'))
 
-    def test_maternal_obsterical_24wks_or_more_pregnancy_2(self):
-        self.options['prev_pregnancies'] = 4
+    def test_maternal_obsterical_24wks_or_more_pregnancy_with_loss(self):
+        self.options['prev_pregnancies'] = 5
         self.options['pregs_24wks_or_more'] = 4
         self.options['lost_before_24wks'] = 0
         self.options['lost_after_24wks'] = 1
         self.maternal_ultrasound.est_edd_ultrasound = timezone.now().date() + \
             timedelta(days=90)
+        self.maternal_ultrasound.save()
+        mob_form = MaternalObstericalHistoryForm(data=self.options)
+        self.assertIn(
+            'The sum of Q3, Q4 and Q5 must be equal to Q2. Please correct.'.format(
+                self.options['prev_pregnancies']),
+            mob_form.errors.get('__all__'))
+
+    def test_maternal_obsterical_24wks_or_more_pregnancy_no_loss_1(self):
+        self.options['prev_pregnancies'] = 4
+        self.options['pregs_24wks_or_more'] = 5
+        self.options['lost_before_24wks'] = 0
+        self.options['lost_after_24wks'] = 0
+        self.maternal_ultrasound.est_edd_ultrasound = timezone.now().date() + \
+            timedelta(days=98)
         self.maternal_ultrasound.save()
         mob_form = MaternalObstericalHistoryForm(data=self.options)
         self.assertIn(

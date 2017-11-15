@@ -58,7 +58,7 @@ IMMUNIZATIONS = (
     ('PCV_Vaccine', 'PCV Vaccine (Pneumonia Conjugated Vaccine)'),
     ('Polio', 'Polio'),
     ('Rotavirus', 'Rotavirus'),
-    ('IPV_inactivated_polio_vaccine', 'IPV-inactivated-Polio vaccine'),
+    ('inactivated_polio_vaccine', 'Inactivated-Polio Vaccine'),
     ('Measles', 'Measles'),
     ('Pentavalent', 'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'))
 
@@ -70,7 +70,7 @@ INFANT_VACCINATIONS = (
     ('Haemophilus_influenza', 'Haemophilus Influenza B Vaccine'),
     ('PCV_Vaccine', 'PCV Vaccine (Pneumonia Conjugated Vaccine)'),
     ('Polio', 'Polio'),
-    ('IPV_inactivated_polio_vaccine', 'IPV-inactivated-Polio vaccine'),
+    ('inactivated_polio_vaccine', 'Inactivated-Polio Vaccine'),
     ('Rotavirus', 'Rotavirus'),
     ('Measles', 'Measles'),
     ('Pentavalent', 'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'))
