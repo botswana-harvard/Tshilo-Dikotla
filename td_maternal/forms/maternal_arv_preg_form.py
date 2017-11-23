@@ -1,12 +1,12 @@
+from edc_constants.constants import YES, NO, NOT_APPLICABLE
+
 from dateutil.parser import parse as parse_date
 from django import forms
 from django.utils import timezone
 
-from edc_constants.constants import YES, NO, NOT_APPLICABLE
 from tshilo_dikotla.utils import weeks_between
 
 from ..models import (MaternalArvPreg, MaternalArv, MaternalLifetimeArvHistory)
-
 from .base_maternal_model_form import BaseMaternalModelForm
 
 
@@ -128,13 +128,14 @@ class MaternalArvForm(BaseMaternalModelForm):
         previous_arv_preg = MaternalArv.objects.filter(
             maternal_arv_preg__maternal_visit__appointment__registered_subject__subject_identifier=subject_identifier,
             stop_date__isnull=True).order_by('-start_date').first()
-        if previous_arv_preg.start_date:
-            start_date = cleaned_data.get('start_date')
-            if start_date != previous_arv_preg.start_date:
-                raise forms.ValidationError(
-                    "ARV's were not stopped in this pregnancy, most recent ARV date was"
-                    "{}, dates must match, got {}.".format(
-                        previous_arv_preg.start_date, start_date))
+        if previous_arv_preg:
+            if previous_arv_preg.start_date:
+                start_date = cleaned_data.get('start_date')
+                if start_date != previous_arv_preg.start_date:
+                    raise forms.ValidationError({
+                        "ARV's were not stopped in this pregnancy, most recent ARV date was"
+                        "{}, dates must match, got {}.".format(
+                            previous_arv_preg.start_date, start_date)})
 
     def validate_stop_date_reason_for_stop(self):
         cleaned_data = self.cleaned_data

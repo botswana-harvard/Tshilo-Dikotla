@@ -1,13 +1,11 @@
 from collections import OrderedDict
+from edc_base.modeladmin.admin import BaseTabularInline
+from edc_export.actions import export_as_csv_action
 
 from django.contrib import admin
 
-from edc_export.actions import export_as_csv_action
-from edc_base.modeladmin.admin import BaseTabularInline
-
 from ..forms import MaternalArvPregForm, MaternalArvForm
 from ..models import MaternalArvPreg, MaternalArv
-
 from .base_maternal_model_admin import BaseMaternalModelAdmin
 
 
@@ -15,6 +13,7 @@ class MaternalArvInlineAdmin(BaseTabularInline):
     model = MaternalArv
     form = MaternalArvForm
     extra = 1
+    min_num = 3
 
 
 class MaternalArvAdmin(BaseMaternalModelAdmin):
@@ -42,6 +41,8 @@ class MaternalArvAdmin(BaseMaternalModelAdmin):
                  'interrupt': 'maternal_arv_preg__interrupt',
                  'interrupt_other': 'maternal_arv_preg__interrupt_other'}),
         )]
+
+
 admin.site.register(MaternalArv, MaternalArvAdmin)
 
 
@@ -57,5 +58,6 @@ class MaternalArvPregAdmin(BaseMaternalModelAdmin):
                     'is_interrupt': admin.VERTICAL,
                     'interrupt': admin.VERTICAL
                     }
+
 
 admin.site.register(MaternalArvPreg, MaternalArvPregAdmin)
