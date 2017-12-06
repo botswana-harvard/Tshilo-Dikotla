@@ -1,22 +1,22 @@
-from dateutil.relativedelta import relativedelta
 from datetime import datetime, date
+from edc_appointment.models import Appointment
+from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES, NO, NOT_APPLICABLE, UNKNOWN
+from edc_constants.constants import SCREENED
+from edc_identifier.models import SubjectIdentifier
+from edc_registration.models import RegisteredSubject
+
+from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-from edc_constants.constants import SCREENED
-from edc_registration.models import RegisteredSubject
-from edc_identifier.models import SubjectIdentifier
-from edc_constants.constants import FAILED_ELIGIBILITY, OFF_STUDY, SCHEDULED, POS, YES, NO, NOT_APPLICABLE, UNKNOWN
-from edc_appointment.models import Appointment
-
-from tshilo_dikotla.constants import MODIFIED, NO_MODIFICATIONS, DISCONTINUED, NEVER_STARTED
+from td_infant.forms import InfantFuImmunizationsForm, VaccinesReceivedForm, VaccinesMissedForm
 from td_maternal.models import MaternalVisit
-
 from td_maternal.tests import BaseTestCase
 from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,
                                          MaternalConsentFactory, AntenatalEnrollmentFactory,
                                          AntenatalVisitMembershipFactory, MaternalLabourDelFactory,
                                          MaternalVisitFactory)
-from td_infant.forms import InfantFuImmunizationsForm, VaccinesReceivedForm, VaccinesMissedForm
+from tshilo_dikotla.constants import MODIFIED, NO_MODIFICATIONS, DISCONTINUED, NEVER_STARTED
+
 from .factories import (InfantBirthFactory, InfantVisitFactory, InfantArvProphFactory, InfantBirthArvFactory,
                         InfantFuImmunizationsFactory)
 
@@ -335,4 +335,16 @@ class TestInfantImmunizationForm(BaseTestCase):
                            'infant_age': '2'}
         vaccine_received_form = VaccinesReceivedForm(data=received_inline)
         self.assertIn("Vitamin A is given to children between 6-11 months of"
+                      " life", vaccine_received_form.errors.get('__all__'))
+
+    def test_give_ipv_vaccine_not_4months(self):
+        """Test for IPV vaccine administered nto at 4 months"""
+        infant_fu_immunizations_factory = InfantFuImmunizationsFactory(
+            **self.options)
+        received_inline = {'infant_fu_immunizations': infant_fu_immunizations_factory.id,
+                           'received_vaccine_name': 'inactivated_polio_vaccine',
+                           'date_given': date.today(),
+                           'infant_age': '2'}
+        vaccine_received_form = VaccinesReceivedForm(data=received_inline)
+        self.assertIn("Inactivated Polio Vaccine is given to children of 4 months of"
                       " life", vaccine_received_form.errors.get('__all__'))
