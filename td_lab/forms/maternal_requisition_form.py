@@ -1,4 +1,5 @@
-from edc_constants.constants import SCHEDULED, UNSCHEDULED, NO
+from edc_base.model.fields import OtherCharField
+from edc_constants.constants import SCHEDULED, UNSCHEDULED, NO, YES
 from lab_requisition.forms import RequisitionFormMixin
 
 from django import forms
@@ -33,6 +34,12 @@ class MaternalRequisitionForm(RequisitionFormMixin):
                     'indicated as {}, whilst requisition is indicated as{}. Please correct'.format(
                         cleaned_data.get('drawn_datetime').date(),
                         cleaned_data.get('requisition_datetime').date()))
+
+        if cleaned_data.get('is_drawn') == YES:
+            if cleaned_data.get('reason_not_drawn'):
+                raise forms.ValidationError(
+                    'No requisition was drawn, reason not drawn must be Not Applicable')
+
         if (
             cleaned_data.get('panel').name == 'Vaginal swab (Storage)' or
             cleaned_data.get('panel').name == 'Rectal swab (Storage)' or
