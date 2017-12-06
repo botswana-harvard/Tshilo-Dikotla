@@ -42,6 +42,7 @@ class MaternalConsentAdmin(BaseModelAdmin):
 
     search_fields = (
         'subject_identifier', 'id',
+        'maternal_eligibility__registered_subject__dob',
         'maternal_eligibility__registered_subject__identity',
         'maternal_eligibility__registered_subject__first_name',
         'maternal_eligibility__registered_subject__last_name')
