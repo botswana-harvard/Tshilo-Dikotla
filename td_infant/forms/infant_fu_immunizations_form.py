@@ -1,9 +1,8 @@
-from django import forms
-
 from edc_constants.constants import YES, NO
 
-from ..models import InfantFuImmunizations, VaccinesReceived, VaccinesMissed, InfantBirth
+from django import forms
 
+from ..models import InfantFuImmunizations, VaccinesReceived, VaccinesMissed, InfantBirth
 from .base_infant_model_form import BaseInfantModelForm
 
 
@@ -63,6 +62,7 @@ class VaccinesReceivedForm(BaseInfantModelForm):
         self.validate_pentavalent_vaccine()
         self.validate_vitamin_a_vaccine()
         self.validate_date_not_before_birth()
+        self.validate_ipv_vaccine()
         return cleaned_data
 
     def validate_vaccine_missed(self):
@@ -171,6 +171,13 @@ class VaccinesReceivedForm(BaseInfantModelForm):
                 cleaned_data.get('infant_age') != '6-11'):
             raise forms.ValidationError("Vitamin A is given to children between 6-11 months"
                                         " of life")
+
+    def validate_ipv_vaccine(self):
+        cleaned_data = self.cleaned_data
+        if (cleaned_data.get('received_vaccine_name') == 'inactivated_polio_vaccine' and
+                cleaned_data.get('infant_age') not in ['4', '9-12']):
+            raise forms.ValidationError("IPV vaccine is only given at 4 Months."
+                                        " of life or 9-12 months")
 
     class Meta:
         model = VaccinesReceived

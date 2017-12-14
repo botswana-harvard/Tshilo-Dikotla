@@ -1,9 +1,9 @@
-from django import forms
-
 from edc_constants.constants import YES, NO, NOT_APPLICABLE, POS, NEG
 
-from td_maternal.classes import MaternalStatusHelper
+from django import forms
+
 from td_list.models import MaternalDiagnoses
+from td_maternal.classes import MaternalStatusHelper
 
 from ..models import MaternalPostPartumFu
 from .base_maternal_model_form import BaseMaternalModelForm
@@ -24,7 +24,8 @@ class MaternalPostPartumFuForm(BaseMaternalModelForm):
 
         cleaned_data = self.cleaned_data
         if self.validate_many_to_many_not_blank('diagnoses'):
-                raise forms.ValidationError('Question4: Diagnosis field should not be left empty')
+            raise forms.ValidationError(
+                'Question4: Diagnosis field should not be left empty')
 
         if cleaned_data.get('new_diagnoses') == NO:
             if self.validate_not_applicable_not_there('diagnoses'):
@@ -64,7 +65,7 @@ class MaternalPostPartumFuForm(BaseMaternalModelForm):
                 raise forms.ValidationError(
                     'Question7: Participant was not hospitalized, reason should only be N/A')
 
-            if cleaned_data.get('hospitalization_other'):
+            if cleaned_data.get('hospitalization_reason_other'):
                 raise forms.ValidationError(
                     'Question8: Patient was not hospitalized, please do not give hospitalization reason.')
             if cleaned_data.get('hospitalization_days'):
@@ -73,16 +74,19 @@ class MaternalPostPartumFuForm(BaseMaternalModelForm):
 
     def validate_who_dignoses_neg(self):
         cleaned_data = self.cleaned_data
-        status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
+        status_helper = MaternalStatusHelper(
+            cleaned_data.get('maternal_visit'))
         subject_status = status_helper.hiv_status
 
         if subject_status == NEG:
             if cleaned_data.get('has_who_dx') != NOT_APPLICABLE:
-                raise forms.ValidationError('The mother is Negative, question 10 for WHO Stage III/IV should be N/A')
+                raise forms.ValidationError(
+                    'The mother is Negative, question 10 for WHO Stage III/IV should be N/A')
 
             if self.validate_many_to_many_not_blank('who'):
-                raise forms.ValidationError('Question11: Participant is HIV {}, WHO Diagnosis field should be N/A'.format(status_helper.hiv_status))
-            
+                raise forms.ValidationError(
+                    'Question11: Participant is HIV {}, WHO Diagnosis field should be N/A'.format(status_helper.hiv_status))
+
             if self.validate_not_applicable_not_there('who'):
                 raise forms.ValidationError(
                     'The mother is Negative, question 11 for WHO Stage III/IV listing should be N/A')
@@ -93,7 +97,8 @@ class MaternalPostPartumFuForm(BaseMaternalModelForm):
 
     def validate_who_dignoses_pos(self):
         cleaned_data = self.cleaned_data
-        status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
+        status_helper = MaternalStatusHelper(
+            cleaned_data.get('maternal_visit'))
         subject_status = status_helper.hiv_status
 
         if subject_status == POS:
@@ -102,7 +107,8 @@ class MaternalPostPartumFuForm(BaseMaternalModelForm):
                     'The mother is positive, question 10 for WHO Stage III/IV should not be N/A')
 
             if self.validate_many_to_many_not_blank('who'):
-                raise forms.ValidationError('Question11: WHO Diagnosis field should not be left empty')
+                raise forms.ValidationError(
+                    'Question11: WHO Diagnosis field should not be left empty')
 
             if cleaned_data.get('has_who_dx') == YES:
                 if self.validate_not_applicable_in_there('who'):
@@ -116,7 +122,6 @@ class MaternalPostPartumFuForm(BaseMaternalModelForm):
                 if self.validate_not_applicable_and_other_options('who'):
                     raise forms.ValidationError(
                         'Question 10 is indicated as NO, who listing should only be N/A')
-
 
     class Meta:
         model = MaternalPostPartumFu

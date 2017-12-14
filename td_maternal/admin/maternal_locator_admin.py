@@ -1,8 +1,9 @@
-from django.contrib import admin
-
 from edc_registration.models import RegisteredSubject
 
+from django.contrib import admin
+
 from tshilo_dikotla.base_model_admin import MembershipBaseModelAdmin, BaseModelAdmin
+
 from ..forms import MaternalLocatorForm
 from ..models import MaternalLocator
 
@@ -44,7 +45,9 @@ class MaternalLocatorAdmin(MembershipBaseModelAdmin, BaseModelAdmin):
         'caretaker_cell',
         'caretaker_tel')
     list_filter = ('care_clinic', )
-    search_fields = ('care_clinic', )
+    search_fields = ('care_clinic', 'registered_subject__subject_identifier',
+                     'registered_subject__identity')
+
     radio_fields = {"home_visit_permission": admin.VERTICAL,
                     "may_follow_up": admin.VERTICAL,
                     "may_call_work": admin.VERTICAL,

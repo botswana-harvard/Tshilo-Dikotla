@@ -1,18 +1,18 @@
+from edc_appointment.models import Appointment
+from edc_constants.constants import SCHEDULED, POS, YES, NO, NOT_APPLICABLE
+from edc_registration.models import RegisteredSubject
+
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
-from edc_registration.models import RegisteredSubject
-from edc_constants.constants import SCHEDULED, POS, YES, NO, NOT_APPLICABLE
-from edc_appointment.models import Appointment
-
+from td_infant.forms import InfantNvpAdjustmentForm
 from td_maternal.models import MaternalVisit
-
 from td_maternal.tests import BaseTestCase
 from td_maternal.tests.factories import (MaternalUltraSoundIniFactory, MaternalEligibilityFactory,
                                          MaternalConsentFactory, AntenatalEnrollmentFactory,
                                          AntenatalVisitMembershipFactory, MaternalLabourDelFactory,
                                          MaternalVisitFactory)
-from td_infant.forms import InfantNvpAdjustmentForm
+
 from .factories import InfantBirthFactory, InfantVisitFactory, InfantNvpDispensingFactory
 
 
@@ -45,6 +45,7 @@ class TestInfantNvpAdjustmentForm(BaseTestCase):
         AntenatalVisitMembershipFactory(registered_subject=registered_subject)
         maternal_labour_del = MaternalLabourDelFactory(registered_subject=registered_subject,
                                                        live_infants_to_register=1)
+
         MaternalVisitFactory(
             appointment=Appointment.objects.get(registered_subject=options.get('registered_subject'),
                                                 visit_definition__code='1010M'))
@@ -64,7 +65,8 @@ class TestInfantNvpAdjustmentForm(BaseTestCase):
             registered_subject=infant_registered_subject,
             visit_definition__code='2000')
         infant_visit = InfantVisitFactory(appointment=appointment)
-        InfantNvpDispensingFactory(infant_visit=infant_visit, nvp_prophylaxis=YES)
+        InfantNvpDispensingFactory(
+            infant_visit=infant_visit, nvp_prophylaxis=YES)
         appointment = Appointment.objects.get(
             registered_subject=infant_registered_subject,
             visit_definition__code='2010')

@@ -36,8 +36,7 @@ class InfantFu(InfantCrfModel):
     was_hospitalized = models.CharField(
         max_length=3,
         choices=YES_NO,
-        verbose_name="Has the child been hospitalized overnight since the last scheduled visit "
-                     "(or since discharge after birth,if this is the randomization visit)?",
+        verbose_name="Has the child been hospitalized overnight since the last scheduled visit?",
         help_text="If 'Yes', the primary diagnosis(es) associated with the hospitalization(s) "
                   "must be recorded in follow up diagnoses section.",
     )

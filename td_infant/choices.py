@@ -58,6 +58,7 @@ IMMUNIZATIONS = (
     ('PCV_Vaccine', 'PCV Vaccine (Pneumonia Conjugated Vaccine)'),
     ('Polio', 'Polio'),
     ('Rotavirus', 'Rotavirus'),
+    ('inactivated_polio_vaccine', 'Inactivated-Polio Vaccine'),
     ('Measles', 'Measles'),
     ('Pentavalent', 'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'))
 
@@ -69,6 +70,7 @@ INFANT_VACCINATIONS = (
     ('Haemophilus_influenza', 'Haemophilus Influenza B Vaccine'),
     ('PCV_Vaccine', 'PCV Vaccine (Pneumonia Conjugated Vaccine)'),
     ('Polio', 'Polio'),
+    ('inactivated_polio_vaccine', 'Inactivated-Polio Vaccine'),
     ('Rotavirus', 'Rotavirus'),
     ('Measles', 'Measles'),
     ('Pentavalent', 'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'))
@@ -79,8 +81,10 @@ INFANT_AGE_VACCINE_GIVEN = (
     ('2', '2 months'),
     ('3', '3 months'),
     ('4', '4 months'),
+    ('4-6', '4-6 months'),
     ('6-11', '6-11 months'),
     ('9', '9 months'),
+    ('9-12', '9-12 months'),
     ('12-17', '12-17 months'),
     ('18', '18 months'),
     ('18-29', '18-29 months'),
@@ -98,7 +102,8 @@ ARV_MODIFICATION_REASON = (
     ('Completed PMTCT intervention', 'Completed PMTCT intervention'),
     ('Completed postpartum tail', 'Completed postpartum "tail"'),
     ('Scheduled dose increase', 'Scheduled dose increase'),
-    ('Confirmed infant HIV infection, ending study drug', 'Confirmed infant HIV infection, ending study drug'),
+    ('Confirmed infant HIV infection, ending study drug',
+     'Confirmed infant HIV infection, ending study drug'),
     ('completed protocol', 'Completion of protocol-required period of study treatment'),
     ('HAART not available', 'HAART not available'),
     ('Anemia', 'Anemia'),
@@ -166,10 +171,12 @@ ARV_DRUG_LIST = (
 SOLID_FOODS = (
     ('Grains, roots and tubers', 'Grains, roots and tubers'),
     ('Legumes and nuts', 'Legumes and nuts'),
-    (' Dairy products (milk, yogurt, cheese)', ' Dairy products (milk, yogurt, cheese)'),
+    (' Dairy products (milk, yogurt, cheese)',
+     ' Dairy products (milk, yogurt, cheese)'),
     ('Flesh foods', 'Flesh foods (meat, fish, poultry and liver/organ meat)'),
     ('Eggs', 'Eggs'),
-    ('Vitamin A rich fruts and vegetables (carrots)', 'Vitamin A rich fruts and vegetables (carrots)'),
+    ('Vitamin A rich fruts and vegetables (carrots)',
+     'Vitamin A rich fruts and vegetables (carrots)'),
     ('Other fruits and vegetables', 'Other fruits and vegetables'),
     ('Other', 'Other')
 

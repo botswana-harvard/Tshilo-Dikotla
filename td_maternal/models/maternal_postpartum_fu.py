@@ -1,17 +1,18 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db import models
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
 from edc_constants.choices import YES_NO, YES_NO_NA
 
-from tshilo_dikotla.choices import HOSPITALIZATION_REASON
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db import models
+
 from td_list.models import MaternalHospitalization
+from tshilo_dikotla.choices import HOSPITALIZATION_REASON
 from tshilo_dikotla.choices import LAUGH, ENJOYMENT, BLAME, UNHAPPY, ANXIOUS, SAD, PANICK, TOP, CRYING, HARM
 
-from .maternal_crf_model import MaternalCrfModel
 from .diagnoses_mixin import DiagnosesMixin
+from .maternal_crf_model import MaternalCrfModel
 
 
+# from edc_base.audit_trail import AuditTrail
 class MaternalPostPartumFu(MaternalCrfModel, DiagnosesMixin):
 
     hospitalized = models.CharField(
@@ -28,7 +29,7 @@ class MaternalPostPartumFu(MaternalCrfModel, DiagnosesMixin):
         help_text="",
     )
 
-    hospitalization_other = OtherCharField(
+    hospitalization_reason_other = OtherCharField(
         max_length=35,
         verbose_name="if other specify...",
         blank=True,

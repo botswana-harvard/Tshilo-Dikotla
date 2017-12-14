@@ -1,12 +1,13 @@
+from edc_base.model.fields import OtherCharField
+from edc_constants.constants import SCHEDULED, UNSCHEDULED, NO, YES
+from lab_requisition.forms import RequisitionFormMixin
+
 from django import forms
 from django.conf import settings
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
-from edc_constants.constants import SCHEDULED, UNSCHEDULED
-from lab_requisition.forms import RequisitionFormMixin
-
-from tshilo_dikotla.choices import STUDY_SITES
 from td_maternal.models import MaternalVisit
+from tshilo_dikotla.choices import STUDY_SITES
 
 from ..models import MaternalRequisition
 
@@ -33,6 +34,12 @@ class MaternalRequisitionForm(RequisitionFormMixin):
                     'indicated as {}, whilst requisition is indicated as{}. Please correct'.format(
                         cleaned_data.get('drawn_datetime').date(),
                         cleaned_data.get('requisition_datetime').date()))
+
+        if cleaned_data.get('is_drawn') == YES:
+            if cleaned_data.get('reason_not_drawn'):
+                raise forms.ValidationError(
+                    'No requisition was drawn, reason not drawn must be Not Applicable')
+
         if (
             cleaned_data.get('panel').name == 'Vaginal swab (Storage)' or
             cleaned_data.get('panel').name == 'Rectal swab (Storage)' or
@@ -40,13 +47,15 @@ class MaternalRequisitionForm(RequisitionFormMixin):
             cleaned_data.get('panel').name == 'Vaginal STI Swab (Storage)'
         ):
             if cleaned_data.get('item_type') != 'swab':
-                raise forms.ValidationError('Panel is a swab therefore collection type is swab. Please correct.')
+                raise forms.ValidationError(
+                    'Panel is a swab therefore collection type is swab. Please correct.')
         else:
             if cleaned_data.get('item_type') != 'tube':
                 raise forms.ValidationError('Panel {} can only be tube therefore collection type is swab. '
                                             'Please correct.'.format(cleaned_data.get('panel').name))
         maternal_visit = MaternalVisit.objects.get(
-            appointment__registered_subject=cleaned_data.get('maternal_visit').appointment.registered_subject,
+            appointment__registered_subject=cleaned_data.get(
+                'maternal_visit').appointment.registered_subject,
             appointment=cleaned_data.get('maternal_visit').appointment,
             appointment__visit_instance=cleaned_data.get('maternal_visit').appointment.visit_instance)
         if maternal_visit:
@@ -56,6 +65,7 @@ class MaternalRequisitionForm(RequisitionFormMixin):
                     'Reason not drawn cannot be {}. Visit report reason is {}'.format(
                         cleaned_data.get('reason_not_drawn'),
                         maternal_visit.reason))
+
         return cleaned_data
 
     class Meta:

@@ -25,7 +25,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
     visit_definitions['2000M'] = {
         'title': 'Delivery Visit',
         'time_point': 30,
-        'base_interval': 10,
+        'base_interval': 0,
         'base_interval_unit': 'D',
         'window_lower_bound': 0,
         'window_lower_bound_unit': 'D',
