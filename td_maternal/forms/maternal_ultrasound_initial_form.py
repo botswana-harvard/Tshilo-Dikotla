@@ -11,6 +11,7 @@ class MaternalUltraSoundInitialForm(BaseMaternalModelForm):
         cleaned_data = super(MaternalUltraSoundInitialForm, self).clean()
 #         cleaned_data.pop('malformations')
         self.validate_est_edd_ultrasound(cleaned_data)
+        self.validate_ga_by_ultrasound_days(cleaned_data)
         self.validate_ga_by_lmp(cleaned_data)
         self.validate_ga_by_ultrasound_against_est_edd_ultrasound(cleaned_data)
         MaternalUltraSoundInitial(
@@ -31,6 +32,12 @@ class MaternalUltraSoundInitialForm(BaseMaternalModelForm):
             raise forms.ValidationError(
                 'GA by ultrasound cannot be greater than 40 weeks.')
 
+    def validate_ga_by_ultrasound_days(self, cleaned_data):
+        ga_by_ultrasound_days = cleaned_data.get('ga_by_ultrasound_days')
+        if ga_by_ultrasound_days > 7:
+            raise forms.ValidationError(
+                'GA by ultrasound days cannot be greater than 8 days.')
+
     def validate_ga_by_ultrasound_against_est_edd_ultrasound(self, cleaned_data):
         est_edd = cleaned_data.get('est_edd_ultrasound')
         ga_by_ultrasound = cleaned_data.get('ga_by_ultrasound_wks')
@@ -41,7 +48,7 @@ class MaternalUltraSoundInitialForm(BaseMaternalModelForm):
             ) - relativedelta(weeks=ga_by_ultrasound))
             weeks_between = ((est_edd - est_conceive_date).days) / 7
             if (weeks_between + 1) > ga_by_ultrasound:
-                if (int(weeks_between) + 1) not in range(38, 42):
+                if (int(weeks_between) + 1) not in range(39, 42):
                     raise forms.ValidationError(
                         'Estimated edd by ultrasound {} should match '
                         'GA by ultrasound'.format(est_edd_ultrasound))
