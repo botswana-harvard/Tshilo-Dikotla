@@ -18,7 +18,6 @@ class InfantFuDxItemsForm(BaseInfantModelForm):
     def clean(self):
         cleaned_data = super(InfantFuDxItemsForm, self).clean()
         self.validate_health_facility()
-        self.validate_reported_hospitalization()
         self.validate_other_serious_grade3or4_infection_specification()
         self.validate_other_serious_grade3or4_non_infectious_specification()
         self.validate_other_abnormallaboratory_tests_specification()
@@ -32,13 +31,6 @@ class InfantFuDxItemsForm(BaseInfantModelForm):
             return infant_fu.was_hospitalized
         except Exception as e:
             pass
-
-#     def validate_reported_hospitalization(self):
-#         cleaned_data = self.cleaned_data
-#         infant_visit = cleaned_data.get('infant_fu_dx').infant_visit
-#         if self.check_infant_hospitalization(infant_visit) == NO:
-#             raise forms.ValidationError(
-#                 'Question6 in Infant Follow Up is not answered YES, you cannot fill this form.')
 
     def validate_health_facility(self):
         cleaned_data = self.cleaned_data
