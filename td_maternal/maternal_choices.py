@@ -142,7 +142,7 @@ MONEY_EARNED = (
      'P501-1000 per month / P117 - 231 per week'),
     ('P1001-5000 per month / P212 - 1157 per week',
      'P1001-5000 per month / P212 - 1157 per week'),
-    ('P5000 per month / >P1157 per week', 'P5000 per month / >P1157 per week'),
+    ('>P5000 per month / >P1157 per week', '>P5000 per month / >P1157 per week'),
     ('Unsure', 'Unsure'),
     (OTHER, 'Other, specify'),)
 
