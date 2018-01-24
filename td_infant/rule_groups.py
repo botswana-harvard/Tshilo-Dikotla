@@ -66,12 +66,10 @@ def func_show_infant_arv_proph(visit_instance):
         if visit_instance.appointment.visit_definition.code == '2010':
             return maternal_hiv_status_visit(visit_instance)
         return False
-    try:
-        arv_mod = InfantArvProphMod.objects.get(
-            infant_arv_proph=infant_arv_proph)
-        return not arv_mod.dose_status == 'Permanently discontinued'
-    except InfantArvProphMod.DoesNotExist:
-        return False
+    else:
+        return not InfantArvProphMod.objects.filter(
+            infant_arv_proph=infant_arv_proph,
+            dose_status='Permanently discontinued').order_by('-created').first()
 
 
 def func_infant_heu(visit_instance):
