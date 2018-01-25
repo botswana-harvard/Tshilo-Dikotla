@@ -17,11 +17,14 @@ def func_mother_pos(visit_instance):
     return False
 
 
-def func_mother_pos_visit_1020(visit_instance):
+def func_mother_pos_vl(visit_instance):
     if (func_mother_pos(visit_instance) and
-            (visit_instance.appointment.visit_definition.code == '1020M')):
+            (visit_instance.appointment.visit_definition.code == '1010M' or
+             visit_instance.appointment.visit_definition.code == '1020M')):
         return False
-    return True
+    elif (func_mother_pos(visit_instance) and
+            visit_instance.appointment.visit_definition.code == '2000M'):
+        return True
 
 
 def func_mother_neg(visit_instance):
@@ -155,13 +158,21 @@ site_rule_groups.register(MaternalRegisteredSubjectRuleGroup)
 
 class MaternalRequisitionRuleGroup(RuleGroup):
 
-    require_vl = RequisitionRule(
+    require_vl_prn = RequisitionRule(
         logic=Logic(
-            predicate=func_mother_pos_visit_1020,
+            predicate=func_mother_pos_vl,
             consequence=UNKEYED,
             alternative=NOT_REQUIRED),
         target_model=[('td_lab', 'maternalrequisition')],
-        target_requisition_panels=['PBMC VL', 'Viral Load'])
+        target_requisition_panels=['Viral Load'])
+
+    require_pbmc_vl = RequisitionRule(
+        logic=Logic(
+            predicate=func_mother_pos,
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_lab', 'maternalrequisition')],
+        target_requisition_panels=['PBMC VL'])
 
     require_pbmc_storage = RequisitionRule(
         logic=Logic(
