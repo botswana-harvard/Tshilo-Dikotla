@@ -423,6 +423,7 @@ OFF_STUDY_REASON = [
     ('unable_to_determine_ga', 'Unable to confirm GA by Ultrasound.'),
     ('enrolled_erroneously',
      'Enrolled erroneously – did not meet eligibility criteria'),
+    ('mother_not_complete_anv1', 'Mother did not complete ANV1 (1010) visit.'),
     (OTHER, 'Other'),
 ]
 
