@@ -64,6 +64,24 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             'DNA PCR', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
     )
 
+    infant_24month_requisitions = (
+        RequisitionPanelTuple(
+            10, 'td_lab', 'infantrequisition',
+            'DNA PCR', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            20, 'td_lab', 'infantrequisition',
+            'Infant Insulin', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            30, 'td_lab', 'infantrequisition',
+            'Infant Glucose', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            40, 'td_lab', 'infantrequisition',
+            'PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            50, 'td_lab', 'infantrequisition',
+            'Infant Serum (Store Only)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
+    )
+
     infant_36month_requisitions = (
         RequisitionPanelTuple(
             10, 'td_lab', 'infantrequisition',
@@ -271,7 +289,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
         'instructions': None,
-        'requisitions': infant_dnapcr_requisitions,
+        'requisitions': infant_24month_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(20, 'td_infant', 'infantfuphysical',
