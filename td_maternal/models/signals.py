@@ -102,19 +102,21 @@ def maternal_consent_on_post_save(sender, instance, raw, created, using, **kwarg
     if not raw:
         if isinstance(instance, MaternalConsent):
             maternal_eligibility = instance.maternal_eligibility
-            maternal_eligibility.is_consented = True
-            maternal_eligibility.save(update_fields=['is_consented'])
-            maternal_eligibility.registered_subject.registration_datetime = instance.consent_datetime
-            maternal_eligibility.registered_subject.registration_status = CONSENTED
-            maternal_eligibility.registered_subject.subject_identifier = instance.subject_identifier
-            maternal_eligibility.registered_subject.initials = instance.initials
-            maternal_eligibility.registered_subject.first_name = instance.first_name
-            maternal_eligibility.registered_subject.last_name = instance.last_name
-            maternal_eligibility.registered_subject.identity = instance.identity
-            maternal_eligibility.registered_subject.dob = instance.dob
-            maternal_eligibility.registered_subject.subject_consent_id = instance.id
-            maternal_eligibility.registered_subject.subject_consent_id = instance.pk
-            maternal_eligibility.registered_subject.save()
+            if not maternal_eligibility.is_consented:
+                maternal_eligibility.is_consented = True
+                maternal_eligibility.save(update_fields=['is_consented'])
+                maternal_eligibility.registered_subject.registration_datetime = instance.consent_datetime
+                maternal_eligibility.registered_subject.registration_status = CONSENTED
+                maternal_eligibility.registered_subject.subject_identifier = instance.subject_identifier
+                maternal_eligibility.registered_subject.initials = instance.initials
+                maternal_eligibility.registered_subject.first_name = instance.first_name
+                maternal_eligibility.registered_subject.last_name = instance.last_name
+                maternal_eligibility.registered_subject.identity = instance.identity
+                maternal_eligibility.registered_subject.dob = instance.dob
+                maternal_eligibility.registered_subject.subject_consent_id = instance.id
+                maternal_eligibility.registered_subject.subject_consent_id = instance.pk
+                maternal_eligibility.registered_subject.save()
+                
 
 
 @receiver(post_save, weak=False, dispatch_uid="ineligible_take_off_study")

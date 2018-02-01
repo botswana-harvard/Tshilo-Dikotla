@@ -35,3 +35,4 @@ from .maternal_ultrasound_initial_form import MaternalUltraSoundInitialForm
 from .maternal_visit_form import MaternalVisitForm
 from .rapid_test_result_form import RapidTestResultForm
 from .specimen_consent_form import SpecimenConsentForm
+from .td_consent_version_form import TdConsentVersionForm

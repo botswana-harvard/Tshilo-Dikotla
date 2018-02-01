@@ -43,7 +43,7 @@ class MaternalVisitForm (VisitFormMixin, BaseModelForm):
             instance = MaternalVisit(**self.cleaned_data)
         instance.subject_failed_eligibility(forms.ValidationError)
         self.clean_ultrasound_form(cleaned_data)
-        self.check_creation_of_antenatal_visit_2(cleaned_data)
+        # self.check_creation_of_antenatal_visit_2(cleaned_data)
 
         return cleaned_data
 

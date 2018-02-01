@@ -29,7 +29,7 @@ APP_NAME = 'td'
 LIVE_SERVER = 'td.bhp.org.bw'
 TEST_HOSTS = ['edc4.bhp.org.bw', 'tdtest.bhp.org.bw']
 DEVELOPER_HOSTS = [
-    'mac2-2.local', 'ckgathi', 'one-2.local', 'One-2.local', 'tsetsiba', 'leslie']
+    'mac2-2.local', 'one-2.local', 'One-2.local', 'tsetsiba', 'leslie']
 
 PROJECT_TITLE = 'Tshilo Dikotla'
 INSTITUTION = 'Botswana-Harvard AIDS Institute'
@@ -43,24 +43,26 @@ PROJECT_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
 PROJECT_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
 ETC_DIR = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(2).child('etc')
 
-if socket.gethostname() == LIVE_SERVER:
-    KEY_PATH = '/home/django/source/tshilo_dikotla/keys'
-elif socket.gethostname() in TEST_HOSTS + DEVELOPER_HOSTS:
-    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
-elif 'test' in sys.argv:
-    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
-else:
-    raise TypeError(
-        'Warning! Unknown hostname for KEY_PATH. \n'
-        'Getting this wrong on a LIVE SERVER will corrupt your encrypted data!!! \n'
-        'Expected hostname to appear in one of '
-        'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
-        'Got hostname=\'{}\'\n'.format(socket.gethostname()))
+# if socket.gethostname() == LIVE_SERVER:
+#     KEY_PATH = '/home/django/source/keys'
+# elif socket.gethostname() in TEST_HOSTS + DEVELOPER_HOSTS:
+#     KEY_PATH = '/Users/ckgathi/td_source/keys'
+# elif 'test' in sys.argv:
+#     KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
+# else:
+#     raise TypeError(
+#         'Warning! Unknown hostname for KEY_PATH. \n'
+#         'Getting this wrong on a LIVE SERVER will corrupt your encrypted data!!! \n'
+#         'Expected hostname to appear in one of '
+#         'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
+#         'Got hostname=\'{}\'\n'.format(socket.gethostname()))
+
+KEY_PATH = '/Users/ckgathi/td_source/keys'
 
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+USE_X_FORWARDED_HOST = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -69,6 +71,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'simple_history',
     'rest_framework',
     'rest_framework.authtoken',
@@ -230,13 +233,18 @@ if socket.gethostname() in DEVELOPER_HOSTS:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         },
     }
-elif socket.gethostname() == LIVE_SERVER:
+elif socket.gethostname() == 'ckgathi':
     SECRET_KEY = PRODUCTION_SECRET_KEY
     DATABASES = PRODUCTION_POSTGRES
 elif socket.gethostname() in TEST_HOSTS:
     DATABASES = TEST_HOSTS_POSTGRES
-elif 'test' in sys.argv:
-    DATABASES = TRAVIS_POSTGRES
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        },
+    }
 
 # django auth
 AUTH_PROFILE_MODULE = "bhp_userprofile.userprofile"
@@ -248,7 +256,7 @@ IS_SECURE_DEVICE = True
 FIELD_MAX_LENGTH = 'default'
 
 # Internationalization
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 LANGUAGES = (
     ('tn', 'Setswana'),
@@ -294,23 +302,25 @@ AGE_IS_ADULT = 18
 GENDER_OF_CONSENT = ['F']
 DISPATCH_APP_LABELS = []
 
-if socket.gethostname() == LIVE_SERVER:
-    DEVICE_ID = 99
-    PROJECT_TITLE = '{} Live Server'.format(PROJECT_TITLE)
-elif socket.gethostname() in TEST_HOSTS:
-    DEVICE_ID = 99
-    PROJECT_TITLE = 'TEST (postgres): {}'.format(PROJECT_TITLE)
-elif socket.gethostname() in DEVELOPER_HOSTS:
-    DEVICE_ID = 99
-    PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
-elif 'test' in sys.argv:
-    DEVICE_ID = 99
-    PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
-else:
-    raise ImproperlyConfigured(
-        'Unknown hostname for full PROJECT_TITLE. Expected hostname to appear in one of '
-        'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
-        'Got hostname=\'{}\''.format(socket.gethostname()))
+# if socket.gethostname() == LIVE_SERVER:
+#     DEVICE_ID = 99
+#     PROJECT_TITLE = '{} Live Server'.format(PROJECT_TITLE)
+# elif socket.gethostname() in TEST_HOSTS:
+#     DEVICE_ID = 99
+#     PROJECT_TITLE = 'TEST (postgres): {}'.format(PROJECT_TITLE)
+# elif socket.gethostname() in DEVELOPER_HOSTS:
+#     DEVICE_ID = 99
+#     PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
+# elif 'test' in sys.argv:
+#     DEVICE_ID = 99
+#     PROJECT_TITLE = 'TEST (sqlite3): {}'.format(PROJECT_TITLE)
+# else:
+#     raise ImproperlyConfigured(
+#         'Unknown hostname for full PROJECT_TITLE. Expected hostname to appear in one of '
+#         'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
+#         'Got hostname=\'{}\''.format(socket.gethostname()))
+
+DEVICE_ID = 99
 
 SITE_CODE = '40'
 SERVER_DEVICE_ID_LIST = [91, 92, 93, 94, 95, 96, 97, 99]
@@ -322,6 +332,9 @@ CELLPHONE_REGEX = '^[7]{1}[12345678]{1}[0-9]{6}$'
 TELEPHONE_REGEX = '^[2-8]{1}[0-9]{6}$'
 DEFAULT_STUDY_SITE = '40'
 ALLOW_MODEL_SERIALIZATION = True
+
+PREVIOUS_CONSENT_VERSION = "1"
+LASTEST_VERSION = "3"
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators

@@ -14,7 +14,7 @@ def get_birth_arv_visit_2000(infant_identifier):
     """Check if infant was given AZT at birth"""
     try:
         visit_2000 = InfantVisit.objects.get(
-            subject_identifier=infant_identifier, appointment__visit_definition__code=2000)
+            subject_identifier=infant_identifier, appointment__visit_definition__code=2000, appointment__visit_instance=0)
         infant_birth_arv = InfantBirthArv.objects.get(infant_visit=visit_2000)
         return infant_birth_arv.azt_discharge_supply
     except InfantBirthArv.DoesNotExist:

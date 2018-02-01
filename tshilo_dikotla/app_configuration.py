@@ -76,7 +76,12 @@ class AppConfiguration(BaseAppConfiguration):
          'model_name': 'maternalconsent',
          'start_datetime': study_start_datetime,
          'end_datetime': datetime(2018, 12, 31, 23, 59),
-         'version': '1'}
+         'version': '1'},
+        {'app_label': 'td_maternal',
+         'model_name': 'maternalconsent',
+         'start_datetime': datetime(2018, 1, 31, 23,59),
+         'end_datetime': datetime(2018, 12, 31, 23, 59),
+         'version': '3'}
     ]
 
     study_site_setup = []
@@ -174,48 +179,3 @@ class AppConfiguration(BaseAppConfiguration):
                      '^FO315,152^A0N,25,20^FD${drawn_datetime}^FS\n'
                      '^XZ')), True)]
     }
-#     labeling_setup = {
-#         'label_printer': [LabelPrinterTuple('Zebra_Technologies_ZTC_GK420t',
-#                                             'mpepu02', '192.168.1.230', True),
-#                           LabelPrinterTuple('Zebra_Technologies_ZTC_GK420t',
-#                                             'kseamolo', '192.168.1.225', True)],
-#         'client': [
-#             ClientTuple(
-#                 hostname='mpepu02',
-#                 printer_name='Zebra_Technologies_ZTC_GK420t',
-#                 cups_hostname='mpepu02',
-#                 ip='192.168.1.230',
-#                 aliases=None),
-#             ClientTuple(
-#                 hostname='kseamolo',
-#                 printer_name='Zebra_Technologies_ZTC_GK420t',
-#                 cups_hostname='kseamolo',
-#                 ip='192.168.1.225',
-#                 aliases=None)],
-#         'zpl_template': [
-#             aliquot_label or ZplTemplateTuple(
-#                 'aliquot_label', (
-#                     ('^XA\n' +
-#                      ('^FO315,15^A0N,17,20^FD${protocol} Site ${site} ${clinician_initials}   '
-#                       '${aliquot_type} ${aliquot_count}${primary}^FS\n') +
-#                      '^FO320,34^BY1,3.0^BCN,50,N,N,N\n'
-#                      '^BY^FD${aliquot_identifier}^FS\n'
-#                      '^FO315,92^A0N,18,20^FD${aliquot_identifier}^FS\n'
-#                      '^FO315,109^A0N,16,20^FD${panel}^FS\n'
-#                      '^FO315,125^A0N,19,20^FD${subject_identifier} (${initials})^FS\n'
-#                      '^FO315,145^A0N,18,20^FDDOB: ${dob} ${gender}^FS\n'
-#                      '^FO315,165^A0N,18,20^FD${drawn_datetime}^FS\n'
-#                      '^XZ')), False),
-#             ZplTemplateTuple(
-#                 'requisition_label', (
-#                     ('^XA\n' +
-#                      ('^FO310,15^A0N,20,20^FD${protocol} Site ${site} ${clinician_initials}   '
-#                       '${aliquot_type} ${aliquot_count}${primary}^FS\n') +
-#                      '^FO310,34^BY1,3.0^BCN,50,N,N,N\n'
-#                      '^BY^FD${requisition_identifier}^FS\n'
-#                      '^FO310,92^A0N,20,20^FD${requisition_identifier} ${panel}^FS\n'
-#                      '^FO310,112^A0N,20,20^FD${subject_identifier} (${initials})^FS\n'
-#                      '^FO310,132^A0N,20,20^FDDOB: ${dob} ${gender}^FS\n'
-#                      '^FO310,152^A0N,25,20^FD${drawn_datetime}^FS\n'
-#                      '^XZ')), True)]
-#     }

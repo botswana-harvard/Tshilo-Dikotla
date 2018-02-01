@@ -13,3 +13,4 @@ errorlog = os.path.join(PROJECT_ROOT, 'logs/gunicorn-error.log')  # Make sure yo
 accesslog = os.path.join(PROJECT_ROOT, 'logs/gunicorn-access.log')
 loglevel = 'debug'
 workers = 1 # the number of recommended workers is '2 * number of CPUs + 1'
+timeout = 300
