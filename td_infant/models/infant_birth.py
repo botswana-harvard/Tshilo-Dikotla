@@ -13,6 +13,10 @@ from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from td_maternal.models import MaternalLabourDel
 
 from ..managers import InfantBirthModelManager
+from td_maternal.models.maternal_consent import MaternalConsent
+from edc_appointment.exceptions import AppointmentCreateError
+from edc_visit_schedule.models.visit_definition import VisitDefinition
+from edc_visit_schedule.models.schedule import Schedule
 
 
 class InfantBirth(SyncModelMixin, OffStudyMixin, AppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
@@ -62,13 +66,43 @@ class InfantBirth(SyncModelMixin, OffStudyMixin, AppointmentMixin, ExportTrackin
     def __str__(self):
         return "{} ({}) {}".format(self.first_name, self.initials, self.gender)
 
+    @property
+    def group_names(self):
+        return ['Infant Enrollment', 'Infant Enrollment1']
+
+    def schedule(self, model_name=None, group_names=None):
+        """Returns the schedule for this membership_form."""
+        return Schedule.objects.filter(
+            membership_form__content_type_map__model=model_name, group_name__in=group_names)
+
+    def visit_definitions_for_schedule(self, model_name=None, instruction=None):
+        """Returns a visit_definition queryset for this membership form's schedule."""
+        # VisitDefinition = get_model('edc_visit_schedule', 'VisitDefinition')
+        schedule = self.schedule(model_name=model_name, group_names=self.group_names)
+        if instruction:
+            visit_definitions = VisitDefinition.objects.filter(
+                schedule__in=schedule, instruction=instruction).order_by('time_point')
+        else:
+            visit_definitions = VisitDefinition.objects.filter(
+                schedule=schedule).order_by('time_point')
+        if not visit_definitions:
+            raise AppointmentCreateError(
+                'No visit_definitions found for membership form class {0} '
+                'in schedule group {1}. Expected at least one visit '
+                'definition to be associated with schedule group {1}.'.format(
+                    model_name, schedule))
+        return visit_definitions
+
     def prepare_appointments(self, using):
         """Creates infant appointments relative to the date-of-delivery"""
         relative_identifier = self.registered_subject.relative_identifier
         maternal_labour_del = MaternalLabourDel.objects.get(
             registered_subject__subject_identifier=relative_identifier)
+        maternal_consent = MaternalConsent.objects.filter(
+                    subject_identifier=relative_identifier).order_by('version').last()
+        instruction = 'V' + maternal_consent.version
         self.create_all(
-            base_appt_datetime=maternal_labour_del.delivery_datetime, using=using)
+            base_appt_datetime=maternal_labour_del.delivery_datetime, using=using, instruction=instruction)
 
     def get_subject_identifier(self):
         return self.registered_subject.subject_identifier

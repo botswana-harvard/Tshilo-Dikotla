@@ -6,6 +6,8 @@ from td_infant.models import InfantVisit, InfantBirth
 from td_lab.models import InfantRequisition
 from td_maternal.models import (MaternalLocator, MaternalConsent, MaternalVisit,
                                 MaternalEligibility)
+from edc_appointment.models.appointment import Appointment
+from edc_visit_schedule.models.membership_form import MembershipForm
 
 
 class InfantDashboard(RegisteredSubjectDashboard):
@@ -51,6 +53,39 @@ class InfantDashboard(RegisteredSubjectDashboard):
             local_results=self.render_labs(),
             infant_birth=self.infant_birth, )
         return self.context
+
+    @property
+    def appointments(self):
+        """Returns all appointments for this registered_subject or just one
+        if given a appointment_code and appointment_continuation_count.
+
+        Could show
+            one
+            all
+            only for this membership form category (which is the subject type)
+            only those for a given membership form
+            only those for a visit definition grouping
+            """
+        appointments = []
+        if self.show == 'forms':
+            appointments = [self.appointment]
+        else:
+            # or filter appointments for the current membership categories
+            # schedule__membership_form
+            codes = []
+            print(self.instruction, 'self.instruction YESSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
+            for category in self.membership_form_category:
+                codes.extend(MembershipForm.objects.codes_for_category(membership_form_category=category))
+                appointments = Appointment.objects.filter(
+                    registered_subject=self.registered_subject,
+                    visit_definition__code__in=codes,
+                    visit_definition__instruction=self.instruction).order_by(
+                    'visit_definition__time_point', 'visit_instance', 'appt_datetime')
+        return appointments
+
+    @property
+    def instruction(self):
+        return 'V' + self.maternal_consent.version
 
     @property
     def maternal_consent(self):

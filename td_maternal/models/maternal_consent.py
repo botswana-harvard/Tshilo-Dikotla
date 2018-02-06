@@ -22,6 +22,7 @@ from edc_consent.exceptions import ConsentVersionError
 from td_maternal.models.td_consent_version import TdConsentVersion
 
 
+
 class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMixin,
                       IdentityFieldsMixin, PersonalFieldsMixin,
                       CitizenFieldsMixin, VulnerabilityFieldsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
@@ -31,7 +32,9 @@ class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMi
     MIN_AGE_OF_CONSENT = MIN_AGE_OF_CONSENT
     MAX_AGE_OF_CONSENT = MAX_AGE_OF_CONSENT
 
-    off_study_model = ('td_maternal', 'MaternalOffStudy')
+    off_study_model = 'td_maternal.maternaloffstudy'
+
+    visit_model_attr = 'maternal_visit'
 
     maternal_eligibility = models.ForeignKey(MaternalEligibility)
 

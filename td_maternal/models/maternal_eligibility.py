@@ -120,22 +120,24 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
             subject_identifier=self.registered_subject.subject_identifier).order_by('version')
 
     @property
-    def consent_version(self):
+    def latest_consent_version(self):
         MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
-        consent_type = None
-        if self.previous_consents:
-            consent_type = site_consent_types.get_by_consent_datetime(
-                MaternalConsent, self.report_datetime,
-                version=self.td_consent_version.version)
-        else:
-            consent_type = site_consent_types.get_by_datetime_lastest_version(
-                MaternalConsent, self.consent_datetime)
+        consent_type = site_consent_types.get_by_datetime_lastest_version(
+            MaternalConsent, timezone.now())
         return consent_type.version
 
     @property
     def re_consent(self):
         if self.previous_consents and self.td_consent_version:
-            if self.td_consent_version.version ==  settings.LASTEST_VERSION:
+            MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
+            try:
+                maternal_consent = MaternalConsent.objects.get(
+                    subject_identifier=self.registered_subject.subject_identifier,
+                    version=settings.LASTEST_VERSION)
+            except MaternalConsent.DoesNotExist:
+                maternal_consent = None
+            
+            if self.td_consent_version.version ==  settings.LASTEST_VERSION and not maternal_consent:
                 return True
         return False
             
