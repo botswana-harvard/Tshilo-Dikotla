@@ -20,7 +20,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
 
     schedules = OrderedDict({
         'Infant Enrollment1': ScheduleTuple('Infant Enrollment1',
-                                           'infant_enrollment1', None, None)})
+                                            'infant_enrollment1', None, None)})
 
     infant_birth_requisitions = (
         RequisitionPanelTuple(
@@ -143,9 +143,9 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         'time_point': 10,
         'base_interval': 1,
         'base_interval_unit': 'M',
-        'window_lower_bound': 23,
+        'window_lower_bound': 15,
         'window_lower_bound_unit': 'D',
-        'window_upper_bound': 76,
+        'window_upper_bound': 23,
         'window_upper_bound_unit': 'D',
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
@@ -171,9 +171,9 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         'time_point': 20,
         'base_interval': 2,
         'base_interval_unit': 'M',
-        'window_lower_bound': 23,
+        'window_lower_bound': 7,
         'window_lower_bound_unit': 'D',
-        'window_upper_bound': 76,
+        'window_upper_bound': 60,
         'window_upper_bound_unit': 'D',
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
@@ -339,7 +339,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         'base_interval_unit': 'M',
         'window_lower_bound': 3,
         'window_lower_bound_unit': 'M',
-        'window_upper_bound': 3,
+        'window_upper_bound': 4,
         'window_upper_bound_unit': 'M',
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
