@@ -28,8 +28,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 APP_NAME = 'td'
 LIVE_SERVER = 'td.bhp.org.bw'
 TEST_HOSTS = ['edc4.bhp.org.bw', 'tdtest.bhp.org.bw']
-DEVELOPER_HOSTS = [
-    'mac2-2.local', 'one-2.local', 'One-2.local', 'tsetsiba', 'leslie']
+DEVELOPER_HOSTS = ['tsetsiba', 'leslie']
 
 PROJECT_TITLE = 'Tshilo Dikotla'
 INSTITUTION = 'Botswana-Harvard AIDS Institute'
@@ -41,23 +40,22 @@ BASE_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
 MEDIA_ROOT = BASE_DIR.child('media')
 PROJECT_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
 PROJECT_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
-ETC_DIR = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(2).child('etc')
+ETC_DIR = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(
+    2).child('etc')
 
-# if socket.gethostname() == LIVE_SERVER:
-#     KEY_PATH = '/home/django/source/keys'
-# elif socket.gethostname() in TEST_HOSTS + DEVELOPER_HOSTS:
-#     KEY_PATH = '/Users/ckgathi/td_source/keys'
-# elif 'test' in sys.argv:
-#     KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
-# else:
-#     raise TypeError(
-#         'Warning! Unknown hostname for KEY_PATH. \n'
-#         'Getting this wrong on a LIVE SERVER will corrupt your encrypted data!!! \n'
-#         'Expected hostname to appear in one of '
-#         'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
-#         'Got hostname=\'{}\'\n'.format(socket.gethostname()))
-
-KEY_PATH = '/Users/ckgathi/td_source/keys'
+if socket.gethostname() == LIVE_SERVER:
+    KEY_PATH = '/home/django/source/keys'
+elif socket.gethostname() in TEST_HOSTS + DEVELOPER_HOSTS:
+    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
+elif 'test' in sys.argv:
+    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
+else:
+    raise TypeError(
+        'Warning! Unknown hostname for KEY_PATH. \n'
+        'Getting this wrong on a LIVE SERVER will corrupt your encrypted data!!! \n'
+        'Expected hostname to appear in one of '
+        'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
+        'Got hostname=\'{}\'\n'.format(socket.gethostname()))
 
 DEBUG = True
 
@@ -88,7 +86,7 @@ INSTALLED_APPS = [
     'edc_configuration',
     'corsheaders',
     'crispy_forms',
-#     'edc_consent',
+    #     'edc_consent',
     'edc_constants',
     'edc_content_type_map',
     'edc_dashboard',
@@ -100,7 +98,7 @@ INSTALLED_APPS = [
     'edc_offstudy',
     'edc_registration',
     'edc_rule_groups',
-#     'edc_sync',
+    #     'edc_sync',
     'edc_sync_files',
     'django_appconfig_ini',
     'edc_code_lists',
@@ -121,7 +119,7 @@ INSTALLED_APPS = [
 ]
 
 if 'test' in sys.argv:
-#     INSTALLED_APPS.append('edc_testing')
+    #     INSTALLED_APPS.append('edc_testing')
     # TODO: Make this list auto generate from INSTALLED_APPS
     # Ignore running migrations on unit tests, greately speeds up tests.
     MIGRATION_MODULES = {"edc_registration": None,
@@ -213,7 +211,6 @@ TEMPLATES = [
 ]
 
 
-
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
@@ -284,7 +281,8 @@ STATICFILES_FINDERS = (
 )
 
 # edc.crytpo_fields encryption keys
-# developers should set by catching their hostname instead of setting explicitly
+# developers should set by catching their hostname instead of setting
+# explicitly
 
 GIT_DIR = BASE_DIR.ancestor(1)
 
@@ -295,7 +293,7 @@ LABEL_PRINTER_MAKE_AND_MODEL = ['Zebra ZPL Label Printer']
 
 SUBJECT_APP_LIST = ['maternal', 'infant']
 SUBJECT_TYPES = ['maternal', 'infant']
-MAX_SUBJECTS = {'maternal': 3000, 'infant': 3000}
+MAX_SUBJECTS = {'maternal': 499, 'infant': 499}
 MINIMUM_AGE_OF_CONSENT = 18
 MAXIMUM_AGE_OF_CONSENT = 64
 AGE_IS_ADULT = 18
@@ -357,8 +355,10 @@ AUTH_PASSWORD_VALIDATORS = [
 try:
     config = configparser.ConfigParser()
     config.read(os.path.join(ETC_DIR, 'edc_sync.ini'))
-    CORS_ORIGIN_WHITELIST = tuple(config['corsheaders'].get('cors_origin_whitelist').split(','))
-    CORS_ORIGIN_ALLOW_ALL = config['corsheaders'].getboolean('cors_origin_allow_all', True)
+    CORS_ORIGIN_WHITELIST = tuple(
+        config['corsheaders'].get('cors_origin_whitelist').split(','))
+    CORS_ORIGIN_ALLOW_ALL = config['corsheaders'].getboolean(
+        'cors_origin_allow_all', True)
 except KeyError:
     CORS_ORIGIN_WHITELIST = None
     CORS_ORIGIN_ALLOW_ALL = True

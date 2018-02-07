@@ -9,7 +9,7 @@ from .entries import (maternal_birth_entries, maternal_followup1_entries, matern
                       maternal_followup3_entries, maternal_requisition_followup)
 
 
-class MaternalFollowUpSchedule(VisitScheduleConfiguration):
+class MaternalFollowUpSchedule3(VisitScheduleConfiguration):
 
     name = 'Follow up visit schedule1'
     app_label = 'td_maternal'
