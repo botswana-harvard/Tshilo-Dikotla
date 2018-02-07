@@ -1,5 +1,5 @@
 from .antenatal_enrollment import AntenatalEnrollmentVisitSchedule
-from .specimen_consent import SpecimenConsentVisitSchedule
 from .antenatal_visits import AntenatalVisitSchedule
 from .maternal_follow_up import MaternalFollowUpSchedule
-
+from .maternal_follow_up_v3 import MaternalFollowUpSchedule3
+from .specimen_consent import SpecimenConsentVisitSchedule
