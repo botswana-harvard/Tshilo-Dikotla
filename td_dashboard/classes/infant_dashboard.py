@@ -73,7 +73,6 @@ class InfantDashboard(RegisteredSubjectDashboard):
             # or filter appointments for the current membership categories
             # schedule__membership_form
             codes = []
-            print(self.instruction, 'self.instruction YESSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
             for category in self.membership_form_category:
                 codes.extend(MembershipForm.objects.codes_for_category(membership_form_category=category))
                 appointments = Appointment.objects.filter(

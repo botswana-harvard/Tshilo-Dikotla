@@ -34,7 +34,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
-        'instructions': '',
+        'instructions': 'V1',
         'requisitions': maternal_requisition_followup,
         'entries': maternal_birth_entries}
 
@@ -50,7 +50,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
-        'instructions': '',
+        'instructions': 'V1',
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup1_entries}
 
@@ -66,7 +66,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
-        'instructions': '',
+        'instructions': 'V1',
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup1_entries}
 
@@ -82,7 +82,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
-        'instructions': '',
+        'instructions': 'V1',
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup1_entries}
 
@@ -98,7 +98,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
-        'instructions': '',
+        'instructions': 'V1',
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup2_entries}
 
@@ -114,7 +114,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
-        'instructions': '',
+        'instructions': 'V1',
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup3_entries}
 
@@ -130,7 +130,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
-        'instructions': '',
+        'instructions': 'V1',
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup3_entries}
 
@@ -146,7 +146,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
-        'instructions': '',
+        'instructions': 'V1',
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup3_entries}
 
@@ -162,7 +162,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
-        'instructions': '',
+        'instructions': 'V1',
         'requisitions': maternal_requisition_followup,
         'entries': maternal_followup3_entries}
 

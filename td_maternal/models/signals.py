@@ -219,8 +219,8 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
         if isinstance(instance, MaternalLabourDel):
             if instance.live_infants_to_register == 1:
                 maternal_registered_subject = instance.registered_subject
-                maternal_consent = MaternalConsent.objects.get(
-                    subject_identifier=maternal_registered_subject.subject_identifier)
+                maternal_consent = MaternalConsent.objects.filter(
+                    subject_identifier=maternal_registered_subject.subject_identifier).order_by('version').last()
                 maternal_ultrasound = MaternalUltraSoundInitial.objects.get(
                     maternal_visit__appointment__registered_subject=instance.registered_subject)
                 with transaction.atomic():

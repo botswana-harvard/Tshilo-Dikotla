@@ -1,6 +1,5 @@
 from django.db import models
 
-from edc_appointment.models import AppointmentMixin
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
 from edc_base.model.validators.date import date_not_future
@@ -14,12 +13,11 @@ from td_maternal.models import MaternalLabourDel
 
 from ..managers import InfantBirthModelManager
 from td_maternal.models.maternal_consent import MaternalConsent
-from edc_appointment.exceptions import AppointmentCreateError
-from edc_visit_schedule.models.visit_definition import VisitDefinition
-from edc_visit_schedule.models.schedule import Schedule
+from td_appoinement_mixin import TdAppointmentMixin
 
 
-class InfantBirth(SyncModelMixin, OffStudyMixin, AppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class InfantBirth(
+        SyncModelMixin, OffStudyMixin, TdAppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
     """ A model completed by the user on the infant's birth. """
 
     off_study_model = ('td_infant', 'InfantOffStudy')
@@ -69,29 +67,6 @@ class InfantBirth(SyncModelMixin, OffStudyMixin, AppointmentMixin, ExportTrackin
     @property
     def group_names(self):
         return ['Infant Enrollment', 'Infant Enrollment1']
-
-    def schedule(self, model_name=None, group_names=None):
-        """Returns the schedule for this membership_form."""
-        return Schedule.objects.filter(
-            membership_form__content_type_map__model=model_name, group_name__in=group_names)
-
-    def visit_definitions_for_schedule(self, model_name=None, instruction=None):
-        """Returns a visit_definition queryset for this membership form's schedule."""
-        # VisitDefinition = get_model('edc_visit_schedule', 'VisitDefinition')
-        schedule = self.schedule(model_name=model_name, group_names=self.group_names)
-        if instruction:
-            visit_definitions = VisitDefinition.objects.filter(
-                schedule__in=schedule, instruction=instruction).order_by('time_point')
-        else:
-            visit_definitions = VisitDefinition.objects.filter(
-                schedule=schedule).order_by('time_point')
-        if not visit_definitions:
-            raise AppointmentCreateError(
-                'No visit_definitions found for membership form class {0} '
-                'in schedule group {1}. Expected at least one visit '
-                'definition to be associated with schedule group {1}.'.format(
-                    model_name, schedule))
-        return visit_definitions
 
     def prepare_appointments(self, using):
         """Creates infant appointments relative to the date-of-delivery"""
