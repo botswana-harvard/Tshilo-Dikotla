@@ -68,6 +68,11 @@ class InfantBirth(
     def group_names(self):
         return ['Infant Enrollment', 'Infant Enrollment1']
 
+    @property
+    def maternal_consents(self):
+        return MaternalConsent.objects.filter(
+            subject_identifier=self.registered_subject.relative_identifier)
+
     def prepare_appointments(self, using):
         """Creates infant appointments relative to the date-of-delivery"""
         relative_identifier = self.registered_subject.relative_identifier
