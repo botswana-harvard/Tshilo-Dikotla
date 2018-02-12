@@ -1,6 +1,8 @@
 from edc_appointment.models import AppointmentMixin
 from edc_visit_schedule.models import Schedule, VisitDefinition
 from edc_appointment.exceptions import AppointmentCreateError
+from edc_appointment.models import Appointment
+from edc_constants.constants import COMPLETE_APPT
 
 
 class TdAppointmentMixin(AppointmentMixin):
@@ -11,6 +13,50 @@ class TdAppointmentMixin(AppointmentMixin):
     trigger the creation of appointments.
 
     """
+
+    def create_all(self, base_appt_datetime=None, using=None,
+                   visit_definitions=None, dashboard_type=None, instruction=None):
+        """Creates appointments for a registered subject based on a list
+        of visit definitions for the given membership form instance.
+
+            1. this is called from a post-save signal
+            2. RegisteredSubject instance is expected to exist at this point
+            3. Only create for visit_instance = '0'
+            4. If appointment exists, just update the appt_datetime
+
+            visit_definition contains the schedule group which contains the membership form
+        """
+        appointments = []
+        default_appt_type = self.get_default_appt_type(self.registered_subject)
+        for visit_definition in self.visit_definitions_for_schedule(model_name=self._meta.model_name, instruction=instruction):
+            if visit_definition.instruction == 'V3' and visit_definition.code in [
+                '2000M', '2010M', '2020M', '2060M', '2120M', '2180M', '2240M', '2300M', '2360M',
+                '2000', '2010', '2020', '2060', '2120', '2180', '2240', '2300', '2360']:
+                try:
+                    Appointment.objects.using(using).get(
+                        registered_subject=self.registered_subject,
+                        visit_definition__code=visit_definition.code,
+                        visit_definition__instruction='V1',
+                        appt_status=COMPLETE_APPT)
+                except Appointment.DoesNotExist:
+                    appointment = self.update_or_create_appointment(
+                        self.registered_subject,
+                        base_appt_datetime or self.get_registration_datetime(),
+                        visit_definition,
+                        default_appt_type,
+                        dashboard_type,
+                        using)
+                    appointments.append(appointment)
+            else:
+                appointment = self.update_or_create_appointment(
+                        self.registered_subject,
+                        base_appt_datetime or self.get_registration_datetime(),
+                        visit_definition,
+                        default_appt_type,
+                        dashboard_type,
+                        using)
+                appointments.append(appointment)
+        return appointments
 
     def schedule(self, model_name=None, group_names=None):
         """Returns the schedule for this membership_form."""

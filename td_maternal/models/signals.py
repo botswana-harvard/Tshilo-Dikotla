@@ -116,6 +116,21 @@ def maternal_consent_on_post_save(sender, instance, raw, created, using, **kwarg
                 maternal_eligibility.registered_subject.subject_consent_id = instance.id
                 maternal_eligibility.registered_subject.subject_consent_id = instance.pk
                 maternal_eligibility.registered_subject.save()
+            if instance.version == '3':
+                try:
+                    maternal_labour_del = MaternalLabourDel.objects.get(
+                        registered_subject=instance.maternal_eligibility.registered_subject)
+                except MaternalLabourDel.DoesNotExist:
+                    pass
+                else:
+                    maternal_labour_del.save()
+                    from td_infant.models import InfantBirth
+                    try:
+                        infant_birth = InfantBirth.objects.get(maternal_labour_del=maternal_labour_del)
+                    except InfantBirth.DoesNotExist:
+                        pass
+                    else:
+                        infant_birth.save()
                 
 
 
