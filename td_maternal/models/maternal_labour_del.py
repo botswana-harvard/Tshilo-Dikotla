@@ -1,7 +1,6 @@
 from django.db import models
 from django.apps import apps
 
-from edc_appointment.models import AppointmentMixin
 from edc_base.model.fields import OtherCharField
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
@@ -21,10 +20,11 @@ from ..maternal_choices import DELIVERY_HEALTH_FACILITY, DELIVERY_MODE, CSECTION
 
 from .maternal_consent import MaternalConsent
 from .maternal_crf_model import MaternalCrfModel
+from td_appoinement_mixin import TdAppointmentMixin
 
 
 class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin,
-                        AppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+                        TdAppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ A model completed by the user on Maternal Labor and Delivery which triggers registration of infants. """
 
@@ -148,6 +148,17 @@ class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin,
         AntenatalEnrollment = apps.get_model(
             'td_maternal', 'antenatalenrollment')
         return AntenatalEnrollment.objects.get(registered_subject=self.registered_subject)
+
+    @property
+    def group_names(self):
+        return ['Follow Up Visit', 'Follow Up Visit1']
+
+    def prepare_appointments(self, using):
+        """Creates infant appointments relative to the date-of-delivery"""
+        maternal_consent = MaternalConsent.objects.filter(
+                    subject_identifier=self.subject_identifier).order_by('version').last()
+        instruction = 'V' + maternal_consent.version
+        self.create_all(using=using, instruction=instruction)
 
     @property
     def keep_on_study(self):

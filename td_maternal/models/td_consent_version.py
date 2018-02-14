@@ -26,6 +26,10 @@ class TdConsentVersion(BaseUuidModel):
             date_not_future, ],
         null=True,
         blank=True)
+    
+
+    def __str__(self):
+        return str(self.maternal_eligibility.age_in_years) + str(self.version)
 
     class Meta:
         app_label = 'td_maternal'

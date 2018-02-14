@@ -28,7 +28,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 APP_NAME = 'td'
 LIVE_SERVER = 'td.bhp.org.bw'
 TEST_HOSTS = ['edc4.bhp.org.bw', 'tdtest.bhp.org.bw']
-DEVELOPER_HOSTS = ['tsetsiba', 'leslie']
+DEVELOPER_HOSTS = ['leslie']
 
 PROJECT_TITLE = 'Tshilo Dikotla'
 INSTITUTION = 'Botswana-Harvard AIDS Institute'
@@ -50,12 +50,14 @@ elif socket.gethostname() in TEST_HOSTS + DEVELOPER_HOSTS:
 elif 'test' in sys.argv:
     KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
 else:
-    raise TypeError(
-        'Warning! Unknown hostname for KEY_PATH. \n'
-        'Getting this wrong on a LIVE SERVER will corrupt your encrypted data!!! \n'
-        'Expected hostname to appear in one of '
-        'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
-        'Got hostname=\'{}\'\n'.format(socket.gethostname()))
+    pass
+#     raise TypeError(
+#         'Warning! Unknown hostname for KEY_PATH. \n'
+#         'Getting this wrong on a LIVE SERVER will corrupt your encrypted data!!! \n'
+#         'Expected hostname to appear in one of '
+#         'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
+#         'Got hostname=\'{}\'\n'.format(socket.gethostname()))
+KEY_PATH = '/Users/ckgathi/td_source/keys'
 
 DEBUG = True
 

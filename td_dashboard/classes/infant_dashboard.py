@@ -67,19 +67,19 @@ class InfantDashboard(RegisteredSubjectDashboard):
             only those for a visit definition grouping
             """
         appointments = []
+        instruction = self.request.GET.get('instruction', '')
         if self.show == 'forms':
             appointments = [self.appointment]
         else:
             # or filter appointments for the current membership categories
             # schedule__membership_form
             codes = []
-            print(self.instruction, 'self.instruction YESSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
             for category in self.membership_form_category:
                 codes.extend(MembershipForm.objects.codes_for_category(membership_form_category=category))
                 appointments = Appointment.objects.filter(
                     registered_subject=self.registered_subject,
                     visit_definition__code__in=codes,
-                    visit_definition__instruction=self.instruction).order_by(
+                    visit_definition__instruction=instruction).order_by(
                     'visit_definition__time_point', 'visit_instance', 'appt_datetime')
         return appointments
 

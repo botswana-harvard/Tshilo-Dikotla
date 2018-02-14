@@ -116,6 +116,21 @@ def maternal_consent_on_post_save(sender, instance, raw, created, using, **kwarg
                 maternal_eligibility.registered_subject.subject_consent_id = instance.id
                 maternal_eligibility.registered_subject.subject_consent_id = instance.pk
                 maternal_eligibility.registered_subject.save()
+            if instance.version == '3':
+                try:
+                    maternal_labour_del = MaternalLabourDel.objects.get(
+                        registered_subject=instance.maternal_eligibility.registered_subject)
+                except MaternalLabourDel.DoesNotExist:
+                    pass
+                else:
+                    maternal_labour_del.save()
+                    from td_infant.models import InfantBirth
+                    try:
+                        infant_birth = InfantBirth.objects.get(maternal_labour_del=maternal_labour_del)
+                    except InfantBirth.DoesNotExist:
+                        pass
+                    else:
+                        infant_birth.save()
                 
 
 
@@ -219,8 +234,8 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
         if isinstance(instance, MaternalLabourDel):
             if instance.live_infants_to_register == 1:
                 maternal_registered_subject = instance.registered_subject
-                maternal_consent = MaternalConsent.objects.get(
-                    subject_identifier=maternal_registered_subject.subject_identifier)
+                maternal_consent = MaternalConsent.objects.filter(
+                    subject_identifier=maternal_registered_subject.subject_identifier).order_by('version').last()
                 maternal_ultrasound = MaternalUltraSoundInitial.objects.get(
                     maternal_visit__appointment__registered_subject=instance.registered_subject)
                 with transaction.atomic():

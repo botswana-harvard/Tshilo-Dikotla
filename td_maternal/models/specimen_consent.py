@@ -1,21 +1,20 @@
 from django.db import models
 
-from edc_appointment.models import AppointmentMixin
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_consent.models import RequiresConsentMixin, BaseSpecimenConsent
 from edc_consent.models.fields import SampleCollectionFieldsMixin, VulnerabilityFieldsMixin
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_registration.models import RegisteredSubject
-from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
+from edc_sync.models import SyncHistoricalRecords
 
 from ..managers import SpecimenConsentManager
 
 from .maternal_consent import MaternalConsent
+from td_appoinement_mixin import TdAppointmentMixin
 
 
 class SpecimenConsent(BaseSpecimenConsent, SampleCollectionFieldsMixin, RequiresConsentMixin,
-                      VulnerabilityFieldsMixin, AppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+                      VulnerabilityFieldsMixin, TdAppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ A model completed by the user when a mother gives consent for specimen storage. """
 
@@ -36,6 +35,10 @@ class SpecimenConsent(BaseSpecimenConsent, SampleCollectionFieldsMixin, Requires
     def prepare_appointments(self, using):
         """Overrides so that the signal does not attempt to prepare appointments."""
         pass
+
+    @property
+    def group_names(self):
+        return ['Specimen Consent']
 
     def get_subject_identifier(self):
         return self.registered_subject.subject_identifier
