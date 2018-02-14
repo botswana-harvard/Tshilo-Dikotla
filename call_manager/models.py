@@ -6,7 +6,7 @@ from edc_base.model.models.base_uuid_model import BaseUuidModel
 from edc_call_manager.managers import CallManager, LogManager, LogEntryManager
 from edc_call_manager.models import CallModelMixin, LogModelMixin, LogEntryModelMixin
 from edc_sync.models.sync_model_mixin import SyncModelMixin
-from edc_registration.models.registered_subject_model_mixin import RegisteredSubject
+from edc_registration.models import RegisteredSubject
 
 
 class Call(SyncModelMixin, CallModelMixin, BaseUuidModel):
@@ -21,7 +21,7 @@ class Call(SyncModelMixin, CallModelMixin, BaseUuidModel):
 #         unique=True)
 
     call_datetime = models.DateTimeField(
-        default=timezone.now(),
+        default=timezone.now,
         verbose_name='Date of this call')
 
     history = SyncHistoricalRecords()

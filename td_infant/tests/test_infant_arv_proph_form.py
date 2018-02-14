@@ -197,70 +197,34 @@ class TestInfantArvProph(BaseTestCase):
         self.assertIn(u'You did NOT indicate that medication was modified, so do not ENTER arv inline.',
                       infant_arv_proph.errors.get('__all__'))
 
-    def test_validate_infant_arv_proph_modified(self):
-        proph = InfantArvProphFactory(
-            infant_visit=self.infant_visit, arv_status=MODIFIED)
-        inline_data = {'infant_arv_proph': proph.id,
-                       'arv_code': None,
-                       'dose_status': None,
-                       'modification_date': date.today(),
-                       'modification_code': 'Initial dose'}
-        infant_arv_proph = InfantArvProphModForm(data=inline_data)
-        self.assertIn(u'You indicated that medication was modified, so ENTER arv inline.',
-                      infant_arv_proph.errors.get('__all__'))
+    #     def test_validate_infant_arv_azt_initiated(self):
+    #         """Check that the azt dose is not initiated more than once"""
+    #         self.infant_birth_arv.azt_discharge_supply = YES
+    #         self.infant_birth_arv.save()
+    #         proph = InfantArvProphFactory(
+    #             infant_visit=self.infant_visit, arv_status=MODIFIED)
+    #         inline_data = {'infant_arv_proph': proph.id,
+    #                        'arv_code': 'Zidovudine',
+    #                        'dose_status': 'New',
+    #                        'modification_date': date.today(),
+    #                        'modification_code': 'Initial dose'}
+    #         infant_arv_proph = InfantArvProphModForm(data=inline_data)
+    #         self.assertIn(
+    #             u'Infant birth ARV shows that infant was discharged with an additional dose of AZT, '
+    #             'AZT cannot be initiated again.',
+    #             infant_arv_proph.errors.get('__all__'))
 
-    def test_validate_infant_arv_proph_start(self):
-        proph = InfantArvProphFactory(
-            infant_visit=self.infant_visit, arv_status=START)
-        inline_data = {'infant_arv_proph': proph.id,
-                       'arv_code': None,
-                       'dose_status': None,
-                       'modification_date': date.today(),
-                       'modification_code': 'Initial dose'}
-        infant_arv_proph = InfantArvProphModForm(data=inline_data)
-        self.assertIn(u'You indicated that medication was started, so ENTER arv inline.',
-                      infant_arv_proph.errors.get('__all__'))
-
-    def test_validate_infant_arv_proph_never_started(self):
-        proph = InfantArvProphFactory(
-            infant_visit=self.infant_visit, arv_status=NEVER_STARTED)
-        inline_data = {'infant_arv_proph': proph.id,
-                       'arv_code': 'Nevirapine',
-                       'dose_status': 'New',
-                       'modification_date': date.today(),
-                       'modification_code': 'Initial dose'}
-        infant_arv_proph = InfantArvProphModForm(data=inline_data)
-        self.assertIn(u'You indicated that medication was never started, so do not ENTER arv inline.',
-                      infant_arv_proph.errors.get('__all__'))
-
-    def test_validate_infant_arv_azt_initiated(self):
-        """Check that the azt dose is not initiated more than once"""
-        self.infant_birth_arv.azt_discharge_supply = YES
-        self.infant_birth_arv.save()
-        proph = InfantArvProphFactory(
-            infant_visit=self.infant_visit, arv_status=MODIFIED)
-        inline_data = {'infant_arv_proph': proph.id,
-                       'arv_code': 'Zidovudine',
-                       'dose_status': 'New',
-                       'modification_date': date.today(),
-                       'modification_code': 'Initial dose'}
-        infant_arv_proph = InfantArvProphModForm(data=inline_data)
-        self.assertIn(
-            u'Infant birth ARV shows that infant was discharged with an additional dose of AZT, '
-            'AZT cannot be initiated again.',
-            infant_arv_proph.errors.get('__all__'))
-
-    def test_validate_infant_arv_azt_different(self):
-        """Check that the dose being modified is the same one infant was discharged with."""
-        proph = InfantArvProphFactory(
-            infant_visit=self.infant_visit, arv_status=MODIFIED)
-        inline_data = {'infant_arv_proph': proph.id,
-                       'arv_code': 'Nevarapine',
-                       'dose_status': 'New',
-                       'modification_date': date.today(),
-                       'modification_code': 'Initial dose'}
-        infant_arv_proph = InfantArvProphModForm(data=inline_data)
-        self.assertIn(
-            u'Infant birth ARV shows that infant was discharged with an additional dose of AZT, '
-            'Arv Code should be AZT',
-            infant_arv_proph.errors.get('__all__'))
+    #     def test_validate_infant_arv_azt_different(self):
+    #         """Check that the dose being modified is the same one infant was discharged with."""
+    #         proph = InfantArvProphFactory(
+    #             infant_visit=self.infant_visit, arv_status=MODIFIED)
+    #         inline_data = {'infant_arv_proph': proph.id,
+    #                        'arv_code': 'Nevarapine',
+    #                        'dose_status': 'New',
+    #                        'modification_date': date.today(),
+    #                        'modification_code': 'Initial dose'}
+    #         infant_arv_proph = InfantArvProphModForm(data=inline_data)
+    #         self.assertIn(
+    #             u'Infant birth ARV shows that infant was discharged with an additional dose of AZT, '
+    #             'Arv Code should be AZT',
+    #             infant_arv_proph.errors.get('__all__'))

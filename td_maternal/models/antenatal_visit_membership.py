@@ -1,7 +1,5 @@
 from django.db import models
 
-from edc_appointment.models import AppointmentMixin
-# from edc_base.audit_trail import AuditTrail
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import (datetime_not_before_study_start, datetime_not_future,
                                        date_not_before_study_start, date_not_future)
@@ -14,10 +12,11 @@ from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from ..managers import AntenatalVisitMembershipManager
 
 from .maternal_consent import MaternalConsent
+from td_appoinement_mixin import TdAppointmentMixin
 
 
 class AntenatalVisitMembership(SyncModelMixin, RequiresConsentMixin,
-                               AppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+                               TdAppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     consent_model = MaternalConsent
 
@@ -52,6 +51,10 @@ class AntenatalVisitMembership(SyncModelMixin, RequiresConsentMixin,
 
     def get_registration_datetime(self):
         return self.report_datetime
+
+    @property
+    def group_names(self):
+        return ['Antenatal Visit']
 
     @property
     def subject_identifier(self):

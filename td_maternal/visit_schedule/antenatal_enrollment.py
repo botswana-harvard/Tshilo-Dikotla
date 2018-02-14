@@ -34,7 +34,7 @@ class AntenatalEnrollmentVisitSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Antenatal Enrollment',
-        'instructions': '',
+        'instructions': 'V1_V3',
         'requisitions': (),
         'entries': maternal_enrollment_entries}
 

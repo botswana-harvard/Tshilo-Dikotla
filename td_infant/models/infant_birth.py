@@ -1,6 +1,5 @@
 from django.db import models
 
-from edc_appointment.models import AppointmentMixin
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
 from edc_base.model.validators.date import date_not_future
@@ -13,9 +12,12 @@ from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from td_maternal.models import MaternalLabourDel
 
 from ..managers import InfantBirthModelManager
+from td_maternal.models.maternal_consent import MaternalConsent
+from td_appoinement_mixin import TdAppointmentMixin
 
 
-class InfantBirth(SyncModelMixin, OffStudyMixin, AppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
+class InfantBirth(
+        SyncModelMixin, OffStudyMixin, TdAppointmentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
     """ A model completed by the user on the infant's birth. """
 
     off_study_model = ('td_infant', 'InfantOffStudy')
@@ -62,13 +64,25 @@ class InfantBirth(SyncModelMixin, OffStudyMixin, AppointmentMixin, ExportTrackin
     def __str__(self):
         return "{} ({}) {}".format(self.first_name, self.initials, self.gender)
 
+    @property
+    def group_names(self):
+        return ['Infant Enrollment', 'Infant Enrollment1']
+
+    @property
+    def maternal_consents(self):
+        return MaternalConsent.objects.filter(
+            subject_identifier=self.registered_subject.relative_identifier)
+
     def prepare_appointments(self, using):
         """Creates infant appointments relative to the date-of-delivery"""
         relative_identifier = self.registered_subject.relative_identifier
         maternal_labour_del = MaternalLabourDel.objects.get(
             registered_subject__subject_identifier=relative_identifier)
+        maternal_consent = MaternalConsent.objects.filter(
+                    subject_identifier=relative_identifier).order_by('version').last()
+        instruction = 'V' + maternal_consent.version
         self.create_all(
-            base_appt_datetime=maternal_labour_del.delivery_datetime, using=using)
+            base_appt_datetime=maternal_labour_del.delivery_datetime, using=using, instruction=instruction)
 
     def get_subject_identifier(self):
         return self.registered_subject.subject_identifier

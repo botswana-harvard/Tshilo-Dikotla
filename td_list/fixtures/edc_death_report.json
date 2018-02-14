@@ -1,0 +1,784 @@
+[
+{
+  "pk": 1, 
+  "model": "edc_death_report.cause", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Autopsy", 
+    "short_name": "Autopsy", 
+    "created": "2011-09-16T11:54:23", 
+    "user_modified": "", 
+    "modified": "2011-09-16T11:54:23", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 10, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 2, 
+  "model": "edc_death_report.cause", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Clinical Record", 
+    "short_name": "Clinical Record", 
+    "created": "2011-09-16T11:54:53", 
+    "user_modified": "", 
+    "modified": "2011-09-16T11:54:53", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 20, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 3, 
+  "model": "edc_death_report.cause", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Information from study staff proving care for participant prior to death", 
+    "short_name": "Study Staff", 
+    "created": "2011-09-16T11:56:15", 
+    "user_modified": "", 
+    "modified": "2011-09-16T11:56:15", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 30, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 4, 
+  "model": "edc_death_report.cause", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Contact with other (non-study) physician/nurse/other health care provider", 
+    "short_name": "non study heath care provider", 
+    "created": "2011-09-16T12:00:44", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:00:44", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 40, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 5, 
+  "model": "edc_death_report.cause", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Death Certificate", 
+    "short_name": "Death Certificate", 
+    "created": "2011-09-16T12:01:17", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:01:17", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 50, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 6, 
+  "model": "edc_death_report.cause", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Information from participant's relatives or friends", 
+    "short_name": "friends and relatives", 
+    "created": "2011-09-16T12:02:11", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:02:11", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 60, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 7, 
+  "model": "edc_death_report.cause", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Obituary", 
+    "short_name": "obituary", 
+    "created": "2011-09-16T12:02:40", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:02:40", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 70, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 8, 
+  "model": "edc_death_report.cause", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Information requested, still pending", 
+    "short_name": "information requested, pending", 
+    "created": "2011-09-16T12:04:06", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:04:06", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 80, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 9, 
+  "model": "edc_death_report.cause", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "No information will ever be available", 
+    "short_name": "information unavailable", 
+    "created": "2011-09-16T12:04:56", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:04:56", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 90, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 10, 
+  "model": "edc_death_report.cause", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Other, specify", 
+    "short_name": "Other, specify", 
+    "created": "2011-09-16T12:05:15", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:05:15", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 999, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 1, 
+  "model": "edc_death_report.causecategory", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "HIV infection or HIV related diagnosis", 
+    "short_name": "HIV related", 
+    "created": "2011-09-16T12:09:09", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:09:09", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 10, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 2, 
+  "model": "edc_death_report.causecategory", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Disease unrelated to HIV", 
+    "short_name": "hiv unrelate", 
+    "created": "2011-09-16T12:10:19", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:10:19", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 20, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 3, 
+  "model": "edc_death_report.causecategory", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Toxicity from Study Drug", 
+    "short_name": "study drug toxicity", 
+    "created": "2011-09-16T12:10:58", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:10:58", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 30, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 4, 
+  "model": "edc_death_report.causecategory", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Toxicity from non-Study drug", 
+    "short_name": " non study drug toxicity", 
+    "created": "2011-09-16T12:11:58", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:11:58", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 40, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 5, 
+  "model": "edc_death_report.causecategory", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Trauma / Accident", 
+    "short_name": "trauma, accident", 
+    "created": "2011-09-16T12:12:39", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:12:39", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 50, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 6, 
+  "model": "edc_death_report.causecategory", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "No information available", 
+    "short_name": "no information available", 
+    "created": "2011-09-16T12:13:45", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:13:45", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 60, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 7, 
+  "model": "edc_death_report.causecategory", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Other, specify", 
+    "short_name": "Other, specify", 
+    "created": "2011-09-16T12:14:02", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:14:02", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 99, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 1, 
+  "model": "edc_death_report.diagnosiscode", 
+  "fields": {
+    "hostname_created": "django", 
+    "code": "1", 
+    "short_name": "Autopsy", 
+    "created": "2011-09-16T11:54:23", 
+    "user_modified": "", 
+    "modified": "2011-09-16T11:54:23", 
+    "hostname_modified": "django", 
+    "long_name": "Autopsy", 
+    "user_created": "", 
+    "list_ref": "", 
+    "revision": null
+  }
+},
+{
+  "pk": 2, 
+  "model": "edc_death_report.diagnosiscode", 
+  "fields": {
+    "hostname_created": "django", 
+    "code": "2", 
+    "short_name": "Clinical Record", 
+    "created": "2011-09-16T11:54:53", 
+    "user_modified": "", 
+    "modified": "2011-09-16T11:54:53", 
+    "hostname_modified": "django", 
+    "long_name": "Clinical Record", 
+    "user_created": "", 
+    "list_ref": "", 
+    "revision": null
+  }
+},
+{
+  "pk": 3, 
+  "model": "edc_death_report.diagnosiscode", 
+  "fields": {
+    "hostname_created": "django", 
+    "code": "3", 
+    "short_name": "Study Staff", 
+    "created": "2011-09-16T11:56:15", 
+    "user_modified": "", 
+    "modified": "2011-09-16T11:56:15", 
+    "hostname_modified": "django", 
+    "long_name": "Information from study staff proving care for participant prior to death", 
+    "user_created": "", 
+    "list_ref": "", 
+    "revision": null
+  }
+},
+{
+  "pk": 4, 
+  "model": "edc_death_report.diagnosiscode", 
+  "fields": {
+    "hostname_created": "django", 
+    "code": "4", 
+    "short_name": "non study heath care provider", 
+    "created": "2011-09-16T12:00:44", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:00:44", 
+    "hostname_modified": "django", 
+    "long_name": "Contact with other (non-study) physician/nurse/other health care provider", 
+    "user_created": "", 
+    "list_ref": "", 
+    "revision": null
+  }
+},
+{
+  "pk": 5, 
+  "model": "edc_death_report.diagnosiscode", 
+  "fields": {
+    "hostname_created": "django", 
+    "code": "5", 
+    "short_name": "Death Certificate", 
+    "created": "2011-09-16T12:01:17", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:01:17", 
+    "hostname_modified": "django", 
+    "long_name": "Death Certificate", 
+    "user_created": "", 
+    "list_ref": "", 
+    "revision": null
+  }
+},
+{
+  "pk": 6, 
+  "model": "edc_death_report.diagnosiscode", 
+  "fields": {
+    "hostname_created": "django", 
+    "code": "6", 
+    "short_name": "friends and relatives", 
+    "created": "2011-09-16T12:02:11", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:02:11", 
+    "hostname_modified": "django", 
+    "long_name": "Information from participant's relatives or friends", 
+    "user_created": "", 
+    "list_ref": "", 
+    "revision": null
+  }
+},
+{
+  "pk": 7, 
+  "model": "edc_death_report.diagnosiscode", 
+  "fields": {
+    "hostname_created": "django", 
+    "code": "7", 
+    "short_name": "obituary", 
+    "created": "2011-09-16T12:02:40", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:02:40", 
+    "hostname_modified": "django", 
+    "long_name": "Obituary", 
+    "user_created": "", 
+    "list_ref": "", 
+    "revision": null
+  }
+},
+{
+  "pk": 8, 
+  "model": "edc_death_report.diagnosiscode", 
+  "fields": {
+    "hostname_created": "django", 
+    "code": "8", 
+    "short_name": "information requested, pending", 
+    "created": "2011-09-16T12:04:06", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:04:06", 
+    "hostname_modified": "django", 
+    "long_name": "Information requested, still pending", 
+    "user_created": "", 
+    "list_ref": "", 
+    "revision": null
+  }
+},
+{
+  "pk": 9, 
+  "model": "edc_death_report.diagnosiscode", 
+  "fields": {
+    "hostname_created": "django", 
+    "code": "9", 
+    "short_name": "information unavailable", 
+    "created": "2011-09-16T12:04:56", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:04:56", 
+    "hostname_modified": "django", 
+    "long_name": "No information will ever be available", 
+    "user_created": "", 
+    "list_ref": "", 
+    "revision": null
+  }
+},
+{
+  "pk": 10, 
+  "model": "edc_death_report.diagnosiscode", 
+  "fields": {
+    "hostname_created": "django", 
+    "code": "10", 
+    "short_name": "Other, specify", 
+    "created": "2011-09-16T12:05:15", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:05:15", 
+    "hostname_modified": "django", 
+    "long_name": "Other, specify", 
+    "user_created": "", 
+    "list_ref": "", 
+    "revision": null
+  }
+},
+{
+  "pk": 1, 
+  "model": "edc_death_report.medicalresponsibility", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Doctor", 
+    "short_name": "doctor", 
+    "created": "2011-09-16T12:15:54", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:15:54", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 10, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 2, 
+  "model": "edc_death_report.medicalresponsibility", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Nurse", 
+    "short_name": "nurse", 
+    "created": "2011-09-16T12:16:39", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:16:39", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 20, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 3, 
+  "model": "edc_death_report.medicalresponsibility", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Traditional Healer", 
+    "short_name": "traditional healer", 
+    "created": "2011-09-16T12:17:03", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:17:03", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 30, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 4, 
+  "model": "edc_death_report.medicalresponsibility", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Both Doctor or Nurse and Traditional Healer", 
+    "short_name": "doctor,  nurse, traditional healer", 
+    "created": "2011-09-16T12:17:59", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:17:59", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 40, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 5, 
+  "model": "edc_death_report.medicalresponsibility", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "No known medical care received (family/friends only)", 
+    "short_name": "family and friends only", 
+    "created": "2011-09-16T12:18:55", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:18:55", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 50, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 1, 
+  "model": "edc_death_report.reasonhospitalized", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Respiratory illness(unspecified)", 
+    "short_name": "respiratory illness", 
+    "created": "2011-09-16T12:22:39", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:22:39", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 10, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 2, 
+  "model": "edc_death_report.reasonhospitalized", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Respiratory illness, CXR  confirmed", 
+    "short_name": "respiratory illness, cxr conf", 
+    "created": "2011-09-16T12:23:53", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:23:53", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 20, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 3, 
+  "model": "edc_death_report.reasonhospitalized", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Respiratory illness, CXR  confirmed, bacterial pathogen specified, specify", 
+    "short_name": "cxr pathogen specified", 
+    "created": "2011-09-16T12:25:24", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:45:02", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 30, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 4, 
+  "model": "edc_death_report.reasonhospitalized", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Respiratory illness, CXR  confirmed, TB or probable TB", 
+    "short_name": "cxr confirmed tb or probable tb", 
+    "created": "2011-09-16T12:27:24", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:27:24", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 40, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 5, 
+  "model": "edc_death_report.reasonhospitalized", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Diarrheal illness(unspecified)", 
+    "short_name": "diarrhea, unspecified", 
+    "created": "2011-09-16T12:28:35", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:28:35", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 50, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 6, 
+  "model": "edc_death_report.reasonhospitalized", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Diarrheal illness, viral or bacterial pathogen specified, specify", 
+    "short_name": "diarrhea, viral or bacteria", 
+    "created": "2011-09-16T12:29:40", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:45:14", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 60, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 7, 
+  "model": "edc_death_report.reasonhospitalized", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Sepsis (unspecified)", 
+    "short_name": "sepsis, unspecified", 
+    "created": "2011-09-16T12:30:22", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:30:22", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 70, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 8, 
+  "model": "edc_death_report.reasonhospitalized", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Sepsis, pathogen specified, specify", 
+    "short_name": "sepsis, specified", 
+    "created": "2011-09-16T12:31:20", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:45:23", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 80, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 9, 
+  "model": "edc_death_report.reasonhospitalized", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Meningitis, unspecified", 
+    "short_name": "meningitis, unspecified", 
+    "created": "2011-09-16T12:32:10", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:32:10", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 90, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 10, 
+  "model": "edc_death_report.reasonhospitalized", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Meningitis, pathogen specified, specify", 
+    "short_name": "meningitis, specified", 
+    "created": "2011-09-16T12:33:20", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:45:53", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 100, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 11, 
+  "model": "edc_death_report.reasonhospitalized", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Other infection, specify", 
+    "short_name": "Other, specify", 
+    "created": "2011-09-16T12:34:14", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:36:41", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 999, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+},
+{
+  "pk": 12, 
+  "model": "edc_death_report.reasonhospitalized", 
+  "fields": {
+    "hostname_created": "django", 
+    "name": "Non-infectious reason for hospitalization, specify", 
+    "short_name": "non-infection reason", 
+    "created": "2011-09-16T12:35:08", 
+    "user_modified": "", 
+    "modified": "2011-09-16T12:46:05", 
+    "hostname_modified": "django", 
+    "version": "1.0", 
+    "display_index": 110, 
+    "user_created": "", 
+    "field_name": null, 
+    "revision": null
+  }
+}
+]

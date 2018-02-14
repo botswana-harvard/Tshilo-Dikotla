@@ -118,12 +118,15 @@ maternal_requisition_antenatal1 = (
     RequisitionPanelTuple(
         60, 'td_lab', 'maternalrequisition',
         'PBMC Plasma (STORE ONLY)', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
+    RequisitionPanelTuple(
+        70, 'td_lab', 'maternalrequisition',
+        'Viral Load', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
 )
 
 maternal_requisition_antenatal2 = (
     RequisitionPanelTuple(
         10, 'td_lab', 'maternalrequisition',
-        'PBMC VL', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        'Viral Load', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
 )
 
 maternal_requisition_followup = (

@@ -1,6 +1,5 @@
 from django.db import models
 
-from edc_appointment.models import AppointmentMixin
 from edc_base.model.models import BaseUuidModel
 from edc_base.model.validators import (
     date_not_before_study_start, date_not_future)
@@ -9,16 +8,16 @@ from edc_consent.models import RequiresConsentMixin
 from edc_constants.constants import NO, YES
 from edc_constants.choices import YES_NO
 from edc_offstudy.models import OffStudyMixin
-from edc_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 
 from ..managers import AntenatalEnrollmentManager
 
 from .enrollment_mixin import EnrollmentMixin
 from .maternal_consent import MaternalConsent
+from td_appoinement_mixin import TdAppointmentMixin
 
 
-class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, OffStudyMixin, AppointmentMixin,
+class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, OffStudyMixin, TdAppointmentMixin,
                           RequiresConsentMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     consent_model = MaternalConsent
@@ -75,6 +74,10 @@ class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, OffStudyMixin, Appoin
     def natural_key(self):
         return self.registered_subject.natural_key()
     natural_key.dependencies = ['edc_registration.registeredsubject']
+
+    @property
+    def group_names(self):
+        return ['Antenatal Enrollment']
 
     def unenrolled_error_messages(self):
         """Returns a tuple (True, None) if mother is eligible otherwise

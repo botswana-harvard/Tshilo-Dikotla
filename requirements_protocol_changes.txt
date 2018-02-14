@@ -1,0 +1,70 @@
+Django==1.9.2
+django-braces==1.8.1
+django-cors-headers==1.1.0
+django-crispy-forms==1.6.0
+-e /Users/ckgathi/td_source/django-crypto-fields
+django-extensions==1.6.1
+django-js-reverse==0.7.2
+django-model-utils==2.5
+-e /Users/ckgathi/td_source/django-revision
+-e /Users/ckgathi/td_source/django-appconfig-ini
+django-simple-history==1.8.1
+django-tastypie==0.13.3
+djangorestframework==3.3.3
+-e /Users/ckgathi/td_source/edc-appointment
+-e /Users/ckgathi/td_source/edc-base
+-e /Users/ckgathi/td_source/edc-call-manager
+-e /Users/ckgathi/td_source/edc-code-lists
+-e /Users/ckgathi/td_source/edc-configuration
+-e /Users/ckgathi/td_source/edc-consent
+-e /Users/ckgathi/td_source/edc-constants
+-e /Users/ckgathi/td_source/edc-content-type-map
+-e /Users/ckgathi/td_source/edc-dashboard
+-e /Users/ckgathi/td_source/edc-data-manager
+-e /Users/ckgathi/td_source/edc-death-report
+-e /Users/ckgathi/td_source/edc-device
+-e /Users/ckgathi/td_source/edc-export
+-e /Users/ckgathi/td_source/edc-identifier
+-e /Users/ckgathi/td_source/edc-lab
+-e /Users/ckgathi/td_source/edc-locator
+-e /Users/ckgathi/td_source/edc-meta-data
+-e /Users/ckgathi/td_source/edc-notification
+-e /Users/ckgathi/td_source/edc-offstudy
+-e /Users/ckgathi/td_source/edc-quota
+-e /Users/ckgathi/td_source/edc-registration
+-e /Users/ckgathi/td_source/edc-rest
+-e /Users/ckgathi/td_source/edc-rule-groups
+-e /Users/ckgathi/td_source/edc-sync-files
+-e /Users/ckgathi/td_source/edc-sync
+-e /Users/ckgathi/td_source/edc-templates
+-e /Users/ckgathi/td_source/edc-testing
+-e /Users/ckgathi/td_source/edc-visit-schedule
+-e /Users/ckgathi/td_source/edc-visit-tracking
+factory-boy==2.6.1
+fake-factory==0.5.7
+flake8==2.5.4
+geopy==1.11.0
+gitdb==0.6.4
+gitflow==0.5.1
+GitPython==2.0.5
+-e /Users/ckgathi/td_source/lab-requisition
+-e /Users/ckgathi/td_source/lis
+mccabe==0.4.0
+mysqlclient==1.3.7
+numpy==1.11.0
+pandas==0.18.1
+pbr==1.10.0
+pep8==1.7.0
+pycrypto==2.6.1
+pycups==1.9.73
+pyflakes==1.0.0
+pyodbc==3.0.10
+python-dateutil==2.5.2
+python-mimeparse==1.5.1
+pytz==2016.3
+requests==2.9.1
+selenium==2.53.2
+six==1.10.0
+smmap==0.9.0
+stevedore==1.15.0
+Unipath==1.1

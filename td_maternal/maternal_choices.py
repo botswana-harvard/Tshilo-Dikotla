@@ -37,7 +37,7 @@ RECRUIT_CLINIC = (
     ('PMH', 'Gaborone(PMH)'),
     ('G.West Clinic', 'G.West Clinic'),
     ('BH3 Clinic', 'BH3 Clinic'),
-    ('Ext12', 'Extension 12'),
+    ('Ext2', 'Extension 2 Clinic'),
     ('Nkoyaphiri', 'Nkoyaphiri Clinic'),
     ('Lesirane', 'Lesirane Clinic'),
     ('Old Naledi', 'Old Naledi'),
@@ -68,7 +68,8 @@ PRIOR_PREG_HAART_STATUS = (
 CSECTION_REASON = (
     (NOT_APPLICABLE, 'Not Applicable'),
     ('arrest', 'Arrest'),
-    ('non-reassuring fetal fetal heart rate', 'Non-reassuring fetal heart rate'),
+    ('non-reassuring fetal fetal heart rate',
+     'Non-reassuring fetal heart rate'),
     ('malpresentation/breeech fetus', 'Malpresentation/breech fetus'),
     ('interruption of hiv transmission', 'Interruption of HIV transmission'),
     ('failure to progress/descend', 'Failue to progress/descend'),
@@ -108,7 +109,8 @@ HIGHEST_EDUCATION = (
 CURRENT_OCCUPATION = (
     ('Housewife', 'Housewife'),
     ('Salaried (government)', 'Salaried (government)'),
-    ('Salaried (private, not including domestic work)', 'Salaried (private, not including domestic work)'),
+    ('Salaried (private, not including domestic work)',
+     'Salaried (private, not including domestic work)'),
     ('Domestic work (paid)', 'Domestic work (paid)'),
     ('Self-employed', 'Self-employed'),
     ('Student', 'Student'),
@@ -135,10 +137,14 @@ MONEY_PROVIDER = (
 MONEY_EARNED = (
     ('None', 'None'),
     ('<P200 per month / <P47 per week', '<P200 per month / <P47 per week'),
-    ('P200-500 per month / P47-116 per week', 'P200-500 per month / P47-116 per week'),
-    ('P501-1000 per month / P117 - 231 per week', 'P501-1000 per month / P117 - 231 per week'),
-    ('P1001-5000 per month / P212 - 1157 per week', 'P1001-5000 per month / P212 - 1157 per week'),
-    ('P5000 per month / >P1157 per week', 'P5000 per month / >P1157 per week'),
+    ('P200-500 per month / P47-116 per week',
+     'P200-500 per month / P47-116 per week'),
+    ('P501-1000 per month / P117 - 231 per week',
+     'P501-1000 per month / P117 - 231 per week'),
+    ('P1001-5000 per month / P212 - 1157 per week',
+     'P1001-5000 per month / P212 - 1157 per week'),
+    ('>P5000 per month / >P1157 per week',
+     '>P5000 per month / >P1157 per week'),
     ('Unsure', 'Unsure'),
     (OTHER, 'Other, specify'),)
 
@@ -156,13 +162,16 @@ COOKING_METHOD = (
 
 TOILET_FACILITY = (
     ('Indoor toilet', 'Indoor toilet'),
-    ('Private latrine for your house/compound', 'Private latrine for your house/compound'),
-    ('Shared latrine with other compounds', 'Shared latrine with other compounds'),
+    ('Private latrine for your house/compound',
+     'Private latrine for your house/compound'),
+    ('Shared latrine with other compounds',
+     'Shared latrine with other compounds'),
     ('No latrine facilities', 'No latrine facilities'),
     (OTHER, 'Other, specify'),)
 
 HOUSE_TYPE = (
-    ('Formal:Tin-roofed, concrete walls', 'Formal: Tin-roofed, concrete walls'),
+    ('Formal:Tin-roofed, concrete walls',
+     'Formal: Tin-roofed, concrete walls'),
     ('Informal: Mud-walled or thatched', 'Informal: Mud-walled or thatched'),
     ('Mixed formal/informal', 'Mixed formal/informal'),
     ('Shack/Mokhukhu', 'Shack/Mokhukhu'),)
@@ -193,7 +202,7 @@ DX = (
     ('Extrapulmonary TB, smear and/or culture positive',
      'Extrapulmonary TB, smear and/or culture positive'),
     (('Acute diarrheal illness (bloody diarrhean OR increase of at least 7 stools per day '
-     'OR life threatening for less than 14 days) '),
+      'OR life threatening for less than 14 days) '),
      ('Acute diarrheal illness (bloody diarrhean OR increase of at least 7 stools per day OR '
       'life threatening for less than 14 days)')),
     ('Chronic diarrheal illness (as above but for 14 days or longer) ',
@@ -204,10 +213,14 @@ DX = (
      'Acute Hepatitis in this pregnancy:Traditional medication related'),
     ('Acute Hepatitis in this pregnancy:Fatty liver disease',
      'Acute Hepatitis in this pregnancy:Fatty liver disease'),
-    ('Acute Hepatitis in this pregnancy:Hepatitis A', 'Acute Hepatitis in this pregnancy:Hepatitis A'),
-    ('Acute Hepatitis in this pregnancy:Hepatitis B ', 'Acute Hepatitis in this pregnancy:Hepatitis B'),
-    ('Acute Hepatitis in this pregnancy:Alcoholic', 'Acute Hepatitis in this pregnancy:Alcoholic'),
-    ('Acute Hepatitis in this pregnancy:Other/Unkown', 'Acute Hepatitis in this pregnancy:Other/Unkown'),
+    ('Acute Hepatitis in this pregnancy:Hepatitis A',
+     'Acute Hepatitis in this pregnancy:Hepatitis A'),
+    ('Acute Hepatitis in this pregnancy:Hepatitis B ',
+     'Acute Hepatitis in this pregnancy:Hepatitis B'),
+    ('Acute Hepatitis in this pregnancy:Alcoholic',
+     'Acute Hepatitis in this pregnancy:Alcoholic'),
+    ('Acute Hepatitis in this pregnancy:Other/Unkown',
+     'Acute Hepatitis in this pregnancy:Other/Unkown'),
     ('Sepsis, unspecified', 'Sepsis, unspecified'),
     ('Sepsis, pathogen specified', 'Sepsis, pathogen specified'),
     ('Meningitis, unspecified', 'Meningitis, unspecified'),
@@ -215,9 +228,12 @@ DX = (
     ('Appendicitis', 'Appendicitis'),
     ('Cholecystitis/cholanangitis', 'Cholecystitis/cholanangitis'),
     ('Pancreatitis', 'Pancreatitis'),
-    ('Acute Renal failure', 'Acute Renal failure (Record highest creatinine level if tested outside of the study)'),
-    ('Anemia', 'Anemia (Only report grade 3 or 4 anemia based on the lab value drawn outside the study)'),
-    ('Pregnancy/peripartum cardiomyopathy or CHF ', 'Pregnancy/peripartum cardiomyopathy or CHF '),
+    ('Acute Renal failure',
+     'Acute Renal failure (Record highest creatinine level if tested outside of the study)'),
+    ('Anemia',
+     'Anemia (Only report grade 3 or 4 anemia based on the lab value drawn outside the study)'),
+    ('Pregnancy/peripartum cardiomyopathy or CHF ',
+     'Pregnancy/peripartum cardiomyopathy or CHF '),
     ('Drug rash on HAART', 'Drug rash on HAART'),
     ('Trauma/Accident', 'Trauma/Accident'),
     ('Other serious (grade 3 or 4) infection, specify',
@@ -227,7 +243,8 @@ DX = (
 )
 
 REASON_FOR_HAART = (
-    ('maternal masa', '1. HAART for maternal treatment (qualifies by Botswana guidelines)'),
+    ('maternal masa',
+     '1. HAART for maternal treatment (qualifies by Botswana guidelines)'),
     ('pmtct bf', '2. HAART for PMTCT while breastfeeding'),
     ('pp arv tail', '3. Brief postpartum antiretroviral "tail"'),
     ('unsure', '4. Unsure'),
@@ -275,8 +292,10 @@ ARV_MODIFICATION_REASON = (
     ('Completed PMTCT intervention', 'Completed PMTCT intervention'),
     ('Completed postpartum tail', 'Completed postpartum "tail"'),
     ('Scheduled dose increase', 'Scheduled dose increase'),
-    ('Confirmed infant HIV infection, ending study drug', 'Confirmed infant HIV infection, ending study drug'),
-    ('completed protocol', 'Completion of protocol-required period of study treatment'),
+    ('Confirmed infant HIV infection, ending study drug',
+     'Confirmed infant HIV infection, ending study drug'),
+    ('completed protocol',
+     'Completion of protocol-required period of study treatment'),
     ('HAART not available', 'HAART not available'),
     ('Anemia', 'Anemia'),
     ('Bleeding', 'Bleeding'),
@@ -292,15 +311,18 @@ ARV_MODIFICATION_REASON = (
     ('Rash', 'Rash'),
     ('Rash resolved', 'Rash resolved'),
     ('Neuropathy', 'Neuropathy'),
-    ('Hypersensitivity_allergic reaction', 'Hypersensitivity / allergic reaction'),
+    ('Hypersensitivity_allergic reaction',
+     'Hypersensitivity / allergic reaction'),
     ('Pancreatitis', 'Pancreatitis'),
     ('Lactic Acidiosis', 'Lactic Acidiosis'),
     ('Pancytopenia', 'Pancytopenia'),
     ('Virologic failure', 'Virologic failure'),
     ('Immunologic failure', 'Immunologic failure(CD4)'),
     ('Clinical failure', 'Clinical failure'),
-    ('Clinician request', 'Clinician request, other reason (including convenience)'),
-    ('Subject request', 'Subject request, other reason (including convenience)'),
+    ('Clinician request',
+     'Clinician request, other reason (including convenience)'),
+    ('Subject request',
+     'Subject request, other reason (including convenience)'),
     ('Non-adherence with clinic visits', 'Non-adherence with clinic visits'),
     ('Non-adherence with ARVs', 'Non-adherence with ARVs'),
     ('Death', 'Death'),
@@ -312,7 +334,8 @@ REASON_UNSEEN_AT_CLINIC = (
     ('no_booking', 'I went to the clinic but could not get a booking'),
     ('in_confinement', 'I am observing confinement'),
     ('not_sexually_active', 'I am not sexually active right now'),
-    ('no_contraception_bf', 'I do not need contraception because I am breastfeeding'),
+    ('no_contraception_bf',
+     'I do not need contraception because I am breastfeeding'),
     ('too_far', 'The clinic is too far from my home'),
     ('partner_refused', 'My partner does not want me to attend'),
     ('mother_refused', 'My mother does not want me to attend'),
@@ -329,7 +352,8 @@ REASON_CONTRACEPTIVE_NOT_INITIATED = (
      'I was told that because I am breastfeeding, I do not need a contraceptive metod'),
     ('partner_refused',
      'My current partner does not want me to use a contraceptive method'),
-    ('was not attended by a clinician', 'I was not attended by a clinician when I went to the SRH clinic'),
+    ('was not attended by a clinician',
+     'I was not attended by a clinician when I went to the SRH clinic'),
     (OTHER, 'Other'),
 )
 
@@ -352,22 +376,28 @@ NORMAL_ABNORMAL_DWTA = (
 
 PAP_SMEAR_ESTIMATE = (
     ('within_last_6months', 'Within the last 6 months'),
-    ('more_than_6months_within_1year', 'More than 6 months ago but within the last year'),
-    ('more_than_1year_within_2years', 'More than one year ago but within the last two years'),
-    ('more_than_1year_within_5years', 'More than one year ago but within the last five years'),
+    ('more_than_6months_within_1year',
+     'More than 6 months ago but within the last year'),
+    ('more_than_1year_within_2years',
+     'More than one year ago but within the last two years'),
+    ('more_than_1year_within_5years',
+     'More than one year ago but within the last five years'),
     ('more_than_5years', 'More than five years ago')
 )
 
 INFLUENTIAL_IN_DECISION_MAKING = (
-    ('independent_decision', 'I made the decision independent of any discussions I have had.'),
+    ('independent_decision',
+     'I made the decision independent of any discussions I have had.'),
     ('partner_most_influential', 'My partner was the most influential.'),
     ('mother_most_influential', 'My mother was the most influential.'),
     ('sister_most_influential', 'My sister was the most influential.'),
     ('auntie_most_influential', 'My auntie was the most influential.'),
-    ('mother_in_law_most_influential', 'My mother-in-law was the most influential'),
+    ('mother_in_law_most_influential',
+     'My mother-in-law was the most influential'),
     ('DWTA', 'I do not wish to answer this question'),
     (NOT_APPLICABLE, 'Not Applicable'),
-    (OTHER, 'Another person was the most influential (Please type in the description of this person below)')
+    (OTHER,
+     'Another person was the most influential (Please type in the description of this person below)')
 )
 
 FEEDING_CHOICES = (
@@ -401,7 +431,8 @@ IS_DATE_ESTIMATED = (
     (NO, 'No'),
     ('Yes, estimated the Day', 'Yes, estimated the Day'),
     ('Yes, estimated Month and Day', 'Yes, estimated Month and Day'),
-    ('Yes, estimated Year, Month and Day', 'Yes, estimated Year, Month and Day'),
+    ('Yes, estimated Year, Month and Day',
+     'Yes, estimated Year, Month and Day'),
 
 )
 
@@ -440,4 +471,3 @@ CONTACT_TYPE = (
     ('text_message', 'Text Message'),
     ('in_person', 'In person, e.g. Home visit')
 )
-

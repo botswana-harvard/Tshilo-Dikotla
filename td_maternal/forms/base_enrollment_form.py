@@ -145,20 +145,14 @@ class BaseEnrollmentForm(BaseModelForm):
 
     def get_consent_or_raise(self, model_class):
         cleaned_data = self.cleaned_data
-        obj = None
-        try:
-            obj = model_class.objects.get(
-                subject_identifier=cleaned_data.get(
-                    'registered_subject').subject_identifier)
-        except (FieldError, AttributeError):
-            obj = model_class.objects.get(
-                registered_subject__subject_identifier=cleaned_data.get(
-                    'registered_subject').subject_identifier)
-        except model_class.DoesNotExist:
+        consents = model_class.objects.filter(
+            subject_identifier=cleaned_data.get(
+                'registered_subject').subject_identifier).order_by('consent_datetime').last()
+        if not consents:
             raise forms.ValidationError(
                 "Please ensure to save the {} before "
                 "completing Enrollment".format(model_class._meta.verbose_name))
-        return obj
+        return consents
 
     def rapid_test_date_and_result(self):
         cleaned_data = self.cleaned_data
