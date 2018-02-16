@@ -24,7 +24,13 @@
     {% block maternal_consent %}
     <tr name="top right"><td>
     <H3>Mother</H3>
-        <ul><A href="{% url 'subject_dashboard_url' dashboard_type='maternal' dashboard_model='maternal_eligibility' dashboard_id=maternal_eligibility.pk show='appointments' %}">{{ maternal_eligibility.registered_subject.subject_identifier }} [{{ maternal_consent.initials|encrypted }}]</A>
+        <ul><A href="{% url 'subject_dashboard_url' dashboard_type='maternal' dashboard_model='maternal_eligibility' dashboard_id=maternal_eligibility.pk show='appointments' %}?instruction=V1">
+        	{{ maternal_eligibility.registered_subject.subject_identifier }} [{{ maternal_consent.initials|encrypted }}]</A><br>
+    {% if maternal_consent.version == '3' %}
+		 <A href="{% url 'subject_dashboard_url' dashboard_type='maternal' dashboard_model='maternal_eligibility' dashboard_id=maternal_eligibility.pk show='appointments' %}?instruction=V3">
+		    {{subject_identifier}} [{{ maternal_consent.initials|encrypted }}]  V3
+		 </A>
+	{% endif %}
     </td></tr>
     {% endblock maternal_consent %}
 {% endif %}
