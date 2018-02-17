@@ -2,11 +2,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*migrations
 .pydevproject
 .DS_Store
 .project
 .settings
-*migrations
 upgrade/
 *static
 test-*

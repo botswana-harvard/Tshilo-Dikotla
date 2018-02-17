@@ -67,7 +67,7 @@ class InfantDashboard(RegisteredSubjectDashboard):
             only those for a visit definition grouping
             """
         appointments = []
-        instruction = self.request.GET.get('instruction', '')
+        instruction = self.request.GET.get('instruction', self.instruction)
         if self.show == 'forms':
             appointments = [self.appointment]
         else:

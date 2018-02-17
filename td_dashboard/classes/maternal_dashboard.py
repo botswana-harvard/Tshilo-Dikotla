@@ -66,9 +66,18 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             gestational_age=self.gestational_age,
             planned_delivery_site=self.planned_delivery_site,
             delivery_site=self.delivery_site,
+            maternal_eligibility=self.maternal_eligibility,
             randomized=self.randomized
         )
         return self.context
+
+    @property
+    def maternal_eligibility(self):
+        try:
+            return MaternalEligibility.objects.get(
+                registered_subject__subject_identifier=self.subject_identifier)
+        except MaternalEligibility.DoesNotExist:
+            pass
 
     @property
     def appointments(self):
@@ -83,7 +92,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             only those for a visit definition grouping
             """
         appointments = []
-        instruction = self.request.GET.get('instruction', '')
+        instruction = self.request.GET.get('instruction', self.instruction)
         if self.show == 'forms':
             appointments = [self.appointment]
         else:
@@ -98,6 +107,10 @@ class MaternalDashboard(RegisteredSubjectDashboard):
                     visit_definition__instruction__in=[instruction, 'V1_V3']).order_by(
                     'visit_definition__time_point', 'visit_instance', 'appt_datetime')
         return appointments
+
+    @property
+    def instruction(self):
+        return 'V' + self.consent.version
 
     @property
     def consent(self):
