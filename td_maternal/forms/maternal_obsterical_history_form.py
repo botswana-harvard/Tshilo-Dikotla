@@ -8,10 +8,8 @@ class MaternalObstericalHistoryForm(BaseMaternalModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalObstericalHistoryForm, self).clean()
+        self.validate_pregnancy_ga()
         self.validate_less_than_24_weeks_pregnant()
-        self.validate_24wks_or_more_pregnancy_with_loss()
-        self.validate_24wks_or_more_pregnancy_none_loss_after()
-        self.validate_24wks_or_more_pregnancy_none_loss_before()
         self.validate_live_children()
         return cleaned_data
 
@@ -22,7 +20,8 @@ class MaternalObstericalHistoryForm(BaseMaternalModelForm):
             raise forms.ValidationError(
                 'Please complete the Ultrasound form first.')
         else:
-            if cleaned_data.get('prev_pregnancies') == 1 and ultrasound[0].ga_confirmed < 24:
+            if (cleaned_data.get('prev_pregnancies') == 1
+                    and ultrasound[0].ga_confirmed < 24):
                 if (
                     cleaned_data.get('pregs_24wks_or_more') != 0 or
                     cleaned_data.get('lost_before_24wks') != 0 or
@@ -34,66 +33,29 @@ class MaternalObstericalHistoryForm(BaseMaternalModelForm):
                                                 'number of children lost after 24 weeks should all be zero.'
                                                 .format(cleaned_data.get('prev_pregnancies')))
 
-            if cleaned_data.get('prev_pregnancies') > 1 and ultrasound[0].ga_confirmed < 24:
-                sum_pregnancies = (
-                    cleaned_data.get('pregs_24wks_or_more') +
-                    cleaned_data.get('lost_before_24wks') +
-                    cleaned_data.get('lost_after_24wks'))
-                if sum_pregnancies != (cleaned_data.get('prev_pregnancies') - 1):
-                    raise forms.ValidationError(
-                        'The sum of Q3, Q4 and Q5 must all add up to Q2 - 1. Please correct.')
-
-    def validate_24wks_or_more_pregnancy_with_loss(self):
+    def validate_pregnancy_ga(self):
         cleaned_data = self.cleaned_data
         ultrasound = self.check_mother_gestational_age()
         if not ultrasound:
             raise forms.ValidationError(
                 'Please complete the Ultrasound form first.')
         else:
-            if cleaned_data.get('prev_pregnancies') > 0 and ultrasound[0].ga_confirmed >= 24:
-                if (cleaned_data.get('lost_after_24wks') > 0 or
-                        cleaned_data.get('lost_after_24wks')) > 0:
-                    sum_pregnancies = (
-                        (cleaned_data.get('pregs_24wks_or_more') - 1) +
-                        cleaned_data.get('lost_before_24wks') +
-                        cleaned_data.get('lost_after_24wks'))
-                    if sum_pregnancies != cleaned_data.get('prev_pregnancies'):
-                        raise forms.ValidationError(
-                            'The sum of Q3, Q4 and Q5 must be equal to Q2. Please correct.')
+            if (cleaned_data.get('prev_pregnancies') > 0):
+                sum_pregs = (cleaned_data.get('pregs_24wks_or_more') +
+                             (cleaned_data.get('lost_before_24wks')))
 
-    def validate_24wks_or_more_pregnancy_none_loss_before(self):
-        cleaned_data = self.cleaned_data
-        ultrasound = self.check_mother_gestational_age()
-        if not ultrasound:
-            raise forms.ValidationError(
-                'Please complete the Ultrasound form first.')
-        else:
-            if cleaned_data.get('prev_pregnancies') > 0 and ultrasound[0].ga_confirmed >= 24:
-                if cleaned_data.get('lost_before_24wks') == 0:
-                    sum_pregnancies = (
-                        (cleaned_data.get('pregs_24wks_or_more') - 1) +
-                        cleaned_data.get('lost_before_24wks') +
-                        cleaned_data.get('lost_after_24wks'))
-                    if sum_pregnancies != cleaned_data.get('prev_pregnancies'):
-                        raise forms.ValidationError(
-                            'The sum of Q3, Q4 and Q5 must be equal to Q2. Please correct.')
+                previous_pregs = (cleaned_data.get('prev_pregnancies'))
 
-    def validate_24wks_or_more_pregnancy_none_loss_after(self):
-        cleaned_data = self.cleaned_data
-        ultrasound = self.check_mother_gestational_age()
-        if not ultrasound:
-            raise forms.ValidationError(
-                'Please complete the Ultrasound form first.')
-        else:
-            if cleaned_data.get('prev_pregnancies') > 0 and ultrasound[0].ga_confirmed >= 24:
-                if cleaned_data.get('lost_after_24wks') == 0:
-                    sum_pregnancies = (
-                        (cleaned_data.get('pregs_24wks_or_more')) +
-                        cleaned_data.get('lost_before_24wks') +
-                        cleaned_data.get('lost_after_24wks'))
-                    if sum_pregnancies != cleaned_data.get('prev_pregnancies'):
-                        raise forms.ValidationError(
-                            'The sum of Q3, Q4 and Q5 must be equal to Q2. Please correct.')
+                if (sum_pregs != previous_pregs):
+                    raise forms.ValidationError('Total pregnancies should be '
+                                                'equal to sum of pregancies '
+                                                'lost and current')
+
+                if ((cleaned_data.get('pregs_24wks_or_more') <
+                     cleaned_data.get('lost_after_24wks'))):
+                    raise forms.ValidationError('Sum of Pregnancies more than '
+                                                '24 weekss should be '
+                                                'less than those lost')
 
     def validate_live_children(self):
         cleaned_data = self.cleaned_data
