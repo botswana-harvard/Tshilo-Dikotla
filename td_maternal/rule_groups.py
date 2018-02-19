@@ -19,8 +19,9 @@ def func_mother_pos(visit_instance):
 
 def func_mother_pos_vl(visit_instance):
     if (func_mother_pos(visit_instance) and
-            (visit_instance.appointment.visit_definition.code == '1010M' or
-             visit_instance.appointment.visit_definition.code == '1020M')):
+            (visit_instance.appointment.visit_definition.code in ['1010M' '1020M',
+                                                                  '2180M' '2240M'
+                                                                  '2300M' '2360M'])):
         return False
     elif (func_mother_pos(visit_instance) and
             visit_instance.appointment.visit_definition.code == '2000M'):
