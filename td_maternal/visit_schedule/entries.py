@@ -133,4 +133,13 @@ maternal_requisition_followup = (
     RequisitionPanelTuple(
         10, 'td_lab', 'maternalrequisition',
         'Viral Load', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+    RequisitionPanelTuple(
+        20, 'td_lab', 'maternalrequisition',
+        'Fasting Glucose', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL),
+    RequisitionPanelTuple(
+        30, 'td_lab', 'maternalrequisition',
+        'Glucose 1h', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL),
+    RequisitionPanelTuple(
+        40, 'td_lab', 'maternalrequisition',
+        'Glucose 2h', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL),
 )
