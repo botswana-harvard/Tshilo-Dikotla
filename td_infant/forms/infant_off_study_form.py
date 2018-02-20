@@ -31,8 +31,8 @@ class InfantOffStudyForm(BaseInfantModelForm):
         cleaned_data = self.cleaned_data
         maternal_subject_identifier = cleaned_data.get(
             'infant_visit').appointment.registered_subject.relative_identifier
-        maternal_consent = MaternalConsent.objects.get(
-            registered_subject__subject_identifier=maternal_subject_identifier)
+        maternal_consent = MaternalConsent.objects.filter(
+            registered_subject__subject_identifier=maternal_subject_identifier).order_by('consent_datetime').last()
         if cleaned_data.get('offstudy_date') < maternal_consent.consent_datetime.date():
             raise forms.ValidationError(
                 'Off study date cannot be before consent date')

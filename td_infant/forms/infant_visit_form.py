@@ -49,8 +49,8 @@ class InfantVisitForm(VisitFormMixin, BaseModelForm):
         cleaned_data = self.cleaned_data
         try:
             relative_identifier = cleaned_data.get('appointment').registered_subject.relative_identifier
-            maternal_consent = MaternalConsent.objects.get(
-                registered_subject__subject_identifier=relative_identifier)
+            maternal_consent = MaternalConsent.objects.filter(
+                registered_subject__subject_identifier=relative_identifier).order_by('consent_datetime').last()
             if cleaned_data.get("report_datetime") < maternal_consent.consent_datetime:
                 raise forms.ValidationError("Report datetime cannot be before consent datetime")
             if cleaned_data.get("report_datetime").date() < maternal_consent.dob:
