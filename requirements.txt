@@ -11,7 +11,7 @@ git+https://github.com/erikvw/django-appconfig-ini@develop#egg=django_appconfig_
 django-simple-history==1.8.1
 django-tastypie==0.13.3
 djangorestframework==3.3.3
--e git+https://github.com/botswana-harvard/edc-appointment@85e9833ff43912d5f8cdd80a8530e8d1f6e46ad5#egg=edc_appointment
+-e git+https://github.com/botswana-harvard/edc-appointment@td-edc-appointment#egg=edc_appointment
 -e git+https://github.com/botswana-harvard/edc-base@c6f2c87a9a1090a97e7a7902fce288b25990ca50#egg=edc_base
 -e git+https://github.com/botswana-harvard/edc-call-manager@f70ed1fe60edecd683df2e2292471adf5ca3d20d#egg=edc_call_manager
 -e git+https://github.com/botswana-harvard/edc-code-lists@4984ef83aecb8dc7ec0428278a867dd38ce0cf68#egg=edc_code_lists
