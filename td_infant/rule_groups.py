@@ -83,6 +83,15 @@ def func_infant_heu(visit_instance):
     return False
 
 
+def func_require_infant_elisa(visit_instance):
+    """ Returns true if the infant is HEU and at visit 2180
+    otherwise returns false if HEU and not 2180 for PRN."""
+    if visit_instance.appointment.visit_definition.code == '2180' and func_infant_heu:
+        return True
+    elif visit_instance.appointment.visit_definition.code != '2180' and func_infant_heu:
+        return False
+
+
 def func_show_infant_nvp_dispensing(visit_instance):
     show_infant_nvp_dispensing = False
     maternal_registered_subject = get_subject_identifier(
@@ -227,6 +236,14 @@ class InfantRequisitionRuleGroup(RuleGroup):
             alternative=UNKEYED),
         target_model=[('td_lab', 'infantrequisition')],
         target_requisition_panels=['DBS (Store Only)'])
+
+    require_elisa = RequisitionRule(
+        logic=Logic(
+            predicate=func_require_infant_elisa,
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_lab', 'infantrequisition')],
+        target_requisition_panels=['ELISA'])
 
 #     require_plasma_pbmc = RequisitionRule(
 #         logic=Logic(
