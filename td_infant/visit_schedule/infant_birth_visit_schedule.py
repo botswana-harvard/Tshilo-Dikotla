@@ -167,7 +167,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
         'instructions': 'V1',
-        'requisitions': infant_dnapcr_requisitions,
+        'requisitions': infant_followup_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(20, 'td_infant', 'infantfuphysical',
@@ -194,7 +194,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
         'instructions': 'V1',
-        'requisitions': infant_dnapcr_requisitions,
+        'requisitions': infant_followup_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(20, 'td_infant', 'infantfuphysical',
@@ -221,7 +221,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
         'instructions': 'V1',
-        'requisitions': infant_dnapcr_requisitions,
+        'requisitions': infant_followup_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(20, 'td_infant', 'infantfuphysical',
@@ -277,7 +277,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
         'instructions': 'V1',
-        'requisitions': infant_dnapcr_requisitions,
+        'requisitions': infant_followup_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(20, 'td_infant', 'infantfuphysical',
@@ -305,7 +305,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
         'instructions': 'V1',
-        'requisitions': infant_dnapcr_requisitions,
+        'requisitions': infant_followup_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(20, 'td_infant', 'infantfuphysical',
