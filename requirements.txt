@@ -39,7 +39,7 @@ djangorestframework==3.3.3
 -e git+https://github.com/botswana-harvard/edc-templates@c79a1d3a541fed424451f6da455bce2b6c84e07c#egg=edc_templates
 -e git+https://github.com/botswana-harvard/edc-testing@d0444af275efc731e923b3239111e7a470802e42#egg=edc_testing
 -e git+https://github.com/botswana-harvard/edc-visit-schedule@td-edc-visit-schedule#egg=edc_visit_schedule
--e git+https://github.com/botswana-harvard/edc-visit-tracking@6c9f910613d91302c9c08fc0b1d04c9e7cc33a40#egg=edc_visit_tracking
+-e git+https://github.com/botswana-harvard/edc-visit-tracking@td-edc-visit-tracking#egg=edc_visit_tracking
 factory-boy==2.6.1
 fake-factory==0.5.7
 flake8==2.5.4
