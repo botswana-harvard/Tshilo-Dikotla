@@ -30,8 +30,8 @@ class TdAppointmentMixin(AppointmentMixin):
         default_appt_type = self.get_default_appt_type(self.registered_subject)
         for visit_definition in self.visit_definitions_for_schedule(model_name=self._meta.model_name, instruction=instruction):
             if visit_definition.instruction == 'V3' and visit_definition.code in [
-                '2000M', '2010M', '2020M', '2060M', '2120M', '2180M', '2240M', '2300M', '2360M',
-                '2000', '2010', '2020', '2060', '2120', '2180', '2240', '2300', '2360']:
+                    '2000M', '2010M', '2020M', '2060M', '2120M', '2180M', '2240M', '2300M', '2360M',
+                    '2000', '2010', '2020', '2060', '2120', '2180', '2240', '2300', '2360']:
                 appointment = Appointment.objects.using(using).filter(
                     registered_subject=self.registered_subject,
                     visit_definition__code=visit_definition.code,
@@ -45,19 +45,22 @@ class TdAppointmentMixin(AppointmentMixin):
                         default_appt_type,
                         dashboard_type,
                         using)
-                    Appointment.objects.using(using).get(
-                        registered_subject=self.registered_subject,
-                        visit_definition__code=visit_definition.code,
-                        visit_definition__instruction='V1',
-                        appt_status=NEW_APPT).delete()
+                    try:
+                        Appointment.objects.using(using).get(
+                            registered_subject=self.registered_subject,
+                            visit_definition__code=visit_definition.code,
+                            visit_definition__instruction='V1',
+                            appt_status=NEW_APPT).delete()
+                    except Appointment.DoesNotExist:
+                        pass
             else:
                 appointment = self.update_or_create_appointment(
-                        self.registered_subject,
-                        base_appt_datetime or self.get_registration_datetime(),
-                        visit_definition,
-                        default_appt_type,
-                        dashboard_type,
-                        using)
+                    self.registered_subject,
+                    base_appt_datetime or self.get_registration_datetime(),
+                    visit_definition,
+                    default_appt_type,
+                    dashboard_type,
+                    using)
             appointments.append(appointment)
         return appointments
 
@@ -69,7 +72,8 @@ class TdAppointmentMixin(AppointmentMixin):
     def visit_definitions_for_schedule(self, model_name=None, instruction=None):
         """Returns a visit_definition queryset for this membership form's schedule."""
         # VisitDefinition = get_model('edc_visit_schedule', 'VisitDefinition')
-        schedule = self.schedule(model_name=model_name, group_names=self.group_names)
+        schedule = self.schedule(
+            model_name=model_name, group_names=self.group_names)
         if instruction:
             visit_definitions = VisitDefinition.objects.filter(
                 schedule__in=schedule, instruction=instruction).order_by('time_point')
