@@ -31,7 +31,7 @@ class InfantBirthData(InfantCrfModel):
     head_circumference = models.DecimalField(
         max_digits=4,
         decimal_places=2,
-        validators=[MinValueValidator(0), MaxValueValidator(40)],
+        validators=[MinValueValidator(0), MaxValueValidator(41)],
         verbose_name="What was the head circumference in centimeters? ",
         help_text="Measured in centimeters, (cm)")
 
