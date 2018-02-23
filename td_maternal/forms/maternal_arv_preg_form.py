@@ -10,6 +10,26 @@ from ..models import (MaternalArvPreg, MaternalArv, MaternalLifetimeArvHistory)
 from .base_maternal_model_form import BaseMaternalModelForm
 
 
+def get_previous_visit(visit_model, timepoints, subject_identifier):
+    position = timepoints.index(
+        visit_model.appointment.visit_definition.code)
+    timepoints_slice = timepoints[:position]
+    if len(timepoints_slice) > 1:
+        timepoints_slice.reverse()
+    for point in timepoints_slice:
+        try:
+            previous_appointment = Appointment.objects.filter(
+                registered_subject__subject_identifier=subject_identifier, visit_definition__code=point).order_by('-created').first()
+            return visit_model.objects.filter(appointment=previous_appointment).order_by('-created').first()
+        except Appointment.DoesNotExist:
+            pass
+        except visit_model.DoesNotExist:
+            pass
+        except AttributeError:
+            pass
+    return None
+
+
 class MaternalArvPregForm(BaseMaternalModelForm):
 
     def clean(self):
@@ -125,17 +145,23 @@ class MaternalArvForm(BaseMaternalModelForm):
         cleaned_data = self.cleaned_data
         subject_identifier = cleaned_data.get(
             'maternal_arv_preg').maternal_visit.appointment.registered_subject.subject_identifier
-        previous_arv_preg = MaternalArv.objects.filter(
-            maternal_arv_preg__maternal_visit__appointment__registered_subject__subject_identifier=subject_identifier,
-            stop_date__isnull=True).order_by('-start_date').first()
-        if previous_arv_preg:
-            if previous_arv_preg.start_date:
-                start_date = cleaned_data.get('start_date')
-                if start_date != previous_arv_preg.start_date:
-                    raise forms.ValidationError({
-                        "ARV's were not stopped in this pregnancy, most recent ARV date was"
-                        "{}, dates must match, got {}.".format(
-                            previous_arv_preg.start_date, start_date)})
+        previous_visit = get_previous_visit(
+            visit_model=cleaned_data.get('maternal_arv_preg').maternal_visit,
+            timepoints=['1000M', '1020M', '2000M'],
+            subject_identifier=subject_identifier)
+
+        if previous_visit:
+            previous_arv_preg = MaternalArv.objects.filter(
+                maternal_arv_preg__previous_visit__appointment__registered_subject__subject_identifier=subject_identifier,
+                stop_date__isnull=True).order_by('-start_date').first()
+            if previous_arv_preg:
+                if previous_arv_preg.start_date:
+                    start_date = cleaned_data.get('start_date')
+                    if start_date != previous_arv_preg.start_date:
+                        raise forms.ValidationError({
+                            "ARV's were not stopped in this pregnancy, most recent ARV date was"
+                            "{}, dates must match, got {}.".format(
+                                previous_arv_preg.start_date, start_date)})
 
     def validate_stop_date_reason_for_stop(self):
         cleaned_data = self.cleaned_data
