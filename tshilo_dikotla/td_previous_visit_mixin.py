@@ -18,13 +18,13 @@ class TdPreviousVisitMixin(PreviousVisitMixin):
                 maternal_eligibility__registered_subject__subject_identifier=self.appointment.registered_subject.relative_identifier).last()
 
         if maternal_consent.version == '1':
-            previous_visit_definition = self.previous_visit_definition(
+            previous_visit_definition = self.get_visit_definition(
                 instruction='V1', visit_definition=visit_definition)
         elif maternal_consent.version == '3':
-            previous_visit_definition = self.previous_visit_definition(
+            previous_visit_definition = self.get_visit_definition(
                 instruction='V1', visit_definition=visit_definition)
             if not previous_visit_definition:
-                self.previous_visit_definition(
+                self.get_visit_definition(
                     instruction='V3', visit_definition=visit_definition)
         if previous_visit_definition:
             return previous_visit_definition
