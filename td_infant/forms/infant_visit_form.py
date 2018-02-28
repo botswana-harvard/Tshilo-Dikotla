@@ -94,7 +94,7 @@ class InfantVisitForm(VisitFormMixin, BaseModelForm):
             'appointment').registered_subject.relative_identifier
         try:
             return MaternalEligibility.objects.get(
-                maternal_eligibility__registered_subject__subject_identifier=relative_identifier)
+                registered_subject__subject_identifier=relative_identifier)
         except MaternalEligibility.DoesNotExist:
             pass
 
