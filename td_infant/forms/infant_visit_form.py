@@ -9,6 +9,7 @@ from tshilo_dikotla.choices import VISIT_REASON, VISIT_INFO_SOURCE, INFANT_VISIT
 from td_maternal.models import MaternalConsent, MaternalDeathReport, TdConsentVersion
 
 from ..models import InfantVisit
+from td_maternal.models.maternal_eligibility import MaternalEligibility
 
 
 class InfantVisitForm(VisitFormMixin, BaseModelForm):
@@ -79,15 +80,23 @@ class InfantVisitForm(VisitFormMixin, BaseModelForm):
             pass
 
     def validate_current_consent_version(self):
+        try:
+            TdConsentVersion.objects.get(
+                maternal_eligibility=self.maternal_eligibility)
+        except TdConsentVersion.DoesNotExist:
+            raise forms.ValidationError(
+                'Complete mother\'s consent version form before proceeding')
+
+    @property
+    def maternal_eligibility(self):
         cleaned_data = self.cleaned_data
         relative_identifier = cleaned_data.get(
             'appointment').registered_subject.relative_identifier
         try:
-            TdConsentVersion.objects.get(
+            return MaternalEligibility.objects.get(
                 maternal_eligibility__registered_subject__subject_identifier=relative_identifier)
-        except TdConsentVersion.DoesNotExist:
-            raise forms.ValidationError(
-                'Complete mother\'s consent version form before proceeding')
+        except MaternalEligibility.DoesNotExist:
+            pass
 
     class Meta:
         model = InfantVisit
