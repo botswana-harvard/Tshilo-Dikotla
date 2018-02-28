@@ -28,7 +28,7 @@ class MaternalOffStudyForm (OffStudyFormMixin, BaseMaternalModelForm):
         subject_identifier = cleaned_data.get(
             'maternal_visit').appointment.registered_subject.subject_identifier
         consent = MaternalConsent.objects.filter(
-            maternal_eligibiliry__registered_subject__subject_identifier=subject_identifier).order_by('consent_datetime').first()
+            maternal_eligibility__registered_subject__subject_identifier=subject_identifier).order_by('consent_datetime').first()
         if consent:
             if cleaned_data.get('offstudy_date') < consent.consent_datetime.date():
                 raise forms.ValidationError(
