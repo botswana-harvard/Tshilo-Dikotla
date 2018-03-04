@@ -1,6 +1,7 @@
 from django.db import models
 
 from edc_base.model.models.base_uuid_model import BaseUuidModel
+from edc_base.model.fields import OtherCharField
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_meta_data.managers import RequisitionMetaDataManager
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
@@ -33,6 +34,12 @@ class MaternalRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin,
     aliquot_type = models.ForeignKey(AliquotType)
 
     panel = models.ForeignKey(Panel)
+
+    reason_not_drawn_other = OtherCharField(
+        max_length=35,
+        verbose_name="if (other) specify...",
+        blank=True,
+        null=True)
 
     objects = MaternalRequisitionManager()
 
