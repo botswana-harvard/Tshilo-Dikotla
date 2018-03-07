@@ -2,7 +2,32 @@ from django.apps import apps
 from edc_visit_tracking.models import PreviousVisitMixin
 
 
+class PreviousVisitError(Exception):
+    pass
+
+
 class TdPreviousVisitMixin(PreviousVisitMixin):
+
+    def has_previous_visit_or_raise(self, exception_cls=None):
+        """Returns True if the previous visit in the schedule exists or this is the first visit.
+
+        Is by-passed if 'requires_previous_visit' is False.
+
+        You can call this from the forms clean() method."""
+        exception_cls = exception_cls or PreviousVisitError
+        if self.requires_previous_visit:
+            previous_visit_definition = self.previous_visit_definition(
+                self.appointment.visit_definition)
+            if previous_visit_definition:
+                if self.previous_visit(previous_visit_definition):
+                    has_previous_visit = True
+                elif (self.appointment.visit_definition.time_point == 0 and
+                        self.appointment.visit_definition.base_interval == 0):
+                    has_previous_visit = True
+                else:
+                    has_previous_visit = False
+                if not has_previous_visit:
+                    pass
 
     def previous_visit_definition(self, visit_definition):
         """Returns the previous visit definition relative to this instance or None.
