@@ -1,5 +1,4 @@
-from edc_base.model.fields import OtherCharField
-from edc_constants.constants import SCHEDULED, UNSCHEDULED, NO, YES
+from edc_constants.constants import SCHEDULED, UNSCHEDULED, NO, YES, OTHER
 from lab_requisition.forms import RequisitionFormMixin
 
 from django import forms
@@ -27,6 +26,36 @@ class MaternalRequisitionForm(RequisitionFormMixin):
 
     def clean(self):
         cleaned_data = super(MaternalRequisitionForm, self).clean()
+        self.validate_drawing_requisitions(cleaned_data)
+        self.validate_requisition_and_drawn_datetime()
+        return cleaned_data
+
+    def validate_drawing_requisitions(self, cleaned_data):
+        cleaned_data = self.cleaned_data
+
+        if cleaned_data.get('is_drawn') == YES and not cleaned_data.get('drawn_datetime'):
+            raise forms.ValidationError("A specimen was collected. Please provide the date and time collected.")
+
+        if cleaned_data.get('is_drawn') == NO and cleaned_data.get('drawn_datetime'):
+            raise forms.ValidationError("A specimen was not collected, date and time collected NA.")
+
+        if cleaned_data.get('is_drawn') == NO and not cleaned_data.get('reason_not_drawn'):
+            raise forms.ValidationError("Please provide a reason why the specimen was not collected.")
+
+        if cleaned_data.get('is_drawn') == YES and cleaned_data.get('reason_not_drawn'):
+            raise forms.ValidationError(
+                "A specimen was not drawn. Do not provided a reason why it was not collected.")
+
+        if cleaned_data.get('is_drawn') == YES and cleaned_data.get('reason_not_drawn_other'):
+            raise forms.ValidationError(
+                "A specimen was drawn. Do not provided a reason why it was not collected.")
+
+        if cleaned_data.get('reason_not_drawn') == OTHER and not cleaned_data.get('reason_not_drawn_other'):
+            raise forms.ValidationError(
+                "Please specify Other reason why requisition was not drawn.")
+
+    def validate_requisition_and_drawn_datetime(self):
+        cleaned_data = self.cleaned_data
         if cleaned_data.get('drawn_datetime'):
             if cleaned_data.get('drawn_datetime').date() < cleaned_data.get('requisition_datetime').date():
                 raise forms.ValidationError(
@@ -34,11 +63,6 @@ class MaternalRequisitionForm(RequisitionFormMixin):
                     'indicated as {}, whilst requisition is indicated as{}. Please correct'.format(
                         cleaned_data.get('drawn_datetime').date(),
                         cleaned_data.get('requisition_datetime').date()))
-
-        if cleaned_data.get('is_drawn') == YES:
-            if cleaned_data.get('reason_not_drawn'):
-                raise forms.ValidationError(
-                    'No requisition was drawn, reason not drawn must be Not Applicable')
 
         if (
             cleaned_data.get('panel').name == 'Vaginal swab (Storage)' or
