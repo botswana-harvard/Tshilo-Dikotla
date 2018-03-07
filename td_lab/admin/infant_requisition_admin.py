@@ -23,6 +23,7 @@ class InfantRequisitionAdmin(RequisitionAdminMixin, MembershipBaseModelAdmin):
 
     def get_fieldsets(self, request, obj=None):
         fields = copy(self.fields)
+        other_reason_field = ['reason_not_drawn_other']
         try:
             panel = Panel.objects.get(id=request.GET.get('panel'))
             if panel.name in ['Rectal swab (Storage)']:
@@ -36,6 +37,7 @@ class InfantRequisitionAdmin(RequisitionAdminMixin, MembershipBaseModelAdmin):
             fields.remove(fields.index('test_code'))
         except ValueError:
             pass
+        fields.insert(4, other_reason_field)
         return [(None, {'fields': fields})]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -44,5 +46,6 @@ class InfantRequisitionAdmin(RequisitionAdminMixin, MembershipBaseModelAdmin):
                 kwargs["queryset"] = InfantVisit.objects.filter(
                     id=request.GET.get('infant_visit'))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 
 admin.site.register(InfantRequisition, InfantRequisitionAdmin)

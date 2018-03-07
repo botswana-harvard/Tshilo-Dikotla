@@ -22,6 +22,7 @@ class MaternalRequisitionAdmin(RequisitionAdminMixin, MembershipBaseModelAdmin):
 
     def get_fieldsets(self, request, obj=None):
         fields = copy(self.fields)
+        other_reason_field = ['reason_not_drawn_other']
         panel_names = [
             'Vaginal swab (Storage)',
             'Rectal swab (Storage)',
@@ -36,6 +37,7 @@ class MaternalRequisitionAdmin(RequisitionAdminMixin, MembershipBaseModelAdmin):
                     pass
         except self.panel_model.DoesNotExist:
             pass
+        fields.insert(4, other_reason_field)
         return [(None, {'fields': fields})]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -44,5 +46,6 @@ class MaternalRequisitionAdmin(RequisitionAdminMixin, MembershipBaseModelAdmin):
                 kwargs["queryset"] = MaternalVisit.objects.filter(
                     id=request.GET.get('maternal_visit'))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 
 admin.site.register(MaternalRequisition, MaternalRequisitionAdmin)
