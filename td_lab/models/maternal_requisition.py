@@ -14,7 +14,6 @@ from .aliquot import Aliquot
 from .aliquot_type import AliquotType
 from .packing_list import PackingList
 from .panel import Panel
-from tshilo_dikotla.choices import REASON_NOT_DRAWN
 
 
 class MaternalRequisitionManager(CrfModelManager):
