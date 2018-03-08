@@ -7,7 +7,6 @@ from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRender
 from edc_constants.constants import YES, NO, OTHER, NOT_APPLICABLE
 from lab_requisition.forms import RequisitionFormMixin
 
-from tshilo_dikotla.choices import STUDY_SITES, REASON_NOT_DRAWN
 # from tshilo_dikotla.td_infant.models import InfantStoolCollection
 
 from ..models import InfantRequisition
