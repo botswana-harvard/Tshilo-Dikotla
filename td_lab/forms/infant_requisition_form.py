@@ -10,6 +10,7 @@ from lab_requisition.forms import RequisitionFormMixin
 # from tshilo_dikotla.td_infant.models import InfantStoolCollection
 
 from ..models import InfantRequisition
+from tshilo_dikotla.choices import STUDY_SITES
 
 
 class InfantRequisitionForm(RequisitionFormMixin):
