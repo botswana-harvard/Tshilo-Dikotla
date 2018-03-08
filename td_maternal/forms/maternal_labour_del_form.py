@@ -4,6 +4,7 @@ from django import forms
 from edc_constants.constants import YES, NO, NOT_APPLICABLE, POS
 
 from ..models import MaternalLabourDel, MaternalHivInterimHx, MaternalVisit
+from ..models import MaternalArv
 from ..classes import MaternalStatusHelper
 
 from .base_maternal_model_form import BaseMaternalModelForm
@@ -13,37 +14,56 @@ class MaternalLabourDelForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalLabourDelForm, self).clean()
+        self.registered_subject = cleaned_data.get('registered_subject')
+        arv_preg = MaternalArv.objects.filter(
+            maternal_arv_preg__maternal_visit__subject_identifier=self.registered_subject.subject_identifier,
+            stop_date__isnull=True).order_by('-start_date').first()
+        if arv_preg:
+            initiation_date = cleaned_data.get('arv_initiation_date')
+            if initiation_date != arv_preg.start_date:
+                raise forms.ValidationError(
+                    {'arv_initiation_date':
+                     "ARV's initiation date must match start date "
+                     "in pregnancy form, pregnancy form start date is "
+                     "{}, got {}.".format(
+                         arv_preg.start_date, initiation_date)})
         self.validate_valid_regimen_hiv_pos_only()
         self.validate_live_births_still_birth()
         return cleaned_data
 
     def validate_valid_regimen_hiv_pos_only(self):
         cleaned_data = self.cleaned_data
-        registered_subject = cleaned_data.get('registered_subject')
-        latest_visit = MaternalVisit.objects.filter(subject_identifier=registered_subject.subject_identifier).order_by('-created').first()
+        latest_visit = MaternalVisit.objects.filter(
+            subject_identifier=self.registered_subject.subject_identifier).order_by('-created').first()
         maternal_status_helper = MaternalStatusHelper(latest_visit)
         if maternal_status_helper.hiv_status == POS:
             if cleaned_data.get('valid_regiment_duration') not in YES:
-                raise forms.ValidationError('Participant is HIV+ valid regimen duration should be YES. Please correct.')
-            if cleaned_data.get('valid_regiment_duration') == YES and not cleaned_data.get('arv_initiation_date'): 
-                raise forms.ValidationError('You indicated participant was on valid regimen, please give a valid arv initiation date.')
+                raise forms.ValidationError(
+                    'Participant is HIV+ valid regimen duration should be YES. Please correct.')
+            if cleaned_data.get('valid_regiment_duration') == YES and not cleaned_data.get('arv_initiation_date'):
+                raise forms.ValidationError(
+                    'You indicated participant was on valid regimen, please give a valid arv initiation date.')
             if (cleaned_data.get('valid_regiment_duration') == YES and
-            (cleaned_data.get('delivery_datetime').date() - relativedelta(weeks=4) <
-             cleaned_data.get('arv_initiation_date'))):
+                (cleaned_data.get('delivery_datetime').date() - relativedelta(weeks=4) <
+                 cleaned_data.get('arv_initiation_date'))):
                 raise forms.ValidationError('You indicated that the mother was on REGIMEN for a valid duration, but'
                                             ' delivery date is within 4weeks of art initiation date. Please correct.')
         else:
             if cleaned_data.get('valid_regiment_duration') not in [NOT_APPLICABLE]:
-                raise forms.ValidationError('Participant\'s HIV status is {}, valid regimen duration should be Not Applicable.'.format(maternal_status_helper.hiv_status))
+                raise forms.ValidationError('Participant\'s HIV status is {}, valid regimen duration should be Not Applicable.'.format(
+                    maternal_status_helper.hiv_status))
             if cleaned_data.get('arv_initiation_date'):
-                raise forms.ValidationError('Participant\'s HIV status is {}, arv initiation date should not filled.'.format(maternal_status_helper.hiv_status))
+                raise forms.ValidationError('Participant\'s HIV status is {}, arv initiation date should not filled.'.format(
+                    maternal_status_helper.hiv_status))
 
     def validate_live_births_still_birth(self):
         cleaned_data = self.cleaned_data
         if cleaned_data.get('still_births') == 0 and cleaned_data.get('live_infants_to_register') != 1:
-            raise forms.ValidationError('If still birth is 0 then live birth should be 1.')
+            raise forms.ValidationError(
+                'If still birth is 0 then live birth should be 1.')
         if cleaned_data.get('still_births') == 1 and cleaned_data.get('live_infants_to_register') != 0:
-            raise forms.ValidationError('If live births is 1 then still birth should be 0.')
+            raise forms.ValidationError(
+                'If live births is 1 then still birth should be 0.')
 
     class Meta:
         model = MaternalLabourDel
