@@ -22,7 +22,8 @@ class InfantDashboard(RegisteredSubjectDashboard):
         '(?P<appointment_code>{appointment_code})/$'] + RegisteredSubjectDashboard.urlpatterns
     urlpattern_options = dict(
         RegisteredSubjectDashboard.urlpattern_options,
-        dashboard_model=RegisteredSubjectDashboard.urlpattern_options['dashboard_model'] + '|infant_birth',
+        dashboard_model=RegisteredSubjectDashboard.urlpattern_options[
+            'dashboard_model'] + '|infant_birth',
         dashboard_type=INFANT,
         appointment_code='2000|2010|2030|2060|2090|2120')
 
@@ -51,7 +52,8 @@ class InfantDashboard(RegisteredSubjectDashboard):
             maternal_consent=self.maternal_consent,
             maternal_eligibility=self.maternal_eligibility,
             local_results=self.render_labs(),
-            infant_birth=self.infant_birth, )
+            infant_birth=self.infant_birth,
+            instruction=self.instruction)
         return self.context
 
     @property
@@ -75,7 +77,8 @@ class InfantDashboard(RegisteredSubjectDashboard):
             # schedule__membership_form
             codes = []
             for category in self.membership_form_category:
-                codes.extend(MembershipForm.objects.codes_for_category(membership_form_category=category))
+                codes.extend(MembershipForm.objects.codes_for_category(
+                    membership_form_category=category))
                 appointments = Appointment.objects.filter(
                     registered_subject=self.registered_subject,
                     visit_definition__code__in=codes,
@@ -133,7 +136,8 @@ class InfantDashboard(RegisteredSubjectDashboard):
     def registered_subject(self):
         if not self._registered_subject:
             try:
-                self._registered_subject = RegisteredSubject.objects.get(pk=self.dashboard_id)
+                self._registered_subject = RegisteredSubject.objects.get(
+                    pk=self.dashboard_id)
             except RegisteredSubject.DoesNotExist:
                 try:
                     self._registered_subject = self.dashboard_model_instance.registered_subject
@@ -142,7 +146,8 @@ class InfantDashboard(RegisteredSubjectDashboard):
                         self._registered_subject = self.dashboard_model_instance.appointment.registered_subject
                     except AttributeError:
                         try:
-                            self._infant_birth = InfantBirth.objects.get(pk=self.dashboard_id)
+                            self._infant_birth = InfantBirth.objects.get(
+                                pk=self.dashboard_id)
                             self._registered_subject = self._infant_birth.registered_subject
                         except InfantBirth.DoesNotExist:
                             pass
