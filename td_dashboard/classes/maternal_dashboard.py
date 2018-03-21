@@ -32,7 +32,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
         '(?P<appointment_code>{appointment_code})/$'] + RegisteredSubjectDashboard.urlpatterns
     urlpattern_options = dict(
         RegisteredSubjectDashboard.urlpattern_options,
-        dashboard_model=RegisteredSubjectDashboard.urlpattern_options['dashboard_model'] + '|maternal_eligibility',
+        dashboard_model=RegisteredSubjectDashboard.urlpattern_options[
+            'dashboard_model'] + '|maternal_eligibility',
         dashboard_type='maternal',
         appointment_code='1000M|1100M|1200M|1600M|2200M|2800M|3400M|4000M|4600M', )
 
@@ -41,7 +42,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
         self.subject_dashboard_url = 'subject_dashboard_url'
         self.visit_model = MaternalVisit
         self.dashboard_type_list = ['maternal']
-        self.membership_form_category = ['specimen', 'enrollment', 'antenatal', 'follow_up']
+        self.membership_form_category = [
+            'specimen', 'enrollment', 'antenatal', 'follow_up']
         self.dashboard_models['maternal_eligibility'] = MaternalEligibility
         self.dashboard_models['maternal_consent'] = MaternalConsent
         self.dashboard_models['visit'] = MaternalVisit
@@ -67,6 +69,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             planned_delivery_site=self.planned_delivery_site,
             delivery_site=self.delivery_site,
             maternal_eligibility=self.maternal_eligibility,
+            instruction=self.instruction,
             randomized=self.randomized
         )
         return self.context
@@ -100,7 +103,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             # schedule__membership_form
             codes = []
             for category in self.membership_form_category:
-                codes.extend(MembershipForm.objects.codes_for_category(membership_form_category=category))
+                codes.extend(MembershipForm.objects.codes_for_category(
+                    membership_form_category=category))
                 appointments = Appointment.objects.filter(
                     registered_subject=self.registered_subject,
                     visit_definition__code__in=codes,
@@ -162,14 +166,17 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             infant_registered_subject = RegisteredSubject.objects.get(
                 subject_type=INFANT, relative_identifier__iexact=self.subject_identifier)
             try:
-                infant_birth = InfantBirth.objects.get(registered_subject__exact=infant_registered_subject)
+                infant_birth = InfantBirth.objects.get(
+                    registered_subject__exact=infant_registered_subject)
                 dct = infant_birth.__dict__
-                dct['dashboard_model'] = convert_from_camel(infant_birth._meta.object_name)
+                dct['dashboard_model'] = convert_from_camel(
+                    infant_birth._meta.object_name)
                 dct['dashboard_id'] = convert_from_camel(str(infant_birth.pk))
                 dct['dashboard_type'] = INFANT
                 infants[infant_registered_subject.subject_identifier] = dct
             except InfantBirth.DoesNotExist:
-                dct = {'subject_identifier': infant_registered_subject.subject_identifier}
+                dct = {
+                    'subject_identifier': infant_registered_subject.subject_identifier}
                 dct['dashboard_model'] = 'registered_subject'
                 dct['dashboard_id'] = str(infant_registered_subject.pk)
                 dct['dashboard_type'] = INFANT
@@ -181,9 +188,11 @@ class MaternalDashboard(RegisteredSubjectDashboard):
     @property
     def antenatal_enrollment(self):
         if not self.maternal_status_helper:
-            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
+            self.maternal_status_helper = MaternalStatusHelper(
+                self.latest_visit)
         try:
-            antenatal_enrollment = AntenatalEnrollment.objects.get(registered_subject=self.registered_subject)
+            antenatal_enrollment = AntenatalEnrollment.objects.get(
+                registered_subject=self.registered_subject)
         except AntenatalEnrollment.DoesNotExist:
             antenatal_enrollment = None
         return antenatal_enrollment
@@ -191,7 +200,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
     @property
     def maternal_randomization(self):
         if not self.maternal_status_helper:
-            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
+            self.maternal_status_helper = MaternalStatusHelper(
+                self.latest_visit)
         try:
             maternal_rando = MaternalRando.objects.get(
                 maternal_visit__appointment__registered_subject=self.registered_subject)
@@ -202,9 +212,11 @@ class MaternalDashboard(RegisteredSubjectDashboard):
     @property
     def maternal_delivery(self):
         if not self.maternal_status_helper:
-            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
+            self.maternal_status_helper = MaternalStatusHelper(
+                self.latest_visit)
         try:
-            delivery = MaternalLabourDel.objects.get(registered_subject=self.registered_subject)
+            delivery = MaternalLabourDel.objects.get(
+                registered_subject=self.registered_subject)
         except MaternalLabourDel.DoesNotExist:
             delivery = None
         return delivery
@@ -218,7 +230,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
     @property
     def planned_delivery_site(self):
         if not self.maternal_status_helper:
-            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
+            self.maternal_status_helper = MaternalStatusHelper(
+                self.latest_visit)
         if self.maternal_randomization and self.maternal_randomization.delivery_clinic != OTHER:
             return self.maternal_randomization.delivery_clinic
         elif self.maternal_randomization and self.maternal_randomization.delivery_clinic == OTHER:
@@ -237,7 +250,8 @@ class MaternalDashboard(RegisteredSubjectDashboard):
     @property
     def gestational_age(self):
         if not self.maternal_status_helper:
-            self.maternal_status_helper = MaternalStatusHelper(self.latest_visit)
+            self.maternal_status_helper = MaternalStatusHelper(
+                self.latest_visit)
         antenatal = self.antenatal_enrollment
         if antenatal:
             enrollment_helper = EnrollmentHelper(instance_antenatal=antenatal)
@@ -252,4 +266,3 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             else:
                 return UNK
         return UNK
-
