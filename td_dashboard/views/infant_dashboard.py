@@ -15,7 +15,7 @@ def infant_dashboard(request, **kwargs):
         dashboard_model=kwargs.get('dashboard_model'),
         dashboard_category=kwargs.get('dashboard_category'),
         registered_subject=kwargs.get('registered_subject'),
-        instruction=kwargs.get('instruction'),
+        instruction=request.GET.get('instruction'),
         dashboard_type_list=[INFANT],
         show=kwargs.get('show'),
     )

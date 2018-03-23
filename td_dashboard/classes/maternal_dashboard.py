@@ -69,7 +69,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             planned_delivery_site=self.planned_delivery_site,
             delivery_site=self.delivery_site,
             maternal_eligibility=self.maternal_eligibility,
-            instruction=self.instruction,
+            instruction=self.request.GET.get('instruction', self.instruction),
             randomized=self.randomized
         )
         return self.context

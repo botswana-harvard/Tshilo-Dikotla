@@ -53,7 +53,7 @@ class InfantDashboard(RegisteredSubjectDashboard):
             maternal_eligibility=self.maternal_eligibility,
             local_results=self.render_labs(),
             infant_birth=self.infant_birth,
-            instruction=self.instruction)
+            instruction=self.request.GET.get('instruction', self.instruction))
         return self.context
 
     @property
