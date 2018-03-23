@@ -65,9 +65,6 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         RequisitionPanelTuple(
             20, 'td_lab', 'infantrequisition',
             'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL),
-        RequisitionPanelTuple(
-            30, 'td_lab', 'infantrequisition',
-            'ELISA', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL)
     )
 
     infant_36month_requisitions = (
