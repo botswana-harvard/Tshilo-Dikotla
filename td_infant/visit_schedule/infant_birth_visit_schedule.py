@@ -65,9 +65,6 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         RequisitionPanelTuple(
             20, 'td_lab', 'infantrequisition',
             'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL),
-        RequisitionPanelTuple(
-            30, 'td_lab', 'infantrequisition',
-            'ELISA', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL)
     )
 
     infant_36month_requisitions = (
@@ -94,7 +91,13 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             'Infant Glucose', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
         RequisitionPanelTuple(
             40, 'td_lab', 'infantrequisition',
-            'ELISA', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL)
+            'ELISA', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            50, 'td_lab', 'infantrequisition',
+            'Infant Serum (Store Only)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            60, 'td_lab', 'infantrequisition',
+            'PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
     )
 
     visit_definitions = OrderedDict()
