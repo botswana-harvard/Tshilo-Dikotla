@@ -46,7 +46,9 @@ class InfantRequisitionForm(RequisitionFormMixin):
                         cleaned_data.get('requisition_datetime').date()))
 
     def validate_drawing_requisitions(self, cleaned_data):
+
         cleaned_data = self.cleaned_data
+
         if cleaned_data.get('is_drawn') == YES and not cleaned_data.get('drawn_datetime'):
             raise forms.ValidationError("A specimen was collected. Please provide the date and time collected.")
 
@@ -56,13 +58,17 @@ class InfantRequisitionForm(RequisitionFormMixin):
         if cleaned_data.get('is_drawn') == NO and not cleaned_data.get('reason_not_drawn'):
             raise forms.ValidationError("Please provide a reason why the specimen was not collected.")
 
+        if cleaned_data.get('is_drawn') == YES and cleaned_data.get('reason_not_drawn'):
+            raise forms.ValidationError(
+                "A specimen was not drawn. Do not provided a reason why it was not collected.")
+
         if cleaned_data.get('is_drawn') == YES and cleaned_data.get('reason_not_drawn_other'):
             raise forms.ValidationError(
                 "A specimen was drawn. Do not provided a reason why it was not collected.")
 
-        if cleaned_data.get('reason_not_drawn') == OTHER and not cleaned_data.get('reason_not_drawn_other'):
+        if cleaned_data.get('reason_not_drawn') == 'other' and not cleaned_data.get('reason_not_drawn_other'):
             raise forms.ValidationError(
-                "Please specify Other reason why specimen was not drawn.")
+                "Please specify Other reason why requisition was not drawn.")
 
     def validate_sample_swabs(self):
         cleaned_data = self.cleaned_data
