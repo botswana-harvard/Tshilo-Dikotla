@@ -50,7 +50,7 @@ class MaternalRequisitionForm(RequisitionFormMixin):
             raise forms.ValidationError(
                 "A specimen was drawn. Do not provided a reason why it was not collected.")
 
-        if cleaned_data.get('reason_not_drawn') == OTHER and not cleaned_data.get('reason_not_drawn_other'):
+        if cleaned_data.get('reason_not_drawn') == 'other' and not cleaned_data.get('reason_not_drawn_other'):
             raise forms.ValidationError(
                 "Please specify Other reason why requisition was not drawn.")
 
