@@ -52,12 +52,12 @@
 
     </td></tr>
 {% endblock infants %}
-{% if consent %}
+{% if consent %} 
     {% block maternal_consent %}
     <tr name="top right"><td>
     <H3>Switch Mother's Schedules</H3>
         {% for consent in maternal_eligibility.previous_consents %}
-      		<a href="{% url 'subject_dashboard_url' dashboard_type='maternal' dashboard_model='maternal_eligibility' dashboard_id=maternal_eligibility.pk show='appointments' %}?instruction=V{{consent.version}}"><div nowrap>{{ consent.subject_identifier }} (V{{consent.version}})</div></a>
+      		<a href="{% url 'subject_dashboard_url' dashboard_type='maternal' dashboard_model='maternal_eligibility' dashboard_id=maternal_eligibility.pk show='appointments' %}?instruction={{instruction}}"><div nowrap>{{ consent.subject_identifier }} ({{instruction}})</div></a>
       	{% endfor %}
     </td></tr>
     {% endblock maternal_consent %}
