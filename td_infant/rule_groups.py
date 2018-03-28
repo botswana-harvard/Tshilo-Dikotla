@@ -84,13 +84,22 @@ def func_infant_heu(visit_instance):
     return False
 
 
+def func_infant_heu_and_require_pcr(visit_instance):
+    appointment = visit_instance.appointment
+    latest_maternal_visit = MaternalVisit.objects.filter(
+        appointment__registered_subject__subject_identifier=appointment.registered_subject.relative_identifier,
+    ).order_by('-created').first()
+    if (func_mother_pos(latest_maternal_visit) and
+            visit_instance.appointment.visit_definition.code in ['2010', '2020', '2060',
+                                                                 '2120']):
+        return True
+    return False
+
+
 def func_require_infant_elisa(visit_instance):
     """ Returns true if the infant is HEU and at visit 2180
     otherwise returns false if HEU and not 2180 for PRN."""
-    if visit_instance.appointment.visit_definition.code == '2180' and func_infant_heu:
-        return True
-    elif visit_instance.appointment.visit_definition.code != '2180' and func_infant_heu:
-        return False
+    return visit_instance.appointment.visit_definition.code == '2180' and func_infant_heu(visit_instance)
 
 
 def func_show_infant_nvp_dispensing(visit_instance):
@@ -100,7 +109,7 @@ def func_show_infant_nvp_dispensing(visit_instance):
     try:
         maternal_rando = MaternalRando.objects.get(
             subject_identifier=maternal_registered_subject.subject_identifier)
-        show_infant_nvp_dispensing = func_infant_heu and maternal_rando.rx.strip(
+        show_infant_nvp_dispensing = func_infant_heu(visit_instance) and maternal_rando.rx.strip(
             '\n') == 'NVP'
     except MaternalRando.DoesNotExist:
         pass
@@ -117,7 +126,8 @@ def func_show_nvp_adjustment_2010(visit_instance):
                 appointment__registered_subject__subject_identifier=subject_identifier).order_by('created').first()
             nvp_dispensing = InfantNvpDispensing.objects.get(
                 infant_visit=visit_2000)
-            nvp_adjustment = func_infant_heu and nvp_dispensing.nvp_prophylaxis == YES
+            nvp_adjustment = func_infant_heu(
+                visit_instance) and nvp_dispensing.nvp_prophylaxis == YES
     except InfantVisit.DoesNotExist:
         pass
     except InfantNvpDispensing.DoesNotExist:
@@ -159,6 +169,8 @@ class InfantRegisteredSubjectRuleGroup(RuleGroup):
         app_label = 'td_infant'
         source_fk = None
         source_model = RegisteredSubject
+
+
 site_rule_groups.register(InfantRegisteredSubjectRuleGroup)
 
 
@@ -183,6 +195,7 @@ class InfantFuRuleGroup(RuleGroup):
         source_fk = (InfantVisit, 'infant_visit')
         source_model = InfantFu
 
+
 site_rule_groups.register(InfantFuRuleGroup)
 
 
@@ -199,6 +212,7 @@ class InfantFeedingRuleGroup(RuleGroup):
         app_label = 'td_infant'
         source_fk = (InfantVisit, 'infant_visit')
         source_model = InfantFeeding
+
 
 site_rule_groups.register(InfantFeedingRuleGroup)
 
@@ -217,6 +231,7 @@ class InfantBirthDataRuleGroup(RuleGroup):
         source_fk = (InfantVisit, 'infant_visit')
         source_model = InfantBirthData
 
+
 site_rule_groups.register(InfantBirthDataRuleGroup)
 
 
@@ -224,7 +239,7 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     require_dna_pcr = RequisitionRule(
         logic=Logic(
-            predicate=func_infant_heu,
+            predicate=func_infant_heu_and_require_pcr,
             consequence=UNKEYED,
             alternative=NOT_REQUIRED),
         target_model=[('td_lab', 'infantrequisition')],
@@ -266,5 +281,6 @@ class InfantRequisitionRuleGroup(RuleGroup):
         app_label = 'td_infant'
         source_fk = None
         source_model = RegisteredSubject
+
 
 site_rule_groups.register(InfantRequisitionRuleGroup)

@@ -61,13 +61,13 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
     infant_followup_requisitions = (
         RequisitionPanelTuple(
             10, 'td_lab', 'infantrequisition',
-            'DNA PCR', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
+            'DNA PCR', 'TEST', 'WB', REQUIRED, ADDITIONAL),
         RequisitionPanelTuple(
             20, 'td_lab', 'infantrequisition',
-            'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL),
+            'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
         RequisitionPanelTuple(
-            30, 'td_lab', 'infantrequisition',
-            'ELISA', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL)
+            20, 'td_lab', 'infantrequisition',
+            'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     )
 
     infant_36month_requisitions = (
@@ -83,6 +83,9 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         RequisitionPanelTuple(
             40, 'td_lab', 'infantrequisition',
             'DBS (Store Only)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            50, 'td_lab', 'infantrequisition',
+            'DNA PCR', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     )
 
     infant_18month_requisitions = (
@@ -101,6 +104,9 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         RequisitionPanelTuple(
             60, 'td_lab', 'infantrequisition',
             'PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            70, 'td_lab', 'infantrequisition',
+            'DNA PCR', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     )
 
     visit_definitions = OrderedDict()
