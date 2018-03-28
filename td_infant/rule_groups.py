@@ -83,6 +83,18 @@ def func_infant_heu(visit_instance):
     return False
 
 
+def func_infant_heu_and_require_pcr(visit_instance):
+    appointment = visit_instance.appointment
+    latest_maternal_visit = MaternalVisit.objects.filter(
+        appointment__registered_subject__subject_identifier=appointment.registered_subject.relative_identifier,
+    ).order_by('-created').first()
+    if (func_mother_pos(latest_maternal_visit) and
+            visit_instance.appointment.visit_definition.code in ['2010', '2020', '2060',
+                                                                 '2120']):
+        return True
+    return False
+
+
 def func_require_infant_elisa(visit_instance):
     """ Returns true if the infant is HEU and at visit 2180
     otherwise returns false if HEU and not 2180 for PRN."""
@@ -226,7 +238,7 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     require_dna_pcr = RequisitionRule(
         logic=Logic(
-            predicate=func_infant_heu,
+            predicate=func_infant_heu_and_require_pcr,
             consequence=UNKEYED,
             alternative=NOT_REQUIRED),
         target_model=[('td_lab', 'infantrequisition')],

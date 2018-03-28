@@ -19,7 +19,7 @@ def func_mother_pos(visit_instance):
 
 def func_mother_pos_vl(visit_instance):
     if (func_mother_pos(visit_instance) and
-            (visit_instance.appointment.visit_definition.code in ['1010M' '1020M', '2120M.0'
+            (visit_instance.appointment.visit_definition.code in ['1010M' '1020M', '2120M'
                                                                   '2180M' '2240M'
                                                                   '2300M' '2360M'])):
         return False
@@ -57,7 +57,8 @@ def show_elisa_requisition_hiv_status_ind(visit_instance):
 def func_require_cd4(visit_instance):
     """Return true if mother is HIV+ and does not have a CD4 in the last 3 months."""
     maternal_status_helper = MaternalStatusHelper(visit_instance)
-    if maternal_status_helper.hiv_status == POS:
+    if (maternal_status_helper.hiv_status == POS
+            and visit_instance.appointment.visit_definition.code == '1010M'):
         return maternal_status_helper.eligible_for_cd4
     return False
 

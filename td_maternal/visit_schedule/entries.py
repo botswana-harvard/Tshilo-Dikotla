@@ -86,6 +86,9 @@ maternal_followup2_entries = (
              REQUIRED, NOT_ADDITIONAL),
     CrfTuple(70, 'td_maternal', 'maternalclinicalmeasurementstwo',
              REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(80, 'td_maternal', 'maternalcontraception',
+             REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(90, 'td_maternal', 'rapidtestresult', NOT_REQUIRED, ADDITIONAL),
 )
 
 maternal_followup3_entries = (
@@ -130,6 +133,18 @@ maternal_requisition_antenatal2 = (
     RequisitionPanelTuple(
         10, 'td_lab', 'maternalrequisition',
         'Viral Load', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+    RequisitionPanelTuple(
+        20, 'td_lab', 'maternalrequisition',
+        'CD4', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+    RequisitionPanelTuple(
+        30, 'td_lab', 'maternalrequisition',
+        'Fasting Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+    RequisitionPanelTuple(
+        40, 'td_lab', 'maternalrequisition',
+        'Glucose 1h', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+    RequisitionPanelTuple(
+        50, 'td_lab', 'maternalrequisition',
+        'Glucose 2h', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
 )
 
 maternal_requisition_followup = (
@@ -138,11 +153,5 @@ maternal_requisition_followup = (
         'Viral Load', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
         20, 'td_lab', 'maternalrequisition',
-        'Fasting Glucose', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL),
-    RequisitionPanelTuple(
-        30, 'td_lab', 'maternalrequisition',
-        'Glucose 1h', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL),
-    RequisitionPanelTuple(
-        40, 'td_lab', 'maternalrequisition',
-        'Glucose 2h', 'TEST', 'WB', NOT_REQUIRED, NOT_ADDITIONAL),
+        'CD4', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
 )
