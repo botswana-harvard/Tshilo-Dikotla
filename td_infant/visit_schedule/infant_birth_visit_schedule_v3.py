@@ -100,7 +100,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
             'PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
         RequisitionPanelTuple(
             40, 'td_lab', 'infantrequisition',
-            'DBS (Store Only)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
+            'Infant Serum (Store Only)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
         RequisitionPanelTuple(
             50, 'td_lab', 'infantrequisition',
             'DNA PCR', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
