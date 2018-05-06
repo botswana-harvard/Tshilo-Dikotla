@@ -17,8 +17,36 @@
         <td><B>HIV status:</B> {{ infant_hiv_status }}</td>
     </tr>
 </table>
-    
+
 {% endblock %}
+
+{% block infants %}
+    <tr name="top right"><td>
+    <H3>Registered Infant</H3>
+    {% if infants %}
+        <ul>
+          <li>
+          {% for subject_identifier,infant in infants.items %}
+          	{%  if not instruction == "V1" %}
+	          <A href="{% url 'subject_dashboard_url' dashboard_type='infant' dashboard_model='registered_subject' dashboard_id=infant.dashboard_id show='appointments' %}?instruction=V1">
+	             {{subject_identifier}} {{ infant.gender }} {{ infant.first_name|encrypted }} V1
+	          </A>
+	        {% elif not instruction == "V3" %}
+          <br >
+	          {% if maternal_consent.version == '3' %}
+		           <A href="{% url 'subject_dashboard_url' dashboard_type='infant' dashboard_model='registered_subject' dashboard_id=infant.dashboard_id show='appointments' %}?instruction=V3">
+		             {{subject_identifier}} {{ infant.gender }} {{ infant.first_name|encrypted }} V3
+		          </A>
+		      {% endif %}
+		     {% endif %}
+          {% endfor %}
+        </ul>        
+    {% else %}    
+        no infants
+    {% endif %}
+
+    </td></tr>
+{% endblock infants %}
 
 {% if maternal_consent %}
     {% block maternal_consent %}

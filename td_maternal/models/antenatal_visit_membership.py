@@ -54,7 +54,7 @@ class AntenatalVisitMembership(SyncModelMixin, RequiresConsentMixin,
 
     @property
     def group_names(self):
-        return ['Antenatal Visit']
+        return ['Antenatal Visit', 'Antenatal Visit v3']
 
     @property
     def subject_identifier(self):

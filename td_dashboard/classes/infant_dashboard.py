@@ -1,5 +1,7 @@
+from collections import OrderedDict
 from edc_dashboard.subject import RegisteredSubjectDashboard
 from edc_registration.models import RegisteredSubject
+from edc_base.utils import convert_from_camel
 
 from tshilo_dikotla.constants import INFANT
 from td_infant.models import InfantVisit, InfantBirth
@@ -48,6 +50,7 @@ class InfantDashboard(RegisteredSubjectDashboard):
             search_name=INFANT,
             title='Infant Dashboard',
             subject_dashboard_url=self.subject_dashboard_url,
+            infants=self.get_registered_infant_identifier(),
             infant_hiv_status=self.infant_hiv_status,
             maternal_consent=self.maternal_consent,
             maternal_eligibility=self.maternal_eligibility,
@@ -55,6 +58,26 @@ class InfantDashboard(RegisteredSubjectDashboard):
             infant_birth=self.infant_birth,
             instruction=self.request.GET.get('instruction', self.instruction))
         return self.context
+
+    def get_registered_infant_identifier(self):
+            """Returns an infant identifier associated with the maternal identifier"""
+            infants = OrderedDict()
+            infant_registered_subject = self.registered_subject
+            if self.infant_birth:
+                dct = self.infant_birth.__dict__
+                dct['dashboard_model'] = convert_from_camel(
+                    self.infant_birth._meta.object_name)
+                dct['dashboard_id'] = convert_from_camel(str(self.infant_birth.pk))
+                dct['dashboard_type'] = INFANT
+                infants[infant_registered_subject.subject_identifier] = dct
+            else:
+                dct = {
+                    'subject_identifier': infant_registered_subject.subject_identifier}
+                dct['dashboard_model'] = 'registered_subject'
+                dct['dashboard_id'] = str(infant_registered_subject.pk)
+                dct['dashboard_type'] = INFANT
+                infants[infant_registered_subject.subject_identifier] = dct
+            return infants
 
     @property
     def appointments(self):

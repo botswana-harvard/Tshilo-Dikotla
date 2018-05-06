@@ -66,7 +66,7 @@ class InfantBirth(
 
     @property
     def group_names(self):
-        return ['Infant Enrollment', 'Infant Enrollment1']
+        return ['Infant Enrollment', 'Infant Enrollment v3']
 
     @property
     def maternal_consents(self):

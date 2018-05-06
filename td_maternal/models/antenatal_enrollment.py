@@ -77,7 +77,7 @@ class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, OffStudyMixin, TdAppo
 
     @property
     def group_names(self):
-        return ['Antenatal Enrollment']
+        return ['Antenatal Enrollment', 'Antenatal Enrollment v3']
 
     def unenrolled_error_messages(self):
         """Returns a tuple (True, None) if mother is eligible otherwise
