@@ -46,16 +46,19 @@ ETC_DIR = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(
 if socket.gethostname() == LIVE_SERVER:
     KEY_PATH = '/home/django/source/keys'
 elif socket.gethostname() in TEST_HOSTS + DEVELOPER_HOSTS:
-    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
+    #KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
+    KEY_PATH = '/Users/ckgathi/td_source/keys'
 elif 'test' in sys.argv:
     KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
 else:
-    raise TypeError(
-        'Warning! Unknown hostname for KEY_PATH. \n'
-        'Getting this wrong on a LIVE SERVER will corrupt your encrypted data!!! \n'
-        'Expected hostname to appear in one of '
-        'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
-        'Got hostname=\'{}\'\n'.format(socket.gethostname()))
+#     raise TypeError(
+#         'Warning! Unknown hostname for KEY_PATH. \n'
+#         'Getting this wrong on a LIVE SERVER will corrupt your encrypted data!!! \n'
+#         'Expected hostname to appear in one of '
+#         'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
+#         'Got hostname=\'{}\'\n'.format(socket.gethostname()))
+
+    KEY_PATH = '/Users/ckgathi/td_source/keys'
 
 DEBUG = True
 

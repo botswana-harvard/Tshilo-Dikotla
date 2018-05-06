@@ -108,7 +108,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
                 appointments = Appointment.objects.filter(
                     registered_subject=self.registered_subject,
                     visit_definition__code__in=codes,
-                    visit_definition__instruction__in=[instruction, 'V1_V3']).order_by(
+                    visit_definition__instruction__in=[instruction]).order_by(
                     'visit_definition__time_point', 'visit_instance', 'appt_datetime')
         return appointments
 

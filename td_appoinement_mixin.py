@@ -2,7 +2,7 @@ from edc_appointment.models import AppointmentMixin
 from edc_visit_schedule.models import Schedule, VisitDefinition
 from edc_appointment.exceptions import AppointmentCreateError
 from edc_appointment.models import Appointment
-from edc_constants.constants import COMPLETE_APPT, NEW_APPT
+from edc_constants.constants import COMPLETE_APPT, NEW_APPT, IN_PROGRESS, INCOMPLETE
 
 
 class TdAppointmentMixin(AppointmentMixin):
@@ -29,14 +29,12 @@ class TdAppointmentMixin(AppointmentMixin):
         appointments = []
         default_appt_type = self.get_default_appt_type(self.registered_subject)
         for visit_definition in self.visit_definitions_for_schedule(model_name=self._meta.model_name, instruction=instruction):
-            if visit_definition.instruction == 'V3' and visit_definition.code in [
-                    '2000M', '2010M', '2020M', '2060M', '2120M', '2180M', '2240M', '2300M', '2360M',
-                    '2000', '2010', '2020', '2060', '2120', '2180', '2240', '2300', '2360']:
+            if visit_definition.instruction == 'V3':
                 appointment = Appointment.objects.using(using).filter(
                     registered_subject=self.registered_subject,
                     visit_definition__code=visit_definition.code,
                     visit_definition__instruction='V1',
-                    appt_status=COMPLETE_APPT).last()
+                    appt_status__in=[COMPLETE_APPT, IN_PROGRESS, INCOMPLETE]).last()
                 if not appointment:
                     appointment = self.update_or_create_appointment(
                         self.registered_subject,
