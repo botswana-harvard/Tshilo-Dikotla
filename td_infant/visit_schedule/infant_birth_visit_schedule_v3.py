@@ -12,15 +12,15 @@ from ..models import InfantVisit, InfantBirth
 
 class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
 
-    name = 'birth visit schedule1'
+    name = 'birth visit schedule v3'
     app_label = 'td_infant'
 
     membership_forms = OrderedDict({
-        'infant_enrollment1': MembershipFormTuple('infant_enrollment1', InfantBirth, True)})
+        'infant_enrollmentv3': MembershipFormTuple('infant_enrollmentv3', InfantBirth, True)})
 
     schedules = OrderedDict({
-        'Infant Enrollment1': ScheduleTuple('Infant Enrollment1',
-                                            'infant_enrollment1', None, None)})
+        'Infant Enrollment v3': ScheduleTuple('Infant Enrollment v3',
+                                            'infant_enrollmentv3', None, None)})
 
     infant_birth_requisitions = (
         RequisitionPanelTuple(
@@ -129,7 +129,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
 
     visit_definitions = OrderedDict()
     visit_definitions['2000'] = {
-        'title': 'Birth1',
+        'title': 'Birth v3',
         'time_point': 0,
         'base_interval': 0,
         'base_interval_unit': 'D',
@@ -139,7 +139,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         'window_upper_bound_unit': 'D',
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
-        'schedule': 'Infant Enrollment1',
+        'schedule': 'Infant Enrollment v3',
         'instructions': 'V3',
         'requisitions': infant_birth_requisitions,
         'entries': (
@@ -157,7 +157,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
                      NOT_REQUIRED, ADDITIONAL),
             CrfTuple(70, 'td_infant', 'infantnvpdispensing', NOT_REQUIRED, ADDITIONAL))}
     visit_definitions['2010'] = {
-        'title': 'Infant 1 Month Visit1',
+        'title': 'Infant 1 Month Visit v3',
         'time_point': 10,
         'base_interval': 1,
         'base_interval_unit': 'M',
@@ -167,7 +167,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         'window_upper_bound_unit': 'D',
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
-        'schedule': 'Infant Enrollment1',
+        'schedule': 'Infant Enrollment v3',
         'instructions': 'V3',
         'requisitions': infant_1month_requisitions,
         'entries': (
@@ -185,7 +185,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
                 70, 'td_infant', 'infantnvpadjustment', REQUIRED, NOT_ADDITIONAL),
             CrfTuple(80, 'td_infant', 'infantfuimmunizations', REQUIRED, NOT_ADDITIONAL),)}
     visit_definitions['2020'] = {
-        'title': 'Infant 2 Month Visit1',
+        'title': 'Infant 2 Month Visit v3',
         'time_point': 20,
         'base_interval': 2,
         'base_interval_unit': 'M',
@@ -195,7 +195,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         'window_upper_bound_unit': 'D',
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
-        'schedule': 'Infant Enrollment1',
+        'schedule': 'Infant Enrollment v3',
         'instructions': 'V3',
         'requisitions': infant_followup_requisitions,
         'entries': (
@@ -212,7 +212,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
             CrfTuple(60, 'td_infant', 'infantfeeding', REQUIRED, NOT_ADDITIONAL))}
 
     visit_definitions['2060'] = {
-        'title': 'Infant 6 Month Visit1',
+        'title': 'Infant 6 Month Visit v3',
         'time_point': 60,
         'base_interval': 6,
         'base_interval_unit': 'M',
@@ -222,7 +222,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         'window_upper_bound_unit': 'D',
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
-        'schedule': 'Infant Enrollment1',
+        'schedule': 'Infant Enrollment v3',
         'instructions': 'V3',
         'requisitions': infant_followup_requisitions,
         'entries': (
@@ -239,7 +239,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
             CrfTuple(80, 'td_infant', 'infantfuimmunizations', REQUIRED, NOT_ADDITIONAL),)}
 
     visit_definitions['2120'] = {
-        'title': 'Infant 12 Month Visit1',
+        'title': 'Infant 12 Month Visit v3',
         'time_point': 120,
         'base_interval': 12,
         'base_interval_unit': 'M',
@@ -249,7 +249,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         'window_upper_bound_unit': 'M',
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
-        'schedule': 'Infant Enrollment1',
+        'schedule': 'Infant Enrollment v3',
         'instructions': 'V3',
         'requisitions': infant_followup_requisitions,
         'entries': (
@@ -267,7 +267,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
                      REQUIRED, NOT_ADDITIONAL),)}
 
     visit_definitions['2180'] = {
-        'title': 'Infant 18 Month Visit1',
+        'title': 'Infant 18 Month Visit v3',
         'time_point': 180,
         'base_interval': 18,
         'base_interval_unit': 'M',
@@ -277,7 +277,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         'window_upper_bound_unit': 'M',
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
-        'schedule': 'Infant Enrollment1',
+        'schedule': 'Infant Enrollment v3',
         'instructions': 'V3',
         'requisitions': infant_18month_requisitions,
         'entries': (
@@ -295,7 +295,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
                      REQUIRED, NOT_ADDITIONAL),)}
 
     visit_definitions['2240'] = {
-        'title': 'Infant 24 Month Visit1',
+        'title': 'Infant 24 Month Visit v3',
         'time_point': 240,
         'base_interval': 24,
         'base_interval_unit': 'M',
@@ -305,7 +305,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         'window_upper_bound_unit': 'M',
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
-        'schedule': 'Infant Enrollment1',
+        'schedule': 'Infant Enrollment v3',
         'instructions': 'V3',
         'requisitions': infant_24month_requisitions,
         'entries': (
@@ -323,7 +323,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
                      REQUIRED, NOT_ADDITIONAL),)}
 
     visit_definitions['2300'] = {
-        'title': 'Infant 30 Month Visit1',
+        'title': 'Infant 30 Month Visit v3',
         'time_point': 300,
         'base_interval': 30,
         'base_interval_unit': 'M',
@@ -333,7 +333,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         'window_upper_bound_unit': 'M',
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
-        'schedule': 'Infant Enrollment1',
+        'schedule': 'Infant Enrollment v3',
         'instructions': 'V3',
         'requisitions': infant_followup_requisitions,
         'entries': (
@@ -351,7 +351,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
                      REQUIRED, NOT_ADDITIONAL),)}
 
     visit_definitions['2360'] = {
-        'title': 'Infant 36 Month Visit1',
+        'title': 'Infant 36 Month Visit v3',
         'time_point': 360,
         'base_interval': 36,
         'base_interval_unit': 'M',
@@ -361,7 +361,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         'window_upper_bound_unit': 'M',
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
-        'schedule': 'Infant Enrollment1',
+        'schedule': 'Infant Enrollment v3',
         'instructions': 'V3',
         'requisitions': infant_36month_requisitions,
         'entries': (
