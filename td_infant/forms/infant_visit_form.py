@@ -93,7 +93,7 @@ class InfantVisitForm(VisitFormMixin, BaseModelForm):
                     version=td_consent_version.version)
             except MaternalConsent.DoesNotExist:
                 raise forms.ValidationError(
-                    f'Maternal Consent form for version {td_consent_version.version} before proceeding')
+                    'Maternal Consent form for version {} before proceeding'.format(td_consent_version.version))
 
     @property
     def maternal_eligibility(self):
