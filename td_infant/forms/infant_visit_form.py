@@ -81,11 +81,19 @@ class InfantVisitForm(VisitFormMixin, BaseModelForm):
 
     def validate_current_consent_version(self):
         try:
-            TdConsentVersion.objects.get(
+            td_consent_version = TdConsentVersion.objects.get(
                 maternal_eligibility=self.maternal_eligibility)
         except TdConsentVersion.DoesNotExist:
             raise forms.ValidationError(
                 'Complete mother\'s consent version form before proceeding')
+        else:
+            try:
+                MaternalConsent.objects.get(
+                    maternal_eligibility=self.maternal_eligibility,
+                    version=td_consent_version.version)
+            except MaternalConsent.DoesNotExist:
+                raise forms.ValidationError(
+                    f'Maternal Consent form for version {td_consent_version.version} before proceeding')
 
     @property
     def maternal_eligibility(self):

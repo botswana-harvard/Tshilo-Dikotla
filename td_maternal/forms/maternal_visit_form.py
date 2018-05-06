@@ -3,9 +3,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminRadioSelect, AdminRadioFieldRenderer
 
 from edc_base.form.old_forms import BaseModelForm
-from edc_constants.constants import ON_STUDY, MISSED_VISIT
+from edc_constants.constants import ON_STUDY
 from edc_visit_tracking.forms import VisitFormMixin
 
+from td_maternal.models import TdConsentVersion, MaternalEligibility, MaternalConsent
 from tshilo_dikotla.choices import VISIT_REASON, VISIT_INFO_SOURCE, MATERNAL_VISIT_STUDY_STATUS
 
 from ..models import MaternalVisit, MaternalUltraSoundInitial
@@ -36,6 +37,7 @@ class MaternalVisitForm (VisitFormMixin, BaseModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalVisitForm, self).clean()
+        self.validate_current_consent_version()
         instance = None
         if self.instance.id:
             instance = self.instance
@@ -63,6 +65,33 @@ class MaternalVisitForm (VisitFormMixin, BaseModelForm):
         except AttributeError:
             consent = self.get_birth_model_as_consent(registered_subject)
         return consent
+
+    def validate_current_consent_version(self):
+        try:
+            td_consent_version = TdConsentVersion.objects.get(
+                maternal_eligibility=self.maternal_eligibility)
+        except TdConsentVersion.DoesNotExist:
+            raise forms.ValidationError(
+                'Complete mother\'s consent version form before proceeding')
+        else:
+            try:
+                MaternalConsent.objects.get(
+                    maternal_eligibility=self.maternal_eligibility,
+                    version=td_consent_version.version)
+            except MaternalConsent.DoesNotExist:
+                raise forms.ValidationError(
+                    f'Maternal Consent form for version {td_consent_version.version} before proceeding')
+
+    @property
+    def maternal_eligibility(self):
+        cleaned_data = self.cleaned_data
+        subject_identifier = cleaned_data.get(
+            'appointment').registered_subject.subject_identifier
+        try:
+            return MaternalEligibility.objects.get(
+                registered_subject__subject_identifier=subject_identifier)
+        except MaternalEligibility.DoesNotExist:
+            return
 
 #     def get_birth_model_as_consent(self, registered_subject):
 #         """Return the birth model in place of the consent_model."""
