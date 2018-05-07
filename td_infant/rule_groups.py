@@ -72,7 +72,6 @@ def func_show_infant_arv_proph(visit_instance):
             dose_status='Permanently discontinued').order_by('-created').first()
 
 
-
 def func_infant_heu(visit_instance):
     """Returns true if mother of the infant is hiv positive."""
     appointment = visit_instance.appointment

@@ -20,7 +20,7 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
 
     schedules = OrderedDict({
         'Infant Enrollment v3': ScheduleTuple('Infant Enrollment v3',
-                                            'infant_enrollmentv3', None, None)})
+                                              'infant_enrollmentv3', None, None)})
 
     infant_birth_requisitions = (
         RequisitionPanelTuple(
@@ -67,7 +67,10 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
             'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
         RequisitionPanelTuple(
             30, 'td_lab', 'infantrequisition',
-            'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+            'Infant Insulin', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            40, 'td_lab', 'infantrequisition',
+            'ELISA', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     )
 
     infant_24month_requisitions = (
@@ -86,6 +89,9 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         RequisitionPanelTuple(
             50, 'td_lab', 'infantrequisition',
             'Infant Serum (Store Only)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
+        RequisitionPanelTuple(
+            60, 'td_lab', 'infantrequisition',
+            'ELISA', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     )
 
     infant_36month_requisitions = (
@@ -104,6 +110,9 @@ class InfantBirthVisitScheduleV3(VisitScheduleConfiguration):
         RequisitionPanelTuple(
             50, 'td_lab', 'infantrequisition',
             'DNA PCR', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            60, 'td_lab', 'infantrequisition',
+            'ELISA', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     )
 
     infant_18month_requisitions = (

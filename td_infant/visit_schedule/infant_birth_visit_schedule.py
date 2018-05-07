@@ -67,7 +67,10 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
         RequisitionPanelTuple(
             30, 'td_lab', 'infantrequisition',
-            'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+            'Infant Insulin', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            40, 'td_lab', 'infantrequisition',
+            'ELISA', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     )
 
     infant_36month_requisitions = (
@@ -86,6 +89,9 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         RequisitionPanelTuple(
             50, 'td_lab', 'infantrequisition',
             'DNA PCR', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            60, 'td_lab', 'infantrequisition',
+            'ELISA', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     )
 
     infant_18month_requisitions = (
