@@ -66,8 +66,11 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             20, 'td_lab', 'infantrequisition',
             'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
         RequisitionPanelTuple(
-            20, 'td_lab', 'infantrequisition',
-            'Infant Glucose', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+            30, 'td_lab', 'infantrequisition',
+            'Infant Insulin', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            40, 'td_lab', 'infantrequisition',
+            'ELISA', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     )
 
     infant_36month_requisitions = (
@@ -86,6 +89,9 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         RequisitionPanelTuple(
             50, 'td_lab', 'infantrequisition',
             'DNA PCR', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+        RequisitionPanelTuple(
+            60, 'td_lab', 'infantrequisition',
+            'ELISA', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     )
 
     infant_18month_requisitions = (
@@ -122,7 +128,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
-        'instructions': None,
+        'instructions': 'V1',
         'requisitions': infant_birth_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantbirthdata',
@@ -150,7 +156,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
-        'instructions': None,
+        'instructions': 'V1',
         'requisitions': infant_1month_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
@@ -178,7 +184,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
-        'instructions': None,
+        'instructions': 'V1',
         'requisitions': infant_followup_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
@@ -205,7 +211,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
-        'instructions': None,
+        'instructions': 'V1',
         'requisitions': infant_followup_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
@@ -232,7 +238,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
-        'instructions': None,
+        'instructions': 'V1',
         'requisitions': infant_followup_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
@@ -260,7 +266,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
-        'instructions': None,
+        'instructions': 'V1',
         'requisitions': infant_18month_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
@@ -288,7 +294,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
-        'instructions': None,
+        'instructions': 'V1',
         'requisitions': infant_followup_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
@@ -316,7 +322,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
-        'instructions': None,
+        'instructions': 'V1',
         'requisitions': infant_followup_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
@@ -344,7 +350,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
         'grouping': INFANT,
         'visit_tracking_model': InfantVisit,
         'schedule': 'Infant Enrollment',
-        'instructions': None,
+        'instructions': 'V1',
         'requisitions': infant_36month_requisitions,
         'entries': (
             CrfTuple(10, 'td_infant', 'infantfu', REQUIRED, NOT_ADDITIONAL),
