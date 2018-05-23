@@ -33,7 +33,7 @@ class InfantFuPhysical(InfantCrfModel):
         decimal_places=2,
         verbose_name="What was the head circumference in centimeters? ",
         help_text="Please measure twice and enter the average of the two. Measured in centimeters, (cm)",
-        validators=[MinValueValidator(0), MaxValueValidator(50.0), ],
+        validators=[MinValueValidator(0), MaxValueValidator(52.0), ],
     )
 
     general_activity = models.CharField(
