@@ -14,6 +14,7 @@ from .aliquot import Aliquot
 from .aliquot_type import AliquotType
 from .packing_list import PackingList
 from .panel import Panel
+from .receive import Receive
 
 
 class MaternalRequisitionManager(CrfModelManager):
@@ -46,6 +47,17 @@ class MaternalRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin,
     history = SyncHistoricalRecords()
 
     entry_meta_data_manager = RequisitionMetaDataManager(MaternalVisit)
+
+    def save(self, *args, **kwargs):
+        if self.id:
+            try:
+                receive = Receive.objects.get(requisition_identifier=self.requisition_identifier)
+            except Receive.DoesNotExist:
+                pass
+            else:
+                receive.drawn_datetime = self.drawn_datetime
+                receive.save()
+        super(RequisitionModelMixin, self).save(*args, **kwargs)
 
     def __str__(self):
         return '{0} {1}'.format(str(self.panel), self.requisition_identifier)
