@@ -88,8 +88,9 @@ def func_infant_heu_and_require_pcr(visit_instance):
     latest_maternal_visit = MaternalVisit.objects.filter(
         appointment__registered_subject__subject_identifier=appointment.registered_subject.relative_identifier,
     ).order_by('-created').first()
-    if (func_mother_pos(latest_maternal_visit) and
-            visit_instance.appointment.visit_definition.code in ['2010', '2020', '2060',
+    if (func_mother_pos(latest_maternal_visit)
+        and visit_instance.appointment.visit_instance == '0'
+        and visit_instance.appointment.visit_definition.code in ['2010', '2020', '2060',
                                                                  '2120']):
         return True
     return False
@@ -98,7 +99,9 @@ def func_infant_heu_and_require_pcr(visit_instance):
 def func_require_infant_elisa(visit_instance):
     """ Returns true if the infant is HEU and at visit 2180
     otherwise returns false if HEU and not 2180 for PRN."""
-    return visit_instance.appointment.visit_definition.code == '2180' and func_infant_heu(visit_instance)
+    return (visit_instance.appointment.visit_definition.code == '2180'
+            and visit_instance.appointment.visit_instance == '0'
+            and func_infant_heu(visit_instance))
 
 
 def func_show_infant_nvp_dispensing(visit_instance):
