@@ -106,7 +106,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             'ELISA', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
         RequisitionPanelTuple(
             50, 'td_lab', 'infantrequisition',
-            'Infant Serum (Store Only)', 'STORAGE', 'WB', REQUIRED, NOT_ADDITIONAL),
+            'Infant Serum (Store Only)', 'STORAGE', 'WB', REQUIRED, ADDITIONAL),
         RequisitionPanelTuple(
             60, 'td_lab', 'infantrequisition',
             'PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB', REQUIRED, ADDITIONAL),
