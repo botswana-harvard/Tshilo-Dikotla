@@ -14,6 +14,7 @@ from .aliquot import Aliquot
 from .aliquot_type import AliquotType
 from .packing_list import PackingList
 from .panel import Panel
+from .receive import Receive
 
 
 class InfantRequisitionManager(CrfModelManager):
@@ -45,6 +46,17 @@ class InfantRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin, Ex
     history = SyncHistoricalRecords()
 
     entry_meta_data_manager = RequisitionMetaDataManager(InfantVisit)
+
+    def save(self, *args, **kwargs):
+        if self.id:
+            try:
+                receive = Receive.objects.get(requisition_identifier=self.requisition_identifier)
+            except Receive.DoesNotExist:
+                pass
+            else:
+                receive.drawn_datetime = self.drawn_datetime
+                receive.save()
+        super(RequisitionModelMixin, self).save(*args, **kwargs)
 
     def get_visit(self):
         return self.infant_visit
