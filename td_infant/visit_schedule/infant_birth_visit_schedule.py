@@ -36,7 +36,7 @@ class InfantBirthVisitSchedule(VisitScheduleConfiguration):
             40, 'td_lab', 'infantrequisition',
             'Infant PBMC PL', 'TEST', 'WB', REQUIRED, ADDITIONAL),
         RequisitionPanelTuple(
-            30, 'td_lab', 'infantrequisition',
+            50, 'td_lab', 'infantrequisition',
             'DNA PCR', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     )
 
