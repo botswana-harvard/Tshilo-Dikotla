@@ -12,8 +12,7 @@ from .classes import MaternalStatusHelper
 def func_mother_pos(visit_instance):
     """Returns true if mother is hiv positive."""
     maternal_status_helper = MaternalStatusHelper(visit_instance)
-    if (maternal_status_helper.hiv_status == POS
-            and visit_instance.appointment.visit_instance == '0'):
+    if maternal_status_helper.hiv_status == POS:
         return True
     return False
 
