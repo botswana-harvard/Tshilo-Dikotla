@@ -671,7 +671,7 @@ class TestRuleGroups(BaseTestCase):
         self.infant_visit = InfantVisitFactory(appointment=self.appointment)
         self.assertEqual(
             RequisitionMetaData.objects.filter(
-                entry_status='NEW',
+                entry_status=UNKEYED,
                 lab_entry__app_label='td_lab',
                 lab_entry__model_name='infantrequisition',
                 lab_entry__requisition_panel__name='DBS (Store Only)',
@@ -725,11 +725,11 @@ class TestRuleGroups(BaseTestCase):
         self.infant_visit = InfantVisitFactory(appointment=self.appointment)
         self.assertEqual(
             RequisitionMetaData.objects.filter(
-                entry_status='NEW',
+                entry_status=NOT_REQUIRED,
                 lab_entry__app_label='td_lab',
                 lab_entry__model_name='infantrequisition',
                 lab_entry__requisition_panel__name='DBS (Store Only)',
-                appointment=self.appointment).count(), 0)
+                appointment=self.appointment).count(), 1)
 
     def test_infant_nvp_dispensing_required_2000(self):
         options = {'registered_subject': self.registered_subject,
