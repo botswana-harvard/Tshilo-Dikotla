@@ -17,6 +17,10 @@ def func_mother_pos(visit_instance):
     return False
 
 
+def require_pbmc_vl(visit_instance):
+    return func_mother_pos(visit_instance) and visit_instance.appointment.visit_instance == '0'
+
+
 def func_mother_pos_vl(visit_instance):
     if (func_mother_pos(visit_instance) and
             (visit_instance.appointment.visit_definition.code in ['1010M' '1020M', '2120M'
@@ -173,7 +177,7 @@ class MaternalRequisitionRuleGroup(RuleGroup):
 
     require_pbmc_vl = RequisitionRule(
         logic=Logic(
-            predicate=func_mother_pos,
+            predicate=require_pbmc_vl,
             consequence=UNKEYED,
             alternative=NOT_REQUIRED),
         target_model=[('td_lab', 'maternalrequisition')],

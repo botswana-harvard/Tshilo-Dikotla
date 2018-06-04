@@ -114,16 +114,16 @@ maternal_requisition_antenatal1 = (
         'PBMC VL', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
         30, 'td_lab', 'maternalrequisition',
-        'Fasting Glucose', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
+        'Fasting Glucose', 'TEST', 'WB', REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
         40, 'td_lab', 'maternalrequisition',
-        'Glucose 1h', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
+        'Glucose 1h', 'TEST', 'WB', REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
         50, 'td_lab', 'maternalrequisition',
-        'Glucose 2h', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
+        'Glucose 2h', 'TEST', 'WB', REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
         60, 'td_lab', 'maternalrequisition',
-        'PBMC Plasma (STORE ONLY)', 'TEST', 'WB', REQUIRED, NOT_ADDITIONAL),
+        'PBMC Plasma (STORE ONLY)', 'TEST', 'WB', REQUIRED, ADDITIONAL),
     RequisitionPanelTuple(
         70, 'td_lab', 'maternalrequisition',
         'Viral Load', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
