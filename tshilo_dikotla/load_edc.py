@@ -20,14 +20,14 @@ def load_edc():
     if 'test' in sys.argv:
         f = open(os.path.join(
                  Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1).child('td_maternal').child('tests'), 'test_randomization.csv'))
-    else:
-        f = open(os.path.join(
-                 Path(os.path.dirname(os.path.realpath(__file__))).ancestor(2).child('etc'), 'randomization.csv'))
-    for index, line in enumerate(f.readlines()):
-        if index == 0:
-            continue
-        seq, drug_assignment = line.split(',')
-        RandomizationItem.objects.get_or_create(name=seq, field_name=drug_assignment)
+    # else:
+    #    f = open(os.path.join(
+    #             Path(os.path.dirname(os.path.realpath(__file__))).ancestor(2).child('etc'), 'randomization.csv'))
+    # for index, line in enumerate(f.readlines()):
+    #    if index == 0:
+    #        continue
+    #    seq, drug_assignment = line.split(',')
+    #    RandomizationItem.objects.get_or_create(name=seq, field_name=drug_assignment)
 
     edc_base_startup()
     site_lab_profiles.autodiscover()
@@ -40,5 +40,3 @@ def load_edc():
     site_sections.update_section_lists()
     site_model_callers.autodiscover()
     admin.autodiscover()
-
-

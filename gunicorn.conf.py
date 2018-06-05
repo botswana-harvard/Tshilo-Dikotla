@@ -9,7 +9,9 @@ from unipath import Path
 PROJECT_ROOT = Path(os.path.dirname(os.path.realpath(__file__)))
 
 bind = "127.0.0.1:9000"  # Don't use port 80 because nginx occupied it already.
-errorlog = os.path.join(PROJECT_ROOT, 'logs/gunicorn-error.log')  # Make sure you have the log folder create
+# Make sure you have the log folder create
+errorlog = os.path.join(PROJECT_ROOT, 'logs/gunicorn-error.log')
 accesslog = os.path.join(PROJECT_ROOT, 'logs/gunicorn-access.log')
 loglevel = 'debug'
-workers = 1 # the number of recommended workers is '2 * number of CPUs + 1'
+workers = 2  # the number of recommended workers is '2 * number of CPUs + 1'
+timeout = 300
