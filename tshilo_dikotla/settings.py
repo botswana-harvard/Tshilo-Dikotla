@@ -41,7 +41,8 @@ BASE_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
 MEDIA_ROOT = BASE_DIR.child('media')
 PROJECT_DIR = Path(os.path.dirname(os.path.realpath(__file__)))
 PROJECT_ROOT = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(1)
-ETC_DIR = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(2).child('etc')
+ETC_DIR = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(
+    2).child('etc')
 
 if socket.gethostname() == LIVE_SERVER:
     KEY_PATH = '/home/django/source/tshilo_dikotla/keys'
@@ -61,6 +62,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+USE_X_FORWARDED_HOST = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -69,6 +71,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'simple_history',
     'rest_framework',
     'rest_framework.authtoken',
@@ -85,7 +88,7 @@ INSTALLED_APPS = [
     'edc_configuration',
     'corsheaders',
     'crispy_forms',
-#     'edc_consent',
+    #     'edc_consent',
     'edc_constants',
     'edc_content_type_map',
     'edc_dashboard',
@@ -97,7 +100,7 @@ INSTALLED_APPS = [
     'edc_offstudy',
     'edc_registration',
     'edc_rule_groups',
-#     'edc_sync',
+    #     'edc_sync',
     'edc_sync_files',
     'django_appconfig_ini',
     'edc_code_lists',
@@ -118,7 +121,7 @@ INSTALLED_APPS = [
 ]
 
 if 'test' in sys.argv:
-#     INSTALLED_APPS.append('edc_testing')
+    #     INSTALLED_APPS.append('edc_testing')
     # TODO: Make this list auto generate from INSTALLED_APPS
     # Ignore running migrations on unit tests, greately speeds up tests.
     MIGRATION_MODULES = {"edc_registration": None,
@@ -210,7 +213,6 @@ TEMPLATES = [
 ]
 
 
-
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
@@ -248,7 +250,7 @@ IS_SECURE_DEVICE = True
 FIELD_MAX_LENGTH = 'default'
 
 # Internationalization
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 LANGUAGES = (
     ('tn', 'Setswana'),
@@ -276,7 +278,8 @@ STATICFILES_FINDERS = (
 )
 
 # edc.crytpo_fields encryption keys
-# developers should set by catching their hostname instead of setting explicitly
+# developers should set by catching their hostname instead of setting
+# explicitly
 
 GIT_DIR = BASE_DIR.ancestor(1)
 
@@ -344,8 +347,10 @@ AUTH_PASSWORD_VALIDATORS = [
 try:
     config = configparser.ConfigParser()
     config.read(os.path.join(ETC_DIR, 'edc_sync.ini'))
-    CORS_ORIGIN_WHITELIST = tuple(config['corsheaders'].get('cors_origin_whitelist').split(','))
-    CORS_ORIGIN_ALLOW_ALL = config['corsheaders'].getboolean('cors_origin_allow_all', True)
+    CORS_ORIGIN_WHITELIST = tuple(
+        config['corsheaders'].get('cors_origin_whitelist').split(','))
+    CORS_ORIGIN_ALLOW_ALL = config['corsheaders'].getboolean(
+        'cors_origin_allow_all', True)
 except KeyError:
     CORS_ORIGIN_WHITELIST = None
     CORS_ORIGIN_ALLOW_ALL = True

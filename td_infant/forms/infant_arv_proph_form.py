@@ -68,7 +68,7 @@ class InfantArvProphModForm(ModelForm):
     def clean(self):
         cleaned_data = self.cleaned_data
         self.validate_proph_mod_fields()
-        self.validate_infant_arv_code()
+        # self.validate_infant_arv_code()
         return cleaned_data
 
     def validate_proph_mod_fields(self):
