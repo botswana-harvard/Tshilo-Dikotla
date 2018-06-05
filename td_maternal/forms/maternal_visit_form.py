@@ -107,7 +107,8 @@ class MaternalVisitForm (VisitFormMixin, BaseModelForm):
         registered_subject = cleaned_data['appointment'].registered_subject
         if cleaned_data['appointment'].visit_definition.code == '1020M':
             try:
-                MaternalUltraSoundInitial.objects.get(maternal_visit__appointment__registered_subject=registered_subject)
+                MaternalUltraSoundInitial.objects.get(
+                    maternal_visit__appointment__registered_subject=registered_subject)
             except MaternalUltraSoundInitial.DoesNotExist:
                 raise forms.ValidationError('Please ensure you have filled Maternal Ultrasound Initial Form before'
                                             ' continuing.')

@@ -13,6 +13,11 @@ test-*
 db.sqlite3
 etc/*
 #tshilo_dikotla/apps/*/migrations/
+td_infant/migrations/*
+td_maternal/migrations/*
+td_list/migrations/*
+td_lab/migrations/*
+call_manager/migrations/*
 getresults_receive/.DS_Store
 # C extensions
 *.so
