@@ -46,7 +46,7 @@ class TestMaternalArvPregForm(BaseTestCase):
             'is_interrupt': NO,
             'interrupt': 'N/A',
             'interrupt_other': '',
-            'comment': '',}
+            'comment': '', }
 
 #     def test_valid_regimen_but_no_arv(self):
 #             """Assert that Enrollment shows participant on valid_regimen but now says
@@ -79,11 +79,12 @@ class TestMaternalArvPregForm(BaseTestCase):
 
     def test_took_arv(self):
         """Assert arv taken but none listed"""
-        maternal_arv_preg = MaternalArvPregFactory(maternal_visit = self.maternal_visit)
+        maternal_arv_preg = MaternalArvPregFactory(
+            maternal_visit=self.maternal_visit)
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
-            'arv_code': '3TC', 
-            'start_date':timezone.now().date() - timezone.timedelta(days=1),
+            'arv_code': '3TC',
+            'start_date': timezone.now().date() - timezone.timedelta(days=1),
             'stop_date': timezone.now().date()
         }
         form = MaternalArvForm(data=inline_data)
@@ -95,7 +96,8 @@ class TestMaternalArvPregForm(BaseTestCase):
         """Assert you cannot put a stop date that is before the start date"""
         self.options['arv_code'] = '3TC'
         self.options['start_date'] = timezone.now().date()
-        self.options['stop_date'] = timezone.now().date() - timezone.timedelta(days=1)
+        self.options[
+            'stop_date'] = timezone.now().date() - timezone.timedelta(days=1)
         form = MaternalArvForm(data=self.options)
         self.assertIn(
             'Your stop date of {} is prior to start date of {}. '
@@ -104,17 +106,18 @@ class TestMaternalArvPregForm(BaseTestCase):
 
     def test_validate_historical_and_present_arv_start_dates(self):
         """"""
-        maternal_arv_preg = MaternalArvPregFactory(maternal_visit = self.maternal_visit, took_arv=YES)
+        maternal_arv_preg = MaternalArvPregFactory(
+            maternal_visit=self.maternal_visit, took_arv=YES)
         maternalarvhistory = MaternalArvHistoryFactory(
             maternal_visit=self.maternal_visit, haart_start_date=(timezone.datetime.now() - relativedelta(weeks=9)).date())
         inline_data = {
             'maternal_arv_preg': maternal_arv_preg.id,
-            'arv_code': 'Zidovudine', 
-            'start_date':timezone.now().date() - timezone.timedelta(weeks=10),
+            'arv_code': 'Zidovudine',
+            'start_date': timezone.now().date() - timezone.timedelta(weeks=10),
             'stop_date': timezone.now().date()
         }
         form = MaternalArvForm(data=inline_data)
         self.assertIn(
             "Your ARV start date {} in this pregnancy cannot be before your "
             "Historical ARV date {}".format(
-            inline_data['start_date'], maternalarvhistory.haart_start_date), form.errors.get('__all__'))
+                inline_data['start_date'], maternalarvhistory.haart_start_date), form.errors.get('__all__'))
