@@ -44,21 +44,18 @@ ETC_DIR = Path(os.path.dirname(os.path.realpath(__file__))).ancestor(
     2).child('etc')
 
 if socket.gethostname() == LIVE_SERVER:
-    KEY_PATH = '/home/django/source/keys'
+    KEY_PATH = '/home/django/source/tshilo_dikotla/keys'
 elif socket.gethostname() in TEST_HOSTS + DEVELOPER_HOSTS:
-    #KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
-    KEY_PATH = '/Users/ckgathi/td_source/keys'
+    KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
 elif 'test' in sys.argv:
     KEY_PATH = os.path.join(SOURCE_ROOT, 'crypto_fields/test_keys')
 else:
-    #     raise TypeError(
-    #         'Warning! Unknown hostname for KEY_PATH. \n'
-    #         'Getting this wrong on a LIVE SERVER will corrupt your encrypted data!!! \n'
-    #         'Expected hostname to appear in one of '
-    #         'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
-    #         'Got hostname=\'{}\'\n'.format(socket.gethostname()))
-
-    KEY_PATH = '/Users/ckgathi/td_source/keys'
+    raise TypeError(
+        'Warning! Unknown hostname for KEY_PATH. \n'
+        'Getting this wrong on a LIVE SERVER will corrupt your encrypted data!!! \n'
+        'Expected hostname to appear in one of '
+        'settings.LIVE_SERVER, settings.TEST_HOSTS or settings.DEVELOPER_HOSTS. '
+        'Got hostname=\'{}\'\n'.format(socket.gethostname()))
 
 DEBUG = True
 
@@ -234,7 +231,7 @@ if socket.gethostname() in DEVELOPER_HOSTS:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         },
     }
-elif socket.gethostname() == 'ckgathi':
+elif socket.gethostname() == LIVE_SERVER:
     SECRET_KEY = PRODUCTION_SECRET_KEY
     DATABASES = PRODUCTION_POSTGRES
 elif socket.gethostname() in TEST_HOSTS:
