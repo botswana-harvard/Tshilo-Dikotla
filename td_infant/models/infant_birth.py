@@ -84,6 +84,7 @@ class InfantBirth(
         self.create_all(
             base_appt_datetime=maternal_labour_del.delivery_datetime, using=using, instruction=instruction)
 
+
     def get_subject_identifier(self):
         return self.registered_subject.subject_identifier
 
