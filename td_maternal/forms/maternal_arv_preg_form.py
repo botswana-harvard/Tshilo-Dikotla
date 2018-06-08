@@ -1,5 +1,5 @@
 from edc_constants.constants import YES, NO, NOT_APPLICABLE
-# from edc_appointment.models import Appointment
+from edc_appointment.models import Appointment
 
 from django import forms
 
@@ -142,7 +142,6 @@ class MaternalArvForm(BaseMaternalModelForm):
         cleaned_data = self.cleaned_data
         subject_identifier = cleaned_data.get(
             'maternal_arv_preg').maternal_visit.appointment.registered_subject.subject_identifier
-        print('>>>>>>>>>>>>', subject_identifier)
         previous_visit = get_previous_visit(
             visit_model=cleaned_data.get('maternal_arv_preg').maternal_visit,
             timepoints=['1000M', '1020M', '2000M'],
