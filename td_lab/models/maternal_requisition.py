@@ -48,17 +48,6 @@ class MaternalRequisition(CrfModelMixin, SyncModelMixin, RequisitionModelMixin,
 
     entry_meta_data_manager = RequisitionMetaDataManager(MaternalVisit)
 
-    def save(self, *args, **kwargs):
-        if self.id:
-            try:
-                receive = Receive.objects.get(requisition_identifier=self.requisition_identifier)
-            except Receive.DoesNotExist:
-                pass
-            else:
-                receive.drawn_datetime = self.drawn_datetime
-                receive.save()
-        super(RequisitionModelMixin, self).save(*args, **kwargs)
-
     def __str__(self):
         return '{0} {1}'.format(str(self.panel), self.requisition_identifier)
 

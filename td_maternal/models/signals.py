@@ -126,12 +126,12 @@ def maternal_consent_on_post_save(sender, instance, raw, created, using, **kwarg
                     maternal_labour_del.save()
                     from td_infant.models import InfantBirth
                     try:
-                        infant_birth = InfantBirth.objects.get(maternal_labour_del=maternal_labour_del)
+                        infant_birth = InfantBirth.objects.get(
+                            maternal_labour_del=maternal_labour_del)
                     except InfantBirth.DoesNotExist:
                         pass
                     else:
                         infant_birth.save()
-                
 
 
 @receiver(post_save, weak=False, dispatch_uid="ineligible_take_off_study")
