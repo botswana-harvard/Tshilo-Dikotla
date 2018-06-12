@@ -29,9 +29,11 @@ OFF_STUDY_REASON = [
     ('not_18'.format(MIN_AGE_OF_CONSENT),
      ' Mother of infant found to be less than {} years of age'.format(MIN_AGE_OF_CONSENT)),
     ('not_citizen', ' Mother found not be a citizen of Botswana'),
-    ('moved', ' Subject will be moving out of study area or unable to stay in study area'),
+    ('moved',
+     ' Subject will be moving out of study area or unable to stay in study area'),
     ('lost_no_contact', ' Lost to follow-up, unable to locate'),
-    ('lost_contacted', ' Lost to follow-up, contacted but did not come to study clinic'),
+    ('lost_contacted',
+     ' Lost to follow-up, contacted but did not come to study clinic'),
     ('withdrew_by_mother',
      ' Mother changed mind and withdrew consent'),
     ('withdrew_by_father',
@@ -39,7 +41,8 @@ OFF_STUDY_REASON = [
     ('withdrew_by_family',
      ' Other family member did not want mother/infant to participate and participant withdrew consent'),
     ('hiv_pos', ' Infant found to be HIV-infected'),
-    ('ill', ' Infant diagnosed with medical condition making survival to 12 months unlikely'),
+    ('ill',
+     ' Infant diagnosed with medical condition making survival to 12 months unlikely'),
     ('complete',
      (' Completion of protocol required period of time for observation (see Study '
       'Protocol for definition of Completion.) [skip to end of form]')),
@@ -60,7 +63,9 @@ IMMUNIZATIONS = (
     ('Rotavirus', 'Rotavirus'),
     ('inactivated_polio_vaccine', 'Inactivated-Polio Vaccine'),
     ('Measles', 'Measles'),
-    ('Pentavalent', 'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'))
+    ('Pentavalent',
+     'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'),
+    ('diptheria_tetanus', 'Diptheria and Tetanus'))
 
 INFANT_VACCINATIONS = (
     ('Vitamin_A', 'Vitamin A'),
@@ -73,7 +78,9 @@ INFANT_VACCINATIONS = (
     ('inactivated_polio_vaccine', 'Inactivated-Polio Vaccine'),
     ('Rotavirus', 'Rotavirus'),
     ('Measles', 'Measles'),
-    ('Pentavalent', 'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'))
+    ('Pentavalent',
+     'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'),
+    ('diphtheria_tetanus', 'Diphtheria and Tetanus'))
 
 INFANT_AGE_VACCINE_GIVEN = (
     ('At Birth', 'At Birth'),
@@ -104,7 +111,8 @@ ARV_MODIFICATION_REASON = (
     ('Scheduled dose increase', 'Scheduled dose increase'),
     ('Confirmed infant HIV infection, ending study drug',
      'Confirmed infant HIV infection, ending study drug'),
-    ('completed protocol', 'Completion of protocol-required period of study treatment'),
+    ('completed protocol',
+     'Completion of protocol-required period of study treatment'),
     ('HAART not available', 'HAART not available'),
     ('Anemia', 'Anemia'),
     ('Bleeding', 'Bleeding'),
@@ -120,15 +128,18 @@ ARV_MODIFICATION_REASON = (
     ('Rash', 'Rash'),
     ('Rash resolved', 'Rash resolved'),
     ('Neuropathy', 'Neuropathy'),
-    ('Hypersensitivity_allergic reaction', 'Hypersensitivity / allergic reaction'),
+    ('Hypersensitivity_allergic reaction',
+     'Hypersensitivity / allergic reaction'),
     ('Pancreatitis', 'Pancreatitis'),
     ('Lactic Acidiosis', 'Lactic Acidiosis'),
     ('Pancytopenia', 'Pancytopenia'),
     ('Virologic failure', 'Virologic failure'),
     ('Immunologic failure', 'Immunologic failure(CD4)'),
     ('Clinical failure', 'Clinical failure'),
-    ('Clinician request', 'Clinician request, other reason (including convenience)'),
-    ('Subject request', 'Subject request, other reason (including convenience)'),
+    ('Clinician request',
+     'Clinician request, other reason (including convenience)'),
+    ('Subject request',
+     'Subject request, other reason (including convenience)'),
     ('Non-adherence with clinic visits', 'Non-adherence with clinic visits'),
     ('Non-adherence with ARVs', 'Non-adherence with ARVs'),
     ('Death', 'Death'),
