@@ -63,6 +63,7 @@ class VaccinesReceivedForm(BaseInfantModelForm):
         self.validate_vitamin_a_vaccine()
         self.validate_date_not_before_birth()
         self.validate_ipv_vaccine()
+        self.validate_diptheria_tetanus_vaccine()
         return cleaned_data
 
     def validate_vaccine_missed(self):
@@ -178,6 +179,13 @@ class VaccinesReceivedForm(BaseInfantModelForm):
                 cleaned_data.get('infant_age') not in ['4', '9-12']):
             raise forms.ValidationError("IPV vaccine is only given at 4 Months."
                                         " of life or 9-12 months")
+
+    def validate_diptheria_tetanus_vaccine(self):
+        cleaned_data = self.cleaned_data
+        if cleaned_data.get("received_vaccine_name") == 'diphtheria_tetanus':
+            if cleaned_data.get("infant_age") not in ['18']:
+                raise forms.ValidationError("Measles vaccine is only administered at 18"
+                                            " months of infant life.")
 
     class Meta:
         model = VaccinesReceived
