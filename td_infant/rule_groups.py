@@ -89,9 +89,8 @@ def func_infant_heu_and_require_pcr(visit_instance):
         appointment__registered_subject__subject_identifier=appointment.registered_subject.relative_identifier,
     ).order_by('-created').first()
     if (func_mother_pos(latest_maternal_visit)
-        and visit_instance.appointment.visit_instance == '0'
-        and visit_instance.appointment.visit_definition.code in ['2010', '2020', '2060',
-                                                                 '2120']):
+            and visit_instance.appointment.visit_instance == '0'
+            and visit_instance.appointment.visit_definition.code in ['2010', '2020', '2060']):
         return True
     return False
 
