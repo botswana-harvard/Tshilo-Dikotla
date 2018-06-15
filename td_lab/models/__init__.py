@@ -15,3 +15,4 @@ from .result import Result
 from .result_item import ResultItem
 from .infant_requisition import InfantRequisition
 from .maternal_requisition import MaternalRequisition
+from .signals import *
