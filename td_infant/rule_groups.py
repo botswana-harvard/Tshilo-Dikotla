@@ -104,6 +104,13 @@ def func_require_infant_elisa(visit_instance):
             and func_infant_heu(visit_instance))
 
 
+def func_require_infant_dbs(visit_instance):
+    """"""
+    return (visit_instance.appointment.visit_definition.code == '2010'
+            and visit_instance.appointment.visit_instance == '0'
+            and func_infant_heu(visit_instance))
+
+
 def func_show_infant_nvp_dispensing(visit_instance):
     show_infant_nvp_dispensing = False
     maternal_registered_subject = get_subject_identifier(
@@ -249,7 +256,7 @@ class InfantRequisitionRuleGroup(RuleGroup):
 
     require_dbs = RequisitionRule(
         logic=Logic(
-            predicate=func_infant_heu,
+            predicate=func_require_infant_dbs,
             consequence=NOT_REQUIRED,
             alternative=UNKEYED),
         target_model=[('td_lab', 'infantrequisition')],
