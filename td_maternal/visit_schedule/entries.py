@@ -103,6 +103,8 @@ maternal_followup3_entries = (
              REQUIRED, NOT_ADDITIONAL),
     CrfTuple(70, 'td_maternal', 'maternalclinicalmeasurementstwo',
              REQUIRED, NOT_ADDITIONAL),
+    CrfTuple(80, 'td_maternal', 'maternalcontraception',
+             REQUIRED, NOT_ADDITIONAL),
 )
 
 maternal_requisition_antenatal1 = (
