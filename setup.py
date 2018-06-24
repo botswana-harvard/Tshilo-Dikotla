@@ -11,7 +11,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='tshilo_dikotla',
-    version='2.0',
+    version='2.0.1',
     author='Coulson Thabo Kgathi',
     author_email='ckgathi@gmail.com',
     packages=find_packages(),
