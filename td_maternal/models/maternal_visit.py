@@ -10,16 +10,17 @@ from edc_export.models import ExportTrackingFieldsMixin
 from edc_offstudy.models import OffStudyMixin
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.constants import VISIT_REASON_NO_FOLLOW_UP_CHOICES, COMPLETED_PROTOCOL_VISIT, LOST_VISIT
-from edc_visit_tracking.models import VisitModelMixin, PreviousVisitMixin, CaretakerFieldsMixin
+from edc_visit_tracking.models import VisitModelMixin, CaretakerFieldsMixin
 
 from tshilo_dikotla.choices import VISIT_REASON
+from tshilo_dikotla.td_previous_visit_mixin import TdPreviousVisitMixin
 
 from .maternal_consent import MaternalConsent
 from .antenatal_enrollment import AntenatalEnrollment
 from .maternal_visit_crf_meta_data_mixin import MaternalVisitCrfMetaDataMixin
 
 
-class MaternalVisit(OffStudyMixin, SyncModelMixin, PreviousVisitMixin, MaternalVisitCrfMetaDataMixin,
+class MaternalVisit(OffStudyMixin, SyncModelMixin, TdPreviousVisitMixin, MaternalVisitCrfMetaDataMixin,
                     RequiresConsentMixin, CaretakerFieldsMixin, VisitModelMixin,
                     ExportTrackingFieldsMixin, BaseUuidModel):
 

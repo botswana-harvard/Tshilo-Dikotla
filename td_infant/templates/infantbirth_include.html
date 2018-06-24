@@ -15,7 +15,11 @@
     	</thead>
         {% for infantbirth in search_result.object_list %}
                 <tr class="{% cycle 'row1' 'row2' %}">
-                <td><A href="{% url 'subject_dashboard_url' dashboard_type='infant' dashboard_model='infant_birth' dashboard_id=infantbirth.pk show='appointments' %}">{{ infantbirth.registered_subject.subject_identifier }}</A></td>        
+                <td>
+	                {% for consent in infantbirth.maternal_consents %}
+	                	<A href="{% url 'subject_dashboard_url' dashboard_type='infant' dashboard_model='infant_birth' dashboard_id=infantbirth.pk show='appointments' %}?instruction=V{{consent.version}}">{{ infantbirth.registered_subject.subject_identifier }} V{{consent.version}}</A><br >
+	                {% endfor %}        
+                </td>
                 <td>{{ infantbirth.registered_subject.subject_identifier|escape}}</td>
               	<td>{{ infantbirth.registered_subject.initials }}</td>          	
                 <td>{{ infantbirth.dob|date:'Y-m-d' }}</td>                      	            

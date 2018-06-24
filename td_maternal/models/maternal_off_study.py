@@ -20,6 +20,10 @@ class MaternalOffStudy(OffStudyModelMixin, CrfModelMixin,
 
     consent_model = MaternalConsent
 
+    visit_model = MaternalVisit
+
+    visit_model_attr = 'maternal_visit'
+
     maternal_visit = models.OneToOneField(MaternalVisit)
 
     entry_meta_data_manager = CrfMetaDataManager(MaternalVisit)

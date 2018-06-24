@@ -40,4 +40,5 @@ from .maternal_randomization import MaternalRando
 from .maternal_substance_during_preg import MaternalSubstanceUseDuringPreg
 from .maternal_substance_prior_preg import MaternalSubstanceUsePriorPreg
 from .maternal_contact import MaternalContact
+from .td_consent_version import TdConsentVersion
 from .signals import *

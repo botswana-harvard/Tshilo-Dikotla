@@ -14,6 +14,7 @@ from .aliquot import Aliquot
 from .aliquot_type import AliquotType
 from .packing_list import PackingList
 from .panel import Panel
+from .receive import Receive
 
 
 class MaternalRequisitionManager(CrfModelManager):

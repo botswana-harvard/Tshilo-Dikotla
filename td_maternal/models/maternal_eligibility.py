@@ -18,6 +18,7 @@ from edc_consent.consent_type import site_consent_types
 from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
 
 from ..managers import MaternalEligibilityManager
+from django.conf import settings
 
 
 class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
@@ -119,9 +120,38 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
             subject_identifier=self.registered_subject.subject_identifier).order_by('version')
 
     @property
-    def current_consent_version(self):
+    def latest_consent_version(self):
         MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
-        return site_consent_types.get_by_consent_datetime(MaternalConsent, timezone.now()).version
+        consent_type = site_consent_types.get_by_datetime_lastest_version(
+            MaternalConsent, timezone.now())
+        return consent_type.version
+
+    @property
+    def re_consent(self):
+        if self.previous_consents and self.td_consent_version:
+            MaternalConsent = apps.get_model('td_maternal', 'MaternalConsent')
+            try:
+                maternal_consent = MaternalConsent.objects.get(
+                    subject_identifier=self.registered_subject.subject_identifier,
+                    version=settings.LASTEST_VERSION)
+            except MaternalConsent.DoesNotExist:
+                maternal_consent = None
+            
+            if self.td_consent_version.version ==  settings.LASTEST_VERSION and not maternal_consent:
+                return True
+        return False
+            
+
+    @property
+    def td_consent_version(self):
+        """Returns a td consent version instance.
+        """
+        from td_maternal.models import TdConsentVersion
+        try:
+            td_consent_version = TdConsentVersion.objects.get(maternal_eligibility=self)
+        except TdConsentVersion.DoesNotExist:
+            td_consent_version = None
+        return td_consent_version
 
     def set_uuid_for_eligibility_if_none(self):
         if not self.eligibility_id:

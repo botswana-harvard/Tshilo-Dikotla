@@ -35,9 +35,15 @@
         <ol>
           <li>
           {% for subject_identifier,infant in infants.items %}
-           <A href="{% url 'subject_dashboard_url' dashboard_type='infant' dashboard_model='registered_subject' dashboard_id=infant.dashboard_id show='appointments' %}">
-             {{subject_identifier}} {{ infant.gender }} {{ infant.first_name|encrypted }}
+          <A href="{% url 'subject_dashboard_url' dashboard_type='infant' dashboard_model='registered_subject' dashboard_id=infant.dashboard_id show='appointments' %}?instruction=V1">
+             {{subject_identifier}} {{ infant.gender }} {{ infant.first_name|encrypted }} V1
           </A>
+          <br >
+          {% if maternal_consent.version == '3' %}
+	           <A href="{% url 'subject_dashboard_url' dashboard_type='infant' dashboard_model='registered_subject' dashboard_id=infant.dashboard_id show='appointments' %}?instruction=V3">
+	             {{subject_identifier}} {{ infant.gender }} {{ infant.first_name|encrypted }} V3
+	          </A>
+	      {% endif %}
           {% endfor %}
         </ol>        
     {% else %}    
@@ -45,4 +51,16 @@
     {% endif %}
 
     </td></tr>
-{% endblock infants %}  
+{% endblock infants %}
+{% if consent %} 
+    {% block maternal_consent %}
+    <tr name="top right"><td>
+    <H3>Switch Mother's Schedules</H3>
+        {% for consent in maternal_eligibility.previous_consents %}
+        	{% if not instruction == 'V'|add:consent.version %}
+            	<a href="{% url 'subject_dashboard_url' dashboard_type='maternal' dashboard_model='maternal_eligibility' dashboard_id=maternal_eligibility.pk show='appointments' %}?instruction=V{{consent.version}}"><div nowrap>{{ consent.subject_identifier }} (V{{consent.version}})</div></a>
+        	{% endif %}
+        {% endfor %}
+    </td></tr>
+    {% endblock maternal_consent %}
+{% endif %}

@@ -10,21 +10,21 @@ from .entries import (maternal_antenatal1_entries,
                       maternal_requisition_antenatal2)
 
 
-class AntenatalVisitSchedule(VisitScheduleConfiguration):
+class AntenatalVisitScheduleV3(VisitScheduleConfiguration):
 
-    name = 'Antenatal visit schedule'
+    name = 'Antenatal visit schedule v3'
     app_label = 'td_maternal'
 
-    membership_forms = OrderedDict({'antenatal': MembershipFormTuple(
-        'antenatal', AntenatalVisitMembership, True), })
+    membership_forms = OrderedDict({'antenatalv3': MembershipFormTuple(
+        'antenatalv3', AntenatalVisitMembership, True), })
 
     schedules = OrderedDict({
-        'Antenatal Visit': ScheduleTuple('Antenatal Visit', 'antenatal', None, None), })
+        'Antenatal Visit v3': ScheduleTuple('Antenatal Visit v3', 'antenatalv3', None, None), })
 
     visit_definitions = OrderedDict()
 
     visit_definitions['1010M'] = {
-        'title': 'Antenatal Visit 1',
+        'title': 'Antenatal Visit 1 v3',
         'time_point': 5,
         'base_interval': 1,
         'base_interval_unit': 'D',
@@ -35,12 +35,12 @@ class AntenatalVisitSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Antenatal Visit',
-        'instructions': 'V1',
+        'instructions': 'V3',
         'requisitions': maternal_requisition_antenatal1,
         'entries': maternal_antenatal1_entries}
 
     visit_definitions['1020M'] = {
-        'title': 'Antenatal Visit 2',
+        'title': 'Antenatal Visit 2 v3',
         'time_point': 10,
         'base_interval': 3,
         'base_interval_unit': 'D',
@@ -51,8 +51,8 @@ class AntenatalVisitSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Antenatal Visit',
-        'instructions': 'V1',
+        'instructions': 'V3',
         'requisitions': maternal_requisition_antenatal2,
         'entries': maternal_antenatal2_entries}
 
-site_visit_schedules.register(AntenatalVisitSchedule)
+site_visit_schedules.register(AntenatalVisitScheduleV3)

@@ -11,17 +11,17 @@ from edc_offstudy.models import OffStudyMixin
 from edc_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
 from edc_visit_tracking.constants import VISIT_REASON_NO_FOLLOW_UP_CHOICES, LOST_VISIT
-from edc_visit_tracking.models import PreviousVisitMixin
 from edc_visit_tracking.models import VisitModelMixin
 
 from tshilo_dikotla.choices import VISIT_REASON
+from tshilo_dikotla.td_previous_visit_mixin import TdPreviousVisitMixin
 from edc_visit_tracking.models.caretaker_fields_mixin import CaretakerFieldsMixin
 
 from .infant_birth import InfantBirth
 
 
 class InfantVisit(
-        CrfMetaDataMixin, SyncModelMixin, PreviousVisitMixin, OffStudyMixin, VisitModelMixin,
+        CrfMetaDataMixin, SyncModelMixin, TdPreviousVisitMixin, OffStudyMixin, VisitModelMixin,
         CaretakerFieldsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
 
     """ A model completed by the user on the infant visits. """
@@ -77,7 +77,7 @@ class InfantVisit(
 #             if self.appointment.visit_definition.code in [
 #                     '2000', '2010', '2030', '2060', '2090', '2120']:
 #                 self.requisition_is_required(
-#                     self.appointment, 'td_lab', 'infantrequisition', 'DNA PCR')
+# self.appointment, 'td_lab', 'infantrequisition', 'DNA PCR')
 
     def requires_circumcision_for_male_at_2030_or_2060(self):
         infant_birth = InfantBirth.objects.get(
@@ -91,7 +91,8 @@ class InfantVisit(
                     visit_definition__code='2030',
                     registered_subject=self.appointment.registered_subject)
                 if appointment:
-                    infant_visit = InfantVisit.objects.get(appointment=appointment)
+                    infant_visit = InfantVisit.objects.get(
+                        appointment=appointment)
                     if infant_visit.reason == MISSED_VISIT:
                         self.crf_is_required(
                             self.appointment, 'td_infant', 'infantcircumcision')
