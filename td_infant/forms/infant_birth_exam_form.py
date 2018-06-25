@@ -30,8 +30,8 @@ class InfantBirthExamForm(BaseInfantModelForm):
     def validate_report_datetime(self, cleaned_data, field):
         try:
             relative_identifier = self.relative_identifier(cleaned_data.get('infant_visit').subject_identifier)
-            maternal_consent = MaternalConsent.objects.get(
-                maternal_eligibility__registered_subject__subject_identifier=relative_identifier)
+            maternal_consent = MaternalConsent.objects.filter(
+                maternal_eligibility__registered_subject__subject_identifier=relative_identifier).order_by('consent_datetime').last()
             if cleaned_data.get(field) < maternal_consent.consent_datetime:
                 raise forms.ValidationError("{} CANNOT be before consent datetime".format(field.title()))
             if cleaned_data.get(field).date() < maternal_consent.dob:

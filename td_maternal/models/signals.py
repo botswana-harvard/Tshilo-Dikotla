@@ -102,19 +102,36 @@ def maternal_consent_on_post_save(sender, instance, raw, created, using, **kwarg
     if not raw:
         if isinstance(instance, MaternalConsent):
             maternal_eligibility = instance.maternal_eligibility
-            maternal_eligibility.is_consented = True
-            maternal_eligibility.save(update_fields=['is_consented'])
-            maternal_eligibility.registered_subject.registration_datetime = instance.consent_datetime
-            maternal_eligibility.registered_subject.registration_status = CONSENTED
-            maternal_eligibility.registered_subject.subject_identifier = instance.subject_identifier
-            maternal_eligibility.registered_subject.initials = instance.initials
-            maternal_eligibility.registered_subject.first_name = instance.first_name
-            maternal_eligibility.registered_subject.last_name = instance.last_name
-            maternal_eligibility.registered_subject.identity = instance.identity
-            maternal_eligibility.registered_subject.dob = instance.dob
-            maternal_eligibility.registered_subject.subject_consent_id = instance.id
-            maternal_eligibility.registered_subject.subject_consent_id = instance.pk
-            maternal_eligibility.registered_subject.save()
+            if not maternal_eligibility.is_consented:
+                maternal_eligibility.is_consented = True
+                maternal_eligibility.save(update_fields=['is_consented'])
+                maternal_eligibility.registered_subject.registration_datetime = instance.consent_datetime
+                maternal_eligibility.registered_subject.registration_status = CONSENTED
+                maternal_eligibility.registered_subject.subject_identifier = instance.subject_identifier
+                maternal_eligibility.registered_subject.initials = instance.initials
+                maternal_eligibility.registered_subject.first_name = instance.first_name
+                maternal_eligibility.registered_subject.last_name = instance.last_name
+                maternal_eligibility.registered_subject.identity = instance.identity
+                maternal_eligibility.registered_subject.dob = instance.dob
+                maternal_eligibility.registered_subject.subject_consent_id = instance.id
+                maternal_eligibility.registered_subject.subject_consent_id = instance.pk
+                maternal_eligibility.registered_subject.save()
+            if instance.version == '3':
+                try:
+                    maternal_labour_del = MaternalLabourDel.objects.get(
+                        registered_subject=instance.maternal_eligibility.registered_subject)
+                except MaternalLabourDel.DoesNotExist:
+                    pass
+                else:
+                    maternal_labour_del.save()
+                    from td_infant.models import InfantBirth
+                    try:
+                        infant_birth = InfantBirth.objects.get(
+                            maternal_labour_del=maternal_labour_del)
+                    except InfantBirth.DoesNotExist:
+                        pass
+                    else:
+                        infant_birth.save()
 
 
 @receiver(post_save, weak=False, dispatch_uid="ineligible_take_off_study")
@@ -217,8 +234,8 @@ def create_infant_identifier_on_labour_delivery(sender, instance, raw, created, 
         if isinstance(instance, MaternalLabourDel):
             if instance.live_infants_to_register == 1:
                 maternal_registered_subject = instance.registered_subject
-                maternal_consent = MaternalConsent.objects.get(
-                    subject_identifier=maternal_registered_subject.subject_identifier)
+                maternal_consent = MaternalConsent.objects.filter(
+                    subject_identifier=maternal_registered_subject.subject_identifier).order_by('version').last()
                 maternal_ultrasound = MaternalUltraSoundInitial.objects.get(
                     maternal_visit__appointment__registered_subject=instance.registered_subject)
                 with transaction.atomic():

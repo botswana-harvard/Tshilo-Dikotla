@@ -2,11 +2,13 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*migrations
 .pydevproject
 .DS_Store
 .project
 .settings
 upgrade/
+*static
 test-*
 db.sqlite3
 etc/*

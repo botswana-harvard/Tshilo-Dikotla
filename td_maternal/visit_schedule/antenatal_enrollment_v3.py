@@ -8,22 +8,22 @@ from ..models import AntenatalEnrollment, MaternalVisit
 from .entries import maternal_enrollment_entries
 
 
-class AntenatalEnrollmentVisitSchedule(VisitScheduleConfiguration):
+class AntenatalEnrollmentVisitScheduleV3(VisitScheduleConfiguration):
 
-    name = 'enrollment visit schedule'
+    name = 'enrollment visit schedule v3'
     app_label = 'td_maternal'
 
-    membership_forms = OrderedDict({'enrollment': MembershipFormTuple(
-        'enrollment', AntenatalEnrollment, True), })
+    membership_forms = OrderedDict({'enrollmentv3': MembershipFormTuple(
+        'enrollmentv3', AntenatalEnrollment, True), })
 
     schedules = OrderedDict({
-        'Antenatal Enrollment': ScheduleTuple('Antenatal Enrollment',
-                                              'enrollment', None, None), })
+        'Antenatal Enrollment v3': ScheduleTuple('Antenatal Enrollment v3',
+                                              'enrollmentv3', None, None), })
 
     visit_definitions = OrderedDict()
 
     visit_definitions['1000M'] = {
-        'title': 'Maternal Enrollment Visit',
+        'title': 'Maternal Enrollment Visit v3',
         'time_point': 0,
         'base_interval': 0,
         'base_interval_unit': 'D',
@@ -34,8 +34,8 @@ class AntenatalEnrollmentVisitSchedule(VisitScheduleConfiguration):
         'grouping': 'maternal',
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Antenatal Enrollment',
-        'instructions': 'V1',
+        'instructions': 'V3',
         'requisitions': (),
         'entries': maternal_enrollment_entries}
 
-site_visit_schedules.register(AntenatalEnrollmentVisitSchedule)
+site_visit_schedules.register(AntenatalEnrollmentVisitScheduleV3)

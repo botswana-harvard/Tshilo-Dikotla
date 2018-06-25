@@ -1,1 +1,2 @@
 from .infant_birth_visit_schedule import InfantBirthVisitSchedule
+from .infant_birth_visit_schedule_v3 import InfantBirthVisitScheduleV3
