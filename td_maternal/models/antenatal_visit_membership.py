@@ -52,6 +52,13 @@ class AntenatalVisitMembership(SyncModelMixin, RequiresConsentMixin,
     def get_registration_datetime(self):
         return self.report_datetime
 
+    def prepare_appointments(self, using):
+        """Creates infant appointments relative to the date-of-delivery"""
+        maternal_consent = MaternalConsent.objects.filter(
+                    subject_identifier=self.subject_identifier).order_by('version').last()
+        instruction = 'V' + maternal_consent.version
+        self.create_all(using=using, instruction=instruction)
+
     @property
     def group_names(self):
         return ['Antenatal Visit', 'Antenatal Visit v3']
