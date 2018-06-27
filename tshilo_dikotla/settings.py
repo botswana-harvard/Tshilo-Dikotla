@@ -23,7 +23,7 @@ from .databases import (TEST_HOSTS_POSTGRES)
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # EDC specific settings
-APP_NAME = 'tshilo-dikotla'
+APP_NAME = 'td'
 LIVE_SERVER = 'td.bhp.org.bw'
 TEST_HOSTS = ['edc4.bhp.org.bw', 'tdtest.bhp.org.bw']
 DEVELOPER_HOSTS = ['leslie']

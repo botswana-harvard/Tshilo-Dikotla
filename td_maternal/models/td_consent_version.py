@@ -10,6 +10,7 @@ CONSENT_VERSION = (
     ('1', 'Consent version 1'),
     ('3', 'Consent version 3'))
 
+
 class TdConsentVersion(BaseUuidModel):
 
     maternal_eligibility = models.ForeignKey(MaternalEligibility, null=True)
@@ -26,7 +27,6 @@ class TdConsentVersion(BaseUuidModel):
             date_not_future, ],
         null=True,
         blank=True)
-    
 
     def __str__(self):
         return str(self.maternal_eligibility.age_in_years) + str(self.version)
