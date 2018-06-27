@@ -1,11 +1,10 @@
 from dateutil.relativedelta import relativedelta
 from django import forms
 
-from edc_constants.constants import YES
-
 from td_maternal.models.enrollment_helper import EnrollmentHelper
 
 from ..models import AntenatalEnrollment, MaternalEligibility
+from ..models import TdConsentVersion, MaternalConsent
 
 from .base_enrollment_form import BaseEnrollmentForm
 
@@ -14,19 +13,6 @@ class AntenatalEnrollmentForm(BaseEnrollmentForm):
 
     def clean(self):
         cleaned_data = super(AntenatalEnrollmentForm, self).clean()
-#         registered_subject = cleaned_data.get('registered_subject')
-#         if not registered_subject:
-#             raise forms.ValidationError('Expected a registered subject. Got None.')
-#         if not self.instance.id:
-#             registered_subject = cleaned_data.get('registered_subject')
-#             try:
-#                 PostnatalEnrollment.objects.get(registered_subject=registered_subject)
-#                 raise forms.ValidationError(
-#                     "Antenatal enrollment is NOT REQUIRED. Postnatal Enrollment already completed")
-#             except PostnatalEnrollment.DoesNotExist:
-#                 pass
-#         self.fill_postnatal_enrollment_if_recently_delivered()
-#         self.raise_if_rapid_test_required()
         self.validate_last_period_date(
             cleaned_data.get('report_datetime'), cleaned_data.get('last_period_date'))
         enrollment_helper = EnrollmentHelper(instance_antenatal=self._meta.model(**cleaned_data),
@@ -59,6 +45,34 @@ class AntenatalEnrollmentForm(BaseEnrollmentForm):
             except AntenatalEnrollment.DoesNotExist:
                 pass
         return rapid_test_date
+
+    def validate_current_consent_version(self):
+        try:
+            td_consent_version = TdConsentVersion.objects.get(
+                maternal_eligibility=self.maternal_eligibility)
+        except TdConsentVersion.DoesNotExist:
+            raise forms.ValidationError(
+                'Complete mother\'s consent version form before proceeding')
+        else:
+            try:
+                MaternalConsent.objects.get(
+                    maternal_eligibility=self.maternal_eligibility,
+                    version=td_consent_version.version)
+            except MaternalConsent.DoesNotExist:
+                raise forms.ValidationError(
+                    'Complete Maternal Consent form for version {} before '
+                    'proceeding'.format(td_consent_version.version))
+
+    @property
+    def maternal_eligibility(self):
+        cleaned_data = self.cleaned_data
+        subject_identifier = cleaned_data.get(
+            'registered_subject').subject_identifier
+        try:
+            return MaternalEligibility.objects.get(
+                registered_subject__subject_identifier=subject_identifier)
+        except MaternalEligibility.DoesNotExist:
+            return None
 
     class Meta:
         model = AntenatalEnrollment
