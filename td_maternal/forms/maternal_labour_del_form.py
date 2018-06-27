@@ -1,9 +1,10 @@
 from dateutil.relativedelta import relativedelta
 from django import forms
 
-from edc_constants.constants import YES, NO, NOT_APPLICABLE, POS
+from edc_constants.constants import YES, NOT_APPLICABLE, POS
 
 from ..models import MaternalLabourDel, MaternalHivInterimHx, MaternalVisit
+from ..models import TdConsentVersion, MaternalConsent, MaternalEligibility
 from ..models import MaternalArv
 from ..classes import MaternalStatusHelper
 
@@ -29,6 +30,7 @@ class MaternalLabourDelForm(forms.ModelForm):
                          arv_preg.start_date, initiation_date)})
         self.validate_valid_regimen_hiv_pos_only()
         self.validate_live_births_still_birth()
+        self.validate_current_consent_version()
         return cleaned_data
 
     def validate_valid_regimen_hiv_pos_only(self):
@@ -64,6 +66,33 @@ class MaternalLabourDelForm(forms.ModelForm):
         if cleaned_data.get('still_births') == 1 and cleaned_data.get('live_infants_to_register') != 0:
             raise forms.ValidationError(
                 'If live births is 1 then still birth should be 0.')
+
+    def validate_current_consent_version(self):
+        try:
+            td_consent_version = TdConsentVersion.objects.get(
+                maternal_eligibility=self.maternal_eligibility)
+        except TdConsentVersion.DoesNotExist:
+            raise forms.ValidationError(
+                'Complete mother\'s consent version form before proceeding')
+        else:
+            try:
+                MaternalConsent.objects.get(
+                    maternal_eligibility=self.maternal_eligibility,
+                    version=td_consent_version.version)
+            except MaternalConsent.DoesNotExist:
+                raise forms.ValidationError(
+                    'Maternal Consent form for version {} before proceeding'.format(td_consent_version.version))
+
+    @property
+    def maternal_eligibility(self):
+        cleaned_data = self.cleaned_data
+        subject_identifier = cleaned_data.get(
+            'registered_subject').subject_identifier
+        try:
+            return MaternalEligibility.objects.get(
+                registered_subject__subject_identifier=subject_identifier)
+        except MaternalEligibility.DoesNotExist:
+            return None
 
     class Meta:
         model = MaternalLabourDel
