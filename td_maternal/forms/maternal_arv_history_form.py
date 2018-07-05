@@ -47,7 +47,8 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
                 try:
                     maternal_consent = MaternalConsent.objects.get(
                         subject_identifier=cleaned_data.get(
-                            'maternal_visit').appointment.registered_subject.subject_identifier)
+                            'maternal_visit').appointment.registered_subject.subject_identifier,
+                        version=cleaned_data.get('maternal_visit').appointment.visit_definition.instruction[1])
                     if report_datetime < maternal_consent.consent_datetime:
                         raise forms.ValidationError("Report datetime CANNOT be before consent datetime")
                     if haart_start_date < maternal_consent.dob:
