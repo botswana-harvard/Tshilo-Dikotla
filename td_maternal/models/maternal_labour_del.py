@@ -144,10 +144,6 @@ class MaternalLabourDel(SyncModelMixin, RequiresConsentMixin,
         return self.registered_subject.subject_identifier
 
     @property
-    def group_names(self):
-        return ['Infant Enrollment', 'Infant Enrollment1']
-
-    @property
     def antenatal_enrollment(self):
         AntenatalEnrollment = apps.get_model(
             'td_maternal', 'antenatalenrollment')
