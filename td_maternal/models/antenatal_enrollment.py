@@ -110,6 +110,21 @@ class AntenatalEnrollment(SyncModelMixin, EnrollmentMixin, OffStudyMixin, TdAppo
             unenrolled_error_message = 'Diabetic'
         return unenrolled_error_message
 
+    def prepare_appointments(self, using):
+        """Creates infant appointments relative to the date-of-delivery"""
+        maternal_consent = MaternalConsent.objects.filter(
+                    subject_identifier=self.subject_identifier).order_by('version').last()
+        instruction = 'V' + maternal_consent.version
+        self.create_all(using=using, instruction=instruction)
+
+    @property
+    def instruction(self):
+        """Returns the instruction from the consent version.
+        """
+        maternal_consent = MaternalConsent.objects.filter(
+                    subject_identifier=self.subject_identifier).order_by('version').last()
+        return 'V' + maternal_consent.version
+
     @property
     def off_study_visit_code(self):
         """Returns the visit code for the off-study visit if eligibility criteria fail."""
