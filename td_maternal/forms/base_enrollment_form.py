@@ -13,6 +13,7 @@ class BaseEnrollmentForm(BaseModelForm):
 
     def clean(self):
         cleaned_data = super(BaseEnrollmentForm, self).clean()
+        self.requires_maternal_consent()
 #         self.requires_specimen_consent()
 #         self.requires_rapid_test_if_current_hiv_status_uknown()
 #         self.requires_week32_result_if_tested()
@@ -181,3 +182,15 @@ class BaseEnrollmentForm(BaseModelForm):
             if cleaned_data.get('rapid_test_date') > cleaned_data.get('report_datetime').date():
                 raise forms.ValidationError(
                     'Rapid test date cannot be a future date relative to the report date')
+
+    def get_consent_or_raise_2(self, model_class):
+        cleaned_data = self.cleaned_data
+        try:
+            model_class.objects.get(version=3, subject_identifier=cleaned_data.get(
+                'registered_subject').subject_identifier)
+        except model_class.DoesNotExist:
+                raise forms.ValidationError('Please re-consent participant to V3')
+
+    def requires_maternal_consent(self):
+        self.get_consent_or_raise_2(MaternalConsent)
+
