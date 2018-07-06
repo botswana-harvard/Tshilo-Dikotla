@@ -91,19 +91,22 @@ class InfantArvProphModForm(ModelForm):
 
     def validate_infant_arv_proph_not_modified(self):
         cleaned_data = self.cleaned_data
-        if cleaned_data.get('infant_arv_proph').arv_status != MODIFIED:
+        if (cleaned_data.get('infant_arv_proph').arv_status != MODIFIED
+            and not self.data.get('infantarvprophmod_set-0-arv_code')):
             raise forms.ValidationError("You did NOT indicate that medication was modified, so do not ENTER "
                                         "arv inline.")
 
     def validate_infant_arv_proph_modified(self):
         cleaned_data = self.cleaned_data
-        if cleaned_data.get('infant_arv_proph').arv_status == MODIFIED:
+        if (cleaned_data.get('infant_arv_proph').arv_status == MODIFIED
+            and not self.data.get('infantarvprophmod_set-0-arv_code')):
             raise forms.ValidationError("You indicated that medication was never modified, so ENTER "
                                         "arv inline.")
 
     def validate_infant_arv_proph_never_started(self):
         cleaned_data = self.cleaned_data
-        if cleaned_data.get('infant_arv_proph').arv_status == NEVER_STARTED:
+        if (cleaned_data.get('infant_arv_proph').arv_status == NEVER_STARTED
+            and self.data.get('infantarvprophmod_set-0-arv_code')):
             raise forms.ValidationError("You indicated that medication was never started, so do not ENTER "
                                         "arv inline.")
 
