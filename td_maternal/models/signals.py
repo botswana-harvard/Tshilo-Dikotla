@@ -174,7 +174,7 @@ def put_back_on_study_from_failed_eligibility(instance):
     from off study."""
     with transaction.atomic():
         try:
-            visit_definition = VisitDefinition.objects.get(code='1000M')
+            visit_definition = VisitDefinition.objects.get(code='1000M', instruction=instance.instruction)
             appointment = Appointment.objects.get(
                 registered_subject=instance.registered_subject,
                 visit_definition=visit_definition,
