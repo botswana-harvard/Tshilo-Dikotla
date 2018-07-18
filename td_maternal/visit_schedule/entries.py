@@ -91,6 +91,7 @@ maternal_followup2_entries = (
     CrfTuple(90, 'td_maternal', 'rapidtestresult', NOT_REQUIRED, ADDITIONAL),
 )
 
+
 maternal_followup3_entries = (
     CrfTuple(20, 'td_maternal', 'maternalpostpartumfu',
              REQUIRED, NOT_ADDITIONAL),
@@ -103,9 +104,13 @@ maternal_followup3_entries = (
              REQUIRED, NOT_ADDITIONAL),
     CrfTuple(70, 'td_maternal', 'maternalclinicalmeasurementstwo',
              REQUIRED, NOT_ADDITIONAL),
+)
+
+maternal_followup24_months_entries =  maternal_followup3_entries + (
     CrfTuple(80, 'td_maternal', 'maternalcontraception',
              REQUIRED, NOT_ADDITIONAL),
 )
+
 
 maternal_requisition_antenatal1 = (
     RequisitionPanelTuple(
