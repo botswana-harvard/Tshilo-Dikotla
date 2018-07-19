@@ -9,7 +9,7 @@
         <td><B>Name:</B> {{maternal_consent.first_name|encrypted }} ({{ maternal_consent.initials|encrypted }}) </td>
         <td><B>Born:</B> {{maternal_consent.dob|date:"Y-m-d" }}</td> 
         <td><B>Age:</B> {{maternal_consent.dob|age }}</td>
-        <td><B>Consented:</B> {{maternal_consent.consent_datetime|date:"Y-m-d H:i" }}</td>
+        <td><B>Consented:</B> {{initial_consent_datetime|date:"Y-m-d H:i" }}</td>
         <td><B>Maternal Contact:</B>
           <A href="{% url 'admin:td_maternal_maternalcontact_add' %}?registered_subject={{ registered_subject.pk }}">
               {{ registered_subject.subject_identifier }}
