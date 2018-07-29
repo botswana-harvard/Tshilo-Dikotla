@@ -188,18 +188,6 @@ class TestMaternalMedicalHistory(BaseTestCase):
             'Question5: Mother has prior chronic illness, they should be listed',
             form.errors.get('__all__'))
 
-    def test_mother_positive_chronic_since_yes_who_diagnosis_no(self):
-        """The Mother is HIV Positive yet chronic_since is YES and who_diagnosis has been indicated as NO.
-           should be YES"""
-
-        self.create_mother(self.hiv_pos_mother_options(self.registered_subject))
-        delivery = MaternalLabourDelFactory(registered_subject=self.registered_subject)
-        self.options['maternal_visit'] = self.maternal_visit_1000.id
-        self.options['chronic_since'] = YES
-        self.options['who_diagnosis'] = NO
-        form = MaternalMedicalHistoryForm(data=self.options)
-        self.assertIn('The mother is HIV positive, because Chronic_since is YES and Who Diagnosis should also be YES',
-                      form.errors.get('__all__'))
 
     def test_positive_mother_chronic_since_no_who_diagnosis_not_applicable(self):
         """The Mother is HIV Positive yet chronic_since is NO and who_diagnosis has been indicated as NOT_APPLICABLE.

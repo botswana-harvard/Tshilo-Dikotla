@@ -56,7 +56,7 @@
         	{{ maternal_eligibility.registered_subject.subject_identifier }} [{{ maternal_consent.initials|encrypted }}] V1</A><br>
     {% if maternal_consent.version == '3' %}
 		 <A href="{% url 'subject_dashboard_url' dashboard_type='maternal' dashboard_model='maternal_eligibility' dashboard_id=maternal_eligibility.pk show='appointments' %}?instruction=V3">
-		    {{subject_identifier}} [{{ maternal_consent.initials|encrypted }}]  V3
+		    {{maternal_eligibility.registered_subject.subject_identifier}} [{{ maternal_consent.initials|encrypted }}]  V3
 		 </A>
 	{% endif %}
     </td></tr>

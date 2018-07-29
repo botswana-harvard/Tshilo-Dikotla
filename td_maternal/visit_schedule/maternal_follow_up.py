@@ -6,7 +6,7 @@ from edc_visit_schedule.classes import (
 from ..models import MaternalLabourDel, MaternalVisit
 
 from .entries import (maternal_birth_entries, maternal_followup1_entries, maternal_followup2_entries,
-                      maternal_followup3_entries, maternal_requisition_followup)
+                      maternal_followup3_entries, maternal_followup24_months_entries, maternal_requisition_followup)
 
 
 class MaternalFollowUpSchedule(VisitScheduleConfiguration):
@@ -132,7 +132,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'schedule': 'Follow Up Visit',
         'instructions': 'V1',
         'requisitions': maternal_requisition_followup,
-        'entries': maternal_followup3_entries}
+        'entries': maternal_followup24_months_entries}
 
     visit_definitions['2300M'] = {
         'title': '30 Months Visit',

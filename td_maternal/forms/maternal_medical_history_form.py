@@ -55,12 +55,6 @@ class MaternalMedicalHistoryForm(BaseMaternalModelForm):
             status_helper = MaternalStatusHelper(cleaned_data.get('maternal_visit'))
             subject_status = status_helper.hiv_status
 
-            if cleaned_data.get('chronic_since') == YES and subject_status == POS:
-                if cleaned_data.get('who_diagnosis') != YES:
-                    raise forms.ValidationError(
-                        "The mother is HIV positive, because Chronic_since is YES and Who Diagnosis should"
-                        " also be YES")
-
             if cleaned_data.get('chronic_since') == NO and subject_status == POS:
                 if cleaned_data.get('who_diagnosis') != NO:
                     raise forms.ValidationError(

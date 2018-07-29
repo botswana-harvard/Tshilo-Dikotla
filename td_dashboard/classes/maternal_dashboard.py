@@ -59,6 +59,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
             title='Maternal Dashboard',
             subject_dashboard_url=self.subject_dashboard_url,
             infants=self.get_registered_infant_identifier(),
+            initial_consent_datetime=self.initial_consent_datetime,
             maternal_consent=self.consent,
             local_results=self.render_labs(),
             antenatal_enrollment=self.antenatal_enrollment,
@@ -115,7 +116,17 @@ class MaternalDashboard(RegisteredSubjectDashboard):
     @property
     def instruction(self):
         return 'V' + self.consent.version
-
+    
+    @property
+    def initial_consent_datetime(self):
+        try:
+            consent = MaternalConsent.objects.filter(
+                    subject_identifier=self.subject_identifier).order_by('-version').last()
+            consent_datetime = consent.consent_datetime
+        except MaternalConsent.DoesNotExist:
+            consent_datetime = None
+        return consent_datetime 
+            
     @property
     def consent(self):
         self._consent = None
