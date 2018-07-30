@@ -169,8 +169,8 @@ class VaccinesReceivedForm(BaseInfantModelForm):
     def validate_vitamin_a_vaccine(self):
         cleaned_data = self.cleaned_data
         if (cleaned_data.get('received_vaccine_name') == 'Vitamin_A' and
-                cleaned_data.get('infant_age') != '6-11'):
-            raise forms.ValidationError("Vitamin A is given to children between 6-11 months"
+                cleaned_data.get('infant_age') not in ['6-11', '9', '9-12', '12-17', '18', '18-29', '24-29', '30-35', '36-41']):
+            raise forms.ValidationError("Vitamin A is given to children between 6-41 months"
                                         " of life")
 
     def validate_ipv_vaccine(self):
