@@ -29,7 +29,7 @@ class ResultItem(BaseResultItem, SyncModelMixin, ExportTrackingFieldsMixin, Base
         self.subject_type = self.get_subject_type()
         super(ResultItem, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.test_code)
 
     def natural_key(self):
