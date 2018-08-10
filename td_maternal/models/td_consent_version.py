@@ -35,3 +35,4 @@ class TdConsentVersion(BaseUuidModel):
         app_label = 'td_maternal'
         verbose_name = 'TD Consent Version'
         verbose_name_plural = 'TD Consent Version'
+        unique_together = ('maternal_eligibility', 'version')

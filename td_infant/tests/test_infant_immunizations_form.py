@@ -334,7 +334,7 @@ class TestInfantImmunizationForm(BaseTestCase):
                            'date_given': date.today(),
                            'infant_age': '2'}
         vaccine_received_form = VaccinesReceivedForm(data=received_inline)
-        self.assertIn("Vitamin A is given to children between 6-11 months of"
+        self.assertIn("Vitamin A is given to children between 6-41 months of"
                       " life", vaccine_received_form.errors.get('__all__'))
 
     def test_give_ipv_vaccine_not_4months(self):
