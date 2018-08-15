@@ -67,7 +67,7 @@ maternal_followup1_entries = (
              NOT_REQUIRED, ADDITIONAL),
     CrfTuple(60, 'td_maternal', 'maternalinterimidcc',
              NOT_REQUIRED, ADDITIONAL),
-    CrfTuple(70, 'td_maternal', 'rapidtestresult', NOT_REQUIRED, ADDITIONAL),
+    CrfTuple(70, 'td_maternal', 'rapidtestresult', REQUIRED, ADDITIONAL),
     CrfTuple(80, 'td_maternal', 'maternalclinicalmeasurementstwo',
              REQUIRED, NOT_ADDITIONAL),
     CrfTuple(90, 'td_maternal', 'maternalcontraception',
@@ -88,7 +88,7 @@ maternal_followup2_entries = (
              REQUIRED, NOT_ADDITIONAL),
     CrfTuple(80, 'td_maternal', 'maternalcontraception',
              REQUIRED, NOT_ADDITIONAL),
-    CrfTuple(90, 'td_maternal', 'rapidtestresult', NOT_REQUIRED, ADDITIONAL),
+    CrfTuple(90, 'td_maternal', 'rapidtestresult', REQUIRED, ADDITIONAL),
 )
 
 
