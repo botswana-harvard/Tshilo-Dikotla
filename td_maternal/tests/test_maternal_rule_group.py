@@ -239,12 +239,48 @@ class TestMaternalRuleGroups(BaseTestCase):
             visit_definition__code='2000M')
         self.maternal_visit_2000 = MaternalVisitFactory(
             appointment=self.appointment)
+        
         self.assertEqual(
             CrfMetaData.objects.filter(
                 entry_status=NEW,
                 crf_entry__app_label='td_maternal',
                 crf_entry__model_name='rapidtestresult',
                 appointment=self.appointment).count(), 1)
+        
+        RapidTestResultFactory(
+            maternal_visit=self.maternal_visit_2000, rapid_test_done=YES, result=NEG,
+            result_date=(timezone.datetime.now() - relativedelta(days=30)).date())
+        
+        self.appointment = Appointment.objects.get(
+            registered_subject=options.get('registered_subject'),
+            visit_definition__code='2010M')
+        self.maternal_visit_2010 = MaternalVisitFactory(
+            appointment=self.appointment)
+          
+        self.assertEqual(
+            CrfMetaData.objects.filter(
+                entry_status=NEW,
+                crf_entry__app_label='td_maternal',
+                crf_entry__model_name='rapidtestresult',
+                appointment=self.appointment).count(), 1)
+        
+        RapidTestResultFactory(
+            maternal_visit=self.maternal_visit_2010, rapid_test_done=YES, result=POS,
+            result_date=(timezone.datetime.now() - relativedelta(days=30)).date())
+         
+        self.appointment = Appointment.objects.get(
+            registered_subject=options.get('registered_subject'),
+            visit_definition__code='2020M')
+        self.maternal_visit_2020 = MaternalVisitFactory(
+            appointment=self.appointment)
+           
+        self.assertEqual(
+            CrfMetaData.objects.filter(
+                entry_status=NEW,
+                crf_entry__app_label='td_maternal',
+                crf_entry__model_name='rapidtestresult',
+                appointment=self.appointment).count(), 0)
+
 
     def test_maternal_pbmc_pl_not_req_hiv_pos(self):
         """"""

@@ -116,7 +116,7 @@ def show_rapid_test_form(visit_instance):
             else:
                 return True
     else:
-        if maternal_status_helper.hiv_status == UNK:
+        if maternal_status_helper.hiv_status in [UNK, NEG]:
             return True
         return False
 
