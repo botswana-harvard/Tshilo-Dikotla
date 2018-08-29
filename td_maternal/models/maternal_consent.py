@@ -114,7 +114,10 @@ class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMi
             td_consent_version = TdConsentVersion.objects.get(
                 maternal_eligibility=self.maternal_eligibility)
         except TdConsentVersion.DoesNotExist:
-            if previous_consent and 'is_verified' not in update_fields:
+            if update_fields:
+                if 'is_verified' not in update_fields:
+                    pass
+            elif previous_consent:
                 raise ConsentVersionError(
                     "Please fill in the TD consent version form first.")
         else:
