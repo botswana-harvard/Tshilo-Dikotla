@@ -22,7 +22,6 @@ from edc_consent.exceptions import ConsentVersionError
 from td_maternal.models.td_consent_version import TdConsentVersion
 
 
-
 class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMixin,
                       IdentityFieldsMixin, PersonalFieldsMixin,
                       CitizenFieldsMixin, VulnerabilityFieldsMixin, ExportTrackingFieldsMixin, BaseUuidModel):
@@ -67,6 +66,7 @@ class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMi
                                           self.last_name, self.initials)
 
     def save(self, *args, **kwargs):
+        update_fields = kwargs.get('update_fields')
         previous_consent = self.__class__.objects.filter(
             maternal_eligibility=self.maternal_eligibility)
         if not self.id and previous_consent.exists():
@@ -77,11 +77,12 @@ class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMi
         if previous_consent:
             consent_type = site_consent_types.get_by_consent_datetime(
                 self.__class__, self.consent_datetime,
-                version=self.td_consent_version(previous_consent=previous_consent))
+                version=self.td_consent_version(previous_consent=previous_consent, update_fields=update_fields))
         else:
             consent_type = site_consent_types.get_by_datetime_lastest_version(
                 self.__class__, self.consent_datetime)
-        self.raise_error_if_reconsent_not_required(previous_consent=previous_consent)
+        self.raise_error_if_reconsent_not_required(
+            previous_consent=previous_consent)
         self.version = consent_type.version
         if consent_type.updates_version:
             try:
@@ -102,17 +103,20 @@ class MaternalConsent(BaseConsent, SyncModelMixin, OffStudyMixin, ReviewFieldsMi
     def raise_error_if_reconsent_not_required(self, previous_consent=None):
         """Raise an error if re-consenting is not required"""
         if previous_consent and (self.td_consent_version(previous_consent=previous_consent) == settings.PREVIOUS_CONSENT_VERSION) and not self.id:
-            raise ConsentVersionError("Re Consenting declided by participant as per the TdConsentVersion form")     
+            raise ConsentVersionError(
+                "Re Consenting declided by participant as per the TdConsentVersion form")
 
     def get_registration_datetime(self):
         return self.consent_datetime
 
-    def td_consent_version(self, previous_consent=None):
+    def td_consent_version(self, previous_consent=None, update_fields=None):
         try:
-            td_consent_version = TdConsentVersion.objects.get(maternal_eligibility=self.maternal_eligibility)
+            td_consent_version = TdConsentVersion.objects.get(
+                maternal_eligibility=self.maternal_eligibility)
         except TdConsentVersion.DoesNotExist:
-            if previous_consent:
-                raise ConsentVersionError("Please fill in the TD consent version form first.")
+            if previous_consent and 'is_verified' not in update_fields:
+                raise ConsentVersionError(
+                    "Please fill in the TD consent version form first.")
         else:
             return td_consent_version.version
 
