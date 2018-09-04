@@ -24,8 +24,8 @@ class ObComp(ListModelMixin):
         verbose_name = "Maternal LabDel: Ob Comp"
 
 
-class LabDelDx (DxCode):
-
-    class Meta:
-        app_label = 'td_list'
-        verbose_name = "Maternal LabDel: Dx"
+# class LabDelDx (DxCode):
+# 
+#     class Meta:
+#         app_label = 'td_list'
+#         verbose_name = "Maternal LabDel: Dx"
