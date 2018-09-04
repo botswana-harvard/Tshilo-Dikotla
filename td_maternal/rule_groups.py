@@ -121,6 +121,31 @@ def show_rapid_test_form(visit_instance):
         return False
 
 
+# SRH code.#################################
+
+
+def func_show_srh_forms(visit_instance):
+    """ Returns True if participant has a version2 consent."""
+    return MaternalConsent.objects.filter(subject_identifier=visit_instance.subject_identifier,
+                                          version__gte=2).exists()
+
+
+def func_show_srh_services_utilization(visit_instance):
+    """Returns True if participant was referred to shr in the last visit."""
+    previous_visit = get_previous_visit(visit_instance,
+                                        ['1000M', '2000M', '2010M', '2030M',
+                                            '2060M', '2090M', '2120M'],
+                                        MaternalVisit)
+    if not previous_visit:
+        return False
+    try:
+        rep_health_previous = ReproductiveHealth.objects.get(
+            maternal_visit=previous_visit)
+        return rep_health_previous.srh_referral == YES
+    except ReproductiveHealth.DoesNotExist:
+        return False
+
+
 class MaternalRegisteredSubjectRuleGroup(RuleGroup):
 
     hiv_pos_forms = CrfRule(
@@ -161,6 +186,7 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
         app_label = 'td_maternal'
         source_fk = None
         source_model = RegisteredSubject
+
 
 site_rule_groups.register(MaternalRegisteredSubjectRuleGroup)
 
@@ -212,6 +238,7 @@ class MaternalRequisitionRuleGroup(RuleGroup):
         source_fk = None
         source_model = RegisteredSubject
 
+
 site_rule_groups.register(MaternalRequisitionRuleGroup)
 
 
@@ -229,6 +256,8 @@ class MaternalRequisitionRuleGroupCD4(RuleGroup):
         app_label = 'td_maternal'
         source_fk = (MaternalVisit, 'maternal_visit')
         source_model = MaternalInterimIdcc
+
+
 site_rule_groups.register(MaternalRequisitionRuleGroupCD4)
 
 
@@ -250,5 +279,6 @@ class MaternalUltrasoundInitialRuleGroup(RuleGroup):
         app_label = 'td_maternal'
         source_fk = (MaternalVisit, 'maternal_visit')
         source_model = MaternalUltraSoundInitial
+
 
 site_rule_groups.register(MaternalUltrasoundInitialRuleGroup)
