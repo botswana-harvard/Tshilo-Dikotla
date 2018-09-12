@@ -1,10 +1,9 @@
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
-from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import YES_NO_DWTA
 
-from microbiome.apps.mb_list.models import Contraceptives
+from td_list.models import Contraceptives
 
 from ..maternal_choices import REASON_UNSEEN_AT_CLINIC, REASON_CONTRACEPTIVE_NOT_INITIATED
 
@@ -59,18 +58,14 @@ class MaternalSrh(MaternalCrfModel):
         max_length=45,
         choices=REASON_CONTRACEPTIVE_NOT_INITIATED,
         blank=True,
-        null=True,
-        help_text='')
+        null=True)
 
     reason_not_initiated_other = OtherCharField(
         verbose_name='If other is selected enter text',
         blank=True,
-        null=True,
-        help_text='')
-
-    history = AuditTrail()
+        null=True)
 
     class Meta:
-        app_label = 'mb_maternal'
+        app_label = 'td_maternal'
         verbose_name = 'Maternal SRH Services'
         verbose_name_plural = 'Maternal SRH Services'

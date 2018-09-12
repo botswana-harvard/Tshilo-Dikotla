@@ -32,6 +32,7 @@ from .maternal_contraception_admin import MaternalContraception
 from .maternal_eligibility_loss_admin import MaternalEligibilityLossAdmin
 from .maternal_death_report_admin import MaternalDeathReportAdmin
 from .maternal_randomization_admin import MartenalRandoAdmin
+from .maternal_srh_admin import MaternalSrhAdmin
 from .maternal_substance_use_during_preg_admin import MaternalSubstanceUseDuringPregAdmin
 from .maternal_substance_use_prior_preg_admin import MaternalSubstanceUsePriorPregAdmin
 from .maternal_contact_admin import MaternalContactAdmin

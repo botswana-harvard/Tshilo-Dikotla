@@ -1,5 +1,5 @@
 from django import forms
-from django.forms.util import ErrorList
+from django.forms.utils import ErrorList
 
 from edc_constants.constants import NO, YES
 
@@ -9,10 +9,6 @@ from .base_maternal_model_form import BaseMaternalModelForm
 
 
 class MaternalSrhForm(BaseMaternalModelForm):
-
-    class Meta:
-        model = MaternalSrh
-        fields = '__all__'
 
     def clean(self):
         cleaned_data = super(MaternalSrhForm, self).clean()
@@ -70,3 +66,7 @@ class MaternalSrhForm(BaseMaternalModelForm):
                 raise forms.ValidationError(
                     'Participant does not want to answer the question on contraceptive initiation, '
                     'the questionnaire is complete.')
+    
+    class Meta:
+        model = MaternalSrh
+        fields = '__all__'
