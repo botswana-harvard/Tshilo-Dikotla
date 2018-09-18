@@ -282,7 +282,7 @@ LABEL_PRINTER_MAKE_AND_MODEL = ['Zebra ZPL Label Printer']
 
 SUBJECT_APP_LIST = ['maternal', 'infant']
 SUBJECT_TYPES = ['maternal', 'infant']
-MAX_SUBJECTS = {'maternal': 499, 'infant': 499}
+MAX_SUBJECTS = {'maternal': 559, 'infant': 559}
 MINIMUM_AGE_OF_CONSENT = 18
 MAXIMUM_AGE_OF_CONSENT = 64
 AGE_IS_ADULT = 18

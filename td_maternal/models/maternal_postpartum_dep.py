@@ -80,6 +80,36 @@ class MaternalPostPartumDep(MaternalCrfModel):
         help_text="",
     )
 
+    total_score = models.IntegerField(
+        verbose_name="Total Depression score",
+        editable=False,
+        default=0,
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.total_score = self.calculate_depression_score()
+        super().save(*args, **kwargs)
+
+    def calculate_depression_score(self):
+        score = 0
+        pos = {'laugh': LAUGH,
+               'enjoyment': ENJOYMENT,
+               'anxious': ANXIOUS}
+
+        neg = {'blame': BLAME, 'panick': PANICK, 'top': TOP,
+               'unhappy': UNHAPPY, 'sad': SAD,
+               'crying': CRYING, 'self_harm': HARM}
+        for f in self._meta.get_fields():
+            if f.name in ['laugh', 'enjoyment', 'anxious']:
+                choice_list = (getattr(self, f.name), getattr(self, f.name))
+                score += pos.get(f.name).index(choice_list)
+            elif f.name in ['blame', 'panick', 'top',
+                            'unhappy', 'sad', 'crying', 'self_harm']:
+                choice_list = (getattr(self, f.name), getattr(self, f.name))
+                score += tuple(reversed(neg.get(f.name))).index(choice_list)
+        return score
+
     class Meta:
         app_label = 'td_maternal'
         verbose_name = "Maternal Post Partum: Depression"

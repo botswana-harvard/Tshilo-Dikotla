@@ -20,4 +20,5 @@ class MaternalPostPartumDepAdmin(BaseMaternalModelAdmin):
                     'crying': admin.VERTICAL,
                     'self_harm': admin.VERTICAL}
 
+
 admin.site.register(MaternalPostPartumDep, MaternalPostPartumDepAdmin)
