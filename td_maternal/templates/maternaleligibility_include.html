@@ -32,11 +32,11 @@
 		                		<a href="{% url 'subject_dashboard_url' dashboard_type='maternal' dashboard_model='maternal_eligibility' dashboard_id=maternal_eligibility.pk show='appointments' instruction='V'|add:consent.version %}"><div nowrap>{{ consent.subject_identifier }} (V{{consent.version}})</div></a>
 		                	{% endfor %}
 		                	{% if maternal_eligibility.re_consent %}
-		                		<span style="color:red"><span><a href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=section_url&next=subject_dashboard_url&dashboard_type=maternal&dashboard_model=maternal_eligibility&dashboard_id={{maternal_eligibility.pk}}&show=appointments&instruction='V'{{maternal_eligibility.td_consent_version.version}}">re-consent (V{{maternal_eligibility.latest_consent_version}})</a>
+		                		<span style="color:red"><span><a href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=section_url&next=subject_dashboard_url&dashboard_type=maternal&dashboard_model=maternal_eligibility&dashboard_id={{maternal_eligibility.pk}}&show=appointments&instruction=V{{maternal_eligibility.td_consent_version.version}}">re-consent (V{{maternal_eligibility.latest_consent_version}})</a>
 		                	{% endif %}
 		            </td>
                 {% elif maternal_eligibility.is_eligible %}
-                   <td><A href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=subject_dashboard_url&dashboard_type=maternal&dashboard_model=maternal_eligibility&dashboard_id={{maternal_eligibility.pk}}&show=appointments&instruction='V'{{maternal_eligibility.td_consent_version.version}}">add maternal consent (V{{maternal_eligibility.consent_version}})</A></td>
+                   <td><A href="{% url 'admin:td_maternal_maternalconsent_add' %}?registered_subject={{maternal_eligibility.registered_subject.pk}}&next=subject_dashboard_url&dashboard_type=maternal&dashboard_model=maternal_eligibility&dashboard_id={{maternal_eligibility.pk}}&show=appointments&instruction=V{{maternal_eligibility.td_consent_version.version}}">add maternal consent (V{{maternal_eligibility.consent_version}})</A></td>
                 {% else %}
                     <td>{{ maternal_eligibility.ineligibility }}</td>
                 {% endif %}
