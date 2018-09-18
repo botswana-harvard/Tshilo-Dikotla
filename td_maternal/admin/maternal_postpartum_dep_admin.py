@@ -9,6 +9,19 @@ class MaternalPostPartumDepAdmin(BaseMaternalModelAdmin):
 
     form = MaternalPostPartumDepForm
     list_display = ('maternal_visit', 'laugh', 'enjoyment', 'blame')
+
+    fields = ('maternal_visit',
+              'laugh',
+              'enjoyment',
+              'blame',
+              'anxious',
+              'panick',
+              'top',
+              'unhappy',
+              'sad',
+              'crying',
+              'self_harm',
+              'total_score')
     radio_fields = {'laugh': admin.VERTICAL,
                     'enjoyment': admin.VERTICAL,
                     'blame': admin.VERTICAL,
