@@ -22,6 +22,7 @@ class MaternalPostPartumDepAdmin(BaseMaternalModelAdmin):
               'crying',
               'self_harm',
               'total_score')
+
     radio_fields = {'laugh': admin.VERTICAL,
                     'enjoyment': admin.VERTICAL,
                     'blame': admin.VERTICAL,
