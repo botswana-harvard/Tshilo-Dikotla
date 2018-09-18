@@ -99,14 +99,6 @@ class MaternalConsentForm(BaseConsentForm):
         except TdConsentVersion.DoesNotExist:
             raise forms.ValidationError(
                 'Complete mother\'s consent version form before proceeding')
-        else:
-            try:
-                MaternalConsent.objects.get(
-                    maternal_eligibility=maternal_eligibility,
-                    version=td_consent_version.version)
-            except MaternalConsent.DoesNotExist:
-                raise forms.ValidationError(
-                    'Maternal Consent form for version {} before proceeding'.format(td_consent_version.version))
 
     class Meta:
         model = MaternalConsent
