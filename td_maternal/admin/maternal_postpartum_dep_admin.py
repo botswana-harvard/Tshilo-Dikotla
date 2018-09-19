@@ -11,6 +11,7 @@ class MaternalPostPartumDepAdmin(BaseMaternalModelAdmin):
     list_display = ('maternal_visit', 'laugh', 'enjoyment', 'blame')
 
     fields = ('maternal_visit',
+              'report_datetime',
               'laugh',
               'enjoyment',
               'blame',

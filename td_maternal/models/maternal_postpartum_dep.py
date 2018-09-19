@@ -83,6 +83,8 @@ class MaternalPostPartumDep(MaternalCrfModel):
     total_score = models.IntegerField(
         verbose_name="Total Depression score",
         default=0,
+        null=True,
+        blank=True,
     )
 
     def save(self, *args, **kwargs):
