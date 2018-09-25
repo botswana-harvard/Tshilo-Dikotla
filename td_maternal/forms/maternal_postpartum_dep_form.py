@@ -12,6 +12,7 @@ class MaternalPostPartumDepForm(BaseMaternalModelForm):
 
     total_score = forms.CharField(
         label='Total score',
+        required=False,
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
     class Meta:
