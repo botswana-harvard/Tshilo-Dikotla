@@ -81,6 +81,7 @@ class EnrollmentMixin(models.Model):
 
     week32_test_date = models.DateField(
         verbose_name="Date of HIV Test",
+        validators=[date_not_future],
         null=True,
         blank=True)
 
@@ -149,7 +150,8 @@ class EnrollmentMixin(models.Model):
 #         if not enrollment_helper.validate_rapid_test():
 #             raise ValidationError('Ensure a rapid test id done for this subject.')
         self.edd_by_lmp = enrollment_helper.evaluate_edd_by_lmp
-        self.ga_lmp_enrollment_wks = enrollment_helper.evaluate_ga_lmp(self.report_datetime.date())
+        self.ga_lmp_enrollment_wks = enrollment_helper.evaluate_ga_lmp(
+            self.report_datetime.date())
         self.enrollment_hiv_status = enrollment_helper.enrollment_hiv_status
         self.date_at_32wks = enrollment_helper.date_at_32wks
         if not self.ultrasound:
@@ -181,7 +183,8 @@ class EnrollmentMixin(models.Model):
 
     @property
     def ultrasound(self):
-        MaternalUltraSoundInitial = apps.get_model('td_maternal', 'MaternalUltraSoundInitial')
+        MaternalUltraSoundInitial = apps.get_model(
+            'td_maternal', 'MaternalUltraSoundInitial')
         try:
             return MaternalUltraSoundInitial.objects.get(
                 maternal_visit__appointment__registered_subject=self.registered_subject)
