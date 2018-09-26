@@ -88,8 +88,7 @@ class MaternalPostPartumDep(MaternalCrfModel):
     )
 
     def save(self, *args, **kwargs):
-        if not self.id:
-            self.total_score = self.calculate_depression_score()
+        self.total_score = self.calculate_depression_score()
         super().save(*args, **kwargs)
 
     def calculate_depression_score(self):
