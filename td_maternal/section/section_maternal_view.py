@@ -31,8 +31,22 @@ class MostRecentQuery(object):
     def query(self):
         qs = self.get_model_cls().objects.filter(
             **self.get_query_options()).order_by(*self.get_order_by())[0:self.get_limit()]
-        qs = sorted(
-            qs, key=lambda td_consent_version: td_consent_version.modified, reverse=True)
+
+        qs_td_consent_version = [ml for ml in qs if ml.td_consent_version]
+        qs_no_td_consent_version = [
+            ml for ml in qs if not ml.td_consent_version]
+        qs_td_consent_version = sorted(
+            qs_td_consent_version,
+            key=lambda eligibility: eligibility.td_consent_version.modified,
+            reverse=True)
+
+        qs_no_td_consent_version = sorted(
+            qs_no_td_consent_version,
+            key=lambda eligibility: eligibility.modified,
+            reverse=True)
+
+        qs = qs_td_consent_version + qs_no_td_consent_version
+
         return qs
 
 
