@@ -37,7 +37,7 @@ class MostRecentQuery(object):
             ml for ml in qs if not ml.td_consent_version]
         qs_td_consent_version = sorted(
             qs_td_consent_version,
-            key=lambda eligibility: eligibility.td_consent_version.modified,
+            key=lambda eligibility: eligibility.td_consent_version.created,
             reverse=True)
 
         qs_no_td_consent_version = sorted(
