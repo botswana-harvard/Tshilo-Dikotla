@@ -1,11 +1,12 @@
 from __future__ import print_function
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 
 from edc_dashboard.section import BaseSectionView, site_sections
 
-from ..search import MaternalSearchByWord
 from ..models import MaternalEligibility
+from ..search import MaternalSearchByWord
 
 
 class MostRecentQuery(object):
@@ -14,7 +15,7 @@ class MostRecentQuery(object):
         self._model_cls = model_cls
         self._limit = limit or 50
         self._query_options = query_options or {}
-        self._order_by = order_by or ('-modified', 'created')
+        self._order_by = order_by or ('-modified')
 
     def get_model_cls(self):
         return self._model_cls
@@ -30,7 +31,7 @@ class MostRecentQuery(object):
 
     def query(self):
         qs = self.get_model_cls().objects.filter(
-            **self.get_query_options()).order_by(*self.get_order_by())[0:self.get_limit()]
+            **self.get_query_options())[0:self.get_limit()]
 
         qs_td_consent_version = [ml for ml in qs if ml.td_consent_version]
         qs_no_td_consent_version = [
