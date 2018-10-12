@@ -60,24 +60,24 @@ class InfantDashboard(RegisteredSubjectDashboard):
         return self.context
 
     def get_registered_infant_identifier(self):
-            """Returns an infant identifier associated with the maternal identifier"""
-            infants = OrderedDict()
-            infant_registered_subject = self.registered_subject
-            if self.infant_birth:
-                dct = self.infant_birth.__dict__
-                dct['dashboard_model'] = convert_from_camel(
-                    self.infant_birth._meta.object_name)
-                dct['dashboard_id'] = convert_from_camel(str(self.infant_birth.pk))
-                dct['dashboard_type'] = INFANT
-                infants[infant_registered_subject.subject_identifier] = dct
-            else:
-                dct = {
-                    'subject_identifier': infant_registered_subject.subject_identifier}
-                dct['dashboard_model'] = 'registered_subject'
-                dct['dashboard_id'] = str(infant_registered_subject.pk)
-                dct['dashboard_type'] = INFANT
-                infants[infant_registered_subject.subject_identifier] = dct
-            return infants
+        """Returns an infant identifier associated with the maternal identifier"""
+        infants = OrderedDict()
+        infant_registered_subject = self.registered_subject
+        if self.infant_birth:
+            dct = self.infant_birth.__dict__
+            dct['dashboard_model'] = convert_from_camel(
+                self.infant_birth._meta.object_name)
+            dct['dashboard_id'] = convert_from_camel(str(self.infant_birth.pk))
+            dct['dashboard_type'] = INFANT
+            infants[infant_registered_subject.subject_identifier] = dct
+        else:
+            dct = {
+                'subject_identifier': infant_registered_subject.subject_identifier}
+            dct['dashboard_model'] = 'registered_subject'
+            dct['dashboard_id'] = str(infant_registered_subject.pk)
+            dct['dashboard_type'] = INFANT
+            infants[infant_registered_subject.subject_identifier] = dct
+        return infants
 
     @property
     def appointments(self):
@@ -108,10 +108,6 @@ class InfantDashboard(RegisteredSubjectDashboard):
                     visit_definition__instruction=instruction).order_by(
                     'visit_definition__time_point', 'visit_instance', 'appt_datetime')
         return appointments
-
-    @property
-    def instruction(self):
-        return 'V' + self.maternal_consent.version
 
     @property
     def maternal_consent(self):

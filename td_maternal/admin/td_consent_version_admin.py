@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.core.urlresolvers import reverse
 
 from tshilo_dikotla.base_model_admin import BaseModelAdmin
 
@@ -21,5 +22,11 @@ class TdConsentVersionAdmin(BaseModelAdmin):
                 kwargs["queryset"] = MaternalEligibility.objects.filter(
                     id=request.GET.get('maternal_visit'))
         return super(TdConsentVersionAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def redirect_url(self, request, obj, post_url_continue=None):
+        url_name = request.GET.get(self.querystring_name)
+        section_name = request.GET.get('section_name')
+        return reverse(url_name, kwargs={'section_name': section_name})
+
 
 admin.site.register(TdConsentVersion, TdConsentVersionAdmin)

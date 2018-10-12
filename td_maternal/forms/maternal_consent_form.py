@@ -12,7 +12,7 @@ from edc_constants.constants import FEMALE, OMANG, OTHER
 
 from tshilo_dikotla.choices import STUDY_SITES
 
-from ..models import MaternalConsent, MaternalEligibility
+from ..models import MaternalConsent, TdConsentVersion
 
 
 class MaternalConsentForm(BaseConsentForm):
@@ -26,12 +26,14 @@ class MaternalConsentForm(BaseConsentForm):
 
     def clean(self):
         self.cleaned_data['gender'] = FEMALE
+        self.validate_current_consent_version()
         cleaned_data = super(MaternalConsentForm, self).clean()
         if cleaned_data.get('identity_type') == OMANG and cleaned_data.get('identity')[4] != '2':
-            raise forms.ValidationError('Identity provided indicates participant is Male. Please correct.')
+            raise forms.ValidationError(
+                'Identity provided indicates participant is Male. Please correct.')
         eligibility = cleaned_data.get('maternal_eligibility')
         if eligibility is None:
-                raise forms.ValidationError("Select age in Maternal eligibility")
+            raise forms.ValidationError("Select age in Maternal eligibility")
         if cleaned_data.get('citizen') != eligibility.has_omang:
             raise forms.ValidationError(
                 "In eligibility you said has_omang is {}. Yet you wrote citizen is {}. "
@@ -45,10 +47,13 @@ class MaternalConsentForm(BaseConsentForm):
         cleaned_data = self.cleaned_data
         try:
             identity = cleaned_data.get('identity')
-            consent_v1 = MaternalConsent.objects.get(identity=identity, version=1)
-            consent_age = relativedelta(consent_v1.consent_datetime.date(), consent_v1.dob).years
+            consent_v1 = MaternalConsent.objects.get(
+                identity=identity, version=1)
+            consent_age = relativedelta(
+                consent_v1.consent_datetime.date(), consent_v1.dob).years
         except MaternalConsent.DoesNotExist:
-            consent_age = relativedelta(timezone.now().date(), cleaned_data.get('dob')).years
+            consent_age = relativedelta(
+                timezone.now().date(), cleaned_data.get('dob')).years
         eligibility_age = cleaned_data.get('maternal_eligibility').age_in_years
         if consent_age != eligibility_age:
             raise forms.ValidationError(
@@ -74,14 +79,26 @@ class MaternalConsentForm(BaseConsentForm):
         cleaned_data = self.cleaned_data
         if cleaned_data.get('recruitment_clinic') == OTHER:
             if not cleaned_data.get('recruitment_clinic_other'):
-                self._errors["recruitment_clinic_other"] = ErrorList(["Please specify health facility."])
+                self._errors["recruitment_clinic_other"] = ErrorList(
+                    ["Please specify health facility."])
                 raise forms.ValidationError('You indicated that mother was recruited from a health facility other '
                                             'than that list provided. Please specify that health facility.')
         else:
             if cleaned_data.get('recruitment_clinic_other'):
-                self._errors["recruitment_clinic_other"] = ErrorList(["Please do not specify health facility."])
+                self._errors["recruitment_clinic_other"] = ErrorList(
+                    ["Please do not specify health facility."])
                 raise forms.ValidationError('You CANNOT specify other facility that mother was recruited from as you '
                                             'already indicated {}'.format(cleaned_data.get('recruitment_clinic')))
+
+    def validate_current_consent_version(self):
+        cleaned_data = self.cleaned_data
+        maternal_eligibility = cleaned_data.get('maternal_eligibility')
+        try:
+            td_consent_version = TdConsentVersion.objects.get(
+                maternal_eligibility=maternal_eligibility)
+        except TdConsentVersion.DoesNotExist:
+            raise forms.ValidationError(
+                'Complete mother\'s consent version form before proceeding')
 
     class Meta:
         model = MaternalConsent

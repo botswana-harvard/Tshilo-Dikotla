@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import (
     ChronicConditions, Contraceptives, DiseasesAtEnrollment, HouseholdGoods,
     PriorArv, AutopsyInfoSource, Supplements, InfantVaccines,
-    HealthCond, DelComp, ObComp, LabDelDx, MaternalRelatives, MaternalMedications, Rations, Foods,
+    HealthCond, DelComp, ObComp, MaternalRelatives, MaternalMedications, Rations, Foods,
     Malformations, MaternalDiagnoses, DeliveryComplications, MaternalHospitalization)
 
 
@@ -82,9 +82,9 @@ class ObCompAdmin(admin.ModelAdmin):
 admin.site.register(ObComp, ObCompAdmin)
 
 
-class LabDelDxAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(LabDelDx, LabDelDxAdmin)
+# class LabDelDxAdmin(admin.ModelAdmin):
+#     pass
+# admin.site.register(LabDelDx, LabDelDxAdmin)
 
 
 class MaternalRelativesAdmin(admin.ModelAdmin):

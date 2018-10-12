@@ -2,6 +2,7 @@ from django.db import models
 
 # from edc_base.audit_trail import AuditTrail
 from edc_base.model.fields import OtherCharField
+from edc_base.model.validators import date_not_future
 from edc_code_lists.models import WcsDxAdult
 from edc_constants.choices import YES_NO, YES_NO_NA
 
@@ -80,6 +81,7 @@ class MaternalMedicalHistory(MaternalCrfModel):
     date_hiv_diagnosis = models.DateField(
         verbose_name="If HIV sero-posetive, what is the approximate date of diagnosis?",
         help_text='EDD Confirmed. Derived variable, see AntenatalEnrollment.',
+        validators=[date_not_future],
         blank=True,
         null=True)
 

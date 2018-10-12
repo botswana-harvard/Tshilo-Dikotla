@@ -112,11 +112,7 @@ class MaternalDashboard(RegisteredSubjectDashboard):
                     visit_definition__instruction__in=[instruction]).order_by(
                     'visit_definition__time_point', 'visit_instance', 'appt_datetime')
         return appointments
-
-    @property
-    def instruction(self):
-        return 'V' + self.consent.version
-    
+ 
     @property
     def initial_consent_datetime(self):
         try:

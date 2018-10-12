@@ -1,12 +1,34 @@
 from edc_constants.constants import UNKEYED, NOT_REQUIRED, POS, NEG, UNK, IND
 from edc_rule_groups.classes import RuleGroup, site_rule_groups, Logic, CrfRule, RequisitionRule
 from edc_registration.models import RegisteredSubject
-
 from tshilo_dikotla.constants import ONE
+from edc_constants.constants import YES
+from edc_appointment.models.appointment import Appointment
 
-from .models import (MaternalUltraSoundInitial, MaternalVisit,
-                     MaternalPostPartumDep, RapidTestResult, MaternalInterimIdcc)
+from .models import MaternalUltraSoundInitial, MaternalVisit, MaternalContraception
+from .models import MaternalPostPartumDep, RapidTestResult, MaternalInterimIdcc
 from .classes import MaternalStatusHelper
+
+
+def get_previous_visit(visit_instance, timepoints, visit_model):
+    registered_subject = visit_instance.appointment.registered_subject
+    position = timepoints.index(
+        visit_instance.appointment.visit_definition.code)
+    timepoints_slice = timepoints[:position]
+    if len(timepoints_slice) > 1:
+        timepoints_slice.reverse()
+    for point in timepoints_slice:
+        try:
+            previous_appointment = Appointment.objects.filter(
+                registered_subject=registered_subject, visit_definition__code=point).order_by('-created').first()
+            return visit_model.objects.filter(appointment=previous_appointment).order_by('-created').first()
+        except Appointment.DoesNotExist:
+            pass
+        except visit_model.DoesNotExist:
+            pass
+        except AttributeError:
+            pass
+    return None
 
 
 def func_mother_pos(visit_instance):
@@ -116,8 +138,25 @@ def show_rapid_test_form(visit_instance):
             else:
                 return True
     else:
-        if maternal_status_helper.hiv_status == UNK:
+        if maternal_status_helper.hiv_status in [UNK, NEG]:
             return True
+        return False
+
+
+def func_show_srh_services_utilization(visit_instance):
+    """Returns True if participant was referred to shr in the last visit."""
+    previous_visit = get_previous_visit(visit_instance,
+                                        ['1000M', '1010M', '1020M', '2000M' '2010M',
+                                         '2020M', '2060M', '2120M', '2180M', '2240M',
+                                         '2300M', '2360M'],
+                                        MaternalVisit)
+    if not previous_visit:
+        return False
+    try:
+        rep_health_refferal = MaternalContraception.objects.get(
+            maternal_visit=previous_visit)
+        return rep_health_refferal.srh_referral == YES
+    except MaternalContraception.DoesNotExist:
         return False
 
 
@@ -157,10 +196,18 @@ class MaternalRegisteredSubjectRuleGroup(RuleGroup):
             alternative=NOT_REQUIRED),
         target_model=[('td_maternal', 'maternalultrasoundinitial')])
 
+    srh_services = CrfRule(
+        logic=Logic(
+            predicate=func_show_srh_services_utilization,
+            consequence=UNKEYED,
+            alternative=NOT_REQUIRED),
+        target_model=[('td_maternal', 'maternalsrh')])
+
     class Meta:
         app_label = 'td_maternal'
         source_fk = None
         source_model = RegisteredSubject
+
 
 site_rule_groups.register(MaternalRegisteredSubjectRuleGroup)
 
@@ -212,6 +259,7 @@ class MaternalRequisitionRuleGroup(RuleGroup):
         source_fk = None
         source_model = RegisteredSubject
 
+
 site_rule_groups.register(MaternalRequisitionRuleGroup)
 
 
@@ -229,6 +277,8 @@ class MaternalRequisitionRuleGroupCD4(RuleGroup):
         app_label = 'td_maternal'
         source_fk = (MaternalVisit, 'maternal_visit')
         source_model = MaternalInterimIdcc
+
+
 site_rule_groups.register(MaternalRequisitionRuleGroupCD4)
 
 
@@ -250,5 +300,6 @@ class MaternalUltrasoundInitialRuleGroup(RuleGroup):
         app_label = 'td_maternal'
         source_fk = (MaternalVisit, 'maternal_visit')
         source_model = MaternalUltraSoundInitial
+
 
 site_rule_groups.register(MaternalUltrasoundInitialRuleGroup)

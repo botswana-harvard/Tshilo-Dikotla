@@ -62,7 +62,8 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
     is_consented = models.BooleanField(
         default=False,
         editable=False)
-    # updated by signal on saving consent, is determined by participant citizenship
+    # updated by signal on saving consent, is determined by participant
+    # citizenship
     has_passed_consent = models.BooleanField(
         default=False,
         editable=False)
@@ -74,7 +75,8 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
     def save(self, *args, **kwargs):
         self.set_uuid_for_eligibility_if_none()
         self.is_eligible, error_message = self.check_eligibility()
-        self.ineligibility = error_message  # error_message not None if is_eligible is False
+        # error_message not None if is_eligible is False
+        self.ineligibility = error_message
         super(MaternalEligibility, self).save(*args, **kwargs)
 
     def check_eligibility(self):
@@ -82,9 +84,11 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
         error message is the reason for eligibility test failed."""
         error_message = []
         if self.age_in_years < MIN_AGE_OF_CONSENT:
-            error_message.append('Mother is under {}'.format(MIN_AGE_OF_CONSENT))
+            error_message.append(
+                'Mother is under {}'.format(MIN_AGE_OF_CONSENT))
         if self.age_in_years > MAX_AGE_OF_CONSENT:
-            error_message.append('Mother is too old (>{})'.format(MAX_AGE_OF_CONSENT))
+            error_message.append(
+                'Mother is too old (>{})'.format(MAX_AGE_OF_CONSENT))
         if self.has_omang == NO:
             error_message.append('Not a citizen')
         is_eligible = False if error_message else True
@@ -98,7 +102,8 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
 
     @property
     def maternal_eligibility_loss(self):
-        MaternalEligibilityLoss = apps.get_model('td_maternal', 'MaternalEligibilityLoss')
+        MaternalEligibilityLoss = apps.get_model(
+            'td_maternal', 'MaternalEligibilityLoss')
         try:
             maternal_eligibility_loss = MaternalEligibilityLoss.objects.get(
                 maternal_eligibility_id=self.id)
@@ -136,11 +141,10 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
                     version=settings.LASTEST_VERSION)
             except MaternalConsent.DoesNotExist:
                 maternal_consent = None
-            
-            if self.td_consent_version.version ==  settings.LASTEST_VERSION and not maternal_consent:
+
+            if self.td_consent_version.version == settings.LASTEST_VERSION and not maternal_consent:
                 return True
         return False
-            
 
     @property
     def td_consent_version(self):
@@ -148,7 +152,8 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
         """
         from td_maternal.models import TdConsentVersion
         try:
-            td_consent_version = TdConsentVersion.objects.get(maternal_eligibility=self)
+            td_consent_version = TdConsentVersion.objects.get(
+                maternal_eligibility=self)
         except TdConsentVersion.DoesNotExist:
             td_consent_version = None
         return td_consent_version

@@ -37,6 +37,7 @@ from .maternal_arv_post import MaternalArvPostAdh
 from .rapid_test_result import RapidTestResult
 from .maternal_contraception import MaternalContraception
 from .maternal_randomization import MaternalRando
+from .maternal_srh import MaternalSrh
 from .maternal_substance_during_preg import MaternalSubstanceUseDuringPreg
 from .maternal_substance_prior_preg import MaternalSubstanceUsePriorPreg
 from .maternal_contact import MaternalContact

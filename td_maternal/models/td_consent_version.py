@@ -31,6 +31,11 @@ class TdConsentVersion(BaseUuidModel):
     def __str__(self):
         return str(self.maternal_eligibility.age_in_years) + str(self.version)
 
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.modified = self.created
+        super(TdConsentVersion, self).save(*args, **kwargs)
+
     class Meta:
         app_label = 'td_maternal'
         verbose_name = 'TD Consent Version'
