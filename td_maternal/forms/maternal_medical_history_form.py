@@ -14,8 +14,8 @@ class MaternalMedicalHistoryForm(BaseMaternalModelForm):
     def clean(self):
         cleaned_data = super(MaternalMedicalHistoryForm, self).clean()
 
-        self.validate_haart_start_date()
-        self.validate_hiv_diagnosis_date()
+        # self.validate_haart_start_date()
+        # self.validate_hiv_diagnosis_date()
         self.validate_chronic_since_who_diagnosis_neg()
         self.validate_chronic_since_who_diagnosis_pos()
         self.validate_who_diagnosis_who_chronic_list()
