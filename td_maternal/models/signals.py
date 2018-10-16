@@ -54,6 +54,8 @@ def maternal_eligibility_on_post_save(sender, instance, raw, created, using, **k
             else:
                 MaternalEligibilityLoss.objects.filter(
                     maternal_eligibility_id=instance.id).delete()
+                if not instance.is_consented:
+                    instance.create_td_consent_version
                 try:
                     registered_subject = RegisteredSubject.objects.get(
                         screening_identifier=instance.eligibility_id,
@@ -174,7 +176,8 @@ def put_back_on_study_from_failed_eligibility(instance):
     from off study."""
     with transaction.atomic():
         try:
-            visit_definition = VisitDefinition.objects.get(code='1000M', instruction=instance.instruction)
+            visit_definition = VisitDefinition.objects.get(
+                code='1000M', instruction=instance.instruction)
             appointment = Appointment.objects.get(
                 registered_subject=instance.registered_subject,
                 visit_definition=visit_definition,

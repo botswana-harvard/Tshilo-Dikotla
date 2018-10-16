@@ -1,5 +1,6 @@
 from uuid import uuid4
 from django.utils import timezone
+from datetime import datetime
 
 from django.db import models
 from django.apps import apps
@@ -157,6 +158,17 @@ class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidMo
         except TdConsentVersion.DoesNotExist:
             td_consent_version = None
         return td_consent_version
+
+    @property
+    def create_td_consent_version(self):
+        from td_maternal.models import TdConsentVersion
+        try:
+            TdConsentVersion.objects.get(maternal_eligibility=self)
+        except TdConsentVersion.DoesNotExist:
+            TdConsentVersion.objects.create(
+                version='3',
+                maternal_eligibility=self,
+                report_datetime=datetime.now())
 
     def set_uuid_for_eligibility_if_none(self):
         if not self.eligibility_id:
