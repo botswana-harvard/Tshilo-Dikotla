@@ -146,7 +146,7 @@ def show_rapid_test_form(visit_instance):
 def func_show_srh_services_utilization(visit_instance):
     """Returns True if participant was referred to shr in the last visit."""
     previous_visit = get_previous_visit(visit_instance,
-                                        ['1000M', '1010M', '1020M', '2000M' '2010M',
+                                        ['1000M', '1010M', '1020M', '2000M', '2010M',
                                          '2020M', '2060M', '2120M', '2180M', '2240M',
                                          '2300M', '2360M'],
                                         MaternalVisit)
