@@ -1,13 +1,14 @@
 # from datetime import datetime
-from django.utils import timezone
+from django_crypto_fields.apps import AppConfig as DjangoCryptoFieldsAppConfigParent
+from edc_sync.apps import AppConfig as EdcSyncAppConfigParent
+from edc_sync.constants import SERVER
 
 from django.apps import AppConfig
 from django.conf import settings
+from django.utils import timezone
 
-from django_crypto_fields.apps import AppConfig as DjangoCryptoFieldsAppConfigParent
 from edc_consent.apps import EdcConsentAppConfig
-from edc_sync.apps import AppConfig as EdcSyncAppConfigParent
-from edc_sync.constants import SERVER
+
 
 study_start_datetime = timezone.datetime(2016, 4, 1, 0, 0, 0)
 consent_version_2_start = timezone.datetime(2018, 2, 1, 0, 0, 0)
