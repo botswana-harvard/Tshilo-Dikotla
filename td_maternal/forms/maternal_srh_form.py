@@ -1,10 +1,9 @@
+from edc_constants.constants import NO, YES
+
 from django import forms
 from django.forms.utils import ErrorList
 
-from edc_constants.constants import NO, YES
-
 from ..models import MaternalSrh
-
 from .base_maternal_model_form import BaseMaternalModelForm
 
 
@@ -48,7 +47,7 @@ class MaternalSrhForm(BaseMaternalModelForm):
                     cleaned_data.get('srh_referral')):
                 raise forms.ValidationError(
                     {'reason_unseen_clinic':
-                     'If Q3 is \'No\' all Questions after Question 4 must None or Blank.'})
+                     'If Q3 is \'No\' all Questions after Question 4 must be None or Blank.'})
 
     def validate_contraceptive_initiated(self):
         cleaned_data = self.cleaned_data

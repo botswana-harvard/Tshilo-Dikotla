@@ -1,9 +1,9 @@
-from django import forms
-
 from edc_constants.constants import YES, NO, NOT_APPLICABLE
 
-from .base_infant_model_form import BaseInfantModelForm
+from django import forms
+
 from ..models import InfantFeeding
+from .base_infant_model_form import BaseInfantModelForm
 
 
 class InfantFeedingForm(BaseInfantModelForm):
@@ -16,6 +16,8 @@ class InfantFeedingForm(BaseInfantModelForm):
         self.validate_cows_milk()
         self.validate_took_other_milk()
         self.validate_breast_milk_weaning()
+        self.validate_most_recent_bm_range()
+        self.validate_breast_milk_completely_weaned()
         self.validate_formula_intro_occur(cleaned_data)
         return cleaned_data
 
@@ -74,10 +76,12 @@ class InfantFeedingForm(BaseInfantModelForm):
         cleaned_data = self.cleaned_data
         if cleaned_data.get('cow_milk') == YES:
             if cleaned_data.get('cow_milk_yes') == 'N/A':
-                raise forms.ValidationError('Question13: If infant took cows milk. Answer CANNOT be Not Applicable')
+                raise forms.ValidationError(
+                    'Question13: If infant took cows milk. Answer CANNOT be Not Applicable')
         else:
             if not cleaned_data.get('cow_milk_yes') == 'N/A':
-                raise forms.ValidationError('Question13: Infant did not take cows milk. Answer is NOT APPLICABLE')
+                raise forms.ValidationError(
+                    'Question13: Infant did not take cows milk. Answer is NOT APPLICABLE')
 
     def validate_took_other_milk(self):
         cleaned_data = self.cleaned_data
@@ -101,12 +105,38 @@ class InfantFeedingForm(BaseInfantModelForm):
         cleaned_data = self.cleaned_data
         if cleaned_data.get('ever_breastfeed') == YES:
             if cleaned_data.get('complete_weaning') != NOT_APPLICABLE:
-                raise forms.ValidationError('Question24: The infant has been breastfed since the last visit, The answer'
+                raise forms.ValidationError('Question24: The infant has been breastfed since the last visit, The'
                                             ' answer should be N/A')
         else:
             if cleaned_data.get('complete_weaning') == NOT_APPLICABLE:
                 raise forms.ValidationError('Question24: The infant has not been breastfed since the last visit, '
                                             'The answer should not be N/A')
+
+    def validate_breast_milk_completely_weaned(self):
+        cleaned_data = self.cleaned_data
+        if (cleaned_data.get('ever_breastfeed') == YES and
+                cleaned_data.get('weaned_completely') == NO and
+                not cleaned_data.get('most_recent_bm')):
+            raise forms.ValidationError({'most_recent_bm': 'The infant has not'
+                                         ' been weaned off of breast milk. This field'
+                                         ' is required.'})
+        elif (cleaned_data.get('ever_breastfeed') == NO and
+                cleaned_data.get('complete_weaning') == YES and
+                cleaned_data.get('most_recent_bm')):
+            raise forms.ValidationError({'most_recent_bm': 'The infant has been'
+                                         ' weaned off of breast milk. This field'
+                                         ' is not required.'})
+
+    def validate_most_recent_bm_range(self):
+        cleaned_data = self.cleaned_data
+        if(self.instance.previous_infant_instance and
+           cleaned_data.get('ever_breastfeed') == YES and
+           cleaned_data.get('weaned_completely') == YES):
+            if(cleaned_data.get('most_recent_bm') > cleaned_data.get("report_datetime").date()
+               or cleaned_data.get('most_recent_bm') < self.instance.previous_infant_feeding):
+                raise forms.ValidationError({'most_recent_bm': 'Date of most '
+                                             'recent breastfeeding must be '
+                                             'between last visit date and today.'})
 
     def validate_formula_intro_occur(self, cleaned_data):
         if cleaned_data.get('formula_intro_occur') == YES:
