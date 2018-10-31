@@ -4,6 +4,7 @@ from django import forms
 
 from ..models import InfantFeeding
 from .base_infant_model_form import BaseInfantModelForm
+from edc_templates.templatetags.common_tags import subject_identifier
 
 
 class InfantFeedingForm(BaseInfantModelForm):
@@ -23,14 +24,20 @@ class InfantFeedingForm(BaseInfantModelForm):
 
     def validate_other_feeding(self):
         cleaned_data = self.cleaned_data
-        if cleaned_data.get('formula_intro_occur') == YES:
+        infant_feeding = InfantFeeding.objects.filter(subject_identifier=cleaned_data.get(
+            'infant_visit').appointment.registered_subject.subject_identifier,
+            formula_intro_date__isnull=False).last()
+        if cleaned_data.get('formula_intro_occur') == YES and infant_feeding and cleaned_data.get('formula_intro_date'):
+            raise forms.ValidationError({'formula_intro_date':
+                                         'Formula intro date already added in visit {}, '
+                                         'do not enter the date again.'.format(infant_feeding.appointment.visit_definition.code)})
+        elif cleaned_data.get('formula_intro_occur') == YES and not infant_feeding:
             if not cleaned_data.get('formula_intro_date'):
                 raise forms.ValidationError('Question3: If received formula milk | foods | liquids since last'
                                             ' attended visit. Please provide intro date')
-        else:
-            if cleaned_data.get('formula_intro_date'):
-                raise forms.ValidationError('You mentioned no formula milk | foods | liquids received'
-                                            ' since last visit in question 3. DO NOT PROVIDE DATE')
+        elif cleaned_data.get('formula_intro_occur') in [NO, NOT_APPLICABLE] and cleaned_data.get('formula_intro_date'):
+            raise forms.ValidationError('You mentioned no formula milk | foods | liquids received'
+                                        ' since last visit in question 3. DO NOT PROVIDE DATE')
 
     def validate_took_formula(self):
         cleaned_data = self.cleaned_data

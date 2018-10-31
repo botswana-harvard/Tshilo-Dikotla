@@ -37,9 +37,10 @@ class InfantFeeding(InfantCrfModel):
         default=NOT_APPLICABLE)
 
     formula_intro_date = models.DateField(
-        verbose_name=("Date the infant participant first started receiving "
-                      "solids since the last attended scheduled visit where "
-                      "an infant feeding form was completed."),
+        verbose_name=(
+            "Date the infant participant first started receiving solids since the last "
+            "attended scheduled visit where an infant feeding form was completed"),
+        validators=[date_not_future, ],
         blank=True,
         null=True)
 
@@ -210,7 +211,7 @@ class InfantFeeding(InfantCrfModel):
         """ Returns previous infant visit. """
         from .infant_visit import InfantVisit
         from edc_appointment.models import Appointment
-        visit = ['2000', '2010', '2030', '2060', '2090', '2120']
+        visit = ['2000', '2010', '2020', '2030', '2060', '2090', '2120']
         try:
             registered_subject = infant_visit.appointment.registered_subject
             previous_visit_code = visit[
