@@ -65,27 +65,27 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
             else:
                 raise forms.ValidationError(
                     "Please give a valid arv initiation date.")
+        try:
+            medical_history = MaternalMedicalHistory.objects.get(
+                maternal_visit=cleaned_data.get('maternal_visit'))
             try:
-                medical_history = MaternalMedicalHistory.objects.get(
-                    maternal_visit=cleaned_data.get('maternal_visit'))
-                try:
-                    antenatal_enrollment = AntenatalEnrollment.objects.get(
-                        registered_subject__subject_identifier=cleaned_data.get(
-                            'maternal_visit').appointment.registered_subject.subject_identifier)
-                except AntenatalEnrollment.DoesNotExist:
-                    raise forms.ValidationError(
-                        'Date of HIV test required, complete Antenatal Enrollment form before proceeding.')
-                else:
-                    if cleaned_data.get('haart_start_date') < antenatal_enrollment.week32_test_date:
-                        raise forms.ValidationError(
-                            'Haart start date cannot be before date of HIV test.')
-            except MaternalMedicalHistory.DoesNotExist:
+                antenatal_enrollment = AntenatalEnrollment.objects.get(
+                    registered_subject__subject_identifier=cleaned_data.get(
+                        'maternal_visit').appointment.registered_subject.subject_identifier)
+            except AntenatalEnrollment.DoesNotExist:
                 raise forms.ValidationError(
-                    'Date of diagnosis required, complete Maternal Medical History form before proceeding.')
+                    'Date of HIV test required, complete Antenatal Enrollment form before proceeding.')
             else:
-                if cleaned_data.get('haart_start_date') < medical_history.date_hiv_diagnosis:
+                if cleaned_data.get('haart_start_date') < antenatal_enrollment.week32_test_date:
                     raise forms.ValidationError(
-                        'Haart start date cannot be before HIV diagnosis date.')
+                        'Haart start date cannot be before date of HIV test.')
+        except MaternalMedicalHistory.DoesNotExist:
+            raise forms.ValidationError(
+                'Date of diagnosis required, complete Maternal Medical History form before proceeding.')
+        else:
+            if cleaned_data.get('haart_start_date') < medical_history.date_hiv_diagnosis:
+                raise forms.ValidationError(
+                    'Haart start date cannot be before HIV diagnosis date.')
 
     def validate_prev_preg(self):
         cleaned_data = self.cleaned_data

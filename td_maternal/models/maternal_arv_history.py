@@ -1,14 +1,13 @@
-from django.db import models
-from django.core.validators import MinValueValidator
-
-from edc_base.model.fields import IsDateEstimatedField, OtherCharField
-# from edc_base.audit_trail import AuditTrail
 from edc_constants.choices import YES_NO, YES_NO_NA
 
+from django.core.validators import MinValueValidator
+from django.db import models
+
+from edc_base.model.fields import IsDateEstimatedField, OtherCharField
+from edc_base.model.validators import date_not_future
 from td_list.models import PriorArv
 
 from ..maternal_choices import PRIOR_PREG_HAART_STATUS
-
 from .maternal_crf_model import MaternalCrfModel
 
 
@@ -33,6 +32,7 @@ class MaternalLifetimeArvHistory(MaternalCrfModel):
 
     haart_start_date = models.DateField(
         verbose_name="Date of triple antiretrovirals first started",
+        validators=[date_not_future],
         blank=True,
         null=True)
 
