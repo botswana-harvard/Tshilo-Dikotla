@@ -1,10 +1,10 @@
 from edc_constants.constants import YES, NO, NOT_APPLICABLE
+from edc_templates.templatetags.common_tags import subject_identifier
 
 from django import forms
 
 from ..models import InfantFeeding
 from .base_infant_model_form import BaseInfantModelForm
-from edc_templates.templatetags.common_tags import subject_identifier
 
 
 class InfantFeedingForm(BaseInfantModelForm):
@@ -24,7 +24,7 @@ class InfantFeedingForm(BaseInfantModelForm):
 
     def validate_other_feeding(self):
         cleaned_data = self.cleaned_data
-        infant_feeding = InfantFeeding.objects.filter(subject_identifier=cleaned_data.get(
+        infant_feeding = InfantFeeding.objects.filter(infant_visit__subject_identifier=cleaned_data.get(
             'infant_visit').appointment.registered_subject.subject_identifier,
             formula_intro_date__isnull=False).last()
         if cleaned_data.get('formula_intro_occur') == YES and infant_feeding and cleaned_data.get('formula_intro_date'):
