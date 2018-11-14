@@ -30,7 +30,7 @@ class InfantFeedingForm(BaseInfantModelForm):
         if cleaned_data.get('formula_intro_occur') == YES and infant_feeding and cleaned_data.get('formula_intro_date'):
             raise forms.ValidationError({'formula_intro_date':
                                          'Formula intro date already added in visit {}, '
-                                         'do not enter the date again.'.format(infant_feeding.appointment.visit_definition.code)})
+                                         'do not enter the date again.'.format(infant_feeding.infant_visit.appointment.visit_definition.code)})
         elif cleaned_data.get('formula_intro_occur') == YES and not infant_feeding:
             if not cleaned_data.get('formula_intro_date'):
                 raise forms.ValidationError('Question3: If received formula milk | foods | liquids since last'
@@ -139,8 +139,10 @@ class InfantFeedingForm(BaseInfantModelForm):
         if(self.instance.previous_infant_instance and
            cleaned_data.get('ever_breastfeed') == YES and
            cleaned_data.get('weaned_completely') == YES):
-            if(cleaned_data.get('most_recent_bm') > cleaned_data.get("report_datetime").date()
-               or cleaned_data.get('most_recent_bm') < self.instance.previous_infant_feeding):
+            if(cleaned_data.get('most_recent_bm') and (
+                cleaned_data.get('most_recent_bm') > cleaned_data.get(
+                    "report_datetime").date()
+               or cleaned_data.get('most_recent_bm') < self.instance.previous_infant_feeding)):
                 raise forms.ValidationError({'most_recent_bm': 'Date of most '
                                              'recent breastfeeding must be '
                                              'between last visit date and today.'})

@@ -185,6 +185,7 @@ class InfantFeeding(InfantCrfModel):
 
     most_recent_bm = models.DateField(
         verbose_name="Date of most recent breastfeeding ",
+        validators=[date_not_future, ],
         blank=True,
         null=True)
 
