@@ -11,6 +11,7 @@ class InfantFeedingForm(BaseInfantModelForm):
 
     def clean(self):
         cleaned_data = super(InfantFeedingForm, self).clean()
+        self.validate_formula_intro_occur_previous()
         self.validate_other_feeding()
         self.validate_took_formula()
         self.validate_took_formula_not_yes()
@@ -26,18 +27,32 @@ class InfantFeedingForm(BaseInfantModelForm):
         cleaned_data = self.cleaned_data
         infant_feeding = InfantFeeding.objects.filter(infant_visit__subject_identifier=cleaned_data.get(
             'infant_visit').appointment.registered_subject.subject_identifier,
-            formula_intro_date__isnull=False).last()
-        if cleaned_data.get('formula_intro_occur') == YES and infant_feeding and cleaned_data.get('formula_intro_date'):
-            raise forms.ValidationError({'formula_intro_date':
-                                         'Formula intro date already added in visit {}, '
-                                         'do not enter the date again.'.format(infant_feeding.infant_visit.appointment.visit_definition.code)})
-        elif cleaned_data.get('formula_intro_occur') == YES and not infant_feeding:
+            formula_intro_date__isnull=False).exclude(infant_visit=cleaned_data.get(
+                'infant_visit')).last()
+        if cleaned_data.get('formula_intro_occur') == YES and not infant_feeding:
             if not cleaned_data.get('formula_intro_date'):
                 raise forms.ValidationError('Question3: If received formula milk | foods | liquids since last'
                                             ' attended visit. Please provide intro date')
         elif cleaned_data.get('formula_intro_occur') in [NO, NOT_APPLICABLE] and cleaned_data.get('formula_intro_date'):
             raise forms.ValidationError('You mentioned no formula milk | foods | liquids received'
                                         ' since last visit in question 3. DO NOT PROVIDE DATE')
+
+    def validate_formula_intro_occur_previous(self):
+        cleaned_data = self.cleaned_data
+        infant_feeding = InfantFeeding.objects.filter(infant_visit__subject_identifier=cleaned_data.get(
+            'infant_visit').appointment.registered_subject.subject_identifier,
+            formula_intro_date__isnull=False).exclude(infant_visit=cleaned_data.get(
+                'infant_visit')).last()
+        if (infant_feeding and cleaned_data.get('formula_intro_date') and
+                cleaned_data.get('formula_intro_date') != infant_feeding.formula_intro_date):
+            raise forms.ValidationError({'formula_intro_date':
+                                         'Formula intro date does not match date '
+                                         'already added in visit {},  '
+                                         'which was defined as {}.'.format(infant_feeding.infant_visit.appointment.visit_definition.code,
+                                                                           infant_feeding.formula_intro_date)})
+        elif infant_feeding:
+            cleaned_data[
+                'formula_intro_date'] = infant_feeding.formula_intro_date
 
     def validate_took_formula(self):
         cleaned_data = self.cleaned_data
