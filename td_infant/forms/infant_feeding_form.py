@@ -46,7 +46,7 @@ class InfantFeedingForm(BaseInfantModelForm):
         if (infant_feeding and cleaned_data.get('formula_intro_date') and
                 cleaned_data.get('formula_intro_date') != infant_feeding.formula_intro_date):
             raise forms.ValidationError({'formula_intro_date':
-                                         'Formula intro date does not match date '
+                                         'Solids intro date does not match date '
                                          'already added in visit {},  '
                                          'which was defined as {}.'.format(infant_feeding.infant_visit.appointment.visit_definition.code,
                                                                            infant_feeding.formula_intro_date)})
