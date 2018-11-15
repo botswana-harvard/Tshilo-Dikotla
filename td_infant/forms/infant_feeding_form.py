@@ -146,7 +146,8 @@ class InfantFeedingForm(BaseInfantModelForm):
                 cleaned_data.get('complete_weaning') == YES and
                 cleaned_data.get('most_recent_bm')):
             raise forms.ValidationError({'most_recent_bm': 'The infant has been'
-                                         ' weaned off of breast milk. This field'
+                                         ' weaned off of breast milk before last '
+                                         'attended scheduled visit. This field'
                                          ' is not required.'})
 
     def validate_most_recent_bm_range(self):
