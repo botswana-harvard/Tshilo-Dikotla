@@ -162,12 +162,12 @@ class InfantFeedingForm(BaseInfantModelForm):
     def validate_most_recent_bm_range(self):
         cleaned_data = self.cleaned_data
         if(self.instance.previous_infant_instance and
-           cleaned_data.get('ever_breastfeed') == YES and
-           cleaned_data.get('weaned_completely') == YES):
-            if(cleaned_data.get('most_recent_bm') and (
-                cleaned_data.get('most_recent_bm') > cleaned_data.get(
-                    "report_datetime").date()
-               or cleaned_data.get('most_recent_bm') < self.instance.previous_infant_feeding)):
+           (cleaned_data.get('ever_breastfeed') == YES and
+                cleaned_data.get('weaned_completely') == YES)):
+            if(not cleaned_data.get('most_recent_bm')
+               or (cleaned_data.get('most_recent_bm')
+                   and cleaned_data.get('most_recent_bm') > cleaned_data.get("report_datetime").date()
+                   or cleaned_data.get('most_recent_bm') < self.instance.previous_infant_feeding)):
                 raise forms.ValidationError({'most_recent_bm': 'Date of most '
                                              'recent breastfeeding must be '
                                              'between last visit date and today.'})
