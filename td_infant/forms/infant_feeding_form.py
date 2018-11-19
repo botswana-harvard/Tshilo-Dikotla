@@ -40,7 +40,8 @@ class InfantFeedingForm(BaseInfantModelForm):
 
     def validate_formula_intro_date_not_future(self):
         cleaned_data = self.cleaned_data
-        if (cleaned_data.get('formula_intro_date') > cleaned_data.get('infant_visit').report_datetime.date()):
+        if(cleaned_data.get('formula_intro_date') and
+           cleaned_data.get('formula_intro_date') > cleaned_data.get('infant_visit').report_datetime.date()):
             raise forms.ValidationError({'formula_intro_date': 'Date cannot be future to visit date.'
                                          'Visit date is {}.'.format(
                                              cleaned_data.get('infant_visit').report_datetime.date())})
