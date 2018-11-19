@@ -12,6 +12,7 @@ class InfantFeedingForm(BaseInfantModelForm):
     def clean(self):
         cleaned_data = super(InfantFeedingForm, self).clean()
         self.validate_formula_intro_occur_previous()
+        self.validate_formula_intro_date_not_future()
         self.validate_other_feeding()
         self.validate_took_formula()
         self.validate_took_formula_not_yes()
@@ -36,6 +37,13 @@ class InfantFeedingForm(BaseInfantModelForm):
         elif cleaned_data.get('formula_intro_occur') in [NO, NOT_APPLICABLE] and cleaned_data.get('formula_intro_date'):
             raise forms.ValidationError('You mentioned no formula milk | foods | liquids received'
                                         ' since last visit in question 3. DO NOT PROVIDE DATE')
+
+    def validate_formula_intro_date_not_future(self):
+        cleaned_data = self.cleaned_data
+        if (cleaned_data.get('formula_intro_date') > cleaned_data.get('infant_visit').report_datetime.date()):
+            raise forms.ValidationError({'formula_intro_date': 'Date cannot be future to visit date.'
+                                         'Visit date is {}.'.format(
+                                             cleaned_data.get('infant_visit').report_datetime.date())})
 
     def validate_formula_intro_occur_previous(self):
         cleaned_data = self.cleaned_data
