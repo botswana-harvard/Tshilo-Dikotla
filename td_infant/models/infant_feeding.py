@@ -1,11 +1,11 @@
+from edc_constants.choices import YES_NO, YES_NO_NA, YES_NO_UNSURE_NA
+from edc_constants.constants import NOT_APPLICABLE
+
 from django.db import models
 
 from edc_base.model.fields.custom_fields import OtherCharField
 from edc_base.model.validators import date_not_future
-from edc_constants.choices import YES_NO, YES_NO_NA, YES_NO_UNSURE_NA
-from edc_constants.constants import NOT_APPLICABLE
 from edc_visit_schedule.models import VisitDefinition
-
 from tshilo_dikotla.choices import COWS_MILK, TIMES_BREASTFED, WATER_USED
 
 from .infant_crf_model import InfantCrfModel
@@ -37,15 +37,17 @@ class InfantFeeding(InfantCrfModel):
         default=NOT_APPLICABLE)
 
     formula_intro_date = models.DateField(
-        verbose_name=("Date participant first received formula milk (or other foods or liquids)"
-                      "since last attended scheduled visit where an infant feeding form"
-                      " was completed"),
+        verbose_name=(
+            "Date the infant participant first started receiving solids since the last "
+            "attended scheduled visit where an infant feeding form was completed"),
+        validators=[date_not_future, ],
         blank=True,
         null=True)
 
     took_formula = models.CharField(
-        verbose_name="Since the last attended scheduled visit where an infant feeding form was completed "
-                     "did the participant take Formula?",
+        verbose_name=("Since the last attended scheduled visit where an infant"
+                      " feeding form was completed "
+                      "did the participant take Formula?"),
         max_length=10,
         choices=YES_NO_UNSURE_NA,
         help_text="If formula feeding since last visit answer YES",
@@ -183,6 +185,7 @@ class InfantFeeding(InfantCrfModel):
 
     most_recent_bm = models.DateField(
         verbose_name="Date of most recent breastfeeding ",
+        validators=[date_not_future, ],
         blank=True,
         null=True)
 
@@ -209,7 +212,7 @@ class InfantFeeding(InfantCrfModel):
         """ Returns previous infant visit. """
         from .infant_visit import InfantVisit
         from edc_appointment.models import Appointment
-        visit = ['2000', '2010', '2030', '2060', '2090', '2120']
+        visit = ['2000', '2010', '2020', '2030', '2060', '2090', '2120']
         try:
             registered_subject = infant_visit.appointment.registered_subject
             previous_visit_code = visit[

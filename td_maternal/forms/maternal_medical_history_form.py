@@ -1,21 +1,18 @@
-from django import forms
-
 from edc_constants.constants import NEG, YES, NOT_APPLICABLE, POS, NO
 
-from .base_maternal_model_form import BaseMaternalModelForm
-
-from ..models import MaternalMedicalHistory, AntenatalEnrollment, MaternalLifetimeArvHistory
+from django import forms
 
 from td_maternal.classes import MaternalStatusHelper
+
+from ..models import MaternalMedicalHistory, AntenatalEnrollment
+from .base_maternal_model_form import BaseMaternalModelForm
 
 
 class MaternalMedicalHistoryForm(BaseMaternalModelForm):
 
     def clean(self):
         cleaned_data = super(MaternalMedicalHistoryForm, self).clean()
-
-        # self.validate_haart_start_date()
-        # self.validate_hiv_diagnosis_date()
+        self.validate_hiv_diagnosis_date()
         self.validate_chronic_since_who_diagnosis_neg()
         self.validate_chronic_since_who_diagnosis_pos()
         self.validate_who_diagnosis_who_chronic_list()
@@ -284,18 +281,6 @@ class MaternalMedicalHistoryForm(BaseMaternalModelForm):
                                                 'Antenatal Enrollment:', cleaned_data.get('date_hiv_diagnosis'))
         except AntenatalEnrollment.DoesNotExist:
             pass
-
-    def validate_haart_start_date(self):
-        cleaned_data = self.cleaned_data
-        try:
-            arv_history = MaternalLifetimeArvHistory.objects.get(
-                maternal_visit=cleaned_data.get('maternal_visit'))
-            if arv_history.haart_start_date < cleaned_data.get('date_hiv_diagnosis'):
-                raise forms.ValidationError(
-                    'Haart start date cannot be before HIV diagnosis date.')
-        except MaternalLifetimeArvHistory.DoesNotExist:
-            raise forms.ValidationError(
-                'Haart start date required, complete Maternal Lifetime Arv History form before proceeding.')
 
     class Meta:
         model = MaternalMedicalHistory
