@@ -1,25 +1,25 @@
+from edc_constants.constants import (
+    FEMALE, SCHEDULED, SCREENED, CONSENTED, FAILED_ELIGIBILITY, ALIVE, OFF_STUDY, ON_STUDY)
+from edc_identifier.subject.classes import InfantIdentifier
+from edc_registration.models import RegisteredSubject
+
 from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 
-from edc_registration.models import RegisteredSubject
 from edc_appointment.models import Appointment
-from edc_constants.constants import (
-    FEMALE, SCHEDULED, SCREENED, CONSENTED, FAILED_ELIGIBILITY, ALIVE, OFF_STUDY, ON_STUDY)
 from edc_visit_schedule.models.visit_definition import VisitDefinition
-from edc_identifier.subject.classes import InfantIdentifier
-
 from tshilo_dikotla.constants import INFANT
 
-from .maternal_consent import MaternalConsent
-from .maternal_ultrasound_initial import MaternalUltraSoundInitial
 from .antenatal_enrollment import AntenatalEnrollment
+from .maternal_consent import MaternalConsent
 from .maternal_eligibility import MaternalEligibility
 from .maternal_eligibility_loss import MaternalEligibilityLoss
-from .maternal_off_study import MaternalOffStudy
-from .maternal_visit import MaternalVisit
 from .maternal_labour_del import MaternalLabourDel
+from .maternal_off_study import MaternalOffStudy
+from .maternal_ultrasound_initial import MaternalUltraSoundInitial
+from .maternal_visit import MaternalVisit
 
 
 @receiver(post_save, weak=False, dispatch_uid="maternal_eligibility_on_post_save")
