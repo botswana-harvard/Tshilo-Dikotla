@@ -31,7 +31,7 @@ class MostRecentQuery(object):
 
     def query(self):
         qs = self.get_model_cls().objects.filter(
-            **self.get_query_options())[0:self.get_limit()]
+            **self.get_query_options())
 
         qs_td_consent_version = [ml for ml in qs if ml.td_consent_version]
         qs_no_td_consent_version = [
@@ -48,7 +48,7 @@ class MostRecentQuery(object):
 
         qs = qs_td_consent_version + qs_no_td_consent_version
 
-        return qs
+        return qs[0:self.get_limit()]
 
 
 class SectionMaternalView(BaseSectionView):
