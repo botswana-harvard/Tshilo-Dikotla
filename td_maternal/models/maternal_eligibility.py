@@ -1,27 +1,26 @@
-from uuid import uuid4
-from django.utils import timezone
 from datetime import datetime
-
-from django.db import models
-from django.apps import apps
-# from django.db.models import get_model
-
-# from edc_base.audit_trail import AuditTrail
-from edc_base.model.models import BaseUuidModel
-from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
-from edc_export.models import ExportTrackingFieldsMixin
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NO
+from edc_export.models import ExportTrackingFieldsMixin
 from edc_registration.models import RegisteredSubject
 from edc_sync.models import SyncModelMixin, SyncHistoricalRecords
-from edc_consent.consent_type import site_consent_types
+from uuid import uuid4
 
+from django.apps import apps
+from django.conf import settings
+from django.db import models
+from django.utils import timezone
+
+from edc_base.model.models import BaseUuidModel
+from edc_base.model.validators import datetime_not_before_study_start, datetime_not_future
+from edc_consent.consent_type import site_consent_types
 from tshilo_dikotla.constants import MIN_AGE_OF_CONSENT, MAX_AGE_OF_CONSENT
 
 from ..managers import MaternalEligibilityManager
-from django.conf import settings
 
 
+# from django.db.models import get_model
+# from edc_base.audit_trail import AuditTrail
 class MaternalEligibility (SyncModelMixin, ExportTrackingFieldsMixin, BaseUuidModel):
     """ A model completed by the user to test and capture the result of the pre-consent eligibility checks.
 
