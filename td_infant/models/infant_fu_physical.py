@@ -1,9 +1,9 @@
-from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
-
-from edc_constants.constants import NOT_APPLICABLE
 from edc_constants.choices import (NORMAL_ABNORMAL,
                                    YES_NO_NOT_EVALUATED_NA, NORMAL_ABNORMAL_NOEXAM)
+from edc_constants.constants import NOT_APPLICABLE
+
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db import models
 
 from .infant_crf_model import InfantCrfModel
 
@@ -25,7 +25,7 @@ class InfantFuPhysical(InfantCrfModel):
         decimal_places=2,
         verbose_name="Height ",
         help_text="Please measure twice and enter the average of the two. Measured in centimeters, (cm)",
-        validators=[MinValueValidator(0), MaxValueValidator(90), ],
+        validators=[MinValueValidator(0), MaxValueValidator(125), ],
     )
 
     head_circumference = models.DecimalField(
