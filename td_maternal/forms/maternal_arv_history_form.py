@@ -103,6 +103,10 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
                     if not cleaned_data.get('haart_start_date'):
                         raise forms.ValidationError(
                             'Please give date triple antiretrovirals first started.')
+                else:
+                    if cleaned_data.get('haart_start_date'):
+                        raise forms.ValidationError(
+                            'Antiretrovirals not started, please do not give date.')
                 if cleaned_data.get('prev_preg_azt') != NOT_APPLICABLE:
                     raise forms.ValidationError(
                         'In Maternal Obsterical History form you indicated there were no previous '
