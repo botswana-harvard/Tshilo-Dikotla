@@ -1,15 +1,14 @@
 from datetime import datetime, date
-
-from edc_lab.lab_packing.models import DestinationTuple
-from edc_lab.lab_profile.classes import ProfileItemTuple, ProfileTuple
 from edc_configuration.base_app_configuration import BaseAppConfiguration
 from edc_device import Device
-
+from edc_lab.lab_packing.models import DestinationTuple
+from edc_lab.lab_profile.classes import ProfileItemTuple, ProfileTuple
 from lis.labeling.classes import LabelPrinterTuple, ZplTemplateTuple, ClientTuple
 from lis.specimen.lab_aliquot_list.classes import AliquotTypeTuple
 from lis.specimen.lab_panel.classes import PanelTuple
 
 from .constants import MIN_AGE_OF_CONSENT
+
 
 try:
     from config.labels import aliquot_label
@@ -17,7 +16,7 @@ except ImportError:
     aliquot_label = None
 
 study_start_datetime = datetime(2016, 4, 1, 0, 0, 0)
-study_end_datetime = datetime(2018, 12, 1, 0, 0, 0)
+study_end_datetime = datetime(2020, 12, 1, 0, 0, 0)
 
 
 class AppConfiguration(BaseAppConfiguration):
@@ -79,7 +78,7 @@ class AppConfiguration(BaseAppConfiguration):
          'version': '1'},
         {'app_label': 'td_maternal',
          'model_name': 'maternalconsent',
-         'start_datetime': datetime(2018, 1, 31, 23,59),
+         'start_datetime': datetime(2018, 1, 31, 23, 59),
          'end_datetime': datetime(2018, 12, 31, 23, 59),
          'version': '3'}
     ]
@@ -97,7 +96,7 @@ class AppConfiguration(BaseAppConfiguration):
                   PanelTuple('Infant Insulin', 'TEST', 'WB'),
                   PanelTuple('DNA PCR', 'TEST', 'WB'),
                   PanelTuple('PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB'),
-                  PanelTuple('ELISA', 'TEST', 'WB'),],
+                  PanelTuple('ELISA', 'TEST', 'WB'), ],
         'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
                          AliquotTypeTuple('Plasma', 'PL', '32'),
                          AliquotTypeTuple('Buffy Coat', 'BC', '16'),
@@ -116,11 +115,13 @@ class AppConfiguration(BaseAppConfiguration):
                            PanelTuple('Glucose 2h', 'TEST', 'WB'),
                            PanelTuple('Infant Insulin', 'TEST', 'WB'),
                            PanelTuple('DNA PCR', 'TEST', 'WB'),
-                           PanelTuple('PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB'),
+                           PanelTuple(
+                               'PBMC Plasma (STORE ONLY)', 'STORAGE', 'WB'),
                            PanelTuple('ELISA', 'TEST', 'WB'),
                            PanelTuple('Insulin', 'TEST', 'WB'),
                            PanelTuple('Infant PBMC PL', 'TEST', 'WB'),
-                           PanelTuple('Infant Serum (Store Only)', 'STORAGE', 'WB'),
+                           PanelTuple(
+                               'Infant Serum (Store Only)', 'STORAGE', 'WB'),
                            PanelTuple('DBS (Store Only)', 'STORAGE', 'WB')],
                  'aliquot_type': [AliquotTypeTuple('Whole Blood', 'WB', '02'),
                                   AliquotTypeTuple('Plasma', 'PL', '32'),
@@ -135,7 +136,8 @@ class AppConfiguration(BaseAppConfiguration):
                              ProfileTuple('PBMC Plasma (STORE ONLY)', 'WB'),
                              ProfileTuple('Infant Glucose', 'WB'),
                              ProfileTuple('Infant PBMC PL', 'WB'),
-                             ProfileTuple('Infant Serum (Store Only)', 'SERUM'),
+                             ProfileTuple(
+                                 'Infant Serum (Store Only)', 'SERUM'),
                              ProfileTuple('DBS (Store Only)', 'WB')],
                  'profile_item': [ProfileItemTuple('Viral Load', 'PL', 1.0, 3),
                                   ProfileItemTuple('Viral Load', 'BC', 0.5, 1),
@@ -144,12 +146,18 @@ class AppConfiguration(BaseAppConfiguration):
                                   ProfileItemTuple('Glucose', 'PL', 1, 3),
                                   ProfileItemTuple('ELISA', 'PL', 1.0, 1),
                                   ProfileItemTuple('ELISA', 'BC', 0.5, 1),
-                                  ProfileItemTuple('PBMC Plasma (STORE ONLY)', 'PL', 1, 4),
-                                  ProfileItemTuple('PBMC Plasma (STORE ONLY)', 'PBMC', 1, 4),
-                                  ProfileItemTuple('Infant Glucose', 'PL', 0.5, 1),
-                                  ProfileItemTuple('Infant Serum (Store Only)', 'SERUM', 0.5, 1),
-                                  ProfileItemTuple('Infant PBMC PL', 'PL', 1.0, 2),
-                                  ProfileItemTuple('Infant PBMC PL', 'PBMC', 1.0, 7),
+                                  ProfileItemTuple(
+                                      'PBMC Plasma (STORE ONLY)', 'PL', 1, 4),
+                                  ProfileItemTuple(
+                                      'PBMC Plasma (STORE ONLY)', 'PBMC', 1, 4),
+                                  ProfileItemTuple(
+                                      'Infant Glucose', 'PL', 0.5, 1),
+                                  ProfileItemTuple(
+                                      'Infant Serum (Store Only)', 'SERUM', 0.5, 1),
+                                  ProfileItemTuple(
+                                      'Infant PBMC PL', 'PL', 1.0, 2),
+                                  ProfileItemTuple(
+                                      'Infant PBMC PL', 'PBMC', 1.0, 7),
                                   ProfileItemTuple('DBS (Store Only)', 'WB', 0.5, 1)]}}
     labeling_setup = {
         'zpl_template': [
