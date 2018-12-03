@@ -12,7 +12,7 @@ from edc_consent.apps import EdcConsentAppConfig
 
 study_start_datetime = timezone.datetime(2016, 4, 1, 0, 0, 0)
 consent_version_2_start = timezone.datetime(2018, 2, 1, 0, 0, 0)
-study_end_datetime = timezone.datetime(2018, 12, 1, 0, 0, 0)
+study_end_datetime = timezone.datetime(2020, 12, 1, 0, 0, 0)
 
 try:
     edc_sync_role = settings.EDC_SYNC_ROLE
