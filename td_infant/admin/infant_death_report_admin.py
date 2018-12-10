@@ -1,15 +1,13 @@
 from collections import OrderedDict
-
-from django.contrib import admin
-
 from edc_export.actions import export_as_csv_action
 from edc_registration.models import RegisteredSubject
+
+from django.contrib import admin
 
 from tshilo_dikotla.base_model_admin import BaseModelAdmin
 
 from ..forms import InfantDeathReportForm
 from ..models import InfantDeathReport, InfantVisit
-
 from .base_infant_scheduled_modeladmin import BaseInfantScheduleModelAdmin
 
 
@@ -28,8 +26,6 @@ class InfantDeathReportAdmin(BaseInfantScheduleModelAdmin, BaseModelAdmin):
         "death_cause",
         "cause_category",
         "cause_category_other",
-        "diagnosis_code",
-        "diagnosis_code_other",
         "illness_duration",
         "medical_responsibility",
         "participant_hospitalized",
@@ -54,7 +50,6 @@ class InfantDeathReportAdmin(BaseInfantScheduleModelAdmin, BaseModelAdmin):
         "infant_nvp_relationship": admin.VERTICAL,
         "haart_relationship": admin.VERTICAL,
         "trad_med_relationship": admin.VERTICAL,
-        "diagnosis_code": admin.VERTICAL
     }
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
