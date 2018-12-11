@@ -76,14 +76,16 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
                 raise forms.ValidationError(
                     'Date of HIV test required, complete Antenatal Enrollment form before proceeding.')
             else:
-                if cleaned_data.get('haart_start_date') < antenatal_enrollment.week32_test_date:
+                if(cleaned_data.get('haart_start_date') and
+                        cleaned_data.get('haart_start_date') < antenatal_enrollment.week32_test_date):
                     raise forms.ValidationError(
                         'Haart start date cannot be before date of HIV test.')
         except MaternalMedicalHistory.DoesNotExist:
             raise forms.ValidationError(
                 'Date of diagnosis required, complete Maternal Medical History form before proceeding.')
         else:
-            if cleaned_data.get('haart_start_date') < medical_history.date_hiv_diagnosis:
+            if(cleaned_data.get('haart_start_date') and
+               cleaned_data.get('haart_start_date') < medical_history.date_hiv_diagnosis):
                 raise forms.ValidationError(
                     'Haart start date cannot be before HIV diagnosis date.')
 
@@ -101,6 +103,10 @@ class MaternalLifetimeArvHistoryForm(BaseMaternalModelForm):
                     if not cleaned_data.get('haart_start_date'):
                         raise forms.ValidationError(
                             'Please give date triple antiretrovirals first started.')
+                else:
+                    if cleaned_data.get('haart_start_date'):
+                        raise forms.ValidationError(
+                            'Antiretrovirals not started, please do not give date.')
                 if cleaned_data.get('prev_preg_azt') != NOT_APPLICABLE:
                     raise forms.ValidationError(
                         'In Maternal Obsterical History form you indicated there were no previous '

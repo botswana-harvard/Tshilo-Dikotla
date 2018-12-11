@@ -19,8 +19,6 @@ class MaternalDeathReportAdmin(BaseMaternalModelAdmin):
         "death_cause",
         "cause_category",
         "cause_category_other",
-        "diagnosis_code",
-        "diagnosis_code_other",
         "illness_duration",
         "medical_responsibility",
         "participant_hospitalized",
@@ -33,7 +31,6 @@ class MaternalDeathReportAdmin(BaseMaternalModelAdmin):
         "perform_autopsy": admin.VERTICAL,
         "participant_hospitalized": admin.VERTICAL,
         "cause_category": admin.VERTICAL,
-        "diagnosis_code": admin.VERTICAL,
         "medical_responsibility": admin.VERTICAL,
         "reason_hospitalized": admin.VERTICAL}
 
