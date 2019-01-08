@@ -172,8 +172,7 @@ class InfantFeedingForm(BaseInfantModelForm):
 
             if prev_infant_feeding:
                 if(not cleaned_data.get('most_recent_bm')
-                   or (cleaned_data.get('most_recent_bm')
-                       and cleaned_data.get('most_recent_bm') > cleaned_data.get("report_datetime").date()
+                   or (cleaned_data.get('most_recent_bm') > cleaned_data.get("report_datetime").date()
                        or cleaned_data.get('most_recent_bm') < prev_infant_feeding.most_recent_bm)):
 
                     raise forms.ValidationError({'most_recent_bm': 'Date of most '
