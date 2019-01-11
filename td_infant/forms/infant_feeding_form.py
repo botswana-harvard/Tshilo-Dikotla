@@ -10,7 +10,7 @@ class InfantFeedingForm(BaseInfantModelForm):
     def clean(self):
         cleaned_data = super(InfantFeedingForm, self).clean()
         self.validate_formula_intro_date_not_future()
-        self.validate_formula_intro_occur(cleaned_data)
+        self.validate_formula_intro_occur()
         self.validate_solids()
         self.validate_took_formula()
         self.validate_took_formula_not_yes()
