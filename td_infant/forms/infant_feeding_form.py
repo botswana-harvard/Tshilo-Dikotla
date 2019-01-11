@@ -9,9 +9,9 @@ class InfantFeedingForm(BaseInfantModelForm):
 
     def clean(self):
         cleaned_data = super(InfantFeedingForm, self).clean()
-        self.validate_formula_intro_occur_previous()
         self.validate_formula_intro_date_not_future()
-        self.validate_other_feeding()
+        self.validate_formula_intro_occur(cleaned_data)
+        self.validate_solids()
         self.validate_took_formula()
         self.validate_took_formula_not_yes()
         self.validate_cows_milk()
@@ -19,26 +19,21 @@ class InfantFeedingForm(BaseInfantModelForm):
         self.validate_breast_milk_weaning()
         self.validate_most_recent_bm_range()
         self.validate_breast_milk_completely_weaned()
-        self.validate_formula_intro_occur(cleaned_data)
+        self.validate_other_feeding()
         return cleaned_data
 
-    def validate_formula_intro_occur_previous(self):
+    def validate_formula_intro_date(self, prev_infant_feeding=None):
         cleaned_data = self.cleaned_data
-        infant_feeding = InfantFeeding.objects.filter(infant_visit__subject_identifier=cleaned_data.get(
-            'infant_visit').appointment.registered_subject.subject_identifier,
-            formula_intro_date__isnull=False,
-            report_datetime__lt=cleaned_data.get('report_datetime')).exclude(infant_visit=cleaned_data.get(
-                'infant_visit')).last()
-        if (infant_feeding and cleaned_data.get('formula_intro_date') and
-                cleaned_data.get('formula_intro_date') != infant_feeding.formula_intro_date):
+        if (cleaned_data.get('formula_intro_date') and
+                cleaned_data.get('formula_intro_date') != prev_infant_feeding.formula_intro_date):
             raise forms.ValidationError({'formula_intro_date':
                                          'Solids intro date does not match date '
                                          'already added in visit {},  '
-                                         'which was defined as {}.'.format(infant_feeding.infant_visit.appointment.visit_definition.code,
-                                                                           infant_feeding.formula_intro_date)})
-        elif infant_feeding:
+                                         'which was defined as {}.'.format(prev_infant_feeding.infant_visit.appointment.visit_definition.code,
+                                                                           prev_infant_feeding.formula_intro_date)})
+        elif prev_infant_feeding:
             cleaned_data[
-                'formula_intro_date'] = infant_feeding.formula_intro_date
+                'formula_intro_date'] = prev_infant_feeding.formula_intro_date
 
     def validate_formula_intro_date_not_future(self):
         cleaned_data = self.cleaned_data
@@ -48,19 +43,49 @@ class InfantFeedingForm(BaseInfantModelForm):
                                          'Visit date is {}.'.format(
                                              cleaned_data.get('infant_visit').report_datetime.date())})
 
-    def validate_other_feeding(self):
+    def validate_solids(self):
         cleaned_data = self.cleaned_data
-        infant_feeding = InfantFeeding.objects.filter(infant_visit__subject_identifier=cleaned_data.get(
+        if cleaned_data.get('formula_intro_occur') == YES:
+            answer = False
+            for question in ['fruits_veg', 'cereal_porridge', 'solid_liquid']:
+                if cleaned_data.get(question) == YES:
+                    answer = True
+                    break
+                if not answer:
+                    raise forms.ValidationError(
+                        'You should answer YES on either one of the questions '
+                        'about the fruits_veg, cereal_porridge or solid_liquid')
+        else:
+            answer = False
+            for question in ['fruits_veg', 'cereal_porridge', 'solid_liquid']:
+                if cleaned_data.get(question) == NO:
+                    answer = True
+                    break
+                if not answer:
+                    raise forms.ValidationError(
+                        'You should answer NO on either one of the questions '
+                        'about the fruits_veg, cereal_porridge or solid_liquid')
+
+    def validate_formula_intro_occur(self):
+        cleaned_data = self.cleaned_data
+        prev_infant_feeding = InfantFeeding.objects.filter(infant_visit__subject_identifier=cleaned_data.get(
             'infant_visit').appointment.registered_subject.subject_identifier,
-            formula_intro_date__isnull=False).exclude(infant_visit=cleaned_data.get(
-                'infant_visit')).last()
-        if cleaned_data.get('formula_intro_occur') == YES and not infant_feeding:
-            if not cleaned_data.get('formula_intro_date'):
-                raise forms.ValidationError('Question3: If received formula milk | foods | liquids since last'
-                                            ' attended visit. Please provide intro date')
-        elif cleaned_data.get('formula_intro_occur') in [NO, NOT_APPLICABLE] and cleaned_data.get('formula_intro_date'):
-            raise forms.ValidationError('You mentioned no formula milk | foods | liquids received'
-                                        ' since last visit in question 3. DO NOT PROVIDE DATE')
+            formula_intro_date__isnull=False,
+            report_datetime__lt=cleaned_data.get('report_datetime')).exclude(infant_visit=cleaned_data.get(
+                'infant_visit')).exclude(infant_visit=cleaned_data.get(
+                    'infant_visit')).last()
+        if cleaned_data.get('formula_intro_occur') == YES:
+            if prev_infant_feeding:
+                self.validate_formula_intro_date(prev_infant_feeding)
+            else:
+                if not cleaned_data.get('formula_intro_date'):
+                    raise forms.ValidationError({'formula_intro_date': 'If received foods since last'
+                                                 ' attended visit. Please provide intro date'})
+
+        elif (cleaned_data.get('formula_intro_occur') in [NO, NOT_APPLICABLE]
+              and cleaned_data.get('formula_intro_date')):
+            raise forms.ValidationError({'formula_intro_date': 'You mentioned no solid foods received'
+                                         ' since last visit in question 4. DO NOT PROVIDE DATE'})
 
     def validate_took_formula(self):
         cleaned_data = self.cleaned_data
@@ -109,7 +134,7 @@ class InfantFeedingForm(BaseInfantModelForm):
                 raise forms.ValidationError(
                     'Question13: If infant took cows milk. Answer CANNOT be Not Applicable')
         else:
-            if not cleaned_data.get('cow_milk_yes') == 'N/A':
+            if not cleaned_data.get('cow_milk_yes') == NOT_APPLICABLE:
                 raise forms.ValidationError(
                     'Question13: Infant did not take cows milk. Answer is NOT APPLICABLE')
 
@@ -179,19 +204,29 @@ class InfantFeedingForm(BaseInfantModelForm):
                                                  'recent breastfeeding must be '
                                                  'between last visit date and today.'})
 
-    def validate_formula_intro_occur(self, cleaned_data):
-        if cleaned_data.get('formula_intro_occur') == YES:
-            if cleaned_data.get('formula_intro_date'):
-                answer = False
-                for question in ['juice', 'cow_milk', 'other_milk', 'fruits_veg',
-                                 'cereal_porridge', 'solid_liquid']:
-                    if cleaned_data.get(question) == YES:
-                        answer = True
-                        break
-                if not answer:
-                    raise forms.ValidationError(
-                        'You should answer YES on either one of the questions about the juice, cow_milk, other milk, '
-                        'fruits_veg, cereal_porridge or solid_liquid')
+    def validate_other_feeding(self, cleaned_data):
+        if cleaned_data.get('other_feeding') == YES:
+            answer = False
+            for question in ['took_formula', 'water', 'juice', 'cow_milk',
+                             'other_milk', 'solid_liquid']:
+                if cleaned_data.get(question) == YES:
+                    answer = True
+                    break
+            if not answer:
+                raise forms.ValidationError(
+                    'You should answer YES on either one of the questions '
+                    'about the water, juice, cow_milk, other milk, or solid_liquid')
+        else:
+            answer = False
+            for question in ['took_formula', 'water', 'juice', 'cow_milk',
+                             'other_milk', 'solid_liquid']:
+                if cleaned_data.get(question) == NO:
+                    answer = True
+                    break
+            if not answer:
+                raise forms.ValidationError(
+                    'You should answer NO on either one of the questions '
+                    'about the water, juice, cow_milk, other milk, or solid_liquid')
 
     class Meta:
         model = InfantFeeding
