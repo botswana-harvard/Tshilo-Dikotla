@@ -19,7 +19,7 @@ class InfantFeedingForm(BaseInfantModelForm):
         self.validate_breast_milk_weaning()
         self.validate_most_recent_bm_range()
         self.validate_breast_milk_completely_weaned()
-        self.validate_other_feeding()
+        self.validate_other_feeding(cleaned_data)
         return cleaned_data
 
     def validate_formula_intro_date(self, prev_infant_feeding=None):
