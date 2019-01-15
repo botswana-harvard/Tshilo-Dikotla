@@ -58,12 +58,12 @@ class InfantFeedingForm(BaseInfantModelForm):
         else:
             answer = False
             for question in ['fruits_veg', 'cereal_porridge', 'solid_liquid']:
-                if cleaned_data.get(question) == NO:
+                if cleaned_data.get(question) == YES:
                     answer = True
                     break
-                if not answer:
+                if answer:
                     raise forms.ValidationError(
-                        'You should answer NO on either one of the questions '
+                        'You should answer NO on all of the questions '
                         'about the fruits_veg, cereal_porridge or solid_liquid')
 
     def validate_formula_intro_occur(self):
@@ -220,12 +220,12 @@ class InfantFeedingForm(BaseInfantModelForm):
             answer = False
             for question in ['took_formula', 'water', 'juice', 'cow_milk',
                              'other_milk', 'solid_liquid']:
-                if cleaned_data.get(question) == NO:
+                if cleaned_data.get(question) == YES:
                     answer = True
                     break
-            if not answer:
+            if answer:
                 raise forms.ValidationError(
-                    'You should answer NO on either one of the questions '
+                    'You should answer NO on all the questions '
                     'about the water, juice, cow_milk, other milk, or solid_liquid')
 
     class Meta:
