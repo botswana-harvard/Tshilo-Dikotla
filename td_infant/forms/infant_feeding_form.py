@@ -51,20 +51,20 @@ class InfantFeedingForm(BaseInfantModelForm):
                 if cleaned_data.get(question) == YES:
                     answer = True
                     break
-                if not answer:
-                    raise forms.ValidationError(
-                        'You should answer YES on either one of the questions '
-                        'about the fruits_veg, cereal_porridge or solid_liquid')
+            if not answer:
+                raise forms.ValidationError(
+                    'You should answer YES on either one of the questions '
+                    'about the fruits_veg, cereal_porridge or solid_liquid')
         else:
             answer = False
             for question in ['fruits_veg', 'cereal_porridge', 'solid_liquid']:
                 if cleaned_data.get(question) == YES:
                     answer = True
                     break
-                if answer:
-                    raise forms.ValidationError(
-                        'You should answer NO on all of the questions '
-                        'about the fruits_veg, cereal_porridge or solid_liquid')
+            if answer:
+                raise forms.ValidationError(
+                    'You should answer NO on ALL of the questions '
+                    'about the fruits_veg, cereal_porridge or solid_liquid')
 
     def validate_formula_intro_occur(self):
         cleaned_data = self.cleaned_data
@@ -197,12 +197,12 @@ class InfantFeedingForm(BaseInfantModelForm):
 
             if prev_infant_feeding:
                 if(not cleaned_data.get('most_recent_bm')
-                   or (cleaned_data.get('most_recent_bm') > cleaned_data.get("report_datetime").date()
+                   or (cleaned_data.get('most_recent_bm') > cleaned_data.get('infant_visit').report_datetime.date()
                        or cleaned_data.get('most_recent_bm') < prev_infant_feeding.most_recent_bm)):
 
                     raise forms.ValidationError({'most_recent_bm': 'Date of most '
                                                  'recent breastfeeding must be '
-                                                 'between last visit date and today.'})
+                                                 'between last visit date and today\'s visit.'})
 
     def validate_other_feeding(self, cleaned_data):
         if cleaned_data.get('other_feeding') == YES:
