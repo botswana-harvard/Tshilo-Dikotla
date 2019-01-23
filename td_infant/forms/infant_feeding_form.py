@@ -191,9 +191,8 @@ class InfantFeedingForm(BaseInfantModelForm):
             report_datetime__lt=cleaned_data.get('report_datetime')).exclude(infant_visit=cleaned_data.get(
                 'infant_visit')).last()
 
-        if(self.instance.previous_infant_instance and
-           (cleaned_data.get('ever_breastfeed') == YES and
-                cleaned_data.get('weaned_completely') == YES)):
+        if(cleaned_data.get('ever_breastfeed') == YES and
+                cleaned_data.get('weaned_completely') == YES):
 
             if prev_infant_feeding:
                 if(not cleaned_data.get('most_recent_bm')
