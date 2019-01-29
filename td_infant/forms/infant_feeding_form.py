@@ -160,12 +160,15 @@ class InfantFeedingForm(BaseInfantModelForm):
         cleaned_data = self.cleaned_data
         if cleaned_data.get('ever_breastfeed') == YES:
             if cleaned_data.get('complete_weaning') != NOT_APPLICABLE:
-                raise forms.ValidationError('Question24: The infant has been breastfed since the last visit, The'
-                                            ' answer should be N/A')
+                raise forms.ValidationError({'complete_weaning': 'The infant has been breastfed since the last visit, The'
+                                             ' answer should be N/A'})
         else:
             if cleaned_data.get('complete_weaning') == NOT_APPLICABLE:
-                raise forms.ValidationError('Question24: The infant has not been breastfed since the last visit, '
-                                            'The answer should not be N/A')
+                raise forms.ValidationError({'complete_weaning': 'The infant has not been breastfed since the last visit, '
+                                             'The answer should not be N/A'})
+            if cleaned_data.get('weaned_completely') != NOT_APPLICABLE:
+                raise forms.ValidationError({'weaned_completely': 'The infant has not been breastfed since the last visit, The'
+                                             ' answer should be N/A'})
 
     def validate_breast_milk_completely_weaned(self):
         cleaned_data = self.cleaned_data
