@@ -162,6 +162,9 @@ class InfantFeedingForm(BaseInfantModelForm):
             if cleaned_data.get('complete_weaning') != NOT_APPLICABLE:
                 raise forms.ValidationError({'complete_weaning': 'The infant has been breastfed since the last visit, The'
                                              ' answer should be N/A'})
+            if cleaned_data.get('weaned_completely') == NOT_APPLICABLE:
+                raise forms.ValidationError({'weaned_completely': 'The infant has been breastfed since the last visit, The'
+                                             ' answer should not be N/A'})
         else:
             if cleaned_data.get('complete_weaning') == NOT_APPLICABLE:
                 raise forms.ValidationError({'complete_weaning': 'The infant has not been breastfed since the last visit, '
@@ -179,7 +182,7 @@ class InfantFeedingForm(BaseInfantModelForm):
                                          ' been weaned off of breast milk. This field'
                                          ' is required.'})
         elif (cleaned_data.get('ever_breastfeed') == NO and
-                cleaned_data.get('weaned_completely') == YES and
+                cleaned_data.get('weaned_completely') == NOT_APPLICABLE and
                 cleaned_data.get('most_recent_bm')):
             raise forms.ValidationError({'most_recent_bm': 'The infant has been'
                                          ' weaned off of breast milk before last '
