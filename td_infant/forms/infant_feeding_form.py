@@ -190,14 +190,15 @@ class InfantFeedingForm(BaseInfantModelForm):
             report_datetime__lt=cleaned_data.get('report_datetime')).exclude(infant_visit=cleaned_data.get(
                 'infant_visit')).last()
 
-        if prev_infant_feeding:
-            if(not cleaned_data.get('most_recent_bm')
-               or (cleaned_data.get('most_recent_bm') > cleaned_data.get('infant_visit').report_datetime.date()
-                   or cleaned_data.get('most_recent_bm') < prev_infant_feeding.infant_visit.report_datetime.date())):
+        if cleaned_data.get('ever_breastfeed') == YES:
+            if prev_infant_feeding:
+                if(not cleaned_data.get('most_recent_bm')
+                   or (cleaned_data.get('most_recent_bm') > cleaned_data.get('infant_visit').report_datetime.date()
+                       or cleaned_data.get('most_recent_bm') < prev_infant_feeding.infant_visit.report_datetime.date())):
 
-                raise forms.ValidationError({'most_recent_bm': 'Date of most '
-                                             'recent breastfeeding must be '
-                                             'between last visit date and today\'s visit.'})
+                    raise forms.ValidationError({'most_recent_bm': 'Date of most '
+                                                 'recent breastfeeding must be '
+                                                 'between last visit date and today\'s visit.'})
 
     def validate_other_feeding(self, cleaned_data):
         if cleaned_data.get('other_feeding') == YES:
