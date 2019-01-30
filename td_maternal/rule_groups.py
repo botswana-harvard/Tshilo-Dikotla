@@ -1,13 +1,14 @@
-from edc_constants.constants import UNKEYED, NOT_REQUIRED, POS, NEG, UNK, IND
-from edc_rule_groups.classes import RuleGroup, site_rule_groups, Logic, CrfRule, RequisitionRule
-from edc_registration.models import RegisteredSubject
-from tshilo_dikotla.constants import ONE
-from edc_constants.constants import YES
 from edc_appointment.models.appointment import Appointment
+from edc_constants.constants import UNKEYED, NOT_REQUIRED, POS, NEG, UNK, IND
+from edc_constants.constants import YES
+from edc_registration.models import RegisteredSubject
+from edc_rule_groups.classes import RuleGroup, site_rule_groups, Logic, CrfRule, RequisitionRule
 
-from .models import MaternalUltraSoundInitial, MaternalVisit, MaternalContraception
-from .models import MaternalPostPartumDep, RapidTestResult, MaternalInterimIdcc
+from tshilo_dikotla.constants import ONE
+
 from .classes import MaternalStatusHelper
+from .models import MaternalPostPartumDep, RapidTestResult, MaternalInterimIdcc
+from .models import MaternalUltraSoundInitial, MaternalVisit, MaternalContraception
 
 
 def get_previous_visit(visit_instance, timepoints, visit_model):
