@@ -1,12 +1,11 @@
+from edc_constants.choices import YES_NO_DWTA
+
 from django.db import models
 
 from edc_base.model.fields import OtherCharField
-from edc_constants.choices import YES_NO_DWTA
-
 from td_list.models import Contraceptives
 
 from ..maternal_choices import REASON_UNSEEN_AT_CLINIC, REASON_CONTRACEPTIVE_NOT_INITIATED
-
 from .maternal_crf_model import MaternalCrfModel
 
 
@@ -40,7 +39,6 @@ class MaternalSrh(MaternalCrfModel):
 
     contr = models.ManyToManyField(
         Contraceptives,
-        null=True,
         blank=True,
         verbose_name='If yes, which method did you select? ',
         help_text='Tell us all that apply')

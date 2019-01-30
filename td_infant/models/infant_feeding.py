@@ -229,7 +229,7 @@ class InfantFeeding(InfantCrfModel):
 
     @property
     def previous_infant_feeding(self):
-        """ Return previous infant feeding from. """
+        """ Return previous infant feeding form. """
         visit_def = VisitDefinition.objects.all()
         visit = []
         for x in visit_def:
