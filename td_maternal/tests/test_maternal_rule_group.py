@@ -652,7 +652,7 @@ class TestMaternalRuleGroups(BaseTestCase):
                 lab_entry__requisition_panel__name='Fasting Glucose',
                 appointment=self.appointment).count(), 1)
 
-    def test_maternal_rapid_test_required_grt_3months(self):
+    def test_maternal_rapid_test_required_lt_3months(self):
         options = {'registered_subject': self.registered_subject,
                    'current_hiv_status': NEG,
                    'evidence_hiv_status': YES,
@@ -696,13 +696,6 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.maternal_visit_2000 = MaternalVisitFactory(
             appointment=self.appointment)
 
-        self.assertEqual(
-            CrfMetaData.objects.filter(
-                entry_status=NEW,
-                crf_entry__app_label='td_maternal',
-                crf_entry__model_name='rapidtestresult',
-                appointment=self.appointment).count(), 1)
-
         RapidTestResultFactory(
             maternal_visit=self.maternal_visit_2000, rapid_test_done=YES, result=NEG,
             result_date=(timezone.datetime.now() - relativedelta(days=30)).date())
@@ -713,16 +706,9 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.maternal_visit_2010 = MaternalVisitFactory(
             appointment=self.appointment)
 
-        self.assertEqual(
-            CrfMetaData.objects.filter(
-                entry_status=NEW,
-                crf_entry__app_label='td_maternal',
-                crf_entry__model_name='rapidtestresult',
-                appointment=self.appointment).count(), 1)
-
         RapidTestResultFactory(
             maternal_visit=self.maternal_visit_2010, rapid_test_done=YES, result=NEG,
-            result_date=(timezone.datetime.now() - relativedelta(months=5)).date())
+            result_date=(timezone.datetime.now() - relativedelta(days=5)).date())
 
         self.appointment = Appointment.objects.get(
             registered_subject=options.get('registered_subject'),
@@ -730,9 +716,13 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.maternal_visit_2020 = MaternalVisitFactory(
             appointment=self.appointment)
 
+        print('=================', CrfMetaData.objects.filter(
+            crf_entry__app_label='td_maternal',
+            crf_entry__model_name='rapidtestresult',
+            appointment=self.appointment)[0].entry_status)
         self.assertEqual(
             CrfMetaData.objects.filter(
-                entry_status=REQUIRED,
+                entry_status=NOT_REQUIRED,
                 crf_entry__app_label='td_maternal',
                 crf_entry__model_name='rapidtestresult',
                 appointment=self.appointment).count(), 1)

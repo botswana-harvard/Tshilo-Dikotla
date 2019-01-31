@@ -209,7 +209,7 @@ class InfantFeedingForm(BaseInfantModelForm):
     def validate_other_feeding(self, cleaned_data):
         if cleaned_data.get('other_feeding') == YES:
             answer = False
-            for question in ['took_formula', 'water', 'juice', 'cow_milk',
+            for question in ['water', 'juice', 'cow_milk',
                              'other_milk', 'solid_liquid']:
                 if cleaned_data.get(question) == YES:
                     answer = True
@@ -220,7 +220,7 @@ class InfantFeedingForm(BaseInfantModelForm):
                     'about the water, juice, cow_milk, other milk, or solid_liquid')
         else:
             answer = False
-            for question in ['took_formula', 'water', 'juice', 'cow_milk',
+            for question in ['water', 'juice', 'cow_milk',
                              'other_milk', 'solid_liquid']:
                 if cleaned_data.get(question) == YES:
                     answer = True
