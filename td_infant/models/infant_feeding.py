@@ -26,14 +26,15 @@ class InfantFeeding(InfantCrfModel):
                       " was completed, has the child received any liquids other than breast-milk? "),
         max_length=3,
         choices=YES_NO,
-        help_text="If Formula Feeding or received any other foods or liquids answer YES.")
+        help_text="If received any other liquids answer YES.")
 
     formula_intro_occur = models.CharField(
         verbose_name=(
             "Since the last attended scheduled visit has the child received any solid foods?"),
         max_length=3,
         choices=YES_NO_NA,
-        default=NOT_APPLICABLE)
+        default=NOT_APPLICABLE,
+        help_text="If received any solids answer YES.")
 
     formula_intro_date = models.DateField(
         verbose_name=(
