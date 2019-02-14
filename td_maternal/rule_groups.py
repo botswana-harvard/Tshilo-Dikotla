@@ -4,7 +4,6 @@ from edc_constants.constants import YES
 from edc_registration.models import RegisteredSubject
 from edc_rule_groups.classes import RuleGroup, site_rule_groups, Logic, CrfRule, RequisitionRule
 
-from td_lab.models import MaternalRequisition
 from tshilo_dikotla.constants import ONE
 
 from .classes import MaternalStatusHelper
