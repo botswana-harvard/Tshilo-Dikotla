@@ -4,6 +4,7 @@ from edc_constants.constants import YES
 from edc_registration.models import RegisteredSubject
 from edc_rule_groups.classes import RuleGroup, site_rule_groups, Logic, CrfRule, RequisitionRule
 
+from td_lab.models import MaternalRequisition
 from tshilo_dikotla.constants import ONE
 
 from .classes import MaternalStatusHelper
@@ -41,7 +42,17 @@ def func_mother_pos(visit_instance):
 
 
 def require_pbmc_vl(visit_instance):
-    return func_mother_pos(visit_instance) and visit_instance.appointment.visit_instance == '0'
+    registered_subject = visit_instance.appointment.registered_subject
+    maternal_req = MaternalRequisition.objects.filter(
+        visit_instance__appointment__visit_definition__code__in=[
+            '2000M', '2010M', '2020M'],
+        visit_instance__appointment__registered_subject=registered_subject
+    )
+
+    if visit_instance.appointment.visit_definition.code in ['2000M', '2010M', '2020M']:
+        return False
+    else:
+        return func_mother_pos(visit_instance) and visit_instance.appointment.visit_instance == '0'
 
 
 def func_mother_pos_vl(visit_instance):
