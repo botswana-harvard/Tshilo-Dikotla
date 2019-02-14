@@ -42,13 +42,6 @@ def func_mother_pos(visit_instance):
 
 
 def require_pbmc_vl(visit_instance):
-    registered_subject = visit_instance.appointment.registered_subject
-    maternal_req = MaternalRequisition.objects.filter(
-        visit_instance__appointment__visit_definition__code__in=[
-            '2000M', '2010M', '2020M'],
-        visit_instance__appointment__registered_subject=registered_subject
-    )
-
     if visit_instance.appointment.visit_definition.code in ['2000M', '2010M', '2020M']:
         return False
     else:
