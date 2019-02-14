@@ -1,13 +1,12 @@
 from collections import OrderedDict
-
 from edc_visit_schedule.classes import (
     VisitScheduleConfiguration, site_visit_schedules, MembershipFormTuple, ScheduleTuple)
 
 from ..models import MaternalLabourDel, MaternalVisit
-
 from .entries import maternal_birth_entries, maternal_followup1_entries, maternal_followup2_entries
-from .entries import maternal_followup3_entries, maternal_followup24_months_entries
 from .entries import maternal_followup1month_entries, maternal_requisition_followup
+from .entries import maternal_followup3_entries, maternal_followup24_months_entries
+from .entries import maternal_requisition_followup_2000M
 
 
 class MaternalFollowUpSchedule(VisitScheduleConfiguration):
@@ -36,7 +35,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': 'V1',
-        'requisitions': maternal_requisition_followup,
+        'requisitions': maternal_requisition_followup_2000M,
         'entries': maternal_birth_entries}
 
     visit_definitions['2010M'] = {
@@ -52,7 +51,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': 'V1',
-        'requisitions': maternal_requisition_followup,
+        'requisitions': maternal_requisition_followup_2000M,
         'entries': maternal_followup1month_entries}
 
     visit_definitions['2020M'] = {
@@ -68,7 +67,7 @@ class MaternalFollowUpSchedule(VisitScheduleConfiguration):
         'visit_tracking_model': MaternalVisit,
         'schedule': 'Follow Up Visit',
         'instructions': 'V1',
-        'requisitions': maternal_requisition_followup,
+        'requisitions': maternal_requisition_followup_2000M,
         'entries': maternal_followup1_entries}
 
     visit_definitions['2060M'] = {

@@ -716,10 +716,6 @@ class TestMaternalRuleGroups(BaseTestCase):
         self.maternal_visit_2020 = MaternalVisitFactory(
             appointment=self.appointment)
 
-        print('=================', CrfMetaData.objects.filter(
-            crf_entry__app_label='td_maternal',
-            crf_entry__model_name='rapidtestresult',
-            appointment=self.appointment)[0].entry_status)
         self.assertEqual(
             CrfMetaData.objects.filter(
                 entry_status=NOT_REQUIRED,

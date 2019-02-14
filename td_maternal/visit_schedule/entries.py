@@ -1,5 +1,5 @@
-from edc_visit_schedule.classes.visit_schedule_configuration import RequisitionPanelTuple, CrfTuple
 from edc_constants.constants import NOT_REQUIRED, REQUIRED, ADDITIONAL, NOT_ADDITIONAL
+from edc_visit_schedule.classes.visit_schedule_configuration import RequisitionPanelTuple, CrfTuple
 
 
 maternal_enrollment_entries = (
@@ -173,4 +173,10 @@ maternal_requisition_followup = (
     RequisitionPanelTuple(
         50, 'td_lab', 'maternalrequisition',
         'Glucose 2h', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
+)
+
+maternal_requisition_followup_2000M = maternal_requisition_followup + (
+    RequisitionPanelTuple(
+        60, 'td_lab', 'maternalrequisition',
+        'PBMC VL', 'TEST', 'WB', NOT_REQUIRED, ADDITIONAL),
 )

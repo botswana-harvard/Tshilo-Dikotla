@@ -41,7 +41,10 @@ def func_mother_pos(visit_instance):
 
 
 def require_pbmc_vl(visit_instance):
-    return func_mother_pos(visit_instance) and visit_instance.appointment.visit_instance == '0'
+    if visit_instance.appointment.visit_definition.code in ['2000M', '2010M', '2020M']:
+        return False
+    else:
+        return func_mother_pos(visit_instance) and visit_instance.appointment.visit_instance == '0'
 
 
 def func_mother_pos_vl(visit_instance):
