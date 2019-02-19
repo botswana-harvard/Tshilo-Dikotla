@@ -21,7 +21,7 @@ djangorestframework==3.3.3
 -e git+https://github.com/botswana-harvard/edc-content-type-map@td-edc-content-type-map#egg=edc_content_type_map
 -e git+https://github.com/botswana-harvard/edc-dashboard@td-edc-dashboard#egg=edc_dashboard
 -e git+https://github.com/botswana-harvard/edc-data-manager@td-edc-data-manager#egg=edc_data_manager
--e git+https://github.com/botswana-harvard/edc-death-report@6ce18e5b6b4a2e99efef43eb0434ed44bd828461#egg=edc_death_report
+-e git+https://github.com/botswana-harvard/edc-death-report@td-edc-death-report#egg=edc_death_report
 -e git+https://github.com/botswana-harvard/edc-device@e641387fbe9d672b73723e624105b503a907fd66#egg=edc_device
 -e git+https://github.com/botswana-harvard/edc-export@td-edc-export#egg=edc_export
 -e git+https://github.com/botswana-harvard/edc-identifier@d5e030cd844f12a660f19e370e7d4044e4fe1b73#egg=edc_identifier
