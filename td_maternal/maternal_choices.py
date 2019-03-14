@@ -263,6 +263,7 @@ ARV_DRUG_LIST = (
     ('Efavirenz', 'EFV'),
     ('Didanosine', 'DDI'),
     ('Stavudine', 'D4T'),
+    ('Emtricitabine', 'FTC'),
     ('Nelfinavir', 'NFV'),
     ('Abacavir', 'ABC'),
     ('Combivir', 'CBV'),
