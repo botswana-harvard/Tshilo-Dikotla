@@ -1,7 +1,7 @@
-from django.db import models
-
 from edc_base.model.validators.date import date_not_future
 from edc_constants.choices import YES_NO_UNKNOWN, YES_NO_UNKNOWN_NA
+
+from django.db import models
 
 from .infant_crf_model import InfantCrfModel
 
@@ -24,7 +24,8 @@ class InfantBirthArv(InfantCrfModel):
     azt_additional_dose = models.CharField(
         max_length=15,
         choices=YES_NO_UNKNOWN_NA,
-        verbose_name="Was the infant given additional doses of AZT before discharge from the hospital? ",
+        verbose_name=('Was the infant given additional doses of AZT before '
+                      'discharge from the hospital? '),
         help_text=("if insufficient timing from delivery to next required dose has"
                    " elapsed, please enter 'Not applicable'"))
 
