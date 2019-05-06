@@ -1,22 +1,20 @@
-from django.db import models
-
-# from edc_base.audit_trail import AuditTrail
-from edc_base.model.models import BaseUuidModel
 from edc_constants.choices import YES_NO
 from edc_constants.constants import NOT_APPLICABLE
-from edc_base.model.validators import date_not_future
-# from edc_sync.models import SyncModelMixin
 from edc_export.models import ExportTrackingFieldsMixin
 from edc_visit_tracking.models import CrfInlineModelMixin
 
+from django.db import models
 
+from edc_base.model.models import BaseUuidModel
+from edc_base.model.validators import date_not_future
 from tshilo_dikotla.choices import ARV_INTERRUPTION_REASON, ARV_DRUG_LIST, REASON_ARV_STOP
 
 from ..managers import MaternalArvManager
-
 from .maternal_crf_model import MaternalCrfModel
 
 
+# from edc_base.audit_trail import AuditTrail
+# from edc_sync.models import SyncModelMixin
 class MaternalArvPreg(MaternalCrfModel):
 
     """ This model is for all HIV positive mothers who are pregnant (whom we hope to enroll their infant)
@@ -67,8 +65,6 @@ class MaternalArv(CrfInlineModelMixin, ExportTrackingFieldsMixin, BaseUuidModel)
     start_date = models.DateField(
         verbose_name="Date Started",
         validators=[date_not_future],
-        null=True,
-        blank=False,
         help_text='WARNING: If date started is less than 4 weeks at delivery, complete off study.')
 
     stop_date = models.DateField(
@@ -99,4 +95,5 @@ class MaternalArv(CrfInlineModelMixin, ExportTrackingFieldsMixin, BaseUuidModel)
         app_label = 'td_maternal'
         verbose_name = 'Maternal ARV'
         verbose_name_plural = 'Maternal ARV'
-        unique_together = ('maternal_arv_preg', 'arv_code', 'start_date', 'stop_date')
+        unique_together = (
+            'maternal_arv_preg', 'arv_code', 'start_date', 'stop_date')

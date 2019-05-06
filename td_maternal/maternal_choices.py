@@ -254,6 +254,7 @@ REASON_FOR_HAART = (
 # haart modification
 ARV_DRUG_LIST = (
     ('Nevirapine', 'NVP'),
+    ('Dolutegravir', 'DTG'),
     ('Kaletra', 'KAL'),
     ('Aluvia', 'ALU'),
     ('Truvada', 'TRV'),
